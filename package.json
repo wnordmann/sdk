@@ -1,0 +1,31 @@
+{
+  "name": "sdk-image-export",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "watchify js/app.jsx -o dist/js/app.js & st -nc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Boundless",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^0.13.2",
+    "keymirror": "~0.1.0",
+    "flux": "^2.0.1"
+  },
+  "devDependencies": {
+    "babelify": "^6.0.2",
+    "browserify": "^9.0.8",
+    "st": "^0.5.3",
+    "watchify": "^3.2.0"
+  },
+  "peerDependencies": {
+    "openlayers": "^3.4.0"
+  },
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
+  }
+}
