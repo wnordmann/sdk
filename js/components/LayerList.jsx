@@ -16,20 +16,36 @@ export default class LayerList extends React.Component {
   _onChange() {
     this.setState(LayerStore.getState());
   }
-  render() {
-    var layerNodes = this.state.layers.map(function(lyr) {
+  renderLayerGroup(group) {
+    var layerNodes = group.getLayers().getArray().map(function(lyr) {
       return (
-        /*jshint ignore:start */
         <LayerListItem key={lyr.get('title')} layer={lyr} title={lyr.get('title')} />
-        /*jshint ignore:end */
       );
     });
     return (
-      /*jshint ignore:start */
       <ul>
         {layerNodes}
       </ul>
-      /*jshint ignore:end */
+    );
+  }
+  render() {
+    var me = this;
+    var layerNodes = this.state.layers.map(function(lyr) {
+      if (lyr instanceof ol.layer.Group) {
+        var children = me.renderLayerGroup(lyr);
+        return (
+          <LayerListItem key={lyr.get('title')} layer={lyr} children={children} title={lyr.get('title')} />
+        );
+      } else {
+        return (
+          <LayerListItem key={lyr.get('title')} layer={lyr} title={lyr.get('title')} />
+        );
+      }
+    });
+    return (
+      <ul>
+        {layerNodes}
+      </ul>
     );
   }
 }

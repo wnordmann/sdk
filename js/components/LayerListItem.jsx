@@ -20,11 +20,11 @@ export default class LayerListItem extends React.Component {
   }
   render() {
     return (
-      /*jshint ignore:start */
       <li><input type="checkbox" checked={this.state.checked}
       onChange={this._handleChange.bind(this)}/>{this.props.title}
-      <button onClick={this._handleRemove.bind(this)}/></li>
-      /*jshint ignore:end */
+      <button onClick={this._handleRemove.bind(this)}/>
+      {this.props.children}
+      </li>
     );
   }
 }

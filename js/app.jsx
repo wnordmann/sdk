@@ -6,14 +6,19 @@ import LayerList from './components/LayerList.jsx';
 
 var map = new ol.Map({
   layers: [
-    new ol.layer.Tile({
-      title: 'Streets',
-      source: new ol.source.MapQuest({layer: 'osm'})
-    }),
-    new ol.layer.Tile({
-      visible: false,
-      title: 'Aerial',
-      source: new ol.source.MapQuest({layer: 'sat'})
+    new ol.layer.Group({
+      title: 'Background',
+      layers: [
+        new ol.layer.Tile({
+          title: 'Streets',
+          source: new ol.source.MapQuest({layer: 'osm'})
+        }),
+        new ol.layer.Tile({
+          visible: false,
+          title: 'Aerial',
+          source: new ol.source.MapQuest({layer: 'sat'})
+        })
+      ]
     }),
     new ol.layer.Vector({
       title: 'Zoning',
@@ -35,7 +40,5 @@ var map = new ol.Map({
     zoom: 12
   })
 });
-/*jshint ignore:start */
 React.render(<LayerList map={map} />,
   document.getElementById('layerlist'));
-/*jshint ignore:end */
