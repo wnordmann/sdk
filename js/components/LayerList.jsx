@@ -30,7 +30,8 @@ export default class LayerList extends React.Component {
   }
   render() {
     var me = this;
-    var layerNodes = this.state.layers.map(function(lyr) {
+    var layers = this.state.layers.slice(0).reverse();
+    var layerNodes = layers.map(function(lyr) {
       if (lyr instanceof ol.layer.Group) {
         var children = me.renderLayerGroup(lyr);
         return (
