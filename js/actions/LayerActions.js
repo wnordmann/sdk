@@ -11,9 +11,9 @@ export default {
       visible: visible
     });
   },
-  removeLayer: (layer) => {
+  zoomToLayer: (layer) => {
     AppDispatcher.handleAction({
-      type: MapConstants.REMOVE_LAYER,
+      type: MapConstants.ZOOM_TO_LAYER,
       layer: layer
     });
   }

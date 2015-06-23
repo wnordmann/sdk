@@ -43,8 +43,11 @@ AppDispatcher.register((payload) => {
     case MapConstants.CHANGE_VISIBILITY:
       action.layer.setVisible(action.visible);
     break;
-    case MapConstants.REMOVE_LAYER:
-      _LayerStore.getMap().removeLayer(action.layer);
+    case MapConstants.ZOOM_TO_LAYER:
+      _LayerStore.getMap().getView().fitExtent(
+        action.layer.getSource().getExtent(),
+        _LayerStore.getMap().getSize()
+      );
     break;
     default:
     break;
