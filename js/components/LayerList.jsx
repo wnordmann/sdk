@@ -8,6 +8,7 @@ export default class LayerList extends React.Component {
   constructor(props) {
     super(props);
     this.showZoomTo = props.showZoomTo !== undefined ? props.showZoomTo : false;
+    this.allowReordering = props.allowReordering !== undefined? props.allowReordering : false;
     LayerStore.bindMap(this.props.map);
   }
   componentWillMount() {
@@ -35,11 +36,11 @@ export default class LayerList extends React.Component {
     if (lyr instanceof ol.layer.Group) {
         var children = this.renderLayerGroup(lyr);
         return (
-          <LayerListItem showZoomTo={this.showZoomTo} key={lyr.get('title')} layer={lyr} children={children} title={lyr.get('title')} />
+          <LayerListItem allowReordering={this.allowReordering} showZoomTo={this.showZoomTo} key={lyr.get('title')} layer={lyr} children={children} title={lyr.get('title')} />
         );
     } else {
       return (
-        <LayerListItem showZoomTo={this.showZoomTo} key={lyr.get('title')} layer={lyr} title={lyr.get('title')} />
+        <LayerListItem allowReordering={this.allowReordering} showZoomTo={this.showZoomTo} key={lyr.get('title')} layer={lyr} title={lyr.get('title')} />
       );
     }
   }

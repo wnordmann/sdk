@@ -19,6 +19,12 @@ export default class LayerListItem extends React.Component {
   _zoomTo() {
     LayerActions.zoomToLayer(this.props.layer);
   }
+  _moveUp() {
+    LayerActions.moveLayerUp(this.props.layer);
+  }
+  _moveDown() {
+    LayerActions.moveLayerDown(this.props.layer);
+  }
   render() {
     var className = 'layer-check glyphicon';
     if (this.state.checked) {
@@ -30,6 +36,11 @@ export default class LayerListItem extends React.Component {
     if (this.props.layer.get("type") !== "base" && this.props.showZoomTo) {
       zoomTo = <a title='Zoom to layer' href='#' onClick={this._zoomTo.bind(this)}><i className='layer-zoom-to glyphicon glyphicon-zoom-in'></i></a>
     }
+    var reorderUp, reorderDown;
+    if (this.props.layer.get("type") !== "base" && this.props.allowReordering && !this.props.children) {
+      reorderUp = <a title='Move up' href='#' onClick={this._moveUp.bind(this)}><i className='layer-move-up glyphicon glyphicon-triangle-top'></i></a>
+      reorderDown = <a title='Move dowm' href='#' onClick={this._moveDown.bind(this)}><i className='layer-move-down glyphicon glyphicon-triangle-bottom'></i></a>
+    }
     return (
       <li>
         <span>
@@ -37,6 +48,8 @@ export default class LayerListItem extends React.Component {
           {this.props.title}
         </span>
         {zoomTo}
+        {reorderUp}
+        {reorderDown}
         {this.props.children}
       </li>
     );

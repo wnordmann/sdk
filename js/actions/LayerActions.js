@@ -16,5 +16,17 @@ export default {
       type: MapConstants.ZOOM_TO_LAYER,
       layer: layer
     });
+  },
+  moveLayerDown: (layer) => {
+    AppDispatcher.handleAction({
+      type: MapConstants.MOVE_LAYER_DOWN,
+      layer: layer
+    });
+  },
+  moveLayerUp: (layer) => {
+    AppDispatcher.handleAction({
+      type: MapConstants.MOVE_LAYER_UP,
+      layer: layer
+    });
   }
 };
