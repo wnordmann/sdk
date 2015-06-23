@@ -12,18 +12,24 @@ export default class LayerListItem extends React.Component {
     this.state = {checked: props.layer.getVisible()};
   }
   _handleChange(event) {
-    LayerActions.setVisible(this.props.layer, event.target.checked);
-    this.setState({checked: event.target.checked});
-  }
-  _handleRemove(event) {
-    LayerActions.removeLayer(this.props.layer);
+    var visible = !this.props.layer.getVisible();
+    LayerActions.setVisible(this.props.layer, visible);
+    this.setState({checked: visible});
   }
   render() {
+    var className = 'layer-check glyphicon';
+    if (this.state.checked) {
+      className += ' glyphicon-check';
+    } else {
+      className += ' glyphicon-unchecked';
+    }
     return (
-      <li><input type="checkbox" checked={this.state.checked}
-      onChange={this._handleChange.bind(this)}/>{this.props.title}
-      <button onClick={this._handleRemove.bind(this)}/>
-      {this.props.children}
+      <li>
+        <span>
+          <i onClick={this._handleChange.bind(this)} className={className}></i>
+          {this.props.title}
+        </span>
+        {this.props.children}
       </li>
     );
   }
