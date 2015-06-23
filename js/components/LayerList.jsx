@@ -17,10 +17,12 @@ export default class LayerList extends React.Component {
     this.setState(LayerStore.getState());
   }
   renderLayerGroup(group) {
-    var layerNodes = group.getLayers().getArray().map(function(lyr) {
-      return (
-        <LayerListItem key={lyr.get('title')} layer={lyr} title={lyr.get('title')} />
-      );
+    return this.renderLayers(group.getLayers().getArray());
+  }
+  renderLayers(layers) {
+    var me = this;
+    var layerNodes = layers.map(function(lyr) {
+      return me.getLayerNode(lyr);
     });
     return (
       <ul>
@@ -28,25 +30,20 @@ export default class LayerList extends React.Component {
       </ul>
     );
   }
-  render() {
-    var me = this;
-    var layers = this.state.layers.slice(0).reverse();
-    var layerNodes = layers.map(function(lyr) {
-      if (lyr instanceof ol.layer.Group) {
-        var children = me.renderLayerGroup(lyr);
+  getLayerNode(lyr) {
+    if (lyr instanceof ol.layer.Group) {
+        var children = this.renderLayerGroup(lyr);
         return (
           <LayerListItem key={lyr.get('title')} layer={lyr} children={children} title={lyr.get('title')} />
         );
-      } else {
-        return (
-          <LayerListItem key={lyr.get('title')} layer={lyr} title={lyr.get('title')} />
-        );
-      }
-    });
-    return (
-      <ul>
-        {layerNodes}
-      </ul>
-    );
+    } else {
+      return (
+        <LayerListItem key={lyr.get('title')} layer={lyr} title={lyr.get('title')} />
+      );
+    }
+  }
+  render() {
+    var layers = this.state.layers.slice(0).reverse();
+    return this.renderLayers(layers);
   }
 }
