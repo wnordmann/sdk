@@ -44,7 +44,7 @@ export default class LayerList extends React.Component {
   }
   render() {
     var layers = this.state.layers.slice(0).reverse();
-    return this.renderLayers(layers);
+    return <div className="layer-tree-panel">{this.renderLayers(layers)}</div>
   }
 }
 
