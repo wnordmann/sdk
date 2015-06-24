@@ -55,3 +55,16 @@ export default class LayerListItem extends React.Component {
     );
   }
 }
+
+LayerListItem.propTypes = {
+  layer: React.PropTypes.instanceOf(ol.layer.Base).isRequired,
+  title: React.PropTypes.string.isRequired,
+  showZoomTo: React.PropTypes.bool,
+  allowReordering: React.PropTypes.bool,
+  children: React.PropTypes.element
+};
+
+LayerListItem.defaultProps = {
+  showZoomTo: false,
+  allowReordering: false
+};

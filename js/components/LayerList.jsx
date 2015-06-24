@@ -7,8 +7,6 @@ import LayerListItem from './LayerListItem.jsx';
 export default class LayerList extends React.Component {
   constructor(props) {
     super(props);
-    this.showZoomTo = props.showZoomTo !== undefined ? props.showZoomTo : false;
-    this.allowReordering = props.allowReordering !== undefined? props.allowReordering : false;
     LayerStore.bindMap(this.props.map);
   }
   componentWillMount() {
@@ -34,13 +32,13 @@ export default class LayerList extends React.Component {
   }
   getLayerNode(lyr) {
     if (lyr instanceof ol.layer.Group) {
-        var children = this.renderLayerGroup(lyr);
+        var children = this.props.showGroupContent ? this.renderLayerGroup(lyr) : undefined;
         return (
-          <LayerListItem allowReordering={this.allowReordering} showZoomTo={this.showZoomTo} key={lyr.get('title')} layer={lyr} children={children} title={lyr.get('title')} />
+          <LayerListItem allowReordering={this.props.allowReordering} showZoomTo={this.props.showZoomTo} key={lyr.get('title')} layer={lyr} children={children} title={lyr.get('title')} />
         );
     } else {
       return (
-        <LayerListItem allowReordering={this.allowReordering} showZoomTo={this.showZoomTo} key={lyr.get('title')} layer={lyr} title={lyr.get('title')} />
+        <LayerListItem allowReordering={this.props.allowReordering} showZoomTo={this.props.showZoomTo} key={lyr.get('title')} layer={lyr} title={lyr.get('title')} />
       );
     }
   }
@@ -49,3 +47,16 @@ export default class LayerList extends React.Component {
     return this.renderLayers(layers);
   }
 }
+
+LayerList.propTypes = {
+  map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  showZoomTo: React.PropTypes.bool,
+  allowReordering: React.PropTypes.bool,
+  showGroupContent: React.PropTypes.bool
+};
+
+LayerList.defaultProps = {
+  showZoomTo: false,
+  allowReordering: false,
+  showGroupContent: false
+};
