@@ -28,5 +28,11 @@ export default {
       type: MapConstants.MOVE_LAYER_UP,
       layer: layer
     });
+  },
+  downloadLayer: (layer) => {
+    AppDispatcher.handleAction({
+      type: MapConstants.DOWNLOAD_LAYER,
+      layer: layer
+    });
   }
 };

@@ -16,6 +16,9 @@ export default class LayerListItem extends React.Component {
     LayerActions.setVisible(this.props.layer, visible);
     this.setState({checked: visible});
   }
+  _download() {
+    LayerActions.downloadLayer(this.props.layer);
+  }
   _zoomTo() {
     LayerActions.zoomToLayer(this.props.layer);
   }
@@ -36,10 +39,14 @@ export default class LayerListItem extends React.Component {
     if (this.props.layer.get("type") !== "base" && this.props.showZoomTo) {
       zoomTo = <a title='Zoom to layer' href='#' onClick={this._zoomTo.bind(this)}><i className='layer-zoom-to glyphicon glyphicon-zoom-in'></i></a>
     }
+    var download;
+    if (this.props.layer instanceof ol.layer.Vector && this.props.showDownload) {
+      download = <a title='Download layer' href='#' onClick={this._download.bind(this)}><i className='layer-download glyphicon glyphicon-download-alt'></i></a>
+    }
     var reorderUp, reorderDown;
     if (this.props.layer.get("type") !== "base" && this.props.allowReordering && !this.props.children) {
       reorderUp = <a title='Move up' href='#' onClick={this._moveUp.bind(this)}><i className='layer-move-up glyphicon glyphicon-triangle-top'></i></a>
-      reorderDown = <a title='Move dowm' href='#' onClick={this._moveDown.bind(this)}><i className='layer-move-down glyphicon glyphicon-triangle-bottom'></i></a>
+      reorderDown = <a title='Move down' href='#' onClick={this._moveDown.bind(this)}><i className='layer-move-down glyphicon glyphicon-triangle-bottom'></i></a>
     }
     return (
       <li>
@@ -48,6 +55,7 @@ export default class LayerListItem extends React.Component {
           {this.props.title}
         </span>
         {zoomTo}
+        {download}
         {reorderUp}
         {reorderDown}
         {this.props.children}
@@ -61,10 +69,12 @@ LayerListItem.propTypes = {
   title: React.PropTypes.string.isRequired,
   showZoomTo: React.PropTypes.bool,
   allowReordering: React.PropTypes.bool,
+  showDownload: React.PropTypes.bool,
   children: React.PropTypes.element
 };
 
 LayerListItem.defaultProps = {
   showZoomTo: false,
-  allowReordering: false
+  allowReordering: false,
+  showDownload: false
 };

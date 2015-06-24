@@ -1,3 +1,4 @@
+/* global ol */
 'use strict';
 
 import {EventEmitter} from 'events';
@@ -39,13 +40,14 @@ export default _LayerStore;
 
 AppDispatcher.register((payload) => {
   let action = payload.action;
+  let layers, index;
   switch(action.type) {
     case MapConstants.CHANGE_VISIBILITY:
       action.layer.setVisible(action.visible);
     break;
     case MapConstants.MOVE_LAYER_UP:
-      var layers = _LayerStore.getMap().getLayers();
-      var index = layers.getArray().indexOf(action.layer);
+      layers = _LayerStore.getMap().getLayers();
+      index = layers.getArray().indexOf(action.layer);
       if (index < layers.getLength()-1) {
         var next = layers.item(index + 1);
         layers.removeAt(index);
@@ -54,14 +56,27 @@ AppDispatcher.register((payload) => {
       }
     break;
     case MapConstants.MOVE_LAYER_DOWN:
-      var layers = _LayerStore.getMap().getLayers();
-      var index = layers.getArray().indexOf(action.layer);
+      layers = _LayerStore.getMap().getLayers();
+      index = layers.getArray().indexOf(action.layer);
       if (index > 1) {
         var prev = layers.item(index - 1);
         layers.removeAt(index);
         layers.setAt(index - 1, action.layer);
         layers.setAt(index, prev);
       }
+    break;
+    case MapConstants.DOWNLOAD_LAYER:
+      var geojson = new ol.format.GeoJSON();
+      var source = action.layer.getSource();
+      if (source instanceof ol.source.Cluster) {
+        source = source.getSource();
+      }
+      var features = source.getFeatures();
+      var json = geojson.writeFeatures(features);
+      var dl = document.createElement('a');
+      dl.setAttribute('href', 'data:text/json;charset=utf-8,' + encodeURIComponent(json));
+      dl.setAttribute('download', action.layer.get('title') + '.geojson');
+      dl.click();
     break;
     case MapConstants.ZOOM_TO_LAYER:
       _LayerStore.getMap().getView().fitExtent(

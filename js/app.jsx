@@ -157,5 +157,5 @@ var map = new ol.Map({
     zoom: 4
   })
 });
-React.render(<LayerList showGroupContent={true} showZoomTo={true} allowReordering={true} map={map} />,
+React.render(<LayerList showDownload={true} showGroupContent={true} showZoomTo={true} allowReordering={true} map={map} />,
   document.getElementById('layerlist'));
