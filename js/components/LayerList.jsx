@@ -34,11 +34,11 @@ export default class LayerList extends React.Component {
     if (lyr instanceof ol.layer.Group) {
         var children = this.props.showGroupContent ? this.renderLayerGroup(lyr) : undefined;
         return (
-          <LayerListItem showDownload={this.props.showDownload} allowReordering={this.props.allowReordering} showZoomTo={this.props.showZoomTo} key={lyr.get('title')} layer={lyr} children={children} title={lyr.get('title')} />
+          <LayerListItem showOpacity={this.props.showOpacity} showDownload={this.props.showDownload} allowReordering={this.props.allowReordering} showZoomTo={this.props.showZoomTo} key={lyr.get('title')} layer={lyr} children={children} title={lyr.get('title')} />
         );
     } else {
       return (
-        <LayerListItem showDownload={this.props.showDownload} allowReordering={this.props.allowReordering} showZoomTo={this.props.showZoomTo} key={lyr.get('title')} layer={lyr} title={lyr.get('title')} />
+        <LayerListItem showOpacity={this.props.showOpacity} showDownload={this.props.showDownload} allowReordering={this.props.allowReordering} showZoomTo={this.props.showZoomTo} key={lyr.get('title')} layer={lyr} title={lyr.get('title')} />
       );
     }
   }
@@ -53,12 +53,14 @@ LayerList.propTypes = {
   showZoomTo: React.PropTypes.bool,
   allowReordering: React.PropTypes.bool,
   showGroupContent: React.PropTypes.bool,
-  showDownload: React.PropTypes.bool
+  showDownload: React.PropTypes.bool,
+  showOpacity: React.PropTypes.bool
 };
 
 LayerList.defaultProps = {
   showZoomTo: false,
   allowReordering: false,
   showGroupContent: false,
-  showDownload: false
+  showDownload: false,
+  showOpacity: false
 };

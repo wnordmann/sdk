@@ -78,6 +78,9 @@ AppDispatcher.register((payload) => {
       dl.setAttribute('download', action.layer.get('title') + '.geojson');
       dl.click();
     break;
+    case MapConstants.SET_LAYER_OPACITY:
+      action.layer.setOpacity(action.opacity);
+    break;
     case MapConstants.ZOOM_TO_LAYER:
       _LayerStore.getMap().getView().fitExtent(
         action.layer.getSource().getExtent(),

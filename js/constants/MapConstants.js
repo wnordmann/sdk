@@ -8,5 +8,6 @@ export default keymirror({
   ZOOM_TO_LAYER: null,
   MOVE_LAYER_UP: null,
   MOVE_LAYER_DOWN: null,
-  DOWNLOAD_LAYER: null
+  DOWNLOAD_LAYER: null,
+  SET_LAYER_OPACITY: null
 });

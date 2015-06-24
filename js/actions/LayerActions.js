@@ -34,5 +34,12 @@ export default {
       type: MapConstants.DOWNLOAD_LAYER,
       layer: layer
     });
+  },
+  setOpacity: (layer, opacity) => {
+    AppDispatcher.handleAction({
+      type: MapConstants.SET_LAYER_OPACITY,
+      layer: layer,
+      opacity: opacity
+    });
   }
 };

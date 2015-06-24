@@ -28,12 +28,20 @@ export default class LayerListItem extends React.Component {
   _moveDown() {
     LayerActions.moveLayerDown(this.props.layer);
   }
+  _changeOpacity(event) {
+    LayerActions.setOpacity(this.props.layer, parseFloat(event.target.value));
+  }
   render() {
     var className = 'layer-check glyphicon';
     if (this.state.checked) {
       className += ' glyphicon-check';
     } else {
       className += ' glyphicon-unchecked';
+    }
+    var opacity;
+    if (this.props.showOpacity) {
+      var val = this.props.layer.getOpacity();
+      opacity = <input onChange={this._changeOpacity.bind(this)} defaultValue={val} type="range" name="opacity" min="0" max="1" step="0.01"></input>
     }
     var zoomTo;
     if (this.props.layer.get("type") !== "base" && this.props.showZoomTo) {
@@ -54,6 +62,7 @@ export default class LayerListItem extends React.Component {
           <i onClick={this._handleChange.bind(this)} className={className}></i>
           {this.props.title}
         </span>
+        {opacity}
         {zoomTo}
         {download}
         {reorderUp}
@@ -70,11 +79,13 @@ LayerListItem.propTypes = {
   showZoomTo: React.PropTypes.bool,
   allowReordering: React.PropTypes.bool,
   showDownload: React.PropTypes.bool,
-  children: React.PropTypes.element
+  children: React.PropTypes.element,
+  showOpacity: React.PropTypes.bool
 };
 
 LayerListItem.defaultProps = {
   showZoomTo: false,
   allowReordering: false,
-  showDownload: false
+  showDownload: false,
+  showOpacity: false
 };
