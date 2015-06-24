@@ -30,6 +30,12 @@ export default class LayerList extends React.Component {
       </ul>
     );
   }
+  _showPanel() {
+    this.setState({visible: true});
+  }
+  _hidePanel() {
+    this.setState({visible: false});
+  }
   getLayerNode(lyr) {
     if (lyr instanceof ol.layer.Group) {
         var children = this.props.showGroupContent ? this.renderLayerGroup(lyr) : undefined;
@@ -44,7 +50,12 @@ export default class LayerList extends React.Component {
   }
   render() {
     var layers = this.state.layers.slice(0).reverse();
-    return <div className="layer-tree-panel">{this.renderLayers(layers)}</div>
+    var className = "ol-unselectable ol-control layer-switcher";
+    if (this.state.visible) {
+      className += ' shown';
+    }
+    return <div onMouseOut={this._hidePanel.bind(this)} onMouseOver={this._showPanel.bind(this)} className={className}><button onClick={this._showPanel.bind(this)} title="Layers"></button>
+        <div className="layer-tree-panel">{this.renderLayers(layers)}</div></div>
   }
 }
 
