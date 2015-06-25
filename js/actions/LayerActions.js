@@ -1,5 +1,3 @@
-'use strict';
-
 import MapConstants from '../constants/MapConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 

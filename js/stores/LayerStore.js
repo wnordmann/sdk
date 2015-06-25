@@ -1,5 +1,4 @@
-/* global ol */
-'use strict';
+/* global ol, document */
 
 import {EventEmitter} from 'events';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
@@ -48,7 +47,7 @@ AppDispatcher.register((payload) => {
     case MapConstants.MOVE_LAYER_UP:
       layers = _LayerStore.getMap().getLayers();
       index = layers.getArray().indexOf(action.layer);
-      if (index < layers.getLength()-1) {
+      if (index < layers.getLength() - 1) {
         var next = layers.item(index + 1);
         layers.removeAt(index);
         layers.setAt(index + 1, action.layer);
