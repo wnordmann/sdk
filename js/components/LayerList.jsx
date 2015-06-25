@@ -3,6 +3,7 @@
 import React from 'react';
 import LayerStore from '../stores/LayerStore.js';
 import LayerListItem from './LayerListItem.jsx';
+import css from './LayerList.css';
 
 export default class LayerList extends React.Component {
   constructor(props) {
