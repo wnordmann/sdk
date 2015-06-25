@@ -1,8 +1,12 @@
 {
-  "name": "sdk-image-export",
-  "version": "1.0.0",
-  "description": "",
+  "name": "boundless-sdk",
+  "version": "0.1.0",
+  "description": "SDK for OpenLayers 3 and React plus Flux",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/boundlessgeo/sdk.git"
+  },
   "scripts": {
     "start": "watchify js/app.jsx -o dist/js/app.js & st -nc",
     "build": "browserify js/app.jsx -o dist/js/app.js",
