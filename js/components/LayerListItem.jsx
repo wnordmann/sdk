@@ -11,7 +11,7 @@ export default class LayerListItem extends React.Component {
     this.state = {checked: props.layer.getVisible()};
   }
   _handleChange() {
-    var visible = !this.props.layer.getVisible();
+    var visible = event.target.checked;
     LayerActions.setVisible(this.props.layer, visible);
     this.setState({checked: visible});
   }
@@ -31,12 +31,6 @@ export default class LayerListItem extends React.Component {
     LayerActions.setOpacity(this.props.layer, parseFloat(event.target.value));
   }
   render() {
-    var className = 'layer-check glyphicon';
-    if (this.state.checked) {
-      className += ' glyphicon-check';
-    } else {
-      className += ' glyphicon-unchecked';
-    }
     var opacity;
     if (this.props.showOpacity) {
       var val = this.props.layer.getOpacity();
@@ -57,10 +51,7 @@ export default class LayerListItem extends React.Component {
     }
     return (
       <li>
-        <span>
-          <i onClick={this._handleChange.bind(this)} className={className}></i>
-          {this.props.title}
-        </span>
+        <input type="checkbox" checked={this.state.checked} onChange={this._handleChange.bind(this)}/>{this.props.title}
         {opacity}
         {zoomTo}
         {download}
