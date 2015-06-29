@@ -3,6 +3,7 @@ import AppDispatcher from '../dispatchers/AppDispatcher.js';
 
 export default {
   setVisible: (layer, visible) => {
+    layer.setVisible(action.visible);
     AppDispatcher.handleAction({
       type: MapConstants.CHANGE_VISIBILITY,
       layer: layer,
@@ -28,12 +29,24 @@ export default {
     });
   },
   downloadLayer: (layer) => {
+    var geojson = new ol.format.GeoJSON();
+    var source = layer.getSource();
+    if (source instanceof ol.source.Cluster) {
+      source = source.getSource();
+    }
+    var features = source.getFeatures();
+    var json = geojson.writeFeatures(features);
+    var dl = document.createElement('a');
+    dl.setAttribute('href', 'data:text/json;charset=utf-8,' + encodeURIComponent(json));
+    dl.setAttribute('download', layer.get('title') + '.geojson');
+    dl.click();
     AppDispatcher.handleAction({
       type: MapConstants.DOWNLOAD_LAYER,
       layer: layer
     });
   },
   setOpacity: (layer, opacity) => {
+    layer.setOpacity(opacity);
     AppDispatcher.handleAction({
       type: MapConstants.SET_LAYER_OPACITY,
       layer: layer,
