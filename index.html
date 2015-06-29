@@ -5,11 +5,28 @@
   <title>React - OpenLayers - LayerSwitcher</title>
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.6.0/ol.css">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="app.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.6.0/ol-debug.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
-  <div id="map" class="map"></div>
-  <div id="layerlist"></div>
+  <div id="content">
+    <div class="row">
+      <div class="col-md-4" id="tabs-panel">
+        <ul class="nav nav-tabs" role="tablist">
+          <li class="active">
+            <a data-toggle="tab" href="#geocoding-tab" role="tab">Geocoding</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="geocoding-tab"></div>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div id="map"></div>
+        <div id="layerlist"></div>
+      </div>
+    </div>
+  </div>
   <script src="dist/js/app.js"></script>
 </body>
 </html>

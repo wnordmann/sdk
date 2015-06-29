@@ -1,6 +1,7 @@
 /* global ol */
 import React from 'react';
 import LayerList from './components/LayerList.jsx';
+import Geocoding from './components/Geocoding.jsx';
 
 var textStyleCacheAirports = {};
 var styleAirports = function() {
@@ -153,5 +154,6 @@ var map = new ol.Map({
     zoom: 4
   })
 });
+React.render(<Geocoding map={map} />, document.getElementById('geocoding-tab'));
 React.render(<LayerList showOpacity={true} showDownload={true} showGroupContent={true} showZoomTo={true} allowReordering={true} map={map} />,
   document.getElementById('layerlist'));

@@ -1,9 +1,10 @@
+/* global ol */
 import MapConstants from '../constants/MapConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 
 export default {
   setVisible: (layer, visible) => {
-    layer.setVisible(action.visible);
+    layer.setVisible(visible);
     AppDispatcher.handleAction({
       type: MapConstants.CHANGE_VISIBILITY,
       layer: layer,

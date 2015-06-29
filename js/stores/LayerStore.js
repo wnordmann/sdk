@@ -1,4 +1,4 @@
-/* global ol, document */
+/* global document */
 
 import {EventEmitter} from 'events';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';

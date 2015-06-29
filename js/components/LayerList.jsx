@@ -5,13 +5,13 @@ import LayerListItem from './LayerListItem.jsx';
 import './LayerList.css';
 
 export default class LayerList extends React.Component {
-  componentWillMount() {
-    LayerStore.addChangeListener(this._onChange.bind(this));
-    this._onChange();
-  }
   constructor(props) {
     super(props);
     LayerStore.bindMap(this.props.map);
+  }
+  componentWillMount() {
+    LayerStore.addChangeListener(this._onChange.bind(this));
+    this._onChange();
   }
   _onChange() {
     this.setState(LayerStore.getState());
@@ -37,15 +37,17 @@ export default class LayerList extends React.Component {
     this.setState({visible: false});
   }
   getLayerNode(lyr) {
-    if (lyr instanceof ol.layer.Group) {
-      var children = this.props.showGroupContent ? this.renderLayerGroup(lyr) : undefined;
-      return (
-        <LayerListItem showOpacity={this.props.showOpacity} showDownload={this.props.showDownload} allowReordering={this.props.allowReordering} showZoomTo={this.props.showZoomTo} key={lyr.get('title')} layer={lyr} children={children} title={lyr.get('title')} />
-      );
-    } else {
-      return (
-        <LayerListItem showOpacity={this.props.showOpacity} showDownload={this.props.showDownload} allowReordering={this.props.allowReordering} showZoomTo={this.props.showZoomTo} key={lyr.get('title')} layer={lyr} title={lyr.get('title')} />
-      );
+    if (lyr.get('hideFromLayerList') !== true) {
+      if (lyr instanceof ol.layer.Group) {
+        var children = this.props.showGroupContent ? this.renderLayerGroup(lyr) : undefined;
+        return (
+          <LayerListItem showOpacity={this.props.showOpacity} showDownload={this.props.showDownload} allowReordering={this.props.allowReordering} showZoomTo={this.props.showZoomTo} key={lyr.get('title')} layer={lyr} children={children} title={lyr.get('title')} />
+        );
+      } else {
+        return (
+          <LayerListItem showOpacity={this.props.showOpacity} showDownload={this.props.showDownload} allowReordering={this.props.allowReordering} showZoomTo={this.props.showZoomTo} key={lyr.get('title')} layer={lyr} title={lyr.get('title')} />
+        );
+      }
     }
   }
   render() {
