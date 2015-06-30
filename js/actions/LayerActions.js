@@ -11,6 +11,12 @@ export default {
       visible: visible
     });
   },
+  showSearchResult: (results) => {
+    AppDispatcher.handleAction({
+      type: MapConstants.SEARCH_RESULTS,
+      searchResults: results
+    });
+  },
   zoomToLayer: (layer) => {
     AppDispatcher.handleAction({
       type: MapConstants.ZOOM_TO_LAYER,

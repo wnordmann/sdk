@@ -2,6 +2,7 @@
 import React from 'react';
 import LayerList from './components/LayerList.jsx';
 import Geocoding from './components/Geocoding.jsx';
+import GeocodingResults from './components/GeocodingResults.jsx';
 
 var textStyleCacheAirports = {};
 var styleAirports = function() {
@@ -154,6 +155,7 @@ var map = new ol.Map({
     zoom: 4
   })
 });
-React.render(<Geocoding map={map} />, document.getElementById('geocoding-tab'));
+React.render(<Geocoding />, document.getElementById('geocoding'));
+React.render(<GeocodingResults map={map} />, document.getElementById('geocoding-results'));
 React.render(<LayerList showOpacity={true} showDownload={true} showGroupContent={true} showZoomTo={true} allowReordering={true} map={map} />,
   document.getElementById('layerlist'));

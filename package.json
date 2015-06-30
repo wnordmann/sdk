@@ -8,8 +8,8 @@
     "url": "https://github.com/boundlessgeo/sdk.git"
   },
   "scripts": {
-    "start": "watchify js/app.jsx -o dist/js/app.js & st -nc",
-    "build": "browserify js/app.jsx -o dist/js/app.js",
+    "start": "watchify js/tabbed.jsx -o dist/js/tabbed.js & watchify js/basic.jsx -o dist/js/basic.js & st -nc",
+    "build": "browserify js/tabbed.jsx -o dist/js/tabbed.js & browserify js/basic.jsx -o dist/js/basic.js",
     "test": "eslint js --ext .jsx,.js"
   },
   "author": "Boundless",

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>React - OpenLayers - LayerSwitcher</title>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.6.0/ol.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="basic.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.6.0/ol-debug.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+  <nav class="navbar navbar-default" role="navigation" id="toolbar">
+    <div class="collapse navbar-collapse" id="navbar">
+        <ul class="nav navbar-nav navbar-right">
+          <div class="navbar-form navbar-right" id="geocoding"></div>
+        </ul>
+    </div>
+  </nav>
+  <div id="content">
+    <div id="map">
+      <div id="geocoding-results" class="geocoding-results"></div>
+    </div>
+    <div id="layerlist"></div>
+  </div>
+  <script src="dist/js/basic.js"></script>
+</body>
+</html>

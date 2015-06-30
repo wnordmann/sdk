@@ -7,5 +7,6 @@ export default keymirror({
   MOVE_LAYER_UP: null,
   MOVE_LAYER_DOWN: null,
   DOWNLOAD_LAYER: null,
-  SET_LAYER_OPACITY: null
+  SET_LAYER_OPACITY: null,
+  SEARCH_RESULTS: null
 });
