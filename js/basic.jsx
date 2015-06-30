@@ -14,7 +14,7 @@ var styleAirports = function() {
       anchorXUnits: 'fraction',
       anchorYUnits: 'fraction',
       anchor: [0.5, 0.5],
-      src: 'data/styles/plane.svg'
+      src: '../../data/styles/plane.svg'
     })
   })];
   var labelText = '';
@@ -136,7 +136,7 @@ var map = new ol.Map({
         distance: 40.0,
         source: new ol.source.Vector({
           format: new ol.format.GeoJSON(),
-          url: 'data/popp.json'
+          url: '../../data/popp.json'
         })
       })
     }),
@@ -145,7 +145,7 @@ var map = new ol.Map({
       style: styleAirports,
       source: new ol.source.Vector({
         format: new ol.format.GeoJSON(),
-        url: 'data/airports.json'
+        url: '../../data/airports.json'
       })
     })
   ],

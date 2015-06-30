@@ -30,7 +30,7 @@ export default class GeocodingResults extends React.Component {
           anchorXUnits: 'fraction',
           anchorYUnits: 'pixels',
           opacity: 0.75,
-          src: './resources/marker.png'
+          src: '../../resources/marker.png'
         })
       }),
       source: new ol.source.Vector()
