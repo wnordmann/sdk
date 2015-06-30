@@ -12,7 +12,7 @@ export default class Geocoding extends React.Component {
     if (value !== '') {
       var cbname = 'fn' + Date.now();
       var script = document.createElement('script');
-      script.src = 'http://nominatim.openstreetmap.org/search?format=json&limit=5&q=' + value + '&json_callback=' + cbname;
+      script.src = 'http://nominatim.openstreetmap.org/search?format=json&limit=' + this.props.maxResults + '&q=' + value + '&json_callback=' + cbname;
       window[cbname] = function(jsonData) {
         LayerActions.showSearchResult(jsonData);
         delete window[cbname];
@@ -31,3 +31,11 @@ export default class Geocoding extends React.Component {
     );
   }
 }
+
+Geocoding.propTypes = {
+  maxResults: React.PropTypes.number
+};
+
+Geocoding.defaultProps = {
+  maxResults: 5
+};
