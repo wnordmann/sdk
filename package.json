@@ -15,9 +15,10 @@
   "author": "Boundless",
   "license": "ISC",
   "dependencies": {
-    "react": "^0.13.2",
+    "fixed-data-table": "^0.3.0",
+    "flux": "^2.0.1",
     "keymirror": "~0.1.0",
-    "flux": "^2.0.1"
+    "react": "^0.13.2"
   },
   "devDependencies": {
     "babelify": "^6.0.2",
