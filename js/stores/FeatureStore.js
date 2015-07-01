@@ -22,6 +22,9 @@ export default class FeatureStore extends EventEmitter {
     this._config.features = source.getFeatures();
     this.emitChange();
   }
+  getObjectAt(index) {
+    return this._config.features[index].getProperties();
+  }
   getState() {
     return this._config;
   }

@@ -21,11 +21,9 @@ export default class FeatureTable extends React.Component {
     this.setState(this._store.getState());
   }
   _rowGetter(index) {
-    var obj = this.state.features[index].getProperties();
-    return Object.keys(obj).map(key => obj[key]);
+    return this._store.getObjectAt(index);
   }
-  _onColumnResize(width, idx) {
-    var label = this.state.features[0].getKeys()[idx];
+  _onColumnResize(width, label) {
     var columnWidths = this.state.columnWidths;
     columnWidths[label] = width;
     this.setState({columnWidths: columnWidths});
@@ -34,9 +32,9 @@ export default class FeatureTable extends React.Component {
     var Table = FixedDataTable.Table;
     var Column = FixedDataTable.Column;
     if (this.state.features.length > 0) {
-      var me = this, idx = -1;
+      var me = this;
       var feature = this.state.features[0], geom = feature.getGeometryName();
-      var columnNodes = feature.getKeys().map(function(key, idx) {
+      var columnNodes = feature.getKeys().map(function(key) {
         if (key !== geom) {
           if (!me.state.columnWidths[key]) {
             me.state.columnWidths[key] = 100;
@@ -45,7 +43,7 @@ export default class FeatureTable extends React.Component {
             <Column
               isResizable={true}
               label={key}
-              dataKey={idx}
+              dataKey={key}
               key={key}
               width={me.state.columnWidths[key]} />
           );
