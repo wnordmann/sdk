@@ -8,5 +8,6 @@ export default keymirror({
   MOVE_LAYER_DOWN: null,
   DOWNLOAD_LAYER: null,
   SET_LAYER_OPACITY: null,
-  SEARCH_RESULTS: null
+  SEARCH_RESULTS: null,
+  SELECT_LAYER: null
 });

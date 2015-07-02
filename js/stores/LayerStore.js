@@ -10,11 +10,22 @@ let config = {
 
 class LayerStore extends EventEmitter {
   bindMap(map) {
-    this._map = map;
-    config.layers = this._map.getLayers().getArray();
-    this.emitChange();
-    this._map.getLayers().on('add', this.emitChange, this);
-    this._map.getLayers().on('remove', this.emitChange, this);
+    if (map !== this._map) {
+      this._map = map;
+      config.layers = this._map.getLayers().getArray();
+      this.emitChange();
+      this._map.getLayers().on('add', this.emitChange, this);
+      this._map.getLayers().on('remove', this.emitChange, this);
+    }
+  }
+  findLayer(title) {
+    var layer;
+    config.layers.map(function(lyr) {
+      if (lyr.get('title') === title) {
+        layer = lyr;
+      }
+    });
+    return layer;
   }
   getMap() {
     return this._map;

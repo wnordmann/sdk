@@ -3,10 +3,22 @@ import React from 'react';
 import FixedDataTable from 'fixed-data-table';
 import '../../node_modules/fixed-data-table/dist/fixed-data-table.css';
 import FeatureStore from '../stores/FeatureStore.js';
+import MapConstants from '../constants/MapConstants.js';
+import AppDispatcher from '../dispatchers/AppDispatcher.js';
 
 export default class FeatureTable extends React.Component {
   constructor(props) {
     super(props);
+    AppDispatcher.register((payload) => {
+      let action = payload.action;
+      switch(action.type) {
+        case MapConstants.SELECT_LAYER:
+          this._store.bindLayer(action.layer);
+          break;
+        default:
+          break;
+      }
+    });
     this._store = new FeatureStore({layer: this.props.layer});
     this.state = {
       features: [],

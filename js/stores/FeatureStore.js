@@ -13,6 +13,9 @@ export default class FeatureStore extends EventEmitter {
     this._config = {};
     this._layer = layer;
     var source = layer.getSource();
+    if (source instanceof ol.source.Cluster) {
+      source = source.getSource();
+    }
     source.on('change', function(evt) {
       if (evt.target.getState() === 'ready') {
         this._config.features = evt.target.getFeatures();

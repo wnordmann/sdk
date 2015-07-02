@@ -11,6 +11,13 @@ export default {
       visible: visible
     });
   },
+  selectLayer: (layer, cmp) => {
+    AppDispatcher.handleAction({
+      type: MapConstants.SELECT_LAYER,
+      layer: layer,
+      cmp: cmp
+    });
+  },
   showSearchResult: (results) => {
     AppDispatcher.handleAction({
       type: MapConstants.SEARCH_RESULTS,
