@@ -32,7 +32,9 @@ export default class FeatureTable extends React.Component {
     this._onChange();
   }
   _onChange() {
-    this.setState(this._store.getState());
+    var state = this._store.getState();
+    state.selected = {};
+    this.setState(state);
   }
   _rowGetter(index) {
     return this._store.getObjectAt(index);
