@@ -43,6 +43,7 @@ export default class FeatureTable extends React.Component {
     var columnWidths = this.state.columnWidths;
     columnWidths[label] = width;
     this.setState({columnWidths: columnWidths});
+    this._isResizing = false;
   }
   _onRowClick(evt, index) {
     this.state.selected[index] = !this.state.selected[index];
@@ -75,6 +76,7 @@ export default class FeatureTable extends React.Component {
       return (
         <Table
           onColumnResizeEndCallback={this._onColumnResize.bind(this)}
+          isColumnResizing={this._isResizing}
           rowHeight={30}
           rowClassNameGetter={this._rowClassNameGetter.bind(this)}
           rowGetter={this._rowGetter.bind(this)}
