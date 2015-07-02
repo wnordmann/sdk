@@ -78,14 +78,14 @@ export default class FeatureTable extends React.Component {
         <Table
           onColumnResizeEndCallback={this._onColumnResize.bind(this)}
           isColumnResizing={this._isResizing}
-          rowHeight={30}
+          rowHeight={this.props.rowHeight}
           rowClassNameGetter={this._rowClassNameGetter.bind(this)}
           rowGetter={this._rowGetter.bind(this)}
-          headerHeight={50}
+          headerHeight={this.props.headerHeight}
           onRowClick={this._onRowClick.bind(this)}
           rowsCount={this.state.features.length}
-          width={400}
-          height={400}>
+          width={this.props.width}
+          height={this.props.height}>
           {columnNodes}
         </Table>);
     } else {
@@ -95,5 +95,16 @@ export default class FeatureTable extends React.Component {
 }
 
 FeatureTable.propTypes = {
-  layer: React.PropTypes.instanceOf(ol.layer.Vector).isRequired
+  layer: React.PropTypes.instanceOf(ol.layer.Vector).isRequired,
+  width: React.PropTypes.number,
+  height: React.PropTypes.number,
+  rowHeight: React.PropTypes.number,
+  headerHeight: React.PropTypes.number
+};
+
+FeatureTable.defaultProps = {
+  width: 400,
+  height: 400,
+  rowHeight: 30,
+  headerHeight: 50
 };
