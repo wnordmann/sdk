@@ -5,6 +5,7 @@ import '../../node_modules/fixed-data-table/dist/fixed-data-table.css';
 import FeatureStore from '../stores/FeatureStore.js';
 import MapConstants from '../constants/MapConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
+import './FeatureTable.css';
 
 export default class FeatureTable extends React.Component {
   constructor(props) {
@@ -22,7 +23,8 @@ export default class FeatureTable extends React.Component {
     this._store = new FeatureStore({layer: this.props.layer});
     this.state = {
       features: [],
-      columnWidths: {}
+      columnWidths: {},
+      selected: {}
     };
   }
   componentWillMount() {
@@ -39,6 +41,13 @@ export default class FeatureTable extends React.Component {
     var columnWidths = this.state.columnWidths;
     columnWidths[label] = width;
     this.setState({columnWidths: columnWidths});
+  }
+  _onRowClick(evt, index) {
+    this.state.selected[index] = !this.state.selected[index];
+    this.setState({selected: this.state.selected});
+  }
+  _rowClassNameGetter(index) {
+    return this.state.selected[index] ? 'row-selected' : '';
   }
   render() {
     var Table = FixedDataTable.Table;
@@ -65,8 +74,10 @@ export default class FeatureTable extends React.Component {
         <Table
           onColumnResizeEndCallback={this._onColumnResize.bind(this)}
           rowHeight={30}
+          rowClassNameGetter={this._rowClassNameGetter.bind(this)}
           rowGetter={this._rowGetter.bind(this)}
           headerHeight={50}
+          onRowClick={this._onRowClick.bind(this)}
           rowsCount={this.state.features.length}
           width={400}
           height={400}>
