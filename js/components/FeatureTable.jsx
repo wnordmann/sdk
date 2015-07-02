@@ -34,6 +34,7 @@ export default class FeatureTable extends React.Component {
   _onChange() {
     var state = this._store.getState();
     state.selected = {};
+    state.columnWidths = {};
     this.setState(state);
   }
   _rowGetter(index) {
