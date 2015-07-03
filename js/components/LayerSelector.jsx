@@ -35,9 +35,10 @@ export default class LayerSelector extends React.Component {
       </select>
     );
   }
-};
+}
 
 LayerSelector.propTypes = {
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  filter: React.PropTypes.func
+  filter: React.PropTypes.func,
+  value: React.PropTypes.string
 };

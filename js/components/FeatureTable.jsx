@@ -31,6 +31,9 @@ export default class FeatureTable extends React.Component {
     this._store.addChangeListener(this._onChange.bind(this));
     this._onChange();
   }
+  _renderLink(cellData) {
+    return <a href={cellData} target="_blank">{cellData}</a>;
+  }
   _onChange() {
     var state = this._store.getState();
     state.selected = {};
@@ -57,23 +60,23 @@ export default class FeatureTable extends React.Component {
     var Table = FixedDataTable.Table;
     var Column = FixedDataTable.Column;
     if (this.state.features.length > 0) {
-      var me = this;
-      var feature = this.state.features[0], geom = feature.getGeometryName();
-      var columnNodes = feature.getKeys().map(function(key) {
-        if (key !== geom) {
-          if (!me.state.columnWidths[key]) {
-            me.state.columnWidths[key] = 100;
-          }
-          return (
-            <Column
-              isResizable={true}
-              label={key}
-              dataKey={key}
-              key={key}
-              width={me.state.columnWidths[key]} />
-          );
+      var schema = this._store.getSchema();
+      var columnNodes = [];
+      for (var key in schema) {
+        if (!this.state.columnWidths[key]) {
+          this.state.columnWidths[key] = this.props.columnWidth;
         }
-      });
+        var cellRenderer = (schema[key] === 'link') ? this._renderLink : undefined;
+        columnNodes.push(
+          <Column
+            isResizable={true}
+            label={key}
+            cellRenderer={cellRenderer}
+            dataKey={key}
+            key={key}
+            width={this.state.columnWidths[key]} />
+          );
+      }
       return (
         <Table
           onColumnResizeEndCallback={this._onColumnResize.bind(this)}
@@ -99,12 +102,14 @@ FeatureTable.propTypes = {
   width: React.PropTypes.number,
   height: React.PropTypes.number,
   rowHeight: React.PropTypes.number,
-  headerHeight: React.PropTypes.number
+  headerHeight: React.PropTypes.number,
+  columnWidth: React.PropTypes.number
 };
 
 FeatureTable.defaultProps = {
   width: 400,
   height: 400,
   rowHeight: 30,
-  headerHeight: 50
+  headerHeight: 50,
+  columnWidth: 100
 };
