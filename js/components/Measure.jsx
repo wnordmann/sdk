@@ -151,6 +151,7 @@ export default class Measure extends React.Component {
       map.removeOverlay(this._tooltips[i]);
     }
     this._layer.getSource().clear();
+    map.un('pointermove', this._pointerMoveHandler, this);
   }
   render() {
     return (
