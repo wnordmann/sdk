@@ -1,26 +1,10 @@
 import React from 'react';
 import './Measure.css';
-import LayerActions from '../actions/LayerActions.js';
-import MapConstants from '../constants/MapConstants.js';
-import AppDispatcher from '../dispatchers/AppDispatcher.js';
+import MapTool from './MapTool.js';
 
-export default class Measure extends React.Component {
+export default class Measure extends MapTool {
   constructor(props) {
     super(props);
-    AppDispatcher.register((payload) => {
-      let action = payload.action;
-      switch(action.type) {
-       case MapConstants.ACTIVATE_TOOL:
-          if (this.props.toggleGroup && this.props.toggleGroup === action.toggleGroup) {
-            if (this !== action.tool) {
-              this.deactivate();
-            }
-          }
-          break;
-        default:
-          break;
-      }
-    });
     this._tooltips = [];
   }
   componentDidMount() {
@@ -139,27 +123,18 @@ export default class Measure extends React.Component {
     this._tooltips.push(this._tooltip);
     this.props.map.addOverlay(this._tooltip);
   }
-  deactivate() {
-    if (this._currentInteraction) {
-      this.props.map.removeInteraction(this._currentInteraction);
-    }
-  }
   _measureDistance() {
     var map = this.props.map;
     this.deactivate();
-    this._currentInteraction = this._interactions.LENGTH;
     map.on('pointermove', this._pointerMoveHandler, this);
-    map.addInteraction(this._currentInteraction);
-    LayerActions.activateTool(this, this.props.toggleGroup);
+    this.activate(this._interactions.LENGTH);
     this._createTooltip();
   }
   _measureArea() {
     var map = this.props.map;
     this.deactivate();
-    this._currentInteraction = this._interactions.AREA;
     map.on('pointermove', this._pointerMoveHandler, this);
-    map.addInteraction(this._currentInteraction);
-    LayerActions.activateTool(this, this.props.toggleGroup);
+    this.activate(this._interactions.AREA);
     this._createTooltip();
   }
   _clear() {
@@ -184,8 +159,3 @@ export default class Measure extends React.Component {
     );
   }
 }
-
-Measure.propTypes = {
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  toggleGroup: React.PropTypes.string
-};
