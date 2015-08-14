@@ -1,9 +1,26 @@
 import React from 'react';
 import SelectActions from '../actions/SelectActions.js';
+import LayerActions from '../actions/LayerActions.js';
+import MapConstants from '../constants/MapConstants.js';
+import AppDispatcher from '../dispatchers/AppDispatcher.js';
 
 export default class Select extends React.Component {
   constructor(props) {
     super(props);
+    AppDispatcher.register((payload) => {
+      let action = payload.action;
+      switch(action.type) {
+       case MapConstants.ACTIVATE_TOOL:
+          if (this.props.toggleGroup && this.props.toggleGroup === action.toggleGroup) {
+            if (this !== action.tool) {
+              this.deactivate();
+            }
+          }
+          break;
+        default:
+          break;
+      }
+    });
     this._select = new ol.interaction.Select();
     this.props.map.addInteraction(this._select);
     this._interactions = {
@@ -32,13 +49,17 @@ export default class Select extends React.Component {
       });
     }, this);
   }
+  deactivate() {
+    if (this._currentInteraction) {
+      this.props.map.removeInteraction(this._currentInteraction);
+    }
+  }
   _selectByRectangle() {
     var map = this.props.map;
-    if (this._currentInteraction) {
-      map.removeInteraction(this._currentInteraction);
-    }
+    this.deactivate();
     this._currentInteraction = this._interactions.RECTANGLE;
     map.addInteraction(this._currentInteraction);
+    LayerActions.activateTool(this, this.props.toggleGroup);
   }
   render() {
     return (
@@ -53,5 +74,6 @@ export default class Select extends React.Component {
 }
 
 Select.propTypes = {
-  map: React.PropTypes.instanceOf(ol.Map).isRequired
+  map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  toggleGroup: React.PropTypes.string
 };

@@ -9,5 +9,6 @@ export default keymirror({
   DOWNLOAD_LAYER: null,
   SET_LAYER_OPACITY: null,
   SEARCH_RESULTS: null,
-  SELECT_LAYER: null
+  SELECT_LAYER: null,
+  ACTIVATE_TOOL: null
 });

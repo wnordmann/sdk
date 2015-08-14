@@ -3,6 +3,13 @@ import MapConstants from '../constants/MapConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 
 export default {
+  activateTool: (tool, toggleGroup) => {
+    AppDispatcher.handleAction({
+      type: MapConstants.ACTIVATE_TOOL,
+      tool: tool,
+      toggleGroup: toggleGroup
+    });
+  },
   setVisible: (layer, visible) => {
     layer.setVisible(visible);
     AppDispatcher.handleAction({

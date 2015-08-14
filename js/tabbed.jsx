@@ -171,5 +171,5 @@ var filterFunc = function(lyr) {
   return !lyr.get('hideFromLayerList') && lyr instanceof ol.layer.Vector;
 };
 React.render(<LayerSelector filter={filterFunc} map={map} value={selectedLayer.get('title')} />, document.getElementById('attributes-layer-selector'));
-React.render(<Select map={map}/>, document.getElementById('toolbar-select'));
-React.render(<Measure map={map}/>, document.getElementById('toolbar-measure'));
+React.render(<Select toggleGroup='navigation' map={map}/>, document.getElementById('toolbar-select'));
+React.render(<Measure toggleGroup='navigation' map={map}/>, document.getElementById('toolbar-measure'));
