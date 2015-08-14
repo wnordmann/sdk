@@ -32,17 +32,19 @@ export default class Select extends React.Component {
       });
     }, this);
   }
-  _selectByPolygon() {
-  }
   _selectByRectangle() {
-    this.props.map.addInteraction(this._interactions.RECTANGLE);
+    var map = this.props.map;
+    if (this._currentInteraction) {
+      map.removeInteraction(this._currentInteraction);
+    }
+    this._currentInteraction = this._interactions.RECTANGLE;
+    map.addInteraction(this._currentInteraction);
   }
   render() {
     return (
       <li className='dropdown'>
         <a href='#' className='dropdown-toggle' data-toggle='dropdown'> Select <span className='caret'></span> </a>
         <ul className='dropdown-menu'>
-          <li><a onClick={this._selectByPolygon.bind(this)} href='#'>Select by polygon</a></li>
           <li><a onClick={this._selectByRectangle.bind(this)} href='#'>Select by rectangle</a></li>
         </ul>
       </li>
