@@ -13,6 +13,9 @@ export default class FeatureStore extends EventEmitter {
       file: /.*[\\\\/].*\..*/
     };
   }
+  getLayer() {
+    return this._layer;
+  }
   bindLayer(layer) {
     this._config = {};
     this._layer = layer;

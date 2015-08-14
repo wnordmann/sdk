@@ -4,6 +4,7 @@ import FixedDataTable from 'fixed-data-table';
 import '../../node_modules/fixed-data-table/dist/fixed-data-table.css';
 import FeatureStore from '../stores/FeatureStore.js';
 import MapConstants from '../constants/MapConstants.js';
+import SelectConstants from '../constants/SelectConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import './FeatureTable.css';
 
@@ -13,8 +14,19 @@ export default class FeatureTable extends React.Component {
     AppDispatcher.register((payload) => {
       let action = payload.action;
       switch(action.type) {
-        case MapConstants.SELECT_LAYER:
+       case MapConstants.SELECT_LAYER:
           this._store.bindLayer(action.layer);
+          break;
+        case SelectConstants.SELECT_FEATURES:
+          if (action.layer === this._store.getLayer()) {
+            this.state.selected = {};
+            for (var i = 0, ii = action.features.length; i < ii; ++i) {
+              var feature = action.features[i];
+              var index = this.state.features.indexOf(feature);
+              this.state.selected[index] = true;
+            }
+            this.setState({selected: this.state.selected});
+          }
           break;
         default:
           break;

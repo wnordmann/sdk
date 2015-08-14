@@ -6,6 +6,7 @@ import GeocodingResults from './components/GeocodingResults.jsx';
 import FeatureTable from './components/FeatureTable.jsx';
 import LayerSelector from './components/LayerSelector.jsx';
 import Measure from './components/Measure.jsx';
+import Select from './components/Select.jsx';
 
 var textStyleCacheAirports = {};
 var styleAirports = function() {
@@ -133,6 +134,7 @@ var map = new ol.Map({
       ]
     }),
     new ol.layer.Vector({
+      isSelectable: true,
       title: 'popp',
       style: stylePopp,
       source: new ol.source.Cluster({
@@ -144,6 +146,7 @@ var map = new ol.Map({
       })
     }),
     new ol.layer.Vector({
+      isSelectable: true,
       title: 'airports',
       style: styleAirports,
       source: new ol.source.Vector({
@@ -168,4 +171,5 @@ var filterFunc = function(lyr) {
   return !lyr.get('hideFromLayerList') && lyr instanceof ol.layer.Vector;
 };
 React.render(<LayerSelector filter={filterFunc} map={map} value={selectedLayer.get('title')} />, document.getElementById('attributes-layer-selector'));
-React.render(<Measure map={map}/>, document.getElementById('toolbar-list'));
+React.render(<Select map={map}/>, document.getElementById('toolbar-select'));
+React.render(<Measure map={map}/>, document.getElementById('toolbar-measure'));
