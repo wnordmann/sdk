@@ -8,6 +8,12 @@ import LayerSelector from './components/LayerSelector.jsx';
 import Measure from './components/Measure.jsx';
 import Select from './components/Select.jsx';
 
+var styleTrees = new ol.style.Style({
+  fill: new ol.style.Fill({
+    color: 'rgba(186,221,105,0.505882)'
+  })
+});
+
 var textStyleCacheAirports = {};
 var styleAirports = function() {
   var value = '';
@@ -132,6 +138,15 @@ var map = new ol.Map({
           source: new ol.source.MapQuest({layer: 'sat'})
         })
       ]
+    }),
+    new ol.layer.Vector({
+      isSelectable: true,
+      title: 'trees',
+      style: styleTrees,
+      source: new ol.source.Vector({
+        format: new ol.format.GeoJSON(),
+        url: '../../data/trees.json'
+      })
     }),
     new ol.layer.Vector({
       isSelectable: true,
