@@ -6,6 +6,7 @@ import FeatureStore from '../stores/FeatureStore.js';
 import MapConstants from '../constants/MapConstants.js';
 import SelectConstants from '../constants/SelectConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
+import SelectActions from '../actions/SelectActions.js';
 import './FeatureTable.css';
 
 export default class FeatureTable extends React.Component {
@@ -63,7 +64,14 @@ export default class FeatureTable extends React.Component {
   }
   _onRowClick(evt, index) {
     this.state.selected[index] = !this.state.selected[index];
+    var lyr = this._store.getLayer(), feature = this.state.features[index];
+    if (this.state.selected[index]) {
+      SelectActions.selectFeature(lyr, feature);
+    } else {
+      SelectActions.unselectFeature(lyr, feature);
+    }
     this.setState({selected: this.state.selected});
+
   }
   _rowClassNameGetter(index) {
     return this.state.selected[index] ? 'row-selected' : '';

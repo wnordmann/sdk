@@ -9,5 +9,19 @@ export default {
       layer: layer,
       features: features
     });
+  },
+  selectFeature: (layer, feature) => {
+    AppDispatcher.handleAction({
+      type: SelectConstants.SELECT_FEATURE,
+      layer: layer,
+      feature: feature
+    });
+  },
+  unselectFeature: (layer, feature) => {
+    AppDispatcher.handleAction({
+      type: SelectConstants.UNSELECT_FEATURE,
+      layer: layer,
+      feature: feature
+    });
   }
 };

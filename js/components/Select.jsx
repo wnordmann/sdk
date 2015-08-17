@@ -1,6 +1,8 @@
 import React from 'react';
 import SelectActions from '../actions/SelectActions.js';
+import SelectConstants from '../constants/SelectConstants.js';
 import MapTool from './MapTool.js';
+import AppDispatcher from '../dispatchers/AppDispatcher.js';
 
 export default class Select extends MapTool {
   constructor(props) {
@@ -32,6 +34,21 @@ export default class Select extends MapTool {
         }
       });
     }, this);
+    AppDispatcher.register((payload) => {
+      let action = payload.action;
+      var feature = action.feature;
+      var selectedFeatures = this._select.getFeatures();
+      switch(action.type) {
+        case SelectConstants.SELECT_FEATURE:
+          selectedFeatures.push(feature);
+          break;
+        case SelectConstants.UNSELECT_FEATURE:
+          selectedFeatures.remove(feature);
+          break;
+        default:
+          break;
+      }
+    });
   }
   _selectByRectangle() {
     var map = this.props.map;
