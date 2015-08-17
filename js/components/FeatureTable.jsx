@@ -13,23 +13,31 @@ export default class FeatureTable extends React.Component {
   constructor(props) {
     super(props);
     AppDispatcher.register((payload) => {
-      let action = payload.action;
+      let action = payload.action, id;
       switch(action.type) {
        case MapConstants.SELECT_LAYER:
-          this.state.selected = [];
+          id = action.layer.get('id');
+          if (!this.state.selected[id]) {
+            this.state.selected[id] = [];
+          }
           if (this.state.selectedOnly === true) {
-            this._store.bindLayer(action.layer, this.state.selected);
+            this._store.bindLayer(action.layer, this.state.selected[id]);
           } else {
             this._store.bindLayer(action.layer);
           }
           break;
         case SelectConstants.SELECT_FEATURES:
-          if (action.layer === this._store.getLayer()) {
-            this.state.selected = [];
-            for (var i = 0, ii = action.features.length; i < ii; ++i) {
-              var feature = action.features[i];
-              this.state.selected.push(feature);
+          var layer = action.layer;
+          id = layer.get('id');
+          this.state.selected[id] = [];
+          for (var i = 0, ii = action.features.length; i < ii; ++i) {
+            this.state.selected[id].push(action.features[i]);
+          }
+          if (this.state.selectedOnly === true) {
+            if (this._store.getLayer() === layer) {
+              this._store.setFilter(this.state.selected[id]);
             }
+          } else {
             this.setState({selected: this.state.selected});
           }
           break;
@@ -42,8 +50,9 @@ export default class FeatureTable extends React.Component {
       selectedOnly: false,
       features: [],
       columnWidths: {},
-      selected: []
+      selected: {}
     };
+    this.state.selected[this.props.layer.get('id')] = [];
   }
   componentWillMount() {
     this._store.addChangeListener(this._onChange.bind(this));
@@ -67,28 +76,30 @@ export default class FeatureTable extends React.Component {
     this._isResizing = false;
   }
   _onRowClick(evt, index) {
+    var lyr = this._store.getLayer(), id = lyr.get('id');
     var feature = this.state.features[index];
-    var idx = this.state.selected.indexOf(feature);
-    var lyr = this._store.getLayer();
+    var idx = this.state.selected[id].indexOf(feature);
     if (idx > -1) {
-      this.state.selected.splice(idx, 1);
+      this.state.selected[id].splice(idx, 1);
       SelectActions.unselectFeature(lyr, feature);
     } else {
-      this.state.selected.push(feature);
+      this.state.selected[id].push(feature);
       SelectActions.selectFeature(lyr, feature);
     }
     this.setState({selected: this.state.selected});
 
   }
   _rowClassNameGetter(index) {
+    var lyr = this._store.getLayer(), id = lyr.get('id');
     var feature = this.state.features[index];
-    return this.state.selected.indexOf(feature) > -1 ? 'row-selected' : '';
+    return this.state.selected[id].indexOf(feature) > -1 ? 'row-selected' : '';
   }
   _filter(evt) {
+    var lyr = this._store.getLayer(), id = lyr.get('id');
     // store->setFilter will trigger setState so no need for an explicit setState call here
     this.state.selectedOnly = evt.target.checked;
     if (this.state.selectedOnly === true) {
-      this._store.setFilter(this.state.selected);
+      this._store.setFilter(this.state.selected[id]);
     } else {
       this._store.setFilter(null);
     }

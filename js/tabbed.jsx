@@ -140,6 +140,7 @@ var map = new ol.Map({
       ]
     }),
     new ol.layer.Vector({
+      id: 'lyr01',
       isSelectable: true,
       title: 'trees',
       style: styleTrees,
@@ -149,6 +150,7 @@ var map = new ol.Map({
       })
     }),
     new ol.layer.Vector({
+      id: 'lyr02',
       isSelectable: true,
       title: 'popp',
       style: stylePopp,
@@ -161,6 +163,7 @@ var map = new ol.Map({
       })
     }),
     new ol.layer.Vector({
+      id: 'lyr03',
       isSelectable: true,
       title: 'airports',
       style: styleAirports,
