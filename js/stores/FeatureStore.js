@@ -16,7 +16,16 @@ export default class FeatureStore extends EventEmitter {
   getLayer() {
     return this._layer;
   }
-  bindLayer(layer) {
+  _setFeatures(filter, features) {
+    if (filter) {
+      this._config.features = filter;
+      this._config.originalFeatures = features;
+    } else {
+      this._config.features = features;
+      this._config.originalFeatures = this._config.features.slice();
+    }
+  }
+  bindLayer(layer, filter) {
     this._config = {};
     this._layer = layer;
     var source = layer.getSource();
@@ -25,12 +34,13 @@ export default class FeatureStore extends EventEmitter {
     }
     source.on('change', function(evt) {
       if (evt.target.getState() === 'ready') {
-        this._config.features = evt.target.getFeatures();
+        var features = evt.target.getFeatures();
+        this._setFeatures(filter, features);
         delete this._schema;
         this.emitChange();
       }
     }, this);
-    this._config.features = source.getFeatures();
+    this._setFeatures(filter, source.getFeatures());
     delete this._schema;
     this.emitChange();
   }
@@ -41,10 +51,18 @@ export default class FeatureStore extends EventEmitter {
     }
     return type;
   }
+  setFilter(features) {
+    if (features === null) {
+      this._config.features = this._config.originalFeatures;
+    } else {
+      this._config.features = features;
+    }
+    this.emitChange();
+  }
   getSchema() {
-    if (!this._schema && this._config.features.length > 0) {
+    if (!this._schema && this._config.originalFeatures.length > 0) {
       var schema = {};
-      var feature = this._config.features[0];
+      var feature = this._config.originalFeatures[0];
       var geom = feature.getGeometryName();
       var values = feature.getProperties();
       for (var key in values) {

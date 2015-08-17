@@ -16,15 +16,19 @@ export default class FeatureTable extends React.Component {
       let action = payload.action;
       switch(action.type) {
        case MapConstants.SELECT_LAYER:
-          this._store.bindLayer(action.layer);
+          this.state.selected = [];
+          if (this.state.selectedOnly === true) {
+            this._store.bindLayer(action.layer, this.state.selected);
+          } else {
+            this._store.bindLayer(action.layer);
+          }
           break;
         case SelectConstants.SELECT_FEATURES:
           if (action.layer === this._store.getLayer()) {
-            this.state.selected = {};
+            this.state.selected = [];
             for (var i = 0, ii = action.features.length; i < ii; ++i) {
               var feature = action.features[i];
-              var index = this.state.features.indexOf(feature);
-              this.state.selected[index] = true;
+              this.state.selected.push(feature);
             }
             this.setState({selected: this.state.selected});
           }
@@ -35,9 +39,10 @@ export default class FeatureTable extends React.Component {
     });
     this._store = new FeatureStore({layer: this.props.layer});
     this.state = {
+      selectedOnly: false,
       features: [],
       columnWidths: {},
-      selected: {}
+      selected: []
     };
   }
   componentWillMount() {
@@ -49,7 +54,6 @@ export default class FeatureTable extends React.Component {
   }
   _onChange() {
     var state = this._store.getState();
-    state.selected = {};
     state.columnWidths = {};
     this.setState(state);
   }
@@ -63,41 +67,55 @@ export default class FeatureTable extends React.Component {
     this._isResizing = false;
   }
   _onRowClick(evt, index) {
-    this.state.selected[index] = !this.state.selected[index];
-    var lyr = this._store.getLayer(), feature = this.state.features[index];
-    if (this.state.selected[index]) {
-      SelectActions.selectFeature(lyr, feature);
-    } else {
+    var feature = this.state.features[index];
+    var idx = this.state.selected.indexOf(feature);
+    var lyr = this._store.getLayer();
+    if (idx > -1) {
+      this.state.selected.splice(idx, 1);
       SelectActions.unselectFeature(lyr, feature);
+    } else {
+      this.state.selected.push(feature);
+      SelectActions.selectFeature(lyr, feature);
     }
     this.setState({selected: this.state.selected});
 
   }
   _rowClassNameGetter(index) {
-    return this.state.selected[index] ? 'row-selected' : '';
+    var feature = this.state.features[index];
+    return this.state.selected.indexOf(feature) > -1 ? 'row-selected' : '';
+  }
+  _filter(evt) {
+    // store->setFilter will trigger setState so no need for an explicit setState call here
+    this.state.selectedOnly = evt.target.checked;
+    if (this.state.selectedOnly === true) {
+      this._store.setFilter(this.state.selected);
+    } else {
+      this._store.setFilter(null);
+    }
   }
   render() {
     var Table = FixedDataTable.Table;
     var Column = FixedDataTable.Column;
-    if (this.state.features.length > 0) {
-      var schema = this._store.getSchema();
-      var columnNodes = [];
-      for (var key in schema) {
-        if (!this.state.columnWidths[key]) {
-          this.state.columnWidths[key] = this.props.columnWidth;
-        }
-        var cellRenderer = (schema[key] === 'link') ? this._renderLink : undefined;
-        columnNodes.push(
-          <Column
-            isResizable={true}
-            label={key}
-            cellRenderer={cellRenderer}
-            dataKey={key}
-            key={key}
-            width={this.state.columnWidths[key]} />
-          );
+    var schema = this._store.getSchema();
+    var columnNodes = [];
+    for (var key in schema) {
+      if (!this.state.columnWidths[key]) {
+        this.state.columnWidths[key] = this.props.columnWidth;
       }
-      return (
+      var cellRenderer = (schema[key] === 'link') ? this._renderLink : undefined;
+      columnNodes.push(
+        <Column
+          isResizable={true}
+          label={key}
+          cellRenderer={cellRenderer}
+          dataKey={key}
+          key={key}
+          width={this.state.columnWidths[key]} />
+        );
+    }
+    return (
+      <div>
+        <label><input type='checkbox' onChange={this._filter.bind(this)}></input>Show only selected features</label>
         <Table
           onColumnResizeEndCallback={this._onColumnResize.bind(this)}
           isColumnResizing={this._isResizing}
@@ -110,10 +128,8 @@ export default class FeatureTable extends React.Component {
           width={this.props.width}
           height={this.props.height}>
           {columnNodes}
-        </Table>);
-    } else {
-      return false;
-    }
+        </Table>
+      </div>);
   }
 }
 
