@@ -12,6 +12,11 @@ export default class LayerSelector extends React.Component {
     LayerStore.addChangeListener(this._onChange.bind(this));
     this._onChange();
   }
+  componentDidMount() {
+    var select = React.findDOMNode(this.refs.layerSelect);
+    var layer = LayerStore.findLayer(select.value);
+    LayerActions.selectLayer(layer, this);
+  }
   _onChange() {
     this.setState(LayerStore.getState());
   }
@@ -30,7 +35,7 @@ export default class LayerSelector extends React.Component {
       }
     });
     return (
-      <select defaultValue={this.props.value} className='form-control' onChange={this._onItemChange.bind(this)}>
+      <select ref='layerSelect' defaultValue={this.props.value} className='form-control' onChange={this._onItemChange.bind(this)}>
         {selectItems}
       </select>
     );

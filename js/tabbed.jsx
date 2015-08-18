@@ -6,6 +6,7 @@ import GeocodingResults from './components/GeocodingResults.jsx';
 import FeatureTable from './components/FeatureTable.jsx';
 import Measure from './components/Measure.jsx';
 import Select from './components/Select.jsx';
+import QueryBuilder from './components/QueryBuilder.jsx';
 
 var styleTrees = new ol.style.Style({
   fill: new ol.style.Fill({
@@ -179,6 +180,7 @@ var map = new ol.Map({
   })
 });
 var selectedLayer = map.getLayers().item(2);
+React.render(<QueryBuilder map={map} />, document.getElementById('query-tab'));
 React.render(<FeatureTable width={434} layer={selectedLayer} map={map} />, document.getElementById('attributes-table-tab'));
 React.render(<Geocoding />, document.getElementById('geocoding-tab'));
 React.render(<GeocodingResults map={map} />, document.getElementById('geocoding-results'));

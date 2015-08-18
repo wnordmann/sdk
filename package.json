@@ -15,6 +15,7 @@
   "author": "Boundless",
   "license": "ISC",
   "dependencies": {
+    "filtrex": "^0.5.4",
     "fixed-data-table": "^0.3.0",
     "flux": "^2.0.1",
     "keymirror": "~0.1.0",
