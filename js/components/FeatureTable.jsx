@@ -129,7 +129,7 @@ export default class FeatureTable extends React.Component {
         );
     }
     return (
-      <div>
+      <div id='attributes-table'>
         <LayerSelector filter={this._filterLayerList} map={this.props.map} value={this.props.layer.get('title')} />
         <label><input type='checkbox' onChange={this._filter.bind(this)}></input>Show only selected features</label>
         <Table

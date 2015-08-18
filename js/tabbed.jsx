@@ -179,7 +179,7 @@ var map = new ol.Map({
   })
 });
 var selectedLayer = map.getLayers().item(2);
-React.render(<FeatureTable width={434} layer={selectedLayer} map={map} />, document.getElementById('attributes-table'));
+React.render(<FeatureTable width={434} layer={selectedLayer} map={map} />, document.getElementById('attributes-table-tab'));
 React.render(<Geocoding />, document.getElementById('geocoding-tab'));
 React.render(<GeocodingResults map={map} />, document.getElementById('geocoding-results'));
 React.render(<LayerList showOpacity={true} showDownload={true} showGroupContent={true} showZoomTo={true} allowReordering={true} map={map} />,
