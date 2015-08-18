@@ -88,7 +88,6 @@ export default class FeatureTable extends React.Component {
       SelectActions.selectFeature(lyr, feature);
     }
     this.setState({selected: this.state.selected});
-
   }
   _rowClassNameGetter(index) {
     var lyr = this._store.getLayer(), id = lyr.get('id');
@@ -99,14 +98,49 @@ export default class FeatureTable extends React.Component {
     var lyr = this._store.getLayer(), id = lyr.get('id');
     // store->setFilter will trigger setState so no need for an explicit setState call here
     this.state.selectedOnly = evt.target.checked;
-    if (this.state.selectedOnly === true) {
-      this._store.setFilter(this.state.selected[id]);
-    } else {
-      this._store.setFilter(null);
-    }
+    this._updateStoreFilter();
   }
   _filterLayerList(lyr) {
     return !lyr.get('hideFromLayerList') && lyr instanceof ol.layer.Vector;
+  }
+  _updateStoreFilter() {
+    var lyr = this._store.getLayer(), id = lyr.get('id');
+    if (this.state.selectedOnly === true) {
+      this._store.setFilter(this.state.selected[id]);
+    } else {
+      // this means restoring the original features
+      this._store.setFilter(null);
+    }
+  }
+  _clearSelected() {
+    var lyr = this._store.getLayer(), id = lyr.get('id');
+    var selected = this.state.selected[id];
+    var len = selected.length;
+    for (var i = 0, ii = len; i < len; ++i) {
+      var feature = selected[i];
+      SelectActions.unselectFeature(lyr, feature);
+    }
+    if (len > 0) {
+      this.state.selected[id] = [];
+      this._updateStoreFilter();
+    }
+  }
+  _zoomSelected() {
+    var selected = this.state.selected[this._store.getLayer().get('id')];
+    var len = selected.length;
+    if (len > 0) {
+      var extent = ol.extent.createEmpty();
+      for (var i = 0; i < len; ++i) {
+        extent = ol.extent.extend(extent, selected[i].getGeometry().getExtent());
+      }
+      var map = this.props.map;
+      if (extent[0] == extent[2]){
+        map.getView().setCenter([extent[0], extent[1]]);
+        map.getView().setZoom(this.props.pointZoom);
+      } else {
+        map.getView().fit(extent, map.getSize());
+      }
+    }
   }
   render() {
     var Table = FixedDataTable.Table;
@@ -130,8 +164,12 @@ export default class FeatureTable extends React.Component {
     }
     return (
       <div id='attributes-table'>
-        <LayerSelector filter={this._filterLayerList} map={this.props.map} value={this.props.layer.get('title')} />
-        <label><input type='checkbox' onChange={this._filter.bind(this)}></input>Show only selected features</label>
+        <form className='form-inline'>
+          <LayerSelector filter={this._filterLayerList} map={this.props.map} value={this.props.layer.get('title')} />
+          <button onClick={this._zoomSelected.bind(this)} type='button' className='btn btn-default'><i className='glyphicon glyphicon-search'></i> Zoom to selected</button>
+          <button onClick={this._clearSelected.bind(this)} type='button' className='btn btn-default'><i className='glyphicon glyphicon-trash'></i> Clear selected</button>
+          <label><input type='checkbox' onChange={this._filter.bind(this)}></input>Show only selected features</label>
+        </form>
         <Table
           onColumnResizeEndCallback={this._onColumnResize.bind(this)}
           isColumnResizing={this._isResizing}
@@ -156,7 +194,8 @@ FeatureTable.propTypes = {
   height: React.PropTypes.number,
   rowHeight: React.PropTypes.number,
   headerHeight: React.PropTypes.number,
-  columnWidth: React.PropTypes.number
+  columnWidth: React.PropTypes.number,
+  pointZoom: React.PropTypes.number
 };
 
 FeatureTable.defaultProps = {
@@ -164,5 +203,6 @@ FeatureTable.defaultProps = {
   height: 400,
   rowHeight: 30,
   headerHeight: 50,
-  columnWidth: 100
+  columnWidth: 100,
+  pointZoom: 16
 };
