@@ -165,10 +165,11 @@ export default class FeatureTable extends React.Component {
     return (
       <div id='attributes-table'>
         <form className='form-inline'>
+          <label>Layer:</label>
           <LayerSelector filter={this._filterLayerList} map={this.props.map} value={this.props.layer.get('title')} />
           <button onClick={this._zoomSelected.bind(this)} type='button' className='btn btn-default'><i className='glyphicon glyphicon-search'></i> Zoom to selected</button>
           <button onClick={this._clearSelected.bind(this)} type='button' className='btn btn-default'><i className='glyphicon glyphicon-trash'></i> Clear selected</button>
-          <label><input type='checkbox' onChange={this._filter.bind(this)}></input>Show only selected features</label>
+          <label><input type='checkbox' onChange={this._filter.bind(this)}></input> Show only selected features</label>
         </form>
         <Table
           onColumnResizeEndCallback={this._onColumnResize.bind(this)}

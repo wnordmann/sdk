@@ -22,3 +22,6 @@ html, body {
   position:fixed;
   bottom: 0px;
 }
+.form-inline > * {
+  margin:5px 3px;
+}
