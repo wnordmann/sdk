@@ -13,12 +13,17 @@ export default class QueryBuilder extends React.Component {
       let action = payload.action;
       switch(action.type) {
        case MapConstants.SELECT_LAYER:
-          this._layer = action.layer;
+          if (action.cmp === this.refs.layerSelector) {
+            this._layer = action.layer;
+          }
           break;
         default:
           break;
       }
     });
+  }
+  componentDidMount() {
+    this._layer = this.refs.layerSelector.getLayer();
   }
   _filterLayerList(lyr) {
     return lyr.get('isSelectable');
@@ -54,7 +59,7 @@ export default class QueryBuilder extends React.Component {
         <form className='form-horizontal'>
           <div className='input-group'>
             <span className='input-group-addon'>Layer</span>
-            <LayerSelector filter={this._filterLayerList} map={this.props.map} />
+            <LayerSelector ref='layerSelector' filter={this._filterLayerList} map={this.props.map} />
           </div>
           <div className='input-group'>
             <span className='input-group-addon'>Filter</span>

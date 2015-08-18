@@ -17,14 +17,16 @@ export default class FeatureTable extends React.Component {
       let action = payload.action, id;
       switch(action.type) {
        case MapConstants.SELECT_LAYER:
-          id = action.layer.get('id');
-          if (!this.state.selected[id]) {
-            this.state.selected[id] = [];
-          }
-          if (this.state.selectedOnly === true) {
-            this._store.bindLayer(action.layer, this.state.selected[id]);
-          } else {
-            this._store.bindLayer(action.layer);
+          if (action.cmp === this.refs.layerSelector) {
+            id = action.layer.get('id');
+            if (!this.state.selected[id]) {
+              this.state.selected[id] = [];
+            }
+            if (this.state.selectedOnly === true) {
+              this._store.bindLayer(action.layer, this.state.selected[id]);
+            } else {
+              this._store.bindLayer(action.layer);
+            }
           }
           break;
         case SelectConstants.SELECT_FEATURES:
@@ -166,7 +168,7 @@ export default class FeatureTable extends React.Component {
       <div id='attributes-table'>
         <form className='form-inline'>
           <label>Layer:</label>
-          <LayerSelector filter={this._filterLayerList} map={this.props.map} value={this.props.layer.get('title')} />
+          <LayerSelector ref='layerSelector' filter={this._filterLayerList} map={this.props.map} value={this.props.layer.get('title')} />
           <button onClick={this._zoomSelected.bind(this)} type='button' className='btn btn-default'><i className='glyphicon glyphicon-search'></i> Zoom to selected</button>
           <button onClick={this._clearSelected.bind(this)} type='button' className='btn btn-default'><i className='glyphicon glyphicon-trash'></i> Clear selected</button>
           <label><input type='checkbox' onChange={this._filter.bind(this)}></input> Show only selected features</label>
