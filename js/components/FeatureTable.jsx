@@ -7,6 +7,7 @@ import MapConstants from '../constants/MapConstants.js';
 import SelectConstants from '../constants/SelectConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import SelectActions from '../actions/SelectActions.js';
+import LayerSelector from './LayerSelector.jsx';
 import './FeatureTable.css';
 
 export default class FeatureTable extends React.Component {
@@ -104,6 +105,9 @@ export default class FeatureTable extends React.Component {
       this._store.setFilter(null);
     }
   }
+  _filterLayerList(lyr) {
+    return !lyr.get('hideFromLayerList') && lyr instanceof ol.layer.Vector;
+  }
   render() {
     var Table = FixedDataTable.Table;
     var Column = FixedDataTable.Column;
@@ -126,6 +130,7 @@ export default class FeatureTable extends React.Component {
     }
     return (
       <div>
+        <LayerSelector filter={this._filterLayerList} map={this.props.map} value={this.props.layer.get('title')} />
         <label><input type='checkbox' onChange={this._filter.bind(this)}></input>Show only selected features</label>
         <Table
           onColumnResizeEndCallback={this._onColumnResize.bind(this)}
@@ -145,6 +150,7 @@ export default class FeatureTable extends React.Component {
 }
 
 FeatureTable.propTypes = {
+  map: React.PropTypes.instanceOf(ol.Map).isRequired,
   layer: React.PropTypes.instanceOf(ol.layer.Vector).isRequired,
   width: React.PropTypes.number,
   height: React.PropTypes.number,
