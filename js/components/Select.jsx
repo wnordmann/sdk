@@ -30,7 +30,7 @@ export default class Select extends MapTool {
             selected.push(feature);
             selectedFeatures.push(feature);
           });
-          SelectActions.selectFeatures(lyr, selected);
+          SelectActions.selectFeatures(lyr, selected, this);
         }
       });
     }, this);
@@ -39,6 +39,11 @@ export default class Select extends MapTool {
       var feature = action.feature;
       var selectedFeatures = this._select.getFeatures();
       switch(action.type) {
+        case SelectConstants.SELECT_FEATURES:
+          if (action.cmp !== this) {
+            selectedFeatures.extend(action.features);
+          }
+          break;
         case SelectConstants.SELECT_FEATURE:
           selectedFeatures.push(feature);
           break;
