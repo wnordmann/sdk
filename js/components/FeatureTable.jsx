@@ -49,7 +49,9 @@ export default class FeatureTable extends React.Component {
         case SelectConstants.SELECT_FEATURES:
           var layer = action.layer;
           id = layer.get('id');
-          this.state.selected[id] = [];
+          if (action.clear === true || !this.state.selected[id]) {
+            this.state.selected[id] = [];
+          }
           for (i = 0, ii = action.features.length; i < ii; ++i) {
             this.state.selected[id].push(action.features[i]);
           }

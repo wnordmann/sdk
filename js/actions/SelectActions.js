@@ -18,12 +18,13 @@ export default {
       cmp: cmp
     });
   },
-  selectFeatures: (layer, features, cmp) => {
+  selectFeatures: (layer, features, cmp, clear) => {
     AppDispatcher.handleAction({
       type: SelectConstants.SELECT_FEATURES,
       layer: layer,
       features: features,
-      cmp: cmp
+      cmp: cmp,
+      clear: clear
     });
   },
   selectFeature: (layer, feature) => {
