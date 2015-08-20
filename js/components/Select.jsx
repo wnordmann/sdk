@@ -69,7 +69,6 @@ export default class Select extends MapTool {
             });
             if (remove.length > 0) {
               for (i = 0, ii = remove.length; i < ii; ++i) {
-                //SelectActions.unselectFeature(action.layer, remove[i]);
                 selectedFeatures.remove(remove[i]);
               }
             }

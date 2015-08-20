@@ -14,7 +14,7 @@ export default class FeatureTable extends React.Component {
   constructor(props) {
     super(props);
     AppDispatcher.register((payload) => {
-      let action = payload.action, id;
+      let action = payload.action, id, i, ii;
       switch(action.type) {
        case MapConstants.SELECT_LAYER:
           if (action.cmp === this.refs.layerSelector) {
@@ -29,11 +29,28 @@ export default class FeatureTable extends React.Component {
             }
           }
           break;
+        case SelectConstants.SELECT_FEATURES_IN:
+          id = action.layer.get('id');
+          var selected = this.state.selected[id];
+          var remove = [];
+          for (i = 0, ii = selected.length; i < ii; ++i) {
+            if (action.features.indexOf(selected[i]) === -1) {
+              remove.push(selected[i]);
+            }
+          }
+          for (i = 0, ii = remove.length; i < ii; ++i) {
+            var idx = this.state.selected[id].indexOf(remove[i]);
+            if (idx > -1) {
+              this.state.selected[id].splice(idx, 1);
+            }
+          }
+          this.setState({selected: this.state.selected});
+          break;
         case SelectConstants.SELECT_FEATURES:
           var layer = action.layer;
           id = layer.get('id');
           this.state.selected[id] = [];
-          for (var i = 0, ii = action.features.length; i < ii; ++i) {
+          for (i = 0, ii = action.features.length; i < ii; ++i) {
             this.state.selected[id].push(action.features[i]);
           }
           if (this.state.selectedOnly === true) {
