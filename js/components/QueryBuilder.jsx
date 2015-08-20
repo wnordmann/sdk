@@ -41,7 +41,7 @@ export default class QueryBuilder extends React.Component {
       }
     }
   }
-  _newQuery() {
+  _doQuery(selectIn) {
     var selection = [];
     this._setQueryFilter();
     var features = this._layer.getSource().getFeatures();
@@ -51,7 +51,21 @@ export default class QueryBuilder extends React.Component {
         selection.push(features[i]);
       }
     }
-    SelectActions.selectFeatures(this._layer, selection);
+    if (selectIn === true) {
+      SelectActions.selectFeaturesInCurrentSelection(this._layer, selection, this);
+    } else {
+      SelectActions.selectFeatures(this._layer, selection, this);
+    }
+  }
+  _addSelection() {
+    this._doQuery();
+  }
+  _newSelection() {
+    SelectActions.clear(this._layer, this);
+    this._doQuery();
+  }
+  _inSelection() {
+    this._doQuery(true);
   }
   render() {
     return (
@@ -67,9 +81,9 @@ export default class QueryBuilder extends React.Component {
           </div>
           <div className='form-group'>
             <div className='col-sm-12 controls'>
-              <a onClick={this._newQuery.bind(this)} className='btn btn-primary' href='#' id='btn-query-new'>New selection</a>
-              <a className='btn btn-primary' href='#' id='btn-query-add'>Add to current selection</a>
-              <a className='btn btn-primary' href='#' id='btn-query-in'>Select in current selection</a>
+              <a onClick={this._newSelection.bind(this)} className='btn btn-primary' href='#' id='btn-query-new'>New selection</a>
+              <a onClick={this._addSelection.bind(this)} className='btn btn-primary' href='#' id='btn-query-add'>Add to current selection</a>
+              <a onClick={this._inSelection.bind(this)} className='btn btn-primary' href='#' id='btn-query-in'>Select in current selection</a>
             </div>
           </div>
         </form>

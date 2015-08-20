@@ -32,13 +32,49 @@ export default class Select extends MapTool {
           });
           SelectActions.selectFeatures(lyr, selected, this);
         }
-      });
+      }, this);
     }, this);
     AppDispatcher.register((payload) => {
       let action = payload.action;
       var feature = action.feature;
       var selectedFeatures = this._select.getFeatures();
+      var source, features, remove, i, ii;
       switch(action.type) {
+        case SelectConstants.CLEAR:
+          if (action.cmp !== this) {
+            source = action.layer.getSource();
+            features = source.getFeatures();
+            remove = [];
+            selectedFeatures.forEach(function(feature) {
+              if (features.indexOf(feature) > -1) {
+                remove.push(feature);
+              }
+            });
+            if (remove.length > 0) {
+              for (i = 0, ii = remove.length; i < ii; ++i) {
+                selectedFeatures.remove(remove[i]);
+              }
+            }
+          }
+          break;
+        case SelectConstants.SELECT_FEATURES_IN:
+          if (action.cmp !== this) {
+            source = action.layer.getSource();
+            features = source.getFeatures();
+            remove = [];
+            selectedFeatures.forEach(function(feature) {
+              if (features.indexOf(feature) > -1 && action.features.indexOf(feature) === -1) {
+                remove.push(feature);
+              }
+            });
+            if (remove.length > 0) {
+              for (i = 0, ii = remove.length; i < ii; ++i) {
+                //SelectActions.unselectFeature(action.layer, remove[i]);
+                selectedFeatures.remove(remove[i]);
+              }
+            }
+          }
+          break;
         case SelectConstants.SELECT_FEATURES:
           if (action.cmp !== this) {
             selectedFeatures.extend(action.features);
