@@ -21,6 +21,9 @@ export default class QueryBuilder extends React.Component {
           break;
       }
     });
+    this.state = {
+      hasError: false
+    };
   }
   componentDidMount() {
     this._layer = this.refs.layerSelector.getLayer();
@@ -33,17 +36,23 @@ export default class QueryBuilder extends React.Component {
     var expression = input.value;
     if (!expression) {
       this._queryFilter = null;
+      this.setState({hasError: false});
     } else {
       try {
         this._queryFilter = Filtrex(expression);
+        this.setState({hasError: false});
       } catch (e) {
         this._queryFilter = null;
+        this.setState({hasError: true});
       }
     }
   }
   _doQuery(selectIn) {
     var selection = [];
     this._setQueryFilter();
+    if (this._queryFilter === null) {
+      return;
+    }
     var features = this._layer.getSource().getFeatures();
     for (var i = 0, ii = features.length; i < ii; ++i) {
       var properties = features[i].getProperties();
@@ -68,6 +77,10 @@ export default class QueryBuilder extends React.Component {
     this._doQuery(true);
   }
   render() {
+    var inputClassName = 'form-control';
+    if (this.state.hasError) {
+      inputClassName += ' input-has-error';
+    }
     return (
       <div className='query-panel'>
         <form className='form-horizontal'>
@@ -77,7 +90,7 @@ export default class QueryBuilder extends React.Component {
           </div>
           <div className='input-group'>
             <span className='input-group-addon'>Filter</span>
-            <input className='form-control' ref='queryExpression' id='query-expression' placeholder='Type expression ....' type='text'/>
+            <input onKeyUp={this._setQueryFilter.bind(this)} className={inputClassName} ref='queryExpression' id='query-expression' placeholder='Type expression ....' type='text'/>
           </div>
           <div className='form-group'>
             <div className='col-sm-12 controls'>

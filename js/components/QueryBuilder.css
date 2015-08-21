@@ -4,3 +4,6 @@
 .query-panel .input-group {
   margin-bottom: 25px;
 }
+.input-has-error {
+  background-color: #fdd;
+}
