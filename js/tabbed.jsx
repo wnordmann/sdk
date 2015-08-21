@@ -7,6 +7,7 @@ import FeatureTable from './components/FeatureTable.jsx';
 import Measure from './components/Measure.jsx';
 import Select from './components/Select.jsx';
 import QueryBuilder from './components/QueryBuilder.jsx';
+import Chart from './components/Chart.jsx';
 
 var styleTrees = new ol.style.Style({
   fill: new ol.style.Fill({
@@ -188,3 +189,5 @@ React.render(<LayerList showOpacity={true} showDownload={true} showGroupContent=
   document.getElementById('layerlist'));
 React.render(<Select toggleGroup='navigation' map={map}/>, document.getElementById('toolbar-select'));
 React.render(<Measure toggleGroup='navigation' map={map}/>, document.getElementById('toolbar-measure'));
+var charts = {"Airports count per use category": {"categoryField": "USE", "layer": "airports", "valueFields": [], "displayMode": 2, "operation": 2}, "Forest area total surface": {"categoryField": "VEGDESC", "layer": "trees", "valueFields": ["AREA_KM2"], "displayMode": 1, "operation": 2}}
+React.render(<Chart charts={charts}/>, document.getElementById('charts-tab'));
