@@ -5,6 +5,7 @@ import Geocoding from './components/Geocoding.jsx';
 import GeocodingResults from './components/GeocodingResults.jsx';
 import Select from './components/Select.jsx';
 import QueryBuilder from './components/QueryBuilder.jsx';
+import FeatureTable from './components/FeatureTable.jsx';
 
 var styleTrees = new ol.style.Style({
   fill: new ol.style.Fill({
@@ -177,13 +178,21 @@ var map = new ol.Map({
     zoom: 4
   })
 });
+var selectedLayer = map.getLayers().item(2);
 React.render(<Geocoding />, document.getElementById('geocoding'));
 React.render(<GeocodingResults map={map} />, document.getElementById('geocoding-results'));
 React.render(<LayerList showOpacity={true} showDownload={true} showGroupContent={true} showZoomTo={true} allowReordering={true} map={map} />,
   document.getElementById('layerlist'));
 React.render(<Select toggleGroup='navigation' map={map}/>, document.getElementById('toolbar-select'));
 React.render(<QueryBuilder map={map} />, document.getElementById('query-panel'));
+var width = $(document.body).width()-25;
+var height = $(document.body).height()/2-100;
+React.render(<FeatureTable width={width} height={height} layer={selectedLayer} map={map} />, document.getElementById('table-panel'));
 
 $('#query-link').on('click', function() {
   $('#query-panel').toggle();
+});
+
+$('#table-link').on('click', function() {
+  $('#table-panel').toggle();
 });
