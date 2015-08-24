@@ -82,7 +82,6 @@ export default class QueryBuilder extends React.Component {
       inputClassName += ' input-has-error';
     }
     return (
-      <div className='query-panel'>
         <form className='form-horizontal'>
           <div className='input-group'>
             <span className='input-group-addon'>Layer</span>
@@ -100,7 +99,6 @@ export default class QueryBuilder extends React.Component {
             </div>
           </div>
         </form>
-      </div>
     );
   }
 };

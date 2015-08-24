@@ -181,7 +181,7 @@ var map = new ol.Map({
   })
 });
 var selectedLayer = map.getLayers().item(2);
-React.render(<QueryBuilder map={map} />, document.getElementById('query-tab'));
+React.render(<QueryBuilder map={map} />, document.getElementById('query-panel'));
 React.render(<FeatureTable width={434} layer={selectedLayer} map={map} />, document.getElementById('attributes-table-tab'));
 React.render(<Geocoding />, document.getElementById('geocoding-tab'));
 React.render(<GeocodingResults map={map} />, document.getElementById('geocoding-results'));

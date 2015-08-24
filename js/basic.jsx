@@ -4,6 +4,7 @@ import LayerList from './components/LayerList.jsx';
 import Geocoding from './components/Geocoding.jsx';
 import GeocodingResults from './components/GeocodingResults.jsx';
 import Select from './components/Select.jsx';
+import QueryBuilder from './components/QueryBuilder.jsx';
 
 var styleTrees = new ol.style.Style({
   fill: new ol.style.Fill({
@@ -181,3 +182,8 @@ React.render(<GeocodingResults map={map} />, document.getElementById('geocoding-
 React.render(<LayerList showOpacity={true} showDownload={true} showGroupContent={true} showZoomTo={true} allowReordering={true} map={map} />,
   document.getElementById('layerlist'));
 React.render(<Select toggleGroup='navigation' map={map}/>, document.getElementById('toolbar-select'));
+React.render(<QueryBuilder map={map} />, document.getElementById('query-panel'));
+
+$('#query-link').on('click', function() {
+  $('#query-panel').toggle();
+});
