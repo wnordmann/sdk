@@ -98,7 +98,7 @@ export default class Select extends MapTool {
   render() {
     return (
       <li className='dropdown'>
-        <a href='#' className='dropdown-toggle' data-toggle='dropdown'> Select <span className='caret'></span> </a>
+        <a href='#' className='dropdown-toggle' data-toggle='dropdown'> Selection <span className='caret'></span> </a>
         <ul className='dropdown-menu'>
           <li><a onClick={this._selectByRectangle.bind(this)} href='#'>Select by rectangle</a></li>
         </ul>
