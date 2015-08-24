@@ -3,6 +3,13 @@ import React from 'react';
 import LayerList from './components/LayerList.jsx';
 import Geocoding from './components/Geocoding.jsx';
 import GeocodingResults from './components/GeocodingResults.jsx';
+import Select from './components/Select.jsx';
+
+var styleTrees = new ol.style.Style({
+  fill: new ol.style.Fill({
+    color: 'rgba(186,221,105,0.505882)'
+  })
+});
 
 var textStyleCacheAirports = {};
 var styleAirports = function() {
@@ -130,6 +137,18 @@ var map = new ol.Map({
       ]
     }),
     new ol.layer.Vector({
+      id: 'lyr01',
+      isSelectable: true,
+      title: 'trees',
+      style: styleTrees,
+      source: new ol.source.Vector({
+        format: new ol.format.GeoJSON(),
+        url: '../../data/trees.json'
+      })
+    }),
+    new ol.layer.Vector({
+      id: 'lyr02',
+      isSelectable: true,
       title: 'popp',
       style: stylePopp,
       source: new ol.source.Cluster({
@@ -142,6 +161,8 @@ var map = new ol.Map({
     }),
     new ol.layer.Vector({
       title: 'airports',
+      id: 'lyr03',
+      isSelectable: true,
       style: styleAirports,
       source: new ol.source.Vector({
         format: new ol.format.GeoJSON(),
@@ -159,3 +180,4 @@ React.render(<Geocoding />, document.getElementById('geocoding'));
 React.render(<GeocodingResults map={map} />, document.getElementById('geocoding-results'));
 React.render(<LayerList showOpacity={true} showDownload={true} showGroupContent={true} showZoomTo={true} allowReordering={true} map={map} />,
   document.getElementById('layerlist'));
+React.render(<Select toggleGroup='navigation' map={map}/>, document.getElementById('toolbar-select'));

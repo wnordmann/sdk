@@ -6,12 +6,17 @@
   <link rel="stylesheet" type="text/css" href="../../node_modules/openlayers/dist/ol.css">
   <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="basic.css">
+  <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
   <script src="../../node_modules/openlayers/dist/ol.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
   <nav class="navbar navbar-default" role="navigation" id="toolbar">
     <div class="collapse navbar-collapse" id="navbar">
         <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <ul class="nav navbar-nav" id="toolbar-select"></ul>
+          </li>
           <div class="navbar-form navbar-right" id="geocoding"></div>
         </ul>
     </div>
