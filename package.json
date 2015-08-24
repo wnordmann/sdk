@@ -16,7 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "filtrex": "^0.5.4",
-    "fixed-data-table": "^0.3.0",
+    "fixed-data-table": "^0.4.6",
     "flux": "^2.0.1",
     "keymirror": "~0.1.0",
     "react": "^0.13.2",
