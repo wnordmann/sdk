@@ -82,23 +82,23 @@ export default class QueryBuilder extends React.Component {
       inputClassName += ' input-has-error';
     }
     return (
-        <form className='form-horizontal'>
-          <div className='input-group'>
-            <span className='input-group-addon'>Layer</span>
-            <LayerSelector ref='layerSelector' filter={this._filterLayerList} map={this.props.map} />
+      <form className='form-horizontal'>
+        <div className='input-group'>
+          <span className='input-group-addon'>Layer</span>
+          <LayerSelector ref='layerSelector' filter={this._filterLayerList} map={this.props.map} />
+        </div>
+        <div className='input-group'>
+          <span className='input-group-addon'>Filter</span>
+          <input onKeyUp={this._setQueryFilter.bind(this)} className={inputClassName} ref='queryExpression' id='query-expression' placeholder='Type expression ....' type='text'/>
+        </div>
+        <div className='form-group'>
+          <div className='col-sm-12 controls'>
+            <a onClick={this._newSelection.bind(this)} className='btn btn-primary' href='#' id='btn-query-new'>New selection</a>
+            <a onClick={this._addSelection.bind(this)} className='btn btn-primary' href='#' id='btn-query-add'>Add to current selection</a>
+            <a onClick={this._inSelection.bind(this)} className='btn btn-primary' href='#' id='btn-query-in'>Select in current selection</a>
           </div>
-          <div className='input-group'>
-            <span className='input-group-addon'>Filter</span>
-            <input onKeyUp={this._setQueryFilter.bind(this)} className={inputClassName} ref='queryExpression' id='query-expression' placeholder='Type expression ....' type='text'/>
-          </div>
-          <div className='form-group'>
-            <div className='col-sm-12 controls'>
-              <a onClick={this._newSelection.bind(this)} className='btn btn-primary' href='#' id='btn-query-new'>New selection</a>
-              <a onClick={this._addSelection.bind(this)} className='btn btn-primary' href='#' id='btn-query-add'>Add to current selection</a>
-              <a onClick={this._inSelection.bind(this)} className='btn btn-primary' href='#' id='btn-query-in'>Select in current selection</a>
-            </div>
-          </div>
-        </form>
+        </div>
+      </form>
     );
   }
 };
