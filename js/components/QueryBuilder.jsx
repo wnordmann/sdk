@@ -82,7 +82,7 @@ export default class QueryBuilder extends React.Component {
       inputClassName += ' input-has-error';
     }
     return (
-      <form className='form-horizontal'>
+      <form className='form-horizontal query-builder'>
         <div className='input-group'>
           <span className='input-group-addon'>Layer</span>
           <LayerSelector ref='layerSelector' filter={this._filterLayerList} map={this.props.map} />

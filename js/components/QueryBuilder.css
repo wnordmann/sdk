@@ -1,9 +1,9 @@
-.query-panel .form-group {
+.query-builder .form-group {
   margin-top: 10px;
 }
-.query-panel .input-group {
+.query-builder .input-group {
   margin-bottom: 25px;
 }
-.input-has-error {
+.query-builder .input-has-error {
   background-color: #fdd;
 }
