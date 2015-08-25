@@ -6,6 +6,7 @@ import GeocodingResults from './components/GeocodingResults.jsx';
 import Select from './components/Select.jsx';
 import QueryBuilder from './components/QueryBuilder.jsx';
 import FeatureTable from './components/FeatureTable.jsx';
+import LayerActions from './actions/LayerActions.js';
 
 var styleTrees = new ol.style.Style({
   fill: new ol.style.Fill({
@@ -195,4 +196,8 @@ $('#query-link').on('click', function() {
 
 $('#table-link').on('click', function() {
   $('#table-panel').toggle();
+});
+
+$('#navigation-link').on('click', function() {
+  LayerActions.activateTool(null, 'navigation');
 });
