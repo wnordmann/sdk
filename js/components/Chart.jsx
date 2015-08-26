@@ -24,6 +24,12 @@ export default class Chart extends React.Component {
           var layer = action.layer;
           var id = layer.get('id');
           this.state.selected[id] = action.features;
+          if (this.state.chart && this.state.chart.layer === id) {
+            this.setState({
+              selected: this.state.selected
+            });
+            this._drawFromSelection(this.state.chart);
+          }
           break;
         default:
           break;
@@ -31,7 +37,8 @@ export default class Chart extends React.Component {
     });
     this.state = {
       selected: {},
-      infoText: ''
+      infoText: '',
+      chart: null
     };
   }
   _drawFromSelection(chart) {
@@ -126,6 +133,7 @@ export default class Chart extends React.Component {
         break;
     }
     this.setState({
+      chart: chart,
       infoText: selectedFeatures.length + ' features selected in layer ' + chart.layer
     });
     c3.generate({
