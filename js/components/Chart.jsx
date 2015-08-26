@@ -3,6 +3,7 @@ import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import SelectConstants from '../constants/SelectConstants.js';
 import c3 from 'c3';
 import '../../node_modules/c3/c3.min.css';
+import './Chart.css';
 
 const AGGREGATION_MIN = 0;
 const AGGREGATION_MAX = 1;
@@ -29,7 +30,8 @@ export default class Chart extends React.Component {
       }
     });
     this.state = {
-      selected: {}
+      selected: {},
+      infoText: ''
     };
   }
   _drawFromSelection(chart) {
@@ -123,6 +125,9 @@ export default class Chart extends React.Component {
       default:
         break;
     }
+    this.setState({
+      infoText: selectedFeatures.length + ' features selected in layer ' + chart.layer
+    });
     c3.generate({
       bindto: '#chart',
       data: {
@@ -158,7 +163,7 @@ export default class Chart extends React.Component {
         <select onChange={this._selectChart.bind(this)} className='form-control' id='chart-selector'>
           {options}
         </select>
-        <span className="chart-panel-info" id="chart-panel-info"></span>
+        <span className="chart-panel-info" id="chart-panel-info">{this.state.infoText}</span>
         <div id='chart'></div>
       </div>
     );
