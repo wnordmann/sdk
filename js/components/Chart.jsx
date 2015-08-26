@@ -35,10 +35,15 @@ export default class Chart extends React.Component {
           break;
       }
     });
+    var chart;
+    for (var key in this.props.charts) {
+      chart = this.props.charts[key];
+      break;
+    }
     this.state = {
       selected: {},
       infoText: '',
-      chart: null
+      chart: chart
     };
   }
   _drawFromSelection(chart) {
