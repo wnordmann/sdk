@@ -190,4 +190,4 @@ React.render(<LayerList showOpacity={true} showDownload={true} showGroupContent=
 React.render(<Select toggleGroup='navigation' map={map}/>, document.getElementById('toolbar-select'));
 React.render(<Measure toggleGroup='navigation' map={map}/>, document.getElementById('toolbar-measure'));
 var charts = {"Airports count per use category": {"categoryField": "USE", "layer": "lyr03", "valueFields": [], "displayMode": 2, "operation": 2}, "Forest area total surface": {"categoryField": "VEGDESC", "layer": "lyr01", "valueFields": ["AREA_KM2"], "displayMode": 1, "operation": 2}}
-React.render(<Chart charts={charts}/>, document.getElementById('charts-tab'));
+React.render(<Chart combo={true} charts={charts}/>, document.getElementById('charts-tab'));

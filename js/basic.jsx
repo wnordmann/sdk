@@ -7,6 +7,7 @@ import Select from './components/Select.jsx';
 import QueryBuilder from './components/QueryBuilder.jsx';
 import FeatureTable from './components/FeatureTable.jsx';
 import LayerActions from './actions/LayerActions.js';
+import Chart from './components/Chart.jsx';
 
 var styleTrees = new ol.style.Style({
   fill: new ol.style.Fill({
@@ -189,6 +190,8 @@ React.render(<QueryBuilder map={map} />, document.getElementById('query-panel'))
 var width = $(document.body).width()-25;
 var height = $(document.body).height()/2-100;
 React.render(<FeatureTable width={width} height={height} layer={selectedLayer} map={map} />, document.getElementById('table-panel'));
+var charts = {"Airports count per use category": {"categoryField": "USE", "layer": "lyr03", "valueFields": [], "displayMode": 2, "operation": 2}, "Forest area total surface": {"categoryField": "VEGDESC", "layer": "lyr01", "valueFields": ["AREA_KM2"], "displayMode": 1, "operation": 2}}
+React.render(<Chart container='chart-panel' charts={charts} />, document.getElementById('toolbar-chart'));
 
 $('#query-link').on('click', function() {
   $('#query-panel').toggle();

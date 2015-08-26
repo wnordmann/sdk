@@ -42,7 +42,6 @@ export default class Chart extends React.Component {
     }
     this.state = {
       selected: {},
-      infoText: '',
       chart: chart
     };
   }
@@ -138,8 +137,7 @@ export default class Chart extends React.Component {
         break;
     }
     this.setState({
-      chart: chart,
-      infoText: selectedFeatures.length + ' features selected in layer ' + chart.layer
+      chart: chart
     });
     c3.generate({
       bindto: '#chart',
@@ -164,25 +162,52 @@ export default class Chart extends React.Component {
     var chart = this.props.charts[evt.target.value];
     if (this.state.selected[chart.layer] && this.state.selected[chart.layer].length > 0) {
       this._drawFromSelection(chart);
+      return true;
+    }
+    return false;
+  }
+  _onClick(evt) {
+    if (this._selectChart(evt) && this.props.container) {
+      document.getElementById(this.props.container).style.display = 'block';
     }
   }
   render() {
-    var options = [];
-    for (var key in this.props.charts) {
-      options.push(<option key={key} value={key}>{key}</option>);
+    if (this.props.combo === true) {
+      var options = [];
+      for (var key in this.props.charts) {
+        options.push(<option key={key} value={key}>{key}</option>);
+      }
+      return (
+        <div className='chart-panel' id='chart-panel'>
+          <select onChange={this._selectChart.bind(this)} className='form-control' id='chart-selector'>
+            {options}
+          </select>
+          <div id='chart'></div>
+        </div>
+      );
+    } else {
+      var listitems = [];
+      for (var key in this.props.charts) {
+        listitems.push(<li key={key}><a onClick={this._onClick.bind(this, {target: {value: key}})} href='#'>{key}</a></li>);
+      }
+      return (
+        <li className='dropdown'>
+          <a href='#' className='dropdown-toggle' data-toggle='dropdown'> Charts <span className='caret'></span> </a>
+          <ul className='dropdown-menu'>
+            {listitems}
+          </ul>
+        </li>
+      );
     }
-    return (
-      <div className='chart-panel' id='chart-panel'>
-        <select onChange={this._selectChart.bind(this)} className='form-control' id='chart-selector'>
-          {options}
-        </select>
-        <span className="chart-panel-info" id="chart-panel-info">{this.state.infoText}</span>
-        <div id='chart'></div>
-      </div>
-    );
   }
 };
 
 Chart.propTypes = {
-  charts: React.PropTypes.object.isRequired
+  charts: React.PropTypes.object.isRequired,
+  combo: React.PropTypes.bool,
+  container: React.PropTypes.string
+};
+
+Chart.defaultProps = {
+  combo: false
 };
