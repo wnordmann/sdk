@@ -116,17 +116,17 @@ export default class Chart extends React.Component {
               values[cat]++;
             }
           }
-          var sorted = [];
-          for (key in values){
-            sorted.push([key, values[key]]);
-          }
-          sorted.sort(function(a, b) {
-            return b[1] - a[1];
-          });
-          for (i = 0, ii = sorted.length; i < ii; i++) {
-            columns[0].push(sorted[i][0]);
-            columns[1].push(sorted[i][1]);
-          }
+        }
+        var sorted = [];
+        for (key in values){
+          sorted.push([key, values[key]]);
+        }
+        sorted.sort(function(a, b) {
+          return b[1] - a[1];
+        });
+        for (i = 0, ii = sorted.length; i < ii; i++) {
+          columns[0].push(sorted[i][0]);
+          columns[1].push(sorted[i][1]);
         }
         break;
       default:
