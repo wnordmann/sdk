@@ -1,6 +1,8 @@
 /* global ol, document */
 
 import {EventEmitter} from 'events';
+import SelectConstants from '../constants/SelectConstants.js';
+import AppDispatcher from '../dispatchers/AppDispatcher.js';
 
 class FeatureStore extends EventEmitter {
   constructor() {
@@ -27,6 +29,7 @@ class FeatureStore extends EventEmitter {
   _setFeatures(layer, features) {
     this._config[layer.get('id')] = {
       features: features,
+      selected: [],
       originalFeatures: features.slice()
     };
   }
@@ -52,6 +55,22 @@ class FeatureStore extends EventEmitter {
       type = 'link';
     }
     return type;
+  }
+  setSelection(layer, features, clear) {
+    var id = layer.get('id');
+    if (!this._config[id]) {
+      this._config[id] = {};
+    }
+    if (clear === true) {
+      this._config[id].selected = features;
+    } else {
+      for (var i = 0, ii = features.length; i < ii; ++i) {
+        if (this._config[id].selected.indexOf(features[i]) === -1) {
+          this._config[id].selected.push(features[i]);
+        }
+      }
+    }
+    this.emitChange();
   }
   setFilter(layer, features) {
     var id = layer.get('id');
@@ -99,5 +118,16 @@ class FeatureStore extends EventEmitter {
 }
 
 let _FeatureStore = new FeatureStore();
+
+AppDispatcher.register((payload) => {
+  let action = payload.action;
+  switch(action.type) {
+    case SelectConstants.SELECT_FEATURES:
+      _FeatureStore.setSelection(action.layer, action.features, action.clear);
+      break;
+    default:
+      break;
+  }
+});
 
 export default _FeatureStore;

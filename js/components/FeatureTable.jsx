@@ -26,7 +26,7 @@ export default class FeatureTable extends React.Component {
             if (this.state.selectedOnly === true) {
               // TODO see if this needs only 1 call
               FeatureStore.addLayer(action.layer);
-              FeatureStore.setFilter(action.layer, this.state.selected[id]);
+              FeatureStore.setFilter(action.layer, this.state.selected);
             } else {
               FeatureStore.addLayer(action.layer);
             }
@@ -49,21 +49,6 @@ export default class FeatureTable extends React.Component {
           }
           this.setState({selected: this.state.selected});
           break;
-        case SelectConstants.SELECT_FEATURES:
-          var layer = action.layer;
-          id = layer.get('id');
-          if (action.clear === true || !this.state.selected[id]) {
-            this.state.selected[id] = [];
-          }
-          for (i = 0, ii = action.features.length; i < ii; ++i) {
-            this.state.selected[id].push(action.features[i]);
-          }
-          if (this.state.selectedOnly === true) {
-            FeatureStore.setFilter(action.layer, this.state.selected[id]);
-          } else {
-            this.setState({selected: this.state.selected});
-          }
-          break;
         default:
           break;
       }
@@ -74,9 +59,8 @@ export default class FeatureTable extends React.Component {
       selectedOnly: false,
       features: [],
       columnWidths: {},
-      selected: {}
+      selected: []
     };
-    this.state.selected[this.props.layer.get('id')] = [];
   }
   componentWillMount() {
     FeatureStore.addChangeListener(this._onChange.bind(this));
@@ -115,7 +99,7 @@ export default class FeatureTable extends React.Component {
   _rowClassNameGetter(index) {
     var lyr = this._layer, id = lyr.get('id');
     var feature = this.state.features[index];
-    return this.state.selected[id].indexOf(feature) > -1 ? 'row-selected' : '';
+    return this.state.selected.indexOf(feature) > -1 ? 'row-selected' : '';
   }
   _filter(evt) {
     var lyr = this._layer, id = lyr.get('id');
@@ -129,7 +113,7 @@ export default class FeatureTable extends React.Component {
   _updateStoreFilter() {
     var lyr = this._layer, id = lyr.get('id');
     if (this.state.selectedOnly === true) {
-      FeatureStore.setFilter(lyr, this.state.selected[id]);
+      FeatureStore.setFilter(lyr, this.state.selected);
     } else {
       // this means restoring the original features
       FeatureStore.setFilter(lyr, null);
