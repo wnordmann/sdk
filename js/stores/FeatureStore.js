@@ -2,32 +2,35 @@
 
 import {EventEmitter} from 'events';
 
-export default class FeatureStore extends EventEmitter {
-  constructor(props) {
+class FeatureStore extends EventEmitter {
+  constructor() {
     super();
-    if (props.layer) {
-      this.bindLayer(props.layer);
-    }
     this._regexes = {
       url: /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/,
       file: /.*[\\\\/].*\..*/
     };
+    this._layers = {};
+    this._schema = {};
+    this._config = {};
+  }
+  addLayer(layer) {
+    var id = layer.get('id');
+    if (!this._layers[id]) {
+      this._layers[id] = layer;
+      this.bindLayer(layer);
+    }
+    this.emitChange();
   }
   getLayer() {
     return this._layer;
   }
-  _setFeatures(filter, features) {
-    if (filter) {
-      this._config.features = filter;
-      this._config.originalFeatures = features;
-    } else {
-      this._config.features = features;
-      this._config.originalFeatures = this._config.features.slice();
-    }
+  _setFeatures(layer, features) {
+    this._config[layer.get('id')] = {
+      features: features,
+      originalFeatures: features.slice()
+    };
   }
-  bindLayer(layer, filter) {
-    this._config = {};
-    this._layer = layer;
+  bindLayer(layer) {
     var source = layer.getSource();
     if (source instanceof ol.source.Cluster) {
       source = source.getSource();
@@ -35,14 +38,13 @@ export default class FeatureStore extends EventEmitter {
     source.on('change', function(evt) {
       if (evt.target.getState() === 'ready') {
         var features = evt.target.getFeatures();
-        this._setFeatures(filter, features);
-        delete this._schema;
+        this._setFeatures(layer, features);
+        delete this._schema[layer.get('id')];
         this.emitChange();
       }
     }, this);
-    this._setFeatures(filter, source.getFeatures());
-    delete this._schema;
-    this.emitChange();
+    this._setFeatures(layer, source.getFeatures());
+    delete this._schema[layer.get('id')];
   }
   _determineType(value) {
     var type = 'string';
@@ -51,18 +53,23 @@ export default class FeatureStore extends EventEmitter {
     }
     return type;
   }
-  setFilter(features) {
+  setFilter(layer, features) {
+    var id = layer.get('id');
     if (features === null) {
-      this._config.features = this._config.originalFeatures;
+      this._config[id].features = this._config[id].originalFeatures;
     } else {
-      this._config.features = features;
+      if (!this._config[id]) {
+        this._config[id] = {};
+      }
+      this._config[id].features = features;
     }
     this.emitChange();
   }
-  getSchema() {
-    if (!this._schema && this._config.originalFeatures.length > 0) {
+  getSchema(layer) {
+    var id = layer.get('id');
+    if (!this._schema[id] && this._config[id].originalFeatures.length > 0) {
       var schema = {};
-      var feature = this._config.originalFeatures[0];
+      var feature = this._config[id].originalFeatures[0];
       var geom = feature.getGeometryName();
       var values = feature.getProperties();
       for (var key in values) {
@@ -70,15 +77,15 @@ export default class FeatureStore extends EventEmitter {
           schema[key] = this._determineType(values[key]);
         }
       }
-      this._schema = schema;
+      this._schema[id] = schema;
     }
-    return this._schema;
+    return this._schema[id];
   }
-  getObjectAt(index) {
-    return this._config.features[index].getProperties();
+  getObjectAt(layer, index) {
+    return this._config[layer.get('id')].features[index].getProperties();
   }
-  getState() {
-    return this._config;
+  getState(layer) {
+    return this._config[layer.get('id')];
   }
   emitChange() {
     this.emit('CHANGE');
@@ -90,3 +97,7 @@ export default class FeatureStore extends EventEmitter {
     this.removeListener('CHANGE', cb);
   }
 }
+
+let _FeatureStore = new FeatureStore();
+
+export default _FeatureStore;

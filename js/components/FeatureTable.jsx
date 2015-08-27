@@ -17,15 +17,18 @@ export default class FeatureTable extends React.Component {
       let action = payload.action, id, i, ii;
       switch(action.type) {
        case MapConstants.SELECT_LAYER:
+          this._layer = action.layer;
           if (action.cmp === this.refs.layerSelector) {
             id = action.layer.get('id');
             if (!this.state.selected[id]) {
               this.state.selected[id] = [];
             }
             if (this.state.selectedOnly === true) {
-              this._store.bindLayer(action.layer, this.state.selected[id]);
+              // TODO see if this needs only 1 call
+              FeatureStore.addLayer(action.layer);
+              FeatureStore.setFilter(action.layer, this.state.selected[id]);
             } else {
-              this._store.bindLayer(action.layer);
+              FeatureStore.addLayer(action.layer);
             }
           }
           break;
@@ -56,9 +59,7 @@ export default class FeatureTable extends React.Component {
             this.state.selected[id].push(action.features[i]);
           }
           if (this.state.selectedOnly === true) {
-            if (this._store.getLayer() === layer) {
-              this._store.setFilter(this.state.selected[id]);
-            }
+            FeatureStore.setFilter(action.layer, this.state.selected[id]);
           } else {
             this.setState({selected: this.state.selected});
           }
@@ -67,7 +68,8 @@ export default class FeatureTable extends React.Component {
           break;
       }
     });
-    this._store = new FeatureStore({layer: this.props.layer});
+    this._layer = this.props.layer;
+    FeatureStore.addLayer(this._layer);
     this.state = {
       selectedOnly: false,
       features: [],
@@ -77,19 +79,19 @@ export default class FeatureTable extends React.Component {
     this.state.selected[this.props.layer.get('id')] = [];
   }
   componentWillMount() {
-    this._store.addChangeListener(this._onChange.bind(this));
+    FeatureStore.addChangeListener(this._onChange.bind(this));
     this._onChange();
   }
   _renderLink(cellData) {
     return <a href={cellData} target="_blank">{cellData}</a>;
   }
   _onChange() {
-    var state = this._store.getState();
+    var state = FeatureStore.getState(this._layer);
     state.columnWidths = {};
     this.setState(state);
   }
   _rowGetter(index) {
-    return this._store.getObjectAt(index);
+    return FeatureStore.getObjectAt(this._layer, index);
   }
   _onColumnResize(width, label) {
     var columnWidths = this.state.columnWidths;
@@ -98,7 +100,7 @@ export default class FeatureTable extends React.Component {
     this._isResizing = false;
   }
   _onRowClick(evt, index) {
-    var lyr = this._store.getLayer(), id = lyr.get('id');
+    var lyr = this._layer, id = lyr.get('id');
     var feature = this.state.features[index];
     var idx = this.state.selected[id].indexOf(feature);
     if (idx > -1) {
@@ -111,12 +113,12 @@ export default class FeatureTable extends React.Component {
     this.setState({selected: this.state.selected});
   }
   _rowClassNameGetter(index) {
-    var lyr = this._store.getLayer(), id = lyr.get('id');
+    var lyr = this._layer, id = lyr.get('id');
     var feature = this.state.features[index];
     return this.state.selected[id].indexOf(feature) > -1 ? 'row-selected' : '';
   }
   _filter(evt) {
-    var lyr = this._store.getLayer(), id = lyr.get('id');
+    var lyr = this._layer, id = lyr.get('id');
     // store->setFilter will trigger setState so no need for an explicit setState call here
     this.state.selectedOnly = evt.target.checked;
     this._updateStoreFilter();
@@ -125,16 +127,16 @@ export default class FeatureTable extends React.Component {
     return !lyr.get('hideFromLayerList') && lyr instanceof ol.layer.Vector;
   }
   _updateStoreFilter() {
-    var lyr = this._store.getLayer(), id = lyr.get('id');
+    var lyr = this._layer, id = lyr.get('id');
     if (this.state.selectedOnly === true) {
-      this._store.setFilter(this.state.selected[id]);
+      FeatureStore.setFilter(lyr, this.state.selected[id]);
     } else {
       // this means restoring the original features
-      this._store.setFilter(null);
+      FeatureStore.setFilter(lyr, null);
     }
   }
   _clearSelected() {
-    var lyr = this._store.getLayer(), id = lyr.get('id');
+    var lyr = this._layer, id = lyr.get('id');
     var selected = this.state.selected[id];
     var len = selected.length;
     for (var i = 0, ii = len; i < len; ++i) {
@@ -147,7 +149,7 @@ export default class FeatureTable extends React.Component {
     }
   }
   _zoomSelected() {
-    var selected = this.state.selected[this._store.getLayer().get('id')];
+    var selected = this.state.selected[this._layer.get('id')];
     var len = selected.length;
     if (len > 0) {
       var extent = ol.extent.createEmpty();
@@ -166,7 +168,7 @@ export default class FeatureTable extends React.Component {
   render() {
     var Table = FixedDataTable.Table;
     var Column = FixedDataTable.Column;
-    var schema = this._store.getSchema();
+    var schema = FeatureStore.getSchema(this._layer);
     var columnNodes = [];
     for (var key in schema) {
       if (!this.state.columnWidths[key]) {
