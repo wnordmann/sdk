@@ -15,23 +15,28 @@ class FeatureStore extends EventEmitter {
     this._schema = {};
     this._config = {};
   }
-  addLayer(layer) {
+  addLayer(layer, filter) {
     var id = layer.get('id');
     if (!this._layers[id]) {
       this._layers[id] = layer;
       this.bindLayer(layer);
     }
-    this.emitChange();
+    if (filter === true) {
+      this.setSelectedAsFilter(layer);
+    } else {
+      this.emitChange();
+    }
   }
   getLayer() {
     return this._layer;
   }
   _setFeatures(layer, features) {
-    this._config[layer.get('id')] = {
-      features: features,
-      selected: [],
-      originalFeatures: features.slice()
-    };
+    var id = layer.get('id');
+    if (!this._config[id]) {
+      this._config[id] = {};
+    }
+    this._config[id].features = features;
+    this._config[id].originalFeatures = features.slice();
   }
   bindLayer(layer) {
     var source = layer.getSource();

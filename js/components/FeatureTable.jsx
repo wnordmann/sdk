@@ -14,19 +14,13 @@ export default class FeatureTable extends React.Component {
   constructor(props) {
     super(props);
     AppDispatcher.register((payload) => {
-      let action = payload.action, id, i, ii;
+      let action = payload.action, id;
       switch(action.type) {
        case MapConstants.SELECT_LAYER:
           this._layer = action.layer;
           if (action.cmp === this.refs.layerSelector) {
             id = action.layer.get('id');
-            if (this.state.selectedOnly === true) {
-              // TODO see if this needs only 1 call
-              FeatureStore.addLayer(action.layer);
-              FeatureStore.setSelectedAsFilter(action.layer);
-            } else {
-              FeatureStore.addLayer(action.layer);
-            }
+            FeatureStore.addLayer(action.layer, this.state.selectedOnly);
           }
           break;
         default:
