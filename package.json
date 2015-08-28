@@ -28,7 +28,6 @@
   },
   "devDependencies": {
     "babelify": "^6.0.2",
-    "uglifyify": "^3.0.1",
     "browserify": "^9.0.8",
     "browserify-css": "^0.6.1",
     "st": "^0.5.3",
@@ -39,8 +38,7 @@
   "browserify": {
     "transform": [
       "browserify-css",
-      "babelify",
-      "uglifyify"
+      "babelify"
     ]
   }
 }
