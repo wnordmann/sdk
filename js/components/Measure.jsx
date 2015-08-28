@@ -1,3 +1,4 @@
+/* global ol */
 import React from 'react';
 import './Measure.css';
 import MapTool from './MapTool.js';
@@ -69,7 +70,7 @@ export default class Measure extends MapTool {
   _onDrawStart(evt) {
     this._sketch = evt.feature;
   }
-  _onDrawEnd(evt) {
+  _onDrawEnd() {
     this._tooltipElement.className = 'tooltip tooltip-static';
     this._tooltip.setOffset([0, -7]);
     this._sketch = null;

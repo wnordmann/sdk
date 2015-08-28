@@ -12,14 +12,14 @@ export default class LayerSelector extends React.Component {
     LayerStore.addChangeListener(this._onChange.bind(this));
     this._onChange();
   }
-  getLayer() {
-    var select = React.findDOMNode(this.refs.layerSelect);
-    return LayerStore.findLayer(select.value);
-  }
   componentDidMount() {
     var select = React.findDOMNode(this.refs.layerSelect);
     var layer = LayerStore.findLayer(select.value);
     LayerActions.selectLayer(layer, this);
+  }
+  getLayer() {
+    var select = React.findDOMNode(this.refs.layerSelect);
+    return LayerStore.findLayer(select.value);
   }
   _onChange() {
     this.setState(LayerStore.getState());

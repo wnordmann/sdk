@@ -4,7 +4,6 @@ import FixedDataTable from 'fixed-data-table';
 import '../../node_modules/fixed-data-table/dist/fixed-data-table.css';
 import FeatureStore from '../stores/FeatureStore.js';
 import MapConstants from '../constants/MapConstants.js';
-import SelectConstants from '../constants/SelectConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import SelectActions from '../actions/SelectActions.js';
 import LayerSelector from './LayerSelector.jsx';
@@ -14,12 +13,11 @@ export default class FeatureTable extends React.Component {
   constructor(props) {
     super(props);
     AppDispatcher.register((payload) => {
-      let action = payload.action, id;
+      let action = payload.action;
       switch(action.type) {
-       case MapConstants.SELECT_LAYER:
+        case MapConstants.SELECT_LAYER:
           this._layer = action.layer;
           if (action.cmp === this.refs.layerSelector) {
-            id = action.layer.get('id');
             FeatureStore.addLayer(action.layer, this.state.selectedOnly);
           }
           break;
@@ -63,12 +61,10 @@ export default class FeatureTable extends React.Component {
     SelectActions.toggleFeature(lyr, feature);
   }
   _rowClassNameGetter(index) {
-    var lyr = this._layer, id = lyr.get('id');
     var feature = this.state.features[index];
     return this.state.selected.indexOf(feature) > -1 ? 'row-selected' : '';
   }
   _filter(evt) {
-    var lyr = this._layer, id = lyr.get('id');
     // store will trigger setState so no need for an explicit setState call here
     this.state.selectedOnly = evt.target.checked;
     this._updateStoreFilter();
@@ -77,7 +73,7 @@ export default class FeatureTable extends React.Component {
     return !lyr.get('hideFromLayerList') && lyr instanceof ol.layer.Vector;
   }
   _updateStoreFilter() {
-    var lyr = this._layer, id = lyr.get('id');
+    var lyr = this._layer;
     if (this.state.selectedOnly === true) {
       FeatureStore.setSelectedAsFilter(lyr);
     } else {
@@ -99,7 +95,7 @@ export default class FeatureTable extends React.Component {
         extent = ol.extent.extend(extent, selected[i].getGeometry().getExtent());
       }
       var map = this.props.map;
-      if (extent[0] == extent[2]){
+      if (extent[0] === extent[2]){
         map.getView().setCenter([extent[0], extent[1]]);
         map.getView().setZoom(this.props.pointZoom);
       } else {

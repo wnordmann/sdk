@@ -1,3 +1,4 @@
+/* global ol */
 import React from 'react';
 import SelectActions from '../actions/SelectActions.js';
 import MapTool from './MapTool.js';
@@ -48,7 +49,6 @@ export default class Select extends MapTool {
     }
   }
   _selectByRectangle() {
-    var map = this.props.map;
     this.deactivate();
     this.activate(this._interactions.RECTANGLE);
   }

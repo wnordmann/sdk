@@ -30,7 +30,7 @@ export default class Chart extends React.Component {
   _onChange() {
     this._storeConfig = FeatureStore.getState();
     if (this.state.chart && this.state.chart.layer) {
-        this._drawFromSelection(this.state.chart);
+      this._drawFromSelection(this.state.chart);
     }
   }
   _drawFromSelection(chart) {
@@ -48,13 +48,12 @@ export default class Chart extends React.Component {
           columns.push([valueFields[i]]);
         }
       }
-      var selectedCount = 0;
       switch(chart.displayMode) {
         case DISPLAY_MODE_FEATURE:
           for (i = 0, ii = selectedFeatures; i < ii; ++i) {
             columns[0].push(selectedFeatures[i].get(categoryField));
             for (j = 0, jj = valueFields.length; j < jj; ++j) {
-              columns[j+1].push(selectedFeatures[i].get(valueFields[j]));
+              columns[j + 1].push(selectedFeatures[i].get(valueFields[j]));
             }
           }
           break;
@@ -78,7 +77,7 @@ export default class Chart extends React.Component {
           }
           for (key in values) {
             columns[0].push(key);
-            var aggregated = [], v;
+            var v;
             for (i = 0, ii = valueFields.length; i < ii; i++) {
               if (chart.operation === AGGREGATION_SUM || chart.operation === AGGREGATION_AVG) {
                 v = 0;
@@ -162,9 +161,10 @@ export default class Chart extends React.Component {
     }
   }
   render() {
+    var key;
     if (this.props.combo === true) {
       var options = [];
-      for (var key in this.props.charts) {
+      for (key in this.props.charts) {
         options.push(<option key={key} value={key}>{key}</option>);
       }
       return (
@@ -177,7 +177,7 @@ export default class Chart extends React.Component {
       );
     } else {
       var listitems = [];
-      for (var key in this.props.charts) {
+      for (key in this.props.charts) {
         listitems.push(<li key={key}><a onClick={this._onClick.bind(this, {target: {value: key}})} href='#'>{key}</a></li>);
       }
       return (
@@ -190,7 +190,7 @@ export default class Chart extends React.Component {
       );
     }
   }
-};
+}
 
 Chart.propTypes = {
   charts: React.PropTypes.object.isRequired,

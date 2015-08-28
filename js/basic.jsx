@@ -1,4 +1,4 @@
-/* global ol */
+/* global ol, $ */
 import React from 'react';
 import LayerList from './components/LayerList.jsx';
 import Geocoding from './components/Geocoding.jsx';
@@ -187,10 +187,10 @@ React.render(<LayerList showOpacity={true} showDownload={true} showGroupContent=
   document.getElementById('layerlist'));
 React.render(<Select toggleGroup='navigation' map={map}/>, document.getElementById('toolbar-select'));
 React.render(<QueryBuilder map={map} />, document.getElementById('query-panel'));
-var width = $(document.body).width()-25;
-var height = $(document.body).height()/2-100;
+var width = $(document.body).width() - 25;
+var height = $(document.body).height() / 2 - 100;
 React.render(<FeatureTable width={width} height={height} layer={selectedLayer} map={map} />, document.getElementById('table-panel'));
-var charts = {"Airports count per use category": {"categoryField": "USE", "layer": "lyr03", "valueFields": [], "displayMode": 2, "operation": 2}, "Forest area total surface": {"categoryField": "VEGDESC", "layer": "lyr01", "valueFields": ["AREA_KM2"], "displayMode": 1, "operation": 2}}
+var charts = {'Airports count per use category': {'categoryField': 'USE', 'layer': 'lyr03', 'valueFields': [], 'displayMode': 2, 'operation': 2}, 'Forest area total surface': {'categoryField': 'VEGDESC', 'layer': 'lyr01', 'valueFields': ['AREA_KM2'], 'displayMode': 1, 'operation': 2}};
 React.render(<Chart container='chart-panel' charts={charts} />, document.getElementById('toolbar-chart'));
 
 $('#query-link').on('click', function() {

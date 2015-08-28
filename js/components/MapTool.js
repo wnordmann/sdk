@@ -1,3 +1,4 @@
+/* global ol */
 import React from 'react';
 import MapConstants from '../constants/MapConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
@@ -9,7 +10,7 @@ export default class MapTool extends React.Component {
     AppDispatcher.register((payload) => {
       let action = payload.action;
       switch(action.type) {
-       case MapConstants.ACTIVATE_TOOL:
+        case MapConstants.ACTIVATE_TOOL:
           if (this.props.toggleGroup && this.props.toggleGroup === action.toggleGroup) {
             if (this !== action.tool) {
               this.deactivate();

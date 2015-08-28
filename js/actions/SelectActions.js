@@ -1,4 +1,3 @@
-/* global ol */
 import SelectConstants from '../constants/SelectConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 

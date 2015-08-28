@@ -1,9 +1,10 @@
+/* global ol */
 import React from 'react';
 import LayerSelector from './LayerSelector.jsx';
 import MapConstants from '../constants/MapConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import SelectActions from '../actions/SelectActions.js';
-import Filtrex from 'filtrex';
+import filtrex from 'filtrex';
 import './QueryBuilder.css';
 
 export default class QueryBuilder extends React.Component {
@@ -12,7 +13,7 @@ export default class QueryBuilder extends React.Component {
     AppDispatcher.register((payload) => {
       let action = payload.action;
       switch(action.type) {
-       case MapConstants.SELECT_LAYER:
+        case MapConstants.SELECT_LAYER:
           if (action.cmp === this.refs.layerSelector) {
             this._layer = action.layer;
           }
@@ -39,7 +40,7 @@ export default class QueryBuilder extends React.Component {
       this.setState({hasError: false});
     } else {
       try {
-        this._queryFilter = Filtrex(expression);
+        this._queryFilter = filtrex(expression);
         this.setState({hasError: false});
       } catch (e) {
         this._queryFilter = null;
@@ -101,8 +102,8 @@ export default class QueryBuilder extends React.Component {
       </form>
     );
   }
-};
+}
 
 QueryBuilder.propTypes = {
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  map: React.PropTypes.instanceOf(ol.Map).isRequired
 };

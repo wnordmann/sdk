@@ -178,6 +178,7 @@ AppDispatcher.register((payload) => {
       break;
     case SelectConstants.TOGGLE_FEATURE:
       _FeatureStore.toggleFeature(action.layer, action.feature);
+      break;
     default:
       break;
   }
