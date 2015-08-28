@@ -18,7 +18,9 @@ export default class GeocodingResults extends React.Component {
           break;
       }
     });
-    this.state = {searchResults: null};
+    this.state = {
+      searchResults: null
+    };
   }
   componentDidMount() {
     this._layer = new ol.layer.Vector({

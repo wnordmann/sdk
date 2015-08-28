@@ -8,7 +8,9 @@ export default class LayerListItem extends React.Component {
     props.layer.on('change:visible', function(evt) {
       this.setState({checked: evt.target.getVisible()});
     }, this);
-    this.state = {checked: props.layer.getVisible()};
+    this.state = {
+      checked: props.layer.getVisible()
+    };
   }
   _handleChange() {
     var visible = event.target.checked;
