@@ -83,7 +83,7 @@ export default class FeatureTable extends React.Component {
   _clearSelected() {
     if (this.state.selected.length > 0) {
       var lyr = this._layer;
-      SelectActions.clear(lyr, this, this._selectedOnly);
+      SelectActions.clear(lyr, this._selectedOnly);
     }
   }
   _zoomSelected() {

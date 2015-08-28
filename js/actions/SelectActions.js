@@ -9,28 +9,25 @@ export default {
       feature: feature
     });
   },
-  clear: (layer, cmp, filter) => {
+  clear: (layer, filter) => {
     AppDispatcher.handleAction({
       type: SelectConstants.CLEAR,
       layer: layer,
-      cmp: cmp,
       filter: filter
     });
   },
-  selectFeaturesInCurrentSelection: (layer, features, cmp) => {
+  selectFeaturesInCurrentSelection: (layer, features) => {
     AppDispatcher.handleAction({
       type: SelectConstants.SELECT_FEATURES_IN,
       layer: layer,
       features: features,
-      cmp: cmp
     });
   },
-  selectFeatures: (layer, features, cmp, clear) => {
+  selectFeatures: (layer, features, clear) => {
     AppDispatcher.handleAction({
       type: SelectConstants.SELECT_FEATURES,
       layer: layer,
       features: features,
-      cmp: cmp,
       clear: clear
     });
   },

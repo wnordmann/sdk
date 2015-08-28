@@ -62,16 +62,16 @@ export default class QueryBuilder extends React.Component {
       }
     }
     if (selectIn === true) {
-      SelectActions.selectFeaturesInCurrentSelection(this._layer, selection, this);
+      SelectActions.selectFeaturesInCurrentSelection(this._layer, selection);
     } else {
-      SelectActions.selectFeatures(this._layer, selection, this);
+      SelectActions.selectFeatures(this._layer, selection);
     }
   }
   _addSelection() {
     this._doQuery();
   }
   _newSelection() {
-    SelectActions.clear(this._layer, this);
+    SelectActions.clear(this._layer);
     this._doQuery();
   }
   _inSelection() {

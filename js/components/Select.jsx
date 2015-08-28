@@ -30,7 +30,7 @@ export default class Select extends MapTool {
             selected.push(feature);
             selectedFeatures.push(feature);
           });
-          SelectActions.selectFeatures(lyr, selected, this, true);
+          SelectActions.selectFeatures(lyr, selected, true);
         }
       }, this);
     }, this);
