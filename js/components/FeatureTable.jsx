@@ -12,13 +12,14 @@ import './FeatureTable.css';
 export default class FeatureTable extends React.Component {
   constructor(props) {
     super(props);
+    this._selectedOnly = false;
     AppDispatcher.register((payload) => {
       let action = payload.action;
       switch(action.type) {
         case MapConstants.SELECT_LAYER:
           this._layer = action.layer;
           if (action.cmp === this.refs.layerSelector) {
-            FeatureStore.addLayer(action.layer, this.state.selectedOnly);
+            FeatureStore.addLayer(action.layer, this._selectedOnly);
           }
           break;
         default:
@@ -28,7 +29,6 @@ export default class FeatureTable extends React.Component {
     this._layer = this.props.layer;
     FeatureStore.addLayer(this._layer);
     this.state = {
-      selectedOnly: false,
       features: [],
       columnWidths: {},
       selected: []
@@ -65,8 +65,7 @@ export default class FeatureTable extends React.Component {
     return this.state.selected.indexOf(feature) > -1 ? 'row-selected' : '';
   }
   _filter(evt) {
-    // store will trigger setState so no need for an explicit setState call here
-    this.state.selectedOnly = evt.target.checked;
+    this._selectedOnly = evt.target.checked;
     this._updateStoreFilter();
   }
   _filterLayerList(lyr) {
@@ -74,7 +73,7 @@ export default class FeatureTable extends React.Component {
   }
   _updateStoreFilter() {
     var lyr = this._layer;
-    if (this.state.selectedOnly === true) {
+    if (this._selectedOnly === true) {
       FeatureStore.setSelectedAsFilter(lyr);
     } else {
       FeatureStore.restoreOriginalFeatures(lyr);
@@ -83,7 +82,7 @@ export default class FeatureTable extends React.Component {
   _clearSelected() {
     if (this.state.selected.length > 0) {
       var lyr = this._layer;
-      SelectActions.clear(lyr, this, this.state.selectedOnly);
+      SelectActions.clear(lyr, this, this._selectedOnly);
     }
   }
   _zoomSelected() {
