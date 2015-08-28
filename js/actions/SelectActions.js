@@ -3,11 +3,19 @@ import SelectConstants from '../constants/SelectConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 
 export default {
-  clear: (layer, cmp) => {
+  toggleFeature: (layer, feature) => {
+    AppDispatcher.handleAction({
+      type: SelectConstants.TOGGLE_FEATURE,
+      layer: layer,
+      feature: feature
+    });
+  },
+  clear: (layer, cmp, filter) => {
     AppDispatcher.handleAction({
       type: SelectConstants.CLEAR,
       layer: layer,
-      cmp: cmp
+      cmp: cmp,
+      filter: filter
     });
   },
   selectFeaturesInCurrentSelection: (layer, features, cmp) => {

@@ -56,6 +56,24 @@ class FeatureStore extends EventEmitter {
     }
     return type;
   }
+  clearSelection(layer, filter) {
+    var id = layer.get('id');
+    this._config[id].selected = [];
+    if (filter === true) {
+      this.setSelectedAsFilter(layer);
+    } else {
+      this.emitChange();
+    }
+  }
+  toggleFeature(layer, feature) {
+    var id = layer.get('id'), idx = this._config[id].selected.indexOf(feature);
+    if (idx === -1) {
+      this._config[id].selected.push(feature);
+    } else {
+      this._config[id].selected.splice(idx, 1);
+    }
+    this.emitChange();
+  }
   setSelection(layer, features, clear) {
     var id = layer.get('id');
     if (!this._config[id]) {
@@ -72,16 +90,17 @@ class FeatureStore extends EventEmitter {
     }
     this.emitChange();
   }
-  setFilter(layer, features) {
+  setSelectedAsFilter(layer) {
     var id = layer.get('id');
-    if (features === null) {
-      this._config[id].features = this._config[id].originalFeatures;
-    } else {
-      if (!this._config[id]) {
-        this._config[id] = {};
-      }
-      this._config[id].features = features;
+    if (!this._config[id]) {
+      this._config[id] = {};
     }
+    this._config[id].features = this._config[id].selected;
+    this.emitChange();
+  }
+  restoreOriginalFeatures(layer) {
+    var id = layer.get('id');
+    this._config[id].features = this._config[id].originalFeatures;
     this.emitChange();
   }
   getSchema(layer) {
@@ -122,9 +141,14 @@ let _FeatureStore = new FeatureStore();
 AppDispatcher.register((payload) => {
   let action = payload.action;
   switch(action.type) {
+    case SelectConstants.CLEAR:
+      _FeatureStore.clearSelection(action.layer, action.filter);
+      break;
     case SelectConstants.SELECT_FEATURES:
       _FeatureStore.setSelection(action.layer, action.features, action.clear);
       break;
+    case SelectConstants.TOGGLE_FEATURE:
+      _FeatureStore.toggleFeature(action.layer, action.feature);
     default:
       break;
   }

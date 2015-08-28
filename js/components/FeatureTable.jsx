@@ -20,13 +20,10 @@ export default class FeatureTable extends React.Component {
           this._layer = action.layer;
           if (action.cmp === this.refs.layerSelector) {
             id = action.layer.get('id');
-            if (!this.state.selected[id]) {
-              this.state.selected[id] = [];
-            }
             if (this.state.selectedOnly === true) {
               // TODO see if this needs only 1 call
               FeatureStore.addLayer(action.layer);
-              FeatureStore.setFilter(action.layer, this.state.selected);
+              FeatureStore.setSelectedAsFilter(action.layer);
             } else {
               FeatureStore.addLayer(action.layer);
             }
@@ -86,15 +83,7 @@ export default class FeatureTable extends React.Component {
   _onRowClick(evt, index) {
     var lyr = this._layer, id = lyr.get('id');
     var feature = this.state.features[index];
-    var idx = this.state.selected[id].indexOf(feature);
-    if (idx > -1) {
-      this.state.selected[id].splice(idx, 1);
-      SelectActions.unselectFeature(lyr, feature);
-    } else {
-      this.state.selected[id].push(feature);
-      SelectActions.selectFeature(lyr, feature);
-    }
-    this.setState({selected: this.state.selected});
+    SelectActions.toggleFeature(lyr, feature);
   }
   _rowClassNameGetter(index) {
     var lyr = this._layer, id = lyr.get('id');
@@ -103,7 +92,7 @@ export default class FeatureTable extends React.Component {
   }
   _filter(evt) {
     var lyr = this._layer, id = lyr.get('id');
-    // store->setFilter will trigger setState so no need for an explicit setState call here
+    // store will trigger setState so no need for an explicit setState call here
     this.state.selectedOnly = evt.target.checked;
     this._updateStoreFilter();
   }
@@ -113,27 +102,19 @@ export default class FeatureTable extends React.Component {
   _updateStoreFilter() {
     var lyr = this._layer, id = lyr.get('id');
     if (this.state.selectedOnly === true) {
-      FeatureStore.setFilter(lyr, this.state.selected);
+      FeatureStore.setSelectedAsFilter(lyr);
     } else {
-      // this means restoring the original features
-      FeatureStore.setFilter(lyr, null);
+      FeatureStore.restoreOriginalFeatures(lyr);
     }
   }
   _clearSelected() {
-    var lyr = this._layer, id = lyr.get('id');
-    var selected = this.state.selected[id];
-    var len = selected.length;
-    for (var i = 0, ii = len; i < len; ++i) {
-      var feature = selected[i];
-      SelectActions.unselectFeature(lyr, feature);
-    }
-    if (len > 0) {
-      this.state.selected[id] = [];
-      this._updateStoreFilter();
+    if (this.state.selected.length > 0) {
+      var lyr = this._layer;
+      SelectActions.clear(lyr, this, this.state.selectedOnly);
     }
   }
   _zoomSelected() {
-    var selected = this.state.selected[this._layer.get('id')];
+    var selected = this.state.selected;
     var len = selected.length;
     if (len > 0) {
       var extent = ol.extent.createEmpty();
