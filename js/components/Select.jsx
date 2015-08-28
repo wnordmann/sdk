@@ -1,8 +1,7 @@
 import React from 'react';
 import SelectActions from '../actions/SelectActions.js';
-import SelectConstants from '../constants/SelectConstants.js';
 import MapTool from './MapTool.js';
-import AppDispatcher from '../dispatchers/AppDispatcher.js';
+import FeatureStore from '../stores/FeatureStore.js';
 
 export default class Select extends MapTool {
   constructor(props) {
@@ -34,61 +33,19 @@ export default class Select extends MapTool {
         }
       }, this);
     }, this);
-    AppDispatcher.register((payload) => {
-      let action = payload.action;
-      var feature = action.feature;
-      var selectedFeatures = this._select.getFeatures();
-      var source, features, remove, i, ii;
-      switch(action.type) {
-        case SelectConstants.CLEAR:
-          if (action.cmp !== this) {
-            source = action.layer.getSource();
-            features = source.getFeatures();
-            remove = [];
-            selectedFeatures.forEach(function(feature) {
-              if (features.indexOf(feature) > -1) {
-                remove.push(feature);
-              }
-            });
-            if (remove.length > 0) {
-              for (i = 0, ii = remove.length; i < ii; ++i) {
-                selectedFeatures.remove(remove[i]);
-              }
-            }
-          }
-          break;
-        case SelectConstants.SELECT_FEATURES_IN:
-          if (action.cmp !== this) {
-            source = action.layer.getSource();
-            features = source.getFeatures();
-            remove = [];
-            selectedFeatures.forEach(function(feature) {
-              if (features.indexOf(feature) > -1 && action.features.indexOf(feature) === -1) {
-                remove.push(feature);
-              }
-            });
-            if (remove.length > 0) {
-              for (i = 0, ii = remove.length; i < ii; ++i) {
-                selectedFeatures.remove(remove[i]);
-              }
-            }
-          }
-          break;
-        case SelectConstants.SELECT_FEATURES:
-          if (action.cmp !== this) {
-            selectedFeatures.extend(action.features);
-          }
-          break;
-        case SelectConstants.SELECT_FEATURE:
-          selectedFeatures.push(feature);
-          break;
-        case SelectConstants.UNSELECT_FEATURE:
-          selectedFeatures.remove(feature);
-          break;
-        default:
-          break;
+  }
+  componentWillMount() {
+    FeatureStore.addChangeListener(this._onChange.bind(this));
+  }
+  _onChange() {
+    var state = FeatureStore.getState();
+    var selectedFeatures = this._select.getFeatures();
+    selectedFeatures.clear();
+    for (var key in state) {
+      for (var i = 0, ii = state[key].selected.length; i < ii; ++i) {
+        selectedFeatures.push(state[key].selected[i]);
       }
-    });
+    }
   }
   _selectByRectangle() {
     var map = this.props.map;

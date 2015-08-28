@@ -27,13 +27,13 @@ class FeatureStore extends EventEmitter {
       this.emitChange();
     }
   }
-  getLayer() {
-    return this._layer;
-  }
   _setFeatures(layer, features) {
     var id = layer.get('id');
     if (!this._config[id]) {
       this._config[id] = {};
+    }
+    if (!this._config[id].selected) {
+      this._config[id].selected = [];
     }
     this._config[id].features = features;
     this._config[id].originalFeatures = features.slice();
@@ -145,7 +145,11 @@ class FeatureStore extends EventEmitter {
     return this._config[layer.get('id')].features[index].getProperties();
   }
   getState(layer) {
-    return this._config[layer.get('id')];
+    if (layer) {
+      return this._config[layer.get('id')];
+    } else {
+      return this._config;
+    }
   }
   emitChange() {
     this.emit('CHANGE');
