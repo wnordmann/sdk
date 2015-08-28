@@ -20,7 +20,7 @@ export default {
     AppDispatcher.handleAction({
       type: SelectConstants.SELECT_FEATURES_IN,
       layer: layer,
-      features: features,
+      features: features
     });
   },
   selectFeatures: (layer, features, clear) => {

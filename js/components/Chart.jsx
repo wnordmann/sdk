@@ -34,129 +34,123 @@ export default class Chart extends React.Component {
     }
   }
   _drawFromSelection(chart) {
-    var id = this.state.chart.layer;
-    if (this._storeConfig[id] && this._storeConfig[id].selected && this._storeConfig[id].selected.length > 0) {
-      var i, ii, j, jj, values, cat, key;
-      var categoryField = chart.categoryField;
-      var valueFields = chart.valueFields;
-      var selectedFeatures = this._storeConfig[chart.layer].selected;
-      var columns = [['x']];
-      if (chart.displayMode === DISPLAY_MODE_COUNT){
-        columns.push(['Feature count']);
-      } else {
-        for (i = 0, ii = valueFields.length; i < ii; i++) {
-          columns.push([valueFields[i]]);
-        }
-      }
-      switch(chart.displayMode) {
-        case DISPLAY_MODE_FEATURE:
-          for (i = 0, ii = selectedFeatures; i < ii; ++i) {
-            columns[0].push(selectedFeatures[i].get(categoryField));
-            for (j = 0, jj = valueFields.length; j < jj; ++j) {
-              columns[j + 1].push(selectedFeatures[i].get(valueFields[j]));
-            }
-          }
-          break;
-        case DISPLAY_MODE_CATEGORY:
-          values = {};
-          for (i = 0, ii = selectedFeatures.length; i < ii; i++) {
-            cat = selectedFeatures[i].get(categoryField);
-            if (cat !== undefined) {
-              cat = cat.toString();
-              if (!(cat in values)){
-                values[cat] = [];
-                for (j = 0, jj = valueFields.length; j < jj; j++) {
-                  values[cat].push([selectedFeatures[i].get(valueFields[j])]);
-                }
-              } else {
-                for (j = 0, jj = valueFields.length; j < jj; j++) {
-                  values[cat][j].push(selectedFeatures[i].get(valueFields[j]));
-                }
-              }
-            }
-          }
-          for (key in values) {
-            columns[0].push(key);
-            var v;
-            for (i = 0, ii = valueFields.length; i < ii; i++) {
-              if (chart.operation === AGGREGATION_SUM || chart.operation === AGGREGATION_AVG) {
-                v = 0;
-                jj = values[key][i].length;
-                for (j = 0; j < jj; ++j) {
-                  v += values[key][i][j];
-                }
-                if (chart.operation === AGGREGATION_AVG) {
-                  v /= jj;
-                }
-              } else if (chart.operation === AGGREGATION_MIN) {
-                Math.min.apply(Math, values[key][i]);
-              } else if (chart.operation === AGGREGATION_MAX) {
-                Math.max.apply(Math, values[key][i]);
-              }
-              columns[i + 1].push(v);
-            }
-          }
-          break;
-        case DISPLAY_MODE_COUNT:
-          values = {};
-          for (i = 0, ii = selectedFeatures.length; i < ii; i++) {
-            cat = selectedFeatures[i].get(categoryField);
-            if (cat !== undefined) {
-              cat = cat.toString();
-              if (!(cat in values)){
-                values[cat] = 1;
-              } else {
-                values[cat]++;
-              }
-            }
-          }
-          var sorted = [];
-          for (key in values){
-            sorted.push([key, values[key]]);
-          }
-          sorted.sort(function(a, b) {
-            return b[1] - a[1];
-          });
-          for (i = 0, ii = sorted.length; i < ii; i++) {
-            columns[0].push(sorted[i][0]);
-            columns[1].push(sorted[i][1]);
-          }
-          break;
-        default:
-          break;
-      }
-      this.setState({
-        chart: chart
-      });
-      c3.generate({
-        bindto: '#chart',
-        data: {
-          x: 'x',
-          columns: columns,
-          type: 'bar'
-        },
-        axis: {
-          x: {
-            type: 'category',
-            tick: {
-              rotate: 70,
-              multiline: false
-            },
-            height: 80
-          }
-        }
-      });
-      return true;
+    var i, ii, j, jj, values, cat, key;
+    var categoryField = chart.categoryField;
+    var valueFields = chart.valueFields;
+    var selectedFeatures = this._storeConfig[chart.layer] ? this._storeConfig[chart.layer].selected : [];
+    var columns = [['x']];
+    if (chart.displayMode === DISPLAY_MODE_COUNT){
+      columns.push(['Feature count']);
     } else {
-      return false;
+      for (i = 0, ii = valueFields.length; i < ii; i++) {
+        columns.push([valueFields[i]]);
+      }
     }
+    switch(chart.displayMode) {
+      case DISPLAY_MODE_FEATURE:
+        for (i = 0, ii = selectedFeatures; i < ii; ++i) {
+          columns[0].push(selectedFeatures[i].get(categoryField));
+          for (j = 0, jj = valueFields.length; j < jj; ++j) {
+            columns[j + 1].push(selectedFeatures[i].get(valueFields[j]));
+          }
+        }
+        break;
+      case DISPLAY_MODE_CATEGORY:
+        values = {};
+        for (i = 0, ii = selectedFeatures.length; i < ii; i++) {
+          cat = selectedFeatures[i].get(categoryField);
+          if (cat !== undefined) {
+            cat = cat.toString();
+            if (!(cat in values)){
+              values[cat] = [];
+              for (j = 0, jj = valueFields.length; j < jj; j++) {
+                values[cat].push([selectedFeatures[i].get(valueFields[j])]);
+              }
+            } else {
+              for (j = 0, jj = valueFields.length; j < jj; j++) {
+                values[cat][j].push(selectedFeatures[i].get(valueFields[j]));
+              }
+            }
+          }
+        }
+        for (key in values) {
+          columns[0].push(key);
+          var v;
+          for (i = 0, ii = valueFields.length; i < ii; i++) {
+            if (chart.operation === AGGREGATION_SUM || chart.operation === AGGREGATION_AVG) {
+              v = 0;
+              jj = values[key][i].length;
+              for (j = 0; j < jj; ++j) {
+                v += values[key][i][j];
+              }
+              if (chart.operation === AGGREGATION_AVG) {
+                v /= jj;
+              }
+            } else if (chart.operation === AGGREGATION_MIN) {
+              Math.min.apply(Math, values[key][i]);
+            } else if (chart.operation === AGGREGATION_MAX) {
+              Math.max.apply(Math, values[key][i]);
+            }
+            columns[i + 1].push(v);
+          }
+        }
+        break;
+      case DISPLAY_MODE_COUNT:
+        values = {};
+        for (i = 0, ii = selectedFeatures.length; i < ii; i++) {
+          cat = selectedFeatures[i].get(categoryField);
+          if (cat !== undefined) {
+            cat = cat.toString();
+            if (!(cat in values)){
+              values[cat] = 1;
+            } else {
+              values[cat]++;
+            }
+          }
+        }
+        var sorted = [];
+        for (key in values){
+          sorted.push([key, values[key]]);
+        }
+        sorted.sort(function(a, b) {
+          return b[1] - a[1];
+        });
+        for (i = 0, ii = sorted.length; i < ii; i++) {
+          columns[0].push(sorted[i][0]);
+          columns[1].push(sorted[i][1]);
+        }
+        break;
+      default:
+        break;
+    }
+    this.setState({
+      chart: chart
+    });
+    c3.generate({
+      bindto: '#chart',
+      data: {
+        x: 'x',
+        columns: columns,
+        type: 'bar'
+      },
+      axis: {
+        x: {
+          type: 'category',
+          tick: {
+            rotate: 70,
+            multiline: false
+          },
+          height: 80
+        }
+      }
+    });
   }
   _selectChart(evt) {
     var chart = this.props.charts[evt.target.value];
-    return this._drawFromSelection(chart);
+    this._drawFromSelection(chart);
   }
-  _onClick(evt) {
-    if (this._selectChart(evt) && this.props.container) {
+  _onClick() {
+    if (this.props.container) {
       document.getElementById(this.props.container).style.display = 'block';
     }
   }
