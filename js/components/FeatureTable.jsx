@@ -43,15 +43,16 @@ export default class FeatureTable extends React.Component {
   }
   _onChange() {
     var state = FeatureStore.getState(this._layer);
-    state.columnWidths = {};
     this.setState(state);
   }
   _rowGetter(index) {
     return FeatureStore.getObjectAt(this._layer, index);
   }
   _onColumnResize(width, label) {
+    var id = this._layer.get('id');
     var columnWidths = this.state.columnWidths;
-    columnWidths[label] = width;
+    columnWidths[id] = columnWidths[id] || {};
+    columnWidths[id][label] = width;
     this.setState({columnWidths: columnWidths});
     this._isResizing = false;
   }
@@ -106,11 +107,10 @@ export default class FeatureTable extends React.Component {
     var Table = FixedDataTable.Table;
     var Column = FixedDataTable.Column;
     var schema = FeatureStore.getSchema(this._layer);
+    var id = this._layer.get('id');
     var columnNodes = [];
     for (var key in schema) {
-      if (!this.state.columnWidths[key]) {
-        this.state.columnWidths[key] = this.props.columnWidth;
-      }
+      var width = this.state.columnWidths[id] && this.state.columnWidths[id][key] ? this.state.columnWidths[id][key] : this.props.columnWidth;
       var cellRenderer = (schema[key] === 'link') ? this._renderLink : undefined;
       columnNodes.push(
         <Column
@@ -119,7 +119,7 @@ export default class FeatureTable extends React.Component {
           cellRenderer={cellRenderer}
           dataKey={key}
           key={key}
-          width={this.state.columnWidths[key]} />
+          width={width} />
         );
     }
     return (
