@@ -65,6 +65,23 @@ class FeatureStore extends EventEmitter {
       this.emitChange();
     }
   }
+  selectFeaturesInCurrentSelection(layer, features) {
+    var id = layer.get('id'), i, ii;
+    var selected = this._config[id].selected;
+    var remove = [];
+    for (i = 0, ii = selected.length; i < ii; ++i) {
+      if (features.indexOf(selected[i]) === -1) {
+        remove.push(selected[i]);
+      }
+    }
+    for (i = 0, ii = remove.length; i < ii; ++i) {
+      var idx = selected.indexOf(remove[i]);
+      if (idx > -1) {
+        selected.splice(idx, 1);
+      }
+    }
+    this.emitChange();
+  }
   toggleFeature(layer, feature) {
     var id = layer.get('id'), idx = this._config[id].selected.indexOf(feature);
     if (idx === -1) {
@@ -141,6 +158,9 @@ let _FeatureStore = new FeatureStore();
 AppDispatcher.register((payload) => {
   let action = payload.action;
   switch(action.type) {
+    case SelectConstants.SELECT_FEATURES_IN:
+      _FeatureStore.selectFeaturesInCurrentSelection(action.layer, action.features);
+      break;
     case SelectConstants.CLEAR:
       _FeatureStore.clearSelection(action.layer, action.filter);
       break;

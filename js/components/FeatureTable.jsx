@@ -29,23 +29,6 @@ export default class FeatureTable extends React.Component {
             }
           }
           break;
-        case SelectConstants.SELECT_FEATURES_IN:
-          id = action.layer.get('id');
-          var selected = this.state.selected[id];
-          var remove = [];
-          for (i = 0, ii = selected.length; i < ii; ++i) {
-            if (action.features.indexOf(selected[i]) === -1) {
-              remove.push(selected[i]);
-            }
-          }
-          for (i = 0, ii = remove.length; i < ii; ++i) {
-            var idx = this.state.selected[id].indexOf(remove[i]);
-            if (idx > -1) {
-              this.state.selected[id].splice(idx, 1);
-            }
-          }
-          this.setState({selected: this.state.selected});
-          break;
         default:
           break;
       }
@@ -81,7 +64,7 @@ export default class FeatureTable extends React.Component {
     this._isResizing = false;
   }
   _onRowClick(evt, index) {
-    var lyr = this._layer, id = lyr.get('id');
+    var lyr = this._layer;
     var feature = this.state.features[index];
     SelectActions.toggleFeature(lyr, feature);
   }
