@@ -10,6 +10,7 @@ import QueryBuilder from './components/QueryBuilder.jsx';
 import Chart from './components/Chart.jsx';
 import Geolocation from './components/Geolocation.jsx';
 import QGISLegend from './components/QGISLegend.jsx';
+import ImageExport from './components/ImageExport.jsx';
 
 var styleTrees = new ol.style.Style({
   fill: new ol.style.Fill({
@@ -196,3 +197,4 @@ React.render(<Chart combo={true} charts={charts}/>, document.getElementById('cha
 React.render(<Geolocation map={map} />, document.getElementById('geolocation-control'));
 var legendData = {'airports': [['', '6_0.png']], 'lakes': [['', '3_0.png']], 'trees': [['', '0_0.png']], 'rivers': [['', '1_0.png']], 'swamp': [['', '4_0.png']], 'popp': [['', '5_0.png']], 'majrivers': [['', '2_0.png']]};
 React.render(<QGISLegend legendBasePath='../../resources/legend/' legendData={legendData} />, document.getElementById('legend'));
+React.render(<ImageExport map={map} />, document.getElementById('toolbar-export'));
