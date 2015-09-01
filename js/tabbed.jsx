@@ -8,6 +8,7 @@ import Measure from './components/Measure.jsx';
 import Select from './components/Select.jsx';
 import QueryBuilder from './components/QueryBuilder.jsx';
 import Chart from './components/Chart.jsx';
+import Geolocation from './components/Geolocation.jsx';
 
 var styleTrees = new ol.style.Style({
   fill: new ol.style.Fill({
@@ -191,3 +192,4 @@ React.render(<Select toggleGroup='navigation' map={map}/>, document.getElementBy
 React.render(<Measure toggleGroup='navigation' map={map}/>, document.getElementById('toolbar-measure'));
 var charts = {'Airports count per use category': {'categoryField': 'USE', 'layer': 'lyr03', 'valueFields': [], 'displayMode': 2, 'operation': 2}, 'Forest area total surface': {'categoryField': 'VEGDESC', 'layer': 'lyr01', 'valueFields': ['AREA_KM2'], 'displayMode': 1, 'operation': 2}};
 React.render(<Chart combo={true} charts={charts}/>, document.getElementById('charts-tab'));
+React.render(<Geolocation map={map} />, document.getElementById('geolocation-control'));
