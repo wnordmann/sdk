@@ -1,15 +1,19 @@
 /* global ol */
 import React from 'react';
 import './Geolocation.css';
+import Pui from 'pui-react-alerts';
 
 export default class Geolocation extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      error: false
+    };
   }
   _geolocate() {
     if (this._geolocation) {
       this._geolocation.setTracking(!this._geolocation.getTracking());
-      this._featuresOverlay.setMap(this._geolocation.getTracking() ? this.props.map :null);
+      this._featuresOverlay.setMap(this._geolocation.getTracking() ? this.props.map : null);
     } else {
       var map = this.props.map;
       this._geolocation = new ol.Geolocation({
@@ -34,10 +38,9 @@ export default class Geolocation extends React.Component {
         })
       }));
       this._geolocation.on('error', function(error) {
-        // TODO proper dialog
-        alert('There was an error determining geolocation: ' + error.message);
-      });
-      this._geolocation.on('change:position', function(evt) {
+        this.setState({error: true, msg: error.message});
+      }, this);
+      this._geolocation.on('change:position', function() {
         var coordinates = this._geolocation.getPosition();
         positionFeature.setGeometry(coordinates ? new ol.geom.Point(coordinates) : null);
         map.getView().setCenter(coordinates);
@@ -52,9 +55,13 @@ export default class Geolocation extends React.Component {
     }
   }
   render() {
-    return (
-      <button title='Geolocation' onClick={this._geolocate.bind(this)}></button>
-    );
+    if (this.state.error) {
+      return (<Pui.ErrorAlert dismissable={true} withIcon={true}>Error while retrieving geolocation, details: {this.state.msg}</Pui.ErrorAlert>);
+    } else {
+      return (
+        <button title='Geolocation' onClick={this._geolocate.bind(this)}></button>
+      );
+    }
   }
 }
 
