@@ -9,6 +9,7 @@ import Select from './components/Select.jsx';
 import QueryBuilder from './components/QueryBuilder.jsx';
 import Chart from './components/Chart.jsx';
 import Geolocation from './components/Geolocation.jsx';
+import QGISLegend from './components/QGISLegend.jsx';
 
 var styleTrees = new ol.style.Style({
   fill: new ol.style.Fill({
@@ -193,3 +194,5 @@ React.render(<Measure toggleGroup='navigation' map={map}/>, document.getElementB
 var charts = {'Airports count per use category': {'categoryField': 'USE', 'layer': 'lyr03', 'valueFields': [], 'displayMode': 2, 'operation': 2}, 'Forest area total surface': {'categoryField': 'VEGDESC', 'layer': 'lyr01', 'valueFields': ['AREA_KM2'], 'displayMode': 1, 'operation': 2}};
 React.render(<Chart combo={true} charts={charts}/>, document.getElementById('charts-tab'));
 React.render(<Geolocation map={map} />, document.getElementById('geolocation-control'));
+var legendData = {'airports': [['', '6_0.png']], 'lakes': [['', '3_0.png']], 'trees': [['', '0_0.png']], 'rivers': [['', '1_0.png']], 'swamp': [['', '4_0.png']], 'popp': [['', '5_0.png']], 'majrivers': [['', '2_0.png']]};
+React.render(<QGISLegend legendBasePath='../../resources/legend/' legendData={legendData} />, document.getElementById('legend'));
