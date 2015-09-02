@@ -1,5 +1,7 @@
 import React from 'react';
 import LayerActions from '../actions/LayerActions.js';
+import UI from 'pui-react-search-input';
+import '../../node_modules/pui-css-forms/forms.css';
 
 export default class Geocoding extends React.Component {
   _searchBoxKeyPressed(e) {
@@ -7,8 +9,8 @@ export default class Geocoding extends React.Component {
       this._searchAddress();
     }
   }
-  _searchAddress() {
-    var value = React.findDOMNode(this.refs.search).value;
+  _searchAddress(evt) {
+    var value = event.target.value
     if (value !== '') {
       var cbname = 'fn' + Date.now();
       var script = document.createElement('script');
@@ -22,12 +24,7 @@ export default class Geocoding extends React.Component {
   }
   render() {
     return (
-      <div className='input-group'>
-        <input type='text' onKeyPress={this._searchBoxKeyPressed.bind(this)} ref='search' id='geocoding-search' className='form-control' placeholder='Search placename...'/>
-        <div className='input-group-btn'>
-          <button className='btn btn-default' onClick={this._searchAddress.bind(this)}><span>&nbsp;</span><i className='glyphicon glyphicon-search'></i></button>
-        </div>
-      </div>
+      <UI.SearchInput placeholder='Search placename...' onChange={this._searchAddress.bind(this)}/>
     );
   }
 }
