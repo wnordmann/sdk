@@ -1,3 +1,11 @@
+#geolocation-control {
+  top: 130px;
+  left: 1.75em;
+}
+#home-button {
+  top: 70px;
+  left: 1.75em;
+}
 html, body {
   height: 100%;
   padding: 0;

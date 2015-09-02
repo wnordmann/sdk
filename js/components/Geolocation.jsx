@@ -59,7 +59,7 @@ export default class Geolocation extends React.Component {
       return (<Pui.ErrorAlert dismissable={true} withIcon={true}>Error while retrieving geolocation, details: {this.state.msg}</Pui.ErrorAlert>);
     } else {
       return (
-        <button title='Geolocation' onClick={this._geolocate.bind(this)}></button>
+        <button id='geolocation-button' title='Geolocation' onClick={this._geolocate.bind(this)}></button>
       );
     }
   }
