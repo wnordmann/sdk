@@ -1,4 +1,4 @@
-/* global ol, $ */
+/* global ol */
 import React from 'react';
 import LayerList from './components/LayerList.jsx';
 import Geocoding from './components/Geocoding.jsx';
@@ -186,7 +186,7 @@ var map = new ol.Map({
   })
 });
 var selectedLayer = map.getLayers().item(2);
-var height = $(document.body).height() - 250;
+window.console.log(React.findDOMNode(document.body));
 
 React.render(
 <UI.SimpleTabs defaultActiveKey={2}>
@@ -198,7 +198,7 @@ React.render(
 );
 
 React.render(<QueryBuilder map={map} />, document.getElementById('query-panel'));
-React.render(<FeatureTable width={400} height={height} layer={selectedLayer} map={map} />, document.getElementById('attributes-table-tab'));
+React.render(<FeatureTable layer={selectedLayer} map={map} />, document.getElementById('attributes-table-tab'));
 React.render(<Geocoding />, document.getElementById('geocoding-tab'));
 React.render(<GeocodingResults map={map} />, document.getElementById('geocoding-results'));
 React.render(<LayerList showOpacity={true} showDownload={true} showGroupContent={true} showZoomTo={true} allowReordering={true} map={map} />,
