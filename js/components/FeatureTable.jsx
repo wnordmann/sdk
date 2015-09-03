@@ -7,6 +7,9 @@ import MapConstants from '../constants/MapConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import SelectActions from '../actions/SelectActions.js';
 import LayerSelector from './LayerSelector.jsx';
+import UI from 'pui-react-buttons';
+import Grids from 'pui-react-grids';
+import Icon from 'pui-react-iconography';
 import './FeatureTable.css';
 
 export default class FeatureTable extends React.Component {
@@ -124,11 +127,11 @@ export default class FeatureTable extends React.Component {
     }
     return (
       <div id='attributes-table'>
-        <form className='form-inline'>
+        <form role='form' className='form-inline'>
           <label>Layer:</label>
           <LayerSelector ref='layerSelector' filter={this._filterLayerList} map={this.props.map} value={this.props.layer.get('title')} />
-          <button onClick={this._zoomSelected.bind(this)} type='button' className='btn btn-default'><i className='glyphicon glyphicon-search'></i> Zoom to selected</button>
-          <button onClick={this._clearSelected.bind(this)} type='button' className='btn btn-default'><i className='glyphicon glyphicon-trash'></i> Clear selected</button>
+          <UI.DefaultButton onClick={this._zoomSelected.bind(this)} title='Zoom to selected'><Icon.Icon name="search" /> Zoom</UI.DefaultButton>
+          <UI.DefaultButton onClick={this._clearSelected.bind(this)} title='Clear selected'><Icon.Icon name="trash" /> Clear</UI.DefaultButton>
           <label><input type='checkbox' onChange={this._filter.bind(this)}></input> Show only selected features</label>
         </form>
         <Table
