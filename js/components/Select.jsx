@@ -3,6 +3,7 @@ import React from 'react';
 import SelectActions from '../actions/SelectActions.js';
 import MapTool from './MapTool.js';
 import FeatureStore from '../stores/FeatureStore.js';
+import UI from 'pui-react-dropdowns';
 
 export default class Select extends MapTool {
   constructor(props) {
@@ -54,12 +55,9 @@ export default class Select extends MapTool {
   }
   render() {
     return (
-      <li className='dropdown'>
-        <a href='#' className='dropdown-toggle' data-toggle='dropdown'> Selection <span className='caret'></span> </a>
-        <ul className='dropdown-menu'>
-          <li><a onClick={this._selectByRectangle.bind(this)} href='#'>Select by rectangle</a></li>
-        </ul>
-      </li>
+      <UI.Dropdown title='Selection'>
+        <UI.DropdownItem onSelect={this._selectByRectangle.bind(this)}>Select by rectangle</UI.DropdownItem>
+      </UI.Dropdown>
     );
   }
 }

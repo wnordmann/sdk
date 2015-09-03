@@ -1,7 +1,7 @@
 import React from 'react';
 import LayerActions from '../actions/LayerActions.js';
 import UI from 'pui-react-search-input';
-import '../../node_modules/pui-css-forms/forms.css';
+//import '../../node_modules/pui-css-forms/forms.css';
 
 export default class Geocoding extends React.Component {
   _searchBoxKeyPressed(e) {

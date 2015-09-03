@@ -2,6 +2,7 @@
 import React from 'react';
 import './Measure.css';
 import MapTool from './MapTool.js';
+import UI from 'pui-react-dropdowns';
 
 export default class Measure extends MapTool {
   constructor(props) {
@@ -149,14 +150,11 @@ export default class Measure extends MapTool {
   }
   render() {
     return (
-      <li className='dropdown'>
-        <a href='#' className='dropdown-toggle' data-toggle='dropdown'> Measure <span className='caret'></span> </a>
-        <ul className='dropdown-menu'>
-          <li><a onClick={this._measureDistance.bind(this)} href='#'>Distance</a></li>
-          <li><a onClick={this._measureArea.bind(this)} href='#'>Area</a></li>
-          <li><a onClick={this._clear.bind(this)} href='#'>Remove measurements</a></li>
-        </ul>
-      </li>
+      <UI.Dropdown title='Measure'>
+        <UI.DropdownItem onSelect={this._measureDistance.bind(this)}>Distance</UI.DropdownItem>
+        <UI.DropdownItem onSelect={this._measureArea.bind(this)}>Area</UI.DropdownItem>
+        <UI.DropdownItem onSelect={this._clear.bind(this)}>Remove measurements</UI.DropdownItem>
+      </UI.Dropdown>
     );
   }
 }

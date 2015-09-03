@@ -12,6 +12,8 @@ import Geolocation from './components/Geolocation.jsx';
 import QGISLegend from './components/QGISLegend.jsx';
 import ImageExport from './components/ImageExport.jsx';
 import HomeButton from './components/HomeButton.jsx';
+import UI from 'pui-react-tabs';
+import DD from 'pui-react-dropdowns';
 
 var styleTrees = new ol.style.Style({
   fill: new ol.style.Fill({
@@ -186,6 +188,16 @@ var map = new ol.Map({
 });
 var selectedLayer = map.getLayers().item(2);
 var height = $(document.body).height() - 230;
+
+React.render(
+<UI.SimpleTabs defaultActiveKey={2}>
+  <UI.Tab eventKey={1} title="Geocoding"><div id='geocoding-tab'></div><div id='geocoding-results' className='geocoding-results'></div></UI.Tab>
+  <UI.Tab eventKey={2} title="Attributes table"><div id="attributes-table-tab"></div></UI.Tab>
+  <UI.Tab eventKey={3} title="Query"><div id='query-panel' className='query-panel'></div></UI.Tab>
+  <UI.Tab eventKey={4} title="Charts"><div id='charts-tab'></div></UI.Tab>
+</UI.SimpleTabs>, document.getElementById('tabs-panel')
+);
+
 React.render(<QueryBuilder map={map} />, document.getElementById('query-panel'));
 React.render(<FeatureTable width={434} height={height} layer={selectedLayer} map={map} />, document.getElementById('attributes-table-tab'));
 React.render(<Geocoding />, document.getElementById('geocoding-tab'));

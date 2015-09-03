@@ -4,25 +4,26 @@
   <meta charset="UTF-8">
   <title>React - OpenLayers - LayerSwitcher</title>
   <link rel="stylesheet" type="text/css" href="../../node_modules/openlayers/dist/ol.css">
-  <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.min.css">
+  <!--<link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.min.css">-->
+<link rel="stylesheet" href="../../css/components.css">
   <link rel="stylesheet" type="text/css" href="tabbed.css">
   <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
-  <script src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <!--<script src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>-->
   <script src="../../node_modules/openlayers/dist/ol.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
-  <nav class="navbar navbar-default" id="toolbar" role="navigation">
-    <div class="collapse navbar-collapse" id="navbar">
-      <ul class="nav navbar-nav navbar-right" id="toolbar-export"></ul>
-      <ul class="nav navbar-nav navbar-right" id="toolbar-measure"></ul>
-      <ul class="nav navbar-nav navbar-right" id="toolbar-select"></ul>
+  <nav id="toolbar" role="navigation">
+    <div id="navbar">
+      <ul class="pull-right" id="toolbar-export"></ul>
+      <ul class="pull-right" id="toolbar-measure"></ul>
+      <ul class="pull-right" id="toolbar-select"></ul>
     </div>
   </nav>
   <div id="content">
     <div class="row full-height">
-      <div class="col-md-4 full-height" id="tabs-panel">
-        <ul class="nav nav-tabs" role="tablist">
+      <div class="col-md-8 full-height" id="tabs-panel">
+<!--        <ul class="nav nav-tabs" role="tablist">
           <li>
             <a data-toggle="tab" href="#geocoding-tab" role="tab">Geocoding</a>
           </li>
@@ -42,9 +43,9 @@
           <div class="tab-pane active" id="attributes-table-tab"></div>
           <div class="tab-pane" id="query-tab"><div id="query-panel" class="query-panel"></div></div>
           <div class="tab-pane" id="charts-tab"></div>
-        </div>
+        </div>-->
       </div>
-      <div class="col-md-8 full-height">
+      <div class="col-md-16 full-height">
         <div id="map"></div>
         <div id="layerlist"></div>
         <div id="legend"></div>

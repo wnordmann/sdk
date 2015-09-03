@@ -2,6 +2,8 @@
 import React from 'react';
 import 'blueimp-canvas-to-blob';
 import FileSaver from 'browser-filesaver';
+import UI from 'pui-react-buttons';
+import Icon from 'pui-react-iconography';
 
 export default class ImageExport extends React.Component {
   constructor(props) {
@@ -19,11 +21,9 @@ export default class ImageExport extends React.Component {
   }
   render() {
     return (
-      <li>
-        <a href='#' onClick={this._handleClick.bind(this)} id='export-as-image'>
-          <i className='glyphicon glyphicon-camera'></i> Export as image
-        </a>
-      </li>
+      <UI.DefaultButton onClick={this._handleClick.bind(this)}>
+        <Icon.Icon name="camera" /> Export as image
+      </UI.DefaultButton>
     );
   }
 }
