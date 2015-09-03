@@ -186,7 +186,6 @@ var map = new ol.Map({
   })
 });
 var selectedLayer = map.getLayers().item(2);
-window.console.log(React.findDOMNode(document.body));
 
 React.render(
 <UI.SimpleTabs defaultActiveKey={2}>
