@@ -13,7 +13,6 @@ import QGISLegend from './components/QGISLegend.jsx';
 import ImageExport from './components/ImageExport.jsx';
 import HomeButton from './components/HomeButton.jsx';
 import UI from 'pui-react-tabs';
-import DD from 'pui-react-dropdowns';
 
 var styleTrees = new ol.style.Style({
   fill: new ol.style.Fill({
