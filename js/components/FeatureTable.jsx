@@ -8,7 +8,6 @@ import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import SelectActions from '../actions/SelectActions.js';
 import LayerSelector from './LayerSelector.jsx';
 import UI from 'pui-react-buttons';
-import Grids from 'pui-react-grids';
 import Icon from 'pui-react-iconography';
 import './FeatureTable.css';
 

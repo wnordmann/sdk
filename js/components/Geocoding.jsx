@@ -8,8 +8,8 @@ export default class Geocoding extends React.Component {
       this._searchAddress();
     }
   }
-  _searchAddress(evt) {
-    var value = event.target.value
+  _searchAddress() {
+    var value = event.target.value;
     if (value !== '') {
       var cbname = 'fn' + Date.now();
       var script = document.createElement('script');
