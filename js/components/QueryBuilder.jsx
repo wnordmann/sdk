@@ -5,6 +5,9 @@ import MapConstants from '../constants/MapConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import SelectActions from '../actions/SelectActions.js';
 import filtrex from 'filtrex';
+import UI from 'pui-react-buttons';
+import Grids from 'pui-react-grids';
+import Icon from 'pui-react-iconography';
 import './QueryBuilder.css';
 
 export default class QueryBuilder extends React.Component {
@@ -83,21 +86,19 @@ export default class QueryBuilder extends React.Component {
       inputClassName += ' input-has-error';
     }
     return (
-      <form className='form-horizontal query-builder'>
-        <div className='input-group'>
-          <span className='input-group-addon'>Layer</span>
-          <LayerSelector ref='layerSelector' filter={this._filterLayerList} map={this.props.map} />
-        </div>
-        <div className='input-group'>
-          <span className='input-group-addon'>Filter</span>
-          <input onKeyUp={this._setQueryFilter.bind(this)} className={inputClassName} ref='queryExpression' id='query-expression' placeholder='Type expression ....' type='text'/>
+      <form role="form" className='form-horizontal query-builder'>
+        <div className="form-group">
+          <Grids.Col md={3}><label>Layer</label></Grids.Col>
+          <Grids.Col md={21}><LayerSelector ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /></Grids.Col>
         </div>
         <div className='form-group'>
-          <div className='col-sm-12 controls'>
-            <a onClick={this._newSelection.bind(this)} className='btn btn-primary' href='#' id='btn-query-new'>New selection</a>
-            <a onClick={this._addSelection.bind(this)} className='btn btn-primary' href='#' id='btn-query-add'>Add to current selection</a>
-            <a onClick={this._inSelection.bind(this)} className='btn btn-primary' href='#' id='btn-query-in'>Select in current selection</a>
-          </div>
+          <Grids.Col md={3}><label>Filter</label></Grids.Col>
+          <Grids.Col md={21}><input onKeyUp={this._setQueryFilter.bind(this)} className={inputClassName} ref='queryExpression' id='query-expression' placeholder='Type expression ....' type='text'/></Grids.Col>
+        </div>
+        <div className='form-group text-center'>
+            <UI.DefaultButton onClick={this._newSelection.bind(this)} title="New selection"><Icon.Icon name="file" /> New</UI.DefaultButton>
+            <UI.DefaultButton onClick={this._addSelection.bind(this)} title="Add to current selection"><Icon.Icon name="plus" /> Add</UI.DefaultButton>
+            <UI.DefaultButton onClick={this._inSelection.bind(this)} title="Select in current selection"><Icon.Icon name="filter" /> Select</UI.DefaultButton>
         </div>
       </form>
     );

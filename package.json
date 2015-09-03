@@ -29,6 +29,8 @@
     "pui-react-alerts": "^2.0.0-alpha.0",
     "pui-react-buttons": "^2.0.0-alpha.0",
     "pui-react-dropdowns": "^2.0.0-alpha.0",
+    "pui-react-grids": "^2.0.0-alpha.0",
+    "pui-react-helpers": "^2.0.0-alpha.0",
     "pui-react-iconography": "^2.0.0-alpha.0",
     "pui-react-search-input": "^2.0.0-alpha.0",
     "pui-react-tabs": "^2.0.0-alpha.0",

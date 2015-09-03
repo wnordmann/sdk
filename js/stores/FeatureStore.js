@@ -63,6 +63,9 @@ class FeatureStore extends EventEmitter {
   }
   clearSelection(layer, filter) {
     var id = layer.get('id');
+    if (!this._config[id]) {
+      this._config[id] = {};
+    }
     this._config[id].selected = [];
     if (filter === true) {
       this.setSelectedAsFilter(layer);
