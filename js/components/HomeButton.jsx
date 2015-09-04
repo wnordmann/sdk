@@ -15,7 +15,7 @@ export default class HomeButton extends React.Component {
   }
   render() {
     return (
-      <button title='Home' onClick={this._goHome.bind(this)}><i className='glyphicon glyphicon-home'></i></button>
+      <button title='Home' onClick={this._goHome.bind(this)}><i className='fa fa-home'></i></button>
     );
   }
 }
