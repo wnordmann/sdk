@@ -2,30 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>React - OpenLayers - LayerSwitcher</title>
+  <title>Boundless SDK - Basic Theme</title>
   <link rel="stylesheet" type="text/css" href="../../node_modules/openlayers/dist/ol.css">
-  <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../../css/components.css">
   <link rel="stylesheet" type="text/css" href="basic.css">
-  <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
-  <script src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
   <script src="../../node_modules/openlayers/dist/ol.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
-  <nav class="navbar navbar-default" role="navigation" id="toolbar">
-    <div class="collapse navbar-collapse" id="navbar">
-        <ul class="nav navbar-nav navbar-right">
-          <li class="dropdown"><a href="#" id="navigation-link"> Navigation</a></li>
-          <li class="dropdown">
-            <ul class="nav navbar-nav" id="toolbar-chart"></ul>
-          </li>
-          <li class="dropdown">
-            <ul class="nav navbar-nav" id="toolbar-select"></ul>
-          </li>
-          <li class="dropdown"><a href="#" id="query-link"><i class="glyphicon glyphicon-filter"></i> Query</a></li>
-          <li class="dropdown"><a href="#" id="table-link"><i class="glyphicon glyphicon-list-alt"></i> Attributes table</a></li>
-          <div class="navbar-form navbar-right" id="geocoding"></div>
-        </ul>
+  <nav role="navigation">
+    <div id="navbar">
+      <div id="geocoding" class="pull-right"></div>
+      <ul class="pull-right" id="toolbar-table"></ul>
+      <ul class="pull-right" id="toolbar-query"></ul>
+      <ul class="pull-right" id="toolbar-select"></ul>
+      <ul class="pull-right" id="toolbar-chart"></ul>
+      <ul class="pull-right" id="toolbar-navigation"></ul>
     </div>
   </nav>
   <div id="content">

@@ -1,4 +1,4 @@
-/* global ol, $ */
+/* global ol */
 import React from 'react';
 import LayerList from './components/LayerList.jsx';
 import Geocoding from './components/Geocoding.jsx';
@@ -8,6 +8,8 @@ import QueryBuilder from './components/QueryBuilder.jsx';
 import FeatureTable from './components/FeatureTable.jsx';
 import LayerActions from './actions/LayerActions.js';
 import Chart from './components/Chart.jsx';
+import UI from 'pui-react-buttons';
+import Icon from 'pui-react-iconography';
 
 var styleTrees = new ol.style.Style({
   fill: new ol.style.Fill({
@@ -180,6 +182,7 @@ var map = new ol.Map({
     zoom: 4
   })
 });
+
 var selectedLayer = map.getLayers().item(2);
 React.render(<Geocoding />, document.getElementById('geocoding'));
 React.render(<GeocodingResults map={map} />, document.getElementById('geocoding-results'));
@@ -187,20 +190,31 @@ React.render(<LayerList showOpacity={true} showDownload={true} showGroupContent=
   document.getElementById('layerlist'));
 React.render(<Select toggleGroup='navigation' map={map}/>, document.getElementById('toolbar-select'));
 React.render(<QueryBuilder map={map} />, document.getElementById('query-panel'));
-var width = $(document.body).width() - 25;
-var height = $(document.body).height() / 2 - 100;
-React.render(<FeatureTable width={width} height={height} layer={selectedLayer} map={map} />, document.getElementById('table-panel'));
+React.render(<FeatureTable layer={selectedLayer} map={map} />, document.getElementById('table-panel'));
 var charts = {'Airports count per use category': {'categoryField': 'USE', 'layer': 'lyr03', 'valueFields': [], 'displayMode': 2, 'operation': 2}, 'Forest area total surface': {'categoryField': 'VEGDESC', 'layer': 'lyr01', 'valueFields': ['AREA_KM2'], 'displayMode': 1, 'operation': 2}};
 React.render(<Chart container='chart-panel' charts={charts} />, document.getElementById('toolbar-chart'));
 
-$('#query-link').on('click', function() {
-  $('#query-panel').toggle();
-});
-
-$('#table-link').on('click', function() {
-  $('#table-panel').toggle();
-});
-
-$('#navigation-link').on('click', function() {
+var navigationFunc = function() {
   LayerActions.activateTool(null, 'navigation');
-});
+};
+React.render(<UI.DefaultButton title='Switch to map navigation (pan and zoom)' onClick={navigationFunc}>Navigation</UI.DefaultButton>, document.getElementById('toolbar-navigation'));
+
+var toggle = function(el) {
+  if (el.style.display === 'block') {
+    el.style.display = 'none';
+  } else {
+    el.style.display = 'block';
+  }
+};
+
+var queryFunc = function() {
+  toggle(document.getElementById('query-panel'));
+};
+
+React.render(<UI.DefaultButton onClick={queryFunc}><Icon.Icon name="filter" /> Query</UI.DefaultButton>, document.getElementById('toolbar-query'));
+
+var tableFunc = function() {
+  toggle(document.getElementById('table-panel'));
+};
+
+React.render(<UI.DefaultButton onClick={tableFunc} title="Attributes table"><Icon.Icon name="list-alt" /> Table</UI.DefaultButton>, document.getElementById('toolbar-table'));

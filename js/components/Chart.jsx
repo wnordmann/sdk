@@ -2,6 +2,7 @@ import React from 'react';
 import FeatureStore from '../stores/FeatureStore.js';
 import c3 from 'c3';
 import '../../node_modules/c3/c3.min.css';
+import UI from 'pui-react-dropdowns';
 import './Chart.css';
 
 const AGGREGATION_MIN = 0;
@@ -172,15 +173,12 @@ export default class Chart extends React.Component {
     } else {
       var listitems = [];
       for (key in this.props.charts) {
-        listitems.push(<li key={key}><a onClick={this._onClick.bind(this, {target: {value: key}})} href='#'>{key}</a></li>);
+        listitems.push(<UI.DropdownItem key={key} onSelect={this._onClick.bind(this, {target: {value: key}})}>{key}</UI.DropdownItem>);
       }
       return (
-        <li className='dropdown'>
-          <a href='#' className='dropdown-toggle' data-toggle='dropdown'> Charts <span className='caret'></span> </a>
-          <ul className='dropdown-menu'>
-            {listitems}
-          </ul>
-        </li>
+        <UI.Dropdown title='Charts'>
+          {listitems}
+        </UI.Dropdown>
       );
     }
   }
