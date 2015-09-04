@@ -105,6 +105,9 @@ export default class FeatureTable extends React.Component {
       }
     }
   }
+  _onSubmit(evt) {
+    evt.preventDefault();
+  }
   render() {
     var Table = FixedDataTable.Table;
     var Column = FixedDataTable.Column;
@@ -126,7 +129,7 @@ export default class FeatureTable extends React.Component {
     }
     return (
       <div id='attributes-table'>
-        <form role='form' className='form-inline'>
+        <form onSubmit={this._onSubmit.bind(this)} role='form' className='form-inline'>
           <label>Layer:</label>
           <LayerSelector ref='layerSelector' filter={this._filterLayerList} map={this.props.map} value={this.props.layer.get('title')} />
           <UI.DefaultButton onClick={this._zoomSelected.bind(this)} title='Zoom to selected'><Icon.Icon name="search" /> Zoom</UI.DefaultButton>
