@@ -21,8 +21,8 @@ export default class ImageExport extends React.Component {
   }
   render() {
     return (
-      <UI.DefaultButton onClick={this._handleClick.bind(this)}>
-        <Icon.Icon name="camera" /> Export as image
+      <UI.DefaultButton title='Export as image' onClick={this._handleClick.bind(this)}>
+        <Icon.Icon name="camera" /> Export
       </UI.DefaultButton>
     );
   }
