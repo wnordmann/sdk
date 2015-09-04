@@ -2,6 +2,8 @@
 import React from 'react';
 import LayerStore from '../stores/LayerStore.js';
 import LayerListItem from './LayerListItem.jsx';
+import UI from 'pui-react-buttons';
+import Icon from 'pui-react-iconography';
 import './LayerList.css';
 
 export default class LayerList extends React.Component {
@@ -57,7 +59,8 @@ export default class LayerList extends React.Component {
       className += ' shown';
     }
     return (
-      <div onMouseOut={this._hidePanel.bind(this)} onMouseOver={this._showPanel.bind(this)} className={className}><button onClick={this._showPanel.bind(this)} title="Layers"></button>
+      <div onMouseOut={this._hidePanel.bind(this)} onMouseOver={this._showPanel.bind(this)} className={className}>
+      <UI.DefaultButton onClick={this._showPanel.bind(this)} title="Layers"><Icon.Icon name="map" /></UI.DefaultButton>
       <div className="layer-tree-panel">{this.renderLayers(layers)}</div></div>
     );
   }

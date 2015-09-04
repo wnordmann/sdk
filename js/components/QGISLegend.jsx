@@ -1,4 +1,6 @@
 import React from 'react';
+import UI from 'pui-react-buttons';
+import Icon from 'pui-react-iconography';
 import './QGISLegend.css';
 
 export default class QGISLegend extends React.Component {
@@ -47,7 +49,8 @@ export default class QGISLegend extends React.Component {
     }
     var items = this._renderItems(this.props.legendData, this.props.legendBasePath);
     return (
-      <div onMouseOut={this._hidePanel.bind(this)} onMouseOver={this._showPanel.bind(this)} className={className}><button onClick={this._showPanel.bind(this)} title='Legend'></button>
+      <div onMouseOut={this._hidePanel.bind(this)} onMouseOver={this._showPanel.bind(this)} className={className}>
+      <UI.DefaultButton title='Legend' onClick={this._showPanel.bind(this)}><Icon.Icon name="file-picture-o" /></UI.DefaultButton>
       <div className='legend-panel' id='legend'>{items}</div></div>
     );
   }
