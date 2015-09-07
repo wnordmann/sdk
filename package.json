@@ -35,6 +35,7 @@
     "pui-react-search-input": "^2.0.0-alpha.0",
     "pui-react-tabs": "^2.0.0-alpha.0",
     "react": "^0.13.2",
+    "react-color-picker": "^2.1.9",
     "react-dropzone": "^2.0.1"
   },
   "devDependencies": {
