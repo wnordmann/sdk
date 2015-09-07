@@ -41,9 +41,12 @@ export default class AddLayer extends React.Component {
           if (features && features.length > 0) {
             var style;
             if (this._strokeColor || this._fillColor) {
+              var fill = this._fillColor ? new ol.style.Fill({color: this._fillColor}) : undefined;
+              var stroke = this._strokeColor ? new ol.style.Stroke({color: this._strokeColor, width: this.props.strokeWidth}) : undefined;
               style = new ol.style.Style({
-                fill: this._fillColor ? new ol.style.Fill({color: this._fillColor}) : undefined,
-                stroke: this._strokeColor ? new ol.style.Stroke({color: this._strokeColor}) : undefined
+                fill: fill,
+                stroke: stroke,
+                image: (fill || stroke) ? new ol.style.Circle({stroke: stroke, fill: fill, radius: this.props.pointRadius}) : undefined
               });
             }
             var lyr = new ol.layer.Vector({
@@ -119,5 +122,12 @@ export default class AddLayer extends React.Component {
 }
 
 AddLayer.propTypes = {
-  map: React.PropTypes.instanceOf(ol.Map).isRequired
+  map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  strokeWidth: React.PropTypes.number,
+  pointRadius: React.PropTypes.number
+};
+
+AddLayer.defaultProps = {
+  strokeWidth: 2,
+  pointRadius: 7
 };
