@@ -1,4 +1,5 @@
 /* global ol */
+/* eslint react/prop-types: 0 */
 import React from 'react';
 import SelectActions from '../actions/SelectActions.js';
 import MapTool from './MapTool.js';

@@ -1,3 +1,4 @@
+/* eslint react/prop-types: 0 */
 /* global ol */
 import React from 'react';
 import './Measure.css';
