@@ -12,6 +12,7 @@ import Geolocation from './components/Geolocation.jsx';
 import QGISLegend from './components/QGISLegend.jsx';
 import ImageExport from './components/ImageExport.jsx';
 import HomeButton from './components/HomeButton.jsx';
+import AddLayer from './components/AddLayer.jsx';
 import UI from 'pui-react-tabs';
 
 var styleTrees = new ol.style.Style({
@@ -211,3 +212,4 @@ var legendData = {'airports': [['', '6_0.png']], 'lakes': [['', '3_0.png']], 'tr
 React.render(<QGISLegend legendBasePath='../../resources/legend/' legendData={legendData} />, document.getElementById('legend'));
 React.render(<ImageExport map={map} />, document.getElementById('toolbar-export'));
 React.render(<HomeButton map={map} />, document.getElementById('home-button'));
+React.render(<AddLayer map={map} />, document.getElementById('toolbar-add-layer'));

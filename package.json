@@ -31,9 +31,11 @@
     "pui-react-grids": "^2.0.0-alpha.0",
     "pui-react-helpers": "^2.0.0-alpha.0",
     "pui-react-iconography": "^2.0.0-alpha.0",
+    "pui-react-modals": "^2.0.0-alpha.0",
     "pui-react-search-input": "^2.0.0-alpha.0",
     "pui-react-tabs": "^2.0.0-alpha.0",
-    "react": "^0.13.2"
+    "react": "^0.13.2",
+    "react-dropzone": "^2.0.1"
   },
   "devDependencies": {
     "babelify": "^6.0.2",
