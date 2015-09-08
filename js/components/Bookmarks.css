@@ -1,0 +1,17 @@
+.slick-prev:before, .slick-next:before {
+  color: grey;
+}
+.story-panel {
+  display: block;
+  position: absolute;
+  background: rgba(255,255,255,0.7);
+  padding: 15px;
+  border-radius: 5px;
+  border: 1px solid #000000;
+  top: 100px;
+  left: 50px;
+  height: 500px;
+  width: 500px;
+  min-width: 400px;
+  z-index: 100
+}

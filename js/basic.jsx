@@ -10,6 +10,7 @@ import LayerActions from './actions/LayerActions.js';
 import Chart from './components/Chart.jsx';
 import UI from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
+import Bookmarks from './components/Bookmarks.jsx';
 
 var styleTrees = new ol.style.Style({
   fill: new ol.style.Fill({
@@ -193,6 +194,38 @@ React.render(<QueryBuilder map={map} />, document.getElementById('query-panel'))
 React.render(<FeatureTable layer={selectedLayer} map={map} />, document.getElementById('table-panel'));
 var charts = {'Airports count per use category': {'categoryField': 'USE', 'layer': 'lyr03', 'valueFields': [], 'displayMode': 2, 'operation': 2}, 'Forest area total surface': {'categoryField': 'VEGDESC', 'layer': 'lyr01', 'valueFields': ['AREA_KM2'], 'displayMode': 1, 'operation': 2}};
 React.render(<Chart container='chart-panel' charts={charts} />, document.getElementById('toolbar-chart'));
+
+var bookmarks = [{
+  name: 'Le Grenier  Pain',
+  description: '<br><b>Address: </b>38 rue des Abbesses<br><b>Telephone :</b>33 (0)1 46 06 41 81<br><a href=""http://www.legrenierapain.com"">Website</a>',
+  extent: [259562.7661267497, 6254560.095662868, 260675.9610346824, 6256252.988234103]
+}, {
+  name: 'Poilne',
+  description: '<br><b>Address: </b>8 rue du Cherche-Midi<br><b>Telephone :</b>33 (0)1 45 48 42 59<br><a href=""http://www.poilane.fr"">Website</a>',
+  extent: [258703.71361629796, 6248811.5276565505, 259816.90852423065, 6250503.271278702]
+}, {
+  name: 'Pain d\'Epis',
+  description: '<br><b>Address: </b>Pain d\'Epis<br><b>Telephone :</b>33 (0)1 45 51 75 01<br><a href=""#"">Website</a>',
+  extent: [256033.93826860288, 6249647.883472723, 257147.1331765356, 6251339.794169339]
+}, {
+  name: 'Le Moulin de la Vierge',
+  description: '<br><b>Address: </b>166 avenue de Suffren<br><b>Telephone :</b>33 (0)1 47 83 45 55<br><a href=""#"">Website</a>',
+  extent: [256411.75662035524, 6248016.017431838, 257524.95152828796, 6249707.602166038]
+}, {
+  name: 'Maison Kayser',
+  description: '<br><b>Address: </b>14 rue Monge<br><b>Telephone :</b>33 (0)1 44 07 17 81<br><a href=""http://www.maison-kayser.com/"">Website</a>',
+  extent: [261005.24408844888, 6248428.056353206, 262118.4389963816, 6250119.723381014]
+}, {
+  name: 'Au 140',
+  description: '<br><b>Address: </b>140 rue de Belleville<br><b>Telephone :</b>33 (0)1 46 36 92 47<br><a href=""http://www.davidlebovitz.com/2006/12/140/"">Website</a>',
+  extent: [265468.710391296, 6252874.480301509, 266581.90529922873, 6254567.035831345]
+}, {
+  name: 'Le Notre',
+  description: '<br><b>Address: </b>10 rue Saint Antoine<br><b>Telephone :</b>33 (0)1 53 01 91 91<br><a href=""http://www.lenotre.fr/fr/boulanger.php"">Website</a>',
+  extent: [262926.7298190316, 6249251.010162451, 264039.9247269643, 6250942.841574115]
+}];
+
+React.render(<Bookmarks introTitle='Paris bakeries' introDescription='Explore the best bakeries of the capital of France' map={map} bookmarks={bookmarks} />, document.getElementById('bookmarks-panel'));
 
 var navigationFunc = function() {
   LayerActions.activateTool(null, 'navigation');
