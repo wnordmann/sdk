@@ -1,3 +1,4 @@
+/* global ol */
 import React from 'react';
 import Slider from 'react-slick';
 import './Bookmarks.css';
@@ -10,8 +11,8 @@ export default class Bookmarks extends React.Component {
     this._zoom = view.getZoom();
   }
   _afterChange(idx) {
-   var map = this.props.map, view = map.getView();
-   if (this.props.animatePanZoom === true) {
+    var map = this.props.map, view = map.getView();
+    if (this.props.animatePanZoom === true) {
       var pan = ol.animation.pan({
         duration: this.props.animationDuration,
         source: view.getCenter()
@@ -27,7 +28,7 @@ export default class Bookmarks extends React.Component {
       view.setCenter(this._center);
       view.setZoom(this._zoom);
     } else {
-      var bookmark = this.props.bookmarks[idx-1];
+      var bookmark = this.props.bookmarks[idx - 1];
       var extent = bookmark.extent;
       view.fit(extent, map.getSize());
     }
@@ -39,7 +40,7 @@ export default class Bookmarks extends React.Component {
     var carouselChildren = this.props.bookmarks.map(function(bookmark) {
       return (<div key={bookmark.name} className="col-md-12 text-center"><h2>{bookmark.name}</h2><p dangerouslySetInnerHTML={getHTML(bookmark)}></p></div>);
     });
-    carouselChildren.unshift(<div key='intro'><h2>{this.props.introTitle}</h2><p>{this.props.introDescription}</p></div>); 
+    carouselChildren.unshift(<div key='intro'><h2>{this.props.introTitle}</h2><p>{this.props.introDescription}</p></div>);
     return (
       <div className='story-panel'>
         <Slider dots={this.props.showIndicators} arrows={true} afterChange={this._afterChange.bind(this)}>
@@ -59,7 +60,7 @@ Bookmarks.propTypes = {
   introTitle: React.PropTypes.string,
   introDescription: React.PropTypes.string
 };
-          
+
 Bookmarks.defaultProps = {
   showIndicators: true,
   animatePanZoom: true,
