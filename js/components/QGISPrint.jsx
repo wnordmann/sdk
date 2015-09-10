@@ -33,7 +33,9 @@ export default class QGISPrint extends React.Component {
   _tileLayerLoaded() {
     this._tiledLayersLoaded++;
     if (this._tiledLayersLoaded === this._tileLayers.length){
-      this._paintMapInPdf();
+      window.setTimeout(function() {
+        this._paintMapInPdf();
+      }, 0);
     }
   }
   _paintMapInPdf() {
