@@ -43,14 +43,43 @@ export default class QGISPrint extends React.Component {
     var pdf = this._pdf;
     var mapElement = this._mapElement;
     var map = this.props.map;
-    var size = map.getSize();
-    var extent = map.getView().calculateExtent(size);
     pdf.rect(mapElement.x, mapElement.y, mapElement.width, mapElement.height);
     pdf.addImage(data, 'JPEG', mapElement.x, mapElement.y, mapElement.width, mapElement.height);
-    map.setSize(size);
-    map.getView().fit(extent, size);
+    map.setSize(this._origSize);
+    map.getView().fit(this._origExtent, this._origSize);
     map.renderSync();
     this._elementLoaded();
+  }
+  _attachLoadListeners(idx) {
+    this._sources[idx] = this._tileLayers[idx].getSource();
+    this._loading[idx] = 0;
+    this._loaded[idx] = 0;
+    var source = this._sources[idx];
+    var loaded = this._loaded[idx];
+    var loading = this._loading[idx];
+    source.on('tileloadstart', function() {
+      loading++;
+    });
+    var loadEndError = function() {
+      ++loaded;
+      if (loading === loaded) {
+        this._tileLayerLoaded();
+      }
+    };
+    source.on('tileloadend', loadEndError, this);
+    source.on('tileloaderror', loadEndError, this);
+  }
+  _addImage(el, resolution) {
+    var type = el.type;
+    this._images[el.id] = new Image();
+    this._images[el.id].crossOrigin = "anonymous";
+    var me = this;
+    this._images[el.id].addEventListener('load', function() {
+      me._pdf.addImage(me._images[el.id], 'png', el.x, el.y, el.width, el.height);
+      me._elementLoaded();
+    });
+    this._images[el.id].src = (type === 'picture') ? this.props.thumbnailPath + el.file :
+      this.props.thumbnailPath + this._layoutSafeName + "_" + el.id + "_" + resolution + ".png";
   }
   _createMap(labels) {
     var map = this.props.map;
@@ -59,7 +88,7 @@ export default class QGISPrint extends React.Component {
     this._layoutSafeName = layout.name.replace(/[^a-z0-9]/gi,'').toLowerCase();
     var elements = layout.elements;
     this._pdf = new jsPDF('landscape', "mm", [layout.width, layout.height]);
-    var images = [];
+    this._images = [];
     this._elementsLoaded = 0;
     var size = (map.getSize());
     var extent = map.getView().calculateExtent(size);
@@ -68,8 +97,8 @@ export default class QGISPrint extends React.Component {
     for (var i = 0; i < elements.length; i++) {
       var element = elements[i];
       if (element.type === "label") {
-        this._pdf.setFontSize(element.size)
-        this._pdf.text(element.x, element.y + element.size / 25.4, labels[element.name])
+        this._pdf.setFontSize(element.size);
+        this._pdf.text(element.x, element.y + element.size / 25.4, labels[element.name]);
         this._elementLoaded();
       } else if (element.type === "map"){
         this._mapElement = element;
@@ -77,60 +106,24 @@ export default class QGISPrint extends React.Component {
         var height = Math.round(element.height * resolution / 25.4);
         map.once('postcompose', function(event) {
           this._canvas = event.context.canvas;
-          var sources = [];
-          var loaded = [];
-          var loading = [];
-          var me = this;
+          this._sources = [];
+          this._loaded = [];
+          this._loading = [];
           for (var j = 0, jj = this._tileLayers.length; j < jj; j++) {
-            (function(idx){
-              sources[idx] = tileLayers[idx].getSource();
-              loading[idx] = 0;
-              loaded[idx] = 0;
-              sources[idx].on('tileloadstart', function() {
-                ++loading;
-              });
-              sources[idx].on('tileloadend', function() {
-                ++loaded;
-                if (loading === loaded) {
-                  me._tileLayerLoaded();
-                }
-              });
-              sources[idx].on('tileloaderror', function() {
-                ++loaded;
-              });
-            })(j);
+            this._attachLoadListeners(j);
           }
         }, this);
+        this._origSize = map.getSize();
+        this._origExtent = map.getView().calculateExtent(this._origSize);
         map.setSize([width, height]);
         map.getView().fit(extent, map.getSize());
         map.renderSync();
         if (this._tileLayers.length === 0) {
           this._paintMapInPdf();
         }
-      } else if (element.type === "shape" || element.type === "arrow" ||
+      } else if (element.type === "picture" || element.type === "shape" || element.type === "arrow" ||
         element.type === "legend" || element.type === "scalebar") {
-          var me = this;
-          (function(el){
-            images[el.id] = new Image();
-            images[el.id].crossOrigin = "anonymous";
-            images[el.id].addEventListener('load', function() {
-              me._pdf.addImage(images[el.id], 'png', el.x, el.y, el.width, el.height);
-              me._elementLoaded();
-            });
-            images[el.id].src = me.props.thumbnailPath + me._layoutSafeName + "_" + el.id + "_" +
-              resolution.toString() + ".png";
-          })(element);
-      } else if (element.type === "picture"){
-        var me = this;
-        (function(el){
-          images[el.id] = new Image();
-          images[el.id].crossOrigin = "anonymous";
-          images[el.id].addEventListener('load', function() {
-            me._pdf.addImage(images[el.id], 'png', el.x, el.y, el.width, el.height);
-            me._elementLoaded();
-          });
-          images[el.id].src = me.props.thumbnailPath + el.file;
-        })(element);
+          this._addImage(element, resolution);
       } else {
         this._elementLoaded();
       }
@@ -145,7 +138,7 @@ export default class QGISPrint extends React.Component {
         labels[name] = React.findDOMNode(this.refs[name]).value;
       }
     }
-    this._createMap(labels)
+    this._createMap(labels);
   }
   componentDidUpdate() {
     this.refs.modal.open();
