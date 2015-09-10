@@ -1,8 +1,9 @@
+/* global ol */
 import React from 'react';
 import UI from 'pui-react-dropdowns';
 import Button from 'pui-react-buttons';
 import Dialog from 'pui-react-modals';
-import jsPDF from 'jspdf';
+import JSPDF from 'jspdf';
 
 export default class QGISPrint extends React.Component {
   constructor(props) {
@@ -10,6 +11,9 @@ export default class QGISPrint extends React.Component {
     this.state = {
       layout: null
     };
+  }
+  componentDidUpdate() {
+    this.refs.modal.open();
   }
   _onClick(idx) {
     var layout = this.props.layouts[idx];
@@ -72,47 +76,48 @@ export default class QGISPrint extends React.Component {
   _addImage(el, resolution) {
     var type = el.type;
     this._images[el.id] = new Image();
-    this._images[el.id].crossOrigin = "anonymous";
+    this._images[el.id].crossOrigin = 'anonymous';
     var me = this;
     this._images[el.id].addEventListener('load', function() {
       me._pdf.addImage(me._images[el.id], 'png', el.x, el.y, el.width, el.height);
       me._elementLoaded();
     });
     this._images[el.id].src = (type === 'picture') ? this.props.thumbnailPath + el.file :
-      this.props.thumbnailPath + this._layoutSafeName + "_" + el.id + "_" + resolution + ".png";
+      this.props.thumbnailPath + this._layoutSafeName + '_' + el.id + '_' + resolution + '.png';
   }
   _createMap(labels) {
     var map = this.props.map;
     var resolution = React.findDOMNode(this.refs.resolution).value;
     var layout = this.state.layout;
-    this._layoutSafeName = layout.name.replace(/[^a-z0-9]/gi,'').toLowerCase();
+    this._layoutSafeName = layout.name.replace(/[^a-z0-9]/gi, '').toLowerCase();
     var elements = layout.elements;
-    this._pdf = new jsPDF('landscape', "mm", [layout.width, layout.height]);
+    this._pdf = new JSPDF('landscape', 'mm', [layout.width, layout.height]);
     this._images = [];
     this._elementsLoaded = 0;
     var size = (map.getSize());
     var extent = map.getView().calculateExtent(size);
     this._tileLayers = this._getTileLayers();
     this._tiledLayersLoaded = 0;
+    var postCompose = function(event) {
+      this._canvas = event.context.canvas;
+      this._sources = [];
+      this._loaded = [];
+      this._loading = [];
+      for (var j = 0, jj = this._tileLayers.length; j < jj; j++) {
+        this._attachLoadListeners(j);
+      }
+    };
     for (var i = 0; i < elements.length; i++) {
       var element = elements[i];
-      if (element.type === "label") {
+      if (element.type === 'label') {
         this._pdf.setFontSize(element.size);
         this._pdf.text(element.x, element.y + element.size / 25.4, labels[element.name]);
         this._elementLoaded();
-      } else if (element.type === "map"){
+      } else if (element.type === 'map'){
         this._mapElement = element;
         var width = Math.round(element.width * resolution / 25.4);
         var height = Math.round(element.height * resolution / 25.4);
-        map.once('postcompose', function(event) {
-          this._canvas = event.context.canvas;
-          this._sources = [];
-          this._loaded = [];
-          this._loading = [];
-          for (var j = 0, jj = this._tileLayers.length; j < jj; j++) {
-            this._attachLoadListeners(j);
-          }
-        }, this);
+        map.once('postcompose', postCompose, this);
         this._origSize = map.getSize();
         this._origExtent = map.getView().calculateExtent(this._origSize);
         map.setSize([width, height]);
@@ -121,9 +126,9 @@ export default class QGISPrint extends React.Component {
         if (this._tileLayers.length === 0) {
           this._paintMapInPdf();
         }
-      } else if (element.type === "picture" || element.type === "shape" || element.type === "arrow" ||
-        element.type === "legend" || element.type === "scalebar") {
-          this._addImage(element, resolution);
+      } else if (element.type === 'picture' || element.type === 'shape' || element.type === 'arrow' ||
+        element.type === 'legend' || element.type === 'scalebar') {
+        this._addImage(element, resolution);
       } else {
         this._elementLoaded();
       }
@@ -133,26 +138,23 @@ export default class QGISPrint extends React.Component {
     var elements = this.state.layout.elements;
     var labels = {};
     for (var i = 0, ii = elements.length; i < ii; i++) {
-      if (elements[i].type === "label") {
-        var name = elements[i].name; 
+      if (elements[i].type === 'label') {
+        var name = elements[i].name;
         labels[name] = React.findDOMNode(this.refs[name]).value;
       }
     }
     this._createMap(labels);
   }
-  componentDidUpdate() {
-    this.refs.modal.open();
-  }
   render() {
-    var listitems = this.props.layouts.map(function(layout, idx) {
-      var href = this.props.thumbnailPath + layout.thumbnail;
+    var listitems = this.props.layouts.map(function(lyt, idx) {
+      var href = this.props.thumbnailPath + lyt.thumbnail;
       return (<UI.DropdownItem key={idx} onSelect={this._onClick.bind(this, idx)}>
-        {layout.name}<div><img src={href}/></div></UI.DropdownItem>);
+        {lyt.name}<div><img src={href}/></div></UI.DropdownItem>);
     }, this);
     var dialog, layout = this.state.layout;
     if (layout !== null) {
       var elements;
-      for (var i =0, ii = layout.elements.length; i < ii; ++i) {
+      for (var i = 0, ii = layout.elements.length; i < ii; ++i) {
         var element = layout.elements[i];
         if (element.type === 'label') {
           if (elements === undefined) {

@@ -257,7 +257,7 @@ var printLayouts = [{
     font: 'Helvetica',
     type: 'label',
     id: 'f636a119-4d1b-43de-995c-cc11f8fd7b61',
-    size: 20,
+    size: 20
   }, {
     height: 61.2703125,
     width: 30.0296875,
