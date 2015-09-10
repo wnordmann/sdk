@@ -13,6 +13,7 @@ import QGISLegend from './components/QGISLegend.jsx';
 import ImageExport from './components/ImageExport.jsx';
 import HomeButton from './components/HomeButton.jsx';
 import AddLayer from './components/AddLayer.jsx';
+import QGISPrint from './components/QGISPrint.jsx';
 import UI from 'pui-react-tabs';
 
 var styleTrees = new ol.style.Style({
@@ -213,3 +214,72 @@ React.render(<QGISLegend legendBasePath='../../resources/legend/' legendData={le
 React.render(<ImageExport map={map} />, document.getElementById('toolbar-export'));
 React.render(<HomeButton map={map} />, document.getElementById('home-button'));
 React.render(<AddLayer map={map} />, document.getElementById('toolbar-add-layer'));
+
+var printLayouts = [{
+  name: 'foo',
+  thumbnail: 'foo_thumbnail.png',
+  width: 420.0,
+  elements: [{
+    name: 'XYZ',
+    height: 40.825440467359044,
+    width: 51.98353115727002,
+    y: 39.25222551928783,
+    x: 221.77507418397624,
+    font: 'Helvetica',
+    type: 'label',
+    id: '24160ce7-34a3-4f25-a077-8910e4889681',
+    size: 18
+  }, {
+    height: 167.0,
+    width: 171.0,
+    grid: {
+      intervalX: 0.0,
+      intervalY: 0.0,
+      annotationEnabled: false,
+      crs: ''
+    },
+    y: 19.0,
+    x: 16.0,
+    type: 'map',
+    id: '3d532cb9-0eca-4e50-9f0a-ce29b1c7f5a6'
+  }],
+  height: 297.0
+}, {
+  name: 'Composer 1',
+  thumbnail: 'composer1_thumbnail.png',
+  width: 297.0,
+  elements: [{
+    name: 'BART',
+    height: 11.7757,
+    width: 185.957,
+    y: 1.96261,
+    x: 52.9905,
+    font: 'Helvetica',
+    type: 'label',
+    id: 'f636a119-4d1b-43de-995c-cc11f8fd7b61',
+    size: 20,
+  }, {
+    height: 61.2703125,
+    width: 30.0296875,
+    y: 142.289,
+    x: 11.285,
+    type: 'legend',
+    id: 'ce0dc16b-f7cc-4385-8a05-b9b0bcc4e94f'
+  }, {
+    height: 185.0,
+    width: 278.0,
+    grid: {
+      intervalX: 0.0,
+      intervalY: 0.0,
+      annotationEnabled: false,
+      crs: ''
+    },
+    y: 14.0,
+    x: 9.0,
+    type: 'map',
+    id: 'b968ec26-91a6-44ed-bf59-42d10898f198'
+  }],
+  height: 210.0
+}];
+
+React.render(<QGISPrint map={map} layouts={printLayouts} />, document.getElementById('toolbar-print'));
