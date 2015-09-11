@@ -5,7 +5,8 @@ import Button from 'pui-react-buttons';
 import Dialog from 'pui-react-modals';
 import JSPDF from 'jspdf';
 
-const INCH_PER_M = 25.4;
+const MM_PER_INCH = 25.4;
+const MM_PER_POINT = 0.352777778;
 
 export default class QGISPrint extends React.Component {
   constructor(props) {
@@ -119,12 +120,12 @@ export default class QGISPrint extends React.Component {
       var element = elements[i];
       if (element.type === 'label') {
         this._pdf.setFontSize(element.size);
-        this._pdf.text(element.x, element.y + element.size / INCH_PER_M, labels[element.name]);
+        this._pdf.text(element.x, element.y + element.size * MM_PER_POINT, labels[element.name]);
         this._elementLoaded();
       } else if (element.type === 'map'){
         this._mapElement = element;
-        var width = Math.round(element.width * resolution / INCH_PER_M);
-        var height = Math.round(element.height * resolution / INCH_PER_M);
+        var width = Math.round(element.width * resolution / MM_PER_INCH);
+        var height = Math.round(element.height * resolution / MM_PER_INCH);
         map.once('postcompose', postCompose, this);
         this._origSize = map.getSize();
         this._origExtent = map.getView().calculateExtent(this._origSize);
