@@ -1,9 +1,11 @@
 /* global ol */
 import React from 'react';
 import UI from 'pui-react-dropdowns';
+import Icon from 'pui-react-iconography';
 import Button from 'pui-react-buttons';
 import Dialog from 'pui-react-modals';
 import JSPDF from 'jspdf';
+import './QGISPrint.css';
 
 const MM_PER_INCH = 25.4;
 const MM_PER_POINT = 0.352777778;
@@ -12,7 +14,8 @@ export default class QGISPrint extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      layout: null
+      layout: null,
+      loading: false
     };
   }
   componentDidUpdate() {
@@ -26,6 +29,7 @@ export default class QGISPrint extends React.Component {
     this._elementsLoaded++;
     if (this._elementsLoaded === this.state.layout.elements.length) {
       this._pdf.save('map.pdf');
+      this.setState({loading: false});
     }
   }
   _forEachLayer(tileLayers, layer) {
@@ -144,6 +148,9 @@ export default class QGISPrint extends React.Component {
     }
   }
   _print() {
+    this.setState({
+      loading: true
+    });
     var elements = this.state.layout.elements;
     var labels = {};
     for (var i = 0, ii = elements.length; i < ii; i++) {
@@ -181,6 +188,10 @@ export default class QGISPrint extends React.Component {
       var selectOptions = this.props.resolutions.map(function(resolution) {
         return (<option key={resolution} value={resolution}>{resolution}</option>);
       });
+      var loading;
+      if (this.state.loading === true) {
+        loading = (<div className="spinner"><Icon.Icon spin size="h1" name="spinner" /><span> Generating PDF ...</span></div>);
+      }
       dialog = (
         <Dialog.Modal title="Print map" ref="modal">
           <Dialog.ModalBody>
@@ -189,6 +200,7 @@ export default class QGISPrint extends React.Component {
             <select ref='resolution' id='resolution-dropdown' className='form-control'>
               {selectOptions}
             </select>
+            {loading}
           </Dialog.ModalBody>
           <Dialog.ModalFooter>
             <Button.DefaultButton title="Print map" onClick={this._print.bind(this)}>Print</Button.DefaultButton>
