@@ -5,6 +5,8 @@ import Button from 'pui-react-buttons';
 import Dialog from 'pui-react-modals';
 import JSPDF from 'jspdf';
 
+const INCH_PER_M = 25.4;
+
 export default class QGISPrint extends React.Component {
   constructor(props) {
     super(props);
@@ -25,21 +27,27 @@ export default class QGISPrint extends React.Component {
       this._pdf.save('map.pdf');
     }
   }
+  _forEachLayer(tileLayers, layer) {
+    if (layer instanceof ol.layer.Group) {
+      layer.getLayers().forEach(function(groupLayer) {
+        this._forEachLayer(tileLayers, groupLayer);
+      }, this);
+    } else if (layer instanceof ol.layer.Tile && layer.getVisible()) {
+      tileLayers.push(layer);
+    }
+  }
   _getTileLayers() {
     var tileLayers = [];
-    this.props.map.getLayers().forEach(function(layer) {
-      if (layer instanceof ol.layer.Tile && layer.getSource() instanceof ol.source.TileWMS) {
-        tileLayers.push(layer);
-      }
-    });
+    this._forEachLayer(tileLayers, this.props.map.getLayerGroup());
     return tileLayers;
   }
   _tileLayerLoaded() {
     this._tiledLayersLoaded++;
     if (this._tiledLayersLoaded === this._tileLayers.length){
+      var me = this;
       window.setTimeout(function() {
-        this._paintMapInPdf();
-      }, 0);
+        me._paintMapInPdf();
+      }, 1000);
     }
   }
   _paintMapInPdf() {
@@ -111,12 +119,12 @@ export default class QGISPrint extends React.Component {
       var element = elements[i];
       if (element.type === 'label') {
         this._pdf.setFontSize(element.size);
-        this._pdf.text(element.x, element.y + element.size / 25.4, labels[element.name]);
+        this._pdf.text(element.x, element.y + element.size / INCH_PER_M, labels[element.name]);
         this._elementLoaded();
       } else if (element.type === 'map'){
         this._mapElement = element;
-        var width = Math.round(element.width * resolution / 25.4);
-        var height = Math.round(element.height * resolution / 25.4);
+        var width = Math.round(element.width * resolution / INCH_PER_M);
+        var height = Math.round(element.height * resolution / INCH_PER_M);
         map.once('postcompose', postCompose, this);
         this._origSize = map.getSize();
         this._origExtent = map.getView().calculateExtent(this._origSize);
