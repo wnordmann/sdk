@@ -11,6 +11,19 @@ import Chart from './components/Chart.jsx';
 import UI from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
 import Bookmarks from './components/Bookmarks.jsx';
+import Playback from './components/Playback.jsx';
+
+var styleFires = new ol.style.Style({
+  image: new ol.style.Icon({
+    scale: 0.030000,
+    anchorOrigin: 'top-left',
+    anchorXUnits: 'fraction',
+    anchorYUnits: 'fraction',
+    anchor: [0.5, 0.5],
+    src: '../../data/styles/amenity=fire_station2321243910.svg',
+    rotation: 0.000000
+  })
+});
 
 var styleTrees = new ol.style.Style({
   fill: new ol.style.Fill({
@@ -144,6 +157,21 @@ var map = new ol.Map({
       ]
     }),
     new ol.layer.Vector({
+      opacity: 1.0,
+      source: new ol.source.Vector({
+        url: '../../data/fires.json',
+        format: new ol.format.GeoJSON()
+      }),
+      id: 'lyr00',
+      timeInfo: {
+        start: 'STARTDATED',
+        end: 'OUTDATED'
+      },
+      style: styleFires,
+      title: 'Fires',
+      isSelectable: true
+    }),
+    new ol.layer.Vector({
       id: 'lyr01',
       isSelectable: true,
       title: 'trees',
@@ -179,8 +207,8 @@ var map = new ol.Map({
   ],
   target: 'map',
   view: new ol.View({
-    center: [-16839563.5993915, 8850169.509638],
-    zoom: 4
+    center: [-13625367.7959, 6039995.37374],
+    zoom: 7
   })
 });
 
@@ -251,3 +279,5 @@ var tableFunc = function() {
 };
 
 React.render(<UI.DefaultButton onClick={tableFunc} title="Attributes table"><Icon.Icon name="list-alt" /> Table</UI.DefaultButton>, document.getElementById('toolbar-table'));
+
+React.render(<Playback map={map} minDate={324511200000} maxDate={1385938800000} />, document.getElementById('timeline'));

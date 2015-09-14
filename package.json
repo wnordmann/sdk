@@ -25,6 +25,7 @@
     "font-awesome": "^4.4.0",
     "jspdf": "bartvde/jsPDF#npm",
     "keymirror": "~0.1.0",
+    "lodash.uniqueid": "^3.0.0",
     "openlayers": "^3.8.2",
     "pui-react-alerts": "^2.0.0-alpha.0",
     "pui-react-buttons": "^2.0.0-alpha.0",
