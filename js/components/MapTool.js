@@ -23,13 +23,23 @@ export default class MapTool extends React.Component {
     });
   }
   deactivate() {
-    if (this._currentInteraction) {
-      this.props.map.removeInteraction(this._currentInteraction);
+    if (this._currentInteractions) {
+      var map = this.props.map;
+      for (var i = 0, ii = this._currentInteractions.length; i < ii; ++i) {
+        map.removeInteraction(this._currentInteractions[i]);
+      }
     }
   }
-  activate(interaction) {
-    this._currentInteraction = interaction;
-    this.props.map.addInteraction(this._currentInteraction);
+  activate(interactions) {
+    if (interactions instanceof ol.interaction.Interaction) {
+      this._currentInteractions = [interaction];
+    } else {
+      this._currentInteractions = interactions;
+    }
+    var map = this.props.map;
+    for (var i = 0, ii = this._currentInteractions.length; i < ii; ++i) {
+      map.addInteraction(this._currentInteractions[i]);
+    }
     LayerActions.activateTool(this, this.props.toggleGroup);
   }
 }
