@@ -10,6 +10,7 @@ import '../../node_modules/react-color-picker/index.css';
 export default class Edit extends MapTool {
   constructor(props) {
     super(props);
+    this._interactions = {};
     this.state = {
       layers: []
     };
@@ -63,17 +64,23 @@ export default class Edit extends MapTool {
       }
     }
     var featColl = layer.getSource().getFeaturesCollection();
-    var draw = new ol.interaction.Draw({
-      features: featColl,
-      type: layer.get('geomType')
-    });
-    var modify = new ol.interaction.Modify({
-      features: featColl,
-      deleteCondition: function(event) {
-        return ol.events.condition.shiftKeyOnly(event) &&
-          ol.events.condition.singleClick(event);
-      }
-    });
+    if (!this._interactions[layerId]) {
+      this._interactions[layerId] = {
+        draw: new ol.interaction.Draw({
+          features: featColl,
+          type: layer.get('geomType')
+        }),
+        modify: new ol.interaction.Modify({
+          features: featColl,
+          deleteCondition: function(event) {
+            return ol.events.condition.shiftKeyOnly(event) &&
+              ol.events.condition.singleClick(event);
+          }
+        })
+      };
+    }
+    var draw = this._interactions[layerId].draw;
+    var modify = this._interactions[layerId].modify;
     this.activate([draw, modify]);
   }
   _showModal() {
@@ -96,7 +103,6 @@ export default class Edit extends MapTool {
           <select ref='layer' className='form-control'>{options}</select>
           <UI.DefaultButton onClick={this._showModal.bind(this)}><Icon.Icon name='plus' /></UI.DefaultButton>
           <UI.DefaultButton onClick={this._enableEditMode.bind(this)}>Enable edit mode</UI.DefaultButton>
-          <UI.DefaultButton>Close</UI.DefaultButton>   
         </form>
        <Dialog.Modal title="Create empty layer" ref="modal">
          <Dialog.ModalBody>
