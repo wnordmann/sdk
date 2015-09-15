@@ -102,7 +102,7 @@ export default class Playback extends React.Component {
       buttonIcon = (<Icon.Icon name='pause' />);
     }
     return (
-      <form role="form" onSubmit={this._onSubmit.bind(this)} className='form-horizontal playback'>
+      <form role="form" onSubmit={this._onSubmit} className='form-horizontal playback'>
         <div className="form-group">
           <Grids.Col md={2}><Button.DefaultButton onClick={this._playPause.bind(this)}>{buttonIcon}</Button.DefaultButton></Grids.Col>
           <Grids.Col md={15}><input onChange={this._onRangeChange.bind(this)} ref='rangeInput' type='range' min={this.props.minDate} max={this.props.maxDate} defaultValue={this.props.minDate}/></Grids.Col>
