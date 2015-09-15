@@ -12,6 +12,7 @@ import UI from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
 import Bookmarks from './components/Bookmarks.jsx';
 import Playback from './components/Playback.jsx';
+import Edit from './components/Edit.jsx';
 
 var styleFires = new ol.style.Style({
   image: new ol.style.Icon({
@@ -281,3 +282,10 @@ var tableFunc = function() {
 React.render(<UI.DefaultButton onClick={tableFunc} title="Attributes table"><Icon.Icon name="list-alt" /> Table</UI.DefaultButton>, document.getElementById('toolbar-table'));
 
 React.render(<Playback map={map} minDate={324511200000} maxDate={1385938800000} />, document.getElementById('timeline'));
+
+var editFunc = function() {
+  toggle(document.getElementById('edit-tool-panel'));
+};
+
+React.render(<UI.DefaultButton onClick={editFunc}><Icon.Icon name="pencil" /> Edit</UI.DefaultButton>, document.getElementById('toolbar-edit'));
+React.render(<Edit toggleGroup='navigation' map={map} />, document.getElementById('edit-tool-panel'));
