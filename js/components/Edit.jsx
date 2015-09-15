@@ -12,7 +12,8 @@ export default class Edit extends MapTool {
     super(props);
     this._interactions = {};
     this.state = {
-      layers: []
+      layers: [],
+      enable: true
     };
   }
   _onSubmit(evt) {
@@ -54,7 +55,18 @@ export default class Edit extends MapTool {
     this.refs.modal.close();
     this.setState({layers: layers});
   }
+  _disableEditMode() {
+    this.setState({enable: true});
+    this.deactivate();
+  }
+  _onLayerChange() {
+    this._activate();
+  }
   _enableEditMode() {
+    this.setState({enable: false});
+    this._activate();
+  }
+  _activate() {
     var layerId = React.findDOMNode(this.refs.layer).value;
     var layer;
     for (var i = 0, ii = this.state.layers.length; i < ii; ++i) {
@@ -81,6 +93,7 @@ export default class Edit extends MapTool {
     }
     var draw = this._interactions[layerId].draw;
     var modify = this._interactions[layerId].modify;
+    this.deactivate();
     this.activate([draw, modify]);
   }
   _showModal() {
@@ -96,13 +109,19 @@ export default class Edit extends MapTool {
       var val = '[No editable layers available]';
       options.push(<option key={val} value={val}>{val}</option>);
     }
+    var button;
+    if (this.state.enable === true) {
+      button = (<UI.DefaultButton onClick={this._enableEditMode.bind(this)}>Enable edit mode</UI.DefaultButton>);
+    } else {
+      button = (<UI.DefaultButton onClick={this._disableEditMode.bind(this)}>Disable edit mode</UI.DefaultButton>);
+    }
     return (
       <article>
         <form onSubmit={this._onSubmit} className='form-inline'>
           <label>Layer:</label>
-          <select ref='layer' className='form-control'>{options}</select>
+          <select onChange={this._onLayerChange.bind(this)} ref='layer' className='form-control'>{options}</select>
           <UI.DefaultButton onClick={this._showModal.bind(this)}><Icon.Icon name='plus' /></UI.DefaultButton>
-          <UI.DefaultButton onClick={this._enableEditMode.bind(this)}>Enable edit mode</UI.DefaultButton>
+          {button}
         </form>
        <Dialog.Modal title="Create empty layer" ref="modal">
          <Dialog.ModalBody>
