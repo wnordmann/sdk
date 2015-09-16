@@ -1,3 +1,5 @@
+/* global ol */
+/* eslint react/prop-types: 0 */
 import React from 'react';
 import MapTool from './MapTool.js';
 import UI from 'pui-react-buttons';
@@ -7,13 +9,16 @@ import Grids from 'pui-react-grids';
 import ColorPicker from 'react-color-picker';
 import '../../node_modules/react-color-picker/index.css';
 
+const NEW_ATTR_PREFIX = 'new-attr-';
+
 export default class Edit extends MapTool {
   constructor(props) {
     super(props);
     this._interactions = {};
     this.state = {
       layers: [],
-      enable: true
+      enable: true,
+      attributes: null
     };
   }
   _onSubmit(evt) {
@@ -66,6 +71,22 @@ export default class Edit extends MapTool {
     this.setState({enable: false});
     this._activate();
   }
+  _addFeatureDialog(feature, attributes) {
+    this._feature = feature;
+    this.setState({
+      attributes: attributes
+    });
+    this.refs.attributesModal.open();
+  }
+  _setAttributes() {
+    var feature = this._feature;
+    for (var i = 0, ii = this.state.attributes.length; i < ii; ++i) {
+      var name = this.state.attributes[i];
+      var value = React.findDOMNode(this.refs[NEW_ATTR_PREFIX + name]).value;
+      feature.set(name, value);
+    }
+    this.refs.attributesModal.close();
+  }
   _activate() {
     var layerId = React.findDOMNode(this.refs.layer).value;
     var layer;
@@ -90,6 +111,12 @@ export default class Edit extends MapTool {
           }
         })
       };
+      var schema = layer.get('schema').trim();
+      if (schema.length > 0) {
+        this._interactions[layerId].draw.on('drawend', function(evt){
+          this._addFeatureDialog(evt.feature, schema.split(','));
+        }, this);
+      }
     }
     var draw = this._interactions[layerId].draw;
     var modify = this._interactions[layerId].modify;
@@ -100,13 +127,13 @@ export default class Edit extends MapTool {
     this.refs.modal.open();
   }
   render() {
-    var options = [];
-    for (var i = 0, ii = this.state.layers.length; i < ii; ++i) {
+    var options = [], i, ii;
+    for (i = 0, ii = this.state.layers.length; i < ii; ++i) {
       var lyr = this.state.layers[i], title = lyr.get('title'), id = lyr.get('id');
       options.push(<option key={id} value={id}>{title}</option>);
     }
     if (options.length === 0) {
-      var val = '[No editable layers available]';
+      var val = '[None]';
       options.push(<option key={val} value={val}>{val}</option>);
     }
     var button;
@@ -114,6 +141,14 @@ export default class Edit extends MapTool {
       button = (<UI.DefaultButton onClick={this._enableEditMode.bind(this)}>Enable edit mode</UI.DefaultButton>);
     } else {
       button = (<UI.DefaultButton onClick={this._disableEditMode.bind(this)}>Disable edit mode</UI.DefaultButton>);
+    }
+    var attributeFormItems;
+    if (this.state.attributes !== null) {
+      attributeFormItems = [];
+      for (i = 0, ii = this.state.attributes.length; i < ii; ++i) {
+        var name = this.state.attributes[i], ref = NEW_ATTR_PREFIX + name;
+        attributeFormItems.push(<div key={ref} className="form-group"><Grids.Col md={12}><label>{name}</label></Grids.Col><Grids.Col md={8}><input className="form-control" type='text' ref={ref} /></Grids.Col></div>);
+      }
     }
     return (
       <article>
@@ -123,30 +158,40 @@ export default class Edit extends MapTool {
           <UI.DefaultButton onClick={this._showModal.bind(this)}><Icon.Icon name='plus' /></UI.DefaultButton>
           {button}
         </form>
-       <Dialog.Modal title="Create empty layer" ref="modal">
-         <Dialog.ModalBody>
-           <form className='form-horizontal'>
-             <div className="form-group">
-               <Grids.Col md={12}><label>Layer name</label></Grids.Col>
-               <Grids.Col md={8}><input className="form-control" type="text" ref="layerName"/></Grids.Col>
-             </div>
-             <div className="form-group">
-               <Grids.Col md={12}><label>Geometry type</label></Grids.Col>
-               <Grids.Col md={8}>
-                 <select className='form-control' ref='geometryType'>
-                   <option>Point</option>
-                   <option>LineString</option>
-                   <option>Polygon</option>
-                 </select>
-               </Grids.Col>
-             </div>
-             <div className="form-group">
-               <Grids.Col md={12}><label>Attributes (comma-separated names)</label></Grids.Col>
-               <Grids.Col md={8}><input className="form-control" type="text" ref="attributes"/></Grids.Col>
-             </div>
-             <div className="form-group">
-               <Grids.Col md={12}><label>Stroke color</label></Grids.Col>
-               <Grids.Col md={8}><ColorPicker onChange={this._onChangeStroke.bind(this)} saturationWidth={100} ref='strokeColor' saturationHeight={75} defaultValue='#452135' /></Grids.Col>
+        <Dialog.Modal title="New feature attributes" ref="attributesModal">
+          <Dialog.ModalBody>
+            <form className='form-horizontal'>
+              {attributeFormItems}
+            </form>
+          </Dialog.ModalBody>
+         <Dialog.ModalFooter>
+             <UI.DefaultButton title="Set feature attributes" onClick={this._setAttributes.bind(this)}>Ok</UI.DefaultButton>
+           </Dialog.ModalFooter>
+        </Dialog.Modal>
+        <Dialog.Modal title="Create empty layer" ref="modal">
+          <Dialog.ModalBody>
+            <form className='form-horizontal'>
+              <div className="form-group">
+                <Grids.Col md={12}><label>Layer name</label></Grids.Col>
+                <Grids.Col md={8}><input className="form-control" type="text" ref="layerName"/></Grids.Col>
+              </div>
+              <div className="form-group">
+                <Grids.Col md={12}><label>Geometry type</label></Grids.Col>
+                <Grids.Col md={8}>
+                  <select className='form-control' ref='geometryType'>
+                    <option>Point</option>
+                    <option>LineString</option>
+                    <option>Polygon</option>
+                  </select>
+                </Grids.Col>
+              </div>
+              <div className="form-group">
+                <Grids.Col md={12}><label>Attributes (comma-separated names)</label></Grids.Col>
+                <Grids.Col md={8}><input className="form-control" type="text" ref="attributes"/></Grids.Col>
+              </div>
+              <div className="form-group">
+                 <Grids.Col md={12}><label>Stroke color</label></Grids.Col>
+                 <Grids.Col md={8}><ColorPicker onChange={this._onChangeStroke.bind(this)} saturationWidth={100} ref='strokeColor' saturationHeight={75} defaultValue='#452135' /></Grids.Col>
              </div>
              <div className="form-group">
                <Grids.Col md={12}><label>Fill color</label></Grids.Col>

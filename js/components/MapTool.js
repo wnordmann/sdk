@@ -32,7 +32,7 @@ export default class MapTool extends React.Component {
   }
   activate(interactions) {
     if (interactions instanceof ol.interaction.Interaction) {
-      this._currentInteractions = [interaction];
+      this._currentInteractions = [interactions];
     } else {
       this._currentInteractions = interactions;
     }
