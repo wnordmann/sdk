@@ -15,6 +15,9 @@ export default class Playback extends React.Component {
   }
   componentDidMount() {
     this._setStyleFunctions();
+    if (this.props.autoPlay === true) {
+      this._playPause();
+    }
   }
   _onSubmit(evt) {
     evt.preventDefault();
@@ -119,11 +122,11 @@ Playback.propTypes = {
   maxDate: React.PropTypes.number.isRequired,
   interval: React.PropTypes.number,
   numIntervals: React.PropTypes.number,
-  autoPlayFromStart: React.PropTypes.bool
+  autoPlay: React.PropTypes.bool
 };
 
 Playback.defaultProps = {
   interval: 500,
   numIntervals: 100,
-  autoPlayFromStartup: false
+  autoPlay: false
 };
