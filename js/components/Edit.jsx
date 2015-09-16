@@ -7,9 +7,12 @@ import Icon from 'pui-react-iconography';
 import Dialog from 'pui-react-modals';
 import Grids from 'pui-react-grids';
 import ColorPicker from 'react-color-picker';
+import Pui from 'pui-react-alerts';
 import '../../node_modules/react-color-picker/index.css';
+import './Edit.css';
 
 const NEW_ATTR_PREFIX = 'new-attr-';
+const ID_PREFIX = 'sdk-edit-';
 
 export default class Edit extends MapTool {
   constructor(props) {
@@ -18,8 +21,11 @@ export default class Edit extends MapTool {
     this.state = {
       layers: [],
       enable: true,
+      error: false,
       attributes: null
     };
+    this._strokeColor = '#452135';
+    this._fillColor = '#452135';
   }
   _onSubmit(evt) {
     evt.preventDefault();
@@ -31,34 +37,36 @@ export default class Edit extends MapTool {
     this._fillColor = color;
   }
   _generateId() {
-    return 'sdk-edit-' + this.state.layers.length;
+    return ID_PREFIX + this.state.layers.length;
   }
   _createLayer() {
     var layerName = React.findDOMNode(this.refs.layerName).value;
     var geometryType = React.findDOMNode(this.refs.geometryType).value;
     var attributes = React.findDOMNode(this.refs.attributes).value;
-    var fill = this._fillColor ? new ol.style.Fill({color: this._fillColor}) : undefined;
-    var stroke = this._strokeColor ? new ol.style.Stroke({color: this._strokeColor, width: this.props.strokeWidth}) : undefined;
-    var style = new ol.style.Style({
-      fill: fill,
-      stroke: stroke,
-      image: (fill || stroke) ? new ol.style.Circle({stroke: stroke, fill: fill, radius: this.props.pointRadius}) : undefined
-    });
-    var layer = new ol.layer.Vector({
-      title: layerName,
-      id: this._generateId(),
-      geomType: geometryType,
-      schema: attributes,
-      isSelectable: true,
-      isRemovable: true,
-      style: style,
-      source: new ol.source.Vector({useSpatialIndex: false})
-    });
-    this.props.map.addLayer(layer);
-    var layers = this.state.layers;
-    layers.push(layer);
-    this.refs.modal.close();
-    this.setState({layers: layers});
+    if (layerName !== '') {
+      var fill = this._fillColor ? new ol.style.Fill({color: this._fillColor}) : undefined;
+      var stroke = this._strokeColor ? new ol.style.Stroke({color: this._strokeColor, width: this.props.strokeWidth}) : undefined;
+      var style = new ol.style.Style({
+        fill: fill,
+        stroke: stroke,
+        image: (fill || stroke) ? new ol.style.Circle({stroke: stroke, fill: fill, radius: this.props.pointRadius}) : undefined
+      });
+      var layer = new ol.layer.Vector({
+        title: layerName,
+        id: this._generateId(),
+        geomType: geometryType,
+        schema: attributes,
+        isSelectable: true,
+        isRemovable: true,
+        style: style,
+        source: new ol.source.Vector({useSpatialIndex: false})
+      });
+      this.props.map.addLayer(layer);
+      var layers = this.state.layers;
+      layers.push(layer);
+      this.refs.modal.close();
+      this.setState({layers: layers});
+    }
   }
   _disableEditMode() {
     this.setState({enable: true});
@@ -68,8 +76,12 @@ export default class Edit extends MapTool {
     this._activate();
   }
   _enableEditMode() {
-    this.setState({enable: false});
-    this._activate();
+    if (this.state.layers.length === 0) {
+      this.setState({error: true});
+    } else {
+      this.setState({error: false, enable: false});
+      this._activate();
+    }
   }
   _addFeatureDialog(feature, attributes) {
     this._feature = feature;
@@ -150,6 +162,10 @@ export default class Edit extends MapTool {
         attributeFormItems.push(<div key={ref} className="form-group"><Grids.Col md={12}><label>{name}</label></Grids.Col><Grids.Col md={8}><input className="form-control" type='text' ref={ref} /></Grids.Col></div>);
       }
     }
+    var error;
+    if (this.state.error === true) {
+      error = (<div className='error-alert'><Pui.ErrorAlert dismissable={true} withIcon={true}>No editable layer is available. Create one to start editing.</Pui.ErrorAlert></div>);
+    }
     return (
       <article>
         <form onSubmit={this._onSubmit} className='form-inline'>
@@ -157,6 +173,7 @@ export default class Edit extends MapTool {
           <select onChange={this._onLayerChange.bind(this)} ref='layer' className='form-control'>{options}</select>
           <UI.DefaultButton onClick={this._showModal.bind(this)}><Icon.Icon name='plus' /></UI.DefaultButton>
           {button}
+          {error}
         </form>
         <Dialog.Modal title="New feature attributes" ref="attributesModal">
           <Dialog.ModalBody>
@@ -191,11 +208,11 @@ export default class Edit extends MapTool {
               </div>
               <div className="form-group">
                  <Grids.Col md={12}><label>Stroke color</label></Grids.Col>
-                 <Grids.Col md={8}><ColorPicker onChange={this._onChangeStroke.bind(this)} saturationWidth={100} ref='strokeColor' saturationHeight={75} defaultValue='#452135' /></Grids.Col>
+                 <Grids.Col md={8}><ColorPicker onChange={this._onChangeStroke.bind(this)} saturationWidth={100} ref='strokeColor' saturationHeight={75} defaultValue={this._strokeColor} /></Grids.Col>
              </div>
              <div className="form-group">
                <Grids.Col md={12}><label>Fill color</label></Grids.Col>
-               <Grids.Col md={8}><ColorPicker onChange={this._onChangeFill.bind(this)} saturationWidth={100} ref='fillColor' saturationHeight={75} defaultValue='#452135' /></Grids.Col>
+               <Grids.Col md={8}><ColorPicker onChange={this._onChangeFill.bind(this)} saturationWidth={100} ref='fillColor' saturationHeight={75} defaultValue={this._fillColor} /></Grids.Col>
              </div>
            </form>
          </Dialog.ModalBody>
