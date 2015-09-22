@@ -2,6 +2,9 @@
 import React from 'react';
 import olcs from 'ol3-cesium';
 
+/**
+ * Adds a button to toggle 3D mode.
+ */
 export default class Globe extends React.Component {
   constructor(props) {
     super(props);
@@ -27,5 +30,8 @@ export default class Globe extends React.Component {
 }
 
 Globe.propTypes = {
+  /**
+   * The ol3 map instance to work on.
+   */
   map: React.PropTypes.instanceOf(ol.Map).isRequired
 };
