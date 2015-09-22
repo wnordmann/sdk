@@ -11,6 +11,9 @@ import UI from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
 import './FeatureTable.css';
 
+/**
+ * A table to show features. Allows for selection of features.
+ */
 export default class FeatureTable extends React.Component {
   constructor(props) {
     super(props);
@@ -154,13 +157,37 @@ export default class FeatureTable extends React.Component {
 }
 
 FeatureTable.propTypes = {
+  /**
+   * The ol3 map in which the source for the table resides.
+   */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * The layer to use initially for loading the table.
+   */
   layer: React.PropTypes.instanceOf(ol.layer.Vector).isRequired,
+  /**
+   * The width of the table component in pixels.
+   */
   width: React.PropTypes.number,
+  /**
+   * The height of the table component in pixels.
+   */
   height: React.PropTypes.number,
+  /**
+   * The height of a row in pixels.
+   */
   rowHeight: React.PropTypes.number,
+  /**
+   * The height of the table header in pixels.
+   */
   headerHeight: React.PropTypes.number,
+  /**
+   * The width in pixels per column.
+   */
   columnWidth: React.PropTypes.number,
+  /**
+   * The zoom level to zoom the map to in case of a point geometry.
+   */
   pointZoom: React.PropTypes.number
 };
 

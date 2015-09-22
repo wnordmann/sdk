@@ -14,6 +14,9 @@ import './Edit.css';
 const NEW_ATTR_PREFIX = 'new-attr-';
 const ID_PREFIX = 'sdk-edit-';
 
+/**
+ * A component that allows creating new features, so drawing their geometries and setting feature attributes through a form.
+ */
 export default class Edit extends MapTool {
   constructor(props) {
     super(props);
@@ -226,7 +229,13 @@ export default class Edit extends MapTool {
 }
 
 Edit.propTypes = {
+  /**
+   * The stroke width in pixels used in the style for the created features.
+   */
   strokeWidth: React.PropTypes.number,
+  /**
+   * The point radius used for the circle style.
+   */
   pointRadius: React.PropTypes.number
 };
 
