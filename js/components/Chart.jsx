@@ -156,7 +156,6 @@ export default class Chart extends React.Component {
     }
   }
   render() {
-    var key;
     if (this.props.combo === true) {
       var options = this.props.charts.map(function(chart, idx) {
         var title = chart.title;
