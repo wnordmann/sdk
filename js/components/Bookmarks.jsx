@@ -3,6 +3,10 @@ import React from 'react';
 import Slider from 'react-slick';
 import './Bookmarks.css';
 
+/**
+ * Adds the ability to retrieve spatial bookmarks.
+ * A spatial bookmark consists of a name, an extent and a description.
+ */
 export default class Bookmarks extends React.Component {
   constructor(props) {
     super(props);
@@ -52,12 +56,34 @@ export default class Bookmarks extends React.Component {
 }
 
 Bookmarks.propTypes = {
+  /**
+   * The ol3 map instance on whose view we should navigate.
+   */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * The bookmark data. An array of objects with name, description and extent keys.
+   * The extent should be in the view projection.
+   */
   bookmarks: React.PropTypes.array.isRequired,
+  /**
+   * Should we show indicators? These are dots to navigate the bookmark pages.
+   */
   showIndicators: React.PropTypes.bool,
+  /**
+   * Should we animate the pan and zoom operation?
+   */
   animatePanZoom: React.PropTypes.bool,
+  /**
+   * The duration of the animation in milleseconds. Only relevant if animatePanZoom is true.
+   */
   animationDuration: React.PropTypes.number,
+  /**
+   * The title on the introduction (first) page of the bookmarks.
+   */
   introTitle: React.PropTypes.string,
+  /**
+   * The description of the introduction (first) page of the bookmarks.
+   */
   introDescription: React.PropTypes.string
 };
 

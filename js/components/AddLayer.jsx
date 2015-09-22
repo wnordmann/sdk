@@ -8,6 +8,10 @@ import Grids from 'pui-react-grids';
 import ColorPicker from 'react-color-picker';
 import '../../node_modules/react-color-picker/index.css';
 
+/**
+ * Adds a menu entry that can be used by the web app user to add a layer to the map.
+ * Only vector layers can be added. Supported formats for layers are GeoJSON, GPX and KML.
+ */
 export default class AddLayer extends React.Component {
   constructor(props) {
     super(props);
@@ -122,8 +126,17 @@ export default class AddLayer extends React.Component {
 }
 
 AddLayer.propTypes = {
+  /**
+   * The ol3 map instance to add to.
+   */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * The stroke width in pixels used in the style for the uploaded data.
+   */
   strokeWidth: React.PropTypes.number,
+  /**
+   * The point radius used for the circle style.
+   */
   pointRadius: React.PropTypes.number
 };
 
