@@ -222,7 +222,23 @@ React.render(<LayerList showOpacity={true} showDownload={true} showGroupContent=
 React.render(<Select toggleGroup='navigation' map={map}/>, document.getElementById('toolbar-select'));
 React.render(<QueryBuilder map={map} />, document.getElementById('query-panel'));
 React.render(<FeatureTable layer={selectedLayer} map={map} />, document.getElementById('table-panel'));
-var charts = {'Airports count per use category': {'categoryField': 'USE', 'layer': 'lyr03', 'valueFields': [], 'displayMode': 2, 'operation': 2}, 'Forest area total surface': {'categoryField': 'VEGDESC', 'layer': 'lyr01', 'valueFields': ['AREA_KM2'], 'displayMode': 1, 'operation': 2}};
+
+var charts = [{
+  title: 'Airports count per use category',
+  categoryField: 'USE',
+  layer: 'lyr03',
+  valueFields: [],
+  displayMode: 2,
+  operation: 2
+}, {
+  title: 'Forest area total surface',
+  categoryField: 'VEGDESC',
+  layer: 'lyr01',
+  valueFields: ['AREA_KM2'],
+  displayMode: 1,
+  operation: 2
+}];
+
 React.render(<Chart container='chart-panel' charts={charts} />, document.getElementById('toolbar-chart'));
 
 var bookmarks = [{

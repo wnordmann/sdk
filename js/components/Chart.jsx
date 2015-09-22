@@ -16,13 +16,8 @@ const DISPLAY_MODE_COUNT = 2;
 export default class Chart extends React.Component {
   constructor(props) {
     super(props);
-    var chart;
-    for (var key in this.props.charts) {
-      chart = this.props.charts[key];
-      break;
-    }
     this.state = {
-      chart: chart
+      chart: this.props.charts[0]
     };
   }
   componentWillMount() {
@@ -147,8 +142,13 @@ export default class Chart extends React.Component {
     });
   }
   _selectChart(evt) {
-    var chart = this.props.charts[evt.target.value];
-    this._drawFromSelection(chart);
+    for (var i = 0, ii = this.props.charts.length; i < ii; ++i) {
+      var chart = this.props.charts;
+      if (chart.title === evt.target.value) {
+        this._drawFromSelection(chart);
+        break;
+      }
+    }
   }
   _onClick() {
     if (this.props.container) {
@@ -158,10 +158,10 @@ export default class Chart extends React.Component {
   render() {
     var key;
     if (this.props.combo === true) {
-      var options = [];
-      for (key in this.props.charts) {
-        options.push(<option key={key} value={key}>{key}</option>);
-      }
+      var options = this.props.charts.map(function(chart, idx) {
+        var title = chart.title;
+        return (<option key={idx} value={title}>{title}</option>);
+      });
       return (
         <div className='chart-panel' id='chart-panel'>
           <select onChange={this._selectChart.bind(this)} className='form-control' id='chart-selector'>
@@ -171,10 +171,10 @@ export default class Chart extends React.Component {
         </div>
       );
     } else {
-      var listitems = [];
-      for (key in this.props.charts) {
-        listitems.push(<UI.DropdownItem key={key} onSelect={this._onClick.bind(this, {target: {value: key}})}>{key}</UI.DropdownItem>);
-      }
+      var listitems = this.props.charts.map(function(chart, idx) {
+        var key = chart.title;
+        return (<UI.DropdownItem key={idx} onSelect={this._onClick.bind(this, {target: {value: key}})}>{key}</UI.DropdownItem>);
+      }, this);
       return (
         <UI.Dropdown title='Charts'>
           {listitems}
@@ -185,7 +185,7 @@ export default class Chart extends React.Component {
 }
 
 Chart.propTypes = {
-  charts: React.PropTypes.object.isRequired,
+  charts: React.PropTypes.array.isRequired,
   combo: React.PropTypes.bool,
   container: React.PropTypes.string
 };
