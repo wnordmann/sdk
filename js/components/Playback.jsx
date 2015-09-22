@@ -51,11 +51,11 @@ export default class Playback extends React.Component {
       lyr.setStyle(function(feature, resolution) {
         var start = Date.parse(feature.get(timeInfo.start));
         if (isNaN(start) || start > dateInput.valueAsNumber) {
-          return null;
+          return undefined;
         }
         var end = Date.parse(feature.get(timeInfo.end));
         if (isNaN(end) || end < dateInput.valueAsNumber) {
-          return null;
+          return undefined;
         }
         if (style instanceof ol.style.Style) {
           return [style];
