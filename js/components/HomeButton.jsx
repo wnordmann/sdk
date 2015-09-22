@@ -1,6 +1,9 @@
 /* global ol */
 import React from 'react';
 
+/**
+ * A button to go back to the initial extent of the map.
+ */
 export default class HomeButton extends React.Component {
   constructor(props) {
     super(props);
@@ -21,5 +24,8 @@ export default class HomeButton extends React.Component {
 }
 
 HomeButton.propTypes = {
+  /**
+   * The ol3 map for whose view the initial center and zoom should be restored.
+   */
   map: React.PropTypes.instanceOf(ol.Map).isRequired
 };

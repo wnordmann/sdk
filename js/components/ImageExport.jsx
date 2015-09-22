@@ -5,6 +5,9 @@ import FileSaver from 'browser-filesaver';
 import UI from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
 
+/**
+ * Export the map as a PNG file.
+ */
 export default class ImageExport extends React.Component {
   constructor(props) {
     super(props);
@@ -29,5 +32,8 @@ export default class ImageExport extends React.Component {
 }
 
 ImageExport.propTypes = {
+  /**
+   * The ol3 map to export as PNG.
+   */
   map: React.PropTypes.instanceOf(ol.Map).isRequired
 };

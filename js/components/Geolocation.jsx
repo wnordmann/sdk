@@ -3,6 +3,9 @@ import React from 'react';
 import './Geolocation.css';
 import Pui from 'pui-react-alerts';
 
+/**
+ * Enable geolocation which uses the current position of the user in the map.
+ */
 export default class Geolocation extends React.Component {
   constructor(props) {
     super(props);
@@ -66,5 +69,8 @@ export default class Geolocation extends React.Component {
 }
 
 Geolocation.propTypes = {
+  /**
+   * The ol3 map for which to change its view's center.
+   */
   map: React.PropTypes.instanceOf(ol.Map).isRequired
 };

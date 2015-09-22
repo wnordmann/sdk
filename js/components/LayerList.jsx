@@ -6,6 +6,9 @@ import UI from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
 import './LayerList.css';
 
+/**
+ * A list of layers in the map. Allows setting visibility and opacity.
+ */
 export default class LayerList extends React.Component {
   constructor(props) {
     super(props);
@@ -67,11 +70,29 @@ export default class LayerList extends React.Component {
 }
 
 LayerList.propTypes = {
+  /**
+   * The map whose layers should show up in this layer list.
+   */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * Should we show a button that allows the user to zoom to the layer's extent?
+   */
   showZoomTo: React.PropTypes.bool,
+  /**
+   * Should we allow for reordering of layers?
+   */
   allowReordering: React.PropTypes.bool,
+  /**
+   * Should we show the contents of layer groups?
+   */
   showGroupContent: React.PropTypes.bool,
+  /**
+   * Should we show a download button for layers?
+   */
   showDownload: React.PropTypes.bool,
+  /**
+   * Should we show an opacity slider for layers?
+   */
   showOpacity: React.PropTypes.bool
 };
 
