@@ -3,6 +3,9 @@ import React from 'react';
 import LayerStore from '../stores/LayerStore.js';
 import LayerActions from '../actions/LayerActions.js';
 
+/**
+ * A combobox to select a layer.
+ */
 export default class LayerSelector extends React.Component {
   constructor(props) {
     super(props);
@@ -47,7 +50,16 @@ export default class LayerSelector extends React.Component {
 }
 
 LayerSelector.propTypes = {
+  /**
+   * The map from which to extract the layers.
+   */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * A filter function to filter out some of the layers by returning false.
+   */
   filter: React.PropTypes.func,
+  /**
+   * The default value of the layer selector, i.e. the layer to select by default.
+   */
   value: React.PropTypes.string
 };

@@ -4,6 +4,10 @@ import MapConstants from '../constants/MapConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LayerActions from '../actions/LayerActions.js';
 
+/**
+ * A tool that manages interactions on the map. The interactions will be
+ * activated and deactivated depending on toggleGroup.
+ */
 export default class MapTool extends React.Component {
   constructor(props) {
     super(props);
@@ -45,6 +49,12 @@ export default class MapTool extends React.Component {
 }
 
 MapTool.propTypes = {
+  /**
+   * The map onto which to activate and deactivate the interactions.
+   */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * The toggleGroup to use. When this tool is activated, all other tools in the same toggleGroup will be deactivated.
+   */
   toggleGroup: React.PropTypes.string
 };

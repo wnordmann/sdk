@@ -3,6 +3,9 @@ import UI from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
 import './QGISLegend.css';
 
+/**
+ * A component that shows a legend based on artefacts created by the QGIS plugin Web Application Builder.
+ */
 export default class QGISLegend extends React.Component {
   constructor(props) {
     super(props);
@@ -57,7 +60,13 @@ export default class QGISLegend extends React.Component {
 }
 
 QGISLegend.propTypes = {
+  /**
+   * The base path (relative url) to use for finding the artefacts.
+   */
   legendBasePath: React.PropTypes.string,
+  /**
+   * The label and image to use per layer. The object is keyed by layer name currently. For example: {'swamp': [['', '4_0.png']]}.
+   */
   legendData: React.PropTypes.object.isRequired
 };
 

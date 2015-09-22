@@ -5,6 +5,9 @@ import Icon from 'pui-react-iconography';
 import Grids from 'pui-react-grids';
 import './Playback.css';
 
+/**
+ * Adds a slider to the map that can be used to select a given date, and modifies the visibility of layers and features depending on their timestamp and the current time.
+ */
 export default class Playback extends React.Component {
   constructor(props) {
     super(props);
@@ -117,11 +120,29 @@ export default class Playback extends React.Component {
 }
 
 Playback.propTypes = {
+  /**
+   * The map whose time-enabled layers should be filtered. Time-enabled layers are layers that have a timeInfo property.
+   */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * The minimum date to use for the slider field and the date picker.
+   */
   minDate: React.PropTypes.number.isRequired,
+  /**
+   * The maximum date to use for the slider field and the date picker.
+   */
   maxDate: React.PropTypes.number.isRequired,
+  /**
+   * The time, in milliseconds, to wait in each position of the slider. Positions are defined by dividing the slider range by the number of intervals defined in the numIntervals parameter.
+   */
   interval: React.PropTypes.number,
+  /**
+   * The number of intervals into which the full range of the slider is divided.
+   */
   numIntervals: React.PropTypes.number,
+  /**
+   * Should the playback tool start playing automatically?
+   */
   autoPlay: React.PropTypes.bool
 };
 

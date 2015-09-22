@@ -10,6 +10,9 @@ import Grids from 'pui-react-grids';
 import Icon from 'pui-react-iconography';
 import './QueryBuilder.css';
 
+/**
+ * A component that allows users to perform queries on vector layers. Queries can be new queries, added to existing queries or users can filter inside of an existing query a.k.a. drill-down.
+ */
 export default class QueryBuilder extends React.Component {
   constructor(props) {
     super(props);
@@ -106,5 +109,8 @@ export default class QueryBuilder extends React.Component {
 }
 
 QueryBuilder.propTypes = {
+  /**
+   * The ol3 map whose layers can be used for the querybuilder.
+   */
   map: React.PropTypes.instanceOf(ol.Map).isRequired
 };

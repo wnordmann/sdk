@@ -2,6 +2,9 @@
 import React from 'react';
 import LayerActions from '../actions/LayerActions.js';
 
+/**
+ * An item in the LayerList component.
+ */
 export default class LayerListItem extends React.Component {
   constructor(props) {
     super(props);
@@ -66,12 +69,33 @@ export default class LayerListItem extends React.Component {
 }
 
 LayerListItem.propTypes = {
+  /**
+   * The layer associated with this item.
+   */
   layer: React.PropTypes.instanceOf(ol.layer.Base).isRequired,
+  /**
+   * The title to show for the layer.
+   */
   title: React.PropTypes.string.isRequired,
+  /**
+   * Should we show a zoom to button for the layer?
+   */
   showZoomTo: React.PropTypes.bool,
+  /**
+   * Should we show up and down buttons to allow reordering?
+   */
   allowReordering: React.PropTypes.bool,
+  /**
+   * Should we show a download button?
+   */
   showDownload: React.PropTypes.bool,
+  /**
+   * The child items to show for this item.
+   */
   children: React.PropTypes.element,
+  /**
+   * Should we show an opacity slider for the layer?
+   */
   showOpacity: React.PropTypes.bool
 };
 

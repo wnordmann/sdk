@@ -6,6 +6,9 @@ import MapTool from './MapTool.js';
 import FeatureStore from '../stores/FeatureStore.js';
 import UI from 'pui-react-dropdowns';
 
+/**
+ * The select tool allows users to select features in multiple layers at a time by drawing a rectangle.
+ */
 export default class Select extends MapTool {
   constructor(props) {
     super(props);

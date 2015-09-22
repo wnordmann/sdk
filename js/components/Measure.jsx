@@ -5,6 +5,9 @@ import './Measure.css';
 import MapTool from './MapTool.js';
 import UI from 'pui-react-dropdowns';
 
+/**
+ * Adds area and length measure tools to the map.
+ */
 export default class Measure extends MapTool {
   constructor(props) {
     super(props);
