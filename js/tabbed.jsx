@@ -207,20 +207,20 @@ React.render(<LayerList showOpacity={true} showDownload={true} showGroupContent=
 React.render(<Select toggleGroup='navigation' map={map}/>, document.getElementById('toolbar-select'));
 React.render(<Measure toggleGroup='navigation' map={map}/>, document.getElementById('toolbar-measure'));
 var charts = [{
-    title: 'Airports count per use category',
-    categoryField: 'USE',
-    layer: 'lyr03',
-    valueFields: [],
-    displayMode: 2,
-    operation: 2
-  }, {
-    title: 'Forest area total surface',
-    categoryField: 'VEGDESC',
-    layer: 'lyr01',
-    valueFields: ['AREA_KM2'],
-    displayMode: 1,
-    operation: 2
-  }];
+  title: 'Airports count per use category',
+  categoryField: 'USE',
+  layer: 'lyr03',
+  valueFields: [],
+  displayMode: 2,
+  operation: 2
+}, {
+  title: 'Forest area total surface',
+  categoryField: 'VEGDESC',
+  layer: 'lyr01',
+  valueFields: ['AREA_KM2'],
+  displayMode: 1,
+  operation: 2
+}];
 React.render(<Chart combo={true} charts={charts}/>, document.getElementById('charts-tab'));
 React.render(<Geolocation map={map} />, document.getElementById('geolocation-control'));
 var legendData = {'airports': [['', '6_0.png']], 'lakes': [['', '3_0.png']], 'trees': [['', '0_0.png']], 'rivers': [['', '1_0.png']], 'swamp': [['', '4_0.png']], 'popp': [['', '5_0.png']], 'majrivers': [['', '2_0.png']]};
