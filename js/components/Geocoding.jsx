@@ -2,6 +2,9 @@ import React from 'react';
 import LayerActions from '../actions/LayerActions.js';
 import UI from 'pui-react-search-input';
 
+/**
+ * Input field to search for placenames using a geocoding service (OSM nominatim).
+ */
 export default class Geocoding extends React.Component {
   _searchBoxKeyPressed(e) {
     if (e.which === 13){
@@ -29,6 +32,9 @@ export default class Geocoding extends React.Component {
 }
 
 Geocoding.propTypes = {
+  /**
+   * The maximum number of results to return on a search.
+   */
   maxResults: React.PropTypes.number
 };
 

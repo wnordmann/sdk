@@ -3,6 +3,9 @@ import React from 'react';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import MapConstants from '../constants/MapConstants.js';
 
+/**
+ * This component displays the results of geocoding search. The geocoding search is initiated by the Geocoding component.
+ */
 export default class GeocodingResults extends React.Component {
   constructor(props) {
     super(props);
@@ -78,7 +81,13 @@ export default class GeocodingResults extends React.Component {
 }
 
 GeocodingResults.propTypes = {
+  /**
+   * The ol3 map on whose view to perform the center action.
+   */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * The zoom level used when centering the view on a geocoding result.
+   */
   zoom: React.PropTypes.number
 };
 
