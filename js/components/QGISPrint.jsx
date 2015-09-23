@@ -4,7 +4,7 @@ import UI from 'pui-react-dropdowns';
 import Icon from 'pui-react-iconography';
 import Button from 'pui-react-buttons';
 import Dialog from 'pui-react-modals';
-import JSPDF from 'jspdf';
+import JSPDF from 'jspdf-browserify';
 import './QGISPrint.css';
 
 const MM_PER_INCH = 25.4;

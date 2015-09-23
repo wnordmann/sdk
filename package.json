@@ -23,7 +23,6 @@
     "fixed-data-table": "^0.4.6",
     "flux": "^2.0.1",
     "font-awesome": "^4.4.0",
-    "jspdf": "bartvde/jsPDF#npm",
     "keymirror": "~0.1.0",
     "lodash.uniqueid": "^3.0.0",
     "ol3-cesium": "bartvde/ol3-cesium#npm",
