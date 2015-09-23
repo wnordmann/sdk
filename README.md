@@ -8,9 +8,7 @@ New javascript SDK based on React and Flux
 
 ## Building css (Pivotal UI)
 
-    npm install -g dr-frankenstyle
-    npm install -g es6-promise
-    dr-frankenstyle css
+    npm run build-css
 
 ## Generating API docs
 
