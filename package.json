@@ -26,7 +26,7 @@
     "jspdf-browserify": "^1.0.272",
     "keymirror": "~0.1.0",
     "lodash.uniqueid": "^3.0.0",
-    "ol3-cesium": "bartvde/ol3-cesium#npm",
+    "ol3-cesium": "^3.8.0",
     "openlayers": "~3.9.0",
     "pui-react-alerts": "^2.0.0-alpha.0",
     "pui-react-buttons": "^2.0.0-alpha.0",
