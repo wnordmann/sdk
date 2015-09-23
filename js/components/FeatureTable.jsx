@@ -134,7 +134,7 @@ export default class FeatureTable extends React.Component {
       <div id='attributes-table'>
         <form onSubmit={this._onSubmit.bind(this)} role='form' className='form-inline'>
           <label>Layer:</label>
-          <LayerSelector ref='layerSelector' filter={this._filterLayerList} map={this.props.map} value={this.props.layer.get('title')} />
+          <LayerSelector ref='layerSelector' filter={this._filterLayerList} map={this.props.map} value={this.props.layer.get('id')} />
           <UI.DefaultButton onClick={this._zoomSelected.bind(this)} title='Zoom to selected'><Icon.Icon name="search" /> Zoom</UI.DefaultButton>
           <UI.DefaultButton onClick={this._clearSelected.bind(this)} title='Clear selected'><Icon.Icon name="trash" /> Clear</UI.DefaultButton>
           <label><input type='checkbox' onChange={this._filter.bind(this)}></input> Show only selected features</label>

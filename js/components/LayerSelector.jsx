@@ -34,10 +34,10 @@ export default class LayerSelector extends React.Component {
   render() {
     var me = this;
     var selectItems = this.state.layers.map(function(lyr, idx) {
-      var title = lyr.get('title');
+      var title = lyr.get('title'), id = lyr.get('id');
       if (!me.props.filter || me.props.filter(lyr) === true) {
         return (
-          <option value={title} key={idx}>{title}</option>
+          <option value={id} key={idx}>{title}</option>
         );
       }
     });

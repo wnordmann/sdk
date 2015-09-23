@@ -223,7 +223,20 @@ var charts = [{
 }];
 React.render(<Chart combo={true} charts={charts}/>, document.getElementById('charts-tab'));
 React.render(<Geolocation map={map} />, document.getElementById('geolocation-control'));
-var legendData = {'airports': [['', '6_0.png']], 'lakes': [['', '3_0.png']], 'trees': [['', '0_0.png']], 'rivers': [['', '1_0.png']], 'swamp': [['', '4_0.png']], 'popp': [['', '5_0.png']], 'majrivers': [['', '2_0.png']]};
+var legendData = {
+  'lyr03': [{
+    title: '',
+    href: '6_0.png'
+  }],
+  'lyr02': [{
+    title: '',
+    href: '5_0.png'
+  }],
+  'lyr01': [{
+    title: '',
+    href: '0_0.png'
+  }]
+};
 React.render(<QGISLegend legendBasePath='../../resources/legend/' legendData={legendData} />, document.getElementById('legend'));
 React.render(<ImageExport map={map} />, document.getElementById('toolbar-export'));
 React.render(<HomeButton map={map} />, document.getElementById('home-button'));

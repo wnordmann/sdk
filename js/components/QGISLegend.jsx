@@ -1,6 +1,7 @@
 import React from 'react';
 import UI from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
+import LayerStore from '../stores/LayerStore.js';
 import './QGISLegend.css';
 
 /**
@@ -22,16 +23,17 @@ export default class QGISLegend extends React.Component {
   _renderItems(legendData, legendBasePath) {
     var legendNodes = [];
     var symbolFunc = function(symbol) {
-      var src = legendBasePath + symbol[1];
-      var lbl = symbol[0];
+      var src = legendBasePath + symbol.href;
+      var lbl = symbol.title;
       return (<li key={src}><img src={src}></img>{lbl}</li>);
     };
-    for (var name in legendData) {
-      var symbols = legendData[name].map(symbolFunc);
-      var forLabel = 'legend-layer-' + name;
+    for (var id in legendData) {
+      var title = LayerStore.findLayer(id).get('title');
+      var symbols = legendData[id].map(symbolFunc);
+      var forLabel = 'legend-layer-' + id;
       legendNodes.push(
-        <li key={name}>
-          <label htmlFor={forLabel}>{name}</label>
+        <li key={id}>
+          <label htmlFor={forLabel}>{title}</label>
           <input readOnly={true} type='checkbox' checked id={forLabel} />
           <ul>
             {symbols}

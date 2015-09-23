@@ -18,10 +18,10 @@ class LayerStore extends EventEmitter {
       this._map.getLayers().on('remove', this.emitChange, this);
     }
   }
-  findLayer(title) {
+  findLayer(id) {
     var layer;
     config.layers.map(function(lyr) {
-      if (lyr.get('title') === title) {
+      if (lyr.get('id') === id) {
         layer = lyr;
       }
     });
