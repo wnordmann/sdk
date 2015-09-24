@@ -44,7 +44,7 @@
     "react-color-picker": "^2.1.9",
     "react-dropzone": "^2.0.1",
     "react-slick": "^0.7.0",
-    "slick-carousel": "^1.5.8"
+    "slick-carousel-dr-frankenstyle": "^1.5.8"
   },
   "devDependencies": {
     "babelify": "^6.0.2",

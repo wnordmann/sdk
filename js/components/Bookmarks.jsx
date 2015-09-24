@@ -2,6 +2,7 @@
 import React from 'react';
 import Slider from 'react-slick';
 import './Bookmarks.css';
+import '../../node_modules/slick-carousel-dr-frankenstyle/slick/slick.css';
 
 /**
  * Adds the ability to retrieve spatial bookmarks.
