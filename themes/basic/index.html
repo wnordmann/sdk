@@ -36,6 +36,14 @@
     <div id="table-panel" class="attributes-table"></div>
     <div id="layerlist"></div>
   </div>
-  <script src="../../dist/js/basic.js"></script>
+  <script>
+    var fileref = document.createElement('script');
+    if (window.location.search.indexOf('production') !== -1) {
+      fileref.setAttribute('src', '../../dist/js/basic.js');
+    } else {
+      fileref.setAttribute('src', '../../dist/js/basic-debug.js');
+    }
+    document.getElementsByTagName("head")[0].appendChild(fileref);
+  </script>
 </body>
 </html>

@@ -31,6 +31,14 @@
       </div>
     </div>
   </div>
-  <script src="../../dist/js/tabbed.js"></script>
+  <script>
+    var fileref = document.createElement('script');
+    if (window.location.search.indexOf('production') !== -1) {
+      fileref.setAttribute('src', '../../dist/js/tabbed.js');
+    } else {
+      fileref.setAttribute('src', '../../dist/js/tabbed-debug.js');
+    }
+    document.getElementsByTagName("head")[0].appendChild(fileref);
+  </script>
 </body>
 </html>
