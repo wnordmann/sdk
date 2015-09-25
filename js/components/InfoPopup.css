@@ -1,0 +1,20 @@
+.ol-popup {
+  display: none;
+  position: absolute;
+  background-color: white;
+  -moz-box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+  filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+  padding: 15px;
+  padding-top:35px;
+  border-radius: 10px;
+  border: 1px solid #cccccc;
+  bottom: 12px;
+  left: -50px;
+  height: auto;
+  width: auto;
+  min-width: 250px;
+  max-height: 350px;
+  max-width: 500px;
+  overflow: auto;
+}

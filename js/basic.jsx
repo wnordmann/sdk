@@ -14,6 +14,7 @@ import Bookmarks from './components/Bookmarks.jsx';
 import Playback from './components/Playback.jsx';
 import Edit from './components/Edit.jsx';
 import Globe from './components/Globe.jsx';
+import InfoPopup from './components/InfoPopup.jsx';
 
 var styleFires = new ol.style.Style({
   image: new ol.style.Icon({
@@ -199,6 +200,7 @@ var map = new ol.Map({
     new ol.layer.Vector({
       title: 'airports',
       id: 'lyr03',
+      popupInfo: '<b>cat</b>: [cat]<br><b>NA3</b>: [NA3]<br><b>ELEV</b>: [ELEV]<br><b>F_CODE</b>: [F_CODE]<br><b>IKO</b>: [IKO]<br><b>NAME</b>: [NAME]<br><b>USE</b>: [USE]',
       isSelectable: true,
       style: styleAirports,
       source: new ol.source.Vector({
@@ -308,3 +310,5 @@ React.render(<UI.DefaultButton onClick={editFunc}><Icon.Icon name="pencil" /> Ed
 React.render(<Edit toggleGroup='navigation' map={map} />, document.getElementById('edit-tool-panel'));
 
 React.render(<Globe map={map} />, document.getElementById('globe-button'));
+
+React.render(<InfoPopup map={map} />, document.getElementById('popup'));
