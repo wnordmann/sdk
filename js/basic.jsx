@@ -159,6 +159,17 @@ var map = new ol.Map({
         })
       ]
     }),
+    new ol.layer.Tile({
+      title: 'States',
+      id: 'wms01',
+      popupInfo: '#AllAttributes',
+      extent: [-13884991, 2870341, -7455066, 6338219],
+      source: new ol.source.TileWMS({
+        url: 'http://demo.boundlessgeo.com/geoserver/wms',
+        params: {'LAYERS': 'topp:states', 'TILED': true},
+        serverType: 'geoserver'
+      })
+    }),
     new ol.layer.Vector({
       opacity: 1.0,
       source: new ol.source.Vector({
