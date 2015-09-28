@@ -34,39 +34,43 @@ var styleTrees = new ol.style.Style({
   })
 });
 
-var textStyleCacheAirports = {};
-var styleAirports = function() {
-  var value = '';
-  var style = [new ol.style.Style({
-    image: new ol.style.Icon({
-      scale: 0.025000,
-      anchorOrigin: 'top-left',
-      anchorXUnits: 'fraction',
-      anchorYUnits: 'fraction',
-      anchor: [0.5, 0.5],
-      src: '../../data/styles/plane.svg'
-    })
-  })];
-  var labelText = '';
-  var key = value + '_' + labelText;
-  if (!textStyleCacheAirports[key]) {
-    var text = new ol.style.Text({
-      font: '16.5px Calibri,sans-serif',
-      text: labelText,
-      fill: new ol.style.Fill({
-        color: 'rgba(0, 0, 0, 255)'
-      })
-    });
-    textStyleCacheAirports[key] = new ol.style.Style({
-      'text': text
-    });
-  }
-  var allStyles = [textStyleCacheAirports[key]];
-  allStyles.push.apply(allStyles, style);
-  return allStyles;
-};
+var styleAirports = new ol.style.Style({
+  image: new ol.style.Icon({
+    scale: 0.025000,
+    anchorOrigin: 'top-left',
+    anchorXUnits: 'fraction',
+    anchorYUnits: 'fraction',
+    anchor: [0.5, 0.5],
+    src: '../../data/styles/plane.svg'
+  })
+});
 
-var textStyleCachePopp = {};
+var baseStylePopp = [new ol.style.Style({
+  image: new ol.style.Circle({
+    radius: 7.0,
+    stroke: new ol.style.Stroke({
+      color: 'rgba(0,0,0,255)',
+      lineDash: null,
+      width: 1
+    }),
+    fill: new ol.style.Fill({
+      color: 'rgba(255,255,255,1.0)'
+    })
+  })
+}), new ol.style.Style({
+  image: new ol.style.Circle({
+    radius: 1.0,
+    stroke: new ol.style.Stroke({
+      color: 'rgba(0,0,0,255)',
+      lineDash: null,
+      width: 1
+    }),
+    fill: new ol.style.Fill({
+      color: 'rgba(0,0,0,1.0)'
+    })
+  })
+})];
+
 var clusterStyleCachePopp = {};
 var stylePopp = function(feature) {
   var style;
@@ -94,50 +98,9 @@ var stylePopp = function(feature) {
       clusterStyleCachePopp[size] = style;
     }
     return style;
+  } else {
+    return baseStylePopp;
   }
-  var value = '';
-  style = [new ol.style.Style({
-    image: new ol.style.Circle({
-      radius: 7.0,
-      stroke: new ol.style.Stroke({
-        color: 'rgba(0,0,0,255)',
-        lineDash: null,
-        width: 1
-      }),
-      fill: new ol.style.Fill({
-        color: 'rgba(255,255,255,1.0)'
-      })
-    })
-  }), new ol.style.Style({
-    image: new ol.style.Circle({
-      radius: 1.0,
-      stroke: new ol.style.Stroke({
-        color: 'rgba(0,0,0,255)',
-        lineDash: null,
-        width: 1
-      }),
-      fill: new ol.style.Fill({
-        color: 'rgba(0,0,0,1.0)'
-      })
-    })
-  })];
-  var labelText = '';
-  var key = value + '_' + labelText;
-  if (!textStyleCachePopp[key]) {
-    var text = new ol.style.Text({
-      font: '16.5px Calibri,sans-serif',
-      text: labelText,
-      fill: new ol.style.Fill({
-        color: 'rgba(0, 0, 0, 255)'
-      })
-    });
-    textStyleCachePopp[key] = new ol.style.Style({
-      'text': text
-    });
-  }
-  var allStyles = [textStyleCachePopp[key]];
-  allStyles.push.apply(allStyles, style);
-  return allStyles;
 };
 
 var map = new ol.Map({
