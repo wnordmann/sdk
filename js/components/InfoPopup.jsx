@@ -54,7 +54,9 @@ export default class InfoPopup extends React.Component {
     var resolution = view.getResolution(), projection = view.getProjection();
     var onReadyAll = function() {
       if (xmlhttp.status === 200 && xmlhttp.readyState === 4) {
-        popupTexts.push(xmlhttp.responseText);
+        if (xmlhttp.responseText.trim() !== 'no features were found') {
+          popupTexts.push(xmlhttp.responseText);
+        }
         finishedQuery();
       }
     };
