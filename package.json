@@ -8,11 +8,11 @@
     "url": "https://github.com/boundlessgeo/sdk.git"
   },
   "scripts": {
-    "start": "watchify js/tabbed.jsx -o dist/js/tabbed-debug.js & watchify js/basic.jsx -o dist/js/basic-debug.js & st -nc",
-    "build": "browserify -p [minifyify --no-map] js/tabbed.jsx -o dist/js/tabbed.js & browserify -p [minifyify --no-map]  js/basic.jsx -o dist/js/basic.js",
-    "build-css": "node_modules/dr-frankenstyle/cli.js css",
-    "build-docs": "node_modules/react-docgen/bin/react-docgen.js js/components > api/info.json",
-    "test": "node_modules/mochify/bin/cmd.js js/**/*.test.js",
+    "start": "node_modules/.bin/watchify js/tabbed.jsx -o dist/js/tabbed-debug.js & node_modules/.bin/watchify js/basic.jsx -o dist/js/basic-debug.js & st -nc",
+    "build": "node_modules/.bin/browserify -p [minifyify --no-map] js/tabbed.jsx -o dist/js/tabbed.js & node_modules/.bin/browserify -p [minifyify --no-map]  js/basic.jsx -o dist/js/basic.js",
+    "build-css": "node_modules/.bin/dr-frankenstyle css",
+    "build-docs": "node_modules/.bin/react-docgen js/components > api/info.json",
+    "test": "node_modules/.bin/mochify js/**/*.test.js",
     "lint": "eslint js --ext .jsx,.js"
   },
   "author": "Boundless",
