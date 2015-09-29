@@ -7,7 +7,7 @@ var ol = require('openlayers');
 var Select = require('./Select.jsx');
 
 describe('SelectTool', function() {
-  var target, map, callback;
+  var target, map;
   var width = 360;
   var height = 180;
 
