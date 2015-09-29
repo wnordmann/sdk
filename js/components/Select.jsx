@@ -13,6 +13,7 @@ export default class Select extends MapTool {
   constructor(props) {
     super(props);
     this._select = new ol.interaction.Select();
+    this.props.map.addInteraction(this._select);
     this._interactions = {
       'RECTANGLE': new ol.interaction.DragBox({
         condition: ol.events.condition.noModifierKeys,
@@ -54,7 +55,7 @@ export default class Select extends MapTool {
   }
   _selectByRectangle() {
     this.deactivate();
-    this.activate([this._select, this._interactions.RECTANGLE]);
+    this.activate(this._interactions.RECTANGLE);
   }
   render() {
     return (
