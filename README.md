@@ -14,5 +14,9 @@ New javascript SDK based on React and Flux
 
     npm run build-docs
 
+## Testing
+    npm run lint
+    npm test
+
 ## npm run build
 If you run into this error: Error: EMFILE, open 'sdk/node_modules/react/package.json' run the solution from here: https://github.com/andreypopp/react-app-express/issues/1#issuecomment-34113065
