@@ -4,14 +4,14 @@ var React = require('react/addons');
 var assert = require('chai').assert;
 var ol = require('openlayers');
 
-var Select = require('./Select.jsx');
+var HomeButton = require('./HomeButton.jsx');
 
-describe('SelectTool', function() {
+describe('HomeButton', function() {
   var target, map;
   var width = 360;
   var height = 180;
 
-  beforeEach(function() {
+  beforeEach(function(done) {
     target = document.createElement('div');
     var style = target.style;
     style.position = 'absolute';
@@ -23,10 +23,12 @@ describe('SelectTool', function() {
     map = new ol.Map({
       target: target,
       view: new ol.View({
-        projection: 'EPSG:4326',
         center: [0, 0],
-        resolution: 1
+        zoom: 1
       })
+    });
+    map.once('postrender', function() {
+      done();
     });
   });
 
@@ -36,20 +38,18 @@ describe('SelectTool', function() {
   });
 
 
-  it('adds a select interaction to the map', function() {
+  it('adds a select interaction to the map when active', function() {
     var container = document.createElement('div');
-    React.render((
-      <Select map={map} />
+    var button = React.render((
+      <HomeButton map={map} />
     ), container);
-
-    var count = 0;
-    map.getInteractions().forEach(function(interaction) {
-      if (interaction instanceof ol.interaction.Select) {
-        ++count;
-      }
-    });
-    assert.equal(count, 1);
-
+    map.getView().setZoom(5);
+    map.getView().setCenter([100, 100]);
+    assert.equal(map.getView().getZoom(), 5);
+    assert.equal(map.getView().getCenter()[0], 100);
+    button._goHome();
+    assert.equal(map.getView().getZoom(), 1);
+    assert.equal(map.getView().getCenter()[0], 0);
     React.unmountComponentAtNode(container);
   });
 
