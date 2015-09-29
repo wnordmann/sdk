@@ -1,5 +1,5 @@
-/* global ol */
 import React from 'react';
+import ol from 'openlayers';
 import Slider from 'react-slick';
 import './Bookmarks.css';
 import '../../node_modules/slick-carousel-dr-frankenstyle/slick/slick.css';

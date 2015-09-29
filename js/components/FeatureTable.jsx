@@ -1,5 +1,5 @@
-/* global ol */
 import React from 'react';
+import ol from 'openlayers';
 import FixedDataTable from 'fixed-data-table';
 import '../../node_modules/fixed-data-table/dist/fixed-data-table.css';
 import FeatureStore from '../stores/FeatureStore.js';

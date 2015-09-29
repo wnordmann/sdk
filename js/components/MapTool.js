@@ -1,4 +1,3 @@
-/* global ol */
 import React from 'react';
 import ol from 'openlayers';
 import MapConstants from '../constants/MapConstants.js';

@@ -1,6 +1,6 @@
 /* eslint react/prop-types: 0 */
-/* global ol */
 import React from 'react';
+import ol from 'openlayers';
 import './Measure.css';
 import MapTool from './MapTool.js';
 import UI from 'pui-react-dropdowns';

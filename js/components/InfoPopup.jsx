@@ -1,5 +1,5 @@
-/* global ol */
 import React from 'react';
+import ol from 'openlayers';
 import './InfoPopup.css';
 
 const ALL_ATTRS = '#AllAttributes';

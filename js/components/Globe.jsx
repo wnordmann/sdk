@@ -1,5 +1,7 @@
-/* global ol, Cesium */
+/* global Cesium */
 import React from 'react';
+import ol from 'openlayers';
+global.ol = ol;
 import olcs from 'ol3-cesium';
 
 /**

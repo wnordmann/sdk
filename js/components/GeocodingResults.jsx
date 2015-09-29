@@ -1,5 +1,5 @@
-/* global ol */
 import React from 'react';
+import ol from 'openlayers';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import MapConstants from '../constants/MapConstants.js';
 

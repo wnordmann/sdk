@@ -1,5 +1,5 @@
-/* global ol */
 import React from 'react';
+import ol from 'openlayers';
 import './Geolocation.css';
 import Pui from 'pui-react-alerts';
 

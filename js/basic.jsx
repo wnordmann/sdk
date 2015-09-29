@@ -1,5 +1,5 @@
-/* global ol */
 import React from 'react';
+import ol from 'openlayers';
 import LayerList from './components/LayerList.jsx';
 import Geocoding from './components/Geocoding.jsx';
 import GeocodingResults from './components/GeocodingResults.jsx';

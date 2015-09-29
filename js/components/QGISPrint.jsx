@@ -1,5 +1,5 @@
-/* global ol */
 import React from 'react';
+import ol from 'openlayers';
 import UI from 'pui-react-dropdowns';
 import Icon from 'pui-react-iconography';
 import Button from 'pui-react-buttons';

@@ -1,6 +1,6 @@
-/* global ol */
 import MapConstants from '../constants/MapConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
+import ol from 'openlayers';
 
 export default {
   activateTool: (tool, toggleGroup) => {

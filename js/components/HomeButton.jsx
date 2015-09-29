@@ -1,5 +1,5 @@
-/* global ol */
 import React from 'react';
+import ol from 'openlayers';
 
 /**
  * A button to go back to the initial extent of the map.

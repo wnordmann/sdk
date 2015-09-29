@@ -1,5 +1,5 @@
-/* global ol */
 import React from 'react';
+import ol from 'openlayers';
 import LayerStore from '../stores/LayerStore.js';
 import LayerActions from '../actions/LayerActions.js';
 

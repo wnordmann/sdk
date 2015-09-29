@@ -1,6 +1,7 @@
-/* global ol, document */
+/* global document */
 
 import {EventEmitter} from 'events';
+import ol from 'openlayers';
 import SelectConstants from '../constants/SelectConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 

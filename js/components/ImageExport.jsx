@@ -1,5 +1,5 @@
-/* global ol */
 import React from 'react';
+import ol from 'openlayers';
 import 'blueimp-canvas-to-blob';
 import FileSaver from 'browser-filesaver';
 import UI from 'pui-react-buttons';

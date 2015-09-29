@@ -1,6 +1,6 @@
-/* global ol */
 /* eslint react/prop-types: 0 */
 import React from 'react';
+import ol from 'openlayers';
 import MapTool from './MapTool.js';
 import UI from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
