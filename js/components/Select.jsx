@@ -1,6 +1,7 @@
 /* global ol */
 /* eslint react/prop-types: 0 */
 import React from 'react';
+import ol from 'openlayers';
 import SelectActions from '../actions/SelectActions.js';
 import MapTool from './MapTool.js';
 import FeatureStore from '../stores/FeatureStore.js';

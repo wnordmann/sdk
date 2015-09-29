@@ -12,7 +12,8 @@
     "build": "browserify -p [minifyify --no-map] js/tabbed.jsx -o dist/js/tabbed.js & browserify -p [minifyify --no-map]  js/basic.jsx -o dist/js/basic.js",
     "build-css": "node_modules/dr-frankenstyle/cli.js css",
     "build-docs": "node_modules/react-docgen/bin/react-docgen.js js/components > api/info.json",
-    "test": "eslint js --ext .jsx,.js"
+    "test": "node_modules/mochify/bin/cmd.js js/**/*.test.js",
+    "lint": "eslint js --ext .jsx,.js"
   },
   "author": "Boundless",
   "license": "ISC",
@@ -50,13 +51,18 @@
     "babelify": "^6.0.2",
     "browserify": "^9.0.8",
     "browserify-css": "^0.6.1",
+    "chai": "^1.10.0",
     "dr-frankenstyle": "^0.2.7",
     "es6-promise": "^3.0.2",
     "eslint": "^0.22.1",
     "eslint-plugin-react": "^3.3.0",
     "minifyify": "^7.1.0",
+    "phantomjs": "^1.9.16",
+    "mocha": "^2.1.0",
+    "mochify": "^2.10.0",
     "react-docgen": "^2.1.2",
     "st": "^0.5.3",
+    "sinon": "^1.12.2",
     "watchify": "^3.2.0"
   },
   "browserify": {
