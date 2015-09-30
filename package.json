@@ -57,7 +57,7 @@
     "browserify": "^9.0.8",
     "browserify-css": "^0.6.1",
     "chai": "^1.10.0",
-    "dr-frankenstyle-win": "^0.2.10",
+    "dr-frankenstyle-win": "^0.2.11",
     "es6-promise": "^3.0.2",
     "eslint": "^0.22.1",
     "eslint-plugin-react": "^3.3.0",
