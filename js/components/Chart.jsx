@@ -1,7 +1,7 @@
 import React from 'react';
 import FeatureStore from '../stores/FeatureStore.js';
-import c3 from 'c3';
-import '../../node_modules/c3/c3.min.css';
+import c3 from 'c3-windows';
+import '../../node_modules/c3-windows/c3.min.css';
 import UI from 'pui-react-dropdowns';
 import './Chart.css';
 
@@ -146,7 +146,7 @@ export default class Chart extends React.Component {
   }
   _selectChart(evt) {
     for (var i = 0, ii = this.props.charts.length; i < ii; ++i) {
-      var chart = this.props.charts;
+      var chart = this.props.charts[i];
       if (chart.title === evt.target.value) {
         this._drawFromSelection(chart);
         break;
