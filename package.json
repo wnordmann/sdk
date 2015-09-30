@@ -54,8 +54,8 @@
   },
   "devDependencies": {
     "babelify": "^6.0.2",
-    "browserify": "^9.0.8",
-    "browserify-css": "^0.6.1",
+    "browserify": "^11.2.0",
+    "browserify-css": "^0.7.1",
     "chai": "^1.10.0",
     "dr-frankenstyle-win": "^0.2.11",
     "es6-promise": "^3.0.2",
