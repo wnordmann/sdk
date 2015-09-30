@@ -8,12 +8,18 @@
     "url": "https://github.com/boundlessgeo/sdk.git"
   },
   "scripts": {
-    "start": "node_modules/.bin/watchify js/tabbed.jsx -o dist/js/tabbed-debug.js & node_modules/.bin/watchify js/basic.jsx -o dist/js/basic-debug.js & st -nc",
-    "build": "node_modules/.bin/browserify -p [minifyify --no-map] js/tabbed.jsx -o dist/js/tabbed.js & node_modules/.bin/browserify -p [minifyify --no-map]  js/basic.jsx -o dist/js/basic.js",
-    "build-css": "node_modules/.bin/dr-frankenstyle css",
-    "build-docs": "node_modules/.bin/react-docgen js/components > api/info.json",
-    "test": "node_modules/.bin/mochify js/**/*.test.js",
-    "lint": "eslint js --ext .jsx,.js"
+    "start:tabbed": "node_modules/.bin/watchify js/tabbed.jsx -o dist/js/tabbed-debug.js",
+    "start:basic": "node_modules/.bin/watchify js/basic.jsx -o dist/js/basic-debug.js",
+    "start:server": "node_modules/.bin/st -nc",
+    "css": "node_modules/.bin/dr-frankenstyle css",
+    "start": "node_modules/.bin/npm-run-all --parallel css start:tabbed start:basic start:server",
+    "build:tabbed": "node_modules/.bin/browserify -p [minifyify --no-map] js/tabbed.jsx -o dist/js/tabbed.js",
+    "build:basic": "node_modules/.bin/browserify -p [minifyify --no-map]  js/basic.jsx -o dist/js/basic.js",
+    "build": "node_modules/.bin/npm-run-all --parallel css build:tabbed build:basic",
+    "docs": "node_modules/.bin/react-docgen js/components > api/info.json",
+    "test:mochify": "node_modules/.bin/mochify js/**/*.test.js",
+    "test:lint": "eslint js --ext .jsx,.js",
+    "test": "node_modules/.bin/npm-run-all --parallel test:mochify test:lint"
   },
   "author": "Boundless",
   "license": "ISC",
@@ -56,12 +62,13 @@
     "eslint": "^0.22.1",
     "eslint-plugin-react": "^3.3.0",
     "minifyify": "^7.1.0",
-    "phantomjs": "^1.9.16",
     "mocha": "^2.1.0",
     "mochify": "^2.10.0",
+    "npm-run-all": "^1.2.11",
+    "phantomjs": "^1.9.16",
     "react-docgen": "^2.1.2",
-    "st": "^0.5.3",
     "sinon": "^1.12.2",
+    "st": "^0.5.3",
     "watchify": "^3.2.0"
   },
   "browserify": {

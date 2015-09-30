@@ -8,14 +8,13 @@ New javascript SDK based on React and Flux
 
 ## Building css (Pivotal UI)
 
-    npm run build-css
+    npm run css
 
 ## Generating API docs
 
-    npm run build-docs
+    npm run docs
 
 ## Testing
-    npm run lint
     npm test
 
 ## npm run build
