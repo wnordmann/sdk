@@ -105,9 +105,12 @@ class FeatureStore extends EventEmitter {
     if (!this._config[id]) {
       this._config[id] = {};
     }
+    var filter = this._config[id].selected === this._config[id].features;
     if (clear === true) {
       this._config[id].selected = features;
-      this._config[id].features = features;
+      if (filter === true) {
+        this._config[id].features = features;
+      }
     } else {
       for (var i = 0, ii = features.length; i < ii; ++i) {
         if (this._config[id].selected.indexOf(features[i]) === -1) {

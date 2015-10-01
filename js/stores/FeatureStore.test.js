@@ -43,6 +43,14 @@ describe('FeatureStore', function() {
     FeatureStore.setSelection(layer, [features[4]], true);
     assert.equal(config.selected.length, 1);
     assert.equal(config.selected[0].get('foo'), '5');
+    FeatureStore.setSelectedAsFilter(layer);
+    assert.equal(config.features.length, 1);
+    assert.equal(config.features[0].get('foo'), '5');
+    FeatureStore.setSelection(layer, [features[0], features[1]], true);
+    assert.equal(config.features.length, 2);
+    assert.equal(config.features[0].get('foo'), '1');
+    FeatureStore.restoreOriginalFeatures(layer);
+    assert.equal(config.features.length, 5);
   });
 
 });
