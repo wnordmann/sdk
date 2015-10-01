@@ -33,7 +33,6 @@ export default class Select extends MapTool {
           var selected = [];
           lyr.getSource().forEachFeatureIntersectingExtent(box, function(feature) {
             selected.push(feature);
-            selectedFeatures.push(feature);
           });
           SelectActions.selectFeatures(lyr, selected, true);
         }
