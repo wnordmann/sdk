@@ -32,7 +32,11 @@ export default class Select extends MapTool {
         if (lyr.get('isSelectable') === true) {
           var selected = [];
           lyr.getSource().forEachFeatureIntersectingExtent(box, function(feature) {
-            selected.push(feature);
+            if (feature.get('features')) {
+              selected = selected.concat(feature.get('features'));
+            } else {
+              selected.push(feature);
+            }
           });
           SelectActions.selectFeatures(lyr, selected, true);
         }
