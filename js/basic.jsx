@@ -289,7 +289,7 @@ export default class BasicApp extends React.Component {
           </div>
           <div id='table-panel' className='attributes-table'><FeatureTable layer={selectedLayer} map={map} /></div>
           <div id='layerlist'><LayerList showOpacity={true} showDownload={true} showGroupContent={true} showZoomTo={true} allowReordering={true} map={map} /></div>
-          <div id='popup' className='ol-popup'></div>
+          <div id='popup' className='ol-popup'><InfoPopup map={map} /></div>
         </div>
       </article>
     );
@@ -301,5 +301,3 @@ const nlMessages = {
 };
 
 React.render(<IntlProvider locale='nl' messages={nlMessages} >{() => (<BasicApp />)}</IntlProvider>, document.body);
-
-/*React.render(<InfoPopup map={map} />, document.getElementById('popup'));*/

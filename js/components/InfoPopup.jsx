@@ -21,13 +21,6 @@ export default class InfoPopup extends React.Component {
       element: React.findDOMNode(this).parentNode
     });
     this.props.map.addOverlay(this._overlayPopup);
-    // regular jsx onClick does not work when stopEvent is true
-    var closer = React.findDOMNode(this.refs.popupCloser);
-    var me = this;
-    closer.onclick = function() {
-      me._setVisible(false);
-      return false;
-    };
   }
   _forEachLayer(layers, layer) {
     if (layer instanceof ol.layer.Group) {
@@ -156,6 +149,15 @@ export default class InfoPopup extends React.Component {
   }
   _setVisible(visible) {
     React.findDOMNode(this).parentNode.style.display = visible ? 'block' : 'none';
+    // regular jsx onClick does not work when stopEvent is true
+    var closer = React.findDOMNode(this.refs.popupCloser);
+    if (closer.onclick === null) {
+      var me = this;
+      closer.onclick = function() {
+        me._setVisible(false);
+        return false;
+      };
+    }
   }
   render() {
     var content = this.state.popupTexts.join('<hr>');
