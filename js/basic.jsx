@@ -1,5 +1,6 @@
 import React from 'react';
 import ol from 'openlayers';
+import {IntlProvider} from 'react-intl';
 import LayerList from './components/LayerList.jsx';
 import Geocoding from './components/Geocoding.jsx';
 import GeocodingResults from './components/GeocodingResults.jsx';
@@ -183,21 +184,11 @@ var map = new ol.Map({
       })
     })
   ],
-  target: 'map',
   view: new ol.View({
     center: [-13625367.7959, 6039995.37374],
     zoom: 7
   })
 });
-
-var selectedLayer = map.getLayers().item(2);
-React.render(<Geocoding />, document.getElementById('geocoding'));
-React.render(<GeocodingResults map={map} />, document.getElementById('geocoding-results'));
-React.render(<LayerList showOpacity={true} showDownload={true} showGroupContent={true} showZoomTo={true} allowReordering={true} map={map} />,
-  document.getElementById('layerlist'));
-React.render(<Select toggleGroup='navigation' map={map}/>, document.getElementById('toolbar-select'));
-React.render(<QueryBuilder map={map} />, document.getElementById('query-panel'));
-React.render(<FeatureTable layer={selectedLayer} map={map} />, document.getElementById('table-panel'));
 
 var charts = [{
   title: 'Airports count per use category',
@@ -214,8 +205,6 @@ var charts = [{
   displayMode: 1,
   operation: 2
 }];
-
-React.render(<Chart container='chart-panel' charts={charts} />, document.getElementById('toolbar-chart'));
 
 var bookmarks = [{
   name: 'Le Grenier  Pain',
@@ -247,42 +236,70 @@ var bookmarks = [{
   extent: [262926.7298190316, 6249251.010162451, 264039.9247269643, 6250942.841574115]
 }];
 
-React.render(<Bookmarks introTitle='Paris bakeries' introDescription='Explore the best bakeries of the capital of France' map={map} bookmarks={bookmarks} />, document.getElementById('bookmarks-panel'));
+var selectedLayer = map.getLayers().item(2);
 
-var navigationFunc = function() {
-  LayerActions.activateTool(null, 'navigation');
-};
-React.render(<UI.DefaultButton title='Switch to map navigation (pan and zoom)' onClick={navigationFunc}>Navigation</UI.DefaultButton>, document.getElementById('toolbar-navigation'));
-
-var toggle = function(el) {
-  if (el.style.display === 'block') {
-    el.style.display = 'none';
-  } else {
-    el.style.display = 'block';
+export default class BasicApp extends React.Component {
+  componentDidMount() {
+    map.setTarget(document.getElementById('map'));
   }
+  _toggle(el) {
+    if (el.style.display === 'block') {
+      el.style.display = 'none';
+    } else {
+      el.style.display = 'block';
+    }
+  }
+  _toggleTable() {
+    this._toggle(document.getElementById('table-panel'));
+  }
+  _toggleQuery() {
+    this._toggle(document.getElementById('query-panel'));
+  }
+  _toggleEdit() {
+    this._toggle(document.getElementById('edit-tool-panel'));
+  }
+  _navigationFunc() {
+    LayerActions.activateTool(null, 'navigation');
+  }
+  render() {
+    return (
+      <article>
+        <nav role='navigation'>
+          <div className='toolbar'>
+            <div id='geocoding' className='pull-right'><Geocoding /></div>
+            <ul className='pull-right' id='toolbar-table'><UI.DefaultButton onClick={this._toggleTable.bind(this)} title="Attributes table"><Icon.Icon name="list-alt" /> Table</UI.DefaultButton></ul>
+            <ul className='pull-right' id='toolbar-query'><UI.DefaultButton onClick={this._toggleQuery.bind(this)}><Icon.Icon name="filter" /> Query</UI.DefaultButton></ul>
+            <ul className='pull-right' id='toolbar-select'><Select toggleGroup='navigation' map={map}/></ul>
+            <ul className='pull-right' id='toolbar-chart'><Chart container='chart-panel' charts={charts} /></ul>
+            <ul className='pull-right' id='toolbar-edit'><UI.DefaultButton onClick={this._toggleEdit.bind(this)}><Icon.Icon name="pencil" /> Edit</UI.DefaultButton></ul>
+            <ul className='pull-right' id='toolbar-navigation'><UI.DefaultButton title='Switch to map navigation (pan and zoom)' onClick={this._navigationFunc}>Navigation</UI.DefaultButton></ul>
+          </div>
+        </nav>
+        <div id='content'>
+          <div id='map'>
+            <div id='query-panel' className='query-panel'><QueryBuilder map={map} /></div>
+            <div id='geocoding-results' className='geocoding-results'><GeocodingResults map={map} /></div>
+            <div id='bookmarks-panel'><Bookmarks introTitle='Paris bakeries' introDescription='Explore the best bakeries of the capital of France' map={map} bookmarks={bookmarks} /></div>
+            <div id='timeline'><Playback map={map} minDate={324511200000} maxDate={1385938800000} /></div>
+            <div id='edit-tool-panel'><Edit toggleGroup='navigation' map={map} /></div>
+            <div id='globe-button' className='ol-unselectable ol-control'><Globe map={map} /></div>
+          </div>
+          <div id='chart-panel' className='chart-panel'>
+            <div id='chart'></div>
+          </div>
+          <div id='table-panel' className='attributes-table'><FeatureTable layer={selectedLayer} map={map} /></div>
+          <div id='layerlist'><LayerList showOpacity={true} showDownload={true} showGroupContent={true} showZoomTo={true} allowReordering={true} map={map} /></div>
+          <div id='popup' className='ol-popup'></div>
+        </div>
+      </article>
+    );
+  }
+}
+
+const nlMessages = {
+  'geocoding.placeholder': 'Zoek op plaatsnaam'
 };
 
-var queryFunc = function() {
-  toggle(document.getElementById('query-panel'));
-};
+React.render(<IntlProvider locale='nl' messages={nlMessages} >{() => (<BasicApp />)}</IntlProvider>, document.body);
 
-React.render(<UI.DefaultButton onClick={queryFunc}><Icon.Icon name="filter" /> Query</UI.DefaultButton>, document.getElementById('toolbar-query'));
-
-var tableFunc = function() {
-  toggle(document.getElementById('table-panel'));
-};
-
-React.render(<UI.DefaultButton onClick={tableFunc} title="Attributes table"><Icon.Icon name="list-alt" /> Table</UI.DefaultButton>, document.getElementById('toolbar-table'));
-
-React.render(<Playback map={map} minDate={324511200000} maxDate={1385938800000} />, document.getElementById('timeline'));
-
-var editFunc = function() {
-  toggle(document.getElementById('edit-tool-panel'));
-};
-
-React.render(<UI.DefaultButton onClick={editFunc}><Icon.Icon name="pencil" /> Edit</UI.DefaultButton>, document.getElementById('toolbar-edit'));
-React.render(<Edit toggleGroup='navigation' map={map} />, document.getElementById('edit-tool-panel'));
-
-React.render(<Globe map={map} />, document.getElementById('globe-button'));
-
-React.render(<InfoPopup map={map} />, document.getElementById('popup'));
+/*React.render(<InfoPopup map={map} />, document.getElementById('popup'));*/

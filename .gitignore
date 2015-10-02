@@ -4,3 +4,4 @@ dist/js/*.js
 npm-debug.log
 tmp
 css
+build

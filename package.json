@@ -49,10 +49,12 @@
     "react": "^0.13.2",
     "react-color-picker": "^2.1.9",
     "react-dropzone": "^2.0.1",
+    "react-intl": "^2.0.0-pr-2",
     "react-slick": "^0.7.0",
     "slick-carousel-dr-frankenstyle": "^1.5.8"
   },
   "devDependencies": {
+    "babel-plugin-react-intl": "^1.0.0-beta-4",
     "babelify": "^6.0.2",
     "browserify": "^11.2.0",
     "browserify-css": "^0.7.1",
