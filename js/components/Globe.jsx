@@ -16,7 +16,7 @@ export default class Globe extends React.Component {
     this._ol3d = new olcs.OLCesium({map: this.props.map});
     var scene = this._ol3d.getCesiumScene();
     scene.terrainProvider = new Cesium.CesiumTerrainProvider({
-      url: '//cesiumjs.org/stk-terrain/tilesets/world/tiles'
+      url: '//assets.agi.com/stk-terrain/world'
     });
   }
   _toggle() {
