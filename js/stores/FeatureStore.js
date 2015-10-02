@@ -135,7 +135,7 @@ class FeatureStore extends EventEmitter {
   }
   getSchema(layer) {
     var id = layer.get('id');
-    if (!this._schema[id] && this._config[id].originalFeatures.length > 0) {
+    if (!this._schema[id] && this._config[id] && this._config[id].originalFeatures.length > 0) {
       var schema = {};
       var feature = this._config[id].originalFeatures[0];
       var geom = feature.getGeometryName();

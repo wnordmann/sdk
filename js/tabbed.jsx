@@ -1,5 +1,6 @@
 import React from 'react';
 import ol from 'openlayers';
+import {IntlProvider} from 'react-intl';
 import LayerList from './components/LayerList.jsx';
 import Geocoding from './components/Geocoding.jsx';
 import GeocodingResults from './components/GeocodingResults.jsx';
@@ -181,31 +182,28 @@ var map = new ol.Map({
       })
     })
   ],
-  target: 'map',
   view: new ol.View({
     center: [-16839563.5993915, 8850169.509638],
     zoom: 4
   })
 });
+
 var selectedLayer = map.getLayers().item(2);
+var legendData = {
+  'lyr03': [{
+    title: '',
+    href: '6_0.png'
+  }],
+  'lyr02': [{
+    title: '',
+    href: '5_0.png'
+  }],
+  'lyr01': [{
+    title: '',
+    href: '0_0.png'
+  }]
+};
 
-React.render(
-<UI.SimpleTabs defaultActiveKey={2}>
-  <UI.Tab eventKey={1} title="Geocoding"><div id='geocoding-tab'></div><div id='geocoding-results' className='geocoding-results'></div></UI.Tab>
-  <UI.Tab eventKey={2} title="Attributes table"><div id="attributes-table-tab"></div></UI.Tab>
-  <UI.Tab eventKey={3} title="Query"><div id='query-panel' className='query-panel'></div></UI.Tab>
-  <UI.Tab eventKey={4} title="Charts"><div id='charts-tab'></div></UI.Tab>
-</UI.SimpleTabs>, document.getElementById('tabs-panel')
-);
-
-React.render(<QueryBuilder map={map} />, document.getElementById('query-panel'));
-React.render(<FeatureTable layer={selectedLayer} map={map} />, document.getElementById('attributes-table-tab'));
-React.render(<Geocoding />, document.getElementById('geocoding-tab'));
-React.render(<GeocodingResults map={map} />, document.getElementById('geocoding-results'));
-React.render(<LayerList showOpacity={true} showDownload={true} showGroupContent={true} showZoomTo={true} allowReordering={true} map={map} />,
-  document.getElementById('layerlist'));
-React.render(<Select toggleGroup='navigation' map={map}/>, document.getElementById('toolbar-select'));
-React.render(<Measure toggleGroup='navigation' map={map}/>, document.getElementById('toolbar-measure'));
 var charts = [{
   title: 'Airports count per use category',
   categoryField: 'USE',
@@ -221,26 +219,6 @@ var charts = [{
   displayMode: 1,
   operation: 2
 }];
-React.render(<Chart combo={true} charts={charts}/>, document.getElementById('charts-tab'));
-React.render(<Geolocation map={map} />, document.getElementById('geolocation-control'));
-var legendData = {
-  'lyr03': [{
-    title: '',
-    href: '6_0.png'
-  }],
-  'lyr02': [{
-    title: '',
-    href: '5_0.png'
-  }],
-  'lyr01': [{
-    title: '',
-    href: '0_0.png'
-  }]
-};
-React.render(<QGISLegend legendBasePath='../../resources/legend/' legendData={legendData} />, document.getElementById('legend'));
-React.render(<ImageExport map={map} />, document.getElementById('toolbar-export'));
-React.render(<HomeButton map={map} />, document.getElementById('home-button'));
-React.render(<AddLayer map={map} />, document.getElementById('toolbar-add-layer'));
 
 var printLayouts = [{
   name: 'foo',
@@ -309,4 +287,48 @@ var printLayouts = [{
   height: 210.0
 }];
 
-React.render(<QGISPrint map={map} layouts={printLayouts} />, document.getElementById('toolbar-print'));
+export default class TabbedApp extends React.Component {
+  componentDidMount() {
+    map.setTarget(document.getElementById('map'));
+  }
+  render() {
+    return (
+      <article>
+        <nav role='navigation'>
+          <div className='toolbar'>
+            <ul className='pull-right' id='toolbar-export'><ImageExport map={map} /></ul>
+            <ul className='pull-right' id='toolbar-measure'><Measure toggleGroup='navigation' map={map}/></ul>
+            <ul className='pull-right' id='toolbar-select'><Select toggleGroup='navigation' map={map}/></ul>
+            <ul className='pull-right' id='toolbar-add-layer'><AddLayer map={map} /></ul>
+            <ul className='pull-right' id='toolbar-print'><QGISPrint map={map} layouts={printLayouts} /></ul>
+          </div>
+        </nav>
+        <div id='content'>
+          <div className='row full-height'>
+            <div className='col-md-8 full-height' id='tabs-panel'>
+              <UI.SimpleTabs defaultActiveKey={2}>
+                <UI.Tab eventKey={1} title="Geocoding"><div id='geocoding-tab'><Geocoding /></div><div id='geocoding-results' className='geocoding-results'><GeocodingResults map={map} /></div></UI.Tab>
+                <UI.Tab eventKey={2} title="Attributes table"><div id="attributes-table-tab"><FeatureTable layer={selectedLayer} map={map} /></div></UI.Tab>
+                <UI.Tab eventKey={3} title="Query"><div id='query-panel' className='query-panel'><QueryBuilder map={map} /></div></UI.Tab>
+                <UI.Tab eventKey={4} title="Charts"><div id='charts-tab'><Chart combo={true} charts={charts}/></div></UI.Tab>
+              </UI.SimpleTabs>
+            </div>
+            <div className='col-md-16 full-height'>
+              <div id='map'></div>
+              <div id='layerlist'><LayerList showOpacity={true} showDownload={true} showGroupContent={true} showZoomTo={true} allowReordering={true} map={map} /></div>
+              <div id='legend'><QGISLegend legendBasePath='../../resources/legend/' legendData={legendData} /></div>
+              <div id='geolocation-control' className='ol-unselectable ol-control'><Geolocation map={map} /></div>
+              <div id='home-button' className='ol-unselectable ol-control'><HomeButton map={map} /></div>
+            </div>
+          </div>
+        </div>
+      </article>
+    );
+  }
+}
+
+const nlMessages = {
+  'geocoding.placeholder': 'Zoek op plaatsnaam'
+};
+
+React.render(<IntlProvider locale='nl' messages={nlMessages} >{() => (<TabbedApp />)}</IntlProvider>, document.body);

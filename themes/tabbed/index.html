@@ -8,28 +8,6 @@
   <link rel="stylesheet" type="text/css" href="tabbed.css">
 </head>
 <body>
-  <nav role="navigation">
-    <div class="toolbar">
-      <ul class="pull-right" id="toolbar-export"></ul>
-      <ul class="pull-right" id="toolbar-measure"></ul>
-      <ul class="pull-right" id="toolbar-select"></ul>
-      <ul class="pull-right" id="toolbar-add-layer"></ul>
-      <ul class="pull-right" id="toolbar-print"></ul>
-    </div>
-  </nav>
-  <div id="content">
-    <div class="row full-height">
-      <div class="col-md-8 full-height" id="tabs-panel">
-      </div>
-      <div class="col-md-16 full-height">
-        <div id="map"></div>
-        <div id="layerlist"></div>
-        <div id="legend"></div>
-        <div id="geolocation-control" class="ol-unselectable ol-control"></div>
-        <div id="home-button" class="ol-unselectable ol-control"></div>
-      </div>
-    </div>
-  </div>
   <script>
     var fileref = document.createElement('script');
     if (window.location.search.indexOf('production') !== -1) {

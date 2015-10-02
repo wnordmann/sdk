@@ -22,8 +22,8 @@ export default class FeatureTable extends React.Component {
       let action = payload.action;
       switch(action.type) {
         case MapConstants.SELECT_LAYER:
-          this._layer = action.layer;
           if (action.cmp === this.refs.layerSelector) {
+            this._layer = action.layer;
             FeatureStore.addLayer(action.layer, this._selectedOnly);
           }
           break;
