@@ -6,13 +6,57 @@ import Dialog from 'pui-react-modals';
 import Dropzone from 'react-dropzone';
 import Grids from 'pui-react-grids';
 import ColorPicker from 'react-color-picker';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import '../../node_modules/react-color-picker/index.css';
+
+const messages = defineMessages({
+  menutitle: {
+    id: 'addlayer.menutitle',
+    description: 'Title of the menu button',
+    defaultMessage: 'Add layer'
+  },
+  menutext: {
+    id: 'addlayer.menutext',
+    description: 'Text of the menu button',
+    defaultMessage: 'Upload'
+  },
+  modaltitle: {
+    id: 'addlayer.modaltitle',
+    description: 'Title of the modal dialog for add layer',
+    defaultMessage: 'Upload layer'
+  },
+  dropzonehelp: {
+    id: 'addlayer.dropzonehelp',
+    description: 'Help text for the drag and drop zone for files',
+    defaultMessage: 'Drop a KML, GPX or GeoJSON file here, or click to select it.'
+  },
+  strokecolorlabel: {
+    id: 'addlayer.strokecolorlabel',
+    description: 'Label text for the stroke color colorpicker',
+    defaultMessage: 'Stroke color'
+  },
+  fillcolorlabel: {
+    id: 'addlayer.fillcolorlabel',
+    description: 'Label text for the fill color colorpicker',
+    defaultMessage: 'Fill color'
+  },
+  applybuttontitle: {
+    id: 'addlayer.applybuttontitle',
+    description: 'Title of the apply button',
+    defaultMessage: 'Apply'
+  },
+  applybuttontext: {
+    id: 'addlayer.applybuttontext',
+    description: 'Text of the apply button',
+    defaultMessage: 'Apply'
+  }
+});
 
 /**
  * Adds a menu entry that can be used by the web app user to add a layer to the map.
  * Only vector layers can be added. Supported formats for layers are GeoJSON, GPX and KML.
  */
-export default class AddLayer extends React.Component {
+class AddLayer extends React.Component {
   constructor(props) {
     super(props);
     this._formats = {
@@ -91,33 +135,34 @@ export default class AddLayer extends React.Component {
     this._fillColor = color;
   }
   render() {
+    const {formatMessage} = this.props.intl;
     return (
       <article>
-        <UI.DefaultButton title='Add layer' onClick={this._showDialog.bind(this)}>
-          <Icon.Icon name="upload" /> Upload
+        <UI.DefaultButton title={formatMessage(messages.menutitle)} onClick={this._showDialog.bind(this)}>
+          <Icon.Icon name="upload" /> {formatMessage(messages.menutext)}
         </UI.DefaultButton>
-        <Dialog.Modal title="Upload layer" ref="modal">
+        <Dialog.Modal title={formatMessage(messages.modaltitle)} ref="modal">
           <Dialog.ModalBody>
             <form className='form-horizontal'>
               <div className="form-group">
                 <Grids.Col md={9}>
                   <Dropzone multiple={false} onDrop={this._onDrop.bind(this)}>
-                    <div>Drop a KML, GPX or GeoJSON file here, or click to select it.</div>
+                    <div>{formatMessage(messages.dropzonehelp)}</div>
                   </Dropzone>
                 </Grids.Col>
                 <Grids.Col md={7}>
-                  <label>Stroke color</label>
+                  <label>{formatMessage(messages.strokecolorlabel)}</label>
                   <ColorPicker saturationWidth={100} saturationHeight={175} onChange={this._onChangeStroke.bind(this)} defaultValue='#452135' />
                 </Grids.Col>
                 <Grids.Col md={7}>
-                    <label>Fill color</label>
+                    <label>{formatMessage(messages.fillcolorlabel)}</label>
                     <ColorPicker saturationWidth={100} saturationHeight={175} onChange={this._onChangeFill.bind(this)} defaultValue='#452135' />
                 </Grids.Col>
               </div>
             </form>
           </Dialog.ModalBody>
           <Dialog.ModalFooter>
-            <UI.DefaultButton title="Apply" onClick={this._readVectorFile.bind(this)}>Apply</UI.DefaultButton>
+            <UI.DefaultButton title={formatMessage(messages.applybuttontitle)} onClick={this._readVectorFile.bind(this)}>{formatMessage(messages.applybuttontext)}</UI.DefaultButton>
           </Dialog.ModalFooter>
         </Dialog.Modal>
       </article>
@@ -137,10 +182,16 @@ AddLayer.propTypes = {
   /**
    * The point radius used for the circle style.
    */
-  pointRadius: React.PropTypes.number
+  pointRadius: React.PropTypes.number,
+  /**
+   * i18n message strings. Provided through the application through context.
+   */
+  intl: intlShape.isRequired
 };
 
 AddLayer.defaultProps = {
   strokeWidth: 2,
   pointRadius: 7
 };
+
+export default injectIntl(AddLayer);

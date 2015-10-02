@@ -1,7 +1,7 @@
 import React from 'react';
 import LayerActions from '../actions/LayerActions.js';
 import UI from 'pui-react-search-input';
-import {defineMessages, injectIntl, intlShape, FormattedMessage} from 'react-intl';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 const messages = defineMessages({
   placeholder: {
@@ -46,6 +46,9 @@ Geocoding.propTypes = {
    * The maximum number of results to return on a search.
    */
   maxResults: React.PropTypes.number,
+  /**
+   * i18n message strings. Provided through the application through context.
+   */
   intl: intlShape.isRequired
 };
 
