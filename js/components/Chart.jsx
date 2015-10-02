@@ -3,6 +3,7 @@ import FeatureStore from '../stores/FeatureStore.js';
 import c3 from 'c3-windows';
 import '../../node_modules/c3-windows/c3.min.css';
 import UI from 'pui-react-dropdowns';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import './Chart.css';
 
 const AGGREGATION_MIN = 0;
@@ -13,10 +14,18 @@ const DISPLAY_MODE_FEATURE = 0;
 const DISPLAY_MODE_CATEGORY = 1;
 const DISPLAY_MODE_COUNT = 2;
 
+const messages = defineMessages({
+  count: {
+    id: 'chart.count',
+    description: 'Title of the column which will be used to show feature count',
+    defaultMessage: 'Feature count'
+  }
+});
+
 /**
  * Allow for the creation of charts based on selected features of a layer.
  */
-export default class Chart extends React.Component {
+class Chart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -33,13 +42,15 @@ export default class Chart extends React.Component {
     }
   }
   _drawFromSelection(chart) {
+    const {formatMessage} = this.props.intl;
     var i, ii, j, jj, values, cat, key;
     var categoryField = chart.categoryField;
     var valueFields = chart.valueFields;
     var selectedFeatures = this._storeConfig[chart.layer] ? this._storeConfig[chart.layer].selected : [];
     var columns = [['x']];
-    if (chart.displayMode === DISPLAY_MODE_COUNT){
-      columns.push(['Feature count']);
+    if (chart.displayMode === DISPLAY_MODE_COUNT) {
+      var count = formatMessage(messages.count);
+      columns.push([count]);
     } else {
       for (i = 0, ii = valueFields.length; i < ii; i++) {
         columns.push([valueFields[i]]);
@@ -209,9 +220,15 @@ Chart.propTypes = {
   /**
    * The id of the container to show when a chart is selected.
    */
-  container: React.PropTypes.string
+  container: React.PropTypes.string,
+  /**
+   * i18n message strings. Provided through the application through context.
+   */
+  intl: intlShape.isRequired
 };
 
 Chart.defaultProps = {
   combo: false
 };
+
+export default injectIntl(Chart);
