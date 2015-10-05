@@ -2,11 +2,20 @@ import React from 'react';
 import ol from 'openlayers';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import MapConstants from '../constants/MapConstants.js';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
+
+const messages = defineMessages({
+  noresults: {
+    id: 'geocodingresults.noresults',
+    description: 'Text to show when no results were found',
+    defaultMessage: 'No results found'
+  }
+});
 
 /**
  * This component displays the results of geocoding search. The geocoding search is initiated by the Geocoding component.
  */
-export default class GeocodingResults extends React.Component {
+class GeocodingResults extends React.Component {
   constructor(props) {
     super(props);
     var me = this;
@@ -59,6 +68,7 @@ export default class GeocodingResults extends React.Component {
     }));
   }
   render() {
+    const {formatMessage} = this.props.intl;
     var me = this;
     var resultNodes;
     if (this.state.searchResults !== null) {
@@ -69,7 +79,7 @@ export default class GeocodingResults extends React.Component {
           );
         });
       } else {
-        resultNodes = <p>No results found</p>;
+        resultNodes = <p>{formatMessage(messages.noresults)}</p>;
       }
     }
     return (
@@ -88,9 +98,15 @@ GeocodingResults.propTypes = {
   /**
    * The zoom level used when centering the view on a geocoding result.
    */
-  zoom: React.PropTypes.number
+  zoom: React.PropTypes.number,
+  /**
+   * i18n message strings. Provided through the application through context.
+   */
+  intl: intlShape.isRequired
 };
 
 GeocodingResults.defaultProps = {
   zoom: 10
 };
+
+export default injectIntl(GeocodingResults);
