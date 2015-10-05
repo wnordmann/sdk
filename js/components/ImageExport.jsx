@@ -4,11 +4,25 @@ import 'blueimp-canvas-to-blob';
 import FileSaver from 'browser-filesaver';
 import UI from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
+
+const messages = defineMessages({
+  buttontitle: {
+    id: 'imageexport.buttontitle',
+    description: 'Title for the Export Image button',
+    defaultMessage: 'Export as image'
+  },
+  buttontext: {
+    id: 'imageexport.buttontext',
+    description: 'Text for the Export Image button',
+    defaultMessage: 'Export'
+  }
+});
 
 /**
  * Export the map as a PNG file.
  */
-export default class ImageExport extends React.Component {
+class ImageExport extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -23,9 +37,10 @@ export default class ImageExport extends React.Component {
     map.renderSync();
   }
   render() {
+    const {formatMessage} = this.props.intl;
     return (
-      <UI.DefaultButton title='Export as image' onClick={this._handleClick.bind(this)}>
-        <Icon.Icon name="camera" /> Export
+      <UI.DefaultButton title={formatMessage(messages.buttontitle)} onClick={this._handleClick.bind(this)}>
+        <Icon.Icon name="camera" /> {formatMessage(messages.buttontext)}
       </UI.DefaultButton>
     );
   }
@@ -35,5 +50,11 @@ ImageExport.propTypes = {
   /**
    * The ol3 map to export as PNG.
    */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired
+  map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * i18n message strings. Provided through the application through context.
+   */
+  intl: intlShape.isRequired
 };
+
+export default injectIntl(ImageExport);
