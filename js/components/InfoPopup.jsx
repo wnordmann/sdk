@@ -1,10 +1,24 @@
 import React from 'react';
 import ol from 'openlayers';
 import './InfoPopup.css';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
+
+const messages = defineMessages({
+  nofeatures: {
+    id: 'infopopup.nofeatures',
+    description: 'Text to show if no features were found',
+    defaultMessage: 'No features at this location'
+  },
+  nulltext: {
+    id: 'infopopup.nulltext',
+    description: 'Text to show if attribute has no value',
+    defaultMessage: 'NULL'
+  }
+});
 
 const ALL_ATTRS = '#AllAttributes';
 
-export default class InfoPopup extends React.Component {
+class InfoPopup extends React.Component {
   constructor(props) {
     super(props);
     this.props.map.on('singleclick', function(evt) {
@@ -53,6 +67,7 @@ export default class InfoPopup extends React.Component {
         finishedQuery();
       }
     };
+    const {formatMessage} = this.props.intl;
     var onReady = function() {
       if (xmlhttp.status === 200 && xmlhttp.readyState === 4) {
         var features = geojsonFormat.readFeatures(xmlhttp.responseText);
@@ -67,13 +82,13 @@ export default class InfoPopup extends React.Component {
               if (value) {
                 popupContent = popupContent.replace('[' + key + ']', value);
               } else {
-                popupContent = popupContent.replace('[' + key + ']', 'NULL');
+                popupContent = popupContent.replace('[' + key + ']', formatMessage(messages.nulltext));
               }
             }
           }
           popupTexts.push(popupContent);
         } else {
-          popupTexts.push('No features at this location');
+          popupTexts.push(formatMessage(messages.nofeatures));
         }
         finishedQuery();
       }
@@ -111,6 +126,7 @@ export default class InfoPopup extends React.Component {
     }
   }
   _onMapClick(evt) {
+    const {formatMessage} = this.props.intl;
     var map = this.props.map;
     var pixel = map.getEventPixel(evt.originalEvent);
     var coord = evt.coordinate;
@@ -125,7 +141,7 @@ export default class InfoPopup extends React.Component {
             if (value) {
               popupDef = popupDef.replace('[' + featureKeys[i] + ']', feature.get(featureKeys[i]));
             } else {
-              popupDef = popupDef.replace('[' + featureKeys[i] + ']', 'NULL');
+              popupDef = popupDef.replace('[' + featureKeys[i] + ']', formatMessage(messages.nulltext));
             }
           }
         }
@@ -174,5 +190,11 @@ InfoPopup.propTypes = {
   /**
    * The ol3 map to register for singleClick.
    */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired
+  map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * i18n message strings. Provided through the application through context.
+   */
+  intl: intlShape.isRequired
 };
+
+export default injectIntl(InfoPopup);
