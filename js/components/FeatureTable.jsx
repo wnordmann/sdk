@@ -9,12 +9,46 @@ import SelectActions from '../actions/SelectActions.js';
 import LayerSelector from './LayerSelector.jsx';
 import UI from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import './FeatureTable.css';
+
+const messages = defineMessages({
+  layerlabel: {
+    id: 'featuretable.layerlabel',
+    description: 'Label for the layer select',
+    defaultMessage: 'Layer'
+  },
+  zoombuttontitle: {
+    id: 'featuretable.zoombuttontitle',
+    description: 'Title for the zoom button',
+    defaultMessage: 'Zoom to selected'
+  },
+  zoombuttontext: {
+    id: 'featuretable.zoombuttontext',
+    description: 'Text for the zoom button',
+    defaultMessage: 'Zoom'
+  },
+  clearbuttontitle: {
+    id: 'featuretable.clearbuttontitle',
+    description: 'Title for the clear button',
+    defaultMessage: 'Clear selected'
+  },
+  clearbuttontext: {
+    id: 'featuretable.clearbuttontext',
+    description: 'Text for the clear button',
+    defaultMessage: 'Clear'
+  },
+  onlyselected: {
+    id: 'featuretable.onlyselected',
+    description: 'Label for the show selected features only checkbox',
+    defaultMessage: 'Show only selected features'
+  }
+});
 
 /**
  * A table to show features. Allows for selection of features.
  */
-export default class FeatureTable extends React.Component {
+class FeatureTable extends React.Component {
   constructor(props) {
     super(props);
     this._selectedOnly = false;
@@ -112,6 +146,7 @@ export default class FeatureTable extends React.Component {
     evt.preventDefault();
   }
   render() {
+    const {formatMessage} = this.props.intl;
     var Table = FixedDataTable.Table;
     var Column = FixedDataTable.Column;
     var schema = FeatureStore.getSchema(this._layer);
@@ -133,11 +168,11 @@ export default class FeatureTable extends React.Component {
     return (
       <div id='attributes-table'>
         <form onSubmit={this._onSubmit.bind(this)} role='form' className='form-inline'>
-          <label>Layer:</label>
+          <label>{formatMessage(messages.layerlabel)}:</label>
           <LayerSelector ref='layerSelector' filter={this._filterLayerList} map={this.props.map} value={this.props.layer.get('id')} />
-          <UI.DefaultButton onClick={this._zoomSelected.bind(this)} title='Zoom to selected'><Icon.Icon name="search" /> Zoom</UI.DefaultButton>
-          <UI.DefaultButton onClick={this._clearSelected.bind(this)} title='Clear selected'><Icon.Icon name="trash" /> Clear</UI.DefaultButton>
-          <label><input type='checkbox' onChange={this._filter.bind(this)}></input> Show only selected features</label>
+          <UI.DefaultButton onClick={this._zoomSelected.bind(this)} title={formatMessage(messages.zoombuttontitle)}><Icon.Icon name="search" /> {formatMessage(messages.zoombuttontext)}</UI.DefaultButton>
+          <UI.DefaultButton onClick={this._clearSelected.bind(this)} title={formatMessage(messages.clearbuttontitle)}><Icon.Icon name="trash" /> {formatMessage(messages.clearbuttontext)}</UI.DefaultButton>
+          <label><input type='checkbox' onChange={this._filter.bind(this)}></input> {formatMessage(messages.onlyselected)}</label>
         </form>
         <Table
           onColumnResizeEndCallback={this._onColumnResize.bind(this)}
@@ -188,7 +223,11 @@ FeatureTable.propTypes = {
   /**
    * The zoom level to zoom the map to in case of a point geometry.
    */
-  pointZoom: React.PropTypes.number
+  pointZoom: React.PropTypes.number,
+  /**
+   * i18n message strings. Provided through the application through context.
+   */
+  intl: intlShape.isRequired
 };
 
 FeatureTable.defaultProps = {
@@ -199,3 +238,5 @@ FeatureTable.defaultProps = {
   columnWidth: 100,
   pointZoom: 16
 };
+
+export default injectIntl(FeatureTable);
