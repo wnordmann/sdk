@@ -1,8 +1,11 @@
 /* global afterEach, beforeEach, describe, it */
 
 var React = require('react/addons');
+var TestUtils = React.addons.TestUtils;
 var assert = require('chai').assert;
 var ol = require('openlayers');
+global.Intl = require('intl');
+var IntlProvider = require('react-intl').IntlProvider;
 
 var HomeButton = require('./HomeButton.jsx');
 
@@ -40,14 +43,15 @@ describe('HomeButton', function() {
 
   it('adds a select interaction to the map when active', function() {
     var container = document.createElement('div');
-    var button = React.render((
-      <HomeButton map={map} />
+    React.render((
+      <IntlProvider locale='en'>{() => (<HomeButton map={map} />)}</IntlProvider>
     ), container);
+    var button = container.querySelector('button');
     map.getView().setZoom(5);
     map.getView().setCenter([100, 100]);
     assert.equal(map.getView().getZoom(), 5);
     assert.equal(map.getView().getCenter()[0], 100);
-    button._goHome();
+    TestUtils.SimulateNative.click(button);
     assert.equal(map.getView().getZoom(), 1);
     assert.equal(map.getView().getCenter()[0], 0);
     React.unmountComponentAtNode(container);
