@@ -1,11 +1,35 @@
 import React from 'react';
 import ol from 'openlayers';
 import LayerActions from '../actions/LayerActions.js';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
+
+const messages = defineMessages({
+  zoomtotitle: {
+    id: 'layerlistitem.zoomtotitle',
+    description: 'Title for the zoom to layer button',
+    defaultMessage: 'Zoom to layer'
+  },
+  downloadtitle: {
+    id: 'layerlistitem.downloadtitle',
+    description: 'Title for the download layer button',
+    defaultMessage: 'Download layer'
+  },
+  movedowntitle: {
+    id: 'layerlistitem.movedowntitle',
+    description: 'Title for the move layer down button',
+    defaultMessage: 'Move down'
+  },
+  moveuptitle: {
+    id: 'layerlistitem.moveuptitle',
+    description: 'Title for the move layer up button',
+    defaultMessage: 'Move up'
+  }
+});
 
 /**
  * An item in the LayerList component.
  */
-export default class LayerListItem extends React.Component {
+class LayerListItem extends React.Component {
   constructor(props) {
     super(props);
     props.layer.on('change:visible', function(evt) {
@@ -36,6 +60,7 @@ export default class LayerListItem extends React.Component {
     LayerActions.setOpacity(this.props.layer, parseFloat(event.target.value));
   }
   render() {
+    const {formatMessage} = this.props.intl;
     var opacity;
     if (this.props.showOpacity) {
       var val = this.props.layer.getOpacity();
@@ -43,16 +68,16 @@ export default class LayerListItem extends React.Component {
     }
     var zoomTo;
     if (this.props.layer.get('type') !== 'base' && this.props.showZoomTo) {
-      zoomTo = <a title='Zoom to layer' href='#' onClick={this._zoomTo.bind(this)}><i className='layer-zoom-to glyphicon glyphicon-zoom-in'></i></a>;
+      zoomTo = <a title={formatMessage(messages.zoomtotitle)} href='#' onClick={this._zoomTo.bind(this)}><i className='layer-zoom-to glyphicon glyphicon-zoom-in'></i></a>;
     }
     var download;
     if (this.props.layer instanceof ol.layer.Vector && this.props.showDownload) {
-      download = <a title='Download layer' href='#' onClick={this._download.bind(this)}><i className='layer-download glyphicon glyphicon-download-alt'></i></a>;
+      download = <a title={formatMessage(messages.downloadtitle)} href='#' onClick={this._download.bind(this)}><i className='layer-download glyphicon glyphicon-download-alt'></i></a>;
     }
     var reorderUp, reorderDown;
     if (this.props.layer.get('type') !== 'base' && this.props.allowReordering && !this.props.children) {
-      reorderUp = <a title='Move up' href='#' onClick={this._moveUp.bind(this)}><i className='layer-move-up glyphicon glyphicon-triangle-top'></i></a>;
-      reorderDown = <a title='Move down' href='#' onClick={this._moveDown.bind(this)}><i className='layer-move-down glyphicon glyphicon-triangle-bottom'></i></a>;
+      reorderUp = <a title={formatMessage(messages.moveuptitle)} href='#' onClick={this._moveUp.bind(this)}><i className='layer-move-up glyphicon glyphicon-triangle-top'></i></a>;
+      reorderDown = <a title={formatMessage(messages.movedowntitle)} href='#' onClick={this._moveDown.bind(this)}><i className='layer-move-down glyphicon glyphicon-triangle-bottom'></i></a>;
     }
     return (
       <li>
@@ -96,7 +121,11 @@ LayerListItem.propTypes = {
   /**
    * Should we show an opacity slider for the layer?
    */
-  showOpacity: React.PropTypes.bool
+  showOpacity: React.PropTypes.bool,
+  /**
+   * i18n message strings. Provided through the application through context.
+   */
+  intl: intlShape.isRequired
 };
 
 LayerListItem.defaultProps = {
@@ -105,3 +134,5 @@ LayerListItem.defaultProps = {
   showDownload: false,
   showOpacity: false
 };
+
+export default injectIntl(LayerListItem);
