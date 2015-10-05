@@ -8,16 +8,115 @@ import Dialog from 'pui-react-modals';
 import Grids from 'pui-react-grids';
 import ColorPicker from 'react-color-picker';
 import Pui from 'pui-react-alerts';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import '../../node_modules/react-color-picker/index.css';
 import './Edit.css';
 
 const NEW_ATTR_PREFIX = 'new-attr-';
 const ID_PREFIX = 'sdk-edit-';
 
+const messages = defineMessages({
+  nolayer: {
+    id: 'edit.nolayer',
+    description: 'Text to show in the combo box when no layer has been created',
+    defaultMessage: 'None'
+  },
+  enable: {
+    id: 'edit.enable',
+    description: 'Button text to enable edit mode',
+    defaultMessage: 'Enable edit mode'
+  },
+  disable: {
+    id: 'edit.disable',
+    description: 'Button text to disable edit mode',
+    defaultMessage: 'Disable edit mode'
+  },
+  nolayererror: {
+    id: 'edit.nolayererror',
+    description: 'Error text for when no layer is available',
+    defaultMessage: 'No editable layer is available. Create one to start editing.'
+  },
+  layerlabel: {
+    id: 'edit.layerlabel',
+    description: 'Label to show in front of layer combo box',
+    defaultMessage: 'Layer'
+  },
+  newfeaturemodaltitle: {
+    id: 'edit.newfeaturemodaltitle',
+    description: 'Title for the modal dialog to specify attributes for a new feature',
+    defaultMessage: 'New feature attributes'
+  },
+  okbuttontitle: {
+    id: 'edit.okbuttontitle',
+    description: 'Title text for Ok button in attributes modal',
+    defaultMessage: 'Set feature attributes'
+  },
+  okbuttontext: {
+    id: 'edit.okbuttontext',
+    description: 'Text for Ok button in attributes modal',
+    defaultMessage: 'Ok'
+  },
+  createlayermodaltitle: {
+    id: 'edit.createlayermodaltitle',
+    description: 'Title for the modal dialog to create a new layer',
+    defaultMessage: 'Create empty layer'
+  },
+  layernamelabel: {
+    id: 'edit.layernamelabel',
+    description: 'Label for the layer name input field in the create layer modal',
+    defaultMessage: 'Layer name'
+  },
+  geometrytypelabel: {
+    id: 'edit.geometrytypelabel',
+    description: 'Label for the geometry type combo in the create layer modal',
+    defaultMessage: 'Geometry type'
+  },
+  pointgeomtype: {
+    id: 'edit.pointgeomtype',
+    description: 'Title for point geometry option in combo box',
+    defaultMessage: 'Point'
+  },
+  linegeomtype: {
+    id: 'edit.linegeomtype',
+    description: 'Title for line geometry option in combo box',
+    defaultMessage: 'LineString'
+  },
+  polygeomtype: {
+    id: 'edit.polygeomtype',
+    description: 'Title for polygon geometry option in combo box',
+    defaultMessage: 'Polygon'
+  },
+  attributeslabel: {
+    id: 'edit.attributeslabel',
+    description: 'Label for attributes input field in new layer dialog',
+    defaultMessage: 'Attributes (comma-separated names)'
+  },
+  strokecolorlabel: {
+    id: 'edit.strokecolorlabel',
+    description: 'Label for stroke color field in new layer dialog',
+    defaultMessage: 'Stroke color'
+  },
+  fillcolorlabel: {
+    id: 'edit.fillcolorlabel',
+    description: 'Label for fill color field in new layer dialog',
+    defaultMessage: 'Fill color'
+  },
+  createbuttontitle: {
+    id: 'edit.createbuttontitle',
+    description: 'Title for create button in new layer dialog',
+    defaultMessage: 'Create empty layer'
+  },
+  createbuttontext: {
+    id: 'edit.createbuttontext',
+    description: 'Text for create button in new layer dialog',
+    defaultMessage: 'Create'
+  }
+});
+
 /**
  * A component that allows creating new features, so drawing their geometries and setting feature attributes through a form.
  */
-export default class Edit extends MapTool {
+class Edit extends MapTool {
   constructor(props) {
     super(props);
     this._interactions = {};
@@ -142,20 +241,21 @@ export default class Edit extends MapTool {
     this.refs.modal.open();
   }
   render() {
+    const {formatMessage} = this.props.intl;
     var options = [], i, ii;
     for (i = 0, ii = this.state.layers.length; i < ii; ++i) {
       var lyr = this.state.layers[i], title = lyr.get('title'), id = lyr.get('id');
       options.push(<option key={id} value={id}>{title}</option>);
     }
     if (options.length === 0) {
-      var val = '[None]';
+      var val = '[' + formatMessage(messages.nolayer) + ']';
       options.push(<option key={val} value={val}>{val}</option>);
     }
     var button;
     if (this.state.enable === true) {
-      button = (<UI.DefaultButton onClick={this._enableEditMode.bind(this)}>Enable edit mode</UI.DefaultButton>);
+      button = (<UI.DefaultButton onClick={this._enableEditMode.bind(this)}>{formatMessage(messages.enable)}</UI.DefaultButton>);
     } else {
-      button = (<UI.DefaultButton onClick={this._disableEditMode.bind(this)}>Disable edit mode</UI.DefaultButton>);
+      button = (<UI.DefaultButton onClick={this._disableEditMode.bind(this)}>{formatMessage(messages.disable)}</UI.DefaultButton>);
     }
     var attributeFormItems;
     if (this.state.attributes !== null) {
@@ -167,60 +267,60 @@ export default class Edit extends MapTool {
     }
     var error;
     if (this.state.error === true) {
-      error = (<div className='error-alert'><Pui.ErrorAlert dismissable={true} withIcon={true}>No editable layer is available. Create one to start editing.</Pui.ErrorAlert></div>);
+      error = (<div className='error-alert'><Pui.ErrorAlert dismissable={true} withIcon={true}>{formatMessage(messages.nolayererror)}</Pui.ErrorAlert></div>);
     }
     return (
       <article>
         <form onSubmit={this._onSubmit} className='form-inline'>
-          <label>Layer:</label>
+          <label>{formatMessage(messages.layerlabel)}:</label>
           <select onChange={this._onLayerChange.bind(this)} ref='layer' className='form-control'>{options}</select>
           <UI.DefaultButton onClick={this._showModal.bind(this)}><Icon.Icon name='plus' /></UI.DefaultButton>
           {button}
           {error}
         </form>
-        <Dialog.Modal title="New feature attributes" ref="attributesModal">
+        <Dialog.Modal title={formatMessage(messages.newfeaturemodaltitle)} ref="attributesModal">
           <Dialog.ModalBody>
             <form className='form-horizontal'>
               {attributeFormItems}
             </form>
           </Dialog.ModalBody>
          <Dialog.ModalFooter>
-             <UI.DefaultButton title="Set feature attributes" onClick={this._setAttributes.bind(this)}>Ok</UI.DefaultButton>
+             <UI.DefaultButton title={formatMessage(messages.okbuttontitle)} onClick={this._setAttributes.bind(this)}>{formatMessage(messages.okbuttontext)}</UI.DefaultButton>
            </Dialog.ModalFooter>
         </Dialog.Modal>
-        <Dialog.Modal title="Create empty layer" ref="modal">
+        <Dialog.Modal title={formatMessage(messages.createlayermodaltitle)} ref="modal">
           <Dialog.ModalBody>
             <form className='form-horizontal'>
               <div className="form-group">
-                <Grids.Col md={12}><label>Layer name</label></Grids.Col>
+                <Grids.Col md={12}><label>{formatMessage(messages.layernamelabel)}</label></Grids.Col>
                 <Grids.Col md={8}><input className="form-control" type="text" ref="layerName"/></Grids.Col>
               </div>
               <div className="form-group">
-                <Grids.Col md={12}><label>Geometry type</label></Grids.Col>
+                <Grids.Col md={12}><label>{formatMessage(messages.geometrytypelabel)}</label></Grids.Col>
                 <Grids.Col md={8}>
                   <select className='form-control' ref='geometryType'>
-                    <option>Point</option>
-                    <option>LineString</option>
-                    <option>Polygon</option>
+                    <option value='Point'>{formatMessage(messages.pointgeomtype)}</option>
+                    <option value='LineString'>{formatMessage(messages.linegeomtype)}</option>
+                    <option value='Polygon'>{formatMessage(messages.polygeomtype)}</option>
                   </select>
                 </Grids.Col>
               </div>
               <div className="form-group">
-                <Grids.Col md={12}><label>Attributes (comma-separated names)</label></Grids.Col>
+                <Grids.Col md={12}><label>{formatMessage(messages.attributeslabel)}</label></Grids.Col>
                 <Grids.Col md={8}><input className="form-control" type="text" ref="attributes"/></Grids.Col>
               </div>
               <div className="form-group">
-                 <Grids.Col md={12}><label>Stroke color</label></Grids.Col>
+                 <Grids.Col md={12}><label>{formatMessage(messages.strokecolorlabel)}</label></Grids.Col>
                  <Grids.Col md={8}><ColorPicker onChange={this._onChangeStroke.bind(this)} saturationWidth={100} ref='strokeColor' saturationHeight={75} defaultValue={this._strokeColor} /></Grids.Col>
              </div>
              <div className="form-group">
-               <Grids.Col md={12}><label>Fill color</label></Grids.Col>
+               <Grids.Col md={12}><label>{formatMessage(messages.fillcolorlabel)}</label></Grids.Col>
                <Grids.Col md={8}><ColorPicker onChange={this._onChangeFill.bind(this)} saturationWidth={100} ref='fillColor' saturationHeight={75} defaultValue={this._fillColor} /></Grids.Col>
              </div>
            </form>
          </Dialog.ModalBody>
          <Dialog.ModalFooter>
-           <UI.DefaultButton title="Create empty layer" onClick={this._createLayer.bind(this)}>Create</UI.DefaultButton>
+           <UI.DefaultButton title={formatMessage(messages.createbuttontitle)} onClick={this._createLayer.bind(this)}>{formatMessage(messages.createbuttontext)}</UI.DefaultButton>
          </Dialog.ModalFooter>
        </Dialog.Modal>
       </article>
@@ -236,10 +336,16 @@ Edit.propTypes = {
   /**
    * The point radius used for the circle style.
    */
-  pointRadius: React.PropTypes.number
+  pointRadius: React.PropTypes.number,
+  /**
+   * i18n message strings. Provided through the application through context.
+   */
+  intl: intlShape.isRequired
 };
 
 Edit.defaultProps = {
   strokeWidth: 2,
   pointRadius: 7
 };
+
+export default injectIntl(Edit);
