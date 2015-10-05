@@ -1,12 +1,26 @@
 import React from 'react';
 import ol from 'openlayers';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import './Geolocation.css';
 import Pui from 'pui-react-alerts';
+
+const messages = defineMessages({
+  error: {
+    id: 'geolocation.error',
+    description: 'Error text for when geolocation fails',
+    defaultMessage: 'Error while retrieving geolocation, details: {details}'
+  },
+  buttontitle: {
+    id: 'geolocation.buttontitle',
+    description: 'Title for geolocation button',
+    defaultMessage: 'Geolocation'
+  }
+});
 
 /**
  * Enable geolocation which uses the current position of the user in the map.
  */
-export default class Geolocation extends React.Component {
+class Geolocation extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -58,11 +72,12 @@ export default class Geolocation extends React.Component {
     }
   }
   render() {
+    const {formatMessage} = this.props.intl;
     if (this.state.error) {
-      return (<Pui.ErrorAlert dismissable={true} withIcon={true}>Error while retrieving geolocation, details: {this.state.msg}</Pui.ErrorAlert>);
+      return (<Pui.ErrorAlert dismissable={true} withIcon={true}>{formatMessage(messages.error, {details: this.state.msg})}</Pui.ErrorAlert>);
     } else {
       return (
-        <button id='geolocation-button' title='Geolocation' onClick={this._geolocate.bind(this)}></button>
+        <button id='geolocation-button' title={formatMessage(messages.buttontitle)} onClick={this._geolocate.bind(this)}></button>
       );
     }
   }
@@ -72,5 +87,11 @@ Geolocation.propTypes = {
   /**
    * The ol3 map for which to change its view's center.
    */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired
+  map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * i18n message strings. Provided through the application through context.
+   */
+  intl: intlShape.isRequired
 };
+
+export default injectIntl(Geolocation);
