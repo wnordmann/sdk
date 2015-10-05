@@ -5,11 +5,25 @@ import SelectActions from '../actions/SelectActions.js';
 import MapTool from './MapTool.js';
 import FeatureStore from '../stores/FeatureStore.js';
 import UI from 'pui-react-dropdowns';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
+
+const messages = defineMessages({
+  menubuttontext: {
+    id: 'select.menubuttontext',
+    description: 'Menu button text for select menu',
+    defaultMessage: 'Selection'
+  },
+  rectangletext: {
+    id: 'select.rectangletext',
+    description: 'Text for select by rectangle menu option',
+    defaultMessage: 'Select by rectangle'
+  }
+});
 
 /**
  * The select tool allows users to select features in multiple layers at a time by drawing a rectangle.
  */
-export default class Select extends MapTool {
+class Select extends MapTool {
   constructor(props) {
     super(props);
     this._select = new ol.interaction.Select();
@@ -61,10 +75,20 @@ export default class Select extends MapTool {
     this.activate(this._interactions.RECTANGLE);
   }
   render() {
+    const {formatMessage} = this.props.intl;
     return (
-      <UI.Dropdown title='Selection'>
-        <UI.DropdownItem onSelect={this._selectByRectangle.bind(this)}>Select by rectangle</UI.DropdownItem>
+      <UI.Dropdown title={formatMessage(messages.menubuttontext)}>
+        <UI.DropdownItem onSelect={this._selectByRectangle.bind(this)}>{formatMessage(messages.rectangletext)}</UI.DropdownItem>
       </UI.Dropdown>
     );
   }
 }
+
+Select.propTypes = {
+  /**
+   * i18n message strings. Provided through the application through context.
+   */
+  intl: intlShape.isRequired
+};
+
+export default injectIntl(Select);

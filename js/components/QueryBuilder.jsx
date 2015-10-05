@@ -9,11 +9,60 @@ import UI from 'pui-react-buttons';
 import Grids from 'pui-react-grids';
 import Icon from 'pui-react-iconography';
 import './QueryBuilder.css';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
+
+const messages = defineMessages({
+  layerlabel: {
+    id: 'querybuilder.layerlabel',
+    description: 'Label for the layer combo box',
+    defaultMessage: 'Layer'
+  },
+  filterlabel: {
+    id: 'querybuilder.filterlabel',
+    description: 'Label for the filter expression input field',
+    defaultMessage: 'Filter'
+  },
+  filterplaceholder: {
+    id: 'querybuilder.filterplaceholder',
+    description: 'Placeholder for the expression input field',
+    defaultMessage: 'Type expression ....'
+  },
+  newbuttontitle: {
+    id: 'querybuilder.newbuttontitle',
+    description: 'Title for the new selection button',
+    defaultMessage: 'New selection'
+  },
+  newbuttontext: {
+    id: 'querybuilder.newbuttontext',
+    description: 'Text for the new selection button',
+    defaultMessage: 'New'
+  },
+  addbuttontitle: {
+    id: 'querybuilder.addbuttontitle',
+    description: 'Title for the add to current selection button',
+    defaultMessage: 'Add to current selection'
+  },
+  addbuttontext: {
+    id: 'querybuilder.addbuttontext',
+    description: 'Text for the add to current selection button',
+    defaultMessage: 'Add'
+  },
+  selectintitle: {
+    id: 'querybuilder.selectintitle',
+    description: 'Title for the select in current selection button',
+    defaultMessage: 'Select in current selection'
+  },
+  selectintext: {
+    id: 'querybuilder.selectintext',
+    description: 'Text for the select in current selection button',
+    defaultMessage: 'Select'
+  }
+});
 
 /**
  * A component that allows users to perform queries on vector layers. Queries can be new queries, added to existing queries or users can filter inside of an existing query a.k.a. drill-down.
  */
-export default class QueryBuilder extends React.Component {
+class QueryBuilder extends React.Component {
   constructor(props) {
     super(props);
     AppDispatcher.register((payload) => {
@@ -84,6 +133,7 @@ export default class QueryBuilder extends React.Component {
     this._doQuery(true);
   }
   render() {
+    const {formatMessage} = this.props.intl;
     var inputClassName = 'form-control';
     if (this.state.hasError) {
       inputClassName += ' input-has-error';
@@ -91,17 +141,17 @@ export default class QueryBuilder extends React.Component {
     return (
       <form role="form" className='form-horizontal query-builder'>
         <div className="form-group">
-          <Grids.Col md={3}><label>Layer</label></Grids.Col>
+          <Grids.Col md={3}><label>{formatMessage(messages.layerlabel)}</label></Grids.Col>
           <Grids.Col md={21}><LayerSelector ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /></Grids.Col>
         </div>
         <div className='form-group'>
-          <Grids.Col md={3}><label>Filter</label></Grids.Col>
-          <Grids.Col md={21}><input onKeyUp={this._setQueryFilter.bind(this)} className={inputClassName} ref='queryExpression' id='query-expression' placeholder='Type expression ....' type='text'/></Grids.Col>
+          <Grids.Col md={3}><label>{formatMessage(messages.filterlabel)}</label></Grids.Col>
+          <Grids.Col md={21}><input onKeyUp={this._setQueryFilter.bind(this)} className={inputClassName} ref='queryExpression' id='query-expression' placeholder={formatMessage(messages.filterplaceholder)} type='text'/></Grids.Col>
         </div>
         <div className='form-group text-center'>
-            <UI.DefaultButton onClick={this._newSelection.bind(this)} title="New selection"><Icon.Icon name="file" /> New</UI.DefaultButton>
-            <UI.DefaultButton onClick={this._addSelection.bind(this)} title="Add to current selection"><Icon.Icon name="plus" /> Add</UI.DefaultButton>
-            <UI.DefaultButton onClick={this._inSelection.bind(this)} title="Select in current selection"><Icon.Icon name="filter" /> Select</UI.DefaultButton>
+            <UI.DefaultButton onClick={this._newSelection.bind(this)} title={formatMessage(messages.newbuttontitle)}><Icon.Icon name="file" /> {formatMessage(messages.newbuttontext)}</UI.DefaultButton>
+            <UI.DefaultButton onClick={this._addSelection.bind(this)} title={formatMessage(messages.addbuttontitle)}><Icon.Icon name="plus" /> {formatMessage(messages.addbuttontext)}</UI.DefaultButton>
+            <UI.DefaultButton onClick={this._inSelection.bind(this)} title={formatMessage(messages.selectintitle)}><Icon.Icon name="filter" /> {formatMessage(messages.selectintext)}</UI.DefaultButton>
         </div>
       </form>
     );
@@ -112,5 +162,11 @@ QueryBuilder.propTypes = {
   /**
    * The ol3 map whose layers can be used for the querybuilder.
    */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired
+  map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * i18n message strings. Provided through the application through context.
+   */
+  intl: intlShape.isRequired
 };
+
+export default injectIntl(QueryBuilder);

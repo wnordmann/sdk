@@ -3,6 +3,8 @@
 var React = require('react/addons');
 var assert = require('chai').assert;
 var ol = require('openlayers');
+global.Intl = require('intl');
+var IntlProvider = require('react-intl').IntlProvider;
 
 var Select = require('./Select.jsx');
 
@@ -39,7 +41,7 @@ describe('SelectTool', function() {
   it('adds a select interaction to the map', function() {
     var container = document.createElement('div');
     React.render((
-      <Select map={map} />
+      <IntlProvider locale='en'>{() => (<Select map={map} />)}</IntlProvider>
     ), container);
 
     var count = 0;
