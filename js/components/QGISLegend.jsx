@@ -3,11 +3,20 @@ import UI from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
 import LayerStore from '../stores/LayerStore.js';
 import './QGISLegend.css';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
+
+const messages = defineMessages({
+  buttontitle: {
+    id: 'qgislegend.buttontitle',
+    description: 'Title to display on hover of the QGIS legend button',
+    defaultMessage: 'Legend'
+  }
+});
 
 /**
  * A component that shows a legend based on artefacts created by the QGIS plugin Web Application Builder.
  */
-export default class QGISLegend extends React.Component {
+class QGISLegend extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -48,6 +57,7 @@ export default class QGISLegend extends React.Component {
     );
   }
   render() {
+    const {formatMessage} = this.props.intl;
     var className = 'ol-unselectable ol-control legend';
     if (this.state.visible) {
       className += ' shown';
@@ -55,7 +65,7 @@ export default class QGISLegend extends React.Component {
     var items = this._renderItems(this.props.legendData, this.props.legendBasePath);
     return (
       <div onMouseOut={this._hidePanel.bind(this)} onMouseOver={this._showPanel.bind(this)} className={className}>
-      <UI.DefaultButton title='Legend' onClick={this._showPanel.bind(this)}><Icon.Icon name="file-picture-o" /></UI.DefaultButton>
+      <UI.DefaultButton title={formatMessage(messages.buttontitle)} onClick={this._showPanel.bind(this)}><Icon.Icon name="file-picture-o" /></UI.DefaultButton>
       <div className='legend-panel' id='legend'>{items}</div></div>
     );
   }
@@ -69,9 +79,15 @@ QGISLegend.propTypes = {
   /**
    * The label and image to use per layer. The object is keyed by layer name currently. For example: {'swamp': [['', '4_0.png']]}.
    */
-  legendData: React.PropTypes.object.isRequired
+  legendData: React.PropTypes.object.isRequired,
+  /**
+   * i18n message strings. Provided through the application through context.
+   */
+  intl: intlShape.isRequired
 };
 
 QGISLegend.defaultProps = {
   legendBasePath: './legend/'
 };
+
+export default injectIntl(QGISLegend);

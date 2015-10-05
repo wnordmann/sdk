@@ -4,11 +4,35 @@ import ol from 'openlayers';
 import './Measure.css';
 import MapTool from './MapTool.js';
 import UI from 'pui-react-dropdowns';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
+
+const messages = defineMessages({
+  dropdowntext: {
+    id: 'measure.dropdowntext',
+    description: 'Text to use on the Measure drop down',
+    defaultMessage: 'Measure'
+  },
+  measuredistancetext: {
+    id: 'measure.measuredistancetext',
+    description: 'Text for the measure distance menu option',
+    defaultMessage: 'Distance'
+  },
+  measureareatext: {
+    id: 'measure.measureareatext',
+    description: 'Text for the measure area menu option',
+    defaultMessage: 'Area'
+  },
+  cleartext: {
+    id: 'measure.cleartext',
+    description: 'Text for the clear measurements menu option',
+    defaultMessage: 'Remove measurements'
+  }
+});
 
 /**
  * Adds area and length measure tools to the map.
  */
-export default class Measure extends MapTool {
+class Measure extends MapTool {
   constructor(props) {
     super(props);
     this._tooltips = [];
@@ -153,12 +177,22 @@ export default class Measure extends MapTool {
     map.un('pointermove', this._pointerMoveHandler, this);
   }
   render() {
+    const {formatMessage} = this.props.intl;
     return (
-      <UI.Dropdown title='Measure'>
-        <UI.DropdownItem onSelect={this._measureDistance.bind(this)}>Distance</UI.DropdownItem>
-        <UI.DropdownItem onSelect={this._measureArea.bind(this)}>Area</UI.DropdownItem>
-        <UI.DropdownItem onSelect={this._clear.bind(this)}>Remove measurements</UI.DropdownItem>
+      <UI.Dropdown title={formatMessage(messages.dropdowntext)}>
+        <UI.DropdownItem onSelect={this._measureDistance.bind(this)}>{formatMessage(messages.measuredistancetext)}</UI.DropdownItem>
+        <UI.DropdownItem onSelect={this._measureArea.bind(this)}>{formatMessage(messages.measureareatext)}</UI.DropdownItem>
+        <UI.DropdownItem onSelect={this._clear.bind(this)}>{formatMessage(messages.cleartext)}</UI.DropdownItem>
       </UI.Dropdown>
     );
   }
 }
+
+Measure.propTypes = {
+  /**
+   * i18n message strings. Provided through the application through context.
+   */
+  intl: intlShape.isRequired
+};
+
+export default injectIntl(Measure);
