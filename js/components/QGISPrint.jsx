@@ -5,6 +5,7 @@ import Icon from 'pui-react-iconography';
 import Button from 'pui-react-buttons';
 import Dialog from 'pui-react-modals';
 import JSPDF from 'jspdf-browserify';
+import Pui from 'pui-react-alerts';
 import './QGISPrint.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
@@ -38,6 +39,11 @@ const messages = defineMessages({
     id: 'qgisprint.printmenutext',
     description: 'Text to use in the menu button that shows all possible layouts',
     defaultMessage: 'Print'
+  },
+  error: {
+    id: 'qgisprint.error',
+    description: 'Error message if PDF generation fails',
+    defaultMessage: 'Error while generating PDF, details: {details}'
   }
 });
 
@@ -52,7 +58,8 @@ class QGISPrint extends React.Component {
     super(props);
     this.state = {
       layout: null,
-      loading: false
+      loading: false,
+      error: false
     };
   }
   componentDidUpdate() {
@@ -93,12 +100,20 @@ class QGISPrint extends React.Component {
     }
   }
   _paintMapInPdf() {
-    var data = this._canvas.toDataURL('image/jpeg');
-    var pdf = this._pdf;
-    var mapElement = this._mapElement;
+    var data, error;
+    try {
+      data = this._canvas.toDataURL('image/jpeg');
+    } catch(e) {
+      error = true;
+      this.setState({loading: false, error: true, msg: e});
+    }
     var map = this.props.map;
-    pdf.rect(mapElement.x, mapElement.y, mapElement.width, mapElement.height);
-    pdf.addImage(data, 'JPEG', mapElement.x, mapElement.y, mapElement.width, mapElement.height);
+    if (error !== true) {
+      var pdf = this._pdf;
+      var mapElement = this._mapElement;
+      pdf.rect(mapElement.x, mapElement.y, mapElement.width, mapElement.height);
+      pdf.addImage(data, 'JPEG', mapElement.x, mapElement.y, mapElement.width, mapElement.height);
+    }
     map.setSize(this._origSize);
     map.getView().fit(this._origExtent, this._origSize);
     map.renderSync();
@@ -226,7 +241,10 @@ class QGISPrint extends React.Component {
       var selectOptions = this.props.resolutions.map(function(resolution) {
         return (<option key={resolution} value={resolution}>{resolution}</option>);
       });
-      var loading;
+      var loading, error;
+      if (this.state.error) {
+        error = (<Pui.ErrorAlert dismissable={false} withIcon={true}>{formatMessage(messages.error, {details: this.state.msg})}</Pui.ErrorAlert>);
+      }
       if (this.state.loading === true) {
         loading = (<div className="spinner"><Icon.Icon spin size="h1" name="spinner" /><span> {formatMessage(messages.waittext)}</span></div>);
       }
@@ -239,6 +257,7 @@ class QGISPrint extends React.Component {
               {selectOptions}
             </select>
             {loading}
+            {error}
           </Dialog.ModalBody>
           <Dialog.ModalFooter>
             <Button.DefaultButton title={formatMessage(messages.printbuttontitle)} onClick={this._print.bind(this)}>{formatMessage(messages.printbuttontext)}</Button.DefaultButton>
