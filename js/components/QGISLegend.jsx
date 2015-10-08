@@ -19,6 +19,7 @@ const messages = defineMessages({
 class QGISLegend extends React.Component {
   constructor(props) {
     super(props);
+    LayerStore.bindMap(this.props.map);
     this.state = {
       visible: false
     };
@@ -72,6 +73,10 @@ class QGISLegend extends React.Component {
 }
 
 QGISLegend.propTypes = {
+  /**
+   * The map from which to extract the layers.
+   */
+  map: React.PropTypes.instanceOf(ol.Map).isRequired,
   /**
    * The base path (relative url) to use for finding the artefacts.
    */
