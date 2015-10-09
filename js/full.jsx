@@ -13,6 +13,9 @@ global.UI = UI;
 import DD from 'pui-react-dropdowns';
 global.DD = DD;
 
+import BUTTON from 'pui-react-buttons';
+global.BUTTON = BUTTON;
+
 import AddLayer from './components/AddLayer.jsx';
 global.AddLayer = AddLayer;
 
