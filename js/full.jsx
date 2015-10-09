@@ -10,6 +10,9 @@ global.IntlProvider = IntlProvider;
 import UI from 'pui-react-tabs';
 global.UI = UI;
 
+import DD from 'pui-react-dropdowns';
+global.DD = DD;
+
 import AddLayer from './components/AddLayer.jsx';
 global.AddLayer = AddLayer;
 
