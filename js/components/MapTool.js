@@ -33,6 +33,8 @@ export default class MapTool extends React.Component {
         map.removeInteraction(this._currentInteractions[i]);
       }
     }
+    delete this._currentInteractions;
+    this.active = false;
   }
   activate(interactions) {
     if (interactions instanceof ol.interaction.Interaction) {
@@ -45,6 +47,7 @@ export default class MapTool extends React.Component {
       map.addInteraction(this._currentInteractions[i]);
     }
     LayerActions.activateTool(this, this.props.toggleGroup);
+    this.active = true;
   }
 }
 

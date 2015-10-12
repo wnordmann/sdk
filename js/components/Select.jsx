@@ -27,6 +27,13 @@ class Select extends MapTool {
   constructor(props) {
     super(props);
     this._select = new ol.interaction.Select();
+    this._handleEvent = this._select.handleEvent;
+    var me = this;
+    this._select.handleEvent = function(mapBrowserEvent) {
+      if (me.active === true) {
+        me._handleEvent.call(me._select, mapBrowserEvent);
+      }
+    };
     this.props.map.addInteraction(this._select);
     this._interactions = {
       'RECTANGLE': new ol.interaction.DragBox({
