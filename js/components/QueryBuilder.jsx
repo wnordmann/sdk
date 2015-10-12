@@ -84,6 +84,9 @@ class QueryBuilder extends React.Component {
   componentDidMount() {
     this._layer = this.refs.layerSelector.getLayer();
   }
+  _onSubmit(evt) {
+    evt.preventDefault();
+  }
   _filterLayerList(lyr) {
     return lyr.get('isSelectable');
   }
@@ -139,7 +142,7 @@ class QueryBuilder extends React.Component {
       inputClassName += ' input-has-error';
     }
     return (
-      <form role="form" className='form-horizontal query-builder'>
+      <form onSubmit={this._onSubmit} role="form" className='form-horizontal query-builder'>
         <div className="form-group">
           <Grids.Col md={3}><label>{formatMessage(messages.layerlabel)}</label></Grids.Col>
           <Grids.Col md={21}><LayerSelector ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /></Grids.Col>
