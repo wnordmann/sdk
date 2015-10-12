@@ -21,9 +21,11 @@ const ALL_ATTRS = '#AllAttributes';
 class InfoPopup extends React.Component {
   constructor(props) {
     super(props);
-    this.props.map.on('singleclick', function(evt) {
-      this._onMapClick(evt);
-    }, this);
+    if (this.props.hover === true) {
+      this.props.map.on('pointermove', this._onMapClick, this);
+    } else {
+      this.props.map.on('singleclick', this._onMapClick, this);
+    }
     this._format = new ol.format.GeoJSON();
     this.state = {
       popupTexts: []
@@ -31,7 +33,6 @@ class InfoPopup extends React.Component {
   }
   componentDidMount() {
     this._overlayPopup = new ol.Overlay({
-      autoPan: true,
       element: React.findDOMNode(this).parentNode
     });
     this.props.map.addOverlay(this._overlayPopup);
@@ -198,9 +199,17 @@ InfoPopup.propTypes = {
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
   /**
+   * Should we show feature info on hover instead of on click?
+   */
+  hover: React.PropTypes.bool,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
+};
+
+InfoPopup.defaultProps = {
+  hover: false
 };
 
 export default injectIntl(InfoPopup);
