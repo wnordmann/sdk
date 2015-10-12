@@ -61,6 +61,7 @@ class AddLayer extends React.Component {
     super(props);
     this._formats = {
       'geojson': new ol.format.GeoJSON(),
+      'json': new ol.format.GeoJSON(),
       'kml': new ol.format.KML(),
       'gpx': new ol.format.GPX()
     };
