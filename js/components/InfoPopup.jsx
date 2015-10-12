@@ -93,10 +93,12 @@ class InfoPopup extends React.Component {
         finishedQuery();
       }
     };
+    var called = false;
     for (var i = 0; i < len; i++) {
       var layer = allLayers[i];
       var popupDef = layer.get('popupInfo');
       if (popupDef === ALL_ATTRS) {
+        called = true;
         url = layer.getSource().getGetFeatureInfoUrl(
           evt.coordinate,
           resolution,
@@ -109,7 +111,8 @@ class InfoPopup extends React.Component {
         xmlhttp.open(method, url, true);
         xmlhttp.onreadystatechange = onReadyAll;
         xmlhttp.send();
-      } else {
+      } else if (popupDef) {
+        called = true;
         url = layer.getSource().getGetFeatureInfoUrl(
           evt.coordinate,
           resolution,
@@ -123,6 +126,9 @@ class InfoPopup extends React.Component {
         xmlhttp.onreadystatechange = onReady;
         xmlhttp.send();
       }
+    }
+    if (called === false) {
+      cb();
     }
   }
   _onMapClick(evt) {
