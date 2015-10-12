@@ -1,4 +1,5 @@
 import React from 'react';
+import ol from 'openlayers';
 import UI from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
 import LayerStore from '../stores/LayerStore.js';
