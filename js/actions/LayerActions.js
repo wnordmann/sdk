@@ -10,6 +10,23 @@ export default {
       toggleGroup: toggleGroup
     });
   },
+  setBaseLayer: (baseLayer, map) => {
+    var forEachLayer = function(layers, layer) {
+      if (layer instanceof ol.layer.Group) {
+        layer.getLayers().forEach(function(groupLayer) {
+          forEachLayer(layers, groupLayer);
+        });
+      } else if (layer.get('type') === 'base') {
+        layers.push(layer);
+      }
+    };
+    var baseLayers = [];
+    forEachLayer(baseLayers, map.getLayerGroup());
+    for (var i = 0, ii = baseLayers.length; i < ii; ++i) {
+      baseLayers[i].setVisible(false);
+    }
+    baseLayer.setVisible(true);
+  },
   setVisible: (layer, visible) => {
     layer.setVisible(visible);
     AppDispatcher.handleAction({

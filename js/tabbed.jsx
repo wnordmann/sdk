@@ -132,7 +132,7 @@ var stylePopp = function(feature) {
 var map = new ol.Map({
   layers: [
     new ol.layer.Group({
-      type: 'base',
+      type: 'base-group',
       title: 'Base maps',
       layers: [
         new ol.layer.Tile({

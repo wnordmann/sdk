@@ -39,9 +39,13 @@ class LayerListItem extends React.Component {
       checked: props.layer.getVisible()
     };
   }
-  _handleChange() {
+  _handleChange(event) {
     var visible = event.target.checked;
-    LayerActions.setVisible(this.props.layer, visible);
+    if (event.target.type === 'radio') {
+      LayerActions.setBaseLayer(this.props.layer, this.props.map);
+    } else {
+      LayerActions.setVisible(this.props.layer, visible);
+    }
     this.setState({checked: visible});
   }
   _download() {
@@ -79,9 +83,19 @@ class LayerListItem extends React.Component {
       reorderUp = <a title={formatMessage(messages.moveuptitle)} href='#' onClick={this._moveUp.bind(this)}><i className='layer-move-up glyphicon glyphicon-triangle-top'></i></a>;
       reorderDown = <a title={formatMessage(messages.movedowntitle)} href='#' onClick={this._moveDown.bind(this)}><i className='layer-move-down glyphicon glyphicon-triangle-bottom'></i></a>;
     }
+    var input;
+    if (this.props.layer.get('type') === 'base') {
+      if (this.state.checked) {
+        input = (<input type="radio" name="baselayergroup" value={this.props.title} checked onChange={this._handleChange.bind(this)}> {this.props.title}</input>);
+      } else {
+        input = (<input type="radio" name="baselayergroup" value={this.props.title} onChange={this._handleChange.bind(this)}> {this.props.title}</input>);
+      }
+    } else {
+      input = (<input type="checkbox" checked={this.state.checked} onChange={this._handleChange.bind(this)}> {this.props.title}</input>);
+    }
     return (
       <li>
-        <input type="checkbox" checked={this.state.checked} onChange={this._handleChange.bind(this)}/>{this.props.title}
+        {input}
         {opacity}
         {zoomTo}
         {download}
@@ -94,6 +108,10 @@ class LayerListItem extends React.Component {
 }
 
 LayerListItem.propTypes = {
+  /**
+   * The map in which the layer of this item resides.
+   */
+  map: React.PropTypes.instanceOf(ol.Map).isRequired,
   /**
    * The layer associated with this item.
    */
