@@ -71,7 +71,7 @@
     "mochify": "^2.10.0",
     "npm-run-all": "^1.2.11",
     "phantomjs": "^1.9.16",
-    "react-docgen": "^2.1.2",
+    "react-docgen": "^2.2.0",
     "sinon": "^1.12.2",
     "st": "^1.0.0",
     "watchify": "^3.2.0"
