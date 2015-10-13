@@ -52,11 +52,12 @@ export default class Playback extends React.Component {
       var style = lyr.getStyle();
       var timeInfo = lyr.get('timeInfo');
       lyr.setStyle(function(feature, resolution) {
-        var start = Date.parse(feature.get(timeInfo.start));
+        var isArray = (timeInfo.length === 2);
+        var start = isArray ? timeInfo[0] : Date.parse(feature.get(timeInfo.start));
         if (isNaN(start) || start > dateInput.valueAsNumber) {
           return undefined;
         }
-        var end = Date.parse(feature.get(timeInfo.end));
+        var end = isArray ? timeInfo[1] : Date.parse(feature.get(timeInfo.end));
         if (isNaN(end) || end < dateInput.valueAsNumber) {
           return undefined;
         }
