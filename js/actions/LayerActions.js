@@ -54,6 +54,12 @@ export default {
       layer: layer
     });
   },
+  removeLayer: (layer) => {
+    AppDispatcher.handleAction({
+      type: MapConstants.REMOVE_LAYER,
+      layer: layer
+    });
+  },
   moveLayerDown: (layer) => {
     AppDispatcher.handleAction({
       type: MapConstants.MOVE_LAYER_DOWN,

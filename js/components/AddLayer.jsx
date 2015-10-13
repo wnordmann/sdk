@@ -104,6 +104,7 @@ class AddLayer extends React.Component {
                 features: features
               }),
               title: filename,
+              isRemovable: true,
               isSelectable: true
             });
             map.addLayer(lyr);

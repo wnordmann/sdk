@@ -71,6 +71,12 @@ exports['default'] = {
       layer: layer
     });
   },
+  removeLayer: function removeLayer(layer) {
+    _dispatchersAppDispatcherJs2['default'].handleAction({
+      type: _constantsMapConstantsJs2['default'].REMOVE_LAYER,
+      layer: layer
+    });
+  },
   moveLayerDown: function moveLayerDown(layer) {
     _dispatchersAppDispatcherJs2['default'].handleAction({
       type: _constantsMapConstantsJs2['default'].MOVE_LAYER_DOWN,
@@ -329,6 +335,7 @@ var AddLayer = (function (_React$Component) {
                   features: features
                 }),
                 title: filename,
+                isRemovable: true,
                 isSelectable: true
               });
               map.addLayer(lyr);
@@ -2888,7 +2895,7 @@ exports['default'] = (0, _reactIntl.injectIntl)(InfoPopup);
 module.exports = exports['default'];
 
 },{"./InfoPopup.css":19,"openlayers":116,"react":759,"react-intl":548}],21:[function(require,module,exports){
-var css = ".layer-switcher {\n  position: absolute;\n  top: 3.5em;\n  right: 0.5em;\n  text-align: left;\n}\n.layer-switcher .layer-tree-panel {\n  display: none;\n}\n.layer-switcher.shown .layer-tree-panel {\n  display: block;\n}\n.layer-switcher button {\n  float: right;\n  width: 38px;\n  height: 38px;\n  background-color: #7b98bc;\n  background-color: rgba(0,60,136,.5);\n  border: none;\n}\n.layer-switcher button:focus,\n.layer-switcher button:hover {\n  background-color: white;\n}\n.layer-tree-panel {\n  padding-right: 50px;\n  border: 1px solid #cccccc;\n  background-color: white;\n  overflow: auto;\n}\n.layer-tree-panel  li {\n  list-style-type: none;\n  margin: 0;\n  padding: 10px 5px 10px 5px;\n  position: relative;\n}\n.layer-tree-panel  li::before,\n.layer-tree-panel  li::after {\n  content: '';\n  left: -20px;\n  position: absolute;\n  right: auto;\n}\n.layer-tree-panel  li::before {\n  border-left: 1px solid #999;\n  bottom: 50px;\n  height: 100%;\n  top: 0;\n  width: 1px;\n}\n.layer-tree-panel  li::after {\n  border-top: 1px solid #999;\n  height: 20px;\n  top: 25px;\n  width: 25px;\n}\n.layer-tree-panel  li span {\n  display: inline-block;\n  padding: 3px 8px;\n  text-decoration: none;\n}\n.layer-tree-panel  li.parent_li>span {\n  cursor: pointer;\n}\n.layer-tree-panel >ul>li::before,\n.layer-tree-panel >ul>li::after {\n  border: 0;\n}\n.layer-tree-panel  li:last-child::before {\n  height: 30px;\n}\n.layer-zoom-to {\n  padding-left: 15px;\n}\n.layer-move-up {\n  padding-left: 15px;\n}\n.layer-move-down {\n  padding-left: 15px;\n}\n.layer-download {\n  padding-left: 15px;\n}\n"; (require("browserify-css").createStyle(css, { "href": "js/components/LayerList.css"})); module.exports = css;
+var css = ".layer-switcher {\n  position: absolute;\n  top: 3.5em;\n  right: 0.5em;\n  text-align: left;\n}\n.layer-switcher .layer-tree-panel {\n  display: none;\n}\n.layer-switcher.shown .layer-tree-panel {\n  display: block;\n}\n.layer-switcher button {\n  float: right;\n  width: 38px;\n  height: 38px;\n  background-color: #7b98bc;\n  background-color: rgba(0,60,136,.5);\n  border: none;\n}\n.layer-switcher button:focus,\n.layer-switcher button:hover {\n  background-color: white;\n}\n.layer-tree-panel {\n  padding-right: 50px;\n  border: 1px solid #cccccc;\n  background-color: white;\n  overflow: auto;\n}\n.layer-tree-panel  li {\n  list-style-type: none;\n  margin: 0;\n  padding: 10px 5px 10px 5px;\n  position: relative;\n}\n.layer-tree-panel  li::before,\n.layer-tree-panel  li::after {\n  content: '';\n  left: -20px;\n  position: absolute;\n  right: auto;\n}\n.layer-tree-panel  li::before {\n  border-left: 1px solid #999;\n  bottom: 50px;\n  height: 100%;\n  top: 0;\n  width: 1px;\n}\n.layer-tree-panel  li::after {\n  border-top: 1px solid #999;\n  height: 20px;\n  top: 25px;\n  width: 25px;\n}\n.layer-tree-panel  li span {\n  display: inline-block;\n  padding: 3px 8px;\n  text-decoration: none;\n}\n.layer-tree-panel  li.parent_li>span {\n  cursor: pointer;\n}\n.layer-tree-panel >ul>li::before,\n.layer-tree-panel >ul>li::after {\n  border: 0;\n}\n.layer-tree-panel  li:last-child::before {\n  height: 30px;\n}\n.layer-zoom-to {\n  padding-left: 15px;\n}\n.layer-move-up {\n  padding-left: 15px;\n}\n.layer-move-down {\n  padding-left: 15px;\n}\n.layer-download {\n  padding-left: 15px;\n}\n.layer-remove {\n  padding-left: 15px;\n}\n"; (require("browserify-css").createStyle(css, { "href": "js/components/LayerList.css"})); module.exports = css;
 },{"browserify-css":45}],22:[function(require,module,exports){
 'use strict';
 
@@ -3110,6 +3117,10 @@ var messages = (0, _reactIntl.defineMessages)({
   moveuptitle: {
     'id': 'layerlistitem.moveuptitle',
     'defaultMessage': 'Move up'
+  },
+  removetitle: {
+    'id': 'layerlistitem.removetitle',
+    'defaultMessage': 'Remove'
   }
 });
 
@@ -3164,6 +3175,11 @@ var LayerListItem = (function (_React$Component) {
       _actionsLayerActionsJs2['default'].moveLayerDown(this.props.layer);
     }
   }, {
+    key: '_remove',
+    value: function _remove() {
+      _actionsLayerActionsJs2['default'].removeLayer(this.props.layer);
+    }
+  }, {
     key: '_changeOpacity',
     value: function _changeOpacity(event) {
       _actionsLayerActionsJs2['default'].setOpacity(this.props.layer, parseFloat(event.target.value));
@@ -3207,6 +3223,14 @@ var LayerListItem = (function (_React$Component) {
           _react2['default'].createElement('i', { className: 'layer-move-down glyphicon glyphicon-triangle-bottom' })
         );
       }
+      var remove;
+      if (this.props.layer.get('isRemovable') === true) {
+        remove = _react2['default'].createElement(
+          'a',
+          { title: formatMessage(messages.removetitle), href: '#', onClick: this._remove.bind(this) },
+          _react2['default'].createElement('i', { className: 'layer-remove glyphicon glyphicon-remove' })
+        );
+      }
       var input;
       if (this.props.layer.get('type') === 'base') {
         if (this.state.checked) {
@@ -3241,6 +3265,7 @@ var LayerListItem = (function (_React$Component) {
         download,
         reorderUp,
         reorderDown,
+        remove,
         this.props.children
       );
     }
@@ -5117,6 +5142,7 @@ var _keymirror2 = _interopRequireDefault(_keymirror);
 
 exports['default'] = (0, _keymirror2['default'])({
   ADD_LAYER: null,
+  REMOVE_LAYER: null,
   CHANGE_VISIBILITY: null,
   ZOOM_TO_LAYER: null,
   MOVE_LAYER_UP: null,
@@ -5731,6 +5757,10 @@ _dispatchersAppDispatcherJs2['default'].register(function (payload) {
   var layers = undefined,
       index = undefined;
   switch (action.type) {
+    case _constantsMapConstantsJs2['default'].REMOVE_LAYER:
+      layers = _LayerStore.getMap().getLayers();
+      layers.remove(action.layer);
+      break;
     case _constantsMapConstantsJs2['default'].MOVE_LAYER_UP:
       layers = _LayerStore.getMap().getLayers();
       index = layers.getArray().indexOf(action.layer);

@@ -23,6 +23,11 @@ const messages = defineMessages({
     id: 'layerlistitem.moveuptitle',
     description: 'Title for the move layer up button',
     defaultMessage: 'Move up'
+  },
+  removetitle: {
+    id: 'layerlistitem.removetitle',
+    description: 'Title for the remove button',
+    defaultMessage: 'Remove'
   }
 });
 
@@ -60,6 +65,9 @@ class LayerListItem extends React.Component {
   _moveDown() {
     LayerActions.moveLayerDown(this.props.layer);
   }
+  _remove() {
+    LayerActions.removeLayer(this.props.layer);
+  }
   _changeOpacity(event) {
     LayerActions.setOpacity(this.props.layer, parseFloat(event.target.value));
   }
@@ -83,6 +91,10 @@ class LayerListItem extends React.Component {
       reorderUp = <a title={formatMessage(messages.moveuptitle)} href='#' onClick={this._moveUp.bind(this)}><i className='layer-move-up glyphicon glyphicon-triangle-top'></i></a>;
       reorderDown = <a title={formatMessage(messages.movedowntitle)} href='#' onClick={this._moveDown.bind(this)}><i className='layer-move-down glyphicon glyphicon-triangle-bottom'></i></a>;
     }
+    var remove;
+    if (this.props.layer.get('isRemovable') === true) {
+      remove = <a title={formatMessage(messages.removetitle)} href='#' onClick={this._remove.bind(this)}><i className='layer-remove glyphicon glyphicon-remove'></i></a>;
+    }
     var input;
     if (this.props.layer.get('type') === 'base') {
       if (this.state.checked) {
@@ -101,6 +113,7 @@ class LayerListItem extends React.Component {
         {download}
         {reorderUp}
         {reorderDown}
+        {remove}
         {this.props.children}
       </li>
     );

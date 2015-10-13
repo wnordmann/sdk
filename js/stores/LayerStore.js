@@ -52,6 +52,10 @@ AppDispatcher.register((payload) => {
   let action = payload.action;
   let layers, index;
   switch(action.type) {
+    case MapConstants.REMOVE_LAYER:
+      layers = _LayerStore.getMap().getLayers();
+      layers.remove(action.layer);
+    break;
     case MapConstants.MOVE_LAYER_UP:
       layers = _LayerStore.getMap().getLayers();
       index = layers.getArray().indexOf(action.layer);
