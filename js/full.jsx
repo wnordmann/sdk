@@ -46,11 +46,17 @@ global.Globe = Globe;
 import HomeButton from './components/HomeButton.jsx';
 global.HomeButton = HomeButton;
 
+import ICON from 'pui-react-iconography';
+global.ICON = ICON;
+
 import ImageExport from './components/ImageExport.jsx';
 global.ImageExport = ImageExport;
 
 import InfoPopup from './components/InfoPopup.jsx';
 global.InfoPopup = InfoPopup;
+
+import LayerActions from './actions/LayerActions.js';
+global.LayerActions = LayerActions;
 
 import LayerList from './components/LayerList.jsx';
 global.LayerList = LayerList;
