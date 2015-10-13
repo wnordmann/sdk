@@ -505,9 +505,22 @@ var _reactSlick = require('react-slick');
 
 var _reactSlick2 = _interopRequireDefault(_reactSlick);
 
+var _puiReactDropdowns = require('pui-react-dropdowns');
+
+var _puiReactDropdowns2 = _interopRequireDefault(_puiReactDropdowns);
+
 require('./Bookmarks.css');
 
 require('../../node_modules/slick-carousel-dr-frankenstyle/slick/slick.css');
+
+var _reactIntl = require('react-intl');
+
+var messages = (0, _reactIntl.defineMessages)({
+  dropdowntext: {
+    'id': 'bookmarks.dropdowntext',
+    'defaultMessage': 'Bookmarks'
+  }
+});
 
 /**
  * Adds the ability to retrieve spatial bookmarks.
@@ -528,8 +541,8 @@ var Bookmarks = (function (_React$Component) {
   }
 
   _createClass(Bookmarks, [{
-    key: '_afterChange',
-    value: function _afterChange(idx) {
+    key: '_selectBookmark',
+    value: function _selectBookmark(bookmark) {
       var map = this.props.map,
           view = map.getView();
       if (this.props.animatePanZoom === true) {
@@ -544,63 +557,83 @@ var Bookmarks = (function (_React$Component) {
         });
         map.beforeRender(pan, zoom);
       }
-      if (idx === 0) {
-        view.setCenter(this._center);
-        view.setZoom(this._zoom);
-      } else {
-        var bookmark = this.props.bookmarks[idx - 1];
+      if (bookmark) {
         var extent = bookmark.extent;
         view.fit(extent, map.getSize());
+      } else {
+        view.setCenter(this._center);
+        view.setZoom(this._zoom);
       }
+    }
+  }, {
+    key: '_afterChange',
+    value: function _afterChange(idx) {
+      var bookmark = idx === 0 ? false : this.props.bookmarks[idx - 1];
+      this._selectBookmark(bookmark);
     }
   }, {
     key: 'render',
     value: function render() {
-      var getHTML = function getHTML(bookmark) {
-        return { __html: bookmark.description };
-      };
-      var carouselChildren = this.props.bookmarks.map(function (bookmark) {
+      var formatMessage = this.props.intl.formatMessage;
+
+      if (this.props.menu === true) {
+        var menuChildren = this.props.bookmarks.map(function (bookmark) {
+          return _react2['default'].createElement(
+            _puiReactDropdowns2['default'].DropdownItem,
+            { key: bookmark.name, onSelect: this._selectBookmark.bind(this, bookmark) },
+            bookmark.name
+          );
+        }, this);
         return _react2['default'].createElement(
+          _puiReactDropdowns2['default'].Dropdown,
+          { title: formatMessage(messages.dropdowntext) },
+          menuChildren
+        );
+      } else {
+        var getHTML = function getHTML(bookmark) {
+          return { __html: bookmark.description };
+        };
+        var carouselChildren = this.props.bookmarks.map(function (bookmark) {
+          return _react2['default'].createElement(
+            'div',
+            { key: bookmark.name, className: 'col-md-12 text-center' },
+            _react2['default'].createElement(
+              'h2',
+              null,
+              bookmark.name
+            ),
+            _react2['default'].createElement('p', { dangerouslySetInnerHTML: getHTML(bookmark) })
+          );
+        });
+        carouselChildren.unshift(_react2['default'].createElement(
           'div',
-          { key: bookmark.name, className: 'col-md-12 text-center' },
+          { key: 'intro' },
           _react2['default'].createElement(
             'h2',
             null,
-            bookmark.name
+            this.props.introTitle
           ),
-          _react2['default'].createElement('p', { dangerouslySetInnerHTML: getHTML(bookmark) })
+          _react2['default'].createElement(
+            'p',
+            null,
+            this.props.introDescription
+          )
+        ));
+        return _react2['default'].createElement(
+          'div',
+          { className: 'story-panel' },
+          _react2['default'].createElement(
+            _reactSlick2['default'],
+            { dots: this.props.showIndicators, arrows: true, afterChange: this._afterChange.bind(this) },
+            carouselChildren
+          )
         );
-      });
-      carouselChildren.unshift(_react2['default'].createElement(
-        'div',
-        { key: 'intro' },
-        _react2['default'].createElement(
-          'h2',
-          null,
-          this.props.introTitle
-        ),
-        _react2['default'].createElement(
-          'p',
-          null,
-          this.props.introDescription
-        )
-      ));
-      return _react2['default'].createElement(
-        'div',
-        { className: 'story-panel' },
-        _react2['default'].createElement(
-          _reactSlick2['default'],
-          { dots: this.props.showIndicators, arrows: true, afterChange: this._afterChange.bind(this) },
-          carouselChildren
-        )
-      );
+      }
     }
   }]);
 
   return Bookmarks;
 })(_react2['default'].Component);
-
-exports['default'] = Bookmarks;
 
 Bookmarks.propTypes = {
   /**
@@ -631,7 +664,15 @@ Bookmarks.propTypes = {
   /**
    * The description of the introduction (first) page of the bookmarks.
    */
-  introDescription: _react2['default'].PropTypes.string
+  introDescription: _react2['default'].PropTypes.string,
+  /**
+   * i18n message strings. Provided through the application through context.
+   */
+  intl: _reactIntl.intlShape.isRequired,
+  /**
+   * Display as a menu drop down list.
+   */
+  menu: _react2['default'].PropTypes.bool
 };
 
 Bookmarks.defaultProps = {
@@ -639,11 +680,14 @@ Bookmarks.defaultProps = {
   animatePanZoom: true,
   introTitle: '',
   introDescription: '',
-  animationDuration: 500
+  animationDuration: 500,
+  menu: false
 };
+
+exports['default'] = (0, _reactIntl.injectIntl)(Bookmarks);
 module.exports = exports['default'];
 
-},{"../../node_modules/slick-carousel-dr-frankenstyle/slick/slick.css":760,"./Bookmarks.css":4,"openlayers":116,"react":759,"react-slick":572}],6:[function(require,module,exports){
+},{"../../node_modules/slick-carousel-dr-frankenstyle/slick/slick.css":760,"./Bookmarks.css":4,"openlayers":116,"pui-react-dropdowns":167,"react":759,"react-intl":548,"react-slick":572}],6:[function(require,module,exports){
 var css = "#chart-selector {\n  margin-bottom: 10px;\n}\n"; (require("browserify-css").createStyle(css, { "href": "js/components/Chart.css"})); module.exports = css;
 },{"browserify-css":45}],7:[function(require,module,exports){
 'use strict';

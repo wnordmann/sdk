@@ -1,21 +1,31 @@
 import React from 'react';
 import ol from 'openlayers';
 import Slider from 'react-slick';
+import UI from 'pui-react-dropdowns';
 import './Bookmarks.css';
 import '../../node_modules/slick-carousel-dr-frankenstyle/slick/slick.css';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
+
+const messages = defineMessages({
+  dropdowntext: {
+    id: 'bookmarks.dropdowntext',
+    description: 'Text to use on the Bookmarks drop down',
+    defaultMessage: 'Bookmarks'
+  }
+});
 
 /**
  * Adds the ability to retrieve spatial bookmarks.
  * A spatial bookmark consists of a name, an extent and a description.
  */
-export default class Bookmarks extends React.Component {
+class Bookmarks extends React.Component {
   constructor(props) {
     super(props);
     var map = this.props.map, view = map.getView();
     this._center = view.getCenter();
     this._zoom = view.getZoom();
   }
-  _afterChange(idx) {
+  _selectBookmark(bookmark) {
     var map = this.props.map, view = map.getView();
     if (this.props.animatePanZoom === true) {
       var pan = ol.animation.pan({
@@ -29,30 +39,41 @@ export default class Bookmarks extends React.Component {
       });
       map.beforeRender(pan, zoom);
     }
-    if (idx === 0) {
-      view.setCenter(this._center);
-      view.setZoom(this._zoom);
-    } else {
-      var bookmark = this.props.bookmarks[idx - 1];
+    if (bookmark) {
       var extent = bookmark.extent;
       view.fit(extent, map.getSize());
+    } else {
+      view.setCenter(this._center);
+      view.setZoom(this._zoom);
     }
   }
+  _afterChange(idx) {
+    var bookmark = idx === 0 ? false : this.props.bookmarks[idx - 1];
+    this._selectBookmark(bookmark);
+  }
   render() {
-    var getHTML = function(bookmark) {
-      return {__html: bookmark.description};
-    };
-    var carouselChildren = this.props.bookmarks.map(function(bookmark) {
-      return (<div key={bookmark.name} className="col-md-12 text-center"><h2>{bookmark.name}</h2><p dangerouslySetInnerHTML={getHTML(bookmark)}></p></div>);
-    });
-    carouselChildren.unshift(<div key='intro'><h2>{this.props.introTitle}</h2><p>{this.props.introDescription}</p></div>);
-    return (
-      <div className='story-panel'>
-        <Slider dots={this.props.showIndicators} arrows={true} afterChange={this._afterChange.bind(this)}>
-          {carouselChildren}
-        </Slider>
-      </div>
-    );
+    const {formatMessage} = this.props.intl;
+    if (this.props.menu === true) {
+      var menuChildren = this.props.bookmarks.map(function(bookmark) {
+        return (<UI.DropdownItem key={bookmark.name} onSelect={this._selectBookmark.bind(this, bookmark)}>{bookmark.name}</UI.DropdownItem>);
+      }, this);
+      return (<UI.Dropdown title={formatMessage(messages.dropdowntext)}>{menuChildren}</UI.Dropdown>);
+    } else {
+      var getHTML = function(bookmark) {
+        return {__html: bookmark.description};
+      };
+      var carouselChildren = this.props.bookmarks.map(function(bookmark) {
+        return (<div key={bookmark.name} className="col-md-12 text-center"><h2>{bookmark.name}</h2><p dangerouslySetInnerHTML={getHTML(bookmark)}></p></div>);
+      });
+      carouselChildren.unshift(<div key='intro'><h2>{this.props.introTitle}</h2><p>{this.props.introDescription}</p></div>);
+      return (
+        <div className='story-panel'>
+          <Slider dots={this.props.showIndicators} arrows={true} afterChange={this._afterChange.bind(this)}>
+            {carouselChildren}
+          </Slider>
+        </div>
+      );
+    }
   }
 }
 
@@ -85,7 +106,15 @@ Bookmarks.propTypes = {
   /**
    * The description of the introduction (first) page of the bookmarks.
    */
-  introDescription: React.PropTypes.string
+  introDescription: React.PropTypes.string,
+  /**
+   * i18n message strings. Provided through the application through context.
+   */
+  intl: intlShape.isRequired,
+  /**
+   * Display as a menu drop down list.
+   */
+  menu: React.PropTypes.bool
 };
 
 Bookmarks.defaultProps = {
@@ -93,5 +122,8 @@ Bookmarks.defaultProps = {
   animatePanZoom: true,
   introTitle: '',
   introDescription: '',
-  animationDuration: 500
+  animationDuration: 500,
+  menu: false
 };
+
+export default injectIntl(Bookmarks);
