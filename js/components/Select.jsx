@@ -32,6 +32,8 @@ class Select extends MapTool {
     this._select.handleEvent = function(mapBrowserEvent) {
       if (me.active === true) {
         me._handleEvent.call(me._select, mapBrowserEvent);
+      } else {
+        return true;
       }
     };
     this.props.map.addInteraction(this._select);
