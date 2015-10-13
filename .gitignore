@@ -1,6 +1,7 @@
 node_modules
 bundle.js
-dist/js/*.js
+dist/js/basic*.js
+dist/js/tabbed*.js
 npm-debug.log
 tmp
 css
