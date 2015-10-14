@@ -86,7 +86,7 @@ class Select extends MapTool {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <UI.Dropdown title={formatMessage(messages.menubuttontext)}>
+      <UI.Dropdown {...this.props} title={formatMessage(messages.menubuttontext)}>
         <UI.DropdownItem onSelect={this._selectByRectangle.bind(this)}>{formatMessage(messages.rectangletext)}</UI.DropdownItem>
       </UI.Dropdown>
     );

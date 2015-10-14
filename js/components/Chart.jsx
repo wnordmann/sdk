@@ -189,7 +189,7 @@ class Chart extends React.Component {
         return (<UI.DropdownItem key={idx} onSelect={this._onClick.bind(this, {target: {value: key}})}>{key}</UI.DropdownItem>);
       }, this);
       return (
-        <UI.Dropdown title='Charts'>
+        <UI.Dropdown {...this.props} title='Charts'>
           {listitems}
         </UI.Dropdown>
       );

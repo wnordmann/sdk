@@ -267,7 +267,7 @@ class QGISPrint extends React.Component {
     }
     return (
       <article>
-        <UI.Dropdown title={formatMessage(messages.printmenutext)}>
+        <UI.Dropdown {...this.props} title={formatMessage(messages.printmenutext)}>
           {listitems}
         </UI.Dropdown>
         {dialog}

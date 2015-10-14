@@ -57,7 +57,7 @@ class Bookmarks extends React.Component {
       var menuChildren = this.props.bookmarks.map(function(bookmark) {
         return (<UI.DropdownItem key={bookmark.name} onSelect={this._selectBookmark.bind(this, bookmark)}>{bookmark.name}</UI.DropdownItem>);
       }, this);
-      return (<UI.Dropdown title={formatMessage(messages.dropdowntext)}>{menuChildren}</UI.Dropdown>);
+      return (<UI.Dropdown {...this.props} title={formatMessage(messages.dropdowntext)}>{menuChildren}</UI.Dropdown>);
     } else {
       var getHTML = function(bookmark) {
         return {__html: bookmark.description};

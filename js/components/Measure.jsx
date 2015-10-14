@@ -179,7 +179,7 @@ class Measure extends MapTool {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <UI.Dropdown title={formatMessage(messages.dropdowntext)}>
+      <UI.Dropdown {...this.props} title={formatMessage(messages.dropdowntext)}>
         <UI.DropdownItem onSelect={this._measureDistance.bind(this)}>{formatMessage(messages.measuredistancetext)}</UI.DropdownItem>
         <UI.DropdownItem onSelect={this._measureArea.bind(this)}>{formatMessage(messages.measureareatext)}</UI.DropdownItem>
         <UI.DropdownItem onSelect={this._clear.bind(this)}>{formatMessage(messages.cleartext)}</UI.DropdownItem>
