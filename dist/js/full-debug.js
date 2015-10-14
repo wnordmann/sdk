@@ -482,7 +482,7 @@ exports['default'] = (0, _reactIntl.injectIntl)(AddLayer);
 module.exports = exports['default'];
 
 },{"../../node_modules/react-color-picker/index.css":506,"openlayers":116,"pui-react-buttons":149,"pui-react-grids":298,"pui-react-iconography":348,"pui-react-modals":405,"react":759,"react-color-picker":510,"react-dropzone":533,"react-intl":548}],4:[function(require,module,exports){
-var css = ".slick-prev:before,\n.slick-next:before {\n  color: grey;\n}\n.story-panel {\n  display: block;\n  position: absolute;\n  background: rgba(255,255,255,0.7);\n  padding: 15px;\n  border-radius: 5px;\n  border: 1px solid #000000;\n  top: 100px;\n  left: 50px;\n  height: 500px;\n  width: 500px;\n  min-width: 400px;\n  z-index: 100;\n}\n"; (require("browserify-css").createStyle(css, { "href": "js/components/Bookmarks.css"})); module.exports = css;
+var css = ".slick-prev:before,\n.slick-next:before {\n  color: grey;\n}\n.slick-list {\n  max-height: 450px;\n  max-width: 450px;\n}\n.story-panel {\n  display: block;\n  position: absolute;\n  background: rgba(255,255,255,0.7);\n  padding: 15px;\n  border-radius: 5px;\n  border: 1px solid #000000;\n  top: 100px;\n  left: 50px;\n  height: 500px;\n  width: 500px;\n  min-width: 400px;\n  z-index: 100;\n}\n"; (require("browserify-css").createStyle(css, { "href": "js/components/Bookmarks.css"})); module.exports = css;
 },{"browserify-css":45}],5:[function(require,module,exports){
 'use strict';
 

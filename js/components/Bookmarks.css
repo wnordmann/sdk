@@ -1,6 +1,10 @@
 .slick-prev:before, .slick-next:before {
   color: grey;
 }
+.slick-list {
+  max-height: 450px;
+  max-width: 450px;
+}
 .story-panel {
   display: block;
   position: absolute;
