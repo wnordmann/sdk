@@ -1,3 +1,6 @@
+.form-control {
+  height: 34px;
+}
 #chart-selector {
   margin-bottom: 10px;
 }
