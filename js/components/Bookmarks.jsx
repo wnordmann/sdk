@@ -68,7 +68,7 @@ class Bookmarks extends React.Component {
       carouselChildren.unshift(<div key='intro'><h2>{this.props.introTitle}</h2><p>{this.props.introDescription}</p></div>);
       return (
         <div className='story-panel'>
-          <Slider dots={this.props.showIndicators} arrows={true} afterChange={this._afterChange.bind(this)}>
+          <Slider {...this.props} arrows={true} afterChange={this._afterChange.bind(this)}>
             {carouselChildren}
           </Slider>
         </div>
@@ -90,7 +90,15 @@ Bookmarks.propTypes = {
   /**
    * Should we show indicators? These are dots to navigate the bookmark pages.
    */
-  showIndicators: React.PropTypes.bool,
+  dots: React.PropTypes.bool,
+  /**
+   * Should the scroller auto scroll?
+   */
+  autoplay: React.PropTypes.bool,
+  /**
+   * delay between each auto scoll in ms.
+   */
+  autoplaySpeed: React.PropTypes.number,
   /**
    * Should we animate the pan and zoom operation?
    */
@@ -118,7 +126,8 @@ Bookmarks.propTypes = {
 };
 
 Bookmarks.defaultProps = {
-  showIndicators: true,
+  dots: true,
+  autoplay: false,
   animatePanZoom: true,
   introTitle: '',
   introDescription: '',

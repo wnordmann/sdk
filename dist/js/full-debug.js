@@ -633,7 +633,7 @@ var Bookmarks = (function (_React$Component) {
           { className: 'story-panel' },
           _react2['default'].createElement(
             _reactSlick2['default'],
-            { dots: this.props.showIndicators, arrows: true, afterChange: this._afterChange.bind(this) },
+            _extends({}, this.props, { arrows: true, afterChange: this._afterChange.bind(this) }),
             carouselChildren
           )
         );
@@ -657,7 +657,15 @@ Bookmarks.propTypes = {
   /**
    * Should we show indicators? These are dots to navigate the bookmark pages.
    */
-  showIndicators: _react2['default'].PropTypes.bool,
+  dots: _react2['default'].PropTypes.bool,
+  /**
+   * Should the scroller auto scroll?
+   */
+  autoplay: _react2['default'].PropTypes.bool,
+  /**
+   * delay between each auto scoll in ms.
+   */
+  autoplaySpeed: _react2['default'].PropTypes.number,
   /**
    * Should we animate the pan and zoom operation?
    */
@@ -685,7 +693,8 @@ Bookmarks.propTypes = {
 };
 
 Bookmarks.defaultProps = {
-  showIndicators: true,
+  dots: true,
+  autoplay: false,
   animatePanZoom: true,
   introTitle: '',
   introDescription: '',
