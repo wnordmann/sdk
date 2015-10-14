@@ -18,12 +18,24 @@ class HomeButton extends React.Component {
     super(props);
     var view = this.props.map.getView();
     this._center = view.getCenter();
-    this._zoom = view.getZoom();
+    this._resolution = view.getResolution();
+    if (this._center === null) {
+      view.once('change:center', function(evt) {
+        this._center = evt.target.getCenter();
+      }, this);
+    }
+    if (this._resolution === undefined) {
+      view.once('change:resolution', function(evt) {
+        this._resolution = evt.target.getResolution();
+      }, this);
+    }
   }
   _goHome() {
-    var view = this.props.map.getView();
-    view.setCenter(this._center);
-    view.setZoom(this._zoom);
+    if (this._center !== null && this._resolution !== undefined) {
+      var view = this.props.map.getView();
+      view.setCenter(this._center);
+      view.setResolution(this._resolution);
+    }
   }
   render() {
     const {formatMessage} = this.props.intl;
