@@ -77,7 +77,7 @@ AppDispatcher.register((payload) => {
       }
     break;
     case MapConstants.ZOOM_TO_LAYER:
-      _LayerStore.getMap().getView().fitExtent(
+      _LayerStore.getMap().getView().fit(
         action.layer.getSource().getExtent(),
         _LayerStore.getMap().getSize()
       );

@@ -74,29 +74,31 @@ class LayerListItem extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     var opacity;
+    const layer = this.props.layer;
+    const source = layer.getSource ? layer.getSource() : undefined;
     if (this.props.showOpacity) {
-      var val = this.props.layer.getOpacity();
+      var val = layer.getOpacity();
       opacity = <input onChange={this._changeOpacity.bind(this)} defaultValue={val} type="range" name="opacity" min="0" max="1" step="0.01"></input>;
     }
     var zoomTo;
-    if (this.props.layer.get('type') !== 'base' && this.props.showZoomTo) {
+    if (layer.get('type') !== 'base' && layer.get('type') !== 'base-group' && (source && source.getExtent) && this.props.showZoomTo) {
       zoomTo = <a title={formatMessage(messages.zoomtotitle)} href='#' onClick={this._zoomTo.bind(this)}><i className='layer-zoom-to glyphicon glyphicon-zoom-in'></i></a>;
     }
     var download;
-    if (this.props.layer instanceof ol.layer.Vector && this.props.showDownload) {
+    if (layer instanceof ol.layer.Vector && this.props.showDownload) {
       download = <a title={formatMessage(messages.downloadtitle)} href='#' onClick={this._download.bind(this)}><i className='layer-download glyphicon glyphicon-download-alt'></i></a>;
     }
     var reorderUp, reorderDown;
-    if (this.props.layer.get('type') !== 'base' && this.props.allowReordering && !this.props.children) {
+    if (layer.get('type') !== 'base' && this.props.allowReordering && !this.props.children) {
       reorderUp = <a title={formatMessage(messages.moveuptitle)} href='#' onClick={this._moveUp.bind(this)}><i className='layer-move-up glyphicon glyphicon-triangle-top'></i></a>;
       reorderDown = <a title={formatMessage(messages.movedowntitle)} href='#' onClick={this._moveDown.bind(this)}><i className='layer-move-down glyphicon glyphicon-triangle-bottom'></i></a>;
     }
     var remove;
-    if (this.props.layer.get('isRemovable') === true) {
+    if (layer.get('isRemovable') === true) {
       remove = <a title={formatMessage(messages.removetitle)} href='#' onClick={this._remove.bind(this)}><i className='layer-remove glyphicon glyphicon-remove'></i></a>;
     }
     var input;
-    if (this.props.layer.get('type') === 'base') {
+    if (layer.get('type') === 'base') {
       if (this.state.checked) {
         input = (<input type="radio" name="baselayergroup" value={this.props.title} checked onChange={this._handleChange.bind(this)}> {this.props.title}</input>);
       } else {

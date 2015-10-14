@@ -3217,12 +3217,14 @@ var LayerListItem = (function (_React$Component) {
       var formatMessage = this.props.intl.formatMessage;
 
       var opacity;
+      var layer = this.props.layer;
+      var source = layer.getSource ? layer.getSource() : undefined;
       if (this.props.showOpacity) {
-        var val = this.props.layer.getOpacity();
+        var val = layer.getOpacity();
         opacity = _react2['default'].createElement('input', { onChange: this._changeOpacity.bind(this), defaultValue: val, type: 'range', name: 'opacity', min: '0', max: '1', step: '0.01' });
       }
       var zoomTo;
-      if (this.props.layer.get('type') !== 'base' && this.props.showZoomTo) {
+      if (layer.get('type') !== 'base' && layer.get('type') !== 'base-group' && (source && source.getExtent) && this.props.showZoomTo) {
         zoomTo = _react2['default'].createElement(
           'a',
           { title: formatMessage(messages.zoomtotitle), href: '#', onClick: this._zoomTo.bind(this) },
@@ -3230,7 +3232,7 @@ var LayerListItem = (function (_React$Component) {
         );
       }
       var download;
-      if (this.props.layer instanceof _openlayers2['default'].layer.Vector && this.props.showDownload) {
+      if (layer instanceof _openlayers2['default'].layer.Vector && this.props.showDownload) {
         download = _react2['default'].createElement(
           'a',
           { title: formatMessage(messages.downloadtitle), href: '#', onClick: this._download.bind(this) },
@@ -3238,7 +3240,7 @@ var LayerListItem = (function (_React$Component) {
         );
       }
       var reorderUp, reorderDown;
-      if (this.props.layer.get('type') !== 'base' && this.props.allowReordering && !this.props.children) {
+      if (layer.get('type') !== 'base' && this.props.allowReordering && !this.props.children) {
         reorderUp = _react2['default'].createElement(
           'a',
           { title: formatMessage(messages.moveuptitle), href: '#', onClick: this._moveUp.bind(this) },
@@ -3251,7 +3253,7 @@ var LayerListItem = (function (_React$Component) {
         );
       }
       var remove;
-      if (this.props.layer.get('isRemovable') === true) {
+      if (layer.get('isRemovable') === true) {
         remove = _react2['default'].createElement(
           'a',
           { title: formatMessage(messages.removetitle), href: '#', onClick: this._remove.bind(this) },
@@ -3259,7 +3261,7 @@ var LayerListItem = (function (_React$Component) {
         );
       }
       var input;
-      if (this.props.layer.get('type') === 'base') {
+      if (layer.get('type') === 'base') {
         if (this.state.checked) {
           input = _react2['default'].createElement(
             'input',
@@ -5819,7 +5821,7 @@ _dispatchersAppDispatcherJs2['default'].register(function (payload) {
       }
       break;
     case _constantsMapConstantsJs2['default'].ZOOM_TO_LAYER:
-      _LayerStore.getMap().getView().fitExtent(action.layer.getSource().getExtent(), _LayerStore.getMap().getSize());
+      _LayerStore.getMap().getView().fit(action.layer.getSource().getExtent(), _LayerStore.getMap().getSize());
       break;
     default:
       break;
