@@ -42,6 +42,16 @@ const messages = defineMessages({
     id: 'featuretable.onlyselected',
     description: 'Label for the show selected features only checkbox',
     defaultMessage: 'Show only selected features'
+  },
+  filterplaceholder: {
+    id: 'featuretable.filterplaceholder',
+    description: 'Placeholder for filter expression input field',
+    defaultMessage: 'Type filter expression'
+  },
+  filterlabel: {
+    id: 'featuretable.filterlabel',
+    description: 'Label for the filter expression input field',
+    defaultMessage: 'Filter'
   }
 });
 
@@ -58,6 +68,7 @@ class FeatureTable extends React.Component {
       switch(action.type) {
         case MapConstants.SELECT_LAYER:
           if (action.cmp === this.refs.layerSelector) {
+            React.findDOMNode(this.refs.filter).value = '';
             this._layer = action.layer;
             FeatureStore.addLayer(action.layer, this._selectedOnly);
           }
@@ -146,6 +157,25 @@ class FeatureTable extends React.Component {
   _onSubmit(evt) {
     evt.preventDefault();
   }
+  _filterByText(evt) {
+    var filterBy = evt.target.value;
+    var state = FeatureStore.getState(this._layer);
+    var rows = state.originalFeatures.slice();
+    var filteredRows = filterBy ? rows.filter(function(row) {
+      var properties = row.getProperties();
+      var geom = row.getGeometryName();
+      for (var key in properties) {
+        if (key !== geom) {
+          var value = '' + properties[key];
+          if (value.toLowerCase().indexOf(filterBy.toLowerCase()) >= 0) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }): rows;
+    FeatureStore.setFilter(this._layer, filteredRows);
+  }
   render() {
     const {formatMessage} = this.props.intl;
     var Table = FixedDataTable.Table;
@@ -173,6 +203,10 @@ class FeatureTable extends React.Component {
           <LayerSelector ref='layerSelector' filter={this._filterLayerList} map={this.props.map} value={this.props.layer.get('id')} />
           <UI.DefaultButton onClick={this._zoomSelected.bind(this)} title={formatMessage(messages.zoombuttontitle)}><Icon.Icon name="search" /> {formatMessage(messages.zoombuttontext)}</UI.DefaultButton>
           <UI.DefaultButton onClick={this._clearSelected.bind(this)} title={formatMessage(messages.clearbuttontitle)}><Icon.Icon name="trash" /> {formatMessage(messages.clearbuttontext)}</UI.DefaultButton>
+          <div className='input-group'>
+            <span className='input-group-addon'>{formatMessage(messages.filterlabel)}</span>
+            <input type='text' ref='filter' className='form-control' onChange={this._filterByText.bind(this)} placeholder={formatMessage(messages.filterplaceholder)}></input>
+          </div>
           <label><input type='checkbox' onChange={this._filter.bind(this)}></input> {formatMessage(messages.onlyselected)}</label>
         </form>
         <Table

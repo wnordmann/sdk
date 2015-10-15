@@ -1680,6 +1680,14 @@ var messages = (0, _reactIntl.defineMessages)({
   onlyselected: {
     'id': 'featuretable.onlyselected',
     'defaultMessage': 'Show only selected features'
+  },
+  filterplaceholder: {
+    'id': 'featuretable.filterplaceholder',
+    'defaultMessage': 'Type filter expression'
+  },
+  filterlabel: {
+    'id': 'featuretable.filterlabel',
+    'defaultMessage': 'Filter'
   }
 });
 
@@ -1703,6 +1711,7 @@ var FeatureTable = (function (_React$Component) {
       switch (action.type) {
         case _constantsMapConstantsJs2['default'].SELECT_LAYER:
           if (action.cmp === _this.refs.layerSelector) {
+            _react2['default'].findDOMNode(_this.refs.filter).value = '';
             _this._layer = action.layer;
             _storesFeatureStoreJs2['default'].addLayer(action.layer, _this._selectedOnly);
           }
@@ -1823,6 +1832,27 @@ var FeatureTable = (function (_React$Component) {
       evt.preventDefault();
     }
   }, {
+    key: '_filterByText',
+    value: function _filterByText(evt) {
+      var filterBy = evt.target.value;
+      var state = _storesFeatureStoreJs2['default'].getState(this._layer);
+      var rows = state.originalFeatures.slice();
+      var filteredRows = filterBy ? rows.filter(function (row) {
+        var properties = row.getProperties();
+        var geom = row.getGeometryName();
+        for (var key in properties) {
+          if (key !== geom) {
+            var value = '' + properties[key];
+            if (value.toLowerCase().indexOf(filterBy.toLowerCase()) >= 0) {
+              return true;
+            }
+          }
+        }
+        return false;
+      }) : rows;
+      _storesFeatureStoreJs2['default'].setFilter(this._layer, filteredRows);
+    }
+  }, {
     key: 'render',
     value: function render() {
       var formatMessage = this.props.intl.formatMessage;
@@ -1869,6 +1899,16 @@ var FeatureTable = (function (_React$Component) {
             _react2['default'].createElement(_puiReactIconography2['default'].Icon, { name: 'trash' }),
             ' ',
             formatMessage(messages.clearbuttontext)
+          ),
+          _react2['default'].createElement(
+            'div',
+            { className: 'input-group' },
+            _react2['default'].createElement(
+              'span',
+              { className: 'input-group-addon' },
+              formatMessage(messages.filterlabel)
+            ),
+            _react2['default'].createElement('input', { type: 'text', ref: 'filter', className: 'form-control', onChange: this._filterByText.bind(this), placeholder: formatMessage(messages.filterplaceholder) })
           ),
           _react2['default'].createElement(
             'label',
@@ -5811,14 +5851,20 @@ var FeatureStore = (function (_EventEmitter) {
       this.emitChange();
     }
   }, {
-    key: 'setSelectedAsFilter',
-    value: function setSelectedAsFilter(layer) {
+    key: 'setFilter',
+    value: function setFilter(layer, filter) {
       var id = layer.get('id');
       if (!this._config[id]) {
         this._config[id] = {};
       }
-      this._config[id].features = this._config[id].selected;
+      this._config[id].features = filter;
       this.emitChange();
+    }
+  }, {
+    key: 'setSelectedAsFilter',
+    value: function setSelectedAsFilter(layer) {
+      var id = layer.get('id');
+      this.setFilter(layer, this._config[id].selected);
     }
   }, {
     key: 'restoreOriginalFeatures',
