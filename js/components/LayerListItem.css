@@ -1,0 +1,24 @@
+.layer-zoom-to {
+  padding-left: 15px;
+}
+.layer-move-up {
+  padding-left: 15px;
+}
+.layer-move-down {
+  padding-left: 15px;
+}
+.layer-download {
+  padding-left: 15px;
+}
+.layer-remove {
+  padding-left: 15px;
+}
+.layer-set-filters {
+  padding-left: 15px;
+}
+.layerlistitem .input-has-error {
+  background-color: #fdd;
+}
+.layerlistitem label {
+  font-weight: bold;
+}

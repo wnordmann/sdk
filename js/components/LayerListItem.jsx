@@ -1,7 +1,12 @@
 import React from 'react';
 import ol from 'openlayers';
 import LayerActions from '../actions/LayerActions.js';
+import Dialog from 'pui-react-modals';
+import Grids from 'pui-react-grids';
+import UI from 'pui-react-buttons';
+import filtrex from 'filtrex';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import './LayerListItem.css';
 
 const messages = defineMessages({
   zoomtotitle: {
@@ -13,6 +18,26 @@ const messages = defineMessages({
     id: 'layerlistitem.downloadtitle',
     description: 'Title for the download layer button',
     defaultMessage: 'Download layer'
+  },
+  filtertitle: {
+    id: 'layerlistitem.filtertitle',
+    description: 'Title for the filter button',
+    defaultMessage: 'Filter layer'
+  },
+  filtermodaltitle: {
+    id: 'layerlistitem.filtermodaltitle',
+    description: 'Title for the filter button',
+    defaultMessage: 'Filters for layer {layer}'
+  },
+  addfiltertext: {
+    id: 'layerlistitem.addfiltertext',
+    description: 'Title for the add filter button',
+    defaultMessage: 'Add'
+  },
+  removefiltertext: {
+    id: 'layerlistitem.removefiltertext',
+    description: 'Title for the remove filter button',
+    defaultMessage: 'Remove'
   },
   movedowntitle: {
     id: 'layerlistitem.movedowntitle',
@@ -41,8 +66,43 @@ class LayerListItem extends React.Component {
       this.setState({checked: evt.target.getVisible()});
     }, this);
     this.state = {
+      hasError: false,
+      filters: [],
       checked: props.layer.getVisible()
     };
+  }
+  componentDidMount() {
+    this._setStyleFunction();
+  }
+  _setStyleFunction() {
+    var layer = this.props.layer;
+    if (this.props.allowFiltering && layer instanceof ol.layer.Vector) {
+      var style = layer.getStyle();
+      var me = this;
+      layer.setStyle(function(feature, resolution) {
+        var hide = false;
+        for (var i = 0, ii = me.state.filters.length; i < ii; i++){
+          if (!me.state.filters[i].filter(feature.getProperties())){
+            hide = true;
+            continue;
+          }
+        }
+        if (hide) {
+          return undefined;
+        } else {
+          if (style instanceof ol.style.Style) {
+            return [style];
+          } else if (Array.isArray(style)) {
+            return style;
+          } else {
+            return style.call(this, feature, resolution);
+          }
+        }
+      });
+    }
+  }
+  _onSubmit(evt) {
+    evt.preventDefault();
   }
   _handleChange(event) {
     var visible = event.target.checked;
@@ -55,6 +115,48 @@ class LayerListItem extends React.Component {
   }
   _download() {
     LayerActions.downloadLayer(this.props.layer);
+  }
+  _removeFilter(filter) {
+    var layer = this.props.layer;
+    var filters = this.state.filters;
+    for (var i = 0, ii = filters.length; i < ii; i++){
+      if (filters[i] === filter){
+        filters.splice(i, 1);
+        break;
+      }
+    }
+    this.setState({filters: filters});
+    layer.getSource().changed();
+  }
+  _addFilter() {
+    var layer = this.props.layer;
+    var filters = this.state.filters;
+    var filter;
+    var expression = React.findDOMNode(this.refs.filterTextBox).value;
+    try {
+      filter = filtrex(expression);
+    } catch (e) {
+      this.setState({hasError: true});
+      return;
+    }
+    var exists = false;
+    for (var i = 0, ii = filters.length; i < ii; ++i) {
+      if (filters[i].title === expression) {
+        exists = true;
+        break;
+      }
+    }
+    if (exists === false) {
+      filters.push({title: expression, filter: filter});
+      this.setState({
+        filters: filters,
+        hasError: false
+      });
+      layer.getSource().changed();
+    }
+  }
+  _filter() {
+    this.refs.filtermodal.open();
   }
   _zoomTo() {
     LayerActions.zoomToLayer(this.props.layer);
@@ -73,6 +175,10 @@ class LayerListItem extends React.Component {
   }
   render() {
     const {formatMessage} = this.props.intl;
+    var inputClassName = 'form-control';
+    if (this.state.hasError) {
+      inputClassName += ' input-has-error';
+    }
     var opacity;
     const layer = this.props.layer;
     const source = layer.getSource ? layer.getSource() : undefined;
@@ -87,6 +193,10 @@ class LayerListItem extends React.Component {
     var download;
     if (layer instanceof ol.layer.Vector && this.props.showDownload) {
       download = <a title={formatMessage(messages.downloadtitle)} href='#' onClick={this._download.bind(this)}><i className='layer-download glyphicon glyphicon-download-alt'></i></a>;
+    }
+    var filter;
+    if (layer instanceof ol.layer.Vector && this.props.allowFiltering) {
+      filter = <a title={formatMessage(messages.filtertitle)} href='#' onClick={this._filter.bind(this)}><i className='layer-set-filters glyphicon glyphicon-filter'></i></a>;
     }
     var reorderUp, reorderDown;
     if (layer.get('type') !== 'base' && this.props.allowReordering && !this.props.children) {
@@ -107,16 +217,47 @@ class LayerListItem extends React.Component {
     } else {
       input = (<input type="checkbox" checked={this.state.checked} onChange={this._handleChange.bind(this)}> {this.props.title}</input>);
     }
+    var filters = this.state.filters.map(function(f) {
+      var filterName = f.title.replace(/\W+/g, '');
+      return (
+        <div key={filterName} className='form-group' ref={filterName}>
+          <Grids.Col md={20}>
+            <label>{f.title}</label>
+          </Grids.Col>
+          <Grids.Col md={4}>
+            <UI.DefaultButton onClick={this._removeFilter.bind(this, f)}>{formatMessage(messages.removefiltertext)}</UI.DefaultButton>
+          </Grids.Col>
+        </div>
+      );
+    }, this);
     return (
       <li>
         {input}
         {opacity}
         {zoomTo}
         {download}
+        {filter}
         {reorderUp}
         {reorderDown}
         {remove}
         {this.props.children}
+        <Dialog.Modal title={formatMessage(messages.filtermodaltitle, {layer: this.props.layer.get('title')})} ref="filtermodal">
+          <Dialog.ModalBody>
+            <form onSubmit={this._onSubmit} className='form-horizontal layerlistitem'>
+              <div className="form-group">
+                <Grids.Col md={20}>
+                  <input ref='filterTextBox' type='text' className={inputClassName}/>
+                </Grids.Col>
+                <Grids.Col md={4}>
+                  <UI.DefaultButton onClick={this._addFilter.bind(this)}>{formatMessage(messages.addfiltertext)}</UI.DefaultButton>
+                </Grids.Col>
+              </div>
+              {filters}
+            </form>
+          </Dialog.ModalBody>
+          <Dialog.ModalFooter>
+          </Dialog.ModalFooter>
+        </Dialog.Modal>
       </li>
     );
   }
@@ -144,6 +285,10 @@ LayerListItem.propTypes = {
    */
   allowReordering: React.PropTypes.bool,
   /**
+   * Should we allow for filtering of features in a layer?
+   */
+  allowFiltering: React.PropTypes.bool,
+  /**
    * Should we show a download button?
    */
   showDownload: React.PropTypes.bool,
@@ -159,13 +304,6 @@ LayerListItem.propTypes = {
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
-};
-
-LayerListItem.defaultProps = {
-  showZoomTo: false,
-  allowReordering: false,
-  showDownload: false,
-  showOpacity: false
 };
 
 export default injectIntl(LayerListItem);

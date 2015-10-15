@@ -57,13 +57,13 @@ export default class LayerList extends React.Component {
   }
   render() {
     var layers = this.state.layers.slice(0).reverse();
-    var className = 'ol-unselectable ol-control layer-switcher';
+    var className = 'layer-switcher';
     if (this.state.visible) {
       className += ' shown';
     }
     return (
-      <div onMouseOut={this._hidePanel.bind(this)} onMouseOver={this._showPanel.bind(this)} className={className}>
-      <UI.DefaultButton onClick={this._showPanel.bind(this)} title="Layers"><Icon.Icon name="map" /></UI.DefaultButton>
+      <div _onMouseOut={this._hidePanel.bind(this)} onMouseOver={this._showPanel.bind(this)} className={className}>
+      <UI.DefaultButton className='layerlistbutton' onClick={this._showPanel.bind(this)} title="Layers"><Icon.Icon name="map" /></UI.DefaultButton>
       <div className="layer-tree-panel">{this.renderLayers(layers)}</div></div>
     );
   }
@@ -83,6 +83,10 @@ LayerList.propTypes = {
    */
   allowReordering: React.PropTypes.bool,
   /**
+   * Should we allow for filtering of features in a layer?
+   */
+  allowFiltering: React.PropTypes.bool,
+  /**
    * Should we show the contents of layer groups?
    */
   showGroupContent: React.PropTypes.bool,
@@ -99,6 +103,7 @@ LayerList.propTypes = {
 LayerList.defaultProps = {
   showZoomTo: false,
   allowReordering: false,
+  allowFiltering: false,
   showGroupContent: false,
   showDownload: false,
   showOpacity: false

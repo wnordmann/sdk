@@ -10,7 +10,8 @@
 .layer-switcher.shown .layer-tree-panel {
   display: block;
 }
-.layer-switcher button {
+.layerlistbutton {
+  color: white;
   float: right;
   width: 38px;
   height: 38px;
@@ -18,7 +19,7 @@
   background-color: rgba(0,60,136,.5);
   border: none;
 }
-.layer-switcher button:focus, .layer-switcher button:hover {
+.layerlistbutton button:focus, .layerlistbutton button:hover {
   background-color: white;
 }
 .layer-tree-panel {
@@ -65,19 +66,4 @@
 }
 .layer-tree-panel  li:last-child::before {
   height:30px
-}
-.layer-zoom-to {
-  padding-left: 15px;
-}
-.layer-move-up {
-  padding-left: 15px;
-}
-.layer-move-down {
-  padding-left: 15px;
-}
-.layer-download {
-  padding-left: 15px;
-}
-.layer-remove {
-  padding-left: 15px;
 }
