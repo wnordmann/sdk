@@ -26,17 +26,7 @@ const messages = defineMessages({
 class Select extends MapTool {
   constructor(props) {
     super(props);
-    this._select = new ol.interaction.Select();
-    this._handleEvent = this._select.handleEvent;
-    var me = this;
-    this._select.handleEvent = function(mapBrowserEvent) {
-      if (me.active === true) {
-        return me._handleEvent.call(me._select, mapBrowserEvent);
-      } else {
-        return true;
-      }
-    };
-    this.props.map.addInteraction(this._select);
+    FeatureStore.bindMap(this.props.map);
     this._interactions = {
       'RECTANGLE': new ol.interaction.DragBox({
         condition: ol.events.condition.noModifierKeys,
@@ -49,8 +39,6 @@ class Select extends MapTool {
     };
     this._interactions.RECTANGLE.on('boxend', function(evt) {
       var box = evt.target.getGeometry().getExtent();
-      var selectedFeatures = this._select.getFeatures();
-      selectedFeatures.clear();
       this.props.map.getLayers().forEach(function(lyr) {
         if (lyr.get('isSelectable') === true) {
           var selected = [];
@@ -66,18 +54,13 @@ class Select extends MapTool {
       }, this);
     }, this);
   }
-  componentWillMount() {
-    FeatureStore.addChangeListener(this._onChange.bind(this));
+  activate(interactions) {
+    super.activate(interactions);
+    FeatureStore.setSelectOnClick(true);
   }
-  _onChange() {
-    var state = FeatureStore.getState();
-    var selectedFeatures = this._select.getFeatures();
-    selectedFeatures.clear();
-    for (var key in state) {
-      for (var i = 0, ii = state[key].selected.length; i < ii; ++i) {
-        selectedFeatures.push(state[key].selected[i]);
-      }
-    }
+  deactivate() {
+    super.deactivate();
+    FeatureStore.setSelectOnClick(false);
   }
   _selectByRectangle() {
     this.deactivate();

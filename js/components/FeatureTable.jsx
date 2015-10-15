@@ -51,6 +51,7 @@ const messages = defineMessages({
 class FeatureTable extends React.Component {
   constructor(props) {
     super(props);
+    FeatureStore.bindMap(this.props.map);
     this._selectedOnly = false;
     AppDispatcher.register((payload) => {
       let action = payload.action;

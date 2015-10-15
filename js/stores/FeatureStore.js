@@ -15,6 +15,26 @@ class FeatureStore extends EventEmitter {
     this._layers = {};
     this._schema = {};
     this._config = {};
+    this.addChangeListener(this._updateSelect.bind(this));
+  }
+  bindMap(map) {
+    if (this._map !== map) {
+      this._map = map;
+      this._select = new ol.interaction.Select();
+      this._handleEvent = this._select.handleEvent;
+      var me = this;
+      this._select.handleEvent = function(mapBrowserEvent) {
+        if (me.active === true) {
+          return me._handleEvent.call(me._select, mapBrowserEvent);
+        } else {
+          return true;
+        }
+      };
+      this._map.addInteraction(this._select);
+    }
+  }
+  setSelectOnClick(active) {
+    this.active = active;
   }
   addLayer(layer, filter) {
     var id = layer.get('id');
@@ -90,6 +110,16 @@ class FeatureStore extends EventEmitter {
       }
     }
     this.emitChange();
+  }
+  _updateSelect() {
+    var selectedFeatures = this._select.getFeatures();
+    selectedFeatures.clear();
+    var state = this._config;
+    for (var key in state) {
+      for (var i = 0, ii = state[key].selected.length; i < ii; ++i) {
+        selectedFeatures.push(state[key].selected[i]);
+      }
+    }
   }
   toggleFeature(layer, feature) {
     var id = layer.get('id'), idx = this._config[id].selected.indexOf(feature);

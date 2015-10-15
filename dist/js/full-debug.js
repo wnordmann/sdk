@@ -1696,6 +1696,7 @@ var FeatureTable = (function (_React$Component) {
     _classCallCheck(this, FeatureTable);
 
     _get(Object.getPrototypeOf(FeatureTable.prototype), 'constructor', this).call(this, props);
+    _storesFeatureStoreJs2['default'].bindMap(this.props.map);
     this._selectedOnly = false;
     _dispatchersAppDispatcherJs2['default'].register(function (payload) {
       var action = payload.action;
@@ -3747,7 +3748,6 @@ var MapTool = (function (_React$Component) {
         }
       }
       delete this._currentInteractions;
-      this.active = false;
     }
   }, {
     key: 'activate',
@@ -3762,7 +3762,6 @@ var MapTool = (function (_React$Component) {
         map.addInteraction(this._currentInteractions[i]);
       }
       _actionsLayerActionsJs2['default'].activateTool(this, this.props.toggleGroup);
-      this.active = true;
     }
   }]);
 
@@ -5265,17 +5264,7 @@ var Select = (function (_MapTool) {
     _classCallCheck(this, Select);
 
     _get(Object.getPrototypeOf(Select.prototype), 'constructor', this).call(this, props);
-    this._select = new _openlayers2['default'].interaction.Select();
-    this._handleEvent = this._select.handleEvent;
-    var me = this;
-    this._select.handleEvent = function (mapBrowserEvent) {
-      if (me.active === true) {
-        return me._handleEvent.call(me._select, mapBrowserEvent);
-      } else {
-        return true;
-      }
-    };
-    this.props.map.addInteraction(this._select);
+    _storesFeatureStoreJs2['default'].bindMap(this.props.map);
     this._interactions = {
       'RECTANGLE': new _openlayers2['default'].interaction.DragBox({
         condition: _openlayers2['default'].events.condition.noModifierKeys,
@@ -5288,8 +5277,6 @@ var Select = (function (_MapTool) {
     };
     this._interactions.RECTANGLE.on('boxend', function (evt) {
       var box = evt.target.getGeometry().getExtent();
-      var selectedFeatures = this._select.getFeatures();
-      selectedFeatures.clear();
       this.props.map.getLayers().forEach(function (lyr) {
         if (lyr.get('isSelectable') === true) {
           var selected = [];
@@ -5307,21 +5294,16 @@ var Select = (function (_MapTool) {
   }
 
   _createClass(Select, [{
-    key: 'componentWillMount',
-    value: function componentWillMount() {
-      _storesFeatureStoreJs2['default'].addChangeListener(this._onChange.bind(this));
+    key: 'activate',
+    value: function activate(interactions) {
+      _get(Object.getPrototypeOf(Select.prototype), 'activate', this).call(this, interactions);
+      _storesFeatureStoreJs2['default'].setSelectOnClick(true);
     }
   }, {
-    key: '_onChange',
-    value: function _onChange() {
-      var state = _storesFeatureStoreJs2['default'].getState();
-      var selectedFeatures = this._select.getFeatures();
-      selectedFeatures.clear();
-      for (var key in state) {
-        for (var i = 0, ii = state[key].selected.length; i < ii; ++i) {
-          selectedFeatures.push(state[key].selected[i]);
-        }
-      }
+    key: 'deactivate',
+    value: function deactivate() {
+      _get(Object.getPrototypeOf(Select.prototype), 'deactivate', this).call(this);
+      _storesFeatureStoreJs2['default'].setSelectOnClick(false);
     }
   }, {
     key: '_selectByRectangle',
@@ -5667,9 +5649,33 @@ var FeatureStore = (function (_EventEmitter) {
     this._layers = {};
     this._schema = {};
     this._config = {};
+    this.addChangeListener(this._updateSelect.bind(this));
   }
 
   _createClass(FeatureStore, [{
+    key: 'bindMap',
+    value: function bindMap(map) {
+      if (this._map !== map) {
+        this._map = map;
+        this._select = new _openlayers2['default'].interaction.Select();
+        this._handleEvent = this._select.handleEvent;
+        var me = this;
+        this._select.handleEvent = function (mapBrowserEvent) {
+          if (me.active === true) {
+            return me._handleEvent.call(me._select, mapBrowserEvent);
+          } else {
+            return true;
+          }
+        };
+        this._map.addInteraction(this._select);
+      }
+    }
+  }, {
+    key: 'setSelectOnClick',
+    value: function setSelectOnClick(active) {
+      this.active = active;
+    }
+  }, {
     key: 'addLayer',
     value: function addLayer(layer, filter) {
       var id = layer.get('id');
@@ -5757,6 +5763,18 @@ var FeatureStore = (function (_EventEmitter) {
         }
       }
       this.emitChange();
+    }
+  }, {
+    key: '_updateSelect',
+    value: function _updateSelect() {
+      var selectedFeatures = this._select.getFeatures();
+      selectedFeatures.clear();
+      var state = this._config;
+      for (var key in state) {
+        for (var i = 0, ii = state[key].selected.length; i < ii; ++i) {
+          selectedFeatures.push(state[key].selected[i]);
+        }
+      }
     }
   }, {
     key: 'toggleFeature',
