@@ -16,5 +16,17 @@
   min-width: 250px;
   max-height: 350px;
   max-width: 500px;
+}
+
+.popup-closer{
+  padding: 5px;
+}
+
+.popup-content{
   overflow: auto;
+  height: auto;
+  width: auto;
+  min-width: 250px;
+  max-height: 300px;
+  max-width: 500px;
 }

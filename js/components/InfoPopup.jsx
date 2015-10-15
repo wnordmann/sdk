@@ -186,7 +186,7 @@ class InfoPopup extends React.Component {
     var content = this.state.popupTexts.join('<hr>');
     return (
       <article>
-        <a href="#" ref="popupCloser" className="fa fa-times fa-pull-right"></a>
+        <a href="#" ref="popupCloser" className="popup-closer fa fa-times fa-pull-right"></a>
         <div id='popup-content' ref='content' dangerouslySetInnerHTML={{__html: content}}></div>
       </article>
     );
