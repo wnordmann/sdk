@@ -2,7 +2,6 @@ import React from 'react';
 import ol from 'openlayers';
 import LayerStore from '../stores/LayerStore.js';
 import LayerActions from '../actions/LayerActions.js';
-import './LayerSelector.css';
 
 /**
  * A combobox to select a layer.
