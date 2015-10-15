@@ -3353,7 +3353,7 @@ var LayerListItem = (function (_React$Component) {
       var opacity;
       var layer = this.props.layer;
       var source = layer.getSource ? layer.getSource() : undefined;
-      if (this.props.showOpacity && layer.getSource()) {
+      if (this.props.showOpacity && source) {
         var val = layer.getOpacity();
         opacity = _react2['default'].createElement('input', { onChange: this._changeOpacity.bind(this), defaultValue: val, type: 'range', name: 'opacity', min: '0', max: '1', step: '0.01' });
       }
