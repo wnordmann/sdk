@@ -182,7 +182,7 @@ class LayerListItem extends React.Component {
     var opacity;
     const layer = this.props.layer;
     const source = layer.getSource ? layer.getSource() : undefined;
-    if (this.props.showOpacity) {
+    if (this.props.showOpacity && layer.get('type') !== 'base-group') {
       var val = layer.getOpacity();
       opacity = <input onChange={this._changeOpacity.bind(this)} defaultValue={val} type="range" name="opacity" min="0" max="1" step="0.01"></input>;
     }
