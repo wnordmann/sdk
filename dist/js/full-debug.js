@@ -3041,7 +3041,7 @@ var LayerList = (function (_React$Component) {
       }
       return _react2['default'].createElement(
         'div',
-        { _onMouseOut: this._hidePanel.bind(this), onMouseOver: this._showPanel.bind(this), className: className },
+        { onMouseOut: this._hidePanel.bind(this), onMouseOver: this._showPanel.bind(this), className: className },
         _react2['default'].createElement(
           _puiReactButtons2['default'].DefaultButton,
           { className: 'layerlistbutton', onClick: this._showPanel.bind(this), title: 'Layers' },
