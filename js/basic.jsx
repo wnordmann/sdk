@@ -7,7 +7,6 @@ import GeocodingResults from './components/GeocodingResults.jsx';
 import Select from './components/Select.jsx';
 import QueryBuilder from './components/QueryBuilder.jsx';
 import FeatureTable from './components/FeatureTable.jsx';
-import LayerActions from './actions/LayerActions.js';
 import Chart from './components/Chart.jsx';
 import UI from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
@@ -259,7 +258,7 @@ export default class BasicApp extends React.Component {
     this._toggle(document.getElementById('edit-tool-panel'));
   }
   _navigationFunc() {
-    LayerActions.activateTool(null, 'navigation');
+    this.refs.info.refs.wrappedElement.activate([]);
   }
   render() {
     return (
@@ -272,7 +271,7 @@ export default class BasicApp extends React.Component {
             <ul className='pull-right' id='toolbar-select'><Select toggleGroup='navigation' map={map}/></ul>
             <ul className='pull-right' id='toolbar-chart'><Chart container='chart-panel' charts={charts} /></ul>
             <ul className='pull-right' id='toolbar-edit'><UI.DefaultButton onClick={this._toggleEdit.bind(this)}><Icon.Icon name="pencil" /> Edit</UI.DefaultButton></ul>
-            <ul className='pull-right' id='toolbar-navigation'><UI.DefaultButton title='Switch to map navigation (pan and zoom)' onClick={this._navigationFunc}>Navigation</UI.DefaultButton></ul>
+            <ul className='pull-right' id='toolbar-navigation'><UI.DefaultButton title='Switch to map navigation (pan and zoom)' onClick={this._navigationFunc.bind(this)}>Navigation</UI.DefaultButton></ul>
           </div>
         </nav>
         <div id='content'>
@@ -289,7 +288,7 @@ export default class BasicApp extends React.Component {
           </div>
           <div id='table-panel' className='attributes-table'><FeatureTable layer={selectedLayer} map={map} /></div>
           <div id='layerlist'><LayerList allowFiltering={true} showOpacity={true} showDownload={true} showGroupContent={true} showZoomTo={true} allowReordering={true} map={map} /></div>
-          <div id='popup' className='ol-popup'><InfoPopup map={map} /></div>
+          <div id='popup' className='ol-popup'><InfoPopup ref='info' toggleGroup='navigation' map={map} /></div>
         </div>
       </article>
     );

@@ -1,4 +1,5 @@
 import React from 'react';
+import MapTool from './MapTool.js';
 import ol from 'openlayers';
 import './InfoPopup.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -18,7 +19,7 @@ const messages = defineMessages({
 
 const ALL_ATTRS = '#AllAttributes';
 
-class InfoPopup extends React.Component {
+class InfoPopup extends MapTool {
   constructor(props) {
     super(props);
     if (this.props.hover === true) {
@@ -27,6 +28,7 @@ class InfoPopup extends React.Component {
       this.props.map.on('singleclick', this._onMapClick, this);
     }
     this._format = new ol.format.GeoJSON();
+    this.active = true;
     this.state = {
       popupTexts: []
     };
@@ -36,6 +38,14 @@ class InfoPopup extends React.Component {
       element: React.findDOMNode(this).parentNode
     });
     this.props.map.addOverlay(this._overlayPopup);
+  }
+  activate(interactions) {
+    this.active = true;
+    super.activate(interactions);
+  }
+  deactivate() {
+    this.active = false;
+    super.deactivate();
   }
   _forEachLayer(layers, layer) {
     if (layer instanceof ol.layer.Group) {
@@ -133,42 +143,44 @@ class InfoPopup extends React.Component {
     }
   }
   _onMapClick(evt) {
-    const {formatMessage} = this.props.intl;
-    var map = this.props.map;
-    var pixel = map.getEventPixel(evt.originalEvent);
-    var coord = evt.coordinate;
-    var popupTexts = [];
-    map.forEachFeatureAtPixel(pixel, function(feature, layer) {
-      if (feature) {
-        var popupDef = layer.get('popupInfo');
-        if (popupDef) {
-          var featureKeys = feature.getKeys();
-          for (var i = 0, ii = featureKeys.length; i < ii; i++) {
-            var value = feature.get(featureKeys[i]);
-            if (value) {
-              popupDef = popupDef.replace('[' + featureKeys[i] + ']', feature.get(featureKeys[i]));
-            } else {
-              popupDef = popupDef.replace('[' + featureKeys[i] + ']', formatMessage(messages.nulltext));
+    if (this.active) {
+      const {formatMessage} = this.props.intl;
+      var map = this.props.map;
+      var pixel = map.getEventPixel(evt.originalEvent);
+      var coord = evt.coordinate;
+      var popupTexts = [];
+      map.forEachFeatureAtPixel(pixel, function(feature, layer) {
+        if (feature) {
+          var popupDef = layer.get('popupInfo');
+          if (popupDef) {
+            var featureKeys = feature.getKeys();
+            for (var i = 0, ii = featureKeys.length; i < ii; i++) {
+              var value = feature.get(featureKeys[i]);
+              if (value) {
+                popupDef = popupDef.replace('[' + featureKeys[i] + ']', feature.get(featureKeys[i]));
+              } else {
+                popupDef = popupDef.replace('[' + featureKeys[i] + ']', formatMessage(messages.nulltext));
+              }
             }
           }
+          if (popupDef) {
+            popupTexts.push(popupDef);
+          }
         }
-        if (popupDef) {
-          popupTexts.push(popupDef);
+      });
+      var me = this;
+      this._fetchData(evt, popupTexts, function() {
+        if (popupTexts.length) {
+          me._overlayPopup.setPosition(coord);
+          me.setState({
+            popupTexts: popupTexts
+          });
+          me._setVisible(true);
+        } else {
+          me._setVisible(false);
         }
-      }
-    });
-    var me = this;
-    this._fetchData(evt, popupTexts, function() {
-      if (popupTexts.length) {
-        me._overlayPopup.setPosition(coord);
-        me.setState({
-          popupTexts: popupTexts
-        });
-        me._setVisible(true);
-      } else {
-        me._setVisible(false);
-      }
-    });
+      });
+    }
   }
   _setVisible(visible) {
     React.findDOMNode(this).parentNode.style.display = visible ? 'block' : 'none';

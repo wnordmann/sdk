@@ -2723,6 +2723,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _MapToolJs = require('./MapTool.js');
+
+var _MapToolJs2 = _interopRequireDefault(_MapToolJs);
+
 var _openlayers = require('openlayers');
 
 var _openlayers2 = _interopRequireDefault(_openlayers);
@@ -2744,8 +2748,8 @@ var messages = (0, _reactIntl.defineMessages)({
 
 var ALL_ATTRS = '#AllAttributes';
 
-var InfoPopup = (function (_React$Component) {
-  _inherits(InfoPopup, _React$Component);
+var InfoPopup = (function (_MapTool) {
+  _inherits(InfoPopup, _MapTool);
 
   function InfoPopup(props) {
     _classCallCheck(this, InfoPopup);
@@ -2757,6 +2761,7 @@ var InfoPopup = (function (_React$Component) {
       this.props.map.on('singleclick', this._onMapClick, this);
     }
     this._format = new _openlayers2['default'].format.GeoJSON();
+    this.active = true;
     this.state = {
       popupTexts: []
     };
@@ -2769,6 +2774,18 @@ var InfoPopup = (function (_React$Component) {
         element: _react2['default'].findDOMNode(this).parentNode
       });
       this.props.map.addOverlay(this._overlayPopup);
+    }
+  }, {
+    key: 'activate',
+    value: function activate(interactions) {
+      this.active = true;
+      _get(Object.getPrototypeOf(InfoPopup.prototype), 'activate', this).call(this, interactions);
+    }
+  }, {
+    key: 'deactivate',
+    value: function deactivate() {
+      this.active = false;
+      _get(Object.getPrototypeOf(InfoPopup.prototype), 'deactivate', this).call(this);
     }
   }, {
     key: '_forEachLayer',
@@ -2870,43 +2887,56 @@ var InfoPopup = (function (_React$Component) {
   }, {
     key: '_onMapClick',
     value: function _onMapClick(evt) {
-      var formatMessage = this.props.intl.formatMessage;
+      var _this = this;
 
-      var map = this.props.map;
-      var pixel = map.getEventPixel(evt.originalEvent);
-      var coord = evt.coordinate;
-      var popupTexts = [];
-      map.forEachFeatureAtPixel(pixel, function (feature, layer) {
-        if (feature) {
-          var popupDef = layer.get('popupInfo');
-          if (popupDef) {
-            var featureKeys = feature.getKeys();
-            for (var i = 0, ii = featureKeys.length; i < ii; i++) {
-              var value = feature.get(featureKeys[i]);
-              if (value) {
-                popupDef = popupDef.replace('[' + featureKeys[i] + ']', feature.get(featureKeys[i]));
-              } else {
-                popupDef = popupDef.replace('[' + featureKeys[i] + ']', formatMessage(messages.nulltext));
+      if (this.active) {
+        var map;
+        var pixel;
+        var coord;
+        var popupTexts;
+        var me;
+
+        (function () {
+          var formatMessage = _this.props.intl.formatMessage;
+          map = _this.props.map;
+          pixel = map.getEventPixel(evt.originalEvent);
+          coord = evt.coordinate;
+          popupTexts = [];
+
+          map.forEachFeatureAtPixel(pixel, function (feature, layer) {
+            if (feature) {
+              var popupDef = layer.get('popupInfo');
+              if (popupDef) {
+                var featureKeys = feature.getKeys();
+                for (var i = 0, ii = featureKeys.length; i < ii; i++) {
+                  var value = feature.get(featureKeys[i]);
+                  if (value) {
+                    popupDef = popupDef.replace('[' + featureKeys[i] + ']', feature.get(featureKeys[i]));
+                  } else {
+                    popupDef = popupDef.replace('[' + featureKeys[i] + ']', formatMessage(messages.nulltext));
+                  }
+                }
+              }
+              if (popupDef) {
+                popupTexts.push(popupDef);
               }
             }
-          }
-          if (popupDef) {
-            popupTexts.push(popupDef);
-          }
-        }
-      });
-      var me = this;
-      this._fetchData(evt, popupTexts, function () {
-        if (popupTexts.length) {
-          me._overlayPopup.setPosition(coord);
-          me.setState({
-            popupTexts: popupTexts
           });
-          me._setVisible(true);
-        } else {
-          me._setVisible(false);
-        }
-      });
+          me = _this;
+
+          _this._fetchData(evt, popupTexts, function () {
+            if (popupTexts.length) {
+              me._overlayPopup.setPosition(coord);
+              me.setState({
+                popupTexts: popupTexts
+              });
+              me._setVisible(true);
+            } else {
+              me._setVisible(false);
+            }
+          });
+        })();
+      }
     }
   }, {
     key: '_setVisible',
@@ -2936,7 +2966,7 @@ var InfoPopup = (function (_React$Component) {
   }]);
 
   return InfoPopup;
-})(_react2['default'].Component);
+})(_MapToolJs2['default']);
 
 InfoPopup.propTypes = {
   /**
@@ -2960,7 +2990,7 @@ InfoPopup.defaultProps = {
 exports['default'] = (0, _reactIntl.injectIntl)(InfoPopup);
 module.exports = exports['default'];
 
-},{"./InfoPopup.css":19,"openlayers":117,"react":760,"react-intl":549}],21:[function(require,module,exports){
+},{"./InfoPopup.css":19,"./MapTool.js":26,"openlayers":117,"react":760,"react-intl":549}],21:[function(require,module,exports){
 var css = ".layer-switcher {\n  position: absolute;\n  top: 3.5em;\n  right: 0.5em;\n  text-align: left;\n}\n.layer-switcher .layer-tree-panel {\n  display: none;\n}\n.layer-switcher.shown .layer-tree-panel {\n  display: block;\n}\n.layerlistbutton {\n  color: white;\n  float: right;\n  width: 38px;\n  height: 38px;\n  background-color: #7b98bc;\n  background-color: rgba(0,60,136,.5);\n  border: none;\n}\n.layerlistbutton button:focus,\n.layerlistbutton button:hover {\n  background-color: white;\n}\n.layer-tree-panel {\n  padding-right: 50px;\n  border: 1px solid #cccccc;\n  background-color: white;\n  overflow: auto;\n}\n.layer-tree-panel  li {\n  list-style-type: none;\n  margin: 0;\n  padding: 10px 5px 10px 5px;\n  position: relative;\n}\n.layer-tree-panel  li::before,\n.layer-tree-panel  li::after {\n  content: '';\n  left: -20px;\n  position: absolute;\n  right: auto;\n}\n.layer-tree-panel  li::before {\n  border-left: 1px solid #999;\n  bottom: 50px;\n  height: 100%;\n  top: 0;\n  width: 1px;\n}\n.layer-tree-panel  li::after {\n  border-top: 1px solid #999;\n  height: 20px;\n  top: 25px;\n  width: 25px;\n}\n.layer-tree-panel  li span {\n  display: inline-block;\n  padding: 3px 8px;\n  text-decoration: none;\n}\n.layer-tree-panel  li.parent_li>span {\n  cursor: pointer;\n}\n.layer-tree-panel >ul>li::before,\n.layer-tree-panel >ul>li::after {\n  border: 0;\n}\n.layer-tree-panel  li:last-child::before {\n  height: 30px;\n}\n"; (require("browserify-css").createStyle(css, { "href": "js/components/LayerList.css"})); module.exports = css;
 },{"browserify-css":46}],22:[function(require,module,exports){
 'use strict';
