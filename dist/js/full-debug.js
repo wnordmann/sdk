@@ -1723,6 +1723,8 @@ var FeatureTable = (function (_React$Component) {
     this._layer = this.props.layer;
     _storesFeatureStoreJs2['default'].addLayer(this._layer);
     this.state = {
+      gridWidth: this.props.width,
+      gridHeight: this.props.height,
       features: [],
       columnWidths: {},
       selected: []
@@ -1734,6 +1736,20 @@ var FeatureTable = (function (_React$Component) {
     value: function componentWillMount() {
       _storesFeatureStoreJs2['default'].addChangeListener(this._onChange.bind(this));
       this._onChange();
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this._setDimensionsOnState();
+    }
+  }, {
+    key: '_setDimensionsOnState',
+    value: function _setDimensionsOnState() {
+      var tableWrapperNode = _react2['default'].findDOMNode(this);
+      this.setState({
+        gridWidth: tableWrapperNode.offsetWidth,
+        gridHeight: tableWrapperNode.offsetHeight
+      });
     }
   }, {
     key: '_renderLink',
@@ -1929,8 +1945,8 @@ var FeatureTable = (function (_React$Component) {
             headerHeight: this.props.headerHeight,
             onRowClick: this._onRowClick.bind(this),
             rowsCount: this.state.features.length,
-            width: this.props.width,
-            height: this.props.height },
+            width: this.state.gridWidth,
+            height: this.state.gridHeight },
           columnNodes
         )
       );

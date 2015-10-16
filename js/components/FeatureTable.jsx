@@ -80,6 +80,8 @@ class FeatureTable extends React.Component {
     this._layer = this.props.layer;
     FeatureStore.addLayer(this._layer);
     this.state = {
+      gridWidth: this.props.width,
+      gridHeight: this.props.height,
       features: [],
       columnWidths: {},
       selected: []
@@ -88,6 +90,16 @@ class FeatureTable extends React.Component {
   componentWillMount() {
     FeatureStore.addChangeListener(this._onChange.bind(this));
     this._onChange();
+  }
+  componentDidMount() {
+    this._setDimensionsOnState();
+  }
+  _setDimensionsOnState() {
+    var tableWrapperNode = React.findDOMNode(this);
+    this.setState({
+      gridWidth: tableWrapperNode.offsetWidth,
+      gridHeight: tableWrapperNode.offsetHeight
+    });
   }
   _renderLink(cellData) {
     return <a href={cellData} target="_blank">{cellData}</a>;
@@ -218,8 +230,8 @@ class FeatureTable extends React.Component {
           headerHeight={this.props.headerHeight}
           onRowClick={this._onRowClick.bind(this)}
           rowsCount={this.state.features.length}
-          width={this.props.width}
-          height={this.props.height}>
+          width={this.state.gridWidth}
+          height={this.state.gridHeight}>
           {columnNodes}
         </Table>
       </div>);
