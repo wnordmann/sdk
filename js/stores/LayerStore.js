@@ -55,7 +55,7 @@ AppDispatcher.register((payload) => {
     case MapConstants.REMOVE_LAYER:
       layers = _LayerStore.getMap().getLayers();
       layers.remove(action.layer);
-    break;
+      break;
     case MapConstants.MOVE_LAYER_UP:
       layers = _LayerStore.getMap().getLayers();
       index = layers.getArray().indexOf(action.layer);
@@ -65,7 +65,7 @@ AppDispatcher.register((payload) => {
         layers.setAt(index + 1, action.layer);
         layers.setAt(index, next);
       }
-    break;
+      break;
     case MapConstants.MOVE_LAYER_DOWN:
       layers = _LayerStore.getMap().getLayers();
       index = layers.getArray().indexOf(action.layer);
@@ -75,14 +75,14 @@ AppDispatcher.register((payload) => {
         layers.setAt(index - 1, action.layer);
         layers.setAt(index, prev);
       }
-    break;
+      break;
     case MapConstants.ZOOM_TO_LAYER:
       _LayerStore.getMap().getView().fit(
         action.layer.getSource().getExtent(),
         _LayerStore.getMap().getSize()
       );
-    break;
+      break;
     default:
-    break;
+      break;
   }
 });

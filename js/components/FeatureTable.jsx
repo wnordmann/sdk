@@ -173,7 +173,7 @@ class FeatureTable extends React.Component {
         }
       }
       return false;
-    }): rows;
+    }) : rows;
     FeatureStore.setFilter(this._layer, filteredRows);
   }
   render() {

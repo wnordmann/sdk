@@ -64,7 +64,7 @@ class GeocodingResults extends React.Component {
     var source = this._layer.getSource();
     source.clear();
     source.addFeature(new ol.Feature({
-        geometry: new ol.geom.Point(center)
+      geometry: new ol.geom.Point(center)
     }));
   }
   render() {
