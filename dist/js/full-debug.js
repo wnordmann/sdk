@@ -1746,10 +1746,12 @@ var FeatureTable = (function (_React$Component) {
     key: '_setDimensionsOnState',
     value: function _setDimensionsOnState() {
       var tableWrapperNode = _react2['default'].findDOMNode(this);
-      this.setState({
-        gridWidth: tableWrapperNode.offsetWidth,
-        gridHeight: tableWrapperNode.offsetHeight
-      });
+      if (tableWrapperNode.offsetWidth > 0 && tableWrapperNode.offsetHeight > 0) {
+        this.setState({
+          gridWidth: tableWrapperNode.offsetWidth,
+          gridHeight: tableWrapperNode.offsetHeight
+        });
+      }
     }
   }, {
     key: '_renderLink',

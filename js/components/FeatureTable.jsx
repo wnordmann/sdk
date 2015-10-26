@@ -96,10 +96,12 @@ class FeatureTable extends React.Component {
   }
   _setDimensionsOnState() {
     var tableWrapperNode = React.findDOMNode(this);
-    this.setState({
-      gridWidth: tableWrapperNode.offsetWidth,
-      gridHeight: tableWrapperNode.offsetHeight
-    });
+    if (tableWrapperNode.offsetWidth > 0 && tableWrapperNode.offsetHeight > 0) {
+      this.setState({
+        gridWidth: tableWrapperNode.offsetWidth,
+        gridHeight: tableWrapperNode.offsetHeight
+      });
+    }
   }
   _renderLink(cellData) {
     return <a href={cellData} target="_blank">{cellData}</a>;
