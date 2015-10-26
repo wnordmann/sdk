@@ -6,7 +6,7 @@ var ol = require('openlayers');
 global.Intl = require('intl');
 var IntlProvider = require('react-intl').IntlProvider;
 
-var Select = require('./Select.jsx');
+var Select = require('../js/components/Select.jsx');
 
 describe('SelectTool', function() {
   var target, map;
