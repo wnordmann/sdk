@@ -239,7 +239,7 @@ var selectedLayer = map.getLayers().item(2);
 
 export default class BasicApp extends React.Component {
   componentDidMount() {
-    map.setTarget(document.getElementById('map'));
+    map.setTarget(React.findDOMNode(this.refs.map));
   }
   _toggle(el) {
     if (el.style.display === 'block') {
@@ -249,13 +249,13 @@ export default class BasicApp extends React.Component {
     }
   }
   _toggleTable() {
-    this._toggle(document.getElementById('table-panel'));
+    this._toggle(React.findDOMNode(this.refs.tablePanel));
   }
   _toggleQuery() {
-    this._toggle(document.getElementById('query-panel'));
+    this._toggle(React.findDOMNode(this.refs.queryPanel));
   }
   _toggleEdit() {
-    this._toggle(document.getElementById('edit-tool-panel'));
+    this._toggle(React.findDOMNode(this.refs.editToolPanel));
   }
   _navigationFunc() {
     this.refs.info.refs.wrappedElement.activate([]);
@@ -275,18 +275,18 @@ export default class BasicApp extends React.Component {
           </div>
         </nav>
         <div id='content'>
-          <div id='map'>
-            <div id='query-panel' className='query-panel'><QueryBuilder map={map} /></div>
+          <div ref='map' id='map'>
+            <div ref='queryPanel' className='query-panel'><QueryBuilder map={map} /></div>
             <div id='geocoding-results' className='geocoding-results'><GeocodingResults map={map} /></div>
             <div id='bookmarks-panel'><Bookmarks introTitle='Paris bakeries' introDescription='Explore the best bakeries of the capital of France' map={map} bookmarks={bookmarks} /></div>
             <div id='timeline'><Playback map={map} minDate={324511200000} maxDate={1385938800000} /></div>
-            <div id='edit-tool-panel'><Edit toggleGroup='navigation' map={map} /></div>
+            <div ref='editToolPanel' className='edit-tool-panel'><Edit toggleGroup='navigation' map={map} /></div>
             <div id='globe-button' className='ol-unselectable ol-control'><Globe map={map} /></div>
           </div>
           <div id='chart-panel' className='chart-panel'>
             <div id='chart'></div>
           </div>
-          <div id='table-panel' className='attributes-table'><FeatureTable layer={selectedLayer} map={map} /></div>
+          <div ref='tablePanel' className='attributes-table'><FeatureTable layer={selectedLayer} map={map} /></div>
           <div id='layerlist'><LayerList allowFiltering={true} showOpacity={true} showDownload={true} showGroupContent={true} showZoomTo={true} allowReordering={true} map={map} /></div>
           <div id='popup' className='ol-popup'><InfoPopup ref='info' toggleGroup='navigation' map={map} /></div>
         </div>

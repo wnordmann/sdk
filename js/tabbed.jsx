@@ -289,7 +289,7 @@ var printLayouts = [{
 
 export default class TabbedApp extends React.Component {
   componentDidMount() {
-    map.setTarget(document.getElementById('map'));
+    map.setTarget(React.findDOMNode(this.refs.map));
   }
   render() {
     return (
@@ -314,7 +314,7 @@ export default class TabbedApp extends React.Component {
               </UI.SimpleTabs>
             </div>
             <div className='col-md-16 full-height'>
-              <div id='map'></div>
+              <div id='map' ref='map'></div>
               <div id='layerlist'><LayerList showOpacity={true} showDownload={true} showGroupContent={true} showZoomTo={true} allowReordering={true} map={map} /></div>
               <div id='legend'><QGISLegend map={map} legendBasePath='../../resources/legend/' legendData={legendData} /></div>
               <div id='geolocation-control' className='ol-unselectable ol-control'><Geolocation map={map} /></div>
