@@ -5240,7 +5240,7 @@ var QueryBuilder = (function (_React$Component) {
           { className: 'form-group' },
           _react2['default'].createElement(
             _puiReactGrids2['default'].Col,
-            { md: 3 },
+            { md: 6 },
             _react2['default'].createElement(
               'label',
               null,
@@ -5249,7 +5249,7 @@ var QueryBuilder = (function (_React$Component) {
           ),
           _react2['default'].createElement(
             _puiReactGrids2['default'].Col,
-            { md: 21 },
+            { md: 18 },
             _react2['default'].createElement(_LayerSelectorJsx2['default'], { ref: 'layerSelector', filter: this._filterLayerList, map: this.props.map })
           )
         ),
@@ -5258,7 +5258,7 @@ var QueryBuilder = (function (_React$Component) {
           { className: 'form-group' },
           _react2['default'].createElement(
             _puiReactGrids2['default'].Col,
-            { md: 3 },
+            { md: 6 },
             _react2['default'].createElement(
               'label',
               null,
@@ -5267,7 +5267,7 @@ var QueryBuilder = (function (_React$Component) {
           ),
           _react2['default'].createElement(
             _puiReactGrids2['default'].Col,
-            { md: 21 },
+            { md: 18 },
             _react2['default'].createElement('input', { onKeyUp: this._setQueryFilter.bind(this), className: inputClassName, ref: 'queryExpression', id: 'query-expression', placeholder: formatMessage(messages.filterplaceholder), type: 'text' })
           )
         ),

@@ -144,12 +144,12 @@ class QueryBuilder extends React.Component {
     return (
       <form onSubmit={this._onSubmit} role="form" className='form-horizontal query-builder'>
         <div className="form-group">
-          <Grids.Col md={3}><label>{formatMessage(messages.layerlabel)}</label></Grids.Col>
-          <Grids.Col md={21}><LayerSelector ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /></Grids.Col>
+          <Grids.Col md={6}><label>{formatMessage(messages.layerlabel)}</label></Grids.Col>
+          <Grids.Col md={18}><LayerSelector ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /></Grids.Col>
         </div>
         <div className='form-group'>
-          <Grids.Col md={3}><label>{formatMessage(messages.filterlabel)}</label></Grids.Col>
-          <Grids.Col md={21}><input onKeyUp={this._setQueryFilter.bind(this)} className={inputClassName} ref='queryExpression' id='query-expression' placeholder={formatMessage(messages.filterplaceholder)} type='text'/></Grids.Col>
+          <Grids.Col md={6}><label>{formatMessage(messages.filterlabel)}</label></Grids.Col>
+          <Grids.Col md={18}><input onKeyUp={this._setQueryFilter.bind(this)} className={inputClassName} ref='queryExpression' id='query-expression' placeholder={formatMessage(messages.filterplaceholder)} type='text'/></Grids.Col>
         </div>
         <div className='form-group text-center'>
             <UI.DefaultButton onClick={this._newSelection.bind(this)} title={formatMessage(messages.newbuttontitle)}><Icon.Icon name="file" /> {formatMessage(messages.newbuttontext)}</UI.DefaultButton>
