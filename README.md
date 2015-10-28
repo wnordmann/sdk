@@ -27,6 +27,7 @@ In order to keep the full build (used by the free version of QGIS Web Applicatio
     npm run build:full:debug
     git add dist/js
     npm run css
+    npm run minify:css
     git add css
     npm run docs
     git add api
