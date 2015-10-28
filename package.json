@@ -30,6 +30,7 @@
     "bootstrap": "3.3.5",
     "browser-filesaver": "^1.1.0",
     "c3-windows": "^0.4.11-rc4",
+    "debounce": "^1.0.0",
     "filtrex": "^0.5.4",
     "fixed-data-table": "^0.4.6",
     "flux": "^2.0.1",

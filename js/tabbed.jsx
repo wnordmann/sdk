@@ -308,7 +308,7 @@ export default class TabbedApp extends React.Component {
             <div className='col-md-8 full-height' id='tabs-panel'>
               <UI.SimpleTabs defaultActiveKey={2}>
                 <UI.Tab eventKey={1} title="Geocoding"><div id='geocoding-tab'><Geocoding /></div><div id='geocoding-results' className='geocoding-results'><GeocodingResults map={map} /></div></UI.Tab>
-                <UI.Tab eventKey={2} title="Attributes table"><div id="attributes-table-tab"><FeatureTable layer={selectedLayer} map={map} /></div></UI.Tab>
+                <UI.Tab eventKey={2} title="Attributes table"><div id="attributes-table-tab"><FeatureTable resizeTo='tabs-panel' offset={[50, 60]} layer={selectedLayer} map={map} /></div></UI.Tab>
                 <UI.Tab eventKey={3} title="Query"><div id='query-panel' className='query-panel'><QueryBuilder map={map} /></div></UI.Tab>
                 <UI.Tab eventKey={4} title="Charts"><div id='charts-tab'><Chart combo={true} charts={charts}/></div></UI.Tab>
               </UI.SimpleTabs>

@@ -1,5 +1,6 @@
 import React from 'react';
 import ol from 'openlayers';
+import debounce from  'debounce';
 import FixedDataTable from 'fixed-data-table';
 import '../../node_modules/fixed-data-table/dist/fixed-data-table.css';
 import FeatureStore from '../stores/FeatureStore.js';
@@ -90,16 +91,27 @@ class FeatureTable extends React.Component {
   componentWillMount() {
     FeatureStore.addChangeListener(this._onChange.bind(this));
     this._onChange();
+    this._setDimensionsOnState = debounce(this._setDimensionsOnState, this.props.refreshRate);
   }
   componentDidMount() {
     this._setDimensionsOnState();
+    this._attachResizeEvent();
+  }
+  componentWillUnmount() {
+    global.removeEventListener('resize', this._setDimensionsOnState);
+  }
+  _attachResizeEvent() {
+    if (global.addEventListener) {
+      global.addEventListener('resize', this._setDimensionsOnState.bind(this), false);
+    }
   }
   _setDimensionsOnState() {
-    var tableWrapperNode = React.findDOMNode(this);
-    if (tableWrapperNode.offsetWidth > 0 && tableWrapperNode.offsetHeight > 0) {
+    if (this.props.resizeTo) {
+      var resizeToNode = document.getElementById(this.props.resizeTo);
+      var formNode = React.findDOMNode(this.refs.form);
       this.setState({
-        gridWidth: tableWrapperNode.offsetWidth,
-        gridHeight: tableWrapperNode.offsetHeight
+        gridWidth: resizeToNode.offsetWidth - this.props.offset[0],
+        gridHeight: resizeToNode.offsetHeight - formNode.offsetHeight - this.props.offset[1]
       });
     }
   }
@@ -212,7 +224,7 @@ class FeatureTable extends React.Component {
     }
     return (
       <div id='attributes-table'>
-        <form onSubmit={this._onSubmit.bind(this)} role='form' className='form-inline'>
+        <form ref='form' onSubmit={this._onSubmit.bind(this)} role='form' className='form-inline'>
           <label>{formatMessage(messages.layerlabel)}:</label>
           <LayerSelector ref='layerSelector' filter={this._filterLayerList} map={this.props.map} value={this.props.layer.get('id')} />
           <UI.DefaultButton onClick={this._zoomSelected.bind(this)} title={formatMessage(messages.zoombuttontitle)}><Icon.Icon name="search" /> {formatMessage(messages.zoombuttontext)}</UI.DefaultButton>
@@ -274,6 +286,18 @@ FeatureTable.propTypes = {
    */
   pointZoom: React.PropTypes.number,
   /**
+   * The id of the container to resize the feature table to.
+   */
+  resizeTo: React.PropTypes.string,
+  /**
+   * Array with offsetX and offsetY, the number of pixels to make the table smaller than the resizeTo container.
+   */
+  offset: React.PropTypes.array,
+  /**
+   * Refresh rate in ms that determines how often to resize the feature table when the window is resized.
+   */
+  refreshRate: React.PropTypes.number,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
@@ -285,7 +309,9 @@ FeatureTable.defaultProps = {
   rowHeight: 30,
   headerHeight: 50,
   columnWidth: 100,
-  pointZoom: 16
+  pointZoom: 16,
+  offset: [0, 0],
+  refreshRate: 250
 };
 
 export default injectIntl(FeatureTable);
