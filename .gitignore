@@ -4,5 +4,4 @@ dist/js/basic*.js
 dist/js/tabbed*.js
 npm-debug.log
 tmp
-css
 build
