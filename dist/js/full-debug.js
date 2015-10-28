@@ -3480,7 +3480,7 @@ var LayerListItem = (function (_React$Component) {
         opacity = _react2['default'].createElement('input', { onChange: this._changeOpacity.bind(this), defaultValue: val, type: 'range', name: 'opacity', min: '0', max: '1', step: '0.01' });
       }
       var zoomTo;
-      if (layer.get('type') !== 'base' && layer.get('type') !== 'base-group' && (source && source.getExtent) && this.props.showZoomTo) {
+      if (layer.get('type') !== 'base' && layer.get('type') !== 'base-group' && source && source.getExtent && this.props.showZoomTo) {
         zoomTo = _react2['default'].createElement(
           'a',
           { title: formatMessage(messages.zoomtotitle), href: '#', onClick: this._zoomTo.bind(this) },
@@ -42726,6 +42726,10 @@ module.exports = Icon;
 /*(c) Copyright 2015 Pivotal Software, Inc. All Rights Reserved.*/
 'use strict';
 
+var _objectWithoutProperties = require('babel-runtime/helpers/object-without-properties')['default'];
+
+var _extends = require('babel-runtime/helpers/extends')['default'];
+
 var _puiReactHelpers = require('pui-react-helpers');
 
 var React = require('react/addons');
@@ -42737,6 +42741,172 @@ var DefaultH4 = _require.DefaultH4;
 require('classlist-polyfill');
 
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+
+/**
+ * @component BaseModal
+ * @description Opens a modal window with scrim.
+ *
+ * @property title {String} Header text for the modal window
+ * @property open {Boolean} Whether the modal is opened
+ * @property onRequestClose {Function} Triggered by either clicking the "x" button, clicking on the scrim or pressing Escape
+ *
+ * @example ```js
+ * var BaseModal = require('pui-react-modals').BaseModal;
+ * var ModalBody = require('pui-react-modals').ModalBody;
+ * var ModalFooter = require('pui-react-modals').ModalFooter;
+ * var DefaultButton = require('pui-react-buttons').DefaultButton;
+ * var MyComponent = React.createClass({
+ *   getInitialState() {
+ *     return {
+ *       open: false
+ *     };
+ *   },
+ *   openModal() {
+ *    this.setState({open: true});
+ *   },
+ *
+ *   closeModal() {
+ *    this.setState({open: false});
+ *   },
+ *
+ *   render() {
+ *     return (
+ *      <article>
+ *        <DefaultButton onClick={this.openModal}>Click to Open Modal</DefaultButton>
+ *
+ *        <BaseModal title="Modal Header Text" ref="modal" open={this.state.open} onRequestClose={this.closeModal}>
+ *          <ModalBody>Modal Body Text</ModalBody>
+ *          <ModalFooter>
+ *            <DefaultButton onClick={this.closeModal}>Click to Close Modal</DefaultButton>
+ *          </ModalFooter>
+ *        </BaseModal>
+ *      </article>
+ *     );
+ *   }
+ * });
+ * ```
+ *
+ */
+
+var BaseModal = React.createClass({
+  displayName: 'BaseModal',
+
+  propTypes: {
+    title: React.PropTypes.string,
+    open: React.PropTypes.bool,
+    onRequestClose: React.PropTypes.func
+  },
+
+  getDefaultProps: function getDefaultProps() {
+    return {
+      onRequestClose: function onRequestClose() {}
+    };
+  },
+
+  componentDidMount: function componentDidMount() {
+    document.body.addEventListener('focus', this.ignoreKey, true);
+    document.body.addEventListener('keyup', this.onKeyUp, true);
+  },
+
+  componentWillUnmount: function componentWillUnmount() {
+    document.body.removeEventListener('focus', this.ignoreKey, true);
+    document.body.removeEventListener('keyup', this.onKeyUp, true);
+  },
+
+  componentWillUpdate: function componentWillUpdate(nextProps) {
+    if (nextProps.open) {
+      document.body.classList.add('modal-open');
+    } else {
+      document.body.classList.remove('modal-open');
+    }
+  },
+
+  close: function close() {
+    this.props.onRequestClose();
+  },
+
+  childrenClick: function childrenClick(e) {
+    if (e.target === this.refs.modal.getDOMNode()) {
+      this.close();
+    }
+  },
+
+  ignoreKey: function ignoreKey(e) {
+    if (this.props.open && !React.findDOMNode(this.refs.modalTransitions).contains(e.target)) {
+      e.preventDefault();
+      React.findDOMNode(this.refs.modalTransitions).focus();
+    }
+  },
+
+  onKeyUp: function onKeyUp(e) {
+    if (e.keyCode === 27) {
+      this.close();
+    }
+  },
+
+  render: function render() {
+    var _props = this.props;
+    var open = _props.open;
+    var title = _props.title;
+    var children = _props.children;
+
+    var modalProps = _objectWithoutProperties(_props, ['open', 'title', 'children']);
+
+    var modal = null;
+    var backdrop = null;
+
+    if (open) {
+      modal = React.createElement(
+        'div',
+        { className: 'modal modal-basic', style: { display: 'block' }, key: 'bananas', ref: 'modal',
+          onClick: this.childrenClick, role: 'dialog' },
+        React.createElement(
+          'div',
+          { className: 'modal-dialog' },
+          React.createElement(
+            'div',
+            _puiReactHelpers.mergeProps(modalProps, { className: 'modal-content' }),
+            React.createElement(
+              'div',
+              { className: 'modal-header' },
+              React.createElement(
+                'button',
+                { type: 'button', className: 'close', onClick: this.close },
+                React.createElement(
+                  'span',
+                  { 'aria-hidden': 'true' },
+                  '×'
+                )
+              ),
+              React.createElement(
+                DefaultH4,
+                { className: 'modal-title', id: 'modalTitle' },
+                title
+              )
+            ),
+            children
+          )
+        )
+      );
+      backdrop = React.createElement('div', { className: 'modal-backdrop in', key: 'tangerine', onClick: this.close });
+    }
+
+    return React.createElement(
+      'div',
+      { tabIndex: '-1', ref: 'modalTransitions', 'aria-labelledby': 'modalTitle' },
+      React.createElement(
+        ReactCSSTransitionGroup,
+        { transitionName: 'modal-backdrop-fade' },
+        backdrop
+      ),
+      React.createElement(
+        ReactCSSTransitionGroup,
+        { transitionName: 'modal-fade' },
+        modal
+      )
+    );
+  }
+});
 
 /**
  * @component Modal
@@ -42779,113 +42949,20 @@ var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 var Modal = React.createClass({
   displayName: 'Modal',
 
-  propTypes: {
-    title: React.PropTypes.string
-  },
-
-  componentDidMount: function componentDidMount() {
-    document.body.addEventListener('focus', this.ignoreKey, true);
-    document.body.addEventListener('keyup', this.onKeyUp, true);
-  },
-
-  componentWillUnmount: function componentWillUnmount() {
-    document.body.removeEventListener('focus', this.ignoreKey);
-    document.body.removeEventListener('keyup', this.onKeyUp);
-  },
-
   getInitialState: function getInitialState() {
     return { isVisible: false };
   },
 
-  componentWillUpdate: function componentWillUpdate(nextProps, nextState) {
-    if (nextState.isVisible) {
-      document.body.classList.add('modal-open');
-    } else {
-      document.body.classList.remove('modal-open');
-    }
-  },
-
   open: function open() {
     this.setState({ isVisible: true });
-    React.findDOMNode(this.refs.modalTransitions).focus();
   },
 
   close: function close() {
     this.setState({ isVisible: false });
   },
 
-  childrenClick: function childrenClick(e) {
-    if (e.target === this.refs.modal.getDOMNode()) {
-      this.close();
-    }
-  },
-
-  ignoreKey: function ignoreKey(e) {
-    if (this.state.isVisible && !React.findDOMNode(this.refs.modalTransitions).contains(e.target)) {
-      e.preventDefault();
-      React.findDOMNode(this.refs.modalTransitions).focus();
-    }
-  },
-
-  onKeyUp: function onKeyUp(e) {
-    if (e.keyCode === 27) {
-      this.close();
-    }
-  },
-
   render: function render() {
-    var modal = null;
-    var backdrop = null;
-    if (this.state.isVisible) {
-      modal = React.createElement(
-        'div',
-        { className: 'modal modal-basic', style: { display: 'block' }, key: 'bananas', ref: 'modal',
-          onClick: this.childrenClick, role: 'dialog' },
-        React.createElement(
-          'div',
-          { className: 'modal-dialog' },
-          React.createElement(
-            'div',
-            _puiReactHelpers.mergeProps(this.props, { className: 'modal-content' }),
-            React.createElement(
-              'div',
-              { className: 'modal-header' },
-              React.createElement(
-                'button',
-                { type: 'button', className: 'close', onClick: this.close },
-                React.createElement(
-                  'span',
-                  { 'aria-hidden': 'true' },
-                  '×'
-                )
-              ),
-              React.createElement(
-                DefaultH4,
-                { className: 'modal-title', id: 'modalTitle' },
-                this.props.title
-              )
-            ),
-            this.props.children
-          )
-        )
-      );
-      backdrop = React.createElement('div', { className: 'modal-backdrop in', key: 'tangerine', onClick: this.close });
-    }
-
-    return React.createElement(
-      'div',
-      { tabIndex: '-1', ref: 'modalTransitions', 'aria-labelledby': 'modalTitle' },
-      React.createElement(
-        ReactCSSTransitionGroup,
-        { transitionName: 'modal-backdrop-fade' },
-        backdrop
-      ),
-      React.createElement(
-        ReactCSSTransitionGroup,
-        { transitionName: 'modal-fade' },
-        modal
-      )
-    );
+    return React.createElement(BaseModal, _extends({ open: this.state.isVisible, onRequestClose: this.close }, this.props));
   }
 });
 
@@ -42923,91 +43000,8 @@ var ModalFooter = React.createClass({
   }
 });
 
-module.exports = { Modal: Modal, ModalBody: ModalBody, ModalFooter: ModalFooter };
-
-/*doc
----
-title: Modals
-name: modal_react
-categories:
- - react_components_modals
- - react_all
----
-
-<code class="pam">
-<i class="fa fa-download" alt="Install the Component">
-npm install pui-react-modals --save
-</i>
-</code>
-
-For the example, you also need to install [Buttons](#button_react) and require `DefaultButton` from it.
-
-Require the subcomponent:
-
-```
-var Modal = require('pui-react-modals').Modal;
-var ModalBody = require('pui-react-modals').ModalBody;
-var ModalFooter = require('pui-react-modals').ModalFooter;
-```
-
-We provide 3 components that can be used to assemble modals:
-
-* `Modal`
-* `ModalBody`
-* `ModalFooter`
-
-<div class="alert alert-info mbxl">
-  <h5 class="em-high mtn">
-    Opening and closing the modal with callbacks
-  </h5>
-  <p>
-    Modals will be closed by default. To open the modal, add a <code>ref</code>
-    property to the modal (i.e. <code>ref='myModal'</code>). Trigger
-    <code>this.refs.myModal.open();</code> to open the modal, and
-    <code>this.refs.myModal.close();</code> to close the modal.
-  </p>
-</div>
-
-There are 4 ways to close the modal
-
-* Clicking the "x" button
-* Clicking on the modal backdrop
-* Clicking the esc key
-* Doing any action that triggers `this.refs.myModal.close`.
-
-```jsx_example
-
-var MyModal = React.createClass({
-  _openModal: function(){
-    this.refs.modal.open();
-  },
-
-  _closeModal: function() {
-    this.refs.modal.close();
-  },
-
-  render: function() {
-    return (
-      <div>
-        <DefaultButton id='openButton' onClick={this._openModal}>Open Modal</DefaultButton>
-        <Modal title='What a Header!' ref='modal' className='optional-custom-class'>
-          <ModalBody>Text in a body</ModalBody>
-          <ModalFooter>
-            <DefaultButton id='closeButton' onClick={this._closeModal}>Close</DefaultButton>
-          </ModalFooter>
-        </Modal>
-      </div>
-    )
-  }
-});
-
-```
-
-```react_example_table
-<MyModal/>
-```
-*/
-},{"classlist-polyfill":413,"pui-react-helpers":323,"pui-react-typography":414,"react/addons":578}],398:[function(require,module,exports){
+module.exports = { Modal: Modal, ModalBody: ModalBody, ModalFooter: ModalFooter, BaseModal: BaseModal };
+},{"babel-runtime/helpers/extends":399,"babel-runtime/helpers/object-without-properties":400,"classlist-polyfill":413,"pui-react-helpers":323,"pui-react-typography":414,"react/addons":578}],398:[function(require,module,exports){
 arguments[4][121][0].apply(exports,arguments)
 },{"core-js/library/fn/object/assign":401,"dup":121}],399:[function(require,module,exports){
 arguments[4][123][0].apply(exports,arguments)
