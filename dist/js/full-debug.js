@@ -1757,9 +1757,7 @@ var FeatureTable = (function (_React$Component) {
   }, {
     key: '_attachResizeEvent',
     value: function _attachResizeEvent() {
-      if (global.addEventListener) {
-        global.addEventListener('resize', this._setDimensionsOnState.bind(this), false);
-      }
+      global.addEventListener('resize', this._setDimensionsOnState.bind(this), false);
     }
   }, {
     key: '_setDimensionsOnState',

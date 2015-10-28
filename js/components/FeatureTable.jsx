@@ -101,9 +101,7 @@ class FeatureTable extends React.Component {
     global.removeEventListener('resize', this._setDimensionsOnState);
   }
   _attachResizeEvent() {
-    if (global.addEventListener) {
-      global.addEventListener('resize', this._setDimensionsOnState.bind(this), false);
-    }
+    global.addEventListener('resize', this._setDimensionsOnState.bind(this), false);
   }
   _setDimensionsOnState() {
     if (this.props.resizeTo) {
