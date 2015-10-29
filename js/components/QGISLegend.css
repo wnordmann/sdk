@@ -19,12 +19,14 @@
   display: block;
 }
 .legend button {
+  color: white;
   float: right;
   width: 38px;
   height: 38px;
   background-color: #7b98bc;
   background-color: rgba(0,60,136,.5);
   border: none;
+  padding: 2px;
 }
 .legend button:focus, .legend button:hover {
   background-color: white;

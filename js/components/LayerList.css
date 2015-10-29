@@ -18,6 +18,7 @@
   background-color: #7b98bc;
   background-color: rgba(0,60,136,.5);
   border: none;
+  padding: 2px;
 }
 .layerlistbutton button:focus, .layerlistbutton button:hover {
   background-color: white;

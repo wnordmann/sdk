@@ -60,7 +60,7 @@ class QGISLegend extends React.Component {
   }
   render() {
     const {formatMessage} = this.props.intl;
-    var className = 'ol-unselectable ol-control legend';
+    var className = 'legend';
     if (this.state.visible) {
       className += ' shown';
     }
