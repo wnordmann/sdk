@@ -250,6 +250,7 @@ export default class BasicApp extends React.Component {
   }
   _toggleTable() {
     this._toggle(React.findDOMNode(this.refs.tablePanel));
+    this.refs.table.refs.wrappedElement.setDimensionsOnState();
   }
   _toggleQuery() {
     this._toggle(React.findDOMNode(this.refs.queryPanel));
@@ -286,7 +287,7 @@ export default class BasicApp extends React.Component {
           <div id='chart-panel' className='chart-panel'>
             <div id='chart'></div>
           </div>
-          <div ref='tablePanel' className='attributes-table'><FeatureTable layer={selectedLayer} map={map} /></div>
+          <div ref='tablePanel' id='table-panel' className='attributes-table'><FeatureTable ref='table' resizeTo='table-panel' offset={[30, 30]} layer={selectedLayer} map={map} /></div>
           <div id='layerlist'><LayerList allowFiltering={true} showOpacity={true} showDownload={true} showGroupContent={true} showZoomTo={true} allowReordering={true} map={map} /></div>
           <div id='popup' className='ol-popup'><InfoPopup ref='info' toggleGroup='navigation' map={map} /></div>
         </div>

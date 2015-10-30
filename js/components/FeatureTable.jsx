@@ -91,19 +91,19 @@ class FeatureTable extends React.Component {
   componentWillMount() {
     FeatureStore.addChangeListener(this._onChange.bind(this));
     this._onChange();
-    this._setDimensionsOnState = debounce(this._setDimensionsOnState, this.props.refreshRate);
+    this.setDimensionsOnState = debounce(this.setDimensionsOnState, this.props.refreshRate);
   }
   componentDidMount() {
-    this._setDimensionsOnState();
+    this.setDimensionsOnState();
     this._attachResizeEvent();
   }
   componentWillUnmount() {
-    global.removeEventListener('resize', this._setDimensionsOnState);
+    global.removeEventListener('resize', this.setDimensionsOnState);
   }
   _attachResizeEvent() {
-    global.addEventListener('resize', this._setDimensionsOnState.bind(this), false);
+    global.addEventListener('resize', this.setDimensionsOnState.bind(this), false);
   }
-  _setDimensionsOnState() {
+  setDimensionsOnState() {
     if (this.props.resizeTo) {
       var resizeToNode = document.getElementById(this.props.resizeTo);
       var formNode = React.findDOMNode(this.refs.form);

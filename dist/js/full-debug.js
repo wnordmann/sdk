@@ -1741,27 +1741,27 @@ var FeatureTable = (function (_React$Component) {
     value: function componentWillMount() {
       _storesFeatureStoreJs2['default'].addChangeListener(this._onChange.bind(this));
       this._onChange();
-      this._setDimensionsOnState = (0, _debounce2['default'])(this._setDimensionsOnState, this.props.refreshRate);
+      this.setDimensionsOnState = (0, _debounce2['default'])(this.setDimensionsOnState, this.props.refreshRate);
     }
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
-      this._setDimensionsOnState();
+      this.setDimensionsOnState();
       this._attachResizeEvent();
     }
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
-      global.removeEventListener('resize', this._setDimensionsOnState);
+      global.removeEventListener('resize', this.setDimensionsOnState);
     }
   }, {
     key: '_attachResizeEvent',
     value: function _attachResizeEvent() {
-      global.addEventListener('resize', this._setDimensionsOnState.bind(this), false);
+      global.addEventListener('resize', this.setDimensionsOnState.bind(this), false);
     }
   }, {
-    key: '_setDimensionsOnState',
-    value: function _setDimensionsOnState() {
+    key: 'setDimensionsOnState',
+    value: function setDimensionsOnState() {
       if (this.props.resizeTo) {
         var resizeToNode = document.getElementById(this.props.resizeTo);
         var formNode = _react2['default'].findDOMNode(this.refs.form);
