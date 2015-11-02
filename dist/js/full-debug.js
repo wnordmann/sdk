@@ -6058,6 +6058,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== 'function' 
 
 var _events = require('events');
 
+var _openlayers = require('openlayers');
+
+var _openlayers2 = _interopRequireDefault(_openlayers);
+
 var _dispatchersAppDispatcherJs = require('../dispatchers/AppDispatcher.js');
 
 var _dispatchersAppDispatcherJs2 = _interopRequireDefault(_dispatchersAppDispatcherJs);
@@ -6091,15 +6095,28 @@ var LayerStore = (function (_EventEmitter) {
       }
     }
   }, {
+    key: '_forEachLayer',
+    value: function _forEachLayer(layer, layers, id) {
+      if (layer.get('id') === id) {
+        layers.push(layer);
+      } else {
+        if (layer instanceof _openlayers2['default'].layer.Group) {
+          layer.getLayers().forEach(function (groupLayer) {
+            this._forEachLayer(groupLayer, layers, id);
+          }, this);
+        }
+      }
+    }
+  }, {
     key: 'findLayer',
     value: function findLayer(id) {
-      var layer;
-      config.layers.map(function (lyr) {
-        if (lyr.get('id') === id) {
-          layer = lyr;
-        }
-      });
-      return layer;
+      var layers = [];
+      this._forEachLayer(this._map.getLayerGroup(), layers, id);
+      if (layers.length === 1) {
+        return layers[0];
+      } else {
+        return undefined;
+      }
     }
   }, {
     key: 'getMap',
@@ -6173,7 +6190,7 @@ _dispatchersAppDispatcherJs2['default'].register(function (payload) {
 });
 module.exports = exports['default'];
 
-},{"../constants/MapConstants.js":38,"../dispatchers/AppDispatcher.js":40,"events":52}],44:[function(require,module,exports){
+},{"../constants/MapConstants.js":38,"../dispatchers/AppDispatcher.js":40,"events":52,"openlayers":119}],44:[function(require,module,exports){
 /*
  * JavaScript Canvas to Blob 2.0.5
  * https://github.com/blueimp/JavaScript-Canvas-to-Blob

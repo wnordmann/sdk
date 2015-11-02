@@ -1,6 +1,7 @@
 /* global document */
 
 import {EventEmitter} from 'events';
+import ol from 'openlayers';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import MapConstants from '../constants/MapConstants.js';
 
@@ -18,14 +19,25 @@ class LayerStore extends EventEmitter {
       this._map.getLayers().on('remove', this.emitChange, this);
     }
   }
-  findLayer(id) {
-    var layer;
-    config.layers.map(function(lyr) {
-      if (lyr.get('id') === id) {
-        layer = lyr;
+  _forEachLayer(layer, layers, id) {
+    if (layer.get('id') === id) {
+      layers.push(layer);
+    } else {
+      if (layer instanceof ol.layer.Group) {
+        layer.getLayers().forEach(function(groupLayer) {
+          this._forEachLayer(groupLayer, layers, id);
+        }, this);
       }
-    });
-    return layer;
+    }
+  }
+  findLayer(id) {
+    var layers = [];
+    this._forEachLayer(this._map.getLayerGroup(), layers, id);
+    if (layers.length === 1) {
+      return layers[0];
+    } else {
+      return undefined;
+    }
   }
   getMap() {
     return this._map;
