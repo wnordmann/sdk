@@ -207,8 +207,14 @@ class FeatureTable extends React.Component {
     var schema = FeatureStore.getSchema(this._layer);
     var id = this._layer.get('id');
     var columnNodes = [];
+    var defaultWidth;
+    if (schema && this.state.gridWidth) {
+      defaultWidth = Math.max(this.props.columnWidth, (this.state.gridWidth / Object.keys(schema).length));
+    } else {
+      defaultWidth = this.props.columnWidth;
+    }
     for (var key in schema) {
-      var width = this.state.columnWidths[id] && this.state.columnWidths[id][key] ? this.state.columnWidths[id][key] : this.props.columnWidth;
+      var width = this.state.columnWidths[id] && this.state.columnWidths[id][key] ? this.state.columnWidths[id][key] : defaultWidth;
       var cellRenderer = (schema[key] === 'link') ? this._renderLink : undefined;
       columnNodes.push(
         <Column
