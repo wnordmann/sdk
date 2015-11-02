@@ -12,13 +12,17 @@ export default class LayerSelector extends React.Component {
     LayerStore.bindMap(this.props.map);
   }
   componentWillMount() {
-    LayerStore.addChangeListener(this._onChange.bind(this));
+    this._onChangeCb = this._onChange.bind(this);
+    LayerStore.addChangeListener(this._onChangeCb);
     this._onChange();
   }
   componentDidMount() {
     var select = React.findDOMNode(this.refs.layerSelect);
     var layer = LayerStore.findLayer(select.value);
     LayerActions.selectLayer(layer, this);
+  }
+  componentWillUnmount() {
+    LayerStore.removeChangeListener(this._onChangeCb);
   }
   getLayer() {
     var select = React.findDOMNode(this.refs.layerSelect);
@@ -33,7 +37,7 @@ export default class LayerSelector extends React.Component {
   }
   render() {
     var me = this;
-    var selectItems = this.state.layers.map(function(lyr, idx) {
+    var selectItems = this.state.flatLayers.map(function(lyr, idx) {
       var title = lyr.get('title'), id = lyr.get('id');
       if (!me.props.filter || me.props.filter(lyr) === true) {
         return (

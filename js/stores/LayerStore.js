@@ -19,6 +19,15 @@ class LayerStore extends EventEmitter {
       this._map.getLayers().on('remove', this.emitChange, this);
     }
   }
+  _flattenForEach(layer, layers) {
+    if (layer instanceof ol.layer.Group) {
+      layer.getLayers().forEach(function(groupLayer) {
+        this._flattenForEach(groupLayer, layers);
+      }, this);
+    } else {
+      layers.push(layer);
+    }
+  }
   _forEachLayer(layer, layers, id) {
     if (layer.get('id') === id) {
       layers.push(layer);
@@ -43,6 +52,8 @@ class LayerStore extends EventEmitter {
     return this._map;
   }
   getState() {
+    config.flatLayers = [];
+    this._flattenForEach(this._map.getLayerGroup(), config.flatLayers);
     return config;
   }
   emitChange() {

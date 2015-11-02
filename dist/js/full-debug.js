@@ -3727,7 +3727,8 @@ var LayerSelector = (function (_React$Component) {
   _createClass(LayerSelector, [{
     key: 'componentWillMount',
     value: function componentWillMount() {
-      _storesLayerStoreJs2['default'].addChangeListener(this._onChange.bind(this));
+      this._onChangeCb = this._onChange.bind(this);
+      _storesLayerStoreJs2['default'].addChangeListener(this._onChangeCb);
       this._onChange();
     }
   }, {
@@ -3736,6 +3737,11 @@ var LayerSelector = (function (_React$Component) {
       var select = _react2['default'].findDOMNode(this.refs.layerSelect);
       var layer = _storesLayerStoreJs2['default'].findLayer(select.value);
       _actionsLayerActionsJs2['default'].selectLayer(layer, this);
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      _storesLayerStoreJs2['default'].removeChangeListener(this._onChangeCb);
     }
   }, {
     key: 'getLayer',
@@ -3758,7 +3764,7 @@ var LayerSelector = (function (_React$Component) {
     key: 'render',
     value: function render() {
       var me = this;
-      var selectItems = this.state.layers.map(function (lyr, idx) {
+      var selectItems = this.state.flatLayers.map(function (lyr, idx) {
         var title = lyr.get('title'),
             id = lyr.get('id');
         if (!me.props.filter || me.props.filter(lyr) === true) {
@@ -6095,6 +6101,17 @@ var LayerStore = (function (_EventEmitter) {
       }
     }
   }, {
+    key: '_flattenForEach',
+    value: function _flattenForEach(layer, layers) {
+      if (layer instanceof _openlayers2['default'].layer.Group) {
+        layer.getLayers().forEach(function (groupLayer) {
+          this._flattenForEach(groupLayer, layers);
+        }, this);
+      } else {
+        layers.push(layer);
+      }
+    }
+  }, {
     key: '_forEachLayer',
     value: function _forEachLayer(layer, layers, id) {
       if (layer.get('id') === id) {
@@ -6126,6 +6143,8 @@ var LayerStore = (function (_EventEmitter) {
   }, {
     key: 'getState',
     value: function getState() {
+      config.flatLayers = [];
+      this._flattenForEach(this._map.getLayerGroup(), config.flatLayers);
       return config;
     }
   }, {
