@@ -9,6 +9,26 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import './LayerListItem.css';
 
 const messages = defineMessages({
+  opacitylabel: {
+    id: 'layerlistitem.opacitylabel',
+    description: 'Label for opacity inputs, only used for screen readers',
+    defaultMessage: 'Layer opacity'
+  },
+  baselayergrouplabel: {
+    id: 'layerlistitem.baselayergrouplabel',
+    description: 'Label for base layer group radio input, only used for screen readers',
+    defaultMessage: 'Select base layer'
+  },
+  layervisibilitylabel: {
+    id: 'layerlistitem.layervisibilitylabel',
+    description: 'Label for layer visibility checkbox, only used for screen readers',
+    defaultMessage: 'Layer visibility'
+  },
+  filtermodalinputlabel: {
+    id: 'layerlistitem.filtermodalinputlabel',
+    description: 'Label for filter input in modal dialog, only used for screen readers',
+    defaultMessage: 'Text to filter features in layer by'
+  },
   zoomtotitle: {
     id: 'layerlistitem.zoomtotitle',
     description: 'Title for the zoom to layer button',
@@ -184,7 +204,13 @@ class LayerListItem extends React.Component {
     const source = layer.getSource ? layer.getSource() : undefined;
     if (this.props.showOpacity && source) {
       var val = layer.getOpacity();
-      opacity = <input onChange={this._changeOpacity.bind(this)} defaultValue={val} type="range" name="opacity" min="0" max="1" step="0.01"></input>;
+      var opacityInputId = 'layerlistitem-' + layer.get('id') + '-opacity';
+      opacity = (
+        <div className='input-group'>
+          <label className='sr-only' htmlFor={opacityInputId}>{formatMessage(messages.opacitylabel)}</label>
+          <input id={opacityInputId} onChange={this._changeOpacity.bind(this)} defaultValue={val} type="range" name="opacity" min="0" max="1" step="0.01"></input>
+        </div>
+      );
     }
     var zoomTo;
     if (layer.get('type') !== 'base' && layer.get('type') !== 'base-group' && (source && source.getExtent) && this.props.showZoomTo) {
@@ -209,13 +235,15 @@ class LayerListItem extends React.Component {
     }
     var input;
     if (layer.get('type') === 'base') {
+      var baselayerId = 'layerlistitem-' + layer.get('id') + '-baselayergroup';
       if (this.state.checked) {
-        input = (<input type="radio" name="baselayergroup" value={this.props.title} checked onChange={this._handleChange.bind(this)}> {this.props.title}</input>);
+        input = (<div className='input-group'><label className='sr-only' htmlFor={baselayerId}>{formatMessage(messages.baselayergrouplabel)}</label><input id={baselayerId} type="radio" name="baselayergroup" value={this.props.title} checked onChange={this._handleChange.bind(this)}> {this.props.title}</input></div>);
       } else {
-        input = (<input type="radio" name="baselayergroup" value={this.props.title} onChange={this._handleChange.bind(this)}> {this.props.title}</input>);
+        input = (<div className='input-group'><label className='sr-only' htmlFor={baselayerId}>{formatMessage(messages.baselayergrouplabel)}</label><input id={baselayerId} type="radio" name="baselayergroup" value={this.props.title} onChange={this._handleChange.bind(this)}> {this.props.title}</input></div>);
       }
     } else {
-      input = (<input type="checkbox" checked={this.state.checked} onChange={this._handleChange.bind(this)}> {this.props.title}</input>);
+      var inputId = 'layerlistitem-' + layer.get('id') + '-visibility';
+      input = (<div className='input-group'><label className='sr-only' htmlFor={inputId}>{formatMessage(messages.layervisibilitylabel)}</label><input id={inputId} type="checkbox" checked={this.state.checked} onChange={this._handleChange.bind(this)}> {this.props.title}</input></div>);
     }
     var filters = this.state.filters.map(function(f) {
       var filterName = f.title.replace(/\W+/g, '');
@@ -247,7 +275,8 @@ class LayerListItem extends React.Component {
               <form onSubmit={this._onSubmit} className='form-horizontal layerlistitem'>
                 <div className="form-group">
                   <Grids.Col md={20}>
-                    <input ref='filterTextBox' type='text' className={inputClassName}/>
+                    <label htmlFor='layerlistitem-filtertext' className='sr-only'>{formatMessage(messages.filtermodalinputlabel)}</label>
+                    <input id='layerlistitem-filtertext' ref='filterTextBox' type='text' className={inputClassName}/>
                   </Grids.Col>
                   <Grids.Col md={4}>
                     <UI.DefaultButton onClick={this._addFilter.bind(this)}>{formatMessage(messages.addfiltertext)}</UI.DefaultButton>

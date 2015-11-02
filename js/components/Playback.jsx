@@ -3,12 +3,26 @@ import ol from 'openlayers';
 import Button from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
 import Grids from 'pui-react-grids';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import './Playback.css';
+
+const messages = defineMessages({
+  rangeinputlabel: {
+    id: 'playback.rangeinputlabel',
+    description: 'Label for the date range input, only used for screen readers',
+    defaultMessage: 'Slider control for changing the date'
+  },
+  dateinputlabel: {
+    id: 'playback.dateinputlabel',
+    description: 'Label for the date picker input, only used for screen readers',
+    defaultMessage: 'Date picker'
+  }
+});
 
 /**
  * Adds a slider to the map that can be used to select a given date, and modifies the visibility of layers and features depending on their timestamp and the current time.
  */
-export default class Playback extends React.Component {
+class Playback extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -100,6 +114,7 @@ export default class Playback extends React.Component {
     return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + date.getDate();
   }
   render() {
+    const {formatMessage} = this.props.intl;
     var minDate = this._dateToString(this.props.minDate);
     var buttonIcon;
     if (this.state.play === true) {
@@ -111,8 +126,8 @@ export default class Playback extends React.Component {
       <form role="form" onSubmit={this._onSubmit} className='form-horizontal playback'>
         <div className="form-group">
           <Grids.Col md={2}><Button.DefaultButton onClick={this._playPause.bind(this)}>{buttonIcon}</Button.DefaultButton></Grids.Col>
-          <Grids.Col md={15}><input onChange={this._onRangeChange.bind(this)} ref='rangeInput' type='range' min={this.props.minDate} max={this.props.maxDate} defaultValue={this.props.minDate}/></Grids.Col>
-          <Grids.Col md={5}><input onChange={this._onDateChange.bind(this)} ref='dateInput' type='date' defaultValue={minDate} min={this.props.minDate} max={this.props.maxDate}/></Grids.Col>
+          <Grids.Col md={15}><label className='sr-only' htmlFor='rangeInput'>{formatMessage(messages.rangeinputlabel)}</label><input id='rangeInput' onChange={this._onRangeChange.bind(this)} ref='rangeInput' type='range' min={this.props.minDate} max={this.props.maxDate} defaultValue={this.props.minDate}/></Grids.Col>
+          <Grids.Col md={5}><label htmlFor='dateInput' className='sr-only'>{formatMessage(messages.dateinputlabel)}</label><input id='dateInput' onChange={this._onDateChange.bind(this)} ref='dateInput' type='date' defaultValue={minDate} min={this.props.minDate} max={this.props.maxDate}/></Grids.Col>
         </div>
       </form>
     );
@@ -143,7 +158,11 @@ Playback.propTypes = {
   /**
    * Should the playback tool start playing automatically?
    */
-  autoPlay: React.PropTypes.bool
+  autoPlay: React.PropTypes.bool,
+  /**
+   * i18n message strings. Provided through the application through context.
+   */
+  intl: intlShape.isRequired
 };
 
 Playback.defaultProps = {
@@ -151,3 +170,5 @@ Playback.defaultProps = {
   numIntervals: 100,
   autoPlay: false
 };
+
+export default injectIntl(Playback);

@@ -1367,14 +1367,14 @@ var Edit = (function (_MapTool) {
               { md: 12 },
               _react2['default'].createElement(
                 'label',
-                null,
+                { htmlFor: ref },
                 name
               )
             ),
             _react2['default'].createElement(
               _puiReactGrids2['default'].Col,
               { md: 8 },
-              _react2['default'].createElement('input', { className: 'form-control', type: 'text', ref: ref })
+              _react2['default'].createElement('input', { id: ref, className: 'form-control', type: 'text', ref: ref })
             )
           ));
         }
@@ -1455,14 +1455,14 @@ var Edit = (function (_MapTool) {
                   { md: 12 },
                   _react2['default'].createElement(
                     'label',
-                    null,
+                    { htmlFor: 'edit-layerName' },
                     formatMessage(messages.layernamelabel)
                   )
                 ),
                 _react2['default'].createElement(
                   _puiReactGrids2['default'].Col,
                   { md: 8 },
-                  _react2['default'].createElement('input', { className: 'form-control', type: 'text', ref: 'layerName' })
+                  _react2['default'].createElement('input', { id: 'edit-layerName', className: 'form-control', type: 'text', ref: 'layerName' })
                 )
               ),
               _react2['default'].createElement(
@@ -1509,14 +1509,14 @@ var Edit = (function (_MapTool) {
                   { md: 12 },
                   _react2['default'].createElement(
                     'label',
-                    null,
+                    { htmlFor: 'edit-attributes' },
                     formatMessage(messages.attributeslabel)
                   )
                 ),
                 _react2['default'].createElement(
                   _puiReactGrids2['default'].Col,
                   { md: 8 },
-                  _react2['default'].createElement('input', { className: 'form-control', type: 'text', ref: 'attributes' })
+                  _react2['default'].createElement('input', { id: 'edit-attributes', className: 'form-control', type: 'text', ref: 'attributes' })
                 )
               ),
               _react2['default'].createElement(
@@ -1931,11 +1931,11 @@ var FeatureTable = (function (_React$Component) {
           { ref: 'form', onSubmit: this._onSubmit.bind(this), role: 'form', className: 'form-inline' },
           _react2['default'].createElement(
             'label',
-            null,
+            { htmlFor: 'table-layerSelector' },
             formatMessage(messages.layerlabel),
             ':'
           ),
-          _react2['default'].createElement(_LayerSelectorJsx2['default'], { ref: 'layerSelector', filter: this._filterLayerList, map: this.props.map, value: this.props.layer.get('id') }),
+          _react2['default'].createElement(_LayerSelectorJsx2['default'], { id: 'table-layerSelector', ref: 'layerSelector', filter: this._filterLayerList, map: this.props.map, value: this.props.layer.get('id') }),
           _react2['default'].createElement(
             _puiReactButtons2['default'].DefaultButton,
             { onClick: this._zoomSelected.bind(this), title: formatMessage(messages.zoombuttontitle) },
@@ -1956,14 +1956,18 @@ var FeatureTable = (function (_React$Component) {
             _react2['default'].createElement(
               'span',
               { className: 'input-group-addon' },
-              formatMessage(messages.filterlabel)
+              _react2['default'].createElement(
+                'label',
+                { htmlFor: 'featuretable-filter' },
+                formatMessage(messages.filterlabel)
+              )
             ),
-            _react2['default'].createElement('input', { type: 'text', ref: 'filter', className: 'form-control', onChange: this._filterByText.bind(this), placeholder: formatMessage(messages.filterplaceholder) })
+            _react2['default'].createElement('input', { type: 'text', id: 'featuretable-filter', ref: 'filter', className: 'form-control', onChange: this._filterByText.bind(this), placeholder: formatMessage(messages.filterplaceholder) })
           ),
           _react2['default'].createElement(
             'label',
-            null,
-            _react2['default'].createElement('input', { type: 'checkbox', onChange: this._filter.bind(this) }),
+            { htmlFor: 'featuretable-onlyselected' },
+            _react2['default'].createElement('input', { id: 'featuretable-onlyselected', type: 'checkbox', onChange: this._filter.bind(this) }),
             ' ',
             formatMessage(messages.onlyselected)
           )
@@ -3296,6 +3300,22 @@ var _reactIntl = require('react-intl');
 require('./LayerListItem.css');
 
 var messages = (0, _reactIntl.defineMessages)({
+  opacitylabel: {
+    'id': 'layerlistitem.opacitylabel',
+    'defaultMessage': 'Layer opacity'
+  },
+  baselayergrouplabel: {
+    'id': 'layerlistitem.baselayergrouplabel',
+    'defaultMessage': 'Select base layer'
+  },
+  layervisibilitylabel: {
+    'id': 'layerlistitem.layervisibilitylabel',
+    'defaultMessage': 'Layer visibility'
+  },
+  filtermodalinputlabel: {
+    'id': 'layerlistitem.filtermodalinputlabel',
+    'defaultMessage': 'Text to filter features in layer by'
+  },
   zoomtotitle: {
     'id': 'layerlistitem.zoomtotitle',
     'defaultMessage': 'Zoom to layer'
@@ -3497,7 +3517,17 @@ var LayerListItem = (function (_React$Component) {
       var source = layer.getSource ? layer.getSource() : undefined;
       if (this.props.showOpacity && source) {
         var val = layer.getOpacity();
-        opacity = _react2['default'].createElement('input', { onChange: this._changeOpacity.bind(this), defaultValue: val, type: 'range', name: 'opacity', min: '0', max: '1', step: '0.01' });
+        var opacityInputId = 'layerlistitem-' + layer.get('id') + '-opacity';
+        opacity = _react2['default'].createElement(
+          'div',
+          { className: 'input-group' },
+          _react2['default'].createElement(
+            'label',
+            { className: 'sr-only', htmlFor: opacityInputId },
+            formatMessage(messages.opacitylabel)
+          ),
+          _react2['default'].createElement('input', { id: opacityInputId, onChange: this._changeOpacity.bind(this), defaultValue: val, type: 'range', name: 'opacity', min: '0', max: '1', step: '0.01' })
+        );
       }
       var zoomTo;
       if (layer.get('type') !== 'base' && layer.get('type') !== 'base-group' && source && source.getExtent && this.props.showZoomTo) {
@@ -3546,27 +3576,56 @@ var LayerListItem = (function (_React$Component) {
       }
       var input;
       if (layer.get('type') === 'base') {
+        var baselayerId = 'layerlistitem-' + layer.get('id') + '-baselayergroup';
         if (this.state.checked) {
           input = _react2['default'].createElement(
-            'input',
-            { type: 'radio', name: 'baselayergroup', value: this.props.title, checked: true, onChange: this._handleChange.bind(this) },
-            ' ',
-            this.props.title
+            'div',
+            { className: 'input-group' },
+            _react2['default'].createElement(
+              'label',
+              { className: 'sr-only', htmlFor: baselayerId },
+              formatMessage(messages.baselayergrouplabel)
+            ),
+            _react2['default'].createElement(
+              'input',
+              { id: baselayerId, type: 'radio', name: 'baselayergroup', value: this.props.title, checked: true, onChange: this._handleChange.bind(this) },
+              ' ',
+              this.props.title
+            )
           );
         } else {
           input = _react2['default'].createElement(
-            'input',
-            { type: 'radio', name: 'baselayergroup', value: this.props.title, onChange: this._handleChange.bind(this) },
-            ' ',
-            this.props.title
+            'div',
+            { className: 'input-group' },
+            _react2['default'].createElement(
+              'label',
+              { className: 'sr-only', htmlFor: baselayerId },
+              formatMessage(messages.baselayergrouplabel)
+            ),
+            _react2['default'].createElement(
+              'input',
+              { id: baselayerId, type: 'radio', name: 'baselayergroup', value: this.props.title, onChange: this._handleChange.bind(this) },
+              ' ',
+              this.props.title
+            )
           );
         }
       } else {
+        var inputId = 'layerlistitem-' + layer.get('id') + '-visibility';
         input = _react2['default'].createElement(
-          'input',
-          { type: 'checkbox', checked: this.state.checked, onChange: this._handleChange.bind(this) },
-          ' ',
-          this.props.title
+          'div',
+          { className: 'input-group' },
+          _react2['default'].createElement(
+            'label',
+            { className: 'sr-only', htmlFor: inputId },
+            formatMessage(messages.layervisibilitylabel)
+          ),
+          _react2['default'].createElement(
+            'input',
+            { id: inputId, type: 'checkbox', checked: this.state.checked, onChange: this._handleChange.bind(this) },
+            ' ',
+            this.props.title
+          )
         );
       }
       var filters = this.state.filters.map(function (f) {
@@ -3624,7 +3683,12 @@ var LayerListItem = (function (_React$Component) {
                   _react2['default'].createElement(
                     _puiReactGrids2['default'].Col,
                     { md: 20 },
-                    _react2['default'].createElement('input', { ref: 'filterTextBox', type: 'text', className: inputClassName })
+                    _react2['default'].createElement(
+                      'label',
+                      { htmlFor: 'layerlistitem-filtertext', className: 'sr-only' },
+                      formatMessage(messages.filtermodalinputlabel)
+                    ),
+                    _react2['default'].createElement('input', { id: 'layerlistitem-filtertext', ref: 'filterTextBox', type: 'text', className: inputClassName })
                   ),
                   _react2['default'].createElement(
                     _puiReactGrids2['default'].Col,
@@ -4246,7 +4310,20 @@ var _puiReactGrids = require('pui-react-grids');
 
 var _puiReactGrids2 = _interopRequireDefault(_puiReactGrids);
 
+var _reactIntl = require('react-intl');
+
 require('./Playback.css');
+
+var messages = (0, _reactIntl.defineMessages)({
+  rangeinputlabel: {
+    'id': 'playback.rangeinputlabel',
+    'defaultMessage': 'Slider control for changing the date'
+  },
+  dateinputlabel: {
+    'id': 'playback.dateinputlabel',
+    'defaultMessage': 'Date picker'
+  }
+});
 
 /**
  * Adds a slider to the map that can be used to select a given date, and modifies the visibility of layers and features depending on their timestamp and the current time.
@@ -4375,6 +4452,8 @@ var Playback = (function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var formatMessage = this.props.intl.formatMessage;
+
       var minDate = this._dateToString(this.props.minDate);
       var buttonIcon;
       if (this.state.play === true) {
@@ -4400,12 +4479,22 @@ var Playback = (function (_React$Component) {
           _react2['default'].createElement(
             _puiReactGrids2['default'].Col,
             { md: 15 },
-            _react2['default'].createElement('input', { onChange: this._onRangeChange.bind(this), ref: 'rangeInput', type: 'range', min: this.props.minDate, max: this.props.maxDate, defaultValue: this.props.minDate })
+            _react2['default'].createElement(
+              'label',
+              { className: 'sr-only', htmlFor: 'rangeInput' },
+              formatMessage(messages.rangeinputlabel)
+            ),
+            _react2['default'].createElement('input', { id: 'rangeInput', onChange: this._onRangeChange.bind(this), ref: 'rangeInput', type: 'range', min: this.props.minDate, max: this.props.maxDate, defaultValue: this.props.minDate })
           ),
           _react2['default'].createElement(
             _puiReactGrids2['default'].Col,
             { md: 5 },
-            _react2['default'].createElement('input', { onChange: this._onDateChange.bind(this), ref: 'dateInput', type: 'date', defaultValue: minDate, min: this.props.minDate, max: this.props.maxDate })
+            _react2['default'].createElement(
+              'label',
+              { htmlFor: 'dateInput', className: 'sr-only' },
+              formatMessage(messages.dateinputlabel)
+            ),
+            _react2['default'].createElement('input', { id: 'dateInput', onChange: this._onDateChange.bind(this), ref: 'dateInput', type: 'date', defaultValue: minDate, min: this.props.minDate, max: this.props.maxDate })
           )
         )
       );
@@ -4414,8 +4503,6 @@ var Playback = (function (_React$Component) {
 
   return Playback;
 })(_react2['default'].Component);
-
-exports['default'] = Playback;
 
 Playback.propTypes = {
   /**
@@ -4441,7 +4528,11 @@ Playback.propTypes = {
   /**
    * Should the playback tool start playing automatically?
    */
-  autoPlay: _react2['default'].PropTypes.bool
+  autoPlay: _react2['default'].PropTypes.bool,
+  /**
+   * i18n message strings. Provided through the application through context.
+   */
+  intl: _reactIntl.intlShape.isRequired
 };
 
 Playback.defaultProps = {
@@ -4449,9 +4540,11 @@ Playback.defaultProps = {
   numIntervals: 100,
   autoPlay: false
 };
+
+exports['default'] = (0, _reactIntl.injectIntl)(Playback);
 module.exports = exports['default'];
 
-},{"./Playback.css":29,"openlayers":119,"pui-react-buttons":150,"pui-react-grids":295,"pui-react-iconography":341,"react":750}],31:[function(require,module,exports){
+},{"./Playback.css":29,"openlayers":119,"pui-react-buttons":150,"pui-react-grids":295,"pui-react-iconography":341,"react":750,"react-intl":539}],31:[function(require,module,exports){
 var css = ".legend {\n  position: absolute;\n  top: 7.5em;\n  right: 0.5em;\n  text-align: left;\n}\n.legend-panel {\n  padding-right: 50px;\n  border: 1px solid #cccccc;\n  background-color: white;\n  height: auto;\n  max-height: 500px;\n  overflow: auto;\n}\n.legend .legend-panel {\n  display: none;\n}\n.legend.shown .legend-panel {\n  display: block;\n}\n.legend button {\n  color: white;\n  float: right;\n  width: 38px;\n  height: 38px;\n  background-color: #7b98bc;\n  background-color: rgba(0,60,136,.5);\n  border: none;\n  padding: 2px;\n}\n.legend button:focus,\n.legend button:hover {\n  background-color: white;\n}\n.expandableList ul {\n  padding: 0 0 0 30px;\n  width: 300px;\n}\n.expandableList li {\n  position: relative;\n  list-style: none;\n  margin-left: -15px;\n  margin-top: 15px;\n  padding: 0;\n}\n.expandableList li input {\n  position: absolute;\n  left: 0;\n  margin-left: 0;\n  opacity: 0;\n  z-index: 2;\n  cursor: pointer;\n  height: 1em;\n  width: 1em;\n  top: 0;\n}\n.expandableList li input + ul {\n  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAURJREFUeNpi/P//PwMlgImBQkCxASwwRlLLKwYmJqZgRkbGbiBXEYva+0Dvlv7792/tvBoxTAO+fv0MororE6UU9VU5MHRfvP1DsX3+M5DhaxkYxDC98ObNGxBW1FVmY/j16xcYu6SdYvjw4QPDixcvGGSEvoLlQeqweuHdu7dg+vfv32D85ctXsNijR4/B4hwcnHA1WA348uUbmP779y+DUchOuIKQsltgetsUE7garAb8/w9h/vz5h+H0Sk8w2yRsN8OZVa5g9ocPn+BqsBrAzs4PdQEzw48ff+Fi375B2Gxs3HA1WNPB45NlDNzcIvfPXv8LVMwJxmdWOcDZF2//A8uD1GF1wefXZ8Q+Pt42oWN+VBED41d5DKv+/30IlJ8IVCcF5D2DCTPC8gIwAXEDKT4Qk0Di+wzU8xnDgKGbmQACDAAtTZadqmiADQAAAABJRU5ErkJggg==') 40px 0px no-repeat;\n  margin: -22px 0 0 -44px;\n  /* 15px */\n  height: 1em;\n}\n.expandableList li input + ul > li {\n  display: none;\n  margin-left: -14px !important;\n  padding-left: 1px;\n}\n.expandableList li label {\n  cursor: pointer;\n  display: block;\n  padding-left: 20px;\n}\n.expandableList li input {\n  display: none;\n}\n.expandableList li input:checked + ul {\n  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAASxJREFUeNpi/P//PwMlgImBQkCxASwwRlLLKwYmJqZgRkbGbiBXEYva+0Dvlv7792/tvBoxTAO+fv0MororE6UU9VU5MHRfvP1DsX3+M5DhaxkYsBjw5s0bEKWoq6zA8OvXL7AYKIC/f//O8OPHDwYZIVaQGqjLlDENePfuLZj+/fs3GH/58pXh/fv3YDYIcHBwwtVgDYMvX76B6b9//zIYhezEULhtiglcDVYD/v+HMH/+/MNweqUnhsIPHz7B1WA1gJ2dH+oCZqCf/2IoZGPjhqvBmg4enyxj4OYWuX/2+l+gYk4MfPH2P7A8SB1WF3x+fUbs4+NtEzrmRxUxMH6Vx7Dq/9+HQPmJQHVSQN4zmDAjLC8AExA3kOIDMQkkvs9APZ8xDBi6mQkgwADDMYZH9Ls66AAAAABJRU5ErkJggg==') 40px 0px no-repeat;\n  margin: -22px 0 0 -44px;\n  /* 20px */\n  padding: 1.563em 0 0 80px;\n  height: auto;\n}\n.expandableList li input:checked + ul > li {\n  display: block;\n  margin: 0 0 0.125em;\n  /* 2px */\n}\n.expandableList li input:checked + ul > li:last-child {\n  margin: 0 0 0.063em;\n  /* 1px */\n}\n"; (require("browserify-css").createStyle(css, { "href": "js/components/QGISLegend.css"})); module.exports = css;
 },{"browserify-css":46}],32:[function(require,module,exports){
 'use strict';
@@ -5273,14 +5366,14 @@ var QueryBuilder = (function (_React$Component) {
             { md: 6 },
             _react2['default'].createElement(
               'label',
-              null,
+              { htmlFor: 'layerSelector' },
               formatMessage(messages.layerlabel)
             )
           ),
           _react2['default'].createElement(
             _puiReactGrids2['default'].Col,
             { md: 18 },
-            _react2['default'].createElement(_LayerSelectorJsx2['default'], { ref: 'layerSelector', filter: this._filterLayerList, map: this.props.map })
+            _react2['default'].createElement(_LayerSelectorJsx2['default'], { id: 'layerSelector', ref: 'layerSelector', filter: this._filterLayerList, map: this.props.map })
           )
         ),
         _react2['default'].createElement(
@@ -5291,7 +5384,7 @@ var QueryBuilder = (function (_React$Component) {
             { md: 6 },
             _react2['default'].createElement(
               'label',
-              null,
+              { htmlFor: 'query-expression' },
               formatMessage(messages.filterlabel)
             )
           ),

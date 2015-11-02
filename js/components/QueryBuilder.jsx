@@ -144,11 +144,11 @@ class QueryBuilder extends React.Component {
     return (
       <form onSubmit={this._onSubmit} role="form" className='form-horizontal query-builder'>
         <div className="form-group">
-          <Grids.Col md={6}><label>{formatMessage(messages.layerlabel)}</label></Grids.Col>
-          <Grids.Col md={18}><LayerSelector ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /></Grids.Col>
+          <Grids.Col md={6}><label htmlFor='layerSelector'>{formatMessage(messages.layerlabel)}</label></Grids.Col>
+          <Grids.Col md={18}><LayerSelector id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /></Grids.Col>
         </div>
         <div className='form-group'>
-          <Grids.Col md={6}><label>{formatMessage(messages.filterlabel)}</label></Grids.Col>
+          <Grids.Col md={6}><label htmlFor='query-expression'>{formatMessage(messages.filterlabel)}</label></Grids.Col>
           <Grids.Col md={18}><input onKeyUp={this._setQueryFilter.bind(this)} className={inputClassName} ref='queryExpression' id='query-expression' placeholder={formatMessage(messages.filterplaceholder)} type='text'/></Grids.Col>
         </div>
         <div className='form-group text-center'>

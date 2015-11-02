@@ -231,15 +231,15 @@ class FeatureTable extends React.Component {
     return (
       <div id='attributes-table'>
         <form ref='form' onSubmit={this._onSubmit.bind(this)} role='form' className='form-inline'>
-          <label>{formatMessage(messages.layerlabel)}:</label>
-          <LayerSelector ref='layerSelector' filter={this._filterLayerList} map={this.props.map} value={this.props.layer.get('id')} />
+          <label htmlFor='table-layerSelector'>{formatMessage(messages.layerlabel)}:</label>
+          <LayerSelector id='table-layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} value={this.props.layer.get('id')} />
           <UI.DefaultButton onClick={this._zoomSelected.bind(this)} title={formatMessage(messages.zoombuttontitle)}><Icon.Icon name="search" /> {formatMessage(messages.zoombuttontext)}</UI.DefaultButton>
           <UI.DefaultButton onClick={this._clearSelected.bind(this)} title={formatMessage(messages.clearbuttontitle)}><Icon.Icon name="trash" /> {formatMessage(messages.clearbuttontext)}</UI.DefaultButton>
           <div className='input-group'>
-            <span className='input-group-addon'>{formatMessage(messages.filterlabel)}</span>
-            <input type='text' ref='filter' className='form-control' onChange={this._filterByText.bind(this)} placeholder={formatMessage(messages.filterplaceholder)}></input>
+            <span className='input-group-addon'><label htmlFor='featuretable-filter'>{formatMessage(messages.filterlabel)}</label></span>
+            <input type='text' id='featuretable-filter' ref='filter' className='form-control' onChange={this._filterByText.bind(this)} placeholder={formatMessage(messages.filterplaceholder)}></input>
           </div>
-          <label><input type='checkbox' onChange={this._filter.bind(this)}></input> {formatMessage(messages.onlyselected)}</label>
+          <label htmlFor='featuretable-onlyselected'><input id='featuretable-onlyselected' type='checkbox' onChange={this._filter.bind(this)}></input> {formatMessage(messages.onlyselected)}</label>
         </form>
         <Table
           onColumnResizeEndCallback={this._onColumnResize.bind(this)}

@@ -262,7 +262,7 @@ class Edit extends MapTool {
       attributeFormItems = [];
       for (i = 0, ii = this.state.attributes.length; i < ii; ++i) {
         var name = this.state.attributes[i], ref = NEW_ATTR_PREFIX + name;
-        attributeFormItems.push(<div key={ref} className="form-group"><Grids.Col md={12}><label>{name}</label></Grids.Col><Grids.Col md={8}><input className="form-control" type='text' ref={ref} /></Grids.Col></div>);
+        attributeFormItems.push(<div key={ref} className="form-group"><Grids.Col md={12}><label htmlFor={ref}>{name}</label></Grids.Col><Grids.Col md={8}><input id={ref} className="form-control" type='text' ref={ref} /></Grids.Col></div>);
       }
     }
     var error;
@@ -292,8 +292,8 @@ class Edit extends MapTool {
           <Dialog.ModalBody>
             <form className='form-horizontal'>
               <div className="form-group">
-                <Grids.Col md={12}><label>{formatMessage(messages.layernamelabel)}</label></Grids.Col>
-                <Grids.Col md={8}><input className="form-control" type="text" ref="layerName"/></Grids.Col>
+                <Grids.Col md={12}><label htmlFor='edit-layerName'>{formatMessage(messages.layernamelabel)}</label></Grids.Col>
+                <Grids.Col md={8}><input id='edit-layerName' className="form-control" type="text" ref="layerName"/></Grids.Col>
               </div>
               <div className="form-group">
                 <Grids.Col md={12}><label>{formatMessage(messages.geometrytypelabel)}</label></Grids.Col>
@@ -306,8 +306,8 @@ class Edit extends MapTool {
                 </Grids.Col>
               </div>
               <div className="form-group">
-                <Grids.Col md={12}><label>{formatMessage(messages.attributeslabel)}</label></Grids.Col>
-                <Grids.Col md={8}><input className="form-control" type="text" ref="attributes"/></Grids.Col>
+                <Grids.Col md={12}><label htmlFor='edit-attributes'>{formatMessage(messages.attributeslabel)}</label></Grids.Col>
+                <Grids.Col md={8}><input id='edit-attributes' className="form-control" type="text" ref="attributes"/></Grids.Col>
               </div>
               <div className="form-group">
                  <Grids.Col md={12}><label>{formatMessage(messages.strokecolorlabel)}</label></Grids.Col>
