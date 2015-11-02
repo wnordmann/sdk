@@ -3,7 +3,7 @@
 var assert = require('chai').assert;
 var ol = require('openlayers');
 
-var FeatureStore = require('./FeatureStore.js');
+var FeatureStore = require('../../js/stores/FeatureStore.js');
 
 describe('FeatureStore', function() {
 

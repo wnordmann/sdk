@@ -7,7 +7,7 @@ var ol = require('openlayers');
 global.Intl = require('intl');
 var IntlProvider = require('react-intl').IntlProvider;
 
-var HomeButton = require('../js/components/HomeButton.jsx');
+var HomeButton = require('../../js/components/HomeButton.jsx');
 
 describe('HomeButton', function() {
   var target, map;

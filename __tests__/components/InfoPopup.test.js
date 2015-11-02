@@ -7,7 +7,7 @@ var ol = require('openlayers');
 global.Intl = require('intl');
 var IntlProvider = require('react-intl').IntlProvider;
 
-var InfoPopup = require('../js/components/InfoPopup.jsx');
+var InfoPopup = require('../../js/components/InfoPopup.jsx');
 
 describe('InfoPopup', function() {
   var target, map;
