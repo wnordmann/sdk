@@ -241,23 +241,25 @@ class LayerListItem extends React.Component {
         {reorderDown}
         {remove}
         {this.props.children}
-        <Dialog.Modal title={formatMessage(messages.filtermodaltitle, {layer: this.props.layer.get('title')})} ref="filtermodal">
-          <Dialog.ModalBody>
-            <form onSubmit={this._onSubmit} className='form-horizontal layerlistitem'>
-              <div className="form-group">
-                <Grids.Col md={20}>
-                  <input ref='filterTextBox' type='text' className={inputClassName}/>
-                </Grids.Col>
-                <Grids.Col md={4}>
-                  <UI.DefaultButton onClick={this._addFilter.bind(this)}>{formatMessage(messages.addfiltertext)}</UI.DefaultButton>
-                </Grids.Col>
-              </div>
-              {filters}
-            </form>
-          </Dialog.ModalBody>
-          <Dialog.ModalFooter>
-          </Dialog.ModalFooter>
-        </Dialog.Modal>
+        <span>
+          <Dialog.Modal title={formatMessage(messages.filtermodaltitle, {layer: this.props.layer.get('title')})} ref="filtermodal">
+            <Dialog.ModalBody>
+              <form onSubmit={this._onSubmit} className='form-horizontal layerlistitem'>
+                <div className="form-group">
+                  <Grids.Col md={20}>
+                    <input ref='filterTextBox' type='text' className={inputClassName}/>
+                  </Grids.Col>
+                  <Grids.Col md={4}>
+                    <UI.DefaultButton onClick={this._addFilter.bind(this)}>{formatMessage(messages.addfiltertext)}</UI.DefaultButton>
+                  </Grids.Col>
+                </div>
+                {filters}
+              </form>
+            </Dialog.ModalBody>
+            <Dialog.ModalFooter>
+            </Dialog.ModalFooter>
+          </Dialog.Modal>
+        </span>
       </li>
     );
   }

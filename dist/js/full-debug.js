@@ -3056,7 +3056,7 @@ exports['default'] = (0, _reactIntl.injectIntl)(InfoPopup);
 module.exports = exports['default'];
 
 },{"./InfoPopup.css":19,"./MapTool.js":26,"openlayers":119,"react":750,"react-intl":539}],21:[function(require,module,exports){
-var css = ".layer-switcher {\n  position: absolute;\n  top: 3.5em;\n  right: 0.5em;\n  text-align: left;\n}\n.layer-switcher .layer-tree-panel {\n  display: none;\n}\n.layer-switcher.shown .layer-tree-panel {\n  display: block;\n}\n.layerlistbutton {\n  color: white;\n  float: right;\n  width: 38px;\n  height: 38px;\n  background-color: #7b98bc;\n  background-color: rgba(0,60,136,.5);\n  border: none;\n  padding: 2px;\n}\n.layerlistbutton button:focus,\n.layerlistbutton button:hover {\n  background-color: white;\n}\n.layer-tree-panel {\n  padding-right: 50px;\n  border: 1px solid #cccccc;\n  background-color: white;\n  overflow: auto;\n}\n.layer-tree-panel  li {\n  list-style-type: none;\n  margin: 0;\n  padding: 10px 5px 10px 5px;\n  position: relative;\n}\n.layer-tree-panel  li::before,\n.layer-tree-panel  li::after {\n  content: '';\n  left: -20px;\n  position: absolute;\n  right: auto;\n}\n.layer-tree-panel  li::before {\n  border-left: 1px solid #999;\n  bottom: 50px;\n  height: 100%;\n  top: 0;\n  width: 1px;\n}\n.layer-tree-panel  li::after {\n  border-top: 1px solid #999;\n  height: 20px;\n  top: 25px;\n  width: 25px;\n}\n.layer-tree-panel  li span {\n  display: inline-block;\n  padding: 3px 8px;\n  text-decoration: none;\n}\n.layer-tree-panel  li.parent_li>span {\n  cursor: pointer;\n}\n.layer-tree-panel >ul>li::before,\n.layer-tree-panel >ul>li::after {\n  border: 0;\n}\n.layer-tree-panel  li:last-child::before {\n  height: 30px;\n}\n"; (require("browserify-css").createStyle(css, { "href": "js/components/LayerList.css"})); module.exports = css;
+var css = ".layer-switcher {\n  position: absolute;\n  top: 3.5em;\n  right: 0.5em;\n  text-align: left;\n}\n.layer-switcher .layer-tree-panel {\n  display: none;\n}\n.layer-switcher.shown .layer-tree-panel {\n  display: block;\n}\n.layerlistbutton {\n  color: white;\n  float: right;\n  width: 38px;\n  height: 38px;\n  background-color: #7b98bc;\n  background-color: rgba(0,60,136,.5);\n  border: none;\n  padding: 2px;\n}\n.layerlistbutton button:focus,\n.layerlistbutton button:hover {\n  background-color: white;\n}\n.layer-tree-panel {\n  padding-right: 50px;\n  border: 1px solid #cccccc;\n  background-color: white;\n  max-height: 450px;\n  overflow: auto;\n}\n.layer-tree-panel li {\n  list-style-type: none;\n  margin: 0px;\n  padding: 2px 1px 2px 1px;\n  position: relative;\n}\n.layer-tree-panel li::before,\n.layer-tree-panel li::after {\n  content: '';\n  left: -20px;\n  position: absolute;\n  right: auto;\n}\n.layer-tree-panel li::before {\n  border-left: 1px solid #999;\n  bottom: 50px;\n  height: 100%;\n  top: 0px;\n  width: 1px;\n}\n.layer-tree-panel li::after {\n  border-top: 1px solid #999;\n  height: 20px;\n  top: 25px;\n  width: 25px;\n}\n.layer-tree-panel li span {\n  display: inline-block;\n  padding: 3px 8px;\n  text-decoration: none;\n}\n.layer-tree-panel li.parent_li>span {\n  cursor: pointer;\n}\n.layer-tree-panel >ul>li::before,\n.layer-tree-panel >ul>li::after {\n  border: 0;\n}\n.layer-tree-panel  li:last-child::before {\n  height: 30px;\n}\n"; (require("browserify-css").createStyle(css, { "href": "js/components/LayerList.css"})); module.exports = css;
 },{"browserify-css":46}],22:[function(require,module,exports){
 'use strict';
 
@@ -3607,36 +3607,40 @@ var LayerListItem = (function (_React$Component) {
         remove,
         this.props.children,
         _react2['default'].createElement(
-          _puiReactModals2['default'].Modal,
-          { title: formatMessage(messages.filtermodaltitle, { layer: this.props.layer.get('title') }), ref: 'filtermodal' },
+          'span',
+          null,
           _react2['default'].createElement(
-            _puiReactModals2['default'].ModalBody,
-            null,
+            _puiReactModals2['default'].Modal,
+            { title: formatMessage(messages.filtermodaltitle, { layer: this.props.layer.get('title') }), ref: 'filtermodal' },
             _react2['default'].createElement(
-              'form',
-              { onSubmit: this._onSubmit, className: 'form-horizontal layerlistitem' },
+              _puiReactModals2['default'].ModalBody,
+              null,
               _react2['default'].createElement(
-                'div',
-                { className: 'form-group' },
+                'form',
+                { onSubmit: this._onSubmit, className: 'form-horizontal layerlistitem' },
                 _react2['default'].createElement(
-                  _puiReactGrids2['default'].Col,
-                  { md: 20 },
-                  _react2['default'].createElement('input', { ref: 'filterTextBox', type: 'text', className: inputClassName })
-                ),
-                _react2['default'].createElement(
-                  _puiReactGrids2['default'].Col,
-                  { md: 4 },
+                  'div',
+                  { className: 'form-group' },
                   _react2['default'].createElement(
-                    _puiReactButtons2['default'].DefaultButton,
-                    { onClick: this._addFilter.bind(this) },
-                    formatMessage(messages.addfiltertext)
+                    _puiReactGrids2['default'].Col,
+                    { md: 20 },
+                    _react2['default'].createElement('input', { ref: 'filterTextBox', type: 'text', className: inputClassName })
+                  ),
+                  _react2['default'].createElement(
+                    _puiReactGrids2['default'].Col,
+                    { md: 4 },
+                    _react2['default'].createElement(
+                      _puiReactButtons2['default'].DefaultButton,
+                      { onClick: this._addFilter.bind(this) },
+                      formatMessage(messages.addfiltertext)
+                    )
                   )
-                )
-              ),
-              filters
-            )
-          ),
-          _react2['default'].createElement(_puiReactModals2['default'].ModalFooter, null)
+                ),
+                filters
+              )
+            ),
+            _react2['default'].createElement(_puiReactModals2['default'].ModalFooter, null)
+          )
         )
       );
     }
