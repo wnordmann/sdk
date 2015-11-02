@@ -21,7 +21,11 @@ fs.readdir(dir, function(err, files) {
         var componentInfo = reactDocs.parse(src, reactDocs.resolver.findAllComponentDefinitions);
         info[dir+file] = componentInfo[0];
         if (0 === --c) {
-          var result = JSON.stringify(info);
+          const ordered = {};
+          Object.keys(info).sort().forEach(function(key) {
+            ordered[key] = info[key];
+          });
+          var result = JSON.stringify(ordered);
           fs.writeFileSync(output, result);
         }
       });
