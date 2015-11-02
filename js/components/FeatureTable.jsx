@@ -89,7 +89,8 @@ class FeatureTable extends React.Component {
     };
   }
   componentWillMount() {
-    FeatureStore.addChangeListener(this._onChange.bind(this));
+    this._onChangeCb = this._onChange.bind(this);
+    FeatureStore.addChangeListener(this._onChangeCb);
     this._onChange();
     this.setDimensionsOnState = debounce(this.setDimensionsOnState, this.props.refreshRate);
   }
@@ -98,6 +99,7 @@ class FeatureTable extends React.Component {
     this._attachResizeEvent();
   }
   componentWillUnmount() {
+    FeatureStore.removeChangeListener(this._onChangeCb);
     global.removeEventListener('resize', this.setDimensionsOnState);
   }
   _attachResizeEvent() {

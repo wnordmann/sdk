@@ -15,8 +15,12 @@ export default class LayerList extends React.Component {
     LayerStore.bindMap(this.props.map);
   }
   componentWillMount() {
-    LayerStore.addChangeListener(this._onChange.bind(this));
+    this._onChangeCb = this._onChange.bind(this);
+    LayerStore.addChangeListener(this._onChangeCb);
     this._onChange();
+  }
+  componentWillUnmount() {
+    LayerStore.removeChangeListener(this._onChangeCb);
   }
   _onChange() {
     this.setState(LayerStore.getState());

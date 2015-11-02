@@ -782,7 +782,13 @@ var Chart = (function (_React$Component) {
   _createClass(Chart, [{
     key: 'componentWillMount',
     value: function componentWillMount() {
-      _storesFeatureStoreJs2['default'].addChangeListener(this._onChange.bind(this));
+      this._onChangeCb = this._onChange.bind(this);
+      _storesFeatureStoreJs2['default'].addChangeListener(this._onChangeCb);
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      _storesFeatureStoreJs2['default'].removeChangeListener(this._onChangeCb);
     }
   }, {
     key: '_onChange',
@@ -1739,7 +1745,8 @@ var FeatureTable = (function (_React$Component) {
   _createClass(FeatureTable, [{
     key: 'componentWillMount',
     value: function componentWillMount() {
-      _storesFeatureStoreJs2['default'].addChangeListener(this._onChange.bind(this));
+      this._onChangeCb = this._onChange.bind(this);
+      _storesFeatureStoreJs2['default'].addChangeListener(this._onChangeCb);
       this._onChange();
       this.setDimensionsOnState = (0, _debounce2['default'])(this.setDimensionsOnState, this.props.refreshRate);
     }
@@ -1752,6 +1759,7 @@ var FeatureTable = (function (_React$Component) {
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
+      _storesFeatureStoreJs2['default'].removeChangeListener(this._onChangeCb);
       global.removeEventListener('resize', this.setDimensionsOnState);
     }
   }, {
@@ -3111,8 +3119,14 @@ var LayerList = (function (_React$Component) {
   _createClass(LayerList, [{
     key: 'componentWillMount',
     value: function componentWillMount() {
-      _storesLayerStoreJs2['default'].addChangeListener(this._onChange.bind(this));
+      this._onChangeCb = this._onChange.bind(this);
+      _storesLayerStoreJs2['default'].addChangeListener(this._onChangeCb);
       this._onChange();
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      _storesLayerStoreJs2['default'].removeChangeListener(this._onChangeCb);
     }
   }, {
     key: '_onChange',

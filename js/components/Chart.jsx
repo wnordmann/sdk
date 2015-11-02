@@ -33,7 +33,11 @@ class Chart extends React.Component {
     };
   }
   componentWillMount() {
-    FeatureStore.addChangeListener(this._onChange.bind(this));
+    this._onChangeCb = this._onChange.bind(this);
+    FeatureStore.addChangeListener(this._onChangeCb);
+  }
+  componentWillUnmount() {
+    FeatureStore.removeChangeListener(this._onChangeCb);
   }
   _onChange() {
     this._storeConfig = FeatureStore.getState();
