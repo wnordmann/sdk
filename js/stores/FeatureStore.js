@@ -4,10 +4,63 @@ import {EventEmitter} from 'events';
 import ol from 'openlayers';
 import SelectConstants from '../constants/SelectConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
+import LayerStore from './LayerStore.js';
 
 class FeatureStore extends EventEmitter {
   constructor() {
     super();
+    this._createDefaultSelectStyleFunction = function() {
+      var styles = {};
+      var width = 3;
+      var white = [255, 255, 255, 1];
+      var yellow = [255, 255, 0, 1];
+      styles.Polygon = [
+        new ol.style.Style({
+          fill: new ol.style.Fill({
+            color: [255, 255, 0, 0.5]
+          })
+        })
+      ];
+      styles.MultiPolygon = styles.Polygon;
+      styles.LineString = [
+        new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: white,
+            width: width + 2
+          })
+        }),
+        new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: yellow,
+            width: width
+          })
+        })
+      ];
+      styles.MultiLineString = styles.LineString;
+      styles.Circle = styles.Polygon.concat(styles.LineString);
+      styles.Point = [
+        new ol.style.Style({
+          image: new ol.style.Circle({
+            radius: width * 2,
+            fill: new ol.style.Fill({
+              color: yellow
+            }),
+            stroke: new ol.style.Stroke({
+              color: white,
+              width: width / 2
+            })
+          }),
+          zIndex: Infinity
+        })
+      ];
+      styles.MultiPoint = styles.Point;
+      styles.GeometryCollection = styles.Polygon.concat(styles.LineString, styles.Point);
+      styles.Polygon.push.apply(styles.Polygon, styles.LineString);
+      styles.GeometryCollection.push.apply(styles.GeometryCollection, styles.LineString);
+      return function(feature, resolution) {
+        return styles[feature.getGeometry().getType()];
+      };
+    };
     this._regexes = {
       url: /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/,
       file: /.*[\\\\/].*\..*/
@@ -17,12 +70,42 @@ class FeatureStore extends EventEmitter {
     this._config = {};
     this.addChangeListener(this._updateSelect.bind(this));
   }
+  _getLayer(feature) {
+    for (var key in this._config) {
+      for (var i = 0, ii = this._config[key].features.length; i < ii; ++i) {
+        if (this._config[key].features[i] === feature) {
+          return this._layers[key];
+        }
+      }
+    }
+  }
   bindMap(map) {
     if (this._map !== map) {
       this._map = map;
-      this._select = new ol.interaction.Select();
-      this._handleEvent = this._select.handleEvent;
       var me = this;
+      var defaultStyle = this._createDefaultSelectStyleFunction();
+      this._select = new ol.interaction.Select({
+        style: function(feature, resolution) {
+          var layer = me._getLayer(feature);
+          window.console.log(layer);
+          var selectedStyle;
+          if (layer) {
+            selectedStyle = layer.get('selectedStyle');
+          }
+          if (selectedStyle) {
+            if (selectedStyle instanceof ol.style.Style) {
+              return [selectedStyle];
+            } else if (Array.isArray(selectedStyle)) {
+              return selectedStyle;
+            } else {
+              return selectedStyle.call(this, feature, resolution);
+            }
+          } else {
+            return defaultStyle.call(this, feature, resolution);
+          }
+        }
+      });
+      this._handleEvent = this._select.handleEvent;
       this._select.handleEvent = function(mapBrowserEvent) {
         if (me.active === true) {
           return me._handleEvent.call(me._select, mapBrowserEvent);
@@ -31,6 +114,13 @@ class FeatureStore extends EventEmitter {
         }
       };
       this._map.addInteraction(this._select);
+      LayerStore.bindMap(map);
+      var layers = LayerStore.getState().flatLayers;
+      for (var i = 0, ii = layers.length; i < ii; ++i) {
+        if (layers[i] instanceof ol.layer.Vector) {
+          this.addLayer(layers[i]);
+        }
+      }
     }
   }
   setSelectOnClick(active) {

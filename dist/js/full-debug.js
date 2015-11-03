@@ -5879,6 +5879,10 @@ var _dispatchersAppDispatcherJs = require('../dispatchers/AppDispatcher.js');
 
 var _dispatchersAppDispatcherJs2 = _interopRequireDefault(_dispatchersAppDispatcherJs);
 
+var _LayerStoreJs = require('./LayerStore.js');
+
+var _LayerStoreJs2 = _interopRequireDefault(_LayerStoreJs);
+
 var FeatureStore = (function (_EventEmitter) {
   _inherits(FeatureStore, _EventEmitter);
 
@@ -5886,6 +5890,51 @@ var FeatureStore = (function (_EventEmitter) {
     _classCallCheck(this, FeatureStore);
 
     _get(Object.getPrototypeOf(FeatureStore.prototype), 'constructor', this).call(this);
+    this._createDefaultSelectStyleFunction = function () {
+      var styles = {};
+      var width = 3;
+      var white = [255, 255, 255, 1];
+      var yellow = [255, 255, 0, 1];
+      styles.Polygon = [new _openlayers2['default'].style.Style({
+        fill: new _openlayers2['default'].style.Fill({
+          color: [255, 255, 0, 0.5]
+        })
+      })];
+      styles.MultiPolygon = styles.Polygon;
+      styles.LineString = [new _openlayers2['default'].style.Style({
+        stroke: new _openlayers2['default'].style.Stroke({
+          color: white,
+          width: width + 2
+        })
+      }), new _openlayers2['default'].style.Style({
+        stroke: new _openlayers2['default'].style.Stroke({
+          color: yellow,
+          width: width
+        })
+      })];
+      styles.MultiLineString = styles.LineString;
+      styles.Circle = styles.Polygon.concat(styles.LineString);
+      styles.Point = [new _openlayers2['default'].style.Style({
+        image: new _openlayers2['default'].style.Circle({
+          radius: width * 2,
+          fill: new _openlayers2['default'].style.Fill({
+            color: yellow
+          }),
+          stroke: new _openlayers2['default'].style.Stroke({
+            color: white,
+            width: width / 2
+          })
+        }),
+        zIndex: Infinity
+      })];
+      styles.MultiPoint = styles.Point;
+      styles.GeometryCollection = styles.Polygon.concat(styles.LineString, styles.Point);
+      styles.Polygon.push.apply(styles.Polygon, styles.LineString);
+      styles.GeometryCollection.push.apply(styles.GeometryCollection, styles.LineString);
+      return function (feature, resolution) {
+        return styles[feature.getGeometry().getType()];
+      };
+    };
     this._regexes = {
       url: /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/,
       file: /.*[\\\\/].*\..*/
@@ -5897,13 +5946,45 @@ var FeatureStore = (function (_EventEmitter) {
   }
 
   _createClass(FeatureStore, [{
+    key: '_getLayer',
+    value: function _getLayer(feature) {
+      for (var key in this._config) {
+        for (var i = 0, ii = this._config[key].features.length; i < ii; ++i) {
+          if (this._config[key].features[i] === feature) {
+            return this._layers[key];
+          }
+        }
+      }
+    }
+  }, {
     key: 'bindMap',
     value: function bindMap(map) {
       if (this._map !== map) {
         this._map = map;
-        this._select = new _openlayers2['default'].interaction.Select();
-        this._handleEvent = this._select.handleEvent;
         var me = this;
+        var defaultStyle = this._createDefaultSelectStyleFunction();
+        this._select = new _openlayers2['default'].interaction.Select({
+          style: function style(feature, resolution) {
+            var layer = me._getLayer(feature);
+            window.console.log(layer);
+            var selectedStyle;
+            if (layer) {
+              selectedStyle = layer.get('selectedStyle');
+            }
+            if (selectedStyle) {
+              if (selectedStyle instanceof _openlayers2['default'].style.Style) {
+                return [selectedStyle];
+              } else if (Array.isArray(selectedStyle)) {
+                return selectedStyle;
+              } else {
+                return selectedStyle.call(this, feature, resolution);
+              }
+            } else {
+              return defaultStyle.call(this, feature, resolution);
+            }
+          }
+        });
+        this._handleEvent = this._select.handleEvent;
         this._select.handleEvent = function (mapBrowserEvent) {
           if (me.active === true) {
             return me._handleEvent.call(me._select, mapBrowserEvent);
@@ -5912,6 +5993,13 @@ var FeatureStore = (function (_EventEmitter) {
           }
         };
         this._map.addInteraction(this._select);
+        _LayerStoreJs2['default'].bindMap(map);
+        var layers = _LayerStoreJs2['default'].getState().flatLayers;
+        for (var i = 0, ii = layers.length; i < ii; ++i) {
+          if (layers[i] instanceof _openlayers2['default'].layer.Vector) {
+            this.addLayer(layers[i]);
+          }
+        }
       }
     }
   }, {
@@ -6154,7 +6242,7 @@ _dispatchersAppDispatcherJs2['default'].register(function (payload) {
 exports['default'] = _FeatureStore;
 module.exports = exports['default'];
 
-},{"../constants/SelectConstants.js":39,"../dispatchers/AppDispatcher.js":40,"events":52,"openlayers":119}],43:[function(require,module,exports){
+},{"../constants/SelectConstants.js":39,"../dispatchers/AppDispatcher.js":40,"./LayerStore.js":43,"events":52,"openlayers":119}],43:[function(require,module,exports){
 /* global document */
 
 'use strict';
