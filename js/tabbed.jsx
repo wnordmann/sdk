@@ -59,7 +59,16 @@ var textStyleCachePopp = {};
 var clusterStyleCachePopp = {};
 var stylePopp = function(feature) {
   var style;
-  var size = feature.get('features').length;
+  var features = feature.get('features');
+  var size = 0;
+  for (var i = 0, ii = features.length; i < ii; ++i) {
+    if (features[i].hide !== true) {
+      size++;
+    }
+  }
+  if (size === 0) {
+    return undefined;
+  }
   if (size !== 1) {
     style = clusterStyleCachePopp[size];
     if (!style) {
@@ -315,7 +324,7 @@ export default class TabbedApp extends React.Component {
             </div>
             <div className='col-md-16 full-height'>
               <div id='map' ref='map'></div>
-              <div id='layerlist'><LayerList showOpacity={true} showDownload={true} showGroupContent={true} showZoomTo={true} allowReordering={true} map={map} /></div>
+              <div id='layerlist'><LayerList allowFiltering={true} showOpacity={true} showDownload={true} showGroupContent={true} showZoomTo={true} allowReordering={true} map={map} /></div>
               <div id='legend'><QGISLegend map={map} legendBasePath='../../resources/legend/' legendData={legendData} /></div>
               <div id='geolocation-control' className='ol-unselectable ol-control'><Geolocation map={map} /></div>
               <div id='home-button' className='ol-unselectable ol-control'><HomeButton map={map} /></div>

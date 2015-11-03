@@ -74,7 +74,17 @@ var baseStylePopp = [new ol.style.Style({
 var clusterStyleCachePopp = {};
 var stylePopp = function(feature) {
   var style;
-  var size = feature.get('features').length;
+  var size;
+  var features = feature.get('features');
+  var size = 0;
+  for (var i = 0, ii = features.length; i < ii; ++i) {
+    if (features[i].hide !== true) {
+      size++;
+    }
+  }
+  if (size === 0) {
+    return undefined;
+  }
   if (size !== 1) {
     style = clusterStyleCachePopp[size];
     if (!style) {

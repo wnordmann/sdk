@@ -97,14 +97,17 @@ class LayerListItem extends React.Component {
   _setStyleFunction() {
     var layer = this.props.layer;
     if (this.props.allowFiltering && layer instanceof ol.layer.Vector) {
+      var cluster = layer.getSource() instanceof ol.source.Cluster;
       var style = layer.getStyle();
       var me = this;
       layer.setStyle(function(feature, resolution) {
         var hide = false;
-        for (var i = 0, ii = me.state.filters.length; i < ii; i++){
-          if (!me.state.filters[i].filter(feature.getProperties())){
-            hide = true;
-            continue;
+        if (!cluster) {
+          for (var i = 0, ii = me.state.filters.length; i < ii; i++){
+            if (!me.state.filters[i].filter(feature.getProperties())){
+              hide = true;
+              continue;
+            }
           }
         }
         if (hide) {
@@ -146,7 +149,28 @@ class LayerListItem extends React.Component {
       }
     }
     this.setState({filters: filters});
+    if (layer.getSource() instanceof ol.source.Cluster) {
+      this._updateCluster();
+    }
     layer.getSource().changed();
+  }
+  _updateCluster() {
+    var layer = this.props.layer;
+    var features = layer.getSource().getFeatures();
+    for (var i = 0, ii = features.length; i < ii; ++i) {
+      var subFeatures = features[i].get('features');
+      for (var j = 0, jj = subFeatures.length; j < jj; ++j) {
+        var hide = false;
+        for (var f = 0, ff = this.state.filters.length; f < ff; f++){
+          if (!this.state.filters[f].filter(subFeatures[j].getProperties())) {
+            hide = true;
+            continue;
+          }
+        }
+        // do not use an observable property, we do not want to notify
+        subFeatures[j].hide = hide;
+      }
+    }
   }
   _addFilter() {
     var layer = this.props.layer;
@@ -172,6 +196,9 @@ class LayerListItem extends React.Component {
         filters: filters,
         hasError: false
       });
+      if (layer.getSource() instanceof ol.source.Cluster) {
+        this._updateCluster();
+      }
       layer.getSource().changed();
     }
   }
