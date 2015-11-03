@@ -203,7 +203,16 @@ class LayerListItem extends React.Component {
     }
   }
   _filter() {
+    if (this.props.onModalOpen) {
+      this.props.onModalOpen.call();
+    }
     this.refs.filtermodal.open();
+  }
+  _onCloseModal() {
+   if (this.props.onModalClose) {
+     this.props.onModalClose.call();
+   }
+   this.refs.filtermodal.close();
   }
   _zoomTo() {
     LayerActions.zoomToLayer(this.props.layer);
@@ -297,7 +306,7 @@ class LayerListItem extends React.Component {
         {remove}
         {this.props.children}
         <span>
-          <Dialog.Modal title={formatMessage(messages.filtermodaltitle, {layer: this.props.layer.get('title')})} ref="filtermodal">
+          <Dialog.Modal onRequestClose={this._onCloseModal.bind(this)} title={formatMessage(messages.filtermodaltitle, {layer: this.props.layer.get('title')})} ref="filtermodal">
             <Dialog.ModalBody>
               <form onSubmit={this._onSubmit} className='form-horizontal layerlistitem'>
                 <div className="form-group">
@@ -358,6 +367,14 @@ LayerListItem.propTypes = {
    * Should we show an opacity slider for the layer?
    */
   showOpacity: React.PropTypes.bool,
+  /**
+   * Called when a modal is opened by this layer list item.
+   */
+  onModalOpen: React.PropTypes.func,
+  /**
+   * Called when a modal is closed by this layer list item.
+   */
+  onModalClose: React.PropTypes.func,
   /**
    * i18n message strings. Provided through the application through context.
    */

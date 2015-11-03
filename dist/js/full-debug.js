@@ -3163,7 +3163,19 @@ var LayerList = (function (_React$Component) {
   }, {
     key: '_hidePanel',
     value: function _hidePanel() {
-      this.setState({ visible: false });
+      if (this._modalOpen !== true) {
+        this.setState({ visible: false });
+      }
+    }
+  }, {
+    key: '_onModalOpen',
+    value: function _onModalOpen() {
+      this._modalOpen = true;
+    }
+  }, {
+    key: '_onModalClose',
+    value: function _onModalClose() {
+      this._modalOpen = false;
     }
   }, {
     key: 'getLayerNode',
@@ -3171,9 +3183,9 @@ var LayerList = (function (_React$Component) {
       if (lyr.get('hideFromLayerList') !== true) {
         if (lyr instanceof _openlayers2['default'].layer.Group) {
           var children = this.props.showGroupContent ? this.renderLayerGroup(lyr) : undefined;
-          return _react2['default'].createElement(_LayerListItemJsx2['default'], _extends({}, this.props, { key: lyr.get('title'), layer: lyr, children: children, title: lyr.get('title') }));
+          return _react2['default'].createElement(_LayerListItemJsx2['default'], _extends({}, this.props, { onModalClose: this._onModalClose.bind(this), onModalOpen: this._onModalOpen.bind(this), key: lyr.get('title'), layer: lyr, children: children, title: lyr.get('title') }));
         } else {
-          return _react2['default'].createElement(_LayerListItemJsx2['default'], _extends({}, this.props, { key: lyr.get('title'), layer: lyr, title: lyr.get('title') }));
+          return _react2['default'].createElement(_LayerListItemJsx2['default'], _extends({}, this.props, { onModalClose: this._onModalClose.bind(this), onModalOpen: this._onModalOpen.bind(this), key: lyr.get('title'), layer: lyr, title: lyr.get('title') }));
         }
       }
     }
@@ -3505,7 +3517,18 @@ var LayerListItem = (function (_React$Component) {
   }, {
     key: '_filter',
     value: function _filter() {
+      if (this.props.onModalOpen) {
+        this.props.onModalOpen.call();
+      }
       this.refs.filtermodal.open();
+    }
+  }, {
+    key: '_onCloseModal',
+    value: function _onCloseModal() {
+      if (this.props.onModalClose) {
+        this.props.onModalClose.call();
+      }
+      this.refs.filtermodal.close();
     }
   }, {
     key: '_zoomTo',
@@ -3699,7 +3722,7 @@ var LayerListItem = (function (_React$Component) {
           null,
           _react2['default'].createElement(
             _puiReactModals2['default'].Modal,
-            { title: formatMessage(messages.filtermodaltitle, { layer: this.props.layer.get('title') }), ref: 'filtermodal' },
+            { onRequestClose: this._onCloseModal.bind(this), title: formatMessage(messages.filtermodaltitle, { layer: this.props.layer.get('title') }), ref: 'filtermodal' },
             _react2['default'].createElement(
               _puiReactModals2['default'].ModalBody,
               null,
@@ -3779,6 +3802,14 @@ LayerListItem.propTypes = {
    * Should we show an opacity slider for the layer?
    */
   showOpacity: _react2['default'].PropTypes.bool,
+  /**
+   * Called when a modal is opened by this layer list item.
+   */
+  onModalOpen: _react2['default'].PropTypes.func,
+  /**
+   * Called when a modal is closed by this layer list item.
+   */
+  onModalClose: _react2['default'].PropTypes.func,
   /**
    * i18n message strings. Provided through the application through context.
    */

@@ -43,18 +43,26 @@ export default class LayerList extends React.Component {
     this.setState({visible: true});
   }
   _hidePanel() {
-    this.setState({visible: false});
+    if (this._modalOpen !== true) {
+      this.setState({visible: false});
+    }
+  }
+  _onModalOpen() {
+    this._modalOpen = true;
+  }
+  _onModalClose() {
+    this._modalOpen = false;
   }
   getLayerNode(lyr) {
     if (lyr.get('hideFromLayerList') !== true) {
       if (lyr instanceof ol.layer.Group) {
         var children = this.props.showGroupContent ? this.renderLayerGroup(lyr) : undefined;
         return (
-          <LayerListItem {...this.props} key={lyr.get('title')} layer={lyr} children={children} title={lyr.get('title')} />
+          <LayerListItem {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('title')} layer={lyr} children={children} title={lyr.get('title')} />
         );
       } else {
         return (
-          <LayerListItem {...this.props} key={lyr.get('title')} layer={lyr} title={lyr.get('title')} />
+          <LayerListItem {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('title')} layer={lyr} title={lyr.get('title')} />
         );
       }
     }
