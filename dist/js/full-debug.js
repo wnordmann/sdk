@@ -5966,7 +5966,6 @@ var FeatureStore = (function (_EventEmitter) {
         this._select = new _openlayers2['default'].interaction.Select({
           style: function style(feature, resolution) {
             var layer = me._getLayer(feature);
-            window.console.log(layer);
             var selectedStyle;
             if (layer) {
               selectedStyle = layer.get('selectedStyle');

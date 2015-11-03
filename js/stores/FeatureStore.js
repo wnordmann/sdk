@@ -87,7 +87,6 @@ class FeatureStore extends EventEmitter {
       this._select = new ol.interaction.Select({
         style: function(feature, resolution) {
           var layer = me._getLayer(feature);
-          window.console.log(layer);
           var selectedStyle;
           if (layer) {
             selectedStyle = layer.get('selectedStyle');
