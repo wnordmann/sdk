@@ -3381,49 +3381,19 @@ var LayerListItem = (function (_React$Component) {
       this._setStyleFunction();
     }
   }, {
-    key: '_hide',
-    value: function _hide(feature) {
-      var hide = false;
-      for (var i = 0, ii = this.state.filters.length; i < ii; i++) {
-        if (!this.state.filters[i].filter(feature.getProperties())) {
-          hide = true;
-          continue;
-        }
-      }
-      return hide;
-    }
-  }, {
     key: '_setStyleFunction',
     value: function _setStyleFunction() {
       var layer = this.props.layer;
       if (this.props.allowFiltering && layer instanceof _openlayers2['default'].layer.Vector) {
-        var source = layer.getSource();
-        var cluster = false;
-        if (source instanceof _openlayers2['default'].source.Cluster) {
-          cluster = true;
-        }
         var style = layer.getStyle();
         var me = this;
         layer.setStyle(function (feature, resolution) {
-          var hide;
-          if (cluster) {
-            var features = feature.get('features');
-            if (!feature.get('originalFeatures')) {
-              feature.set('originalFeatures', features.slice());
+          var hide = false;
+          for (var i = 0, ii = me.state.filters.length; i < ii; i++) {
+            if (!me.state.filters[i].filter(feature.getProperties())) {
+              hide = true;
+              continue;
             }
-            var childFeatures = [];
-            for (var c = 0, cc = feature.get('originalFeatures').length; c < cc; c++) {
-              hide = me._hide.call(me, feature.get('originalFeatures')[c]);
-              if (!hide) {
-                childFeatures.push(feature.get('originalFeatures')[c]);
-              }
-            }
-            feature.set('features', childFeatures);
-          }
-          if (!cluster) {
-            hide = me._hide.call(me, feature);
-          } else {
-            hide = feature.get('features').length === 0;
           }
           if (hide) {
             return undefined;
