@@ -209,10 +209,10 @@ class LayerListItem extends React.Component {
     this.refs.filtermodal.open();
   }
   _onCloseModal() {
-   if (this.props.onModalClose) {
-     this.props.onModalClose.call();
-   }
-   this.refs.filtermodal.close();
+    if (this.props.onModalClose) {
+      this.props.onModalClose.call();
+    }
+    this.refs.filtermodal.close();
   }
   _zoomTo() {
     LayerActions.zoomToLayer(this.props.layer);
