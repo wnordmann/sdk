@@ -1,5 +1,6 @@
 /* eslint react/prop-types: 0 */
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import MapTool from './MapTool.js';
 import UI from 'pui-react-buttons';
@@ -142,9 +143,9 @@ class Edit extends MapTool {
     return ID_PREFIX + this.state.layers.length;
   }
   _createLayer() {
-    var layerName = React.findDOMNode(this.refs.layerName).value;
-    var geometryType = React.findDOMNode(this.refs.geometryType).value;
-    var attributes = React.findDOMNode(this.refs.attributes).value;
+    var layerName = ReactDOM.findDOMNode(this.refs.layerName).value;
+    var geometryType = ReactDOM.findDOMNode(this.refs.geometryType).value;
+    var attributes = ReactDOM.findDOMNode(this.refs.attributes).value;
     if (layerName !== '') {
       var fill = this._fillColor ? new ol.style.Fill({color: this._fillColor}) : undefined;
       var stroke = this._strokeColor ? new ol.style.Stroke({color: this._strokeColor, width: this.props.strokeWidth}) : undefined;
@@ -196,13 +197,13 @@ class Edit extends MapTool {
     var feature = this._feature;
     for (var i = 0, ii = this.state.attributes.length; i < ii; ++i) {
       var name = this.state.attributes[i];
-      var value = React.findDOMNode(this.refs[NEW_ATTR_PREFIX + name]).value;
+      var value = ReactDOM.findDOMNode(this.refs[NEW_ATTR_PREFIX + name]).value;
       feature.set(name, value);
     }
     this.refs.attributesModal.close();
   }
   _activate() {
-    var layerId = React.findDOMNode(this.refs.layer).value;
+    var layerId = ReactDOM.findDOMNode(this.refs.layer).value;
     var layer;
     for (var i = 0, ii = this.state.layers.length; i < ii; ++i) {
       if (this.state.layers[i].get('id') === layerId) {

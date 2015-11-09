@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import Button from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
@@ -40,12 +41,12 @@ class Playback extends React.Component {
     evt.preventDefault();
   }
   _play() {
-    var newTime = React.findDOMNode(this.refs.dateInput).valueAsNumber + this._interval;
+    var newTime = ReactDOM.findDOMNode(this.refs.dateInput).valueAsNumber + this._interval;
     if (newTime > this.props.maxDate) {
       newTime = this.props.minDate;
     }
-    React.findDOMNode(this.refs.dateInput).valueAsNumber = newTime;
-    React.findDOMNode(this.refs.rangeInput).valueAsNumber = newTime;
+    ReactDOM.findDOMNode(this.refs.dateInput).valueAsNumber = newTime;
+    ReactDOM.findDOMNode(this.refs.rangeInput).valueAsNumber = newTime;
     this._refreshTimeLayers();
   }
   _playPause() {
@@ -62,7 +63,7 @@ class Playback extends React.Component {
   }
   _setStyleFunc(lyr) {
     if (lyr.get('timeInfo')) {
-      var dateInput = React.findDOMNode(this.refs.dateInput);
+      var dateInput = ReactDOM.findDOMNode(this.refs.dateInput);
       var style = lyr.getStyle();
       var timeInfo = lyr.get('timeInfo');
       lyr.setStyle(function(feature, resolution) {
@@ -102,11 +103,11 @@ class Playback extends React.Component {
     this._forEachLayer(this.props.map.getLayerGroup(), this._handleTimeLayer);
   }
   _onRangeChange(evt) {
-    React.findDOMNode(this.refs.dateInput).valueAsNumber = evt.target.valueAsNumber;
+    ReactDOM.findDOMNode(this.refs.dateInput).valueAsNumber = evt.target.valueAsNumber;
     this._refreshTimeLayers();
   }
   _onDateChange(evt) {
-    React.findDOMNode(this.refs.rangeInput).valueAsNumber = evt.target.valueAsNumber;
+    ReactDOM.findDOMNode(this.refs.rangeInput).valueAsNumber = evt.target.valueAsNumber;
     this._refreshTimeLayers();
   }
   _dateToString(ms) {

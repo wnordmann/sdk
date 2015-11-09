@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import MapConstants from '../constants/MapConstants.js';
@@ -52,7 +53,7 @@ class GeocodingResults extends React.Component {
     this.props.map.addLayer(this._layer);
   }
   _setVisible(visible) {
-    React.findDOMNode(this).parentNode.style.display = visible ? 'block' : 'none';
+    ReactDOM.findDOMNode(this).parentNode.style.display = visible ? 'block' : 'none';
   }
   _zoomTo(result) {
     this._setVisible(false);

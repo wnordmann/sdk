@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import {IntlProvider} from 'react-intl';
 import LayerList from './components/LayerList.jsx';
@@ -248,7 +249,7 @@ var selectedLayer = map.getLayers().item(2);
 
 export default class BasicApp extends React.Component {
   componentDidMount() {
-    map.setTarget(React.findDOMNode(this.refs.map));
+    map.setTarget(ReactDOM.findDOMNode(this.refs.map));
   }
   _toggle(el) {
     if (el.style.display === 'block') {
@@ -258,14 +259,14 @@ export default class BasicApp extends React.Component {
     }
   }
   _toggleTable() {
-    this._toggle(React.findDOMNode(this.refs.tablePanel));
+    this._toggle(ReactDOM.findDOMNode(this.refs.tablePanel));
     this.refs.table.refs.wrappedElement.setDimensionsOnState();
   }
   _toggleQuery() {
-    this._toggle(React.findDOMNode(this.refs.queryPanel));
+    this._toggle(ReactDOM.findDOMNode(this.refs.queryPanel));
   }
   _toggleEdit() {
-    this._toggle(React.findDOMNode(this.refs.editToolPanel));
+    this._toggle(ReactDOM.findDOMNode(this.refs.editToolPanel));
   }
   _navigationFunc() {
     this.refs.info.refs.wrappedElement.activate([]);
@@ -305,8 +306,4 @@ export default class BasicApp extends React.Component {
   }
 }
 
-const nlMessages = {
-  'geocoding.placeholder': 'Zoek op plaatsnaam'
-};
-
-React.render(<IntlProvider locale='nl' messages={nlMessages} >{() => (<BasicApp />)}</IntlProvider>, document.body);
+ReactDOM.render(<IntlProvider locale='en'><BasicApp /></IntlProvider>, document.getElementById('main'));

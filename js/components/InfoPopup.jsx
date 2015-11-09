@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import MapTool from './MapTool.js';
 import ol from 'openlayers';
 import './InfoPopup.css';
@@ -35,7 +36,7 @@ class InfoPopup extends MapTool {
   }
   componentDidMount() {
     this._overlayPopup = new ol.Overlay({
-      element: React.findDOMNode(this).parentNode
+      element: ReactDOM.findDOMNode(this).parentNode
     });
     this.props.map.addOverlay(this._overlayPopup);
   }
@@ -183,9 +184,9 @@ class InfoPopup extends MapTool {
     }
   }
   _setVisible(visible) {
-    React.findDOMNode(this).parentNode.style.display = visible ? 'block' : 'none';
+    ReactDOM.findDOMNode(this).parentNode.style.display = visible ? 'block' : 'none';
     // regular jsx onClick does not work when stopEvent is true
-    var closer = React.findDOMNode(this.refs.popupCloser);
+    var closer = ReactDOM.findDOMNode(this.refs.popupCloser);
     if (closer.onclick === null) {
       var me = this;
       closer.onclick = function() {

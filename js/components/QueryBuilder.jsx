@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import LayerSelector from './LayerSelector.jsx';
 import MapConstants from '../constants/MapConstants.js';
@@ -91,7 +92,7 @@ class QueryBuilder extends React.Component {
     return lyr.get('isSelectable');
   }
   _setQueryFilter() {
-    var input = React.findDOMNode(this.refs.queryExpression);
+    var input = ReactDOM.findDOMNode(this.refs.queryExpression);
     var expression = input.value;
     if (!expression) {
       this._queryFilter = null;

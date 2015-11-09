@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import UI from 'pui-react-dropdowns';
 import Icon from 'pui-react-iconography';
@@ -152,7 +153,7 @@ class QGISPrint extends React.Component {
   }
   _createMap(labels) {
     var map = this.props.map;
-    var resolution = React.findDOMNode(this.refs.resolution).value;
+    var resolution = ReactDOM.findDOMNode(this.refs.resolution).value;
     var layout = this.state.layout;
     this._layoutSafeName = layout.name.replace(/[^a-z0-9]/gi, '').toLowerCase();
     var elements = layout.elements;
@@ -208,7 +209,7 @@ class QGISPrint extends React.Component {
     for (var i = 0, ii = elements.length; i < ii; i++) {
       if (elements[i].type === 'label') {
         var name = elements[i].name;
-        labels[name] = React.findDOMNode(this.refs[name]).value;
+        labels[name] = ReactDOM.findDOMNode(this.refs[name]).value;
       }
     }
     this._createMap(labels);

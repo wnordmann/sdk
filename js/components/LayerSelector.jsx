@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import LayerStore from '../stores/LayerStore.js';
 import LayerActions from '../actions/LayerActions.js';
@@ -17,7 +18,7 @@ export default class LayerSelector extends React.Component {
     this._onChange();
   }
   componentDidMount() {
-    var select = React.findDOMNode(this.refs.layerSelect);
+    var select = ReactDOM.findDOMNode(this.refs.layerSelect);
     var layer = LayerStore.findLayer(select.value);
     LayerActions.selectLayer(layer, this);
   }
@@ -25,7 +26,7 @@ export default class LayerSelector extends React.Component {
     LayerStore.removeChangeListener(this._onChangeCb);
   }
   getLayer() {
-    var select = React.findDOMNode(this.refs.layerSelect);
+    var select = ReactDOM.findDOMNode(this.refs.layerSelect);
     return LayerStore.findLayer(select.value);
   }
   _onChange() {

@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import {IntlProvider} from 'react-intl';
 import LayerList from './components/LayerList.jsx';
@@ -298,7 +299,7 @@ var printLayouts = [{
 
 export default class TabbedApp extends React.Component {
   componentDidMount() {
-    map.setTarget(React.findDOMNode(this.refs.map));
+    map.setTarget(ReactDOM.findDOMNode(this.refs.map));
   }
   render() {
     return (
@@ -336,8 +337,5 @@ export default class TabbedApp extends React.Component {
   }
 }
 
-const nlMessages = {
-  'geocoding.placeholder': 'Zoek op plaatsnaam'
-};
-
-React.render(<IntlProvider locale='nl' messages={nlMessages} >{() => (<TabbedApp />)}</IntlProvider>, document.body);
+ReactDOM.render(<IntlProvider locale='en'><TabbedApp /></IntlProvider>, document.getElementById('main'));
+//ReactDOM.render(<IntlProvider locale='nl' messages={nlMessages} >{() => (<TabbedApp />)}</IntlProvider>, document.getElementById('main'));

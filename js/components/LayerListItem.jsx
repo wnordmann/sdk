@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import LayerActions from '../actions/LayerActions.js';
 import Dialog from 'pui-react-modals';
@@ -176,7 +177,7 @@ class LayerListItem extends React.Component {
     var layer = this.props.layer;
     var filters = this.state.filters;
     var filter;
-    var expression = React.findDOMNode(this.refs.filterTextBox).value;
+    var expression = ReactDOM.findDOMNode(this.refs.filterTextBox).value;
     try {
       filter = filtrex(expression);
     } catch (e) {
@@ -244,7 +245,7 @@ class LayerListItem extends React.Component {
       opacity = (
         <div className='input-group'>
           <label className='sr-only' htmlFor={opacityInputId}>{formatMessage(messages.opacitylabel)}</label>
-          <input id={opacityInputId} onChange={this._changeOpacity.bind(this)} defaultValue={val} type="range" name="opacity" min="0" max="1" step="0.01"></input>
+          <input id={opacityInputId} onChange={this._changeOpacity.bind(this)} defaultValue={val} type="range" name="opacity" min="0" max="1" step="0.01" />
         </div>
       );
     }
@@ -273,13 +274,13 @@ class LayerListItem extends React.Component {
     if (layer.get('type') === 'base') {
       var baselayerId = 'layerlistitem-' + layer.get('id') + '-baselayergroup';
       if (this.state.checked) {
-        input = (<div className='input-group'><label className='sr-only' htmlFor={baselayerId}>{formatMessage(messages.baselayergrouplabel)}</label><input id={baselayerId} type="radio" name="baselayergroup" value={this.props.title} checked onChange={this._handleChange.bind(this)}> {this.props.title}</input></div>);
+        input = (<div className='input-group'><label className='sr-only' htmlFor={baselayerId}>{formatMessage(messages.baselayergrouplabel)}</label><input id={baselayerId} type="radio" name="baselayergroup" value={this.props.title} checked onChange={this._handleChange.bind(this)} /> {this.props.title}</div>);
       } else {
-        input = (<div className='input-group'><label className='sr-only' htmlFor={baselayerId}>{formatMessage(messages.baselayergrouplabel)}</label><input id={baselayerId} type="radio" name="baselayergroup" value={this.props.title} onChange={this._handleChange.bind(this)}> {this.props.title}</input></div>);
+        input = (<div className='input-group'><label className='sr-only' htmlFor={baselayerId}>{formatMessage(messages.baselayergrouplabel)}</label><input id={baselayerId} type="radio" name="baselayergroup" value={this.props.title} onChange={this._handleChange.bind(this)} /> {this.props.title}</div>);
       }
     } else {
       var inputId = 'layerlistitem-' + layer.get('id') + '-visibility';
-      input = (<div className='input-group'><label className='sr-only' htmlFor={inputId}>{formatMessage(messages.layervisibilitylabel)}</label><input id={inputId} type="checkbox" checked={this.state.checked} onChange={this._handleChange.bind(this)}> {this.props.title}</input></div>);
+      input = (<div className='input-group'><label className='sr-only' htmlFor={inputId}>{formatMessage(messages.layervisibilitylabel)}</label><input id={inputId} type="checkbox" checked={this.state.checked} onChange={this._handleChange.bind(this)} /> {this.props.title}</div>);
     }
     var filters = this.state.filters.map(function(f) {
       var filterName = f.title.replace(/\W+/g, '');

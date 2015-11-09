@@ -137,9 +137,11 @@ class Chart extends React.Component {
       default:
         break;
     }
-    this.setState({
-      chart: chart
-    });
+    if (this.state.chart !== chart) {
+      this.setState({
+        chart: chart
+      });
+    }
     c3.generate({
       bindto: '#chart',
       data: {

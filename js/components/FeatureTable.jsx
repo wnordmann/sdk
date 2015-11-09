@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import debounce from  'debounce';
 import FixedDataTable from 'fixed-data-table';
@@ -69,7 +70,7 @@ class FeatureTable extends React.Component {
       switch(action.type) {
         case MapConstants.SELECT_LAYER:
           if (action.cmp === this.refs.layerSelector) {
-            React.findDOMNode(this.refs.filter).value = '';
+            ReactDOM.findDOMNode(this.refs.filter).value = '';
             this._layer = action.layer;
             FeatureStore.addLayer(action.layer, this._selectedOnly);
           }
@@ -108,7 +109,7 @@ class FeatureTable extends React.Component {
   setDimensionsOnState() {
     if (this.props.resizeTo) {
       var resizeToNode = document.getElementById(this.props.resizeTo);
-      var formNode = React.findDOMNode(this.refs.form);
+      var formNode = ReactDOM.findDOMNode(this.refs.form);
       this.setState({
         gridWidth: resizeToNode.offsetWidth - this.props.offset[0],
         gridHeight: resizeToNode.offsetHeight - formNode.offsetHeight - this.props.offset[1]
