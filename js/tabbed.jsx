@@ -337,5 +337,4 @@ export default class TabbedApp extends React.Component {
   }
 }
 
-ReactDOM.render(<IntlProvider locale='en'><TabbedApp /></IntlProvider>, document.getElementById('main'));
-//ReactDOM.render(<IntlProvider locale='nl' messages={nlMessages} >{() => (<TabbedApp />)}</IntlProvider>, document.getElementById('main'));
+ReactDOM.render(<IntlProvider locale='nl'><TabbedApp /></IntlProvider>, document.getElementById('main'));
