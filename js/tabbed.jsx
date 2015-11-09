@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
-import {IntlProvider} from 'react-intl';
+import {addLocaleData, IntlProvider, defineMessages, injectIntl, intlShape} from 'react-intl';
 import LayerList from './components/LayerList.jsx';
 import Geocoding from './components/Geocoding.jsx';
 import GeocodingResults from './components/GeocodingResults.jsx';
@@ -17,6 +17,12 @@ import HomeButton from './components/HomeButton.jsx';
 import AddLayer from './components/AddLayer.jsx';
 import QGISPrint from './components/QGISPrint.jsx';
 import UI from 'pui-react-tabs';
+import nlLocaleData from '../node_modules/react-intl/dist/locale-data/nl.js';
+import nlMessages from '../locale/nl.js';
+
+addLocaleData(
+  nlLocaleData
+);
 
 var styleTrees = new ol.style.Style({
   fill: new ol.style.Fill({
@@ -214,22 +220,6 @@ var legendData = {
   }]
 };
 
-var charts = [{
-  title: 'Airports count per use category',
-  categoryField: 'USE',
-  layer: 'lyr03',
-  valueFields: [],
-  displayMode: 2,
-  operation: 2
-}, {
-  title: 'Forest area total surface',
-  categoryField: 'VEGDESC',
-  layer: 'lyr01',
-  valueFields: ['AREA_KM2'],
-  displayMode: 1,
-  operation: 2
-}];
-
 var printLayouts = [{
   name: 'foo',
   thumbnail: 'foo_thumbnail.png',
@@ -297,11 +287,70 @@ var printLayouts = [{
   height: 210.0
 }];
 
-export default class TabbedApp extends React.Component {
+const messages = defineMessages({
+  geocodingtab: {
+    id: 'app.geocodingtab',
+    description: 'Title of the geocoding tab',
+    defaultMessage: 'Geocoding'
+  },
+  attributestab: {
+    id: 'app.attributestab',
+    description: 'Title of the attributes table tab',
+    defaultMessage: 'Attributes table'
+  },
+  querytab: {
+    id: 'app.querytab',
+    description: 'Title of the query tab',
+    defaultMessage: 'Query'
+  },
+  charttab: {
+    id: 'app.charttab',
+    description: 'Title of the chart tab',
+    defaultMessage: 'Charts'
+  },
+  chart1: {
+    id: 'app.chart1',
+    description: 'Title of the first chart',
+    defaultMessage: 'Airports count per use category'
+  },
+  chart2: {
+    id: 'app.chart2',
+    description: 'Title of the second chart',
+    defaultMessage: 'Forest area total surface'
+  }
+});
+
+nlMessages['app.geocodingtab'] = 'Adres';
+nlMessages['app.attributestab'] = 'Attribuuttabel';
+nlMessages['app.querytab'] = 'Bevragen';
+nlMessages['app.charttab'] = 'Grafieken';
+nlMessages['app.chart1'] = 'Aantal vliegvelden per gebruikscategorie';
+nlMessages['app.chart2'] = 'Totaal oppervlakte bos';
+
+var locale = window.location.search.indexOf('nl') !== -1 ? 'nl' : 'en';
+var i18n = locale === 'nl' ? nlMessages : undefined;
+
+class TabbedApp extends React.Component {
   componentDidMount() {
     map.setTarget(ReactDOM.findDOMNode(this.refs.map));
   }
   render() {
+    const {formatMessage} = this.props.intl;
+    var charts = [{
+      title: formatMessage(messages.chart1),
+      categoryField: 'USE',
+      layer: 'lyr03',
+      valueFields: [],
+      displayMode: 2,
+      operation: 2
+    }, {
+      title: formatMessage(messages.chart2),
+      categoryField: 'VEGDESC',
+      layer: 'lyr01',
+      valueFields: ['AREA_KM2'],
+      displayMode: 1,
+      operation: 2
+    }];
     return (
       <article>
         <nav role='navigation'>
@@ -317,10 +366,10 @@ export default class TabbedApp extends React.Component {
           <div className='row full-height'>
             <div className='col-md-8 full-height' id='tabs-panel'>
               <UI.SimpleTabs defaultActiveKey={2}>
-                <UI.Tab eventKey={1} title="Geocoding"><div id='geocoding-tab'><Geocoding /></div><div id='geocoding-results' className='geocoding-results'><GeocodingResults map={map} /></div></UI.Tab>
-                <UI.Tab eventKey={2} title="Attributes table"><div id="attributes-table-tab"><FeatureTable resizeTo='tabs-panel' offset={[50, 60]} layer={selectedLayer} map={map} /></div></UI.Tab>
-                <UI.Tab eventKey={3} title="Query"><div id='query-panel' className='query-panel'><QueryBuilder map={map} /></div></UI.Tab>
-                <UI.Tab eventKey={4} title="Charts"><div id='charts-tab'><Chart combo={true} charts={charts}/></div></UI.Tab>
+                <UI.Tab eventKey={1} title={formatMessage(messages.geocodingtab)}><div id='geocoding-tab'><Geocoding /></div><div id='geocoding-results' className='geocoding-results'><GeocodingResults map={map} /></div></UI.Tab>
+                <UI.Tab eventKey={2} title={formatMessage(messages.attributestab)}><div id="attributes-table-tab"><FeatureTable resizeTo='tabs-panel' offset={[50, 60]} layer={selectedLayer} map={map} /></div></UI.Tab>
+                <UI.Tab eventKey={3} title={formatMessage(messages.querytab)}><div id='query-panel' className='query-panel'><QueryBuilder map={map} /></div></UI.Tab>
+                <UI.Tab eventKey={4} title={formatMessage(messages.charttab)}><div id='charts-tab'><Chart combo={true} charts={charts}/></div></UI.Tab>
               </UI.SimpleTabs>
             </div>
             <div className='col-md-16 full-height'>
@@ -337,4 +386,14 @@ export default class TabbedApp extends React.Component {
   }
 }
 
-ReactDOM.render(<IntlProvider locale='nl'><TabbedApp /></IntlProvider>, document.getElementById('main'));
+TabbedApp.propTypes = {
+  /**
+   * i18n message strings. Provided through the application through context.
+   */
+  intl: intlShape.isRequired
+};
+
+
+TabbedApp = injectIntl(TabbedApp);
+
+ReactDOM.render(<IntlProvider locale={locale} messages={i18n}><TabbedApp /></IntlProvider>, document.getElementById('main'));
