@@ -123,7 +123,7 @@ class WFST extends MapTool {
       data.documentElement.localName == 'ExceptionReport') {
         this.setState({
           error: true,
-          msg: data.getElementsByTagNameNS('http://www.opengis.net/ows', 'ExceptionText').item(0).textContent)
+          msg: data.getElementsByTagNameNS('http://www.opengis.net/ows', 'ExceptionText').item(0).textContent
         });
     } else {
       result = this._format.readTransactionResponse(data);
