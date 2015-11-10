@@ -132,17 +132,6 @@ var map = new ol.Map({
         })
       ]
     }),
-    new ol.layer.Tile({
-      title: 'States',
-      id: 'wms01',
-      popupInfo: '#AllAttributes',
-      extent: [-13884991, 2870341, -7455066, 6338219],
-      source: new ol.source.TileWMS({
-        url: 'http://demo.boundlessgeo.com/geoserver/wms',
-        params: {'LAYERS': 'topp:states', 'TILED': true},
-        serverType: 'geoserver'
-      })
-    }),
     new ol.layer.Vector({
       opacity: 1.0,
       source: new ol.source.Vector({
@@ -194,8 +183,8 @@ var map = new ol.Map({
     })
   ],
   view: new ol.View({
-    center: [-13625367.7959, 6039995.37374],
-    zoom: 7
+    center: [-16839563.5993915, 8850169.509638],
+    zoom: 4
   })
 });
 
