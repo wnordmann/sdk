@@ -57,6 +57,43 @@ class WFST extends MapTool {
     this.deactivate();
     this.activate([this._select, this._modify]);
   }
+  _deleteFeature() {
+    this._setLayer();
+    var wfsInfo = this._layer.get('wfsInfo');
+    var features = this._select.getFeatures();
+    if (features.getLength() === 1) {
+      var feature = features.item(0);
+      // TODO have a confirm dialog?
+      var node = this._format.writeTransaction(null, null, [feature], {
+        featureNS: wfsInfo.featureNS,
+        featureType: wfsInfo.featureType
+      });
+      this._doPOST(this._serializer.serializeToString(node),
+        function(xmlhttp) {
+          var data = xmlhttp.responseText;
+          var result = this._readResponse(data);
+          if (result && result.transactionSummary.totalDeleted === 1) {
+            this._select.getFeatures().clear();
+            this._layer.getSource().removeFeature(feature);
+          } else {
+            // TODO i18n
+            this.setState({
+              error: true,
+              msg: 'There was an issue deleting the feature.'
+            });
+          }
+        },
+        function(xmlhttp) {
+          this.setState({
+            error: true,
+            msg: xmlhttp.status + ' ' + xmlhttp.statusText,
+            enable: true
+          });
+        },
+        this
+      );
+    }
+  }
   _onSubmit(evt) {
     evt.preventDefault();
   }
@@ -235,6 +272,7 @@ class WFST extends MapTool {
         <div className='form-group'>
           {button}
           <UI.DefaultButton onClick={this._modifyFeature.bind(this)}>Modify</UI.DefaultButton>
+          <UI.DefaultButton onClick={this._deleteFeature.bind(this)}>Delete</UI.DefaultButton>
         </div>
         {error}
       </form>
