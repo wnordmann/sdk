@@ -2,10 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import MapConstants from '../constants/MapConstants.js';
+import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LayerSelector from './LayerSelector.jsx';
 import LayerStore from '../stores/LayerStore.js';
 import MapTool from './MapTool.js';
-import Grids from 'pui-react-grids';
 import Pui from 'pui-react-alerts';
 import UI from 'pui-react-buttons';
 
@@ -15,15 +16,20 @@ const messages = defineMessages({
     description: 'Label for the layer combo box',
     defaultMessage: 'Layer'
   },
-  enable: {
-    id: 'wfst.enable',
-    description: 'Button text to enable edit mode',
-    defaultMessage: 'Enable edit mode'
+  drawfeature: {
+    id: 'wfst.drawfeature',
+    description: 'Button text for draw new feature',
+    defaultMessage: 'Draw',
   },
-  disable: {
-    id: 'wfst.disable',
-    description: 'Button text to disable edit mode',
-    defaultMessage: 'Disable edit mode'
+  modifyfeature: {
+    id: 'wfst.modifyfeature',
+    description: 'Button text for modify / select existing feature',
+    defaultMessage: 'Modify / Select',
+  },
+  deletefeature: {
+    id: 'wfst.deletefeature',
+    description: 'Button text for delete selected feature',
+    defaultMessage: 'Delete',
   },
   errormsg: {
     id: 'wfst.errormsg',
@@ -35,8 +41,19 @@ const messages = defineMessages({
 class WFST extends MapTool {
   constructor(props) {
     super(props);
+    AppDispatcher.register((payload) => {
+      let action = payload.action;
+      switch(action.type) {
+        case MapConstants.SELECT_LAYER:
+          if (action.cmp === this.refs.layerSelector) {
+            this._setLayer(action.layer);
+          }
+          break;
+        default:
+          break;
+      }
+    });
     this.state = {
-      enable: true,
       error: false
     };
     this._interactions = {};
@@ -45,20 +62,30 @@ class WFST extends MapTool {
     this._modify = new ol.interaction.Modify({
       features: features
     });
-    this._hasDraw = false;
     features.on('add', this._onSelectAdd, this);
     features.on('remove', this._onSelectRemove, this);
     this._dirty = {};
     this._format = new ol.format.WFS();
     this._serializer = new XMLSerializer();
   }
+  componentDidMount() {
+    var layerId = ReactDOM.findDOMNode(this.refs.layerSelector).value;
+    this._setLayer(LayerStore.findLayer(layerId));
+  }
+  _setLayer(layer) {
+    this._layer = layer;
+     var layers = LayerStore.getState().flatLayers;
+    for (var i = 0, ii = layers.length; i < ii; ++i) {
+      if (layers[i].get('isWFST')) {
+        layers[i].setVisible(layers[i] === this._layer);
+      }
+    }
+  }
   _modifyFeature() {
-    this._setLayer();
     this.deactivate();
     this.activate([this._select, this._modify]);
   }
   _deleteFeature() {
-    this._setLayer();
     var wfsInfo = this._layer.get('wfsInfo');
     var features = this._select.getFeatures();
     if (features.getLength() === 1) {
@@ -86,8 +113,7 @@ class WFST extends MapTool {
         function(xmlhttp) {
           this.setState({
             error: true,
-            msg: xmlhttp.status + ' ' + xmlhttp.statusText,
-            enable: true
+            msg: xmlhttp.status + ' ' + xmlhttp.statusText
           });
         },
         this
@@ -143,8 +169,7 @@ class WFST extends MapTool {
         function(xmlhttp) {
           this.setState({
             error: true,
-            msg: xmlhttp.status + ' ' + xmlhttp.statusText,
-            enable: true
+            msg: xmlhttp.status + ' ' + xmlhttp.statusText
           });
         },
         this
@@ -203,30 +228,20 @@ class WFST extends MapTool {
             feature.setId(insertId);
           }
         }
-        this._disableEditMode();
-        this._hasDraw = false;
       },
       function(xmlhttp) {
         this.deactivate();
-        this._hasDraw = false;
         var errorMsg = xmlhttp ? (xmlhttp.status + ' ' + xmlhttp.statusText) : '';
         this.setState({
           error: true,  
-          msg: errorMsg,
-          enable: true
+          msg: errorMsg
         });
       },
       this
     );
   }
-  _setLayer() {
-    var layerId = ReactDOM.findDOMNode(this.refs.layerSelector).value;
-    var layer = LayerStore.findLayer(layerId);
-    this._layer = layer;
-    return layerId;
-  }
-  _activate() {
-    var layerId = this._setLayer();
+  _drawFeature() {
+    var layerId = this._layer.get('id');
     var wfsInfo = this._layer.get('wfsInfo');
     var source = this._layer.getSource();
     if (!this._interactions[layerId]) {
@@ -241,15 +256,7 @@ class WFST extends MapTool {
     }
     var draw = this._interactions[layerId].draw;
     this.deactivate();
-    this.activate([draw/*, this._modify, this._select*/]);
-  } 
-  _disableEditMode() {
-    this.setState({enable: true});
-    this.deactivate();
-  }
-  _enableEditMode() {
-    this.setState({enable: false});
-    this._activate();
+    this.activate([draw]);
   }
   render() {
     const {formatMessage} = this.props.intl;
@@ -257,23 +264,13 @@ class WFST extends MapTool {
     if (this.state.error === true) {
       error = (<div className='error-alert'><Pui.ErrorAlert dismissable={false} withIcon={true}>{formatMessage(messages.errormsg, {msg: this.state.msg})}</Pui.ErrorAlert></div>);
     }
-    var button;
-    if (this.state.enable === true) {
-      button = (<UI.DefaultButton onClick={this._enableEditMode.bind(this)}>{formatMessage(messages.enable)}</UI.DefaultButton>);
-    } else {
-      button = (<UI.DefaultButton onClick={this._disableEditMode.bind(this)}>{formatMessage(messages.disable)}</UI.DefaultButton>);
-    }
     return (
-      <form onSubmit={this._onSubmit} role="form" className='form-horizontal'>
-        <div className="form-group">
-          <Grids.Col md={6}><label htmlFor='layerSelector'>{formatMessage(messages.layerlabel)}</label></Grids.Col>
-          <Grids.Col md={18}><LayerSelector id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /></Grids.Col>
-        </div>
-        <div className='form-group'>
-          {button}
-          <UI.DefaultButton onClick={this._modifyFeature.bind(this)}>Modify</UI.DefaultButton>
-          <UI.DefaultButton onClick={this._deleteFeature.bind(this)}>Delete</UI.DefaultButton>
-        </div>
+      <form onSubmit={this._onSubmit} role='form'>
+        <label htmlFor='layerSelector'>{formatMessage(messages.layerlabel)}</label>
+        <LayerSelector id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} />
+        <UI.DefaultButton onClick={this._drawFeature.bind(this)}>{formatMessage(messages.drawfeature)}</UI.DefaultButton>
+        <UI.DefaultButton onClick={this._modifyFeature.bind(this)}>{formatMessage(messages.modifyfeature)}</UI.DefaultButton>
+        <UI.DefaultButton onClick={this._deleteFeature.bind(this)}>{formatMessage(messages.deletefeature)}</UI.DefaultButton>
         {error}
       </form>
     );
