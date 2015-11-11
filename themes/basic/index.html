@@ -11,14 +11,7 @@
 </head>
 <body>
   <div id='main'></div>
-  <script>
-    var fileref = document.createElement('script');
-    if (window.location.search.indexOf('production') !== -1) {
-      fileref.setAttribute('src', '../../dist/js/basic.js');
-    } else {
-      fileref.setAttribute('src', '../../dist/js/basic-debug.js');
-    }
-    document.getElementsByTagName("head")[0].appendChild(fileref);
-  </script>
+  <script src="/loader.js"></script>
+  <script src="/dist/js/basic-debug.js"></script>
 </body>
 </html>

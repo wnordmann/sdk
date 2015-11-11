@@ -8,12 +8,9 @@
     "url": "https://github.com/boundlessgeo/sdk.git"
   },
   "scripts": {
-    "start:tabbed": "node_modules/.bin/watchify js/tabbed.jsx -o dist/js/tabbed-debug.js",
-    "start:basic": "node_modules/.bin/watchify js/basic.jsx -o dist/js/basic-debug.js",
-    "start:server": "node_modules/.bin/st -nc",
     "css": "node_modules/.bin/dr-frankenstyle css",
     "minify:css": "node_modules/.bin/cleancss -o css/components.min.css css/components.css",
-    "start": "node_modules/.bin/npm-run-all --parallel css start:tabbed start:basic start:server",
+    "start": "node scripts/debug-server.js",
     "build:tabbed": "node_modules/.bin/browserify -g [envify --NODE_ENV production] -p [minifyify --no-map --exclude node_modules/openlayers/dist/ol.js] js/tabbed.jsx -o dist/js/tabbed.js",
     "build:basic": "node_modules/.bin/browserify -g [envify --NODE_ENV production] -p [minifyify --no-map --exclude node_modules/openlayers/dist/ol.js]  js/basic.jsx -o dist/js/basic.js",
     "build:full": "node_modules/.bin/browserify -g [envify --NODE_ENV production] -p [minifyify --no-map --exclude node_modules/openlayers/dist/ol.js]  js/full.jsx -o dist/js/full.js",
@@ -78,7 +75,7 @@
     "phantomjs": "^1.9.16",
     "react-docgen": "^2.2.0",
     "sinon": "^1.12.2",
-    "st": "^1.0.0",
+    "through": "^2.3.8",
     "watchify": "^3.2.0"
   },
   "browserify": {
