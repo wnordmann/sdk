@@ -20,7 +20,7 @@ class Geocoding extends React.Component {
       this._searchAddress();
     }
   }
-  _searchAddress() {
+  _searchAddress(event) {
     var value = event.target.value;
     if (value !== '') {
       var cbname = 'fn' + Date.now();

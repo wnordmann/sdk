@@ -2130,7 +2130,7 @@ var Geocoding = (function (_React$Component) {
     }
   }, {
     key: '_searchAddress',
-    value: function _searchAddress() {
+    value: function _searchAddress(event) {
       var value = event.target.value;
       if (value !== '') {
         var cbname = 'fn' + Date.now();
