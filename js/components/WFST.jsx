@@ -52,6 +52,11 @@ class WFST extends MapTool {
     this._format = new ol.format.WFS();
     this._serializer = new XMLSerializer();
   }
+  _modifyFeature() {
+    this._setLayer();
+    this.deactivate();
+    this.activate([this._select, this._modify]);
+  }
   _onSubmit(evt) {
     evt.preventDefault();
   }
@@ -69,12 +74,20 @@ class WFST extends MapTool {
     var wfsInfo = this._layer.get('wfsInfo');
     var fid = feature.getId();
     if (this._dirty[fid]) {
+      var featureGeometryName = feature.getGeometryName();
       // do a WFS transaction to update the geometry
       var properties = feature.getProperties();
       // get rid of bbox which is not a real property
       delete properties.bbox;
+      if (wfsInfo.geometryName !== featureGeometryName) {
+        properties[wfsInfo.geometryName] = properties[featureGeometryName];
+        delete properties[featureGeometryName];
+      }
       var clone = new ol.Feature(properties);
       clone.setId(fid);
+      if (wfsInfo.geometryName !== featureGeometryName) {
+        clone.setGeometryName(wfsInfo.geometryName);
+      }
       var node = this._format.writeTransaction(null, [clone], null, {
         gmlOptions: {
           srsName: this.props.map.getView().getProjection().getCode()
@@ -169,12 +182,16 @@ class WFST extends MapTool {
       this
     );
   }
-  _activate() {
+  _setLayer() {
     var layerId = ReactDOM.findDOMNode(this.refs.layerSelector).value;
     var layer = LayerStore.findLayer(layerId);
     this._layer = layer;
-    var wfsInfo = layer.get('wfsInfo');
-    var source = layer.getSource();
+    return layerId;
+  }
+  _activate() {
+    var layerId = this._setLayer();
+    var wfsInfo = this._layer.get('wfsInfo');
+    var source = this._layer.getSource();
     if (!this._interactions[layerId]) {
       this._interactions[layerId] = {
         draw:  new ol.interaction.Draw({
@@ -201,7 +218,7 @@ class WFST extends MapTool {
     const {formatMessage} = this.props.intl;
     var error;
     if (this.state.error === true) {
-      error = (<div className='error-alert'><Pui.ErrorAlert dismissable={true} withIcon={true}>{formatMessage(messages.errormsg, {msg: this.state.msg})}</Pui.ErrorAlert></div>);
+      error = (<div className='error-alert'><Pui.ErrorAlert dismissable={false} withIcon={true}>{formatMessage(messages.errormsg, {msg: this.state.msg})}</Pui.ErrorAlert></div>);
     }
     var button;
     if (this.state.enable === true) {
@@ -217,6 +234,7 @@ class WFST extends MapTool {
         </div>
         <div className='form-group'>
           {button}
+          <UI.DefaultButton onClick={this._modifyFeature.bind(this)}>Modify</UI.DefaultButton>
         </div>
         {error}
       </form>
