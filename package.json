@@ -62,7 +62,7 @@
     "browserify-css": "^0.7.1",
     "chai": "^1.10.0",
     "clean-css": "^3.4.6",
-    "dr-frankenstyle-win": "^0.2.11",
+    "dr-frankenstyle-win": "0.2.12",
     "envify": "3.4.0",
     "es6-promise": "^3.0.2",
     "eslint": "^1.6.0",
