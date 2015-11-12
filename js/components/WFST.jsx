@@ -35,9 +35,27 @@ const messages = defineMessages({
     id: 'wfst.errormsg',
     description: 'Error message to show the user when a request fails',
     defaultMessage: 'Error saving this feature to GeoServer. {msg}'
+  },
+  deletemsg: {
+    id: 'wfst.deletemsg',
+    description: 'Error message to show when delete fails',
+    defaultMessage: 'There was an issue deleting the feature.'
   }
 });
 
+/**
+ * Allows users to make changes to WFS-T layers. This can be drawing new
+ * features and deleting or modifying existing features. Only geometry
+ * changes are currently supported, no attribute changes.
+ * This depends on ol.layer.Vector with ol.source.Vector. The layer
+ * needs to have isWFST set to true. Also a wfsInfo object needs to be
+ * configured on the layer with the following properties:
+ * - featureNS: the namespace of the WFS typename
+ * - featureType: the name (without prefix) of the underlying WFS typename
+ * - geometryType: the type of geometry (e.g. MultiPolygon)
+ * - geometryName: the name of the geometry attribute
+ * - url: the online resource of the WFS endpoint
+ */
 class WFST extends MapTool {
   constructor(props) {
     super(props);
@@ -72,9 +90,15 @@ class WFST extends MapTool {
     var layerId = ReactDOM.findDOMNode(this.refs.layerSelector).value;
     this._setLayer(LayerStore.findLayer(layerId));
   }
+  _setError(msg) {
+    this.setState({
+      error: true,
+      msg: msg
+    });
+  }
   _setLayer(layer) {
     this._layer = layer;
-     var layers = LayerStore.getState().flatLayers;
+    var layers = LayerStore.getState().flatLayers;
     for (var i = 0, ii = layers.length; i < ii; ++i) {
       if (layers[i].get('isWFST')) {
         layers[i].setVisible(layers[i] === this._layer);
@@ -87,10 +111,10 @@ class WFST extends MapTool {
   }
   _deleteFeature() {
     var wfsInfo = this._layer.get('wfsInfo');
+    const {formatMessage} = this.props.intl;
     var features = this._select.getFeatures();
     if (features.getLength() === 1) {
       var feature = features.item(0);
-      // TODO have a confirm dialog?
       var node = this._format.writeTransaction(null, null, [feature], {
         featureNS: wfsInfo.featureNS,
         featureType: wfsInfo.featureType
@@ -103,18 +127,11 @@ class WFST extends MapTool {
             this._select.getFeatures().clear();
             this._layer.getSource().removeFeature(feature);
           } else {
-            // TODO i18n
-            this.setState({
-              error: true,
-              msg: 'There was an issue deleting the feature.'
-            });
+            this._setError(formatMessage(messages.deletemsg));
           }
         },
         function(xmlhttp) {
-          this.setState({
-            error: true,
-            msg: xmlhttp.status + ' ' + xmlhttp.statusText
-          });
+          this._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
         },
         this
       );
@@ -167,10 +184,7 @@ class WFST extends MapTool {
           }
         },
         function(xmlhttp) {
-          this.setState({
-            error: true,
-            msg: xmlhttp.status + ' ' + xmlhttp.statusText
-          });
+          this._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
         },
         this
       );
@@ -179,8 +193,8 @@ class WFST extends MapTool {
   _doPOST(data, success, failure, scope) {
     var xmlhttp = new XMLHttpRequest();
     var url = this._layer.get('wfsInfo').url;
-    xmlhttp.open("POST", url, true);
-    xmlhttp.setRequestHeader("Content-Type", "text/xml");
+    xmlhttp.open('POST', url, true);
+    xmlhttp.setRequestHeader('Content-Type', 'text/xml');
     xmlhttp.onreadystatechange = function() {
       if (xmlhttp.readyState === 4) {
         if (xmlhttp.status === 200) {
@@ -196,10 +210,7 @@ class WFST extends MapTool {
     var result;
     if (global.Document && data instanceof global.Document && data.documentElement &&
       data.documentElement.localName == 'ExceptionReport') {
-        this.setState({
-          error: true,
-          msg: data.getElementsByTagNameNS('http://www.opengis.net/ows', 'ExceptionText').item(0).textContent
-        });
+      this._setError(data.getElementsByTagNameNS('http://www.opengis.net/ows', 'ExceptionText').item(0).textContent);
     } else {
       result = this._format.readTransactionResponse(data);
     }
@@ -231,11 +242,7 @@ class WFST extends MapTool {
       },
       function(xmlhttp) {
         this.deactivate();
-        var errorMsg = xmlhttp ? (xmlhttp.status + ' ' + xmlhttp.statusText) : '';
-        this.setState({
-          error: true,  
-          msg: errorMsg
-        });
+        this._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
       },
       this
     );
