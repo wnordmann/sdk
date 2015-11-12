@@ -3,10 +3,8 @@ New javascript SDK based on React and Flux
 
     npm install
     npm start
-    http://127.0.0.1:1337/themes/tabbed/index.html
-    http://127.0.0.1:1337/themes/basic/index.html
-
-To run the examples in production mode, append ?production to the url.
+    http://localhost:3000/themes/tabbed/
+    http://localhost:3000/themes/basic/
 
 ## Building css (Pivotal UI)
 
