@@ -5611,7 +5611,7 @@ var Select = (function (_MapTool) {
     this._interactions.RECTANGLE.on('boxend', function (evt) {
       var box = evt.target.getGeometry().getExtent();
       this.props.map.getLayers().forEach(function (lyr) {
-        if (lyr.get('isSelectable') === true) {
+        if (lyr.getVisible() && lyr.get('isSelectable') === true) {
           var selected = [];
           lyr.getSource().forEachFeatureIntersectingExtent(box, function (feature) {
             if (feature.get('features')) {
