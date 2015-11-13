@@ -37,7 +37,7 @@
     "keymirror": "~0.1.0",
     "lodash.uniqueid": "^3.0.0",
     "ol3-cesium": "^3.8.0",
-    "openlayers": "3.11.0",
+    "openlayers": "3.11.1",
     "pui-react-alerts": "3.0.0-alpha.1",
     "pui-react-buttons": "3.0.0-alpha.1",
     "pui-react-dropdowns": "3.0.0-alpha.1",
