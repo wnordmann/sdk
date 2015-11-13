@@ -50,7 +50,7 @@
     "react": "0.14.2",
     "react-color-picker": "^2.1.9",
     "react-dom": "^0.14.2",
-    "react-dropzone": "^2.0.1",
+    "react-dropzone": "3.0.0",
     "react-intl": "2.0.0-beta-1",
     "react-slick": "0.9.1",
     "slick-carousel-dr-frankenstyle": "^1.5.8"
