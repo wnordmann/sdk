@@ -66,12 +66,13 @@ const messages = defineMessages({
 class QueryBuilder extends React.Component {
   constructor(props) {
     super(props);
+    var me = this;
     AppDispatcher.register((payload) => {
       let action = payload.action;
       switch(action.type) {
         case MapConstants.SELECT_LAYER:
-          if (action.cmp === this.refs.layerSelector) {
-            this._layer = action.layer;
+          if (action.cmp === me.refs.layerSelector) {
+            me._layer = action.layer;
           }
           break;
         default:

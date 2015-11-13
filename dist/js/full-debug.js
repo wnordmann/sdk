@@ -4018,18 +4018,17 @@ var MapTool = (function (_React$Component) {
   _inherits(MapTool, _React$Component);
 
   function MapTool(props) {
-    var _this = this;
-
     _classCallCheck(this, MapTool);
 
     _get(Object.getPrototypeOf(MapTool.prototype), 'constructor', this).call(this, props);
+    var me = this;
     _dispatchersAppDispatcherJs2['default'].register(function (payload) {
       var action = payload.action;
       switch (action.type) {
         case _constantsMapConstantsJs2['default'].ACTIVATE_TOOL:
-          if (_this.props.toggleGroup && _this.props.toggleGroup === action.toggleGroup) {
-            if (_this !== action.tool) {
-              _this.deactivate();
+          if (me.props.toggleGroup && me.props.toggleGroup === action.toggleGroup) {
+            if (me !== action.tool) {
+              me.deactivate();
             }
           }
           break;
@@ -5384,17 +5383,16 @@ var QueryBuilder = (function (_React$Component) {
   _inherits(QueryBuilder, _React$Component);
 
   function QueryBuilder(props) {
-    var _this = this;
-
     _classCallCheck(this, QueryBuilder);
 
     _get(Object.getPrototypeOf(QueryBuilder.prototype), 'constructor', this).call(this, props);
+    var me = this;
     _dispatchersAppDispatcherJs2['default'].register(function (payload) {
       var action = payload.action;
       switch (action.type) {
         case _constantsMapConstantsJs2['default'].SELECT_LAYER:
-          if (action.cmp === _this.refs.layerSelector) {
-            _this._layer = action.layer;
+          if (action.cmp === me.refs.layerSelector) {
+            me._layer = action.layer;
           }
           break;
         default:

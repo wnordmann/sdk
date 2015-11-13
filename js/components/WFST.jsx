@@ -59,12 +59,13 @@ const messages = defineMessages({
 class WFST extends MapTool {
   constructor(props) {
     super(props);
+    var me = this;
     AppDispatcher.register((payload) => {
       let action = payload.action;
       switch(action.type) {
         case MapConstants.SELECT_LAYER:
-          if (action.cmp === this.refs.layerSelector) {
-            this._setLayer(action.layer);
+          if (action.cmp === me.refs.layerSelector) {
+            me._setLayer(action.layer);
           }
           break;
         default:

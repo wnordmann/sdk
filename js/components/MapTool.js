@@ -11,13 +11,14 @@ import LayerActions from '../actions/LayerActions.js';
 export default class MapTool extends React.Component {
   constructor(props) {
     super(props);
+    var me = this;
     AppDispatcher.register((payload) => {
       let action = payload.action;
       switch(action.type) {
         case MapConstants.ACTIVATE_TOOL:
-          if (this.props.toggleGroup && this.props.toggleGroup === action.toggleGroup) {
-            if (this !== action.tool) {
-              this.deactivate();
+          if (me.props.toggleGroup && me.props.toggleGroup === action.toggleGroup) {
+            if (me !== action.tool) {
+              me.deactivate();
             }
           }
           break;
