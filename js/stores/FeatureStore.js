@@ -134,7 +134,7 @@ class FeatureStore extends EventEmitter {
     if (filter === true) {
       this.setSelectedAsFilter(layer);
     } else {
-      this.emitChange();
+      this.restoreOriginalFeatures(layer);
     }
   }
   _setFeatures(layer, features) {

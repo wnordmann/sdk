@@ -1720,21 +1720,20 @@ var FeatureTable = (function (_React$Component) {
   _inherits(FeatureTable, _React$Component);
 
   function FeatureTable(props) {
-    var _this = this;
-
     _classCallCheck(this, FeatureTable);
 
     _get(Object.getPrototypeOf(FeatureTable.prototype), 'constructor', this).call(this, props);
     _storesFeatureStoreJs2['default'].bindMap(this.props.map);
     this._selectedOnly = false;
+    var me = this;
     _dispatchersAppDispatcherJs2['default'].register(function (payload) {
       var action = payload.action;
       switch (action.type) {
         case _constantsMapConstantsJs2['default'].SELECT_LAYER:
-          if (action.cmp === _this.refs.layerSelector) {
-            _reactDom2['default'].findDOMNode(_this.refs.filter).value = '';
-            _this._layer = action.layer;
-            _storesFeatureStoreJs2['default'].addLayer(action.layer, _this._selectedOnly);
+          if (action.cmp === me.refs.layerSelector) {
+            _reactDom2['default'].findDOMNode(me.refs.filter).value = '';
+            me._layer = action.layer;
+            _storesFeatureStoreJs2['default'].addLayer(action.layer, me._selectedOnly);
           }
           break;
         default:
@@ -1977,7 +1976,7 @@ var FeatureTable = (function (_React$Component) {
           _react2['default'].createElement(
             'label',
             { htmlFor: 'featuretable-onlyselected' },
-            _react2['default'].createElement('input', { id: 'featuretable-onlyselected', type: 'checkbox', onChange: this._filter.bind(this) }),
+            _react2['default'].createElement('input', { id: 'featuretable-onlyselected', type: 'checkbox', checked: this._selectedOnly, onChange: this._filter.bind(this) }),
             ' ',
             formatMessage(messages.onlyselected)
           )
@@ -6112,7 +6111,7 @@ var FeatureStore = (function (_EventEmitter) {
       if (filter === true) {
         this.setSelectedAsFilter(layer);
       } else {
-        this.emitChange();
+        this.restoreOriginalFeatures(layer);
       }
     }
   }, {

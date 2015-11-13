@@ -65,14 +65,15 @@ class FeatureTable extends React.Component {
     super(props);
     FeatureStore.bindMap(this.props.map);
     this._selectedOnly = false;
+    var me = this;
     AppDispatcher.register((payload) => {
       let action = payload.action;
       switch(action.type) {
         case MapConstants.SELECT_LAYER:
-          if (action.cmp === this.refs.layerSelector) {
-            ReactDOM.findDOMNode(this.refs.filter).value = '';
-            this._layer = action.layer;
-            FeatureStore.addLayer(action.layer, this._selectedOnly);
+          if (action.cmp === me.refs.layerSelector) {
+            ReactDOM.findDOMNode(me.refs.filter).value = '';
+            me._layer = action.layer;
+            FeatureStore.addLayer(action.layer, me._selectedOnly);
           }
           break;
         default:
@@ -240,7 +241,7 @@ class FeatureTable extends React.Component {
             <span className='input-group-addon'><label htmlFor='featuretable-filter'>{formatMessage(messages.filterlabel)}</label></span>
             <input type='text' id='featuretable-filter' ref='filter' className='form-control' onChange={this._filterByText.bind(this)} placeholder={formatMessage(messages.filterplaceholder)}></input>
           </div>
-          <label htmlFor='featuretable-onlyselected'><input id='featuretable-onlyselected' type='checkbox' onChange={this._filter.bind(this)}></input> {formatMessage(messages.onlyselected)}</label>
+          <label htmlFor='featuretable-onlyselected'><input id='featuretable-onlyselected' type='checkbox' checked={this._selectedOnly} onChange={this._filter.bind(this)}></input> {formatMessage(messages.onlyselected)}</label>
         </form>
         <Table
           onColumnResizeEndCallback={this._onColumnResize.bind(this)}
