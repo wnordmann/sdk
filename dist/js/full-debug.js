@@ -234,6 +234,8 @@ var _reactIntl = require('react-intl');
 
 require('../../node_modules/react-color-picker/index.css');
 
+var ID_PREFIX = 'sdk-addlayer-';
+
 var messages = (0, _reactIntl.defineMessages)({
   menutitle: {
     'id': 'addlayer.menutitle',
@@ -287,6 +289,7 @@ var AddLayer = (function (_React$Component) {
       'kml': new _openlayers2['default'].format.KML(),
       'gpx': new _openlayers2['default'].format.GPX()
     };
+    this._counter = 0;
   }
 
   _createClass(AddLayer, [{
@@ -303,6 +306,11 @@ var AddLayer = (function (_React$Component) {
     key: '_readFile',
     value: function _readFile(text) {
       this._text = text;
+    }
+  }, {
+    key: '_generateId',
+    value: function _generateId() {
+      return ID_PREFIX + this._counter;
     }
   }, {
     key: '_readVectorFile',
@@ -329,7 +337,9 @@ var AddLayer = (function (_React$Component) {
                   image: fill || stroke ? new _openlayers2['default'].style.Circle({ stroke: stroke, fill: fill, radius: this.props.pointRadius }) : undefined
                 });
               }
+              this._counter++;
               var lyr = new _openlayers2['default'].layer.Vector({
+                id: this._generateId(),
                 style: style,
                 source: new _openlayers2['default'].source.Vector({
                   features: features

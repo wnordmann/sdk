@@ -9,6 +9,8 @@ import ColorPicker from 'react-color-picker';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import '../../node_modules/react-color-picker/index.css';
 
+const ID_PREFIX = 'sdk-addlayer-';
+
 const messages = defineMessages({
   menutitle: {
     id: 'addlayer.menutitle',
@@ -65,6 +67,7 @@ class AddLayer extends React.Component {
       'kml': new ol.format.KML(),
       'gpx': new ol.format.GPX()
     };
+    this._counter = 0;
   }
   _showDialog() {
     this.refs.modal.open();
@@ -74,6 +77,9 @@ class AddLayer extends React.Component {
   }
   _readFile(text) {
     this._text = text;
+  }
+  _generateId() {
+    return ID_PREFIX + this._counter;
   }
   _readVectorFile() {
     var text = this._text;
@@ -98,7 +104,9 @@ class AddLayer extends React.Component {
                 image: (fill || stroke) ? new ol.style.Circle({stroke: stroke, fill: fill, radius: this.props.pointRadius}) : undefined
               });
             }
+            this._counter++;
             var lyr = new ol.layer.Vector({
+              id: this._generateId(),
               style: style,
               source: new ol.source.Vector({
                 features: features
