@@ -29,6 +29,8 @@ const messages = defineMessages({
   }
 });
 
+const wgs84Sphere = new ol.Sphere(6378137);
+
 /**
  * Adds area and length measure tools to the map.
  */
@@ -107,7 +109,16 @@ class Measure extends MapTool {
     this._createTooltip();
   }
   _formatArea(polygon) {
-    var area = polygon.getArea();
+    var area;
+    if (this.props.geodesic) {
+      var sourceProj = this.props.map.getView().getProjection();
+      var geom = polygon.clone().transform(sourceProj, 'EPSG:4326');
+      var coordinates = geom.getLinearRing(0).getCoordinates();
+      area = Math.abs(wgs84Sphere.geodesicArea(coordinates));
+    } else {
+      area = polygon.getArea();
+    }
+    var output;
     if (area > 10000) {
       return (Math.round(area / 1000000 * 100) / 100) + ' ' + 'km<sup>2</sup>';
     } else {
@@ -115,7 +126,20 @@ class Measure extends MapTool {
     }
   }
   _formatLength(line) {
-    var length = Math.round(line.getLength() * 100) / 100;
+    var length;
+    if (this.props.geodesic) {
+      var coordinates = line.getCoordinates();
+      length = 0;
+      var sourceProj = this.props.map.getView().getProjection();
+      for (var i = 0, ii = coordinates.length - 1; i < ii; ++i) {
+        var c1 = ol.proj.transform(coordinates[i], sourceProj, 'EPSG:4326');
+        var c2 = ol.proj.transform(coordinates[i + 1], sourceProj, 'EPSG:4326');
+        length += wgs84Sphere.haversineDistance(c1, c2);
+      }
+    } else {
+      length = Math.round(line.getLength() * 100) / 100;
+    }
+    var output;
     if (length > 100) {
       return (Math.round(length / 1000 * 100) / 100) + ' ' + 'km';
     } else {
@@ -190,9 +214,17 @@ class Measure extends MapTool {
 
 Measure.propTypes = {
   /**
+   * Should measurements be geodesic?
+   */
+  geodesic: React.PropTypes.bool,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
+};
+
+Measure.defaultProps = {
+  geodesic: true
 };
 
 export default injectIntl(Measure);

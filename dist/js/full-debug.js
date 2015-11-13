@@ -4134,6 +4134,8 @@ var messages = (0, _reactIntl.defineMessages)({
   }
 });
 
+var wgs84Sphere = new _openlayers2['default'].Sphere(6378137);
+
 /**
  * Adds area and length measure tools to the map.
  */
@@ -4226,7 +4228,16 @@ var Measure = (function (_MapTool) {
   }, {
     key: '_formatArea',
     value: function _formatArea(polygon) {
-      var area = polygon.getArea();
+      var area;
+      if (this.props.geodesic) {
+        var sourceProj = this.props.map.getView().getProjection();
+        var geom = polygon.clone().transform(sourceProj, 'EPSG:4326');
+        var coordinates = geom.getLinearRing(0).getCoordinates();
+        area = Math.abs(wgs84Sphere.geodesicArea(coordinates));
+      } else {
+        area = polygon.getArea();
+      }
+      var output;
       if (area > 10000) {
         return Math.round(area / 1000000 * 100) / 100 + ' ' + 'km<sup>2</sup>';
       } else {
@@ -4236,7 +4247,20 @@ var Measure = (function (_MapTool) {
   }, {
     key: '_formatLength',
     value: function _formatLength(line) {
-      var length = Math.round(line.getLength() * 100) / 100;
+      var length;
+      if (this.props.geodesic) {
+        var coordinates = line.getCoordinates();
+        length = 0;
+        var sourceProj = this.props.map.getView().getProjection();
+        for (var i = 0, ii = coordinates.length - 1; i < ii; ++i) {
+          var c1 = _openlayers2['default'].proj.transform(coordinates[i], sourceProj, 'EPSG:4326');
+          var c2 = _openlayers2['default'].proj.transform(coordinates[i + 1], sourceProj, 'EPSG:4326');
+          length += wgs84Sphere.haversineDistance(c1, c2);
+        }
+      } else {
+        length = Math.round(line.getLength() * 100) / 100;
+      }
+      var output;
       if (length > 100) {
         return Math.round(length / 1000 * 100) / 100 + ' ' + 'km';
       } else {
@@ -4339,9 +4363,17 @@ var Measure = (function (_MapTool) {
 
 Measure.propTypes = {
   /**
+   * Should measurements be geodesic?
+   */
+  geodesic: _react2['default'].PropTypes.bool,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: _reactIntl.intlShape.isRequired
+};
+
+Measure.defaultProps = {
+  geodesic: true
 };
 
 exports['default'] = (0, _reactIntl.injectIntl)(Measure);
