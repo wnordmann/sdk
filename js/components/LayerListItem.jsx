@@ -307,7 +307,7 @@ class LayerListItem extends React.Component {
         {remove}
         {this.props.children}
         <span>
-          <Dialog.Modal onRequestClose={this._onCloseModal.bind(this)} title={formatMessage(messages.filtermodaltitle, {layer: this.props.layer.get('title')})} ref="filtermodal">
+          <Dialog.Modal onHide={this._onCloseModal.bind(this)} title={formatMessage(messages.filtermodaltitle, {layer: this.props.layer.get('title')})} ref="filtermodal">
             <Dialog.ModalBody>
               <form onSubmit={this._onSubmit} className='form-horizontal layerlistitem'>
                 <div className="form-group">

@@ -3734,7 +3734,7 @@ var LayerListItem = (function (_React$Component) {
           null,
           _react2['default'].createElement(
             _puiReactModals2['default'].Modal,
-            { onRequestClose: this._onCloseModal.bind(this), title: formatMessage(messages.filtermodaltitle, { layer: this.props.layer.get('title') }), ref: 'filtermodal' },
+            { onHide: this._onCloseModal.bind(this), title: formatMessage(messages.filtermodaltitle, { layer: this.props.layer.get('title') }), ref: 'filtermodal' },
             _react2['default'].createElement(
               _puiReactModals2['default'].ModalBody,
               null,
