@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import {addLocaleData, IntlProvider, defineMessages, injectIntl, intlShape} from 'react-intl';
+import LayerActions from './actions/LayerActions.js';
 import LayerList from './components/LayerList.jsx';
 import Geocoding from './components/Geocoding.jsx';
 import GeocodingResults from './components/GeocodingResults.jsx';
@@ -16,6 +17,7 @@ import ImageExport from './components/ImageExport.jsx';
 import HomeButton from './components/HomeButton.jsx';
 import AddLayer from './components/AddLayer.jsx';
 import QGISPrint from './components/QGISPrint.jsx';
+import BUTTON from 'pui-react-buttons';
 import UI from 'pui-react-tabs';
 import nlLocaleData from '../node_modules/react-intl/dist/locale-data/nl.js';
 import nlMessages from '../locale/nl.js';
@@ -317,6 +319,16 @@ const messages = defineMessages({
     id: 'app.chart2',
     description: 'Title of the second chart',
     defaultMessage: 'Forest area total surface'
+  },
+  navigationbutton: {
+    id: 'app.navigationbutton',
+    description: 'Text of the Navigation button',
+    defaultMessage: 'Navigation'
+  },
+  navigationbuttontitle: {
+    id: 'app.navigationbuttontitle',
+    description: 'Title of the Navigation button',
+    defaultMessage: 'Switch to map navigation (pan and zoom)'
   }
 });
 
@@ -326,6 +338,8 @@ nlMessages['app.querytab'] = 'Bevragen';
 nlMessages['app.charttab'] = 'Grafieken';
 nlMessages['app.chart1'] = 'Aantal vliegvelden per gebruikscategorie';
 nlMessages['app.chart2'] = 'Totaal oppervlakte bos';
+nlMessages['app.navigationbutton'] = 'Navigatie';
+nlMessages['app.navigationbuttontitle'] = 'Schakel naar kaart navigatie (verschuif en zoom)';
 
 var locale = window.location.search.indexOf('nl') !== -1 ? 'nl' : 'en';
 var i18n = locale === 'nl' ? nlMessages : undefined;
@@ -333,6 +347,9 @@ var i18n = locale === 'nl' ? nlMessages : undefined;
 class TabbedApp extends React.Component {
   componentDidMount() {
     map.setTarget(ReactDOM.findDOMNode(this.refs.map));
+  }
+  _navigationFunc() {
+    LayerActions.activateTool(null, 'navigation');
   }
   render() {
     const {formatMessage} = this.props.intl;
@@ -360,6 +377,7 @@ class TabbedApp extends React.Component {
             <ul className='pull-right' id='toolbar-select'><Select toggleGroup='navigation' map={map}/></ul>
             <ul className='pull-right' id='toolbar-add-layer'><AddLayer map={map} /></ul>
             <ul className='pull-right' id='toolbar-print'><QGISPrint map={map} layouts={printLayouts} /></ul>
+            <ul className='pull-right' id='toolbar-navigation'><BUTTON.DefaultButton title={formatMessage(messages.navigationbuttontitle)} onClick={this._navigationFunc.bind(this)}>{formatMessage(messages.navigationbutton)}</BUTTON.DefaultButton></ul>
           </div>
         </nav>
         <div id='content'>
