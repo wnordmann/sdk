@@ -5778,6 +5778,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
 var _openlayers = require('openlayers');
 
 var _openlayers2 = _interopRequireDefault(_openlayers);
@@ -5882,6 +5886,8 @@ var _componentsSelectJsx2 = _interopRequireDefault(_componentsSelectJsx);
 
 global.React = _react2['default'];
 
+global.ReactDOM = _reactDom2['default'];
+
 global.ol = _openlayers2['default'];
 
 global.IntlProvider = _reactIntl.IntlProvider;
@@ -5935,7 +5941,7 @@ global.QueryBuilder = _componentsQueryBuilderJsx2['default'];
 global.Select = _componentsSelectJsx2['default'];
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./actions/LayerActions.js":1,"./components/AddLayer.jsx":3,"./components/Bookmarks.jsx":5,"./components/Chart.jsx":7,"./components/Edit.jsx":9,"./components/FeatureTable.jsx":11,"./components/Geocoding.jsx":12,"./components/GeocodingResults.jsx":13,"./components/Geolocation.jsx":15,"./components/Globe.jsx":16,"./components/HomeButton.jsx":17,"./components/ImageExport.jsx":18,"./components/InfoPopup.jsx":20,"./components/LayerList.jsx":22,"./components/Measure.jsx":28,"./components/Playback.jsx":30,"./components/QGISLegend.jsx":32,"./components/QGISPrint.jsx":34,"./components/QueryBuilder.jsx":36,"./components/Select.jsx":37,"openlayers":119,"pui-react-buttons":147,"pui-react-dropdowns":165,"pui-react-iconography":352,"pui-react-tabs":549,"react":789,"react-intl":593}],42:[function(require,module,exports){
+},{"./actions/LayerActions.js":1,"./components/AddLayer.jsx":3,"./components/Bookmarks.jsx":5,"./components/Chart.jsx":7,"./components/Edit.jsx":9,"./components/FeatureTable.jsx":11,"./components/Geocoding.jsx":12,"./components/GeocodingResults.jsx":13,"./components/Geolocation.jsx":15,"./components/Globe.jsx":16,"./components/HomeButton.jsx":17,"./components/ImageExport.jsx":18,"./components/InfoPopup.jsx":20,"./components/LayerList.jsx":22,"./components/Measure.jsx":28,"./components/Playback.jsx":30,"./components/QGISLegend.jsx":32,"./components/QGISPrint.jsx":34,"./components/QueryBuilder.jsx":36,"./components/Select.jsx":37,"openlayers":119,"pui-react-buttons":147,"pui-react-dropdowns":165,"pui-react-iconography":352,"pui-react-tabs":549,"react":789,"react-dom":577,"react-intl":593}],42:[function(require,module,exports){
 /* global document */
 
 'use strict';

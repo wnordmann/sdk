@@ -1,6 +1,9 @@
 import React from 'react';
 global.React = React;
 
+import ReactDOM from 'react-dom';
+global.ReactDOM = ReactDOM;
+
 import ol from 'openlayers';
 global.ol = ol;
 
