@@ -14,6 +14,8 @@ import Icon from 'pui-react-iconography';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import './FeatureTable.css';
 
+const {Table, Column, Cell} = FixedDataTable;
+
 const messages = defineMessages({
   layerlabel: {
     id: 'featuretable.layerlabel',
@@ -56,6 +58,29 @@ const messages = defineMessages({
     defaultMessage: 'Filter'
   }
 });
+
+class FeatureCell extends React.Component {
+  render() {
+    var {rowIndex, link, field, ...props} = this.props;
+    var value = this._getMyDataForIndex(rowIndex, field);
+    if (link) {
+      return (
+        <Cell>
+          <a href={value} target="_blank">{value}</a>
+        </Cell>
+      );
+    } else {
+      return (
+        <Cell>
+          {value}
+        </Cell>
+      );
+    }
+  }
+  _getMyDataForIndex(index, field) {
+    return FeatureStore.getFieldValue(this.props.layer, index, field);
+  }
+}
 
 /**
  * A table to show features. Allows for selection of features.
@@ -116,9 +141,6 @@ class FeatureTable extends React.Component {
         gridHeight: resizeToNode.offsetHeight - formNode.offsetHeight - this.props.offset[1]
       });
     }
-  }
-  _renderLink(cellData) {
-    return <a href={cellData} target="_blank">{cellData}</a>;
   }
   _onChange() {
     var state = FeatureStore.getState(this._layer);
@@ -206,8 +228,6 @@ class FeatureTable extends React.Component {
   }
   render() {
     const {formatMessage} = this.props.intl;
-    var Table = FixedDataTable.Table;
-    var Column = FixedDataTable.Column;
     var schema = FeatureStore.getSchema(this._layer);
     var id = this._layer.get('id');
     var columnNodes = [];
@@ -219,13 +239,11 @@ class FeatureTable extends React.Component {
     }
     for (var key in schema) {
       var width = this.state.columnWidths[id] && this.state.columnWidths[id][key] ? this.state.columnWidths[id][key] : defaultWidth;
-      var cellRenderer = (schema[key] === 'link') ? this._renderLink : undefined;
       columnNodes.push(
         <Column
+          header={<Cell>{key}</Cell>}
           isResizable={true}
-          label={key}
-          cellRenderer={cellRenderer}
-          dataKey={key}
+          cell={<FeatureCell link={(schema[key] === 'link')} layer={this._layer} field={key} />}
           key={key}
           width={width} />
         );
@@ -248,7 +266,6 @@ class FeatureTable extends React.Component {
           isColumnResizing={this._isResizing}
           rowHeight={this.props.rowHeight}
           rowClassNameGetter={this._rowClassNameGetter.bind(this)}
-          rowGetter={this._rowGetter.bind(this)}
           headerHeight={this.props.headerHeight}
           onRowClick={this._onRowClick.bind(this)}
           rowsCount={this.state.features.length}

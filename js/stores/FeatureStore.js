@@ -275,6 +275,9 @@ class FeatureStore extends EventEmitter {
   getObjectAt(layer, index) {
     return this._config[layer.get('id')].features[index].getProperties();
   }
+  getFieldValue(layer, index, field) {
+    return this._config[layer.get('id')].features[index].get(field);
+  }
   getState(layer) {
     if (layer) {
       return this._config[layer.get('id')];
