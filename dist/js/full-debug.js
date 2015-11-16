@@ -2291,9 +2291,17 @@ var GeocodingResults = (function (_React$Component) {
       map.getView().setZoom(this.props.zoom);
       var source = this._layer.getSource();
       source.clear();
-      source.addFeature(new _openlayers2['default'].Feature({
+      var feature = new _openlayers2['default'].Feature({
         geometry: new _openlayers2['default'].geom.Point(center)
-      }));
+      });
+      if (result.icon) {
+        feature.setStyle(new _openlayers2['default'].style.Style({
+          image: new _openlayers2['default'].style.Icon({
+            src: result.icon
+          })
+        }));
+      }
+      source.addFeature(feature);
     }
   }, {
     key: 'render',

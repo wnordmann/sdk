@@ -64,9 +64,17 @@ class GeocodingResults extends React.Component {
     map.getView().setZoom(this.props.zoom);
     var source = this._layer.getSource();
     source.clear();
-    source.addFeature(new ol.Feature({
+    var feature = new ol.Feature({
       geometry: new ol.geom.Point(center)
-    }));
+    });
+    if (result.icon) {
+      feature.setStyle(new ol.style.Style({
+        image: new ol.style.Icon({
+          src: result.icon
+        })
+      }));
+    }
+    source.addFeature(feature);
   }
   render() {
     const {formatMessage} = this.props.intl;
