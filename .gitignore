@@ -5,3 +5,4 @@ dist/js/tabbed*.js
 npm-debug.log
 tmp
 build
+/nbproject/private/

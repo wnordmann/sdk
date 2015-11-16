@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import LayerStore from '../stores/LayerStore.js';
 import LayerActions from '../actions/LayerActions.js';
+import './LayerSelector.css';
 
 /**
  * A combobox to select a layer.
@@ -47,7 +48,7 @@ export default class LayerSelector extends React.Component {
       }
     });
     return (
-      <select ref='layerSelect' defaultValue={this.props.value} className='form-control' onChange={this._onItemChange.bind(this)}>
+      <select ref='layerSelect' defaultValue={this.props.value} className='form-select' onChange={this._onItemChange.bind(this)}>
         {selectItems}
       </select>
     );
