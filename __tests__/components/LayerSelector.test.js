@@ -1,7 +1,7 @@
 /* global afterEach, beforeEach, describe, it */
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactDOM = require('react-dom');
 var assert = require('chai').assert;
 var ol = require('openlayers');
 global.Intl = require('intl');
@@ -63,12 +63,10 @@ describe('LayerSelect', function() {
     var filter = function(lyr) {
       return !lyr.get('hideFromLayerList') && lyr instanceof ol.layer.Vector;
     };
-    var app = React.render((
-      <IntlProvider locale='en'>{() => (<LayerSelector ref='layers' filter={filter} map={map} />)}</IntlProvider>
-    ), container);
+    ReactDOM.render(<LayerSelector filter={filter} map={map} />, container);
     var layers = container.querySelectorAll('option');
     assert.equal(layers.length, 2);
-    React.unmountComponentAtNode(container);
+    ReactDOM.unmountComponentAtNode(container);
   });
 
 });

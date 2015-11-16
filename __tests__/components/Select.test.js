@@ -1,6 +1,7 @@
 /* global afterEach, beforeEach, describe, it */
 
-var React = require('react/addons');
+var React = require('react');
+var ReactDOM = require('react-dom');
 var assert = require('chai').assert;
 var ol = require('openlayers');
 global.Intl = require('intl');
@@ -40,8 +41,8 @@ describe('SelectTool', function() {
 
   it('adds a select interaction to the map', function() {
     var container = document.createElement('div');
-    React.render((
-      <IntlProvider locale='en'>{() => (<Select map={map} />)}</IntlProvider>
+    ReactDOM.render((
+      <IntlProvider locale='en'><Select map={map} /></IntlProvider>
     ), container);
 
     var count = 0;
@@ -52,7 +53,7 @@ describe('SelectTool', function() {
     });
     assert.equal(count, 1);
 
-    React.unmountComponentAtNode(container);
+    ReactDOM.unmountComponentAtNode(container);
   });
 
 });

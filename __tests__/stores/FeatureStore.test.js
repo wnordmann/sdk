@@ -7,8 +7,9 @@ var FeatureStore = require('../../js/stores/FeatureStore.js');
 
 describe('FeatureStore', function() {
 
-  var layer, features;
+  var map, layer, features;
   beforeEach(function() {
+    map = new ol.Map({view: new ol.View()});
     layer = new ol.layer.Vector({id: 'xxx', source: new ol.source.Vector()});
     features = [
       new ol.Feature({'foo': '1'}),
@@ -20,6 +21,8 @@ describe('FeatureStore', function() {
     for (var i = 0, ii = features.length; i < ii; ++i) {
       layer.getSource().addFeature(features[i]);
     }
+    map.addLayer(layer);
+    FeatureStore.bindMap(map);
   });
 
   it('adds the correct config to the FeatureStore using addLayer', function() {
