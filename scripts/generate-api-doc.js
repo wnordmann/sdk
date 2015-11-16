@@ -19,7 +19,9 @@ fs.readdir(dir, function(err, files) {
           throw err;
         }
         var componentInfo = reactDocs.parse(src, reactDocs.resolver.findAllComponentDefinitions);
-        info[dir+file] = componentInfo[0];
+        if (componentInfo[0].description !== '') {
+          info[dir+file] = componentInfo[0];
+        }
         if (0 === --c) {
           const ordered = {};
           Object.keys(info).sort().forEach(function(key) {

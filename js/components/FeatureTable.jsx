@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import debounce from  'debounce';
 import FixedDataTable from 'fixed-data-table';
+import FeatureCell from './FeatureCell.jsx';
 import '../../node_modules/fixed-data-table/dist/fixed-data-table.css';
 import FeatureStore from '../stores/FeatureStore.js';
 import MapConstants from '../constants/MapConstants.js';
@@ -58,29 +59,6 @@ const messages = defineMessages({
     defaultMessage: 'Filter'
   }
 });
-
-class FeatureCell extends React.Component {
-  render() {
-    var {rowIndex, link, field, ...props} = this.props;
-    var value = this._getMyDataForIndex(rowIndex, field);
-    if (link) {
-      return (
-        <Cell>
-          <a href={value} target="_blank">{value}</a>
-        </Cell>
-      );
-    } else {
-      return (
-        <Cell>
-          {value}
-        </Cell>
-      );
-    }
-  }
-  _getMyDataForIndex(index, field) {
-    return FeatureStore.getFieldValue(this.props.layer, index, field);
-  }
-}
 
 /**
  * A table to show features. Allows for selection of features.
