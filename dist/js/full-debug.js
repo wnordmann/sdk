@@ -1421,7 +1421,7 @@ var Edit = (function (_MapTool) {
           ),
           _react2['default'].createElement(
             'select',
-            { onChange: this._onLayerChange.bind(this), ref: 'layer', className: 'form-control' },
+            { onChange: this._onLayerChange.bind(this), ref: 'layer', className: 'form-select' },
             options
           ),
           _react2['default'].createElement(
@@ -1631,6 +1631,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
@@ -1693,6 +1695,59 @@ var Table = _fixedDataTable2['default'].Table;
 var Column = _fixedDataTable2['default'].Column;
 var Cell = _fixedDataTable2['default'].Cell;
 
+var SortTypes = {
+  ASC: 'ASC',
+  DESC: 'DESC'
+};
+
+function reverseSortDirection(sortDir) {
+  return sortDir === SortTypes.DESC ? SortTypes.ASC : SortTypes.DESC;
+}
+
+var SortHeaderCell = (function (_React$Component) {
+  _inherits(SortHeaderCell, _React$Component);
+
+  function SortHeaderCell(props) {
+    _classCallCheck(this, SortHeaderCell);
+
+    _get(Object.getPrototypeOf(SortHeaderCell.prototype), 'constructor', this).call(this, props);
+    this._onSortChange = this._onSortChange.bind(this);
+  }
+
+  _createClass(SortHeaderCell, [{
+    key: 'render',
+    value: function render() {
+      var _props = this.props;
+      var sortDir = _props.sortDir;
+      var children = _props.children;
+
+      var props = _objectWithoutProperties(_props, ['sortDir', 'children']);
+
+      return _react2['default'].createElement(
+        Cell,
+        props,
+        _react2['default'].createElement(
+          'a',
+          { onClick: this._onSortChange },
+          children,
+          ' ',
+          sortDir ? sortDir === SortTypes.DESC ? '↓' : '↑' : ''
+        )
+      );
+    }
+  }, {
+    key: '_onSortChange',
+    value: function _onSortChange(e) {
+      e.preventDefault();
+      if (this.props.onSortChange) {
+        this.props.onSortChange(this.props.columnKey, this.props.sortDir ? reverseSortDirection(this.props.sortDir) : SortTypes.DESC);
+      }
+    }
+  }]);
+
+  return SortHeaderCell;
+})(_react2['default'].Component);
+
 var messages = (0, _reactIntl.defineMessages)({
   layerlabel: {
     'id': 'featuretable.layerlabel',
@@ -1732,16 +1787,17 @@ var LinkCell = function LinkCell(_ref) {
   var rowIndex = _ref.rowIndex;
   var col = _ref.col;
   var layer = _ref.layer;
+  var sortIndexes = _ref.sortIndexes;
 
-  var props = _objectWithoutProperties(_ref, ['rowIndex', 'col', 'layer']);
+  var props = _objectWithoutProperties(_ref, ['rowIndex', 'col', 'layer', 'sortIndexes']);
 
   return _react2['default'].createElement(
     Cell,
     props,
     _react2['default'].createElement(
       'a',
-      { href: _storesFeatureStoreJs2['default'].getFieldValue(layer, rowIndex, col), target: '_blank' },
-      _storesFeatureStoreJs2['default'].getFieldValue(layer, rowIndex, col)
+      { href: _storesFeatureStoreJs2['default'].getFieldValue(layer, sortIndexes ? sortIndexes[rowIndex] : rowIndex, col), target: '_blank' },
+      _storesFeatureStoreJs2['default'].getFieldValue(layer, sortIndexes ? sortIndexes[rowIndex] : rowIndex, col)
     )
   );
 };
@@ -1750,13 +1806,14 @@ var TextCell = function TextCell(_ref2) {
   var rowIndex = _ref2.rowIndex;
   var col = _ref2.col;
   var layer = _ref2.layer;
+  var sortIndexes = _ref2.sortIndexes;
 
-  var props = _objectWithoutProperties(_ref2, ['rowIndex', 'col', 'layer']);
+  var props = _objectWithoutProperties(_ref2, ['rowIndex', 'col', 'layer', 'sortIndexes']);
 
   return _react2['default'].createElement(
     Cell,
     props,
-    _storesFeatureStoreJs2['default'].getFieldValue(layer, rowIndex, col)
+    _storesFeatureStoreJs2['default'].getFieldValue(layer, sortIndexes ? sortIndexes[rowIndex] : rowIndex, col)
   );
 };
 
@@ -1764,13 +1821,15 @@ var TextCell = function TextCell(_ref2) {
  * A table to show features. Allows for selection of features.
  */
 
-var FeatureTable = (function (_React$Component) {
-  _inherits(FeatureTable, _React$Component);
+var FeatureTable = (function (_React$Component2) {
+  _inherits(FeatureTable, _React$Component2);
 
   function FeatureTable(props) {
     _classCallCheck(this, FeatureTable);
 
     _get(Object.getPrototypeOf(FeatureTable.prototype), 'constructor', this).call(this, props);
+    this._onSortChange = this._onSortChange.bind(this);
+    this._onChange = this._onChange.bind(this);
     _storesFeatureStoreJs2['default'].bindMap(this.props.map);
     this._selectedOnly = false;
     var me = this;
@@ -1795,15 +1854,15 @@ var FeatureTable = (function (_React$Component) {
       gridHeight: this.props.height,
       features: [],
       columnWidths: {},
-      selected: []
+      selected: [],
+      colSortDirs: {}
     };
   }
 
   _createClass(FeatureTable, [{
     key: 'componentWillMount',
     value: function componentWillMount() {
-      this._onChangeCb = this._onChange.bind(this);
-      _storesFeatureStoreJs2['default'].addChangeListener(this._onChangeCb);
+      _storesFeatureStoreJs2['default'].addChangeListener(this._onChange);
       this._onChange();
       this.setDimensionsOnState = (0, _debounce2['default'])(this.setDimensionsOnState, this.props.refreshRate);
     }
@@ -1816,7 +1875,7 @@ var FeatureTable = (function (_React$Component) {
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
-      _storesFeatureStoreJs2['default'].removeChangeListener(this._onChangeCb);
+      _storesFeatureStoreJs2['default'].removeChangeListener(this._onChange);
       global.removeEventListener('resize', this.setDimensionsOnState);
     }
   }, {
@@ -1840,12 +1899,17 @@ var FeatureTable = (function (_React$Component) {
     key: '_onChange',
     value: function _onChange() {
       var state = _storesFeatureStoreJs2['default'].getState(this._layer);
+      this._defaultSortIndexes = [];
+      var size = state.features.length;
+      for (var index = 0; index < size; index++) {
+        this._defaultSortIndexes.push(index);
+      }
       this.setState(state);
-    }
-  }, {
-    key: '_rowGetter',
-    value: function _rowGetter(index) {
-      return _storesFeatureStoreJs2['default'].getObjectAt(this._layer, index);
+      // re-sort
+      if (this.state.sortIndexes && this.state.sortIndexes.length !== state.features.length) {
+        var columnKey = Object.keys(this.state.colSortDirs)[0];
+        this._onSortChange(columnKey, this.state.colSortDirs[columnKey]);
+      }
     }
   }, {
     key: '_onColumnResize',
@@ -1858,16 +1922,21 @@ var FeatureTable = (function (_React$Component) {
       this._isResizing = false;
     }
   }, {
+    key: '_transformIndex',
+    value: function _transformIndex(index) {
+      return this.state.sortIndexes ? this.state.sortIndexes[index] : index;
+    }
+  }, {
     key: '_onRowClick',
     value: function _onRowClick(evt, index) {
       var lyr = this._layer;
-      var feature = this.state.features[index];
+      var feature = this.state.features[this._transformIndex(index)];
       _actionsSelectActionsJs2['default'].toggleFeature(lyr, feature);
     }
   }, {
     key: '_rowClassNameGetter',
     value: function _rowClassNameGetter(index) {
-      var feature = this.state.features[index];
+      var feature = this.state.features[this._transformIndex(index)];
       return this.state.selected.indexOf(feature) > -1 ? 'row-selected' : '';
     }
   }, {
@@ -1945,8 +2014,37 @@ var FeatureTable = (function (_React$Component) {
       _storesFeatureStoreJs2['default'].setFilter(this._layer, filteredRows);
     }
   }, {
+    key: '_onSortChange',
+    value: function _onSortChange(columnKey, sortDir) {
+      var _this = this;
+
+      var sortIndexes = this._defaultSortIndexes.slice();
+      sortIndexes.sort(function (indexA, indexB) {
+        var valueA = _storesFeatureStoreJs2['default'].getFieldValue(_this._layer, indexA, columnKey);
+        var valueB = _storesFeatureStoreJs2['default'].getFieldValue(_this._layer, indexB, columnKey);
+        var sortVal = 0;
+        if (valueA > valueB) {
+          sortVal = 1;
+        }
+        if (valueA < valueB) {
+          sortVal = -1;
+        }
+        if (sortVal !== 0 && sortDir === SortTypes.ASC) {
+          sortVal = sortVal * -1;
+        }
+        return sortVal;
+      });
+      this.setState({
+        sortIndexes: sortIndexes,
+        colSortDirs: _defineProperty({}, columnKey, sortDir)
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
+      var _state = this.state;
+      var sortIndexes = _state.sortIndexes;
+      var colSortDirs = _state.colSortDirs;
       var formatMessage = this.props.intl.formatMessage;
 
       var schema = _storesFeatureStoreJs2['default'].getSchema(this._layer);
@@ -1962,12 +2060,14 @@ var FeatureTable = (function (_React$Component) {
         var width = this.state.columnWidths[id] && this.state.columnWidths[id][key] ? this.state.columnWidths[id][key] : defaultWidth;
         columnNodes.push(_react2['default'].createElement(Column, {
           header: _react2['default'].createElement(
-            Cell,
-            null,
+            SortHeaderCell,
+            {
+              onSortChange: this._onSortChange,
+              sortDir: colSortDirs[key] },
             key
           ),
           isResizable: true,
-          cell: schema[key] === 'link' ? _react2['default'].createElement(LinkCell, { layer: this._layer, col: key }) : _react2['default'].createElement(TextCell, { layer: this._layer, col: key }),
+          cell: schema[key] === 'link' ? _react2['default'].createElement(LinkCell, { sortIndexes: sortIndexes, layer: this._layer, col: key }) : _react2['default'].createElement(TextCell, { sortIndexes: sortIndexes, layer: this._layer, col: key }),
           key: key,
           columnKey: key,
           width: width }));

@@ -16,6 +16,43 @@ import './FeatureTable.css';
 
 const {Table, Column, Cell} = FixedDataTable;
 
+var SortTypes = {
+  ASC: 'ASC',
+  DESC: 'DESC'
+};
+
+function reverseSortDirection(sortDir) {
+  return sortDir === SortTypes.DESC ? SortTypes.ASC : SortTypes.DESC;
+}
+
+class SortHeaderCell extends React.Component {
+  constructor(props) {
+    super(props);
+    this._onSortChange = this._onSortChange.bind(this);
+  }
+  render() {
+    var {sortDir, children, ...props} = this.props;
+    return (
+      <Cell {...props}>
+        <a onClick={this._onSortChange}>
+          {children} {sortDir ? (sortDir === SortTypes.DESC ? '↓' : '↑') : ''}
+        </a>
+      </Cell>
+    );
+  }
+  _onSortChange(e) {
+    e.preventDefault();
+    if (this.props.onSortChange) {
+      this.props.onSortChange(
+        this.props.columnKey,
+        this.props.sortDir ?
+          reverseSortDirection(this.props.sortDir) :
+          SortTypes.DESC
+      );
+    }
+  }
+}
+
 const messages = defineMessages({
   layerlabel: {
     id: 'featuretable.layerlabel',
@@ -59,15 +96,15 @@ const messages = defineMessages({
   }
 });
 
-const LinkCell = ({rowIndex, col, layer, ...props}) => (
+const LinkCell = ({rowIndex, col, layer, sortIndexes, ...props}) => (
   <Cell {...props}>
-    <a href={FeatureStore.getFieldValue(layer, rowIndex, col)} target="_blank">{FeatureStore.getFieldValue(layer, rowIndex, col)}</a>
+    <a href={FeatureStore.getFieldValue(layer, sortIndexes ? sortIndexes[rowIndex] : rowIndex, col)} target="_blank">{FeatureStore.getFieldValue(layer, sortIndexes ? sortIndexes[rowIndex] : rowIndex, col)}</a>
   </Cell>
 );
 
-const TextCell = ({rowIndex,col, layer, ...props}) => (
+const TextCell = ({rowIndex,col, layer, sortIndexes, ...props}) => (
   <Cell {...props}>
-    {FeatureStore.getFieldValue(layer, rowIndex, col)}
+    {FeatureStore.getFieldValue(layer, sortIndexes ? sortIndexes[rowIndex] : rowIndex, col)}
   </Cell>
 );
 
@@ -77,6 +114,8 @@ const TextCell = ({rowIndex,col, layer, ...props}) => (
 class FeatureTable extends React.Component {
   constructor(props) {
     super(props);
+    this._onSortChange = this._onSortChange.bind(this);
+    this._onChange = this._onChange.bind(this);
     FeatureStore.bindMap(this.props.map);
     this._selectedOnly = false;
     var me = this;
@@ -101,12 +140,12 @@ class FeatureTable extends React.Component {
       gridHeight: this.props.height,
       features: [],
       columnWidths: {},
-      selected: []
+      selected: [],
+      colSortDirs: {}
     };
   }
   componentWillMount() {
-    this._onChangeCb = this._onChange.bind(this);
-    FeatureStore.addChangeListener(this._onChangeCb);
+    FeatureStore.addChangeListener(this._onChange);
     this._onChange();
     this.setDimensionsOnState = debounce(this.setDimensionsOnState, this.props.refreshRate);
   }
@@ -115,7 +154,7 @@ class FeatureTable extends React.Component {
     this._attachResizeEvent();
   }
   componentWillUnmount() {
-    FeatureStore.removeChangeListener(this._onChangeCb);
+    FeatureStore.removeChangeListener(this._onChange);
     global.removeEventListener('resize', this.setDimensionsOnState);
   }
   _attachResizeEvent() {
@@ -133,10 +172,17 @@ class FeatureTable extends React.Component {
   }
   _onChange() {
     var state = FeatureStore.getState(this._layer);
+    this._defaultSortIndexes = [];
+    var size = state.features.length;
+    for (var index = 0; index < size; index++) {
+      this._defaultSortIndexes.push(index);
+    }
     this.setState(state);
-  }
-  _rowGetter(index) {
-    return FeatureStore.getObjectAt(this._layer, index);
+    // re-sort
+    if (this.state.sortIndexes && (this.state.sortIndexes.length !== state.features.length)) {
+      var columnKey = Object.keys(this.state.colSortDirs)[0];
+      this._onSortChange(columnKey, this.state.colSortDirs[columnKey]);
+    }
   }
   _onColumnResize(width, label) {
     var id = this._layer.get('id');
@@ -146,13 +192,16 @@ class FeatureTable extends React.Component {
     this.setState({columnWidths: columnWidths});
     this._isResizing = false;
   }
+  _transformIndex(index) {
+    return this.state.sortIndexes ? this.state.sortIndexes[index] : index;
+  }
   _onRowClick(evt, index) {
     var lyr = this._layer;
-    var feature = this.state.features[index];
+    var feature = this.state.features[this._transformIndex(index)];
     SelectActions.toggleFeature(lyr, feature);
   }
   _rowClassNameGetter(index) {
-    var feature = this.state.features[index];
+    var feature = this.state.features[this._transformIndex(index)];
     return this.state.selected.indexOf(feature) > -1 ? 'row-selected' : '';
   }
   _filter(evt) {
@@ -215,7 +264,32 @@ class FeatureTable extends React.Component {
     }) : rows;
     FeatureStore.setFilter(this._layer, filteredRows);
   }
+  _onSortChange(columnKey, sortDir) {
+    var sortIndexes = this._defaultSortIndexes.slice();
+    sortIndexes.sort((indexA, indexB) => {
+      var valueA = FeatureStore.getFieldValue(this._layer, indexA, columnKey);
+      var valueB = FeatureStore.getFieldValue(this._layer, indexB, columnKey); 
+      var sortVal = 0;
+      if (valueA > valueB) {
+        sortVal = 1;
+      }
+      if (valueA < valueB) {
+        sortVal = -1;
+      }
+      if (sortVal !== 0 && sortDir === SortTypes.ASC) {
+        sortVal = sortVal * -1;
+      }
+      return sortVal;
+    });
+    this.setState({
+      sortIndexes: sortIndexes,
+      colSortDirs: {
+        [columnKey]: sortDir
+      }
+    });
+  }
   render() {
+    var {sortIndexes, colSortDirs} = this.state;
     const {formatMessage} = this.props.intl;
     var schema = FeatureStore.getSchema(this._layer);
     var id = this._layer.get('id');
@@ -230,9 +304,15 @@ class FeatureTable extends React.Component {
       var width = this.state.columnWidths[id] && this.state.columnWidths[id][key] ? this.state.columnWidths[id][key] : defaultWidth;
       columnNodes.push(
         <Column
-          header={<Cell>{key}</Cell>}
+          header={
+            <SortHeaderCell
+              onSortChange={this._onSortChange}
+              sortDir={colSortDirs[key]}>
+              {key}
+            </SortHeaderCell>
+          }
           isResizable={true}
-          cell={(schema[key] === 'link') ? <LinkCell layer={this._layer} col={key} /> : <TextCell layer={this._layer} col={key} />}
+          cell={(schema[key] === 'link') ? <LinkCell sortIndexes={sortIndexes} layer={this._layer} col={key} /> : <TextCell sortIndexes={sortIndexes} layer={this._layer} col={key} />}
           key={key}
           columnKey={key}
           width={width} />
