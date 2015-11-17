@@ -1969,6 +1969,7 @@ var FeatureTable = (function (_React$Component) {
           isResizable: true,
           cell: schema[key] === 'link' ? _react2['default'].createElement(LinkCell, { layer: this._layer, col: key }) : _react2['default'].createElement(TextCell, { layer: this._layer, col: key }),
           key: key,
+          columnKey: key,
           width: width }));
       }
       return _react2['default'].createElement(
@@ -8412,7 +8413,7 @@ function utf8ToBytes (string, units) {
       }
 
       // valid surrogate pair
-      codePoint = leadSurrogate - 0xD800 << 10 | codePoint - 0xDC00 | 0x10000
+      codePoint = (leadSurrogate - 0xD800 << 10 | codePoint - 0xDC00) + 0x10000
     } else if (leadSurrogate) {
       // valid bmp char, but last char was a lead
       if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
@@ -16444,7 +16445,7 @@ var css = ".c3 svg{font:10px sans-serif;-webkit-tap-highlight-color:transparent}
 },{"./../cssify":57}],56:[function(require,module,exports){
 !function() {
   var d3 = {
-    version: "3.5.8"
+    version: "3.5.9"
   };
   var d3_arraySlice = [].slice, d3_array = function(list) {
     return d3_arraySlice.call(list);
@@ -17676,7 +17677,7 @@ var css = ".c3 svg{font:10px sans-serif;-webkit-tap-highlight-color:transparent}
         function ended() {
           if (!position(parent, dragId)) return;
           dragSubject.on(move + dragName, null).on(end + dragName, null);
-          dragRestore(dragged && d3.event.target === target);
+          dragRestore(dragged);
           dispatch({
             type: "dragend"
           });
@@ -17914,7 +17915,7 @@ var css = ".c3 svg{font:10px sans-serif;-webkit-tap-highlight-color:transparent}
       }), center0 = null;
     }
     function mousedowned() {
-      var that = this, target = d3.event.target, dispatch = event.of(that, arguments), dragged = 0, subject = d3.select(d3_window(that)).on(mousemove, moved).on(mouseup, ended), location0 = location(d3.mouse(that)), dragRestore = d3_event_dragSuppress(that);
+      var that = this, dispatch = event.of(that, arguments), dragged = 0, subject = d3.select(d3_window(that)).on(mousemove, moved).on(mouseup, ended), location0 = location(d3.mouse(that)), dragRestore = d3_event_dragSuppress(that);
       d3_selection_interrupt.call(that);
       zoomstarted(dispatch);
       function moved() {
@@ -17924,7 +17925,7 @@ var css = ".c3 svg{font:10px sans-serif;-webkit-tap-highlight-color:transparent}
       }
       function ended() {
         subject.on(mousemove, null).on(mouseup, null);
-        dragRestore(dragged && d3.event.target === target);
+        dragRestore(dragged);
         zoomended(dispatch);
       }
     }
@@ -25371,6 +25372,14 @@ var css = ".c3 svg{font:10px sans-serif;-webkit-tap-highlight-color:transparent}
           delete lock[cancelId];
         }
       }
+      timer.c = tick;
+      d3_timer(function() {
+        if (timer.c && tick(elapsed || 1)) {
+          timer.c = null;
+          timer.t = NaN;
+        }
+        return 1;
+      }, 0, time);
       lock.active = id;
       transition.event && transition.event.start.call(node, node.__data__, i);
       tweens = [];
@@ -25381,14 +25390,6 @@ var css = ".c3 svg{font:10px sans-serif;-webkit-tap-highlight-color:transparent}
       });
       ease = transition.ease;
       duration = transition.duration;
-      timer.c = tick;
-      d3_timer(function() {
-        if (timer.c && tick(elapsed || 1)) {
-          timer.c = null;
-          timer.t = NaN;
-        }
-        return 1;
-      }, 0, time);
     }
     function tick(elapsed) {
       var t = elapsed / duration, e = ease(t), n = tweens.length;
@@ -25990,7 +25991,7 @@ var css = ".c3 svg{font:10px sans-serif;-webkit-tap-highlight-color:transparent}
   d3.xml = d3_xhrType(function(request) {
     return request.responseXML;
   });
-  if (typeof define === "function" && define.amd) define(this.d3 = d3); else if (typeof module === "object" && module.exports) module.exports = d3; else this.d3 = d3;
+  if (typeof define === "function" && define.amd) this.d3 = d3, define(d3); else if (typeof module === "object" && module.exports) module.exports = d3; else this.d3 = d3;
 }();
 },{}],57:[function(require,module,exports){
 function injectStyleTag(document, fileName, cb) {

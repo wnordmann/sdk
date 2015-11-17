@@ -234,6 +234,7 @@ class FeatureTable extends React.Component {
           isResizable={true}
           cell={(schema[key] === 'link') ? <LinkCell layer={this._layer} col={key} /> : <TextCell layer={this._layer} col={key} />}
           key={key}
+          columnKey={key}
           width={width} />
         );
     }
