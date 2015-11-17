@@ -1614,98 +1614,8 @@ exports['default'] = (0, _reactIntl.injectIntl)(Edit);
 module.exports = exports['default'];
 
 },{"../../node_modules/react-color-picker/index.css":551,"./Edit.css":8,"./MapTool.js":27,"openlayers":120,"pui-react-alerts":121,"pui-react-buttons":148,"pui-react-grids":304,"pui-react-iconography":353,"pui-react-modals":409,"react":790,"react-color-picker":555,"react-dom":578,"react-intl":594}],10:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _storesFeatureStoreJs = require('../stores/FeatureStore.js');
-
-var _storesFeatureStoreJs2 = _interopRequireDefault(_storesFeatureStoreJs);
-
-var _fixedDataTable = require('fixed-data-table');
-
-var _fixedDataTable2 = _interopRequireDefault(_fixedDataTable);
-
-var _openlayers = require('openlayers');
-
-var _openlayers2 = _interopRequireDefault(_openlayers);
-
-var Cell = _fixedDataTable2['default'].Cell;
-
-var FeatureCell = (function (_React$Component) {
-  _inherits(FeatureCell, _React$Component);
-
-  function FeatureCell() {
-    _classCallCheck(this, FeatureCell);
-
-    _get(Object.getPrototypeOf(FeatureCell.prototype), 'constructor', this).apply(this, arguments);
-  }
-
-  _createClass(FeatureCell, [{
-    key: '_getMyDataForIndex',
-    value: function _getMyDataForIndex(index, field) {
-      return _storesFeatureStoreJs2['default'].getFieldValue(this.props.layer, index, field);
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var value = this._getMyDataForIndex(this.props.rowIndex, this.props.field);
-      if (this.props.link) {
-        return _react2['default'].createElement(
-          Cell,
-          null,
-          _react2['default'].createElement(
-            'a',
-            { href: value, target: '_blank' },
-            value
-          )
-        );
-      } else {
-        return _react2['default'].createElement(
-          Cell,
-          null,
-          value
-        );
-      }
-    }
-  }]);
-
-  return FeatureCell;
-})(_react2['default'].Component);
-
-exports['default'] = FeatureCell;
-
-FeatureCell.propTypes = {
-  rowIndex: _react2['default'].PropTypes.number.isRequired,
-  field: _react2['default'].PropTypes.string.isRequired,
-  link: _react2['default'].PropTypes.bool,
-  layer: _react2['default'].PropTypes.instanceOf(_openlayers2['default'].layer.Vector).isRequired
-};
-
-FeatureCell.defaultProps = {
-  link: false
-};
-module.exports = exports['default'];
-
-},{"../stores/FeatureStore.js":43,"fixed-data-table":111,"openlayers":120,"react":790}],11:[function(require,module,exports){
 var css = ".row-selected .public_fixedDataTableCell_main {\n  background-color: yellow;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/FeatureTable.css'); module.exports = css;
-},{"./../../node_modules/cssify":57}],12:[function(require,module,exports){
+},{"./../../node_modules/cssify":57}],11:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -1718,6 +1628,8 @@ var _createClass = (function () { function defineProperties(target, props) { for
 var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
@@ -1742,10 +1654,6 @@ var _debounce2 = _interopRequireDefault(_debounce);
 var _fixedDataTable = require('fixed-data-table');
 
 var _fixedDataTable2 = _interopRequireDefault(_fixedDataTable);
-
-var _FeatureCellJsx = require('./FeatureCell.jsx');
-
-var _FeatureCellJsx2 = _interopRequireDefault(_FeatureCellJsx);
 
 require('../../node_modules/fixed-data-table/dist/fixed-data-table.css');
 
@@ -1819,6 +1727,38 @@ var messages = (0, _reactIntl.defineMessages)({
     'defaultMessage': 'Filter'
   }
 });
+
+var LinkCell = function LinkCell(_ref) {
+  var rowIndex = _ref.rowIndex;
+  var col = _ref.col;
+  var layer = _ref.layer;
+
+  var props = _objectWithoutProperties(_ref, ['rowIndex', 'col', 'layer']);
+
+  return _react2['default'].createElement(
+    Cell,
+    props,
+    _react2['default'].createElement(
+      'a',
+      { href: _storesFeatureStoreJs2['default'].getFieldValue(layer, rowIndex, col), target: '_blank' },
+      _storesFeatureStoreJs2['default'].getFieldValue(layer, rowIndex, col)
+    )
+  );
+};
+
+var TextCell = function TextCell(_ref2) {
+  var rowIndex = _ref2.rowIndex;
+  var col = _ref2.col;
+  var layer = _ref2.layer;
+
+  var props = _objectWithoutProperties(_ref2, ['rowIndex', 'col', 'layer']);
+
+  return _react2['default'].createElement(
+    Cell,
+    props,
+    _storesFeatureStoreJs2['default'].getFieldValue(layer, rowIndex, col)
+  );
+};
 
 /**
  * A table to show features. Allows for selection of features.
@@ -2027,7 +1967,7 @@ var FeatureTable = (function (_React$Component) {
             key
           ),
           isResizable: true,
-          cell: _react2['default'].createElement(_FeatureCellJsx2['default'], { link: schema[key] === 'link', layer: this._layer, field: key }),
+          cell: schema[key] === 'link' ? _react2['default'].createElement(LinkCell, { layer: this._layer, col: key }) : _react2['default'].createElement(TextCell, { layer: this._layer, col: key }),
           key: key,
           width: width }));
       }
@@ -2167,7 +2107,7 @@ exports['default'] = (0, _reactIntl.injectIntl)(FeatureTable);
 module.exports = exports['default'];
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../node_modules/fixed-data-table/dist/fixed-data-table.css":61,"../actions/SelectActions.js":2,"../constants/MapConstants.js":39,"../dispatchers/AppDispatcher.js":41,"../stores/FeatureStore.js":43,"./FeatureCell.jsx":10,"./FeatureTable.css":11,"./LayerSelector.jsx":26,"debounce":58,"fixed-data-table":111,"openlayers":120,"pui-react-buttons":148,"pui-react-iconography":353,"react":790,"react-dom":578,"react-intl":594}],13:[function(require,module,exports){
+},{"../../node_modules/fixed-data-table/dist/fixed-data-table.css":61,"../actions/SelectActions.js":2,"../constants/MapConstants.js":39,"../dispatchers/AppDispatcher.js":41,"../stores/FeatureStore.js":43,"./FeatureTable.css":10,"./LayerSelector.jsx":26,"debounce":58,"fixed-data-table":111,"openlayers":120,"pui-react-buttons":148,"pui-react-iconography":353,"react":790,"react-dom":578,"react-intl":594}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2270,7 +2210,7 @@ Geocoding.defaultProps = {
 exports['default'] = (0, _reactIntl.injectIntl)(Geocoding);
 module.exports = exports['default'];
 
-},{"../actions/LayerActions.js":1,"pui-react-search-input":479,"react":790,"react-intl":594}],14:[function(require,module,exports){
+},{"../actions/LayerActions.js":1,"pui-react-search-input":479,"react":790,"react-intl":594}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2452,9 +2392,9 @@ GeocodingResults.defaultProps = {
 exports['default'] = (0, _reactIntl.injectIntl)(GeocodingResults);
 module.exports = exports['default'];
 
-},{"../constants/MapConstants.js":39,"../dispatchers/AppDispatcher.js":41,"openlayers":120,"react":790,"react-dom":578,"react-intl":594}],15:[function(require,module,exports){
+},{"../constants/MapConstants.js":39,"../dispatchers/AppDispatcher.js":41,"openlayers":120,"react":790,"react-dom":578,"react-intl":594}],14:[function(require,module,exports){
 var css = "#geolocation-button {\n  float: right;\n  background-image: url('data:image/png;base64,R0lGODlhEAAQALMAAJmZzMzM/2aZzJnM/2bM/8DAwPf3583NzczMzAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAAUALAAAAAAQABAAQARVsMhJqxzCYMPFMB4VCAJyGAdCBtVYnulqScFgs9aIGAApAAYVrqDj+YDCWe02azqJPd9vOOntaoHgj4I5jD6YwCF0EXgFBI1ATJZYDVgtIBc9Up+WCAA7');\n  background-repeat: no-repeat;\n  background-position: 2px;\n  border: none;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/Geolocation.css'); module.exports = css;
-},{"./../../node_modules/cssify":57}],16:[function(require,module,exports){
+},{"./../../node_modules/cssify":57}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2594,7 +2534,7 @@ Geolocation.propTypes = {
 exports['default'] = (0, _reactIntl.injectIntl)(Geolocation);
 module.exports = exports['default'];
 
-},{"./Geolocation.css":15,"openlayers":120,"pui-react-alerts":121,"react":790,"react-intl":594}],17:[function(require,module,exports){
+},{"./Geolocation.css":14,"openlayers":120,"pui-react-alerts":121,"react":790,"react-intl":594}],16:[function(require,module,exports){
 (function (global){
 /* global Cesium */
 'use strict';
@@ -2680,7 +2620,7 @@ Globe.propTypes = {
 module.exports = exports['default'];
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"ol3-cesium":119,"openlayers":120,"react":790}],18:[function(require,module,exports){
+},{"ol3-cesium":119,"openlayers":120,"react":790}],17:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2779,7 +2719,7 @@ HomeButton.propTypes = {
 exports['default'] = (0, _reactIntl.injectIntl)(HomeButton);
 module.exports = exports['default'];
 
-},{"openlayers":120,"react":790,"react-intl":594}],19:[function(require,module,exports){
+},{"openlayers":120,"react":790,"react-intl":594}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2888,9 +2828,9 @@ ImageExport.propTypes = {
 exports['default'] = (0, _reactIntl.injectIntl)(ImageExport);
 module.exports = exports['default'];
 
-},{"blueimp-canvas-to-blob":45,"browser-filesaver":46,"openlayers":120,"pui-react-buttons":148,"pui-react-iconography":353,"react":790,"react-intl":594}],20:[function(require,module,exports){
+},{"blueimp-canvas-to-blob":45,"browser-filesaver":46,"openlayers":120,"pui-react-buttons":148,"pui-react-iconography":353,"react":790,"react-intl":594}],19:[function(require,module,exports){
 var css = ".ol-popup {\n  display: none;\n  position: absolute;\n  background-color: white;\n  -moz-box-shadow: 0 1px 4px rgba(0,0,0,0.2);\n  -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));\n  filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));\n  padding: 15px;\n  padding-top:35px;\n  border-radius: 10px;\n  border: 1px solid #cccccc;\n  bottom: 12px;\n  left: -50px;\n  height: auto;\n  width: auto;\n  min-width: 250px;\n  max-height: 350px;\n  max-width: 500px;\n}\n\n.popup-closer{\n  padding: 5px;\n}\n\n.popup-content{\n  overflow: auto;\n  height: auto;\n  width: auto;\n  min-width: 250px;\n  max-height: 300px;\n  max-width: 500px;\n}"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/InfoPopup.css'); module.exports = css;
-},{"./../../node_modules/cssify":57}],21:[function(require,module,exports){
+},{"./../../node_modules/cssify":57}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3182,9 +3122,9 @@ InfoPopup.defaultProps = {
 exports['default'] = (0, _reactIntl.injectIntl)(InfoPopup);
 module.exports = exports['default'];
 
-},{"./InfoPopup.css":20,"./MapTool.js":27,"openlayers":120,"react":790,"react-dom":578,"react-intl":594}],22:[function(require,module,exports){
+},{"./InfoPopup.css":19,"./MapTool.js":27,"openlayers":120,"react":790,"react-dom":578,"react-intl":594}],21:[function(require,module,exports){
 var css = ".layer-switcher {\n  position: absolute;\n  top: 3.5em;\n  right: 0.5em;\n  text-align: left;\n}\n.layer-switcher .layer-tree-panel {\n  display: none;\n}\n.layer-switcher.shown .layer-tree-panel {\n  display: block;\n}\n.layerlistbutton {\n  color: white;\n  float: right;\n  width: 38px;\n  height: 38px;\n  background-color: #7b98bc;\n  background-color: rgba(0,60,136,.5);\n  border: none;\n  padding: 2px;\n}\n.layerlistbutton button:focus, .layerlistbutton button:hover {\n  background-color: white;\n}\n.layer-tree-panel {\n  padding-right: 50px;\n  border: 1px solid #cccccc;\n  background-color: white;\n  max-height: 450px;\n  overflow: auto;\n}\n.layer-tree-panel li {\n  list-style-type: none;\n  margin: 0px;\n  padding: 2px 1px 2px 1px;\n  position: relative;\n}\n.layer-tree-panel li::before, .layer-tree-panel li::after {\n  content: '';\n  left: -20px;\n  position: absolute;\n  right: auto;\n}\n.layer-tree-panel li::before {\n  border-left: 1px solid #999;\n  bottom: 50px;\n  height: 100%;\n  top: 0px;\n  width: 1px;\n}\n.layer-tree-panel li::after {\n  border-top: 1px solid #999;\n  height: 20px;\n  top: 25px;\n  width: 25px;\n}\n.layer-tree-panel li span {\n  display: inline-block;\n  padding: 3px 8px;\n  text-decoration: none;\n}\n.layer-tree-panel li.parent_li>span {\n  cursor: pointer;\n}\n.layer-tree-panel >ul>li::before, .layer-tree-panel >ul>li::after {\n  border: 0;\n}\n.layer-tree-panel  li:last-child::before {\n  height: 30px;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/LayerList.css'); module.exports = css;
-},{"./../../node_modules/cssify":57}],23:[function(require,module,exports){
+},{"./../../node_modules/cssify":57}],22:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3383,9 +3323,9 @@ LayerList.defaultProps = {
 };
 module.exports = exports['default'];
 
-},{"../stores/LayerStore.js":44,"./LayerList.css":22,"./LayerListItem.jsx":25,"openlayers":120,"pui-react-buttons":148,"pui-react-iconography":353,"react":790}],24:[function(require,module,exports){
+},{"../stores/LayerStore.js":44,"./LayerList.css":21,"./LayerListItem.jsx":24,"openlayers":120,"pui-react-buttons":148,"pui-react-iconography":353,"react":790}],23:[function(require,module,exports){
 var css = ".layer-zoom-to {\n  padding-left: 15px;\n}\n.layer-move-up {\n  padding-left: 15px;\n}\n.layer-move-down {\n  padding-left: 15px;\n}\n.layer-download {\n  padding-left: 15px;\n}\n.layer-remove {\n  padding-left: 15px;\n}\n.layer-set-filters {\n  padding-left: 15px;\n}\n.layerlistitem .input-has-error {\n  background-color: #fdd;\n}\n.layerlistitem label {\n  font-weight: bold;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/LayerListItem.css'); module.exports = css;
-},{"./../../node_modules/cssify":57}],25:[function(require,module,exports){
+},{"./../../node_modules/cssify":57}],24:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3937,7 +3877,9 @@ LayerListItem.propTypes = {
 exports['default'] = (0, _reactIntl.injectIntl)(LayerListItem);
 module.exports = exports['default'];
 
-},{"../actions/LayerActions.js":1,"./LayerListItem.css":24,"filtrex":60,"openlayers":120,"pui-react-buttons":148,"pui-react-grids":304,"pui-react-modals":409,"react":790,"react-dom":578,"react-intl":594}],26:[function(require,module,exports){
+},{"../actions/LayerActions.js":1,"./LayerListItem.css":23,"filtrex":60,"openlayers":120,"pui-react-buttons":148,"pui-react-grids":304,"pui-react-modals":409,"react":790,"react-dom":578,"react-intl":594}],25:[function(require,module,exports){
+var css = ".form-select{\n\tcolor: rgb(27, 120, 179);\n    background-color: rbg(255,255,255);\n    font-family: 'Source Sans Pro', SourceSansPro, sans-serif;\n    font-size: 16px;\n    font-weight: 600;\n\tborder-radius: 4px;\n\tbox-shadow: none;\n    line-height: 24px;\n  \theight: 34px;\n  \tborder: 0.75px solid #D4D9D9;\n  /*padding: 6px 10px; /* The 6px vertically centers text on FF, ignored by Webkit */\n \n  \n  \n /* box-sizing: border-box; */\n}\n\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/LayerSelector.css'); module.exports = css;
+},{"./../../node_modules/cssify":57}],26:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3973,6 +3915,8 @@ var _storesLayerStoreJs2 = _interopRequireDefault(_storesLayerStoreJs);
 var _actionsLayerActionsJs = require('../actions/LayerActions.js');
 
 var _actionsLayerActionsJs2 = _interopRequireDefault(_actionsLayerActionsJs);
+
+require('./LayerSelector.css');
 
 /**
  * A combobox to select a layer.
@@ -4041,7 +3985,7 @@ var LayerSelector = (function (_React$Component) {
       });
       return _react2['default'].createElement(
         'select',
-        { ref: 'layerSelect', defaultValue: this.props.value, className: 'form-control', onChange: this._onItemChange.bind(this) },
+        { ref: 'layerSelect', defaultValue: this.props.value, className: 'form-select', onChange: this._onItemChange.bind(this) },
         selectItems
       );
     }
@@ -4068,7 +4012,7 @@ LayerSelector.propTypes = {
 };
 module.exports = exports['default'];
 
-},{"../actions/LayerActions.js":1,"../stores/LayerStore.js":44,"openlayers":120,"react":790,"react-dom":578}],27:[function(require,module,exports){
+},{"../actions/LayerActions.js":1,"../stores/LayerStore.js":44,"./LayerSelector.css":25,"openlayers":120,"react":790,"react-dom":578}],27:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -6076,7 +6020,7 @@ global.QueryBuilder = _componentsQueryBuilderJsx2['default'];
 global.Select = _componentsSelectJsx2['default'];
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./actions/LayerActions.js":1,"./components/AddLayer.jsx":3,"./components/Bookmarks.jsx":5,"./components/Chart.jsx":7,"./components/Edit.jsx":9,"./components/FeatureTable.jsx":12,"./components/Geocoding.jsx":13,"./components/GeocodingResults.jsx":14,"./components/Geolocation.jsx":16,"./components/Globe.jsx":17,"./components/HomeButton.jsx":18,"./components/ImageExport.jsx":19,"./components/InfoPopup.jsx":21,"./components/LayerList.jsx":23,"./components/Measure.jsx":29,"./components/Playback.jsx":31,"./components/QGISLegend.jsx":33,"./components/QGISPrint.jsx":35,"./components/QueryBuilder.jsx":37,"./components/Select.jsx":38,"openlayers":120,"pui-react-buttons":148,"pui-react-dropdowns":166,"pui-react-iconography":353,"pui-react-tabs":550,"react":790,"react-dom":578,"react-intl":594}],43:[function(require,module,exports){
+},{"./actions/LayerActions.js":1,"./components/AddLayer.jsx":3,"./components/Bookmarks.jsx":5,"./components/Chart.jsx":7,"./components/Edit.jsx":9,"./components/FeatureTable.jsx":11,"./components/Geocoding.jsx":12,"./components/GeocodingResults.jsx":13,"./components/Geolocation.jsx":15,"./components/Globe.jsx":16,"./components/HomeButton.jsx":17,"./components/ImageExport.jsx":18,"./components/InfoPopup.jsx":20,"./components/LayerList.jsx":22,"./components/Measure.jsx":29,"./components/Playback.jsx":31,"./components/QGISLegend.jsx":33,"./components/QGISPrint.jsx":35,"./components/QueryBuilder.jsx":37,"./components/Select.jsx":38,"openlayers":120,"pui-react-buttons":148,"pui-react-dropdowns":166,"pui-react-iconography":353,"pui-react-tabs":550,"react":790,"react-dom":578,"react-intl":594}],43:[function(require,module,exports){
 /* global document */
 
 'use strict';

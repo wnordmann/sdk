@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import debounce from  'debounce';
 import FixedDataTable from 'fixed-data-table';
-import FeatureCell from './FeatureCell.jsx';
 import '../../node_modules/fixed-data-table/dist/fixed-data-table.css';
 import FeatureStore from '../stores/FeatureStore.js';
 import MapConstants from '../constants/MapConstants.js';
@@ -59,6 +58,18 @@ const messages = defineMessages({
     defaultMessage: 'Filter'
   }
 });
+
+const LinkCell = ({rowIndex, col, layer, ...props}) => (
+  <Cell {...props}>
+    <a href={FeatureStore.getFieldValue(layer, rowIndex, col)} target="_blank">{FeatureStore.getFieldValue(layer, rowIndex, col)}</a>
+  </Cell>
+);
+
+const TextCell = ({rowIndex,col, layer, ...props}) => (
+  <Cell {...props}>
+    {FeatureStore.getFieldValue(layer, rowIndex, col)}
+  </Cell>
+);
 
 /**
  * A table to show features. Allows for selection of features.
@@ -221,7 +232,7 @@ class FeatureTable extends React.Component {
         <Column
           header={<Cell>{key}</Cell>}
           isResizable={true}
-          cell={<FeatureCell link={(schema[key] === 'link')} layer={this._layer} field={key} />}
+          cell={(schema[key] === 'link') ? <LinkCell layer={this._layer} col={key} /> : <TextCell layer={this._layer} col={key} />}
           key={key}
           width={width} />
         );
