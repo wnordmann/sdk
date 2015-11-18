@@ -274,7 +274,7 @@ class Edit extends MapTool {
       <article>
         <form onSubmit={this._onSubmit} className='form-inline'>
           <label>{formatMessage(messages.layerlabel)}:</label>
-          <select onChange={this._onLayerChange.bind(this)} ref='layer' className='form-select'>{options}</select>
+          <select onChange={this._onLayerChange.bind(this)} ref='layer' className='form-control'>{options}</select>
           <UI.DefaultButton onClick={this._showModal.bind(this)}><Icon.Icon name='plus' /></UI.DefaultButton>
           {button}
           {error}
