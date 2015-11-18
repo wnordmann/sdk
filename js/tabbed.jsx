@@ -182,7 +182,6 @@ var map = new ol.Map({
       title: 'popp',
       style: stylePopp,
       source: new ol.source.Cluster({
-        distance: 40.0,
         source: new ol.source.Vector({
           format: new ol.format.GeoJSON(),
           url: '../../data/popp.json'
