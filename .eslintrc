@@ -4,6 +4,7 @@
   ],
   "ecmaFeatures": {
     "jsx": true,
+    "experimentalObjectRestSpread": true,
     "modules": true
   },
   "env": {
