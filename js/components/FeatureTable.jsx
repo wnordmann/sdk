@@ -79,6 +79,16 @@ const messages = defineMessages({
     description: 'Text for the clear button',
     defaultMessage: 'Clear'
   },
+  movebuttontitle: {
+    id: 'featuretable.movebuttontitle',
+    description: 'Title for the move button',
+    defaultMessage: 'Move selected to top'
+  },
+  movebuttontext: {
+    id: 'featuretable.movebuttontext',
+    description: 'Text for the move button',
+    defaultMessage: 'Move'
+  },
   onlyselected: {
     id: 'featuretable.onlyselected',
     description: 'Label for the show selected features only checkbox',
@@ -225,6 +235,23 @@ class FeatureTable extends React.Component {
       SelectActions.clear(lyr, this._selectedOnly);
     }
   }
+  _moveSelectedToTop() {
+    var selected = this.state.selected;
+    var sortIndexes = [];
+    for (var i = 0, ii = selected.length; i < ii; ++i) {
+      var idx = this.state.features.indexOf(selected[i]);
+      sortIndexes.push(idx);
+    }
+    var size = this.state.features.length;
+    for (var index = 0; index < size; index++) {
+      if (selected.indexOf(this.state.features[index]) === -1) {
+        sortIndexes.push(index);
+      }
+    }
+    this.setState({
+      sortIndexes: sortIndexes
+    });
+  }
   _zoomSelected() {
     var selected = this.state.selected;
     var len = selected.length;
@@ -325,6 +352,7 @@ class FeatureTable extends React.Component {
           <LayerSelector id='table-layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} value={this.props.layer.get('id')} />
           <UI.DefaultButton onClick={this._zoomSelected.bind(this)} title={formatMessage(messages.zoombuttontitle)}><Icon.Icon name="search" /> {formatMessage(messages.zoombuttontext)}</UI.DefaultButton>
           <UI.DefaultButton onClick={this._clearSelected.bind(this)} title={formatMessage(messages.clearbuttontitle)}><Icon.Icon name="trash" /> {formatMessage(messages.clearbuttontext)}</UI.DefaultButton>
+          <UI.DefaultButton onClick={this._moveSelectedToTop.bind(this)} title={formatMessage(messages.movebuttontitle)}><Icon.Icon name="arrow-up" /> {formatMessage(messages.movebuttontext)}</UI.DefaultButton>
           <div className='input-group'>
             <span className='input-group-addon'><label htmlFor='featuretable-filter'>{formatMessage(messages.filterlabel)}</label></span>
             <input type='text' id='featuretable-filter' ref='filter' className='form-control' onChange={this._filterByText.bind(this)} placeholder={formatMessage(messages.filterplaceholder)}></input>

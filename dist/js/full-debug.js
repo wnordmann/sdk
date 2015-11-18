@@ -1769,6 +1769,14 @@ var messages = (0, _reactIntl.defineMessages)({
     'id': 'featuretable.clearbuttontext',
     'defaultMessage': 'Clear'
   },
+  movebuttontitle: {
+    'id': 'featuretable.movebuttontitle',
+    'defaultMessage': 'Move selected to top'
+  },
+  movebuttontext: {
+    'id': 'featuretable.movebuttontext',
+    'defaultMessage': 'Move'
+  },
   onlyselected: {
     'id': 'featuretable.onlyselected',
     'defaultMessage': 'Show only selected features'
@@ -1969,6 +1977,25 @@ var FeatureTable = (function (_React$Component2) {
       }
     }
   }, {
+    key: '_moveSelectedToTop',
+    value: function _moveSelectedToTop() {
+      var selected = this.state.selected;
+      var sortIndexes = [];
+      for (var i = 0, ii = selected.length; i < ii; ++i) {
+        var idx = this.state.features.indexOf(selected[i]);
+        sortIndexes.push(idx);
+      }
+      var size = this.state.features.length;
+      for (var index = 0; index < size; index++) {
+        if (selected.indexOf(this.state.features[index]) === -1) {
+          sortIndexes.push(index);
+        }
+      }
+      this.setState({
+        sortIndexes: sortIndexes
+      });
+    }
+  }, {
     key: '_zoomSelected',
     value: function _zoomSelected() {
       var selected = this.state.selected;
@@ -2098,6 +2125,13 @@ var FeatureTable = (function (_React$Component2) {
             _react2['default'].createElement(_puiReactIconography2['default'].Icon, { name: 'trash' }),
             ' ',
             formatMessage(messages.clearbuttontext)
+          ),
+          _react2['default'].createElement(
+            _puiReactButtons2['default'].DefaultButton,
+            { onClick: this._moveSelectedToTop.bind(this), title: formatMessage(messages.movebuttontitle) },
+            _react2['default'].createElement(_puiReactIconography2['default'].Icon, { name: 'arrow-up' }),
+            ' ',
+            formatMessage(messages.movebuttontext)
           ),
           _react2['default'].createElement(
             'div',
