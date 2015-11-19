@@ -1,5 +1,6 @@
 import SelectConstants from '../constants/SelectConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
+import FeatureStore from '../stores/FeatureStore.js';
 
 export default {
   toggleFeature: (layer, feature) => {
@@ -29,20 +30,6 @@ export default {
       layer: layer,
       features: features,
       clear: clear
-    });
-  },
-  selectFeature: (layer, feature) => {
-    AppDispatcher.handleAction({
-      type: SelectConstants.SELECT_FEATURE,
-      layer: layer,
-      feature: feature
-    });
-  },
-  unselectFeature: (layer, feature) => {
-    AppDispatcher.handleAction({
-      type: SelectConstants.UNSELECT_FEATURE,
-      layer: layer,
-      feature: feature
     });
   }
 };

@@ -53,6 +53,9 @@ var stylePopp = function(feature) {
   var features = feature.get('features');
   var size = 0;
   for (var i = 0, ii = features.length; i < ii; ++i) {
+    if (features[i].selected) {
+      return null;
+    }
     if (features[i].hide !== true) {
       size++;
     }

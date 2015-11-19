@@ -44,7 +44,12 @@ class Select extends MapTool {
           var selected = [];
           lyr.getSource().forEachFeatureIntersectingExtent(box, function(feature) {
             if (feature.get('features')) {
-              selected = selected.concat(feature.get('features'));
+              var children = feature.get('features');
+              for (var i = 0, ii = children.length; i < ii; ++i) {
+                children[i].selected = true;
+              }
+              feature.changed();
+              selected = selected.concat(children);
             } else {
               selected.push(feature);
             }

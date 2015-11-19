@@ -154,11 +154,13 @@ class FeatureStore extends EventEmitter {
       source = source.getSource();
     }
     source.on('change', function(evt) {
-      if (evt.target.getState() === 'ready') {
-        var features = evt.target.getFeatures();
-        this._setFeatures(layer, features);
-        delete this._schema[layer.get('id')];
-        this.emitChange();
+      if (!this._ignoreSourceChange) {
+        if (evt.target.getState() === 'ready') {
+          var features = evt.target.getFeatures();
+          this._setFeatures(layer, features);
+          delete this._schema[layer.get('id')];
+          this.emitChange();
+        }
       }
     }, this);
     this._setFeatures(layer, source.getFeatures());
@@ -211,6 +213,13 @@ class FeatureStore extends EventEmitter {
     }
   }
   toggleFeature(layer, feature) {
+    // special handling for cluster features
+    if (layer instanceof ol.layer.Vector && layer.getSource() instanceof ol.source.Cluster) {
+      feature.selected = !feature.selected;
+      this._ignoreSourceChange = true;
+      feature.changed();
+      this._ignoreSourceChange = false;
+    }
     var id = layer.get('id'), idx = this._config[id].selected.indexOf(feature);
     if (idx === -1) {
       this._config[id].selected.push(feature);
@@ -220,6 +229,19 @@ class FeatureStore extends EventEmitter {
     this.emitChange();
   }
   setSelection(layer, features, clear) {
+    // special handling for clusters
+    // if a cluster has children selected, it should not show up as well
+    if (clear && layer instanceof ol.layer.Vector && layer.getSource() instanceof ol.source.Cluster) {
+      var f = layer.getSource().getFeatures();
+      for (var i = 0, ii = f.length; i < ii; ++i) {
+        var children = f[i].get('features');
+        for (var j = 0, jj = children.length; j < jj; ++j) {
+          if (features.indexOf(children[j]) === -1) {
+            children[j].selected = false;
+          }
+        }
+      }
+    }
     var id = layer.get('id');
     if (!this._config[id]) {
       this._config[id] = {};

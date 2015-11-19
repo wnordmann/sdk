@@ -134,6 +134,10 @@ var _dispatchersAppDispatcherJs = require('../dispatchers/AppDispatcher.js');
 
 var _dispatchersAppDispatcherJs2 = _interopRequireDefault(_dispatchersAppDispatcherJs);
 
+var _storesFeatureStoreJs = require('../stores/FeatureStore.js');
+
+var _storesFeatureStoreJs2 = _interopRequireDefault(_storesFeatureStoreJs);
+
 exports['default'] = {
   toggleFeature: function toggleFeature(layer, feature) {
     _dispatchersAppDispatcherJs2['default'].handleAction({
@@ -163,25 +167,11 @@ exports['default'] = {
       features: features,
       clear: clear
     });
-  },
-  selectFeature: function selectFeature(layer, feature) {
-    _dispatchersAppDispatcherJs2['default'].handleAction({
-      type: _constantsSelectConstantsJs2['default'].SELECT_FEATURE,
-      layer: layer,
-      feature: feature
-    });
-  },
-  unselectFeature: function unselectFeature(layer, feature) {
-    _dispatchersAppDispatcherJs2['default'].handleAction({
-      type: _constantsSelectConstantsJs2['default'].UNSELECT_FEATURE,
-      layer: layer,
-      feature: feature
-    });
   }
 };
 module.exports = exports['default'];
 
-},{"../constants/SelectConstants.js":40,"../dispatchers/AppDispatcher.js":41}],3:[function(require,module,exports){
+},{"../constants/SelectConstants.js":40,"../dispatchers/AppDispatcher.js":41,"../stores/FeatureStore.js":43}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1421,7 +1411,7 @@ var Edit = (function (_MapTool) {
           ),
           _react2['default'].createElement(
             'select',
-            { onChange: this._onLayerChange.bind(this), ref: 'layer', className: 'form-select' },
+            { onChange: this._onLayerChange.bind(this), ref: 'layer', className: 'form-control' },
             options
           ),
           _react2['default'].createElement(
@@ -1614,7 +1604,7 @@ exports['default'] = (0, _reactIntl.injectIntl)(Edit);
 module.exports = exports['default'];
 
 },{"../../node_modules/react-color-picker/index.css":551,"./Edit.css":8,"./MapTool.js":27,"openlayers":120,"pui-react-alerts":121,"pui-react-buttons":148,"pui-react-grids":304,"pui-react-iconography":353,"pui-react-modals":409,"react":790,"react-color-picker":555,"react-dom":578,"react-intl":594}],10:[function(require,module,exports){
-var css = ".row-selected .public_fixedDataTableCell_main {\n  background-color: yellow;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/FeatureTable.css'); module.exports = css;
+var css = ".row-selected .public_fixedDataTableCell_main {\n  background-color: yellow;\n}\n\n.btn-default{\n\theight: 42px;\n}\n\n.input-group-addon{\n\theight: 42px;\n}\n\nlabel{\n\tmargin-bottom: 0px;\n}\n\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/FeatureTable.css'); module.exports = css;
 },{"./../../node_modules/cssify":57}],11:[function(require,module,exports){
 (function (global){
 'use strict';
@@ -4013,7 +4003,7 @@ exports['default'] = (0, _reactIntl.injectIntl)(LayerListItem);
 module.exports = exports['default'];
 
 },{"../actions/LayerActions.js":1,"./LayerListItem.css":23,"filtrex":60,"openlayers":120,"pui-react-buttons":148,"pui-react-grids":304,"pui-react-modals":409,"react":790,"react-dom":578,"react-intl":594}],25:[function(require,module,exports){
-var css = ".form-select{\n\tcolor: rgb(27, 120, 179);\n    background-color: rbg(255,255,255);\n    font-family: 'Source Sans Pro', SourceSansPro, sans-serif;\n    font-size: 16px;\n    font-weight: 600;\n\tborder-radius: 4px;\n\tbox-shadow: none;\n    line-height: 24px;\n  \theight: 34px;\n  \tborder: 0.75px solid #D4D9D9;\n  /*padding: 6px 10px; /* The 6px vertically centers text on FF, ignored by Webkit */\n \n  \n  \n /* box-sizing: border-box; */\n}\n\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/LayerSelector.css'); module.exports = css;
+var css = "select.form-control{\n  border-radius: 4px;\n}\n\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/LayerSelector.css'); module.exports = css;
 },{"./../../node_modules/cssify":57}],26:[function(require,module,exports){
 'use strict';
 
@@ -4120,7 +4110,7 @@ var LayerSelector = (function (_React$Component) {
       });
       return _react2['default'].createElement(
         'select',
-        { ref: 'layerSelect', defaultValue: this.props.value, className: 'form-select', onChange: this._onItemChange.bind(this) },
+        { ref: 'layerSelect', defaultValue: this.props.value, className: 'form-control', onChange: this._onItemChange.bind(this) },
         selectItems
       );
     }
@@ -5829,7 +5819,12 @@ var Select = (function (_MapTool) {
           var selected = [];
           lyr.getSource().forEachFeatureIntersectingExtent(box, function (feature) {
             if (feature.get('features')) {
-              selected = selected.concat(feature.get('features'));
+              var children = feature.get('features');
+              for (var i = 0, ii = children.length; i < ii; ++i) {
+                children[i].selected = true;
+              }
+              feature.changed();
+              selected = selected.concat(children);
             } else {
               selected.push(feature);
             }
@@ -5933,8 +5928,6 @@ exports['default'] = (0, _keymirror2['default'])({
   CLEAR: null,
   SELECT_FEATURES: null,
   SELECT_FEATURES_IN: null,
-  SELECT_FEATURE: null,
-  UNSELECT_FEATURE: null,
   TOGGLE_FEATURE: null
 });
 module.exports = exports['default'];
@@ -6350,11 +6343,13 @@ var FeatureStore = (function (_EventEmitter) {
         source = source.getSource();
       }
       source.on('change', function (evt) {
-        if (evt.target.getState() === 'ready') {
-          var features = evt.target.getFeatures();
-          this._setFeatures(layer, features);
-          delete this._schema[layer.get('id')];
-          this.emitChange();
+        if (!this._ignoreSourceChange) {
+          if (evt.target.getState() === 'ready') {
+            var features = evt.target.getFeatures();
+            this._setFeatures(layer, features);
+            delete this._schema[layer.get('id')];
+            this.emitChange();
+          }
         }
       }, this);
       this._setFeatures(layer, source.getFeatures());
@@ -6419,6 +6414,13 @@ var FeatureStore = (function (_EventEmitter) {
   }, {
     key: 'toggleFeature',
     value: function toggleFeature(layer, feature) {
+      // special handling for cluster features
+      if (layer instanceof _openlayers2['default'].layer.Vector && layer.getSource() instanceof _openlayers2['default'].source.Cluster) {
+        feature.selected = !feature.selected;
+        this._ignoreSourceChange = true;
+        feature.changed();
+        this._ignoreSourceChange = false;
+      }
       var id = layer.get('id'),
           idx = this._config[id].selected.indexOf(feature);
       if (idx === -1) {
@@ -6431,6 +6433,19 @@ var FeatureStore = (function (_EventEmitter) {
   }, {
     key: 'setSelection',
     value: function setSelection(layer, features, clear) {
+      // special handling for clusters
+      // if a cluster has children selected, it should not show up as well
+      if (clear && layer instanceof _openlayers2['default'].layer.Vector && layer.getSource() instanceof _openlayers2['default'].source.Cluster) {
+        var f = layer.getSource().getFeatures();
+        for (var i = 0, ii = f.length; i < ii; ++i) {
+          var children = f[i].get('features');
+          for (var j = 0, jj = children.length; j < jj; ++j) {
+            if (features.indexOf(children[j]) === -1) {
+              children[j].selected = false;
+            }
+          }
+        }
+      }
       var id = layer.get('id');
       if (!this._config[id]) {
         this._config[id] = {};
