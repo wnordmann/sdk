@@ -10,7 +10,15 @@
 	height: 42px;
 }
 
+.form-inline .input-group{
+	padding: 10px;
+
+}
+
 label{
 	margin-bottom: 0px;
 }
 
+input[type="radio"], input[type="checkbox"]{
+	margin: 4px 4px 0px;
+}
