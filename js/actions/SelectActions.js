@@ -1,6 +1,5 @@
 import SelectConstants from '../constants/SelectConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
-import FeatureStore from '../stores/FeatureStore.js';
 
 export default {
   toggleFeature: (layer, feature) => {

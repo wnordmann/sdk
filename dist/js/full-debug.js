@@ -134,10 +134,6 @@ var _dispatchersAppDispatcherJs = require('../dispatchers/AppDispatcher.js');
 
 var _dispatchersAppDispatcherJs2 = _interopRequireDefault(_dispatchersAppDispatcherJs);
 
-var _storesFeatureStoreJs = require('../stores/FeatureStore.js');
-
-var _storesFeatureStoreJs2 = _interopRequireDefault(_storesFeatureStoreJs);
-
 exports['default'] = {
   toggleFeature: function toggleFeature(layer, feature) {
     _dispatchersAppDispatcherJs2['default'].handleAction({
@@ -171,7 +167,7 @@ exports['default'] = {
 };
 module.exports = exports['default'];
 
-},{"../constants/SelectConstants.js":40,"../dispatchers/AppDispatcher.js":41,"../stores/FeatureStore.js":43}],3:[function(require,module,exports){
+},{"../constants/SelectConstants.js":40,"../dispatchers/AppDispatcher.js":41}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
