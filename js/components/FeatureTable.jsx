@@ -12,6 +12,7 @@ import LayerSelector from './LayerSelector.jsx';
 import UI from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import filtrex from 'filtrex';
 import './FeatureTable.css';
 
 const {Table, Column, Cell} = FixedDataTable;
@@ -276,19 +277,36 @@ class FeatureTable extends React.Component {
     var filterBy = evt.target.value;
     var state = FeatureStore.getState(this._layer);
     var rows = state.originalFeatures.slice();
-    var filteredRows = filterBy ? rows.filter(function(row) {
-      var properties = row.getProperties();
-      var geom = row.getGeometryName();
-      for (var key in properties) {
-        if (key !== geom) {
-          var value = '' + properties[key];
-          if (value.toLowerCase().indexOf(filterBy.toLowerCase()) >= 0) {
-            return true;
-          }
+    var filteredRows = [];
+    var queryFilter;
+    try {
+      queryFilter = filtrex(filterBy);
+    } catch (e) {
+      queryFilter = null;
+    }
+    if (queryFilter !== null) {
+      for (var i = 0, ii = rows.length; i < ii; ++i) {
+        var properties = rows[i].getProperties();
+        if (queryFilter(properties)) {
+          filteredRows.push(rows[i]);
         }
       }
-      return false;
-    }) : rows;
+    }
+    if (filteredRows.length === 0) {
+      filteredRows = filterBy ? rows.filter(function(row) {
+        var properties = row.getProperties();
+        var geom = row.getGeometryName();
+        for (var key in properties) {
+          if (key !== geom) {
+            var value = '' + properties[key];
+            if (value.toLowerCase().indexOf(filterBy.toLowerCase()) >= 0) {
+              return true;
+            }
+          }
+        }
+        return false;
+      }) : rows;
+    }
     FeatureStore.setFilter(this._layer, filteredRows);
   }
   _onSortChange(columnKey, sortDir) {

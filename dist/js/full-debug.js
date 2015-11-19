@@ -1600,7 +1600,7 @@ exports['default'] = (0, _reactIntl.injectIntl)(Edit);
 module.exports = exports['default'];
 
 },{"../../node_modules/react-color-picker/index.css":551,"./Edit.css":8,"./MapTool.js":27,"openlayers":120,"pui-react-alerts":121,"pui-react-buttons":148,"pui-react-grids":304,"pui-react-iconography":353,"pui-react-modals":409,"react":790,"react-color-picker":555,"react-dom":578,"react-intl":594}],10:[function(require,module,exports){
-var css = ".row-selected .public_fixedDataTableCell_main {\n  background-color: yellow;\n}\n\n.btn-default{\n\theight: 42px;\n}\n\n.input-group-addon{\n\theight: 42px;\n}\n\nlabel{\n\tmargin-bottom: 0px;\n}\n\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/FeatureTable.css'); module.exports = css;
+var css = ".row-selected .public_fixedDataTableCell_main {\n  background-color: yellow;\n}\n\n.btn-default{\n\theight: 42px;\n}\n\n.input-group-addon{\n\theight: 42px;\n}\n\n.form-inline .input-group{\n\tpadding: 10px;\n\n}\n\nlabel{\n\tmargin-bottom: 0px;\n}\n\ninput[type=\"radio\"], input[type=\"checkbox\"]{\n\tmargin: 4px 4px 0px;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/FeatureTable.css'); module.exports = css;
 },{"./../../node_modules/cssify":57}],11:[function(require,module,exports){
 (function (global){
 'use strict';
@@ -1674,6 +1674,10 @@ var _puiReactIconography = require('pui-react-iconography');
 var _puiReactIconography2 = _interopRequireDefault(_puiReactIconography);
 
 var _reactIntl = require('react-intl');
+
+var _filtrex = require('filtrex');
+
+var _filtrex2 = _interopRequireDefault(_filtrex);
 
 require('./FeatureTable.css');
 
@@ -2011,19 +2015,36 @@ var FeatureTable = (function (_React$Component2) {
       var filterBy = evt.target.value;
       var state = _storesFeatureStoreJs2['default'].getState(this._layer);
       var rows = state.originalFeatures.slice();
-      var filteredRows = filterBy ? rows.filter(function (row) {
-        var properties = row.getProperties();
-        var geom = row.getGeometryName();
-        for (var key in properties) {
-          if (key !== geom) {
-            var value = '' + properties[key];
-            if (value.toLowerCase().indexOf(filterBy.toLowerCase()) >= 0) {
-              return true;
-            }
+      var filteredRows = [];
+      var queryFilter;
+      try {
+        queryFilter = (0, _filtrex2['default'])(filterBy);
+      } catch (e) {
+        queryFilter = null;
+      }
+      if (queryFilter !== null) {
+        for (var i = 0, ii = rows.length; i < ii; ++i) {
+          var properties = rows[i].getProperties();
+          if (queryFilter(properties)) {
+            filteredRows.push(rows[i]);
           }
         }
-        return false;
-      }) : rows;
+      }
+      if (filteredRows.length === 0) {
+        filteredRows = filterBy ? rows.filter(function (row) {
+          var properties = row.getProperties();
+          var geom = row.getGeometryName();
+          for (var key in properties) {
+            if (key !== geom) {
+              var value = '' + properties[key];
+              if (value.toLowerCase().indexOf(filterBy.toLowerCase()) >= 0) {
+                return true;
+              }
+            }
+          }
+          return false;
+        }) : rows;
+      }
       _storesFeatureStoreJs2['default'].setFilter(this._layer, filteredRows);
     }
   }, {
@@ -2228,7 +2249,7 @@ exports['default'] = (0, _reactIntl.injectIntl)(FeatureTable);
 module.exports = exports['default'];
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../node_modules/fixed-data-table/dist/fixed-data-table.css":61,"../actions/SelectActions.js":2,"../constants/MapConstants.js":39,"../dispatchers/AppDispatcher.js":41,"../stores/FeatureStore.js":43,"./FeatureTable.css":10,"./LayerSelector.jsx":26,"debounce":58,"fixed-data-table":111,"openlayers":120,"pui-react-buttons":148,"pui-react-iconography":353,"react":790,"react-dom":578,"react-intl":594}],12:[function(require,module,exports){
+},{"../../node_modules/fixed-data-table/dist/fixed-data-table.css":61,"../actions/SelectActions.js":2,"../constants/MapConstants.js":39,"../dispatchers/AppDispatcher.js":41,"../stores/FeatureStore.js":43,"./FeatureTable.css":10,"./LayerSelector.jsx":26,"debounce":58,"filtrex":60,"fixed-data-table":111,"openlayers":120,"pui-react-buttons":148,"pui-react-iconography":353,"react":790,"react-dom":578,"react-intl":594}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3999,7 +4020,7 @@ exports['default'] = (0, _reactIntl.injectIntl)(LayerListItem);
 module.exports = exports['default'];
 
 },{"../actions/LayerActions.js":1,"./LayerListItem.css":23,"filtrex":60,"openlayers":120,"pui-react-buttons":148,"pui-react-grids":304,"pui-react-modals":409,"react":790,"react-dom":578,"react-intl":594}],25:[function(require,module,exports){
-var css = "select.form-control{\n  border-radius: 4px;\n}\n\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/LayerSelector.css'); module.exports = css;
+var css = "select.form-control{\n  border-radius: 4px;\n  box-shadow: 0px 1px 0px rgba(211, 217, 217, 0.5);\n}\n\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/LayerSelector.css'); module.exports = css;
 },{"./../../node_modules/cssify":57}],26:[function(require,module,exports){
 'use strict';
 
