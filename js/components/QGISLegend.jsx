@@ -65,7 +65,7 @@ class QGISLegend extends React.Component {
     }
     var items = this._renderItems(this.props.legendData, this.props.legendBasePath);
     return (
-      <div onMouseOver={this._showPanel.bind(this)} className={className}>
+      <div onMouseOut={this._hidePanel.bind(this)} onMouseOver={this._showPanel.bind(this)} className={className}>
       <UI.DefaultButton title={formatMessage(messages.buttontitle)} onClick={this._showPanel.bind(this)}><Icon.Icon name="file-picture-o" /></UI.DefaultButton>
       <div className='legend-panel' id='legend'>{items}</div></div>
     );
