@@ -384,7 +384,7 @@ class TabbedApp extends React.Component {
         </nav>
         <div id='content'>
           <div className='row full-height'>
-            <div className='col-md-8 full-height' id='tabs-panel'>
+            <div className='col-md-9 full-height' id='tabs-panel'>
               <UI.SimpleTabs defaultActiveKey={2}>
                 <UI.Tab eventKey={1} title={formatMessage(messages.geocodingtab)}><div id='geocoding-tab'><Geocoding /></div><div id='geocoding-results' className='geocoding-results'><GeocodingResults map={map} /></div></UI.Tab>
                 <UI.Tab eventKey={2} title={formatMessage(messages.attributestab)}><div id="attributes-table-tab"><FeatureTable resizeTo='tabs-panel' offset={[50, 60]} layer={selectedLayer} map={map} /></div></UI.Tab>
@@ -392,7 +392,7 @@ class TabbedApp extends React.Component {
                 <UI.Tab eventKey={4} title={formatMessage(messages.charttab)}><div id='charts-tab'><Chart combo={true} charts={charts}/></div></UI.Tab>
               </UI.SimpleTabs>
             </div>
-            <div className='col-md-16 full-height'>
+            <div className='col-md-15 full-height'>
               <div id='map' ref='map'></div>
               <div id='layerlist'><LayerList allowFiltering={true} showOpacity={true} showDownload={true} showGroupContent={true} showZoomTo={true} allowReordering={true} map={map} /></div>
               <div id='legend'><QGISLegend map={map} legendBasePath='../../resources/legend/' legendData={legendData} /></div>
