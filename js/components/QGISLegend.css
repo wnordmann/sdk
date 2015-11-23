@@ -10,7 +10,8 @@
   background-color: white;
   height: auto;
   max-height:500px;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .legend .legend-panel {
   display: none;
