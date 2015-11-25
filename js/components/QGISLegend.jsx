@@ -35,8 +35,7 @@ class QGISLegend extends React.Component {
     var legendNodes = [];
     var symbolFunc = function(symbol) {
       var src = legendBasePath + symbol.href;
-      var lbl = symbol.title;
-      return (<img src={src}></img>);
+      return (<img key={symbol.title} src={src}></img>);
     };
     for (var id in legendData) {
       var title = LayerStore.findLayer(id).get('title');
@@ -44,7 +43,6 @@ class QGISLegend extends React.Component {
       var forLabel = 'legend-layer-' + id;
       legendNodes.push(
         <li key={id}>
-          
           <ul>
             {symbols} {title}
           </ul>
@@ -66,8 +64,9 @@ class QGISLegend extends React.Component {
     var items = this._renderItems(this.props.legendData, this.props.legendBasePath);
     return (
       <div onMouseOut={this._hidePanel.bind(this)} onMouseOver={this._showPanel.bind(this)} className={className}>
-      <UI.DefaultButton title={formatMessage(messages.buttontitle)} onClick={this._showPanel.bind(this)}><Icon.Icon name="file-picture-o" /></UI.DefaultButton>
-      <div className='legend-panel' id='legend'>{items}</div></div>
+        <UI.DefaultButton title={formatMessage(messages.buttontitle)} onClick={this._showPanel.bind(this)}><Icon.Icon name="file-picture-o" /></UI.DefaultButton>
+        <div className='legend-panel' id='legend'>{items}</div>
+      </div>
     );
   }
 }

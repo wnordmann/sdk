@@ -2535,7 +2535,7 @@ exports['default'] = (0, _reactIntl.injectIntl)(GeocodingResults);
 module.exports = exports['default'];
 
 },{"../constants/MapConstants.js":39,"../dispatchers/AppDispatcher.js":41,"openlayers":120,"react":790,"react-dom":578,"react-intl":594}],14:[function(require,module,exports){
-var css = "#geolocation-button {\n  float: right;\n  background-image: url('data:image/png;base64,R0lGODlhEAAQALMAAJmZzMzM/2aZzJnM/2bM/8DAwPf3583NzczMzAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAAUALAAAAAAQABAAQARVsMhJqxzCYMPFMB4VCAJyGAdCBtVYnulqScFgs9aIGAApAAYVrqDj+YDCWe02azqJPd9vOOntaoHgj4I5jD6YwCF0EXgFBI1ATJZYDVgtIBc9Up+WCAA7');\n  background-repeat: no-repeat;\n  background-position: 2px;\n  border: none;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/Geolocation.css'); module.exports = css;
+var css = "#geolocation-button {\n  float: right;\n  background-image: url('data:image/png;base64,R0lGODlhEAAQALMAAJmZzMzM/2aZzJnM/2bM/8DAwPf3583NzczMzAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAAUALAAAAAAQABAAQARVsMhJqxzCYMPFMB4VCAJyGAdCBtVYnulqScFgs9aIGAApAAYVrqDj+YDCWe02azqJPd9vOOntaoHgj4I5jD6YwCF0EXgFBI1ATJZYDVgtIBc9Up+WCAA7');\n  background-repeat: no-repeat;\n  background-position: center;\n  border: none;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/Geolocation.css'); module.exports = css;
 },{"./../../node_modules/cssify":57}],15:[function(require,module,exports){
 'use strict';
 
@@ -4848,7 +4848,7 @@ exports['default'] = (0, _reactIntl.injectIntl)(Playback);
 module.exports = exports['default'];
 
 },{"./Playback.css":30,"openlayers":120,"pui-react-buttons":148,"pui-react-grids":304,"pui-react-iconography":353,"react":790,"react-dom":578,"react-intl":594}],32:[function(require,module,exports){
-var css = ".legend {\n  position: absolute;\n  top: 7.5em;\n  right: 0.5em;\n  text-align: left;\n}\n.legend-panel {\n  padding-right: 50px;\n  border: 1px solid #cccccc;\n  background-color: white;\n  height: auto;\n  max-height:500px;\n  overflow: auto;\n}\n.legend .legend-panel {\n  display: none;\n}\n.legend.shown .legend-panel {\n  display: block;\n}\n.legend button {\n  color: white;\n  float: right;\n  width: 38px;\n  height: 38px;\n  background-color: #7b98bc;\n  background-color: rgba(0,60,136,.5);\n  border: none;\n  padding: 2px;\n}\n.legend button:focus, .legend button:hover {\n  background-color: white;\n}\n.expandableList ul {\n  padding: 0 0 0 30px;\n  width: 300px;\n}\n.expandableList li {\n  position: relative;\n  list-style: none;\n  margin-left: -15px;\n  margin-top:15px;\n  padding: 0;\n}\n.expandableList li input {\n  position: absolute;\n  left: 0;\n  margin-left: 0;\n  opacity: 0;\n  z-index: 2;\n  cursor: pointer;\n  height: 1em;\n  width: 1em;\n  top: 0;\n}\n.expandableList li input + ul {\n  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAURJREFUeNpi/P//PwMlgImBQkCxASwwRlLLKwYmJqZgRkbGbiBXEYva+0Dvlv7792/tvBoxTAO+fv0MororE6UU9VU5MHRfvP1DsX3+M5DhaxkYxDC98ObNGxBW1FVmY/j16xcYu6SdYvjw4QPDixcvGGSEvoLlQeqweuHdu7dg+vfv32D85ctXsNijR4/B4hwcnHA1WA348uUbmP779y+DUchOuIKQsltgetsUE7garAb8/w9h/vz5h+H0Sk8w2yRsN8OZVa5g9ocPn+BqsBrAzs4PdQEzw48ff+Fi375B2Gxs3HA1WNPB45NlDNzcIvfPXv8LVMwJxmdWOcDZF2//A8uD1GF1wefXZ8Q+Pt42oWN+VBED41d5DKv+/30IlJ8IVCcF5D2DCTPC8gIwAXEDKT4Qk0Di+wzU8xnDgKGbmQACDAAtTZadqmiADQAAAABJRU5ErkJggg==') 40px 0px no-repeat;\n  margin: -22px 0 0 -44px; /* 15px */\n  height: 1em;\n}\n.expandableList li input + ul > li {\n  display: none;\n  margin-left:-14px !important;\n  padding-left: 1px;\n}\n.expandableList li label {\n  cursor: pointer;\n  display: block;\n  padding-left: 20px;\n}\n.expandableList li input {\n  display: none;\n}\n.expandableList li input:checked + ul {\n  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAASxJREFUeNpi/P//PwMlgImBQkCxASwwRlLLKwYmJqZgRkbGbiBXEYva+0Dvlv7792/tvBoxTAO+fv0MororE6UU9VU5MHRfvP1DsX3+M5DhaxkYsBjw5s0bEKWoq6zA8OvXL7AYKIC/f//O8OPHDwYZIVaQGqjLlDENePfuLZj+/fs3GH/58pXh/fv3YDYIcHBwwtVgDYMvX76B6b9//zIYhezEULhtiglcDVYD/v+HMH/+/MNweqUnhsIPHz7B1WA1gJ2dH+oCZqCf/2IoZGPjhqvBmg4enyxj4OYWuX/2+l+gYk4MfPH2P7A8SB1WF3x+fUbs4+NtEzrmRxUxMH6Vx7Dq/9+HQPmJQHVSQN4zmDAjLC8AExA3kOIDMQkkvs9APZ8xDBi6mQkgwADDMYZH9Ls66AAAAABJRU5ErkJggg==') 40px 0px no-repeat;\n  margin: -22px 0 0 -44px; /* 20px */\n  padding: 1.563em 0 0 80px;\n  height: auto;\n}\n.expandableList li input:checked + ul > li {\n  display: block;\n  margin: 0 0 0.125em; /* 2px */\n}\n.expandableList li input:checked + ul > li:last-child {\n  margin: 0 0 0.063em; /* 1px */\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/QGISLegend.css'); module.exports = css;
+var css = ".legend {\n  position: absolute;\n  top: 7.5em;\n  right: 0.5em;\n  text-align: left;\n}\n.legend-panel {\n  /*padding-right: 50px;*/\n  border: 1px solid #cccccc;\n  background-color: white;\n  height: auto;\n  max-height:500px;\n  overflow-y: auto;\n  overflow-x: hidden;\n}\n.legend .legend-panel {\n  display: none;\n}\n.legend.shown .legend-panel {\n  display: block;\n}\n.legend button {\n  color: white;\n  float: right;\n  width: 38px;\n  height: 38px;\n  background-color: #7b98bc;\n  background-color: rgba(0,60,136,.5);\n  border: none;\n  padding: 2px;\n}\n.legend button:focus, .legend button:hover {\n  background-color: white;\n}\n.expandableList ul {\n  padding: 0 0 0 30px;\n  width: 300px;\n}\n.expandableList li {\n  position: relative;\n  list-style: none;\n  margin-left: -15px;\n  margin-top:15px;\n  padding: 0;\n}\n.expandableList li input {\n  position: absolute;\n  left: 0;\n  margin-left: 0;\n  opacity: 0;\n  z-index: 2;\n  cursor: pointer;\n  height: 1em;\n  width: 1em;\n  top: 0;\n}\n.expandableList li input + ul {\n  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAURJREFUeNpi/P//PwMlgImBQkCxASwwRlLLKwYmJqZgRkbGbiBXEYva+0Dvlv7792/tvBoxTAO+fv0MororE6UU9VU5MHRfvP1DsX3+M5DhaxkYxDC98ObNGxBW1FVmY/j16xcYu6SdYvjw4QPDixcvGGSEvoLlQeqweuHdu7dg+vfv32D85ctXsNijR4/B4hwcnHA1WA348uUbmP779y+DUchOuIKQsltgetsUE7garAb8/w9h/vz5h+H0Sk8w2yRsN8OZVa5g9ocPn+BqsBrAzs4PdQEzw48ff+Fi375B2Gxs3HA1WNPB45NlDNzcIvfPXv8LVMwJxmdWOcDZF2//A8uD1GF1wefXZ8Q+Pt42oWN+VBED41d5DKv+/30IlJ8IVCcF5D2DCTPC8gIwAXEDKT4Qk0Di+wzU8xnDgKGbmQACDAAtTZadqmiADQAAAABJRU5ErkJggg==') 40px 0px no-repeat;\n  margin: -22px 0 0 -44px; /* 15px */\n  height: 1em;\n}\n.expandableList li input + ul > li {\n  display: none;\n  margin-left:-14px !important;\n  padding-left: 1px;\n}\n.expandableList li label {\n  cursor: pointer;\n  display: block;\n  padding-left: 20px;\n}\n.expandableList li input {\n  display: none;\n}\n.expandableList li input:checked + ul {\n  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAASxJREFUeNpi/P//PwMlgImBQkCxASwwRlLLKwYmJqZgRkbGbiBXEYva+0Dvlv7792/tvBoxTAO+fv0MororE6UU9VU5MHRfvP1DsX3+M5DhaxkYsBjw5s0bEKWoq6zA8OvXL7AYKIC/f//O8OPHDwYZIVaQGqjLlDENePfuLZj+/fs3GH/58pXh/fv3YDYIcHBwwtVgDYMvX76B6b9//zIYhezEULhtiglcDVYD/v+HMH/+/MNweqUnhsIPHz7B1WA1gJ2dH+oCZqCf/2IoZGPjhqvBmg4enyxj4OYWuX/2+l+gYk4MfPH2P7A8SB1WF3x+fUbs4+NtEzrmRxUxMH6Vx7Dq/9+HQPmJQHVSQN4zmDAjLC8AExA3kOIDMQkkvs9APZ8xDBi6mQkgwADDMYZH9Ls66AAAAABJRU5ErkJggg==') 40px 0px no-repeat;\n  margin: -22px 0 0 -44px; /* 20px */\n  padding: 1.563em 0 0 80px;\n  height: auto;\n}\n.expandableList li input:checked + ul > li {\n  display: block;\n  margin: 0 0 0.125em; /* 2px */\n}\n.expandableList li input:checked + ul > li:last-child {\n  margin: 0 0 0.063em; /* 1px */\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/QGISLegend.css'); module.exports = css;
 },{"./../../node_modules/cssify":57}],33:[function(require,module,exports){
 'use strict';
 
@@ -4930,13 +4930,7 @@ var QGISLegend = (function (_React$Component) {
       var legendNodes = [];
       var symbolFunc = function symbolFunc(symbol) {
         var src = legendBasePath + symbol.href;
-        var lbl = symbol.title;
-        return _react2['default'].createElement(
-          'li',
-          { key: src },
-          _react2['default'].createElement('img', { src: src }),
-          lbl
-        );
+        return _react2['default'].createElement('img', { key: symbol.title, src: src });
       };
       for (var id in legendData) {
         var title = _storesLayerStoreJs2['default'].findLayer(id).get('title');
@@ -4946,15 +4940,11 @@ var QGISLegend = (function (_React$Component) {
           'li',
           { key: id },
           _react2['default'].createElement(
-            'label',
-            { htmlFor: forLabel },
-            title
-          ),
-          _react2['default'].createElement('input', { readOnly: true, type: 'checkbox', checked: true, id: forLabel }),
-          _react2['default'].createElement(
             'ul',
             null,
-            symbols
+            symbols,
+            ' ',
+            title
           )
         ));
       }
