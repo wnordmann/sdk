@@ -5,9 +5,9 @@ import Icon from 'pui-react-iconography';
 import Dialog from 'pui-react-modals';
 import Dropzone from 'react-dropzone';
 import Grids from 'pui-react-grids';
-import ColorPicker from 'react-color-picker';
+import ColorPicker from 'react-color';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import '../../node_modules/react-color-picker/index.css';
+import './AddLayer.css';
 
 const ID_PREFIX = 'sdk-addlayer-';
 
@@ -26,6 +26,11 @@ const messages = defineMessages({
     id: 'addlayer.modaltitle',
     description: 'Title of the modal dialog for add layer',
     defaultMessage: 'Upload layer'
+  },
+  dropzonelabel: {
+    id: 'addlayer.dropzonelabel',
+    description: 'Label for the drag and drop zone for files',
+    defaultMessage: 'File'
   },
   dropzonehelp: {
     id: 'addlayer.dropzonehelp',
@@ -138,11 +143,15 @@ class AddLayer extends React.Component {
       r.readAsText(file);
     }
   }
+  _transformColor(color) {
+    var colorObj = color.rgb;
+    return [colorObj.r, colorObj.g, colorObj.b, colorObj.a];
+  }
   _onChangeStroke(color) {
-    this._strokeColor = color;
+    this._strokeColor = this._transformColor(color);
   }
   _onChangeFill(color) {
-    this._fillColor = color;
+    this._fillColor = this._transformColor(color);
   }
   render() {
     const {formatMessage} = this.props.intl;
@@ -155,18 +164,19 @@ class AddLayer extends React.Component {
           <Dialog.ModalBody>
             <form className='form-horizontal'>
               <div className="form-group">
-                <Grids.Col md={9}>
-                  <Dropzone multiple={false} onDrop={this._onDrop.bind(this)}>
+                <Grids.Col md={4}>
+                   <label>{formatMessage(messages.dropzonelabel)}</label>
+                  <Dropzone className='dropzone' multiple={false} onDrop={this._onDrop.bind(this)}>
                     <div>{formatMessage(messages.dropzonehelp)}</div>
                   </Dropzone>
                 </Grids.Col>
-                <Grids.Col md={7}>
+                <Grids.Col md={10}>
                   <label>{formatMessage(messages.strokecolorlabel)}</label>
-                  <ColorPicker saturationWidth={100} saturationHeight={175} onChange={this._onChangeStroke.bind(this)} defaultValue='#452135' />
+                  <ColorPicker onChangeComplete={this._onChangeStroke.bind(this)} color='#452135' />
                 </Grids.Col>
-                <Grids.Col md={7}>
+                <Grids.Col md={10}>
                     <label>{formatMessage(messages.fillcolorlabel)}</label>
-                    <ColorPicker saturationWidth={100} saturationHeight={175} onChange={this._onChangeFill.bind(this)} defaultValue='#452135' />
+                    <ColorPicker onChangeComplete={this._onChangeFill.bind(this)} color='#452135' />
                 </Grids.Col>
               </div>
             </form>

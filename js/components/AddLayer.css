@@ -1,0 +1,7 @@
+.dropzone {
+  height: 200px;
+  border-width: 2px;
+  border-color: #666;
+  border-style: dashed;
+  border-radius: 5px;
+}

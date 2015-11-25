@@ -7,10 +7,9 @@ import UI from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
 import Dialog from 'pui-react-modals';
 import Grids from 'pui-react-grids';
-import ColorPicker from 'react-color-picker';
+import ColorPicker from 'react-color';
 import Pui from 'pui-react-alerts';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import '../../node_modules/react-color-picker/index.css';
 import './Edit.css';
 
 const NEW_ATTR_PREFIX = 'new-attr-';
@@ -133,11 +132,15 @@ class Edit extends MapTool {
   _onSubmit(evt) {
     evt.preventDefault();
   }
+  _transformColor(color) {
+    var colorObj = color.rgb;
+    return [colorObj.r, colorObj.g, colorObj.b, colorObj.a];
+  }
   _onChangeStroke(color) {
-    this._strokeColor = color;
+    this._strokeColor = this._transformColor(color);
   }
   _onChangeFill(color) {
-    this._fillColor = color;
+    this._fillColor = this._transformColor(color);
   }
   _generateId() {
     return ID_PREFIX + this.state.layers.length;
@@ -293,12 +296,12 @@ class Edit extends MapTool {
           <Dialog.ModalBody>
             <form className='form-horizontal'>
               <div className="form-group">
-                <Grids.Col md={12}><label htmlFor='edit-layerName'>{formatMessage(messages.layernamelabel)}</label></Grids.Col>
-                <Grids.Col md={8}><input id='edit-layerName' className="form-control" type="text" ref="layerName"/></Grids.Col>
+                <Grids.Col md={8}><label htmlFor='edit-layerName'>{formatMessage(messages.layernamelabel)}</label></Grids.Col>
+                <Grids.Col md={12}><input id='edit-layerName' className="form-control" type="text" ref="layerName"/></Grids.Col>
               </div>
               <div className="form-group">
-                <Grids.Col md={12}><label>{formatMessage(messages.geometrytypelabel)}</label></Grids.Col>
-                <Grids.Col md={8}>
+                <Grids.Col md={8}><label>{formatMessage(messages.geometrytypelabel)}</label></Grids.Col>
+                <Grids.Col md={12}>
                   <select className='form-control' ref='geometryType'>
                     <option value='Point'>{formatMessage(messages.pointgeomtype)}</option>
                     <option value='LineString'>{formatMessage(messages.linegeomtype)}</option>
@@ -307,16 +310,16 @@ class Edit extends MapTool {
                 </Grids.Col>
               </div>
               <div className="form-group">
-                <Grids.Col md={12}><label htmlFor='edit-attributes'>{formatMessage(messages.attributeslabel)}</label></Grids.Col>
-                <Grids.Col md={8}><input id='edit-attributes' className="form-control" type="text" ref="attributes"/></Grids.Col>
+                <Grids.Col md={8}><label htmlFor='edit-attributes'>{formatMessage(messages.attributeslabel)}</label></Grids.Col>
+                <Grids.Col md={12}><input id='edit-attributes' className="form-control" type="text" ref="attributes"/></Grids.Col>
               </div>
               <div className="form-group">
-                 <Grids.Col md={12}><label>{formatMessage(messages.strokecolorlabel)}</label></Grids.Col>
-                 <Grids.Col md={8}><ColorPicker onChange={this._onChangeStroke.bind(this)} saturationWidth={100} ref='strokeColor' saturationHeight={75} defaultValue={this._strokeColor} /></Grids.Col>
+                 <Grids.Col md={8}><label>{formatMessage(messages.strokecolorlabel)}</label></Grids.Col>
+                 <Grids.Col md={12}><ColorPicker type='compact' onChangeComplete={this._onChangeStroke.bind(this)} ref='strokeColor' color={this._strokeColor} /></Grids.Col>
              </div>
              <div className="form-group">
-               <Grids.Col md={12}><label>{formatMessage(messages.fillcolorlabel)}</label></Grids.Col>
-               <Grids.Col md={8}><ColorPicker onChange={this._onChangeFill.bind(this)} saturationWidth={100} ref='fillColor' saturationHeight={75} defaultValue={this._fillColor} /></Grids.Col>
+               <Grids.Col md={8}><label>{formatMessage(messages.fillcolorlabel)}</label></Grids.Col>
+               <Grids.Col md={12}><ColorPicker type='compact' onChangeComplete={this._onChangeFill.bind(this)} ref='fillColor' color={this._fillColor} /></Grids.Col>
              </div>
            </form>
          </Dialog.ModalBody>
