@@ -7,6 +7,9 @@
     "type": "git",
     "url": "https://github.com/boundlessgeo/sdk.git"
   },
+  "publishConfig": {
+    "registry":"https://repo.boundlessgeo.com/npmjs/"
+  },
   "scripts": {
     "css": "node_modules/.bin/dr-frankenstyle css",
     "minify:css": "node_modules/.bin/cleancss -o css/components.min.css css/components.css",
