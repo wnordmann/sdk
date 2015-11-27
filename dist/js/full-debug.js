@@ -34,9 +34,9 @@ Object.defineProperty(exports, '__esModule', {
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _constantsMapConstantsJs = require('../constants/MapConstants.js');
+var _constantsLayerConstantsJs = require('../constants/LayerConstants.js');
 
-var _constantsMapConstantsJs2 = _interopRequireDefault(_constantsMapConstantsJs);
+var _constantsLayerConstantsJs2 = _interopRequireDefault(_constantsLayerConstantsJs);
 
 var _dispatchersAppDispatcherJs = require('../dispatchers/AppDispatcher.js');
 
@@ -49,33 +49,33 @@ var _openlayers2 = _interopRequireDefault(_openlayers);
 exports['default'] = {
   selectLayer: function selectLayer(layer, cmp) {
     _dispatchersAppDispatcherJs2['default'].handleAction({
-      type: _constantsMapConstantsJs2['default'].SELECT_LAYER,
+      type: _constantsLayerConstantsJs2['default'].SELECT_LAYER,
       layer: layer,
       cmp: cmp
     });
   },
   removeLayer: function removeLayer(layer) {
     _dispatchersAppDispatcherJs2['default'].handleAction({
-      type: _constantsMapConstantsJs2['default'].REMOVE_LAYER,
+      type: _constantsLayerConstantsJs2['default'].REMOVE_LAYER,
       layer: layer
     });
   },
   moveLayerDown: function moveLayerDown(layer) {
     _dispatchersAppDispatcherJs2['default'].handleAction({
-      type: _constantsMapConstantsJs2['default'].MOVE_LAYER_DOWN,
+      type: _constantsLayerConstantsJs2['default'].MOVE_LAYER_DOWN,
       layer: layer
     });
   },
   moveLayerUp: function moveLayerUp(layer) {
     _dispatchersAppDispatcherJs2['default'].handleAction({
-      type: _constantsMapConstantsJs2['default'].MOVE_LAYER_UP,
+      type: _constantsLayerConstantsJs2['default'].MOVE_LAYER_UP,
       layer: layer
     });
   }
 };
 module.exports = exports['default'];
 
-},{"../constants/MapConstants.js":43,"../dispatchers/AppDispatcher.js":46,"openlayers":125}],3:[function(require,module,exports){
+},{"../constants/LayerConstants.js":43,"../dispatchers/AppDispatcher.js":46,"openlayers":125}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1656,9 +1656,9 @@ var _storesFeatureStoreJs = require('../stores/FeatureStore.js');
 
 var _storesFeatureStoreJs2 = _interopRequireDefault(_storesFeatureStoreJs);
 
-var _constantsMapConstantsJs = require('../constants/MapConstants.js');
+var _constantsLayerConstantsJs = require('../constants/LayerConstants.js');
 
-var _constantsMapConstantsJs2 = _interopRequireDefault(_constantsMapConstantsJs);
+var _constantsLayerConstantsJs2 = _interopRequireDefault(_constantsLayerConstantsJs);
 
 var _dispatchersAppDispatcherJs = require('../dispatchers/AppDispatcher.js');
 
@@ -1841,7 +1841,7 @@ var FeatureTable = (function (_React$Component2) {
     _dispatchersAppDispatcherJs2['default'].register(function (payload) {
       var action = payload.action;
       switch (action.type) {
-        case _constantsMapConstantsJs2['default'].SELECT_LAYER:
+        case _constantsLayerConstantsJs2['default'].SELECT_LAYER:
           if (action.cmp === me.refs.layerSelector) {
             _reactDom2['default'].findDOMNode(me.refs.filter).value = '';
             me._layer = action.layer;
@@ -2256,7 +2256,7 @@ exports['default'] = (0, _reactIntl.injectIntl)(FeatureTable);
 module.exports = exports['default'];
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../node_modules/fixed-data-table/dist/fixed-data-table.css":66,"../actions/SelectActions.js":3,"../constants/MapConstants.js":43,"../dispatchers/AppDispatcher.js":46,"../stores/FeatureStore.js":48,"./FeatureTable.css":13,"./LayerSelector.jsx":29,"debounce":63,"filtrex":65,"fixed-data-table":116,"openlayers":125,"pui-react-buttons":153,"pui-react-iconography":358,"react":816,"react-dom":604,"react-intl":620}],15:[function(require,module,exports){
+},{"../../node_modules/fixed-data-table/dist/fixed-data-table.css":66,"../actions/SelectActions.js":3,"../constants/LayerConstants.js":43,"../dispatchers/AppDispatcher.js":46,"../stores/FeatureStore.js":48,"./FeatureTable.css":13,"./LayerSelector.jsx":29,"debounce":63,"filtrex":65,"fixed-data-table":116,"openlayers":125,"pui-react-buttons":153,"pui-react-iconography":358,"react":816,"react-dom":604,"react-intl":620}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -5509,9 +5509,9 @@ var _LayerSelectorJsx = require('./LayerSelector.jsx');
 
 var _LayerSelectorJsx2 = _interopRequireDefault(_LayerSelectorJsx);
 
-var _constantsMapConstantsJs = require('../constants/MapConstants.js');
+var _constantsLayerConstantsJs = require('../constants/LayerConstants.js');
 
-var _constantsMapConstantsJs2 = _interopRequireDefault(_constantsMapConstantsJs);
+var _constantsLayerConstantsJs2 = _interopRequireDefault(_constantsLayerConstantsJs);
 
 var _dispatchersAppDispatcherJs = require('../dispatchers/AppDispatcher.js');
 
@@ -5595,7 +5595,7 @@ var QueryBuilder = (function (_React$Component) {
     _dispatchersAppDispatcherJs2['default'].register(function (payload) {
       var action = payload.action;
       switch (action.type) {
-        case _constantsMapConstantsJs2['default'].SELECT_LAYER:
+        case _constantsLayerConstantsJs2['default'].SELECT_LAYER:
           if (action.cmp === me.refs.layerSelector) {
             me._layer = action.layer;
           }
@@ -5773,7 +5773,7 @@ QueryBuilder.propTypes = {
 exports['default'] = (0, _reactIntl.injectIntl)(QueryBuilder);
 module.exports = exports['default'];
 
-},{"../actions/SelectActions.js":3,"../constants/MapConstants.js":43,"../dispatchers/AppDispatcher.js":46,"./LayerSelector.jsx":29,"./QueryBuilder.css":39,"filtrex":65,"openlayers":125,"pui-react-buttons":153,"pui-react-grids":309,"pui-react-iconography":358,"react":816,"react-dom":604,"react-intl":620}],41:[function(require,module,exports){
+},{"../actions/SelectActions.js":3,"../constants/LayerConstants.js":43,"../dispatchers/AppDispatcher.js":46,"./LayerSelector.jsx":29,"./QueryBuilder.css":39,"filtrex":65,"openlayers":125,"pui-react-buttons":153,"pui-react-grids":309,"pui-react-iconography":358,"react":816,"react-dom":604,"react-intl":620}],41:[function(require,module,exports){
 /* eslint react/prop-types: 0 */
 'use strict';
 
@@ -6669,9 +6669,9 @@ var _dispatchersAppDispatcherJs = require('../dispatchers/AppDispatcher.js');
 
 var _dispatchersAppDispatcherJs2 = _interopRequireDefault(_dispatchersAppDispatcherJs);
 
-var _constantsMapConstantsJs = require('../constants/MapConstants.js');
+var _constantsLayerConstantsJs = require('../constants/LayerConstants.js');
 
-var _constantsMapConstantsJs2 = _interopRequireDefault(_constantsMapConstantsJs);
+var _constantsLayerConstantsJs2 = _interopRequireDefault(_constantsLayerConstantsJs);
 
 var config = {
   layers: []
@@ -6773,11 +6773,11 @@ _dispatchersAppDispatcherJs2['default'].register(function (payload) {
   var layers = undefined,
       index = undefined;
   switch (action.type) {
-    case _constantsMapConstantsJs2['default'].REMOVE_LAYER:
+    case _constantsLayerConstantsJs2['default'].REMOVE_LAYER:
       layers = _LayerStore.getMap().getLayers();
       layers.remove(action.layer);
       break;
-    case _constantsMapConstantsJs2['default'].MOVE_LAYER_UP:
+    case _constantsLayerConstantsJs2['default'].MOVE_LAYER_UP:
       layers = _LayerStore.getMap().getLayers();
       index = layers.getArray().indexOf(action.layer);
       if (index < layers.getLength() - 1) {
@@ -6787,7 +6787,7 @@ _dispatchersAppDispatcherJs2['default'].register(function (payload) {
         layers.setAt(index, next);
       }
       break;
-    case _constantsMapConstantsJs2['default'].MOVE_LAYER_DOWN:
+    case _constantsLayerConstantsJs2['default'].MOVE_LAYER_DOWN:
       layers = _LayerStore.getMap().getLayers();
       index = layers.getArray().indexOf(action.layer);
       if (index > 1) {
@@ -6803,7 +6803,7 @@ _dispatchersAppDispatcherJs2['default'].register(function (payload) {
 });
 module.exports = exports['default'];
 
-},{"../constants/MapConstants.js":43,"../dispatchers/AppDispatcher.js":46,"events":57,"openlayers":125}],50:[function(require,module,exports){
+},{"../constants/LayerConstants.js":43,"../dispatchers/AppDispatcher.js":46,"events":57,"openlayers":125}],50:[function(require,module,exports){
 /*
  * JavaScript Canvas to Blob 2.0.5
  * https://github.com/blueimp/JavaScript-Canvas-to-Blob

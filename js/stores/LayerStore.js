@@ -3,7 +3,7 @@
 import {EventEmitter} from 'events';
 import ol from 'openlayers';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
-import MapConstants from '../constants/MapConstants.js';
+import LayerConstants from '../constants/LayerConstants.js';
 
 let config = {
   layers: []
@@ -75,11 +75,11 @@ AppDispatcher.register((payload) => {
   let action = payload.action;
   let layers, index;
   switch(action.type) {
-    case MapConstants.REMOVE_LAYER:
+    case LayerConstants.REMOVE_LAYER:
       layers = _LayerStore.getMap().getLayers();
       layers.remove(action.layer);
       break;
-    case MapConstants.MOVE_LAYER_UP:
+    case LayerConstants.MOVE_LAYER_UP:
       layers = _LayerStore.getMap().getLayers();
       index = layers.getArray().indexOf(action.layer);
       if (index < layers.getLength() - 1) {
@@ -89,7 +89,7 @@ AppDispatcher.register((payload) => {
         layers.setAt(index, next);
       }
       break;
-    case MapConstants.MOVE_LAYER_DOWN:
+    case LayerConstants.MOVE_LAYER_DOWN:
       layers = _LayerStore.getMap().getLayers();
       index = layers.getArray().indexOf(action.layer);
       if (index > 1) {

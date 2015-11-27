@@ -5,7 +5,7 @@ import debounce from  'debounce';
 import FixedDataTable from 'fixed-data-table';
 import '../../node_modules/fixed-data-table/dist/fixed-data-table.css';
 import FeatureStore from '../stores/FeatureStore.js';
-import MapConstants from '../constants/MapConstants.js';
+import LayerConstants from '../constants/LayerConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import SelectActions from '../actions/SelectActions.js';
 import LayerSelector from './LayerSelector.jsx';
@@ -133,7 +133,7 @@ class FeatureTable extends React.Component {
     AppDispatcher.register((payload) => {
       let action = payload.action;
       switch(action.type) {
-        case MapConstants.SELECT_LAYER:
+        case LayerConstants.SELECT_LAYER:
           if (action.cmp === me.refs.layerSelector) {
             ReactDOM.findDOMNode(me.refs.filter).value = '';
             me._layer = action.layer;

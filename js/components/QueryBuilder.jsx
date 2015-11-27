@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import LayerSelector from './LayerSelector.jsx';
-import MapConstants from '../constants/MapConstants.js';
+import LayerConstants from '../constants/LayerConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import SelectActions from '../actions/SelectActions.js';
 import filtrex from 'filtrex';
@@ -70,7 +70,7 @@ class QueryBuilder extends React.Component {
     AppDispatcher.register((payload) => {
       let action = payload.action;
       switch(action.type) {
-        case MapConstants.SELECT_LAYER:
+        case LayerConstants.SELECT_LAYER:
           if (action.cmp === me.refs.layerSelector) {
             me._layer = action.layer;
           }

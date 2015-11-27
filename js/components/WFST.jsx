@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import MapConstants from '../constants/MapConstants.js';
+import LayerConstants from '../constants/LayerConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LayerSelector from './LayerSelector.jsx';
 import LayerStore from '../stores/LayerStore.js';
@@ -63,7 +63,7 @@ class WFST extends MapTool {
     AppDispatcher.register((payload) => {
       let action = payload.action;
       switch(action.type) {
-        case MapConstants.SELECT_LAYER:
+        case LayerConstants.SELECT_LAYER:
           if (action.cmp === me.refs.layerSelector) {
             me._setLayer(action.layer);
           }
