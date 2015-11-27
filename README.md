@@ -1,10 +1,6 @@
 # SDK
 New javascript SDK based on React and Flux
-
-    npm install
-    npm start
-    http://localhost:3000/themes/tabbed/
-    http://localhost:3000/themes/basic/
+For example usage see: https://github.com/boundlessgeo/sdk-template
 
 ## Building css (Pivotal UI)
 
