@@ -6129,9 +6129,9 @@ var _componentsInfoPopupJsx = require('./components/InfoPopup.jsx');
 
 var _componentsInfoPopupJsx2 = _interopRequireDefault(_componentsInfoPopupJsx);
 
-var _actionsLayerActionsJs = require('./actions/LayerActions.js');
+var _actionsToolActionsJs = require('./actions/ToolActions.js');
 
-var _actionsLayerActionsJs2 = _interopRequireDefault(_actionsLayerActionsJs);
+var _actionsToolActionsJs2 = _interopRequireDefault(_actionsToolActionsJs);
 
 var _componentsLayerListJsx = require('./components/LayerList.jsx');
 
@@ -6201,7 +6201,7 @@ global.ImageExport = _componentsImageExportJsx2['default'];
 
 global.InfoPopup = _componentsInfoPopupJsx2['default'];
 
-global.LayerActions = _actionsLayerActionsJs2['default'];
+global.ToolActions = _actionsToolActionsJs2['default'];
 
 global.LayerList = _componentsLayerListJsx2['default'];
 
@@ -6218,7 +6218,7 @@ global.QueryBuilder = _componentsQueryBuilderJsx2['default'];
 global.Select = _componentsSelectJsx2['default'];
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./actions/LayerActions.js":2,"./components/AddLayer.jsx":6,"./components/Bookmarks.jsx":8,"./components/Chart.jsx":10,"./components/Edit.jsx":12,"./components/FeatureTable.jsx":14,"./components/Geocoding.jsx":15,"./components/GeocodingResults.jsx":16,"./components/Geolocation.jsx":18,"./components/Globe.jsx":19,"./components/HomeButton.jsx":20,"./components/ImageExport.jsx":21,"./components/InfoPopup.jsx":23,"./components/LayerList.jsx":25,"./components/Measure.jsx":32,"./components/Playback.jsx":34,"./components/QGISLegend.jsx":36,"./components/QGISPrint.jsx":38,"./components/QueryBuilder.jsx":40,"./components/Select.jsx":41,"openlayers":125,"pui-react-buttons":153,"pui-react-dropdowns":171,"pui-react-iconography":358,"pui-react-tabs":555,"react":816,"react-dom":604,"react-intl":620}],48:[function(require,module,exports){
+},{"./actions/ToolActions.js":4,"./components/AddLayer.jsx":6,"./components/Bookmarks.jsx":8,"./components/Chart.jsx":10,"./components/Edit.jsx":12,"./components/FeatureTable.jsx":14,"./components/Geocoding.jsx":15,"./components/GeocodingResults.jsx":16,"./components/Geolocation.jsx":18,"./components/Globe.jsx":19,"./components/HomeButton.jsx":20,"./components/ImageExport.jsx":21,"./components/InfoPopup.jsx":23,"./components/LayerList.jsx":25,"./components/Measure.jsx":32,"./components/Playback.jsx":34,"./components/QGISLegend.jsx":36,"./components/QGISPrint.jsx":38,"./components/QueryBuilder.jsx":40,"./components/Select.jsx":41,"openlayers":125,"pui-react-buttons":153,"pui-react-dropdowns":171,"pui-react-iconography":358,"pui-react-tabs":555,"react":816,"react-dom":604,"react-intl":620}],48:[function(require,module,exports){
 /* global document */
 
 'use strict';

@@ -58,8 +58,8 @@ global.ImageExport = ImageExport;
 import InfoPopup from './components/InfoPopup.jsx';
 global.InfoPopup = InfoPopup;
 
-import LayerActions from './actions/LayerActions.js';
-global.LayerActions = LayerActions;
+import ToolActions from './actions/ToolActions.js';
+global.ToolActions = ToolActions;
 
 import LayerList from './components/LayerList.jsx';
 global.LayerList = LayerList;
