@@ -138,7 +138,18 @@ class LayerListItem extends React.Component {
     this.setState({checked: visible});
   }
   _download() {
-    LayerActions.downloadLayer(this.props.layer);
+    var layer = this.props.layer;
+    var geojson = new ol.format.GeoJSON();
+    var source = layer.getSource();
+    if (source instanceof ol.source.Cluster) {
+      source = source.getSource();
+    }
+    var features = source.getFeatures();
+    var json = geojson.writeFeatures(features);
+    var dl = document.createElement('a');
+    dl.setAttribute('href', 'data:text/json;charset=utf-8,' + encodeURIComponent(json));
+    dl.setAttribute('download', layer.get('title') + '.geojson');
+    dl.click();
   }
   _removeFilter(filter) {
     var layer = this.props.layer;
@@ -216,7 +227,11 @@ class LayerListItem extends React.Component {
     this.refs.filtermodal.close();
   }
   _zoomTo() {
-    LayerActions.zoomToLayer(this.props.layer);
+    var map = this.props.map;
+    map.getView().fit(
+      this.props.layer.getSource().getExtent(),
+      map.getSize()
+    );
   }
   _moveUp() {
     LayerActions.moveLayerUp(this.props.layer);
@@ -228,7 +243,7 @@ class LayerListItem extends React.Component {
     LayerActions.removeLayer(this.props.layer);
   }
   _changeOpacity(event) {
-    LayerActions.setOpacity(this.props.layer, parseFloat(event.target.value));
+    this.props.layer.setOpacity(parseFloat(event.target.value));
   }
   render() {
     const {formatMessage} = this.props.intl;

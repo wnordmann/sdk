@@ -1,5 +1,5 @@
 import React from 'react';
-import LayerActions from '../actions/LayerActions.js';
+import GeocodingActions from '../actions/GeocodingActions.js';
 import UI from 'pui-react-search-input';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
@@ -27,7 +27,7 @@ class Geocoding extends React.Component {
       var script = document.createElement('script');
       script.src = 'http://nominatim.openstreetmap.org/search?format=json&limit=' + this.props.maxResults + '&q=' + value + '&json_callback=' + cbname;
       window[cbname] = function(jsonData) {
-        LayerActions.showSearchResult(jsonData);
+        GeocodingActions.showSearchResult(jsonData);
         delete window[cbname];
       };
       document.head.appendChild(script);

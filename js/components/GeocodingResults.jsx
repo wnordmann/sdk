@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
-import MapConstants from '../constants/MapConstants.js';
+import GeocodingConstants from '../constants/GeocodingConstants.js';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 const messages = defineMessages({
@@ -23,7 +23,7 @@ class GeocodingResults extends React.Component {
     AppDispatcher.register((payload) => {
       let action = payload.action;
       switch(action.type) {
-        case MapConstants.SEARCH_RESULTS:
+        case GeocodingConstants.SHOW_SEARCH_RESULTS:
           me.setState({searchResults: action.searchResults});
           me._setVisible(true);
           break;

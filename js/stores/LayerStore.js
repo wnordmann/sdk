@@ -99,12 +99,6 @@ AppDispatcher.register((payload) => {
         layers.setAt(index, prev);
       }
       break;
-    case MapConstants.ZOOM_TO_LAYER:
-      _LayerStore.getMap().getView().fit(
-        action.layer.getSource().getExtent(),
-        _LayerStore.getMap().getSize()
-      );
-      break;
     default:
       break;
   }
