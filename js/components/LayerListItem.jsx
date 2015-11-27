@@ -131,9 +131,23 @@ class LayerListItem extends React.Component {
   _handleChange(event) {
     var visible = event.target.checked;
     if (event.target.type === 'radio') {
-      LayerActions.setBaseLayer(this.props.layer, this.props.map);
+      var forEachLayer = function(layers, layer) {
+        if (layer instanceof ol.layer.Group) {
+          layer.getLayers().forEach(function(groupLayer) {
+            forEachLayer(layers, groupLayer);
+          });
+        } else if (layer.get('type') === 'base') {
+          layers.push(layer);
+        }
+      };
+      var baseLayers = [];
+      forEachLayer(baseLayers, this.props.map.getLayerGroup());
+      for (var i = 0, ii = baseLayers.length; i < ii; ++i) {
+        baseLayers[i].setVisible(false);
+      }
+      this.props.layer.setVisible(true);
     } else {
-      LayerActions.setVisible(this.props.layer, visible);
+      this.props.layer.setVisible(visible);
     }
     this.setState({checked: visible});
   }

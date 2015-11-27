@@ -1,8 +1,8 @@
 import React from 'react';
 import ol from 'openlayers';
-import MapConstants from '../constants/MapConstants.js';
+import ToolConstants from '../constants/ToolConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
-import LayerActions from '../actions/LayerActions.js';
+import ToolActions from '../actions/ToolActions.js';
 
 /**
  * A tool that manages interactions on the map. The interactions will be
@@ -15,7 +15,7 @@ export default class MapTool extends React.Component {
     AppDispatcher.register((payload) => {
       let action = payload.action;
       switch(action.type) {
-        case MapConstants.ACTIVATE_TOOL:
+        case ToolConstants.ACTIVATE_TOOL:
           if (me.props.toggleGroup && me.props.toggleGroup === action.toggleGroup) {
             if (me !== action.tool) {
               me.deactivate();
@@ -46,7 +46,7 @@ export default class MapTool extends React.Component {
     for (var i = 0, ii = this._currentInteractions.length; i < ii; ++i) {
       map.addInteraction(this._currentInteractions[i]);
     }
-    LayerActions.activateTool(this, this.props.toggleGroup);
+    ToolActions.activateTool(this, this.props.toggleGroup);
   }
 }
 
