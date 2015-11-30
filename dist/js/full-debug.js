@@ -1094,10 +1094,6 @@ var _puiReactAlerts2 = _interopRequireDefault(_puiReactAlerts);
 
 var _reactIntl = require('react-intl');
 
-var _pureRenderDecorator = require('pure-render-decorator');
-
-var _pureRenderDecorator2 = _interopRequireDefault(_pureRenderDecorator);
-
 require('./Edit.css');
 
 var NEW_ATTR_PREFIX = 'new-attr-';
@@ -1190,9 +1186,9 @@ var Edit = (function (_MapTool) {
   _inherits(Edit, _MapTool);
 
   function Edit(props) {
-    _classCallCheck(this, _Edit);
+    _classCallCheck(this, Edit);
 
-    _get(Object.getPrototypeOf(_Edit.prototype), 'constructor', this).call(this, props);
+    _get(Object.getPrototypeOf(Edit.prototype), 'constructor', this).call(this, props);
     this._interactions = {};
     this.state = {
       layers: [],
@@ -1602,8 +1598,6 @@ var Edit = (function (_MapTool) {
     }
   }]);
 
-  var _Edit = Edit;
-  Edit = (0, _pureRenderDecorator2['default'])(Edit) || Edit;
   return Edit;
 })(_MapToolJs2['default']);
 
@@ -1630,7 +1624,7 @@ Edit.defaultProps = {
 exports['default'] = (0, _reactIntl.injectIntl)(Edit);
 module.exports = exports['default'];
 
-},{"./Edit.css":11,"./MapTool.js":30,"openlayers":125,"pui-react-alerts":126,"pui-react-buttons":153,"pui-react-grids":309,"pui-react-iconography":358,"pui-react-modals":414,"pure-render-decorator":556,"react":819,"react-color":588,"react-dom":606,"react-intl":622}],13:[function(require,module,exports){
+},{"./Edit.css":11,"./MapTool.js":30,"openlayers":125,"pui-react-alerts":126,"pui-react-buttons":153,"pui-react-grids":309,"pui-react-iconography":358,"pui-react-modals":414,"react":819,"react-color":588,"react-dom":606,"react-intl":622}],13:[function(require,module,exports){
 var css = ".row-selected .public_fixedDataTableCell_main {\n  background-color: yellow;\n}\n\n.btn-default{\n\theight: 42px;\n}\n\n.input-group-addon{\n\theight: 42px;\n}\n\n.form-inline .input-group{\n\tpadding: 10px;\n\n}\n\nlabel{\n\tmargin-bottom: 0px;\n}\n\ninput[type=\"radio\"], input[type=\"checkbox\"]{\n\tmargin: 4px 4px 0px;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/FeatureTable.css'); module.exports = css;
 },{"./../../node_modules/cssify":62}],14:[function(require,module,exports){
 (function (global){
