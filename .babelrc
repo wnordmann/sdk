@@ -1,5 +1,6 @@
 {
   "plugins": ["react-intl"],
+  "optional": ['es7.decorators'],
   "extra": {
     "react-intl": {
         "messagesDir": "./build/messages/",
