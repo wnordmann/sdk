@@ -8,7 +8,7 @@
     "url": "https://github.com/boundlessgeo/sdk.git"
   },
   "publishConfig": {
-    "registry": "https://repo.boundlessgeo.com/npmjs/"
+    "registry":"https://repo.boundlessgeo.com/npmjs/"
   },
   "scripts": {
     "css": "node_modules/.bin/dr-frankenstyle dist/css",
@@ -47,7 +47,6 @@
     "pui-react-modals": "3.0.0-alpha.1",
     "pui-react-search-input": "3.0.0-alpha.1",
     "pui-react-tabs": "3.0.0-alpha.1",
-    "pure-render-decorator": "^0.2.0",
     "react": "0.14.3",
     "react-color": "1.2.1",
     "react-dom": "0.14.3",

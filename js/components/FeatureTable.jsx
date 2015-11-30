@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import pureRender from 'pure-render-decorator';
 import ol from 'openlayers';
 import debounce from  'debounce';
 import FixedDataTable from 'fixed-data-table';
@@ -123,7 +122,6 @@ const TextCell = ({rowIndex,col, layer, sortIndexes, ...props}) => (
 /**
  * A table to show features. Allows for selection of features.
  */
-@pureRender
 class FeatureTable extends React.Component {
   constructor(props) {
     super(props);
