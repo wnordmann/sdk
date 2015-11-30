@@ -4,11 +4,13 @@ import LayerStore from '../stores/LayerStore.js';
 import LayerListItem from './LayerListItem.jsx';
 import UI from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
+import pureRender from 'pure-render-decorator';
 import './LayerList.css';
 
 /**
  * A list of layers in the map. Allows setting visibility and opacity.
  */
+@pureRender
 export default class LayerList extends React.Component {
   constructor(props) {
     super(props);

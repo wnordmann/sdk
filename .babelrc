@@ -1,4 +1,5 @@
 {
+  "optional": ['es7.decorators'],
   "plugins": ["react-intl"],
   "extra": {
     "react-intl": {

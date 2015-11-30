@@ -5,6 +5,7 @@ import FileSaver from 'browser-filesaver';
 import UI from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   buttontitle: {
@@ -22,6 +23,7 @@ const messages = defineMessages({
 /**
  * Export the map as a PNG file.
  */
+@pureRender
 class ImageExport extends React.Component {
   constructor(props) {
     super(props);

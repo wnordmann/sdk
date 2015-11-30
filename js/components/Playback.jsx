@@ -5,6 +5,7 @@ import Button from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
 import Grids from 'pui-react-grids';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import pureRender from 'pure-render-decorator';
 import './Playback.css';
 
 const messages = defineMessages({
@@ -23,6 +24,7 @@ const messages = defineMessages({
 /**
  * Adds a slider to the map that can be used to select a given date, and modifies the visibility of layers and features depending on their timestamp and the current time.
  */
+@pureRender
 class Playback extends React.Component {
   constructor(props) {
     super(props);

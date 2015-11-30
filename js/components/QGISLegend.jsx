@@ -5,6 +5,7 @@ import Icon from 'pui-react-iconography';
 import LayerStore from '../stores/LayerStore.js';
 import './QGISLegend.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   buttontitle: {
@@ -17,6 +18,7 @@ const messages = defineMessages({
 /**
  * A component that shows a legend based on artefacts created by the QGIS plugin Web Application Builder.
  */
+@pureRender
 class QGISLegend extends React.Component {
   constructor(props) {
     super(props);

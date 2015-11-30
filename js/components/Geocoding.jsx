@@ -2,6 +2,7 @@ import React from 'react';
 import GeocodingActions from '../actions/GeocodingActions.js';
 import UI from 'pui-react-search-input';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   placeholder: {
@@ -14,6 +15,7 @@ const messages = defineMessages({
 /**
  * Input field to search for placenames using a geocoding service (OSM nominatim).
  */
+@pureRender
 class Geocoding extends React.Component {
   _searchBoxKeyPressed(e) {
     if (e.which === 13){

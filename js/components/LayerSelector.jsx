@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import LayerStore from '../stores/LayerStore.js';
 import LayerActions from '../actions/LayerActions.js';
+import pureRender from 'pure-render-decorator';
 import './LayerSelector.css';
 
 /**
  * A combobox to select a layer.
  */
+@pureRender
 export default class LayerSelector extends React.Component {
   constructor(props) {
     super(props);

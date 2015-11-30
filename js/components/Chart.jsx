@@ -4,6 +4,7 @@ import c3 from 'c3-windows';
 import '../../node_modules/c3-windows/c3.min.css';
 import UI from 'pui-react-dropdowns';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import pureRender from 'pure-render-decorator';
 import './Chart.css';
 
 const AGGREGATION_MIN = 0;
@@ -25,6 +26,7 @@ const messages = defineMessages({
 /**
  * Allow for the creation of charts based on selected features of a layer.
  */
+@pureRender
 class Chart extends React.Component {
   constructor(props) {
     super(props);

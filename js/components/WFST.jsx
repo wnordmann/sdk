@@ -9,6 +9,7 @@ import LayerStore from '../stores/LayerStore.js';
 import MapTool from './MapTool.js';
 import Pui from 'pui-react-alerts';
 import UI from 'pui-react-buttons';
+import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   layerlabel: {
@@ -56,6 +57,7 @@ const messages = defineMessages({
  * - geometryName: the name of the geometry attribute
  * - url: the online resource of the WFS endpoint
  */
+@pureRender
 class WFST extends MapTool {
   constructor(props) {
     super(props);

@@ -5,6 +5,7 @@ import UI from 'pui-react-dropdowns';
 import './Bookmarks.css';
 import '../../node_modules/slick-carousel-dr-frankenstyle/slick/slick.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   dropdowntext: {
@@ -18,6 +19,7 @@ const messages = defineMessages({
  * Adds the ability to retrieve spatial bookmarks.
  * A spatial bookmark consists of a name, an extent and a description.
  */
+@pureRender
 class Bookmarks extends React.Component {
   constructor(props) {
     super(props);

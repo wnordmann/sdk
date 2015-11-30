@@ -1,6 +1,7 @@
 import React from 'react';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   buttontitle: {
@@ -13,6 +14,7 @@ const messages = defineMessages({
 /**
  * A button to go back to the initial extent of the map.
  */
+@pureRender
 class HomeButton extends React.Component {
   constructor(props) {
     super(props);

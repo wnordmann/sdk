@@ -7,6 +7,7 @@ import Dropzone from 'react-dropzone';
 import Grids from 'pui-react-grids';
 import ColorPicker from 'react-color';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import pureRender from 'pure-render-decorator';
 import './AddLayer.css';
 
 const ID_PREFIX = 'sdk-addlayer-';
@@ -63,6 +64,7 @@ const messages = defineMessages({
  * Adds a menu entry that can be used by the web app user to add a layer to the map.
  * Only vector layers can be added. Supported formats for layers are GeoJSON, GPX and KML.
  */
+@pureRender
 class AddLayer extends React.Component {
   constructor(props) {
     super(props);

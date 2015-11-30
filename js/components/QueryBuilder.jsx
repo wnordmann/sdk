@@ -11,6 +11,7 @@ import Grids from 'pui-react-grids';
 import Icon from 'pui-react-iconography';
 import './QueryBuilder.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   layerlabel: {
@@ -63,6 +64,7 @@ const messages = defineMessages({
 /**
  * A component that allows users to perform queries on vector layers. Queries can be new queries, added to existing queries or users can filter inside of an existing query a.k.a. drill-down.
  */
+@pureRender
 class QueryBuilder extends React.Component {
   constructor(props) {
     super(props);

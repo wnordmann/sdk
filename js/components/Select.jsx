@@ -6,6 +6,7 @@ import MapTool from './MapTool.js';
 import FeatureStore from '../stores/FeatureStore.js';
 import UI from 'pui-react-dropdowns';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   menubuttontext: {
@@ -23,6 +24,7 @@ const messages = defineMessages({
 /**
  * The select tool allows users to select features in multiple layers at a time by drawing a rectangle.
  */
+@pureRender
 class Select extends MapTool {
   constructor(props) {
     super(props);

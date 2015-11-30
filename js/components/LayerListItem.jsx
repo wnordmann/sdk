@@ -7,6 +7,7 @@ import Grids from 'pui-react-grids';
 import UI from 'pui-react-buttons';
 import filtrex from 'filtrex';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import pureRender from 'pure-render-decorator';
 import './LayerListItem.css';
 
 const messages = defineMessages({
@@ -80,6 +81,7 @@ const messages = defineMessages({
 /**
  * An item in the LayerList component.
  */
+@pureRender
 class LayerListItem extends React.Component {
   constructor(props) {
     super(props);

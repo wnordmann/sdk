@@ -4,6 +4,7 @@ import MapTool from './MapTool.js';
 import ol from 'openlayers';
 import './InfoPopup.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   nofeatures: {
@@ -20,6 +21,7 @@ const messages = defineMessages({
 
 const ALL_ATTRS = '#AllAttributes';
 
+@pureRender
 class InfoPopup extends MapTool {
   constructor(props) {
     super(props);

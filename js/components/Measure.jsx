@@ -5,6 +5,7 @@ import './Measure.css';
 import MapTool from './MapTool.js';
 import UI from 'pui-react-dropdowns';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   dropdowntext: {
@@ -34,6 +35,7 @@ const wgs84Sphere = new ol.Sphere(6378137);
 /**
  * Adds area and length measure tools to the map.
  */
+@pureRender
 class Measure extends MapTool {
   constructor(props) {
     super(props);

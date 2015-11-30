@@ -10,6 +10,7 @@ import Grids from 'pui-react-grids';
 import ColorPicker from 'react-color';
 import Pui from 'pui-react-alerts';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import pureRender from 'pure-render-decorator';
 import './Edit.css';
 
 const NEW_ATTR_PREFIX = 'new-attr-';
@@ -116,6 +117,7 @@ const messages = defineMessages({
 /**
  * A component that allows creating new features, so drawing their geometries and setting feature attributes through a form.
  */
+@pureRender
 class Edit extends MapTool {
   constructor(props) {
     super(props);
