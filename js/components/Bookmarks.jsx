@@ -3,7 +3,7 @@ import ol from 'openlayers';
 import Slider from 'react-slick';
 import UI from 'pui-react-dropdowns';
 import './Bookmarks.css';
-import '../../node_modules/slick-carousel-dr-frankenstyle/slick/slick.css';
+import './slick.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 

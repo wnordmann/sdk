@@ -1,7 +1,7 @@
 import React from 'react';
 import FeatureStore from '../stores/FeatureStore.js';
 import c3 from 'c3-windows';
-import '../../node_modules/c3-windows/c3.min.css';
+import './c3.min.css';
 import UI from 'pui-react-dropdowns';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';

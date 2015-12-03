@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import debounce from  'debounce';
 import FixedDataTable from 'fixed-data-table';
-import '../../node_modules/fixed-data-table/dist/fixed-data-table.css';
+import './fixed-data-table.css';
 import FeatureStore from '../stores/FeatureStore.js';
 import LayerConstants from '../constants/LayerConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
