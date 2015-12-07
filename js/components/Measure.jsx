@@ -43,7 +43,7 @@ class Measure extends MapTool {
   }
   componentDidMount() {
     this._layer = new ol.layer.Vector({
-      hideFromLayerList: true,
+      title: null,
       managed: false,
       style: new ol.style.Style({
         fill: new ol.style.Fill({

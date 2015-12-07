@@ -56,7 +56,7 @@ export default class LayerList extends React.Component {
     this._modalOpen = false;
   }
   getLayerNode(lyr) {
-    if (lyr.get('hideFromLayerList') !== true) {
+    if (lyr.get('title') !== null) {
       if (lyr instanceof ol.layer.Group) {
         var children = this.props.showGroupContent ? this.renderLayerGroup(lyr) : undefined;
         return (

@@ -220,7 +220,7 @@ class FeatureTable extends React.Component {
     this._updateStoreFilter();
   }
   _filterLayerList(lyr) {
-    return !lyr.get('hideFromLayerList') && lyr instanceof ol.layer.Vector;
+    return lyr.get('title') !== null && lyr instanceof ol.layer.Vector;
   }
   _updateStoreFilter() {
     var lyr = this._layer;

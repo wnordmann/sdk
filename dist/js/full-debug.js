@@ -1971,7 +1971,7 @@ var FeatureTable = (function (_React$Component2) {
   }, {
     key: '_filterLayerList',
     value: function _filterLayerList(lyr) {
-      return !lyr.get('hideFromLayerList') && lyr instanceof _openlayers2['default'].layer.Vector;
+      return lyr.get('title') !== null && lyr instanceof _openlayers2['default'].layer.Vector;
     }
   }, {
     key: '_updateStoreFilter',
@@ -2461,7 +2461,7 @@ var GeocodingResults = (function (_React$Component) {
     key: 'componentDidMount',
     value: function componentDidMount() {
       this._layer = new _openlayers2['default'].layer.Vector({
-        hideFromLayerList: true,
+        title: null,
         managed: false,
         style: new _openlayers2['default'].style.Style({
           image: new _openlayers2['default'].style.Icon({
@@ -3438,7 +3438,7 @@ var LayerList = (function (_React$Component) {
   }, {
     key: 'getLayerNode',
     value: function getLayerNode(lyr) {
-      if (lyr.get('hideFromLayerList') !== true) {
+      if (lyr.get('title') !== null) {
         if (lyr instanceof _openlayers2['default'].layer.Group) {
           var children = this.props.showGroupContent ? this.renderLayerGroup(lyr) : undefined;
           return _react2['default'].createElement(_LayerListItemJsx2['default'], _extends({}, this.props, { onModalClose: this._onModalClose.bind(this), onModalOpen: this._onModalOpen.bind(this), key: lyr.get('title'), layer: lyr, children: children, title: lyr.get('title') }));
@@ -4442,7 +4442,7 @@ var Measure = (function (_MapTool) {
     key: 'componentDidMount',
     value: function componentDidMount() {
       this._layer = new _openlayers2['default'].layer.Vector({
-        hideFromLayerList: true,
+        title: null,
         managed: false,
         style: new _openlayers2['default'].style.Style({
           fill: new _openlayers2['default'].style.Fill({
@@ -5043,19 +5043,21 @@ var QGISLegend = (function (_React$Component) {
       };
       for (var id in legendData) {
         var title = _storesLayerStoreJs2['default'].findLayer(id).get('title');
-        var symbols = legendData[id].map(symbolFunc);
-        var forLabel = 'legend-layer-' + id;
-        legendNodes.push(_react2['default'].createElement(
-          'li',
-          { key: id },
-          _react2['default'].createElement(
-            'ul',
-            null,
-            symbols,
-            ' ',
-            title
-          )
-        ));
+        if (title !== null) {
+          var symbols = legendData[id].map(symbolFunc);
+          var forLabel = 'legend-layer-' + id;
+          legendNodes.push(_react2['default'].createElement(
+            'li',
+            { key: id },
+            _react2['default'].createElement(
+              'ul',
+              null,
+              symbols,
+              ' ',
+              title
+            )
+          ));
+        }
       }
       return _react2['default'].createElement(
         'ul',

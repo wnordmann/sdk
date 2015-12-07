@@ -37,7 +37,7 @@ class GeocodingResults extends React.Component {
   }
   componentDidMount() {
     this._layer = new ol.layer.Vector({
-      hideFromLayerList: true,
+      title: null,
       managed: false,
       style: new ol.style.Style({
         image: new ol.style.Icon({

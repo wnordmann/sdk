@@ -41,15 +41,17 @@ class QGISLegend extends React.Component {
     };
     for (var id in legendData) {
       var title = LayerStore.findLayer(id).get('title');
-      var symbols = legendData[id].map(symbolFunc);
-      var forLabel = 'legend-layer-' + id;
-      legendNodes.push(
-        <li key={id}>
-          <ul>
-            {symbols} {title}
-          </ul>
-        </li>
-      );
+      if (title !== null) {
+        var symbols = legendData[id].map(symbolFunc);
+        var forLabel = 'legend-layer-' + id;
+        legendNodes.push(
+          <li key={id}>
+            <ul>
+              {symbols} {title}
+            </ul>
+          </li>
+        );
+      }
     }
     return (
       <ul className='expandableList'>
