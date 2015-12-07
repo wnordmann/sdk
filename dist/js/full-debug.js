@@ -6744,7 +6744,7 @@ _dispatchersAppDispatcherJs2['default'].register(function (payload) {
 exports['default'] = _FeatureStore;
 module.exports = exports['default'];
 
-},{"../constants/SelectConstants.js":47,"../dispatchers/AppDispatcher.js":49,"./LayerStore.js":52,"events":60,"openlayers":126}],52:[function(require,module,exports){
+},{"../constants/SelectConstants.js":47,"../dispatchers/AppDispatcher.js":49,"./LayerStore.js":52,"events":59,"openlayers":126}],52:[function(require,module,exports){
 /* global document */
 
 'use strict';
@@ -6907,7 +6907,7 @@ _dispatchersAppDispatcherJs2['default'].register(function (payload) {
 });
 module.exports = exports['default'];
 
-},{"../constants/LayerConstants.js":46,"../dispatchers/AppDispatcher.js":49,"events":60,"openlayers":126}],53:[function(require,module,exports){
+},{"../constants/LayerConstants.js":46,"../dispatchers/AppDispatcher.js":49,"events":59,"openlayers":126}],53:[function(require,module,exports){
 /*
  * JavaScript Canvas to Blob 2.0.5
  * https://github.com/blueimp/JavaScript-Canvas-to-Blob
@@ -7276,7 +7276,7 @@ if (typeof module !== "undefined" && module.exports) {
 
 var base64 = require('base64-js')
 var ieee754 = require('ieee754')
-var isArray = require('is-array')
+var isArray = require('isarray')
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -8812,7 +8812,7 @@ function blitBuffer (src, dst, offset, length) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"base64-js":57,"ieee754":58,"is-array":59}],57:[function(require,module,exports){
+},{"base64-js":57,"ieee754":58,"isarray":60}],57:[function(require,module,exports){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 ;(function (exports) {
@@ -9025,41 +9025,6 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 }
 
 },{}],59:[function(require,module,exports){
-
-/**
- * isArray
- */
-
-var isArray = Array.isArray;
-
-/**
- * toString
- */
-
-var str = Object.prototype.toString;
-
-/**
- * Whether or not the given `val`
- * is an array.
- *
- * example:
- *
- *        isArray([]);
- *        // > true
- *        isArray(arguments);
- *        // > false
- *        isArray('');
- *        // > false
- *
- * @param {mixed} val
- * @return {bool}
- */
-
-module.exports = isArray || function (val) {
-  return !! val && '[object Array]' == str.call(val);
-};
-
-},{}],60:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -9361,6 +9326,11 @@ function isObject(arg) {
 function isUndefined(arg) {
   return arg === void 0;
 }
+
+},{}],60:[function(require,module,exports){
+module.exports = Array.isArray || function (arr) {
+  return Object.prototype.toString.call(arr) == '[object Array]';
+};
 
 },{}],61:[function(require,module,exports){
 // shim for using process in browser
@@ -16763,7 +16733,7 @@ process.umask = function() { return 0; };
 },{"d3":63}],63:[function(require,module,exports){
 !function() {
   var d3 = {
-    version: "3.5.9"
+    version: "3.5.10"
   };
   var d3_arraySlice = [].slice, d3_array = function(list) {
     return d3_arraySlice.call(list);
@@ -23130,7 +23100,7 @@ process.umask = function() { return 0; };
           alpha = x;
         } else {
           timer.c = null, timer.t = NaN, timer = null;
-          event.start({
+          event.end({
             type: "end",
             alpha: alpha = 0
           });
@@ -36870,7 +36840,7 @@ module.exports = exports['default'];
 		module.exports = classNames;
 	} else if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {
 		// register as 'classnames', consistent with npm package name
-		define('classnames', function () {
+		define('classnames', [], function () {
 			return classNames;
 		});
 	} else {
@@ -42729,7 +42699,8 @@ function set(component, propName, handler, value, args) {
   }
 
   component._values[propName] = value;
-  component.forceUpdate();
+
+  if (component.isMounted()) component.forceUpdate();
 }
 
 exports['default'] = _createUncontrollable2['default']([mixin], set);
@@ -42742,8 +42713,6 @@ module.exports = exports['default'];
  * This source code is licensed under the BSD-style license found in the
  * LICENSE file in the root directory of this source tree. An additional grant
  * of patent rights can be found in the PATENTS file in the same directory.
- *
- * @providesModule invariant
  */
 
 'use strict';
@@ -42777,9 +42746,9 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
       var args = [a, b, c, d, e, f];
       var argIndex = 0;
       error = new Error(
-        'Invariant Violation: ' +
         format.replace(/%s/g, function() { return args[argIndex++]; })
       );
+      error.name = 'Invariant Violation';
     }
 
     error.framesToPop = 1; // we don't care about invariant's own frame
