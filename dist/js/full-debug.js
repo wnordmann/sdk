@@ -3398,7 +3398,7 @@ var LayerList = (function (_React$Component) {
   }, {
     key: 'renderLayerGroup',
     value: function renderLayerGroup(group) {
-      return this.renderLayers(group.getLayers().getArray());
+      return this.renderLayers(group.getLayers().getArray().slice(0).reverse());
     }
   }, {
     key: 'renderLayers',

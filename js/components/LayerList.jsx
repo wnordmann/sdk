@@ -28,7 +28,7 @@ export default class LayerList extends React.Component {
     this.setState(LayerStore.getState());
   }
   renderLayerGroup(group) {
-    return this.renderLayers(group.getLayers().getArray());
+    return this.renderLayers(group.getLayers().getArray().slice(0).reverse());
   }
   renderLayers(layers) {
     var me = this;
