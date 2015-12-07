@@ -202,7 +202,7 @@ class InfoPopup extends MapTool {
     return (
       <article>
         <a href="#" ref="popupCloser" className="popup-closer fa fa-times fa-pull-right"></a>
-        <div id='popup-content' ref='content' dangerouslySetInnerHTML={{__html: content}}></div>
+        <div className='popup-content' ref='content' dangerouslySetInnerHTML={{__html: content}}></div>
       </article>
     );
   }

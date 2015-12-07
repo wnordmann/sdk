@@ -3281,7 +3281,7 @@ var InfoPopup = (function (_MapTool) {
         'article',
         null,
         _react2['default'].createElement('a', { href: '#', ref: 'popupCloser', className: 'popup-closer fa fa-times fa-pull-right' }),
-        _react2['default'].createElement('div', { id: 'popup-content', ref: 'content', dangerouslySetInnerHTML: { __html: content } })
+        _react2['default'].createElement('div', { className: 'popup-content', ref: 'content', dangerouslySetInnerHTML: { __html: content } })
       );
     }
   }]);
