@@ -36,9 +36,9 @@ export default class LayerList extends React.Component {
       return me.getLayerNode(lyr);
     });
     return (
-      <ul>
+        <ul>
         {layerNodes}
-      </ul>
+        </ul>
     );
   }
   _showPanel() {
