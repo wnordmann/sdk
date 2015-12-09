@@ -314,7 +314,6 @@ class LayerListItem extends React.Component {
       var heading = (<h4><strong>Base maps</strong></h4>);
     } else {
       var inputId = 'layerlistitem-' + layer.get('id') + '-visibility';
-      var heading = (<h4><strong>Overlays</strong></h4>);
       input = (<ul><div className='input-group'><label className='sr-only' htmlFor={inputId}>{formatMessage(messages.layervisibilitylabel)}</label><input id={inputId} type="checkbox" checked={this.state.checked} onChange={this._handleChange.bind(this)} />{this.props.title}</div></ul>);
     }
     var filters = this.state.filters.map(function(f) {
