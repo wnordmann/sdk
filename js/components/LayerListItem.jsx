@@ -267,17 +267,17 @@ class LayerListItem extends React.Component {
     if (this.state.hasError) {
       inputClassName += ' input-has-error';
     }
-    var opacity;
     const layer = this.props.layer;
     const source = layer.getSource ? layer.getSource() : undefined;
-    if (this.props.showOpacity && source) {
+    var opacity;
+    if (this.props.showOpacity && source && layer.get('type') !== 'base') {
       var val = layer.getOpacity();
       var opacityInputId = 'layerlistitem-' + layer.get('id') + '-opacity';
       opacity = (
-        <div className='input-group'>
+        <ul><div className='input-group'>
           <label className='sr-only' htmlFor={opacityInputId}>{formatMessage(messages.opacitylabel)}</label>
           <input id={opacityInputId} onChange={this._changeOpacity.bind(this)} defaultValue={val} type="range" name="opacity" min="0" max="1" step="0.01" />
-        </div>
+        </div></ul>
       );
     }
     var zoomTo;
@@ -305,13 +305,17 @@ class LayerListItem extends React.Component {
     if (layer.get('type') === 'base') {
       var baselayerId = 'layerlistitem-' + layer.get('id') + '-baselayergroup';
       if (this.state.checked) {
-        input = (<div className='input-group'><label className='sr-only' htmlFor={baselayerId}>{formatMessage(messages.baselayergrouplabel)}</label><input id={baselayerId} type="radio" name="baselayergroup" value={this.props.title} checked onChange={this._handleChange.bind(this)} /> {this.props.title}</div>);
+        input = (<div className='input-group'><label className='sr-only' htmlFor={baselayerId}>{formatMessage(messages.baselayergrouplabel)}</label><input id={baselayerId} type="radio" name="baselayergroup" value={this.props.title} checked onChange={this._handleChange.bind(this)} />{this.props.title}</div>);
       } else {
-        input = (<div className='input-group'><label className='sr-only' htmlFor={baselayerId}>{formatMessage(messages.baselayergrouplabel)}</label><input id={baselayerId} type="radio" name="baselayergroup" value={this.props.title} onChange={this._handleChange.bind(this)} /> {this.props.title}</div>);
+        input = (<div className='input-group'><label className='sr-only' htmlFor={baselayerId}>{formatMessage(messages.baselayergrouplabel)}</label><input id={baselayerId} type="radio" name="baselayergroup" value={this.props.title} onChange={this._handleChange.bind(this)} />{this.props.title}</div>);
       }
+    } else if (layer.get('type') === 'base-group'){
+      var baselayerId = 'layerlistitem-' + layer.get('id') + '-baselayergroup';
+      var heading = (<h4><strong>Base maps</strong></h4>);
     } else {
       var inputId = 'layerlistitem-' + layer.get('id') + '-visibility';
-      input = (<div className='input-group'><label className='sr-only' htmlFor={inputId}>{formatMessage(messages.layervisibilitylabel)}</label><input id={inputId} type="checkbox" checked={this.state.checked} onChange={this._handleChange.bind(this)} /> {this.props.title}</div>);
+      var heading = (<h4><strong>Overlays</strong></h4>);
+      input = (<ul><div className='input-group'><label className='sr-only' htmlFor={inputId}>{formatMessage(messages.layervisibilitylabel)}</label><input id={inputId} type="checkbox" checked={this.state.checked} onChange={this._handleChange.bind(this)} />{this.props.title}</div></ul>);
     }
     var filters = this.state.filters.map(function(f) {
       var filterName = f.title.replace(/\W+/g, '');
@@ -328,14 +332,15 @@ class LayerListItem extends React.Component {
     }, this);
     return (
       <li>
+        {heading}
         {input}
         {opacity}
-        {zoomTo}
+        <ul>{zoomTo}
         {download}
         {filter}
         {reorderUp}
         {reorderDown}
-        {remove}
+        {remove}</ul>
         {this.props.children}
         <span>
           <Dialog.Modal onHide={this._onCloseModal.bind(this)} title={formatMessage(messages.filtermodaltitle, {layer: this.props.layer.get('title')})} ref="filtermodal">

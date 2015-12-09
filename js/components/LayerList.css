@@ -32,28 +32,28 @@
 }
 .layer-tree-panel li {
   list-style-type: none;
-  margin: 0px;
+  /*margin: 0px;
   padding: 2px 1px 2px 1px;
-  position: relative;
+  position: relative;*/
 }
 .layer-tree-panel li::before, .layer-tree-panel li::after {
-  content: '';
+/*  content: '';
   left: -20px;
   position: absolute;
-  right: auto;
+  right: auto;*/
 }
 .layer-tree-panel li::before {
-  border-left: 1px solid #999;
-  bottom: 50px;
+  /*border-left: 1px solid #999;*/
+/*  bottom: 50px;
   height: 100%;
   top: 0px;
-  width: 1px;
+  width: 1px;*/
 }
 .layer-tree-panel li::after {
-  border-top: 1px solid #999;
-  height: 20px;
+  /*border-top: 1px solid #999;*/
+  /*height: 20px;
   top: 25px;
-  width: 25px;
+  width: 25px;*/
 }
 .layer-tree-panel li span {
   display: inline-block;
