@@ -1,11 +1,10 @@
 /* global afterEach, beforeEach, describe, it */
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactDOM = require('react-dom');
 var assert = require('chai').assert;
 var ol = require('openlayers');
-global.Intl = require('intl');
-var IntlProvider = require('react-intl').IntlProvider;
+var intl = require('../mock-i18n.js');
 
 var InfoPopup = require('../../js/components/InfoPopup.jsx');
 
@@ -43,16 +42,15 @@ describe('InfoPopup', function() {
 
   it('callback gets called even if no XHR is performed', function() {
     var container = document.createElement('div');
-    var app = React.render((
-      <IntlProvider locale='en'>{() => (<InfoPopup ref='popup' map={map} />)}</IntlProvider>
+    var popup = ReactDOM.render((
+      <InfoPopup intl={intl} map={map} />
     ), container);
-    var popup = app.refs.popup.refs.wrappedElement;
     var callbackCalled = false;
     popup._fetchData({}, [], function() {
       callbackCalled = true;
     });
     assert.equal(callbackCalled, true);
-    React.unmountComponentAtNode(container);
+    ReactDOM.unmountComponentAtNode(container);
   });
 
 });

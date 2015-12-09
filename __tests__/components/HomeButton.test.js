@@ -5,8 +5,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var assert = require('chai').assert;
 var ol = require('openlayers');
-global.Intl = require('intl');
-var IntlProvider = require('react-intl').IntlProvider;
+var intl = require('../mock-i18n.js');
 
 var HomeButton = require('../../js/components/HomeButton.jsx');
 
@@ -45,7 +44,7 @@ describe('HomeButton', function() {
   it('adds a select interaction to the map when active', function() {
     var container = document.createElement('div');
     ReactDOM.render((
-      <IntlProvider locale='en'><HomeButton map={map}/></IntlProvider>
+      <HomeButton intl={intl} map={map}/>
     ), container);
     var button = container.querySelector('button');
     map.getView().setZoom(5);

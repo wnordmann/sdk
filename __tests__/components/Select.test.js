@@ -4,8 +4,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var assert = require('chai').assert;
 var ol = require('openlayers');
-global.Intl = require('intl');
-var IntlProvider = require('react-intl').IntlProvider;
+var intl = require('../mock-i18n.js');
 
 var Select = require('../../js/components/Select.jsx');
 
@@ -42,7 +41,7 @@ describe('SelectTool', function() {
   it('adds a select interaction to the map', function() {
     var container = document.createElement('div');
     ReactDOM.render((
-      <IntlProvider locale='en'><Select map={map} /></IntlProvider>
+      <Select intl={intl} map={map} />
     ), container);
 
     var count = 0;
