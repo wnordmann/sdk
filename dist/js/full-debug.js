@@ -2754,11 +2754,22 @@ var Globe = (function (_React$Component) {
     this.state = {
       globe: false
     };
-    this._ol3d = new _ol3Cesium2['default'].OLCesium({ map: this.props.map });
-    var scene = this._ol3d.getCesiumScene();
-    scene.terrainProvider = new Cesium.CesiumTerrainProvider({
-      url: '//assets.agi.com/stk-terrain/world'
-    });
+    var providerUrl = '//assets.agi.com/stk-terrain/world';
+    if (this.props.map.getTarget()) {
+      this._ol3d = new _ol3Cesium2['default'].OLCesium({ map: this.props.map });
+      var scene = this._ol3d.getCesiumScene();
+      scene.terrainProvider = new Cesium.CesiumTerrainProvider({
+        url: providerUrl
+      });
+    } else {
+      this.props.map.on('change:target', function () {
+        this._ol3d = new _ol3Cesium2['default'].OLCesium({ map: this.props.map });
+        var scene = this._ol3d.getCesiumScene();
+        scene.terrainProvider = new Cesium.CesiumTerrainProvider({
+          url: providerUrl
+        });
+      }, this);
+    }
   }
 
   _createClass(Globe, [{
@@ -3314,7 +3325,7 @@ exports['default'] = (0, _reactIntl.injectIntl)(InfoPopup);
 module.exports = exports['default'];
 
 },{"./InfoPopup.css":22,"./MapTool.js":30,"openlayers":126,"pure-render-decorator":557,"react":820,"react-dom":607,"react-intl":623}],24:[function(require,module,exports){
-var css = ".layer-switcher {\n  position: absolute;\n  top: 3.5em;\n  right: 0.5em;\n  text-align: left;\n}\n.layer-switcher .layer-tree-panel {\n  display: none;\n}\n.layer-switcher.shown .layer-tree-panel {\n  display: block;\n}\n.layerlistbutton {\n  color: white;\n  float: right;\n  width: 38px;\n  height: 38px;\n  background-color: #7b98bc;\n  background-color: rgba(0,60,136,.5);\n  border: none;\n  padding: 2px;\n}\n.layerlistbutton button:focus, .layerlistbutton button:hover {\n  background-color: white;\n}\n.layer-tree-panel {\n  padding-right: 50px;\n  border: 1px solid #cccccc;\n  background-color: white;\n  max-height: 450px;\n  overflow: auto;\n}\n.layer-tree-panel li {\n  list-style-type: none;\n  margin: 0px;\n  padding: 2px 1px 2px 1px;\n  position: relative;\n}\n.layer-tree-panel li::before, .layer-tree-panel li::after {\n  content: '';\n  left: -20px;\n  position: absolute;\n  right: auto;\n}\n.layer-tree-panel li::before {\n  border-left: 1px solid #999;\n  bottom: 50px;\n  height: 100%;\n  top: 0px;\n  width: 1px;\n}\n.layer-tree-panel li::after {\n  border-top: 1px solid #999;\n  height: 20px;\n  top: 25px;\n  width: 25px;\n}\n.layer-tree-panel li span {\n  display: inline-block;\n  padding: 3px 8px;\n  text-decoration: none;\n}\n.layer-tree-panel li.parent_li>span {\n  cursor: pointer;\n}\n.layer-tree-panel >ul>li::before, .layer-tree-panel >ul>li::after {\n  border: 0;\n}\n.layer-tree-panel  li:last-child::before {\n  height: 30px;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/LayerList.css'); module.exports = css;
+var css = ".layer-switcher {\n  position: absolute;\n  top: 3.5em;\n  right: 0.5em;\n  text-align: left;\n}\n.layer-switcher .layer-tree-panel {\n  display: none;\n}\n.layer-switcher.shown .layer-tree-panel {\n  display: block;\n}\n.layerlistbutton {\n  color: white;\n  float: right;\n  width: 38px;\n  height: 38px;\n  background-color: #7b98bc;\n  background-color: rgba(0,60,136,.5);\n  border: none;\n  padding: 2px;\n}\n.layerlistbutton button:focus, .layerlistbutton button:hover {\n  background-color: white;\n}\n.layer-tree-panel {\n  padding-right: 50px;\n  border: 1px solid #cccccc;\n  background-color: white;\n  max-height: 450px;\n  overflow: auto;\n}\n.layer-tree-panel li {\n  list-style-type: none;\n  /*margin: 0px;\n  padding: 2px 1px 2px 1px;\n  position: relative;*/\n}\n.layer-tree-panel li::before, .layer-tree-panel li::after {\n/*  content: '';\n  left: -20px;\n  position: absolute;\n  right: auto;*/\n}\n.layer-tree-panel li::before {\n  /*border-left: 1px solid #999;*/\n/*  bottom: 50px;\n  height: 100%;\n  top: 0px;\n  width: 1px;*/\n}\n.layer-tree-panel li::after {\n  /*border-top: 1px solid #999;*/\n  /*height: 20px;\n  top: 25px;\n  width: 25px;*/\n}\n.layer-tree-panel li span {\n  display: inline-block;\n  padding: 3px 8px;\n  text-decoration: none;\n}\n.layer-tree-panel li.parent_li>span {\n  cursor: pointer;\n}\n.layer-tree-panel >ul>li::before, .layer-tree-panel >ul>li::after {\n  border: 0;\n}\n.layer-tree-panel  li:last-child::before {\n  height: 30px;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/LayerList.css'); module.exports = css;
 },{"./../../node_modules/cssify":64}],25:[function(require,module,exports){
 'use strict';
 
@@ -3466,6 +3477,19 @@ var LayerList = (function (_React$Component) {
         _react2['default'].createElement(
           'div',
           { className: 'layer-tree-panel' },
+          _react2['default'].createElement(
+            'ul',
+            null,
+            _react2['default'].createElement(
+              'h4',
+              null,
+              _react2['default'].createElement(
+                'strong',
+                null,
+                'Overlays'
+              )
+            )
+          ),
           this.renderLayers(layers)
         )
       );
@@ -3858,21 +3882,25 @@ var LayerListItem = (function (_React$Component) {
       if (this.state.hasError) {
         inputClassName += ' input-has-error';
       }
-      var opacity;
       var layer = this.props.layer;
       var source = layer.getSource ? layer.getSource() : undefined;
-      if (this.props.showOpacity && source) {
+      var opacity;
+      if (this.props.showOpacity && source && layer.get('type') !== 'base') {
         var val = layer.getOpacity();
         var opacityInputId = 'layerlistitem-' + layer.get('id') + '-opacity';
         opacity = _react2['default'].createElement(
-          'div',
-          { className: 'input-group' },
+          'ul',
+          null,
           _react2['default'].createElement(
-            'label',
-            { className: 'sr-only', htmlFor: opacityInputId },
-            formatMessage(messages.opacitylabel)
-          ),
-          _react2['default'].createElement('input', { id: opacityInputId, onChange: this._changeOpacity.bind(this), defaultValue: val, type: 'range', name: 'opacity', min: '0', max: '1', step: '0.01' })
+            'div',
+            { className: 'input-group' },
+            _react2['default'].createElement(
+              'label',
+              { className: 'sr-only', htmlFor: opacityInputId },
+              formatMessage(messages.opacitylabel)
+            ),
+            _react2['default'].createElement('input', { id: opacityInputId, onChange: this._changeOpacity.bind(this), defaultValue: val, type: 'range', name: 'opacity', min: '0', max: '1', step: '0.01' })
+          )
         );
       }
       var zoomTo;
@@ -3933,7 +3961,6 @@ var LayerListItem = (function (_React$Component) {
               formatMessage(messages.baselayergrouplabel)
             ),
             _react2['default'].createElement('input', { id: baselayerId, type: 'radio', name: 'baselayergroup', value: this.props.title, checked: true, onChange: this._handleChange.bind(this) }),
-            ' ',
             this.props.title
           );
         } else {
@@ -3946,23 +3973,36 @@ var LayerListItem = (function (_React$Component) {
               formatMessage(messages.baselayergrouplabel)
             ),
             _react2['default'].createElement('input', { id: baselayerId, type: 'radio', name: 'baselayergroup', value: this.props.title, onChange: this._handleChange.bind(this) }),
-            ' ',
             this.props.title
           );
         }
+      } else if (layer.get('type') === 'base-group') {
+        var baselayerId = 'layerlistitem-' + layer.get('id') + '-baselayergroup';
+        var heading = _react2['default'].createElement(
+          'h4',
+          null,
+          _react2['default'].createElement(
+            'strong',
+            null,
+            'Base maps'
+          )
+        );
       } else {
         var inputId = 'layerlistitem-' + layer.get('id') + '-visibility';
         input = _react2['default'].createElement(
-          'div',
-          { className: 'input-group' },
+          'ul',
+          null,
           _react2['default'].createElement(
-            'label',
-            { className: 'sr-only', htmlFor: inputId },
-            formatMessage(messages.layervisibilitylabel)
-          ),
-          _react2['default'].createElement('input', { id: inputId, type: 'checkbox', checked: this.state.checked, onChange: this._handleChange.bind(this) }),
-          ' ',
-          this.props.title
+            'div',
+            { className: 'input-group' },
+            _react2['default'].createElement(
+              'label',
+              { className: 'sr-only', htmlFor: inputId },
+              formatMessage(messages.layervisibilitylabel)
+            ),
+            _react2['default'].createElement('input', { id: inputId, type: 'checkbox', checked: this.state.checked, onChange: this._handleChange.bind(this) }),
+            this.props.title
+          )
         );
       }
       var filters = this.state.filters.map(function (f) {
@@ -3993,14 +4033,19 @@ var LayerListItem = (function (_React$Component) {
       return _react2['default'].createElement(
         'li',
         null,
+        heading,
         input,
         opacity,
-        zoomTo,
-        download,
-        filter,
-        reorderUp,
-        reorderDown,
-        remove,
+        _react2['default'].createElement(
+          'ul',
+          null,
+          zoomTo,
+          download,
+          filter,
+          reorderUp,
+          reorderDown,
+          remove
+        ),
         this.props.children,
         _react2['default'].createElement(
           'span',

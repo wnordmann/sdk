@@ -13,11 +13,22 @@ export default class Globe extends React.Component {
     this.state = {
       globe: false
     };
-    this._ol3d = new olcs.OLCesium({map: this.props.map});
-    var scene = this._ol3d.getCesiumScene();
-    scene.terrainProvider = new Cesium.CesiumTerrainProvider({
-      url: '//assets.agi.com/stk-terrain/world'
-    });
+    var providerUrl = '//assets.agi.com/stk-terrain/world';
+    if (this.props.map.getTarget()) {
+      this._ol3d = new olcs.OLCesium({map: this.props.map});
+      var scene = this._ol3d.getCesiumScene();
+      scene.terrainProvider = new Cesium.CesiumTerrainProvider({
+        url: providerUrl
+      });
+    } else {
+      this.props.map.on('change:target', function() {
+        this._ol3d = new olcs.OLCesium({map: this.props.map});
+        var scene = this._ol3d.getCesiumScene();
+        scene.terrainProvider = new Cesium.CesiumTerrainProvider({
+          url: providerUrl
+        });
+      }, this);
+    }
   }
   _toggle() {
     this._ol3d.setEnabled(!this.state.globe);
