@@ -33,7 +33,7 @@
     "jspdf-browserify": "^1.0.272",
     "keymirror": "~0.1.0",
     "lodash.uniqueid": "^3.0.0",
-    "ol3-cesium": "3.9.0",
+    "ol3-cesium": "3.9.1",
     "openlayers": "3.11.1",
     "pui-react-alerts": "3.0.0-alpha.1",
     "pui-react-buttons": "3.0.0-alpha.1",
