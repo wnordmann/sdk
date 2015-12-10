@@ -5,3 +5,6 @@ input::-webkit-clear-button {
   -webkit-appearance: none;
   margin: 0;
 }
+#timeline {
+	background-color: rgba(255,255,255,.7);
+}
