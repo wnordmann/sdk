@@ -2762,7 +2762,7 @@ var Globe = (function (_React$Component) {
         url: providerUrl
       });
     } else {
-      this.props.map.on('change:target', function () {
+      this.props.map.once('change:target', function () {
         this._ol3d = new _ol3Cesium2['default'].OLCesium({ map: this.props.map });
         var scene = this._ol3d.getCesiumScene();
         scene.terrainProvider = new Cesium.CesiumTerrainProvider({
