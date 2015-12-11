@@ -4887,14 +4887,6 @@ var Playback = (function (_React$Component) {
       this.setState({ date: evt.target.valueAsNumber });
     }
   }, {
-    key: '_onDateChange',
-    value: function _onDateChange(evt) {
-      var date = Date.parse(evt.target.value);
-      if (!isNaN(date)) {
-        this.setState({ date: date });
-      }
-    }
-  }, {
     key: '_dateToString',
     value: function _dateToString(ms) {
       var date = new Date(ms);
@@ -4916,7 +4908,6 @@ var Playback = (function (_React$Component) {
       } else {
         buttonIcon = _react2['default'].createElement(_puiReactIconography2['default'].Icon, { name: 'pause' });
       }
-      var isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
       return _react2['default'].createElement(
         'form',
         { role: 'form', onSubmit: this._onSubmit, className: 'form-horizontal playback' },
@@ -4950,7 +4941,7 @@ var Playback = (function (_React$Component) {
               { htmlFor: 'dateInput', className: 'sr-only' },
               formatMessage(messages.dateinputlabel)
             ),
-            _react2['default'].createElement('input', { id: 'dateInput', onChange: this._onDateChange.bind(this), ref: 'dateInput', type: 'date', readOnly: !isChrome, value: dateString, min: this.props.minDate, max: this.props.maxDate })
+            _react2['default'].createElement('input', { id: 'dateInput', ref: 'dateInput', type: 'text', readOnly: true, value: dateString })
           )
         )
       );
