@@ -29,7 +29,8 @@ class Playback extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      play: true
+      play: true,
+      date: this.props.minDate
     };
     this._interval = (this.props.maxDate - this.props.minDate) / this.props.numIntervals;
   }
@@ -43,13 +44,11 @@ class Playback extends React.Component {
     evt.preventDefault();
   }
   _play() {
-    var newTime = ReactDOM.findDOMNode(this.refs.dateInput).valueAsNumber + this._interval;
+    var newTime = this.state.date + this._interval;
     if (newTime > this.props.maxDate) {
       newTime = this.props.minDate;
     }
-    ReactDOM.findDOMNode(this.refs.dateInput).valueAsNumber = newTime;
-    ReactDOM.findDOMNode(this.refs.rangeInput).valueAsNumber = newTime;
-    this._refreshTimeLayers();
+    this.setState({date: newTime});
   }
   _playPause() {
     var play = !this.state.play;
@@ -65,16 +64,16 @@ class Playback extends React.Component {
   }
   _setStyleFunc(lyr) {
     if (lyr.get('timeInfo')) {
-      var dateInput = ReactDOM.findDOMNode(this.refs.dateInput);
       var style = lyr.getStyle();
       var timeInfo = lyr.get('timeInfo');
+      var me = this;
       lyr.setStyle(function(feature, resolution) {
         var start = (timeInfo.start === parseInt(timeInfo.start, 10)) ? timeInfo.start : Date.parse(feature.get(timeInfo.start));
-        if (isNaN(start) || start > dateInput.valueAsNumber) {
+        if (isNaN(start) || start > me.state.date) {
           return undefined;
         }
         var end = (timeInfo.end === parseInt(timeInfo.end, 10)) ? timeInfo.end : Date.parse(feature.get(timeInfo.end));
-        if (isNaN(end) || end < dateInput.valueAsNumber) {
+        if (isNaN(end) || end < me.state.date) {
           return undefined;
         }
         if (style instanceof ol.style.Style) {
@@ -105,20 +104,25 @@ class Playback extends React.Component {
     this._forEachLayer(this.props.map.getLayerGroup(), this._handleTimeLayer);
   }
   _onRangeChange(evt) {
-    ReactDOM.findDOMNode(this.refs.dateInput).valueAsNumber = evt.target.valueAsNumber;
-    this._refreshTimeLayers();
+    this.setState({date: evt.target.valueAsNumber});
   }
   _onDateChange(evt) {
-    ReactDOM.findDOMNode(this.refs.rangeInput).valueAsNumber = evt.target.valueAsNumber;
-    this._refreshTimeLayers();
+    var date = Date.parse(evt.target.value);
+    if (!isNaN(date)) {
+      this.setState({date: date});
+    }
   }
   _dateToString(ms) {
     var date = new Date(ms);
-    return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + date.getDate();
+    var yyyy = date.getFullYear().toString();
+    var mm = (date.getMonth()+1).toString();
+    var dd  = date.getDate().toString();
+    return yyyy + '-' + (mm[1] ? mm : '0' + mm[0]) + '-' + (dd[1] ? dd : '0' + dd[0]);
   }
   render() {
+    this._refreshTimeLayers();
     const {formatMessage} = this.props.intl;
-    var minDate = this._dateToString(this.props.minDate);
+    var dateString = this._dateToString(this.state.date);
     var buttonIcon;
     if (this.state.play === true) {
       buttonIcon = (<Icon.Icon name='play' />);
@@ -129,8 +133,8 @@ class Playback extends React.Component {
       <form role="form" onSubmit={this._onSubmit} className='form-horizontal playback'>
         <div className="form-group">
           <Grids.Col md={2}><Button.DefaultButton onClick={this._playPause.bind(this)}>{buttonIcon}</Button.DefaultButton></Grids.Col>
-          <Grids.Col md={15}><label className='sr-only' htmlFor='rangeInput'>{formatMessage(messages.rangeinputlabel)}</label><input id='rangeInput' onChange={this._onRangeChange.bind(this)} ref='rangeInput' type='range' min={this.props.minDate} max={this.props.maxDate} defaultValue={this.props.minDate}/></Grids.Col>
-          <Grids.Col md={5}><label htmlFor='dateInput' className='sr-only'>{formatMessage(messages.dateinputlabel)}</label><input id='dateInput' onChange={this._onDateChange.bind(this)} ref='dateInput' type='date' defaultValue={minDate} min={this.props.minDate} max={this.props.maxDate}/></Grids.Col>
+          <Grids.Col md={15}><label className='sr-only' htmlFor='rangeInput'>{formatMessage(messages.rangeinputlabel)}</label><input id='rangeInput' onChange={this._onRangeChange.bind(this)} ref='rangeInput' type='range' min={this.props.minDate} max={this.props.maxDate} value={this.state.date}/></Grids.Col>
+          <Grids.Col md={5}><label htmlFor='dateInput' className='sr-only'>{formatMessage(messages.dateinputlabel)}</label><input id='dateInput' onChange={this._onDateChange.bind(this)} ref='dateInput' type='date' value={dateString} min={this.props.minDate} max={this.props.maxDate}/></Grids.Col>
         </div>
       </form>
     );
