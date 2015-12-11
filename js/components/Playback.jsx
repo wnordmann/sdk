@@ -129,12 +129,13 @@ class Playback extends React.Component {
     } else {
       buttonIcon = (<Icon.Icon name='pause' />);
     }
+    var isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
     return (
       <form role="form" onSubmit={this._onSubmit} className='form-horizontal playback'>
         <div className="form-group">
           <Grids.Col md={2}><Button.DefaultButton onClick={this._playPause.bind(this)}>{buttonIcon}</Button.DefaultButton></Grids.Col>
           <Grids.Col md={15}><label className='sr-only' htmlFor='rangeInput'>{formatMessage(messages.rangeinputlabel)}</label><input id='rangeInput' onChange={this._onRangeChange.bind(this)} ref='rangeInput' type='range' min={this.props.minDate} max={this.props.maxDate} value={this.state.date}/></Grids.Col>
-          <Grids.Col md={5}><label htmlFor='dateInput' className='sr-only'>{formatMessage(messages.dateinputlabel)}</label><input id='dateInput' onChange={this._onDateChange.bind(this)} ref='dateInput' type='date' value={dateString} min={this.props.minDate} max={this.props.maxDate}/></Grids.Col>
+          <Grids.Col md={5}><label htmlFor='dateInput' className='sr-only'>{formatMessage(messages.dateinputlabel)}</label><input id='dateInput' onChange={this._onDateChange.bind(this)} ref='dateInput' type='date' readOnly={!isChrome} value={dateString} min={this.props.minDate} max={this.props.maxDate}/></Grids.Col>
         </div>
       </form>
     );

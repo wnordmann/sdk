@@ -4916,6 +4916,7 @@ var Playback = (function (_React$Component) {
       } else {
         buttonIcon = _react2['default'].createElement(_puiReactIconography2['default'].Icon, { name: 'pause' });
       }
+      var isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
       return _react2['default'].createElement(
         'form',
         { role: 'form', onSubmit: this._onSubmit, className: 'form-horizontal playback' },
@@ -4949,7 +4950,7 @@ var Playback = (function (_React$Component) {
               { htmlFor: 'dateInput', className: 'sr-only' },
               formatMessage(messages.dateinputlabel)
             ),
-            _react2['default'].createElement('input', { id: 'dateInput', onChange: this._onDateChange.bind(this), ref: 'dateInput', type: 'date', value: dateString, min: this.props.minDate, max: this.props.maxDate })
+            _react2['default'].createElement('input', { id: 'dateInput', onChange: this._onDateChange.bind(this), ref: 'dateInput', type: 'date', readOnly: !isChrome, value: dateString, min: this.props.minDate, max: this.props.maxDate })
           )
         )
       );
