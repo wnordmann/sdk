@@ -230,14 +230,23 @@ class FeatureStore extends EventEmitter {
     // special handling for clusters
     // if a cluster has children selected, it should not show up as well
     if (clear && layer instanceof ol.layer.Vector && layer.getSource() instanceof ol.source.Cluster) {
+      var dirty = [];
       var f = layer.getSource().getFeatures();
       for (var i = 0, ii = f.length; i < ii; ++i) {
         var children = f[i].get('features');
         for (var j = 0, jj = children.length; j < jj; ++j) {
           if (features.indexOf(children[j]) === -1) {
+            if (children[j].selected) {
+              if (dirty.indexOf(f[i]) === -1) {
+                dirty.push(f[i]);
+              }
+            }
             children[j].selected = false;
           }
         }
+      }
+      for (var d = 0, dd = dirty.length; d < dd; ++d) {
+        dirty[d].changed();
       }
     }
     var id = layer.get('id');
