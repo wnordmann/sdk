@@ -102,13 +102,8 @@ class FeatureStore extends EventEmitter {
           }
         }
       });
-      this._handleEvent = this._select.handleEvent;
       this._select.handleEvent = function(mapBrowserEvent) {
-        if (me.active === true) {
-          return me._handleEvent.call(me._select, mapBrowserEvent);
-        } else {
-          return true;
-        }
+        return true;
       };
       this._map.addInteraction(this._select);
       LayerStore.bindMap(map);
