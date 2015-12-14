@@ -455,4 +455,4 @@ FeatureTable.defaultProps = {
   refreshRate: 250
 };
 
-export default injectIntl(FeatureTable);
+export default injectIntl(FeatureTable, {withRef: true}); // withRef needed so apps can call setDimensionsOnState

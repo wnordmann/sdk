@@ -2270,7 +2270,8 @@ FeatureTable.defaultProps = {
   refreshRate: 250
 };
 
-exports['default'] = (0, _reactIntl.injectIntl)(FeatureTable);
+exports['default'] = (0, _reactIntl.injectIntl)(FeatureTable, { withRef: true });
+// withRef needed so apps can call setDimensionsOnState
 module.exports = exports['default'];
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
@@ -67381,23 +67382,15 @@ module.exports = Dropzone;
 },{"attr-accept":609,"react":820}],609:[function(require,module,exports){
 module.exports=function(t){function n(e){if(r[e])return r[e].exports;var o=r[e]={exports:{},id:e,loaded:!1};return t[e].call(o.exports,o,o.exports,n),o.loaded=!0,o.exports}var r={};return n.m=t,n.c=r,n.p="",n(0)}([function(t,n,r){"use strict";n.__esModule=!0,r(8),r(9),n["default"]=function(t,n){if(t&&n){var r=function(){var r=n.split(","),e=t.name||"",o=t.type||"",i=o.replace(/\/.*$/,"");return{v:r.some(function(t){var n=t.trim();return"."===n.charAt(0)?e.toLowerCase().endsWith(n.toLowerCase()):/\/\*$/.test(n)?i===n.replace(/\/.*$/,""):o===n})}}();if("object"==typeof r)return r.v}return!0},t.exports=n["default"]},function(t,n){var r=t.exports={version:"1.2.2"};"number"==typeof __e&&(__e=r)},function(t,n){var r=t.exports="undefined"!=typeof window&&window.Math==Math?window:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")();"number"==typeof __g&&(__g=r)},function(t,n,r){var e=r(2),o=r(1),i=r(4),u=r(19),c="prototype",f=function(t,n){return function(){return t.apply(n,arguments)}},s=function(t,n,r){var a,p,l,d,y=t&s.G,h=t&s.P,v=y?e:t&s.S?e[n]||(e[n]={}):(e[n]||{})[c],x=y?o:o[n]||(o[n]={});y&&(r=n);for(a in r)p=!(t&s.F)&&v&&a in v,l=(p?v:r)[a],d=t&s.B&&p?f(l,e):h&&"function"==typeof l?f(Function.call,l):l,v&&!p&&u(v,a,l),x[a]!=l&&i(x,a,d),h&&((x[c]||(x[c]={}))[a]=l)};e.core=o,s.F=1,s.G=2,s.S=4,s.P=8,s.B=16,s.W=32,t.exports=s},function(t,n,r){var e=r(5),o=r(18);t.exports=r(22)?function(t,n,r){return e.setDesc(t,n,o(1,r))}:function(t,n,r){return t[n]=r,t}},function(t,n){var r=Object;t.exports={create:r.create,getProto:r.getPrototypeOf,isEnum:{}.propertyIsEnumerable,getDesc:r.getOwnPropertyDescriptor,setDesc:r.defineProperty,setDescs:r.defineProperties,getKeys:r.keys,getNames:r.getOwnPropertyNames,getSymbols:r.getOwnPropertySymbols,each:[].forEach}},function(t,n){var r=0,e=Math.random();t.exports=function(t){return"Symbol(".concat(void 0===t?"":t,")_",(++r+e).toString(36))}},function(t,n,r){var e=r(20)("wks"),o=r(2).Symbol;t.exports=function(t){return e[t]||(e[t]=o&&o[t]||(o||r(6))("Symbol."+t))}},function(t,n,r){r(26),t.exports=r(1).Array.some},function(t,n,r){r(25),t.exports=r(1).String.endsWith},function(t,n){t.exports=function(t){if("function"!=typeof t)throw TypeError(t+" is not a function!");return t}},function(t,n){var r={}.toString;t.exports=function(t){return r.call(t).slice(8,-1)}},function(t,n,r){var e=r(10);t.exports=function(t,n,r){if(e(t),void 0===n)return t;switch(r){case 1:return function(r){return t.call(n,r)};case 2:return function(r,e){return t.call(n,r,e)};case 3:return function(r,e,o){return t.call(n,r,e,o)}}return function(){return t.apply(n,arguments)}}},function(t,n){t.exports=function(t){if(void 0==t)throw TypeError("Can't call method on  "+t);return t}},function(t,n,r){t.exports=function(t){var n=/./;try{"/./"[t](n)}catch(e){try{return n[r(7)("match")]=!1,!"/./"[t](n)}catch(o){}}return!0}},function(t,n){t.exports=function(t){try{return!!t()}catch(n){return!0}}},function(t,n){t.exports=function(t){return"object"==typeof t?null!==t:"function"==typeof t}},function(t,n,r){var e=r(16),o=r(11),i=r(7)("match");t.exports=function(t){var n;return e(t)&&(void 0!==(n=t[i])?!!n:"RegExp"==o(t))}},function(t,n){t.exports=function(t,n){return{enumerable:!(1&t),configurable:!(2&t),writable:!(4&t),value:n}}},function(t,n,r){var e=r(2),o=r(4),i=r(6)("src"),u="toString",c=Function[u],f=(""+c).split(u);r(1).inspectSource=function(t){return c.call(t)},(t.exports=function(t,n,r,u){"function"==typeof r&&(o(r,i,t[n]?""+t[n]:f.join(String(n))),"name"in r||(r.name=n)),t===e?t[n]=r:(u||delete t[n],o(t,n,r))})(Function.prototype,u,function(){return"function"==typeof this&&this[i]||c.call(this)})},function(t,n,r){var e=r(2),o="__core-js_shared__",i=e[o]||(e[o]={});t.exports=function(t){return i[t]||(i[t]={})}},function(t,n,r){var e=r(17),o=r(13);t.exports=function(t,n,r){if(e(n))throw TypeError("String#"+r+" doesn't accept regex!");return String(o(t))}},function(t,n,r){t.exports=!r(15)(function(){return 7!=Object.defineProperty({},"a",{get:function(){return 7}}).a})},function(t,n){var r=Math.ceil,e=Math.floor;t.exports=function(t){return isNaN(t=+t)?0:(t>0?e:r)(t)}},function(t,n,r){var e=r(23),o=Math.min;t.exports=function(t){return t>0?o(e(t),9007199254740991):0}},function(t,n,r){"use strict";var e=r(3),o=r(24),i=r(21),u="endsWith",c=""[u];e(e.P+e.F*r(14)(u),"String",{endsWith:function(t){var n=i(this,t,u),r=arguments,e=r.length>1?r[1]:void 0,f=o(n.length),s=void 0===e?f:Math.min(o(e),f),a=String(t);return c?c.call(n,a,s):n.slice(s-a.length,s)===a}})},function(t,n,r){var e=r(5),o=r(3),i=r(1).Array||Array,u={},c=function(t,n){e.each.call(t.split(","),function(t){void 0==n&&t in i?u[t]=i[t]:t in[]&&(u[t]=r(12)(Function.call,[][t],n))})};c("pop,reverse,shift,keys,values,entries",1),c("indexOf,every,some,forEach,map,filter,find,findIndex,includes",3),c("join,slice,concat,push,splice,unshift,sort,lastIndexOf,reduce,reduceRight,copyWithin,fill"),o(o.S,"Array",u)}]);
 },{}],610:[function(require,module,exports){
-/*
- * Copyright 2015, Yahoo Inc.
- * Copyrights licensed under the New BSD License.
- * See the accompanying LICENSE file for terms.
- */
-
 'use strict';
-
-exports.__esModule = true;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _react = require('react');
 
@@ -67407,47 +67400,65 @@ var _types = require('../types');
 
 var _utils = require('../utils');
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyright 2015, Yahoo Inc.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyrights licensed under the New BSD License.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * See the accompanying LICENSE file for terms.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
 var FormattedDate = (function (_Component) {
     _inherits(FormattedDate, _Component);
 
     function FormattedDate(props, context) {
         _classCallCheck(this, FormattedDate);
 
-        _Component.call(this, props, context);
-        _utils.invariantIntlContext(context);
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(FormattedDate).call(this, props, context));
+
+        (0, _utils.invariantIntlContext)(context);
+        return _this;
     }
 
-    FormattedDate.prototype.shouldComponentUpdate = function shouldComponentUpdate() {
-        for (var _len = arguments.length, next = Array(_len), _key = 0; _key < _len; _key++) {
-            next[_key] = arguments[_key];
+    _createClass(FormattedDate, [{
+        key: 'shouldComponentUpdate',
+        value: function shouldComponentUpdate() {
+            for (var _len = arguments.length, next = Array(_len), _key = 0; _key < _len; _key++) {
+                next[_key] = arguments[_key];
+            }
+
+            return _utils.shouldIntlComponentUpdate.apply(undefined, [this].concat(next));
         }
+    }, {
+        key: 'render',
+        value: function render() {
+            var formatDate = this.context.intl.formatDate;
+            var _props = this.props;
+            var value = _props.value;
+            var children = _props.children;
 
-        return _utils.shouldIntlComponentUpdate.apply(undefined, [this].concat(next));
-    };
+            var formattedDate = formatDate(value, this.props);
 
-    FormattedDate.prototype.render = function render() {
-        var formatDate = this.context.intl.formatDate;
-        var _props = this.props;
-        var value = _props.value;
-        var children = _props.children;
+            if (typeof children === 'function') {
+                return children(formattedDate);
+            }
 
-        var formattedDate = formatDate(value, this.props);
-
-        if (typeof children === 'function') {
-            return children(formattedDate);
+            return _react2.default.createElement(
+                'span',
+                null,
+                formattedDate
+            );
         }
-
-        return _react2['default'].createElement(
-            'span',
-            null,
-            formattedDate
-        );
-    };
+    }]);
 
     return FormattedDate;
 })(_react.Component);
 
-exports['default'] = FormattedDate;
+exports.default = FormattedDate;
 
 FormattedDate.displayName = 'FormattedDate';
 
@@ -67460,23 +67471,16 @@ FormattedDate.propTypes = _extends({}, _types.dateTimeFormatPropTypes, {
     format: _react.PropTypes.string,
     children: _react.PropTypes.func
 });
-module.exports = exports['default'];
 },{"../types":624,"../utils":625,"react":820}],611:[function(require,module,exports){
-/*
- * Copyright 2015, Yahoo Inc.
- * Copyrights licensed under the New BSD License.
- * See the accompanying LICENSE file for terms.
- */
-
 'use strict';
-
-exports.__esModule = true;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _react = require('react');
 
@@ -67484,74 +67488,90 @@ var _types = require('../types');
 
 var _utils = require('../utils');
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyright 2015, Yahoo Inc.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyrights licensed under the New BSD License.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * See the accompanying LICENSE file for terms.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
 var FormattedHTMLMessage = (function (_Component) {
     _inherits(FormattedHTMLMessage, _Component);
 
     function FormattedHTMLMessage(props, context) {
         _classCallCheck(this, FormattedHTMLMessage);
 
-        _Component.call(this, props, context);
-        _utils.invariantIntlContext(context);
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(FormattedHTMLMessage).call(this, props, context));
+
+        (0, _utils.invariantIntlContext)(context);
+        return _this;
     }
 
-    FormattedHTMLMessage.prototype.shouldComponentUpdate = function shouldComponentUpdate(nextProps) {
-        var values = this.props.values;
-        var nextValues = nextProps.values;
+    _createClass(FormattedHTMLMessage, [{
+        key: 'shouldComponentUpdate',
+        value: function shouldComponentUpdate(nextProps) {
+            var values = this.props.values;
+            var nextValues = nextProps.values;
 
-        if (!_utils.shallowEquals(nextValues, values)) {
-            return true;
-        }
-
-        // Since `values` has already been checked, we know they're not
-        // different, so the current `values` are carried over so the shallow
-        // equals comparison on the other props isn't affected by the `values`.
-        var nextPropsToCheck = _extends({}, nextProps, {
-            values: values
-        });
-
-        for (var _len = arguments.length, next = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-            next[_key - 1] = arguments[_key];
-        }
-
-        return _utils.shouldIntlComponentUpdate.apply(undefined, [this, nextPropsToCheck].concat(next));
-    };
-
-    FormattedHTMLMessage.prototype.render = function render() {
-        var formatHTMLMessage = this.context.intl.formatHTMLMessage;
-        var _props = this.props;
-        var id = _props.id;
-        var description = _props.description;
-        var defaultMessage = _props.defaultMessage;
-        var rawValues = _props.values;
-        var tagName = _props.tagName;
-        var children = _props.children;
-
-        var descriptor = { id: id, description: description, defaultMessage: defaultMessage };
-        var formattedHTMLMessage = formatHTMLMessage(descriptor, rawValues);
-
-        if (typeof children === 'function') {
-            return children(formattedHTMLMessage);
-        }
-
-        // Since the message presumably has HTML in it, we need to set
-        // `innerHTML` in order for it to be rendered and not escaped by React.
-        // To be safe, all string prop values were escaped when formatting the
-        // message. It is assumed that the message is not UGC, and came from the
-        // developer making it more like a template.
-        //
-        // Note: There's a perf impact of using this component since there's no
-        // way for React to do its virtual DOM diffing.
-        return _react.createElement(tagName, {
-            dangerouslySetInnerHTML: {
-                __html: formattedHTMLMessage
+            if (!(0, _utils.shallowEquals)(nextValues, values)) {
+                return true;
             }
-        });
-    };
+
+            // Since `values` has already been checked, we know they're not
+            // different, so the current `values` are carried over so the shallow
+            // equals comparison on the other props isn't affected by the `values`.
+            var nextPropsToCheck = _extends({}, nextProps, {
+                values: values
+            });
+
+            for (var _len = arguments.length, next = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+                next[_key - 1] = arguments[_key];
+            }
+
+            return _utils.shouldIntlComponentUpdate.apply(undefined, [this, nextPropsToCheck].concat(next));
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var formatHTMLMessage = this.context.intl.formatHTMLMessage;
+            var _props = this.props;
+            var id = _props.id;
+            var description = _props.description;
+            var defaultMessage = _props.defaultMessage;
+            var rawValues = _props.values;
+            var tagName = _props.tagName;
+            var children = _props.children;
+
+            var descriptor = { id: id, description: description, defaultMessage: defaultMessage };
+            var formattedHTMLMessage = formatHTMLMessage(descriptor, rawValues);
+
+            if (typeof children === 'function') {
+                return children(formattedHTMLMessage);
+            }
+
+            // Since the message presumably has HTML in it, we need to set
+            // `innerHTML` in order for it to be rendered and not escaped by React.
+            // To be safe, all string prop values were escaped when formatting the
+            // message. It is assumed that the message is not UGC, and came from the
+            // developer making it more like a template.
+            //
+            // Note: There's a perf impact of using this component since there's no
+            // way for React to do its virtual DOM diffing.
+            return (0, _react.createElement)(tagName, {
+                dangerouslySetInnerHTML: {
+                    __html: formattedHTMLMessage
+                }
+            });
+        }
+    }]);
 
     return FormattedHTMLMessage;
 })(_react.Component);
 
-exports['default'] = FormattedHTMLMessage;
+exports.default = FormattedHTMLMessage;
 
 FormattedHTMLMessage.displayName = 'FormattedHTMLMessage';
 
@@ -67559,41 +67579,26 @@ FormattedHTMLMessage.contextTypes = {
     intl: _types.intlShape
 };
 
-FormattedHTMLMessage.propTypes = {
-    id: _react.PropTypes.string,
-    description: _react.PropTypes.string,
-    defaultMessage: _react.PropTypes.string,
-
+FormattedHTMLMessage.propTypes = _extends({}, _types.messageDescriptorPropTypes, {
     values: _react.PropTypes.object,
     tagName: _react.PropTypes.string,
     children: _react.PropTypes.func
-};
+});
 
 FormattedHTMLMessage.defaultProps = {
     values: {},
     tagName: 'span'
 };
-module.exports = exports['default'];
 },{"../types":624,"../utils":625,"react":820}],612:[function(require,module,exports){
-/*
- * Copyright 2015, Yahoo Inc.
- * Copyrights licensed under the New BSD License.
- * See the accompanying LICENSE file for terms.
- */
-
 'use strict';
-
-exports.__esModule = true;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _react = require('react');
 
@@ -67613,6 +67618,10 @@ var _intlFormatCache = require('intl-format-cache');
 
 var _intlFormatCache2 = _interopRequireDefault(_intlFormatCache);
 
+var _invariant = require('invariant');
+
+var _invariant2 = _interopRequireDefault(_invariant);
+
 var _utils = require('../utils');
 
 var _types = require('../types');
@@ -67623,121 +67632,162 @@ var format = _interopRequireWildcard(_format);
 
 var _localeDataRegistry = require('../locale-data-registry');
 
-var intlPropNames = Object.keys(_types.intlPropTypes);
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyright 2015, Yahoo Inc.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyrights licensed under the New BSD License.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * See the accompanying LICENSE file for terms.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+var intlConfigPropNames = Object.keys(_types.intlConfigPropTypes);
 var intlFormatPropNames = Object.keys(_types.intlFormatPropTypes);
 
 var IntlProvider = (function (_Component) {
     _inherits(IntlProvider, _Component);
 
-    function IntlProvider(props) {
-        var _this = this;
-
+    function IntlProvider(props, context) {
         _classCallCheck(this, IntlProvider);
 
-        _Component.call(this, props);
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(IntlProvider).call(this, props, context));
+
+        (0, _invariant2.default)(Intl, '[React Intl] The `Intl` APIs must be available in the runtime, ' + 'and do not appear to be built-in. An `Intl` polyfill should be loaded.\n' + 'See: http://formatjs.io/guides/runtime-environments/');
 
         // Used to stabilize time when performing an initial rendering so that
         // all relative times use the same reference "now" time.
-        var initialNow = isFinite(props.initialNow) ? Number(props.initialNow) : Date.now();
+        var initialNow = undefined;
+        if (isFinite(props.initialNow)) {
+            initialNow = Number(props.initialNow);
+        } else {
+            // When an `initialNow` isn't provided via `props`, look to see an
+            // <IntlProvider> exists in the ancestry and call its `now()`
+            // function to propagate its value for "now".
+            initialNow = context.intl ? context.intl.now() : Date.now();
+        }
 
-        this.state = {
+        _this.state = {
             // Creating `Intl*` formatters is expensive so these format caches
             // memoize the `Intl*` constructors and have the same lifecycle as
             // this IntlProvider instance.
-            getDateTimeFormat: _intlFormatCache2['default'](Intl.DateTimeFormat),
-            getNumberFormat: _intlFormatCache2['default'](Intl.NumberFormat),
-            getMessageFormat: _intlFormatCache2['default'](_intlMessageformat2['default']),
-            getRelativeFormat: _intlFormatCache2['default'](_intlRelativeformat2['default']),
-            getPluralFormat: _intlFormatCache2['default'](_plural2['default']),
+            getDateTimeFormat: (0, _intlFormatCache2.default)(Intl.DateTimeFormat),
+            getNumberFormat: (0, _intlFormatCache2.default)(Intl.NumberFormat),
+            getMessageFormat: (0, _intlFormatCache2.default)(_intlMessageformat2.default),
+            getRelativeFormat: (0, _intlFormatCache2.default)(_intlRelativeformat2.default),
+            getPluralFormat: (0, _intlFormatCache2.default)(_plural2.default),
 
             // Wrapper to provide stable "now" time for initial render.
             now: function now() {
                 return _this._didDisplay ? Date.now() : initialNow;
             }
         };
+        return _this;
     }
 
-    IntlProvider.prototype.getConfig = function getConfig() {
-        var _this2 = this;
+    _createClass(IntlProvider, [{
+        key: 'getConfig',
+        value: function getConfig() {
+            var _this2 = this;
 
-        var config = intlPropNames.reduce(function (config, name) {
-            config[name] = _this2.props[name];
-            return config;
-        }, {});
+            var _context$intl = this.context.intl;
+            var intlContext = _context$intl === undefined ? {} : _context$intl;
 
-        if (!_localeDataRegistry.hasLocaleData(config.locale)) {
-            var _config = config;
-            var locale = _config.locale;
-            var defaultLocale = _config.defaultLocale;
-            var defaultFormats = _config.defaultFormats;
+            // Build a whitelisted config object from `props` and `context.intl`, if
+            // an <IntlProvider> exists in the ancestry.
 
-            if ("development" !== 'production') {
-                console.error('[React Intl] Missing locale data for: "' + locale + '". ' + ('Using default locale: "' + defaultLocale + '" as fallback.'));
+            var config = intlConfigPropNames.reduce(function (config, name) {
+                config[name] = _this2.props[name] || intlContext[name];
+                return config;
+            }, {});
+
+            if (!(0, _localeDataRegistry.hasLocaleData)(config.locale)) {
+                var _config = config;
+                var locale = _config.locale;
+                var defaultLocale = _config.defaultLocale;
+                var defaultFormats = _config.defaultFormats;
+
+                if ("development" !== 'production') {
+                    console.error('[React Intl] Missing locale data for locale: "' + locale + '". ' + ('Using default locale: "' + defaultLocale + '" as fallback.'));
+                }
+
+                // Since there's no registered locale data for `locale`, this will
+                // fallback to the `defaultLocale` to make sure things can render.
+                // The `messages` are overridden to the `defaultProps` empty object
+                // to maintain referential equality across re-renders. It's assumed
+                // each <FormattedMessage> contains a `defaultMessage` prop.
+                config = _extends({}, config, {
+                    locale: defaultLocale,
+                    formats: defaultFormats,
+                    messages: IntlProvider.defaultProps.messages
+                });
             }
 
-            // Since there's no registered locale data for `locale`, this will
-            // fallback to the `defaultLocale` to make sure things can render.
-            // The `messages` are overridden to the `defaultProps` empty object
-            // to maintain referential equality across re-renders. It's assumed
-            // each <FormattedMessage> contains a `defaultMessage` prop.
-            config = _extends({}, config, {
-                locale: defaultLocale,
-                formats: defaultFormats,
-                messages: IntlProvider.defaultProps.messages
-            });
+            return config;
         }
-
-        return config;
-    };
-
-    IntlProvider.prototype.getBoundFormatFns = function getBoundFormatFns(config, state) {
-        return intlFormatPropNames.reduce(function (boundFormatFns, name) {
-            boundFormatFns[name] = format[name].bind(null, config, state);
-            return boundFormatFns;
-        }, {});
-    };
-
-    IntlProvider.prototype.getChildContext = function getChildContext() {
-        var config = this.getConfig();
-
-        // Bind intl factories and current config to the format functions.
-        var boundFormatFns = this.getBoundFormatFns(config, this.state);
-
-        return {
-            intl: _extends({}, config, boundFormatFns, {
-                now: this.state.now
-            })
-        };
-    };
-
-    IntlProvider.prototype.shouldComponentUpdate = function shouldComponentUpdate() {
-        for (var _len = arguments.length, next = Array(_len), _key = 0; _key < _len; _key++) {
-            next[_key] = arguments[_key];
+    }, {
+        key: 'getBoundFormatFns',
+        value: function getBoundFormatFns(config, state) {
+            return intlFormatPropNames.reduce(function (boundFormatFns, name) {
+                boundFormatFns[name] = format[name].bind(null, config, state);
+                return boundFormatFns;
+            }, {});
         }
+    }, {
+        key: 'getChildContext',
+        value: function getChildContext() {
+            var config = this.getConfig();
 
-        return _utils.shouldIntlComponentUpdate.apply(undefined, [this].concat(next));
-    };
+            // Bind intl factories and current config to the format functions.
+            var boundFormatFns = this.getBoundFormatFns(config, this.state);
 
-    IntlProvider.prototype.componentDidMount = function componentDidMount() {
-        this._didDisplay = true;
-    };
+            return {
+                intl: _extends({}, config, boundFormatFns, {
+                    now: this.state.now
+                })
+            };
+        }
+    }, {
+        key: 'shouldComponentUpdate',
+        value: function shouldComponentUpdate() {
+            for (var _len = arguments.length, next = Array(_len), _key = 0; _key < _len; _key++) {
+                next[_key] = arguments[_key];
+            }
 
-    IntlProvider.prototype.render = function render() {
-        return _react.Children.only(this.props.children);
-    };
+            return _utils.shouldIntlComponentUpdate.apply(undefined, [this].concat(next));
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this._didDisplay = true;
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react.Children.only(this.props.children);
+        }
+    }]);
 
     return IntlProvider;
 })(_react.Component);
 
-exports['default'] = IntlProvider;
+exports.default = IntlProvider;
 
 IntlProvider.displayName = 'IntlProvider';
+
+IntlProvider.contextTypes = {
+    intl: _types.intlShape
+};
 
 IntlProvider.childContextTypes = {
     intl: _types.intlShape.isRequired
 };
 
-IntlProvider.propTypes = _extends({}, _types.intlPropTypes, {
+IntlProvider.propTypes = _extends({}, _types.intlConfigPropTypes, {
     children: _react.PropTypes.element.isRequired,
     initialNow: _react.PropTypes.any
 });
@@ -67749,25 +67799,16 @@ IntlProvider.defaultProps = {
     defaultLocale: 'en',
     defaultFormats: {}
 };
-module.exports = exports['default'];
-},{"../format":619,"../locale-data-registry":621,"../plural":622,"../types":624,"../utils":625,"intl-format-cache":626,"intl-messageformat":629,"intl-relativeformat":638,"react":820}],613:[function(require,module,exports){
-/*
- * Copyright 2015, Yahoo Inc.
- * Copyrights licensed under the New BSD License.
- * See the accompanying LICENSE file for terms.
- */
-
+},{"../format":619,"../locale-data-registry":621,"../plural":622,"../types":624,"../utils":625,"intl-format-cache":626,"intl-messageformat":629,"intl-relativeformat":638,"invariant":644,"react":820}],613:[function(require,module,exports){
 'use strict';
-
-exports.__esModule = true;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _react = require('react');
 
@@ -67775,104 +67816,123 @@ var _types = require('../types');
 
 var _utils = require('../utils');
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyright 2015, Yahoo Inc.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyrights licensed under the New BSD License.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * See the accompanying LICENSE file for terms.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
 var FormattedMessage = (function (_Component) {
     _inherits(FormattedMessage, _Component);
 
     function FormattedMessage(props, context) {
         _classCallCheck(this, FormattedMessage);
 
-        _Component.call(this, props, context);
-        _utils.invariantIntlContext(context);
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(FormattedMessage).call(this, props, context));
+
+        (0, _utils.invariantIntlContext)(context);
+        return _this;
     }
 
-    FormattedMessage.prototype.shouldComponentUpdate = function shouldComponentUpdate(nextProps) {
-        var values = this.props.values;
-        var nextValues = nextProps.values;
+    _createClass(FormattedMessage, [{
+        key: 'shouldComponentUpdate',
+        value: function shouldComponentUpdate(nextProps) {
+            var values = this.props.values;
+            var nextValues = nextProps.values;
 
-        if (!_utils.shallowEquals(nextValues, values)) {
-            return true;
-        }
-
-        // Since `values` has already been checked, we know they're not
-        // different, so the current `values` are carried over so the shallow
-        // equals comparison on the other props isn't affected by the `values`.
-        var nextPropsToCheck = _extends({}, nextProps, {
-            values: values
-        });
-
-        for (var _len = arguments.length, next = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-            next[_key - 1] = arguments[_key];
-        }
-
-        return _utils.shouldIntlComponentUpdate.apply(undefined, [this, nextPropsToCheck].concat(next));
-    };
-
-    FormattedMessage.prototype.render = function render() {
-        var formatMessage = this.context.intl.formatMessage;
-        var _props = this.props;
-        var id = _props.id;
-        var description = _props.description;
-        var defaultMessage = _props.defaultMessage;
-        var values = _props.values;
-        var tagName = _props.tagName;
-        var children = _props.children;
-
-        // Creates a token with a random UID that should not be guessable or
-        // conflict with other parts of the `message` string.
-        var uid = Math.floor(Math.random() * 0x10000000000).toString(16);
-        var tokenRegexp = new RegExp('(@__ELEMENT-' + uid + '-\\d+__@)', 'g');
-
-        var generateToken = (function () {
-            var counter = 0;
-            return function () {
-                return '@__ELEMENT-' + uid + '-' + (counter += 1) + '__@';
-            };
-        })();
-
-        var tokenizedValues = {};
-        var elements = {};
-
-        // Iterates over the `props` to keep track of any React Element values
-        // so they can be represented by the `token` as a placeholder when the
-        // `message` is formatted. This allows the formatted message to then be
-        // broken-up into parts with references to the React Elements inserted
-        // back in.
-        Object.keys(values).forEach(function (name) {
-            var value = values[name];
-
-            if (_react.isValidElement(value)) {
-                var token = generateToken();
-                tokenizedValues[name] = token;
-                elements[token] = value;
-            } else {
-                tokenizedValues[name] = value;
+            if (!(0, _utils.shallowEquals)(nextValues, values)) {
+                return true;
             }
-        });
 
-        var descriptor = { id: id, description: description, defaultMessage: defaultMessage };
-        var formattedMessage = formatMessage(descriptor, tokenizedValues);
+            // Since `values` has already been checked, we know they're not
+            // different, so the current `values` are carried over so the shallow
+            // equals comparison on the other props isn't affected by the `values`.
+            var nextPropsToCheck = _extends({}, nextProps, {
+                values: values
+            });
 
-        // Split the message into parts so the React Element values captured
-        // above can be inserted back into the rendered message. This approach
-        // allows messages to render with React Elements while keeping React's
-        // virtual diffing working properly.
-        var nodes = formattedMessage.split(tokenRegexp).filter(function (part) {
-            return !!part;
-        }).map(function (part) {
-            return elements[part] || part;
-        });
+            for (var _len = arguments.length, next = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+                next[_key - 1] = arguments[_key];
+            }
 
-        if (typeof children === 'function') {
-            return children.apply(undefined, _toConsumableArray(nodes));
+            return _utils.shouldIntlComponentUpdate.apply(undefined, [this, nextPropsToCheck].concat(next));
         }
+    }, {
+        key: 'render',
+        value: function render() {
+            var formatMessage = this.context.intl.formatMessage;
+            var _props = this.props;
+            var id = _props.id;
+            var description = _props.description;
+            var defaultMessage = _props.defaultMessage;
+            var values = _props.values;
+            var tagName = _props.tagName;
+            var children = _props.children;
 
-        return _react.createElement.apply(undefined, [tagName, null].concat(_toConsumableArray(nodes)));
-    };
+            // Creates a token with a random UID that should not be guessable or
+            // conflict with other parts of the `message` string.
+
+            var uid = Math.floor(Math.random() * 0x10000000000).toString(16);
+            var tokenRegexp = new RegExp('(@__ELEMENT-' + uid + '-\\d+__@)', 'g');
+
+            var generateToken = (function () {
+                var counter = 0;
+                return function () {
+                    return '@__ELEMENT-' + uid + '-' + (counter += 1) + '__@';
+                };
+            })();
+
+            var tokenizedValues = {};
+            var elements = {};
+
+            // Iterates over the `props` to keep track of any React Element values
+            // so they can be represented by the `token` as a placeholder when the
+            // `message` is formatted. This allows the formatted message to then be
+            // broken-up into parts with references to the React Elements inserted
+            // back in.
+            Object.keys(values).forEach(function (name) {
+                var value = values[name];
+
+                if ((0, _react.isValidElement)(value)) {
+                    var token = generateToken();
+                    tokenizedValues[name] = token;
+                    elements[token] = value;
+                } else {
+                    tokenizedValues[name] = value;
+                }
+            });
+
+            var descriptor = { id: id, description: description, defaultMessage: defaultMessage };
+            var formattedMessage = formatMessage(descriptor, tokenizedValues);
+
+            // Split the message into parts so the React Element values captured
+            // above can be inserted back into the rendered message. This approach
+            // allows messages to render with React Elements while keeping React's
+            // virtual diffing working properly.
+            var nodes = formattedMessage.split(tokenRegexp).filter(function (part) {
+                return !!part;
+            }).map(function (part) {
+                return elements[part] || part;
+            });
+
+            if (typeof children === 'function') {
+                return children.apply(undefined, _toConsumableArray(nodes));
+            }
+
+            return _react.createElement.apply(undefined, [tagName, null].concat(_toConsumableArray(nodes)));
+        }
+    }]);
 
     return FormattedMessage;
 })(_react.Component);
 
-exports['default'] = FormattedMessage;
+exports.default = FormattedMessage;
 
 FormattedMessage.displayName = 'FormattedMessage';
 
@@ -67880,39 +67940,26 @@ FormattedMessage.contextTypes = {
     intl: _types.intlShape
 };
 
-FormattedMessage.propTypes = {
-    id: _react.PropTypes.string.isRequired,
-    description: _react.PropTypes.string,
-    defaultMessage: _react.PropTypes.string,
-
+FormattedMessage.propTypes = _extends({}, _types.messageDescriptorPropTypes, {
     values: _react.PropTypes.object,
     tagName: _react.PropTypes.string,
     children: _react.PropTypes.func
-};
+});
 
 FormattedMessage.defaultProps = {
     values: {},
     tagName: 'span'
 };
-module.exports = exports['default'];
 },{"../types":624,"../utils":625,"react":820}],614:[function(require,module,exports){
-/*
- * Copyright 2015, Yahoo Inc.
- * Copyrights licensed under the New BSD License.
- * See the accompanying LICENSE file for terms.
- */
-
 'use strict';
-
-exports.__esModule = true;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _react = require('react');
 
@@ -67922,47 +67969,65 @@ var _types = require('../types');
 
 var _utils = require('../utils');
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyright 2015, Yahoo Inc.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyrights licensed under the New BSD License.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * See the accompanying LICENSE file for terms.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
 var FormattedNumber = (function (_Component) {
     _inherits(FormattedNumber, _Component);
 
     function FormattedNumber(props, context) {
         _classCallCheck(this, FormattedNumber);
 
-        _Component.call(this, props, context);
-        _utils.invariantIntlContext(context);
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(FormattedNumber).call(this, props, context));
+
+        (0, _utils.invariantIntlContext)(context);
+        return _this;
     }
 
-    FormattedNumber.prototype.shouldComponentUpdate = function shouldComponentUpdate() {
-        for (var _len = arguments.length, next = Array(_len), _key = 0; _key < _len; _key++) {
-            next[_key] = arguments[_key];
+    _createClass(FormattedNumber, [{
+        key: 'shouldComponentUpdate',
+        value: function shouldComponentUpdate() {
+            for (var _len = arguments.length, next = Array(_len), _key = 0; _key < _len; _key++) {
+                next[_key] = arguments[_key];
+            }
+
+            return _utils.shouldIntlComponentUpdate.apply(undefined, [this].concat(next));
         }
+    }, {
+        key: 'render',
+        value: function render() {
+            var formatNumber = this.context.intl.formatNumber;
+            var _props = this.props;
+            var value = _props.value;
+            var children = _props.children;
 
-        return _utils.shouldIntlComponentUpdate.apply(undefined, [this].concat(next));
-    };
+            var formattedNumber = formatNumber(value, this.props);
 
-    FormattedNumber.prototype.render = function render() {
-        var formatNumber = this.context.intl.formatNumber;
-        var _props = this.props;
-        var value = _props.value;
-        var children = _props.children;
+            if (typeof children === 'function') {
+                return children(formattedNumber);
+            }
 
-        var formattedNumber = formatNumber(value, this.props);
-
-        if (typeof children === 'function') {
-            return children(formattedNumber);
+            return _react2.default.createElement(
+                'span',
+                null,
+                formattedNumber
+            );
         }
-
-        return _react2['default'].createElement(
-            'span',
-            null,
-            formattedNumber
-        );
-    };
+    }]);
 
     return FormattedNumber;
 })(_react.Component);
 
-exports['default'] = FormattedNumber;
+exports.default = FormattedNumber;
 
 FormattedNumber.displayName = 'FormattedNumber';
 
@@ -67975,25 +68040,16 @@ FormattedNumber.propTypes = _extends({}, _types.numberFormatPropTypes, {
     format: _react.PropTypes.string,
     children: _react.PropTypes.func
 });
-module.exports = exports['default'];
 },{"../types":624,"../utils":625,"react":820}],615:[function(require,module,exports){
-/*
- * Copyright 2015, Yahoo Inc.
- * Copyrights licensed under the New BSD License.
- * See the accompanying LICENSE file for terms.
- */
-
 'use strict';
-
-exports.__esModule = true;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _react = require('react');
 
@@ -68003,49 +68059,67 @@ var _types = require('../types');
 
 var _utils = require('../utils');
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyright 2015, Yahoo Inc.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyrights licensed under the New BSD License.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * See the accompanying LICENSE file for terms.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
 var FormattedPlural = (function (_Component) {
     _inherits(FormattedPlural, _Component);
 
     function FormattedPlural(props, context) {
         _classCallCheck(this, FormattedPlural);
 
-        _Component.call(this, props, context);
-        _utils.invariantIntlContext(context);
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(FormattedPlural).call(this, props, context));
+
+        (0, _utils.invariantIntlContext)(context);
+        return _this;
     }
 
-    FormattedPlural.prototype.shouldComponentUpdate = function shouldComponentUpdate() {
-        for (var _len = arguments.length, next = Array(_len), _key = 0; _key < _len; _key++) {
-            next[_key] = arguments[_key];
+    _createClass(FormattedPlural, [{
+        key: 'shouldComponentUpdate',
+        value: function shouldComponentUpdate() {
+            for (var _len = arguments.length, next = Array(_len), _key = 0; _key < _len; _key++) {
+                next[_key] = arguments[_key];
+            }
+
+            return _utils.shouldIntlComponentUpdate.apply(undefined, [this].concat(next));
         }
+    }, {
+        key: 'render',
+        value: function render() {
+            var formatPlural = this.context.intl.formatPlural;
+            var _props = this.props;
+            var value = _props.value;
+            var other = _props.other;
+            var children = _props.children;
 
-        return _utils.shouldIntlComponentUpdate.apply(undefined, [this].concat(next));
-    };
+            var pluralCategory = formatPlural(value, this.props);
+            var formattedPlural = this.props[pluralCategory] || other;
 
-    FormattedPlural.prototype.render = function render() {
-        var formatPlural = this.context.intl.formatPlural;
-        var _props = this.props;
-        var value = _props.value;
-        var other = _props.other;
-        var children = _props.children;
+            if (typeof children === 'function') {
+                return children(formattedPlural);
+            }
 
-        var pluralCategory = formatPlural(value, this.props);
-        var formattedPlural = this.props[pluralCategory] || other;
-
-        if (typeof children === 'function') {
-            return children(formattedPlural);
+            return _react2.default.createElement(
+                'span',
+                null,
+                formattedPlural
+            );
         }
-
-        return _react2['default'].createElement(
-            'span',
-            null,
-            formattedPlural
-        );
-    };
+    }]);
 
     return FormattedPlural;
 })(_react.Component);
 
-exports['default'] = FormattedPlural;
+exports.default = FormattedPlural;
 
 FormattedPlural.displayName = 'FormattedPlural';
 
@@ -68069,25 +68143,16 @@ FormattedPlural.propTypes = _extends({}, _types.pluralFormatPropTypes, {
 FormattedPlural.defaultProps = {
     style: 'cardinal'
 };
-module.exports = exports['default'];
 },{"../types":624,"../utils":625,"react":820}],616:[function(require,module,exports){
-/*
- * Copyright 2015, Yahoo Inc.
- * Copyrights licensed under the New BSD License.
- * See the accompanying LICENSE file for terms.
- */
-
 'use strict';
-
-exports.__esModule = true;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _react = require('react');
 
@@ -68096,6 +68161,18 @@ var _react2 = _interopRequireDefault(_react);
 var _types = require('../types');
 
 var _utils = require('../utils');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyright 2015, Yahoo Inc.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyrights licensed under the New BSD License.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * See the accompanying LICENSE file for terms.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 
 var SECOND = 1000;
 var MINUTE = 1000 * 60;
@@ -68147,89 +68224,100 @@ var FormattedRelative = (function (_Component) {
     function FormattedRelative(props, context) {
         _classCallCheck(this, FormattedRelative);
 
-        _Component.call(this, props, context);
-        _utils.invariantIntlContext(context);
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(FormattedRelative).call(this, props, context));
+
+        (0, _utils.invariantIntlContext)(context);
 
         var now = isFinite(props.initialNow) ? Number(props.initialNow) : context.intl.now();
 
         // `now` is stored as state so that `render()` remains a function of
         // props + state, instead of accessing `Date.now()` inside `render()`.
-        this.state = { now: now };
+        _this.state = { now: now };
+        return _this;
     }
 
-    FormattedRelative.prototype.scheduleNextUpdate = function scheduleNextUpdate(props, state) {
-        var _this = this;
+    _createClass(FormattedRelative, [{
+        key: 'scheduleNextUpdate',
+        value: function scheduleNextUpdate(props, state) {
+            var _this2 = this;
 
-        var updateInterval = props.updateInterval;
+            var updateInterval = props.updateInterval;
 
-        // If the `updateInterval` is falsy, including `0`, then auto updates
-        // have been turned off, so we bail and skip scheduling an update.
-        if (!updateInterval) {
-            return;
+            // If the `updateInterval` is falsy, including `0`, then auto updates
+            // have been turned off, so we bail and skip scheduling an update.
+
+            if (!updateInterval) {
+                return;
+            }
+
+            var delta = Number(props.value) - state.now;
+            var units = props.units || selectUnits(delta);
+
+            var unitDelay = getUnitDelay(units);
+            var unitRemainder = Math.abs(delta % unitDelay);
+
+            // We want the largest possible timer delay which will still display
+            // accurate information while reducing unnecessary re-renders. The delay
+            // should be until the next "interesting" moment, like a tick from
+            // "1 minute ago" to "2 minutes ago" when the delta is 120,000ms.
+            var delay = delta < 0 ? Math.max(updateInterval, unitDelay - unitRemainder) : Math.max(updateInterval, unitRemainder);
+
+            clearTimeout(this._timer);
+
+            this._timer = setTimeout(function () {
+                _this2.setState({ now: _this2.context.intl.now() });
+            }, delay);
         }
+    }, {
+        key: 'shouldComponentUpdate',
+        value: function shouldComponentUpdate() {
+            for (var _len = arguments.length, next = Array(_len), _key = 0; _key < _len; _key++) {
+                next[_key] = arguments[_key];
+            }
 
-        var delta = Number(props.value) - state.now;
-        var units = props.units || selectUnits(delta);
-
-        var unitDelay = getUnitDelay(units);
-        var unitRemainder = Math.abs(delta % unitDelay);
-
-        // We want the largest possible timer delay which will still display
-        // accurate information while reducing unnecessary re-renders. The delay
-        // should be until the next "interesting" moment, like a tick from
-        // "1 minute ago" to "2 minutes ago" when the delta is 120,000ms.
-        var delay = delta < 0 ? Math.max(updateInterval, unitDelay - unitRemainder) : Math.max(updateInterval, unitRemainder);
-
-        clearTimeout(this._timer);
-
-        this._timer = setTimeout(function () {
-            _this.setState({ now: _this.context.intl.now() });
-        }, delay);
-    };
-
-    FormattedRelative.prototype.shouldComponentUpdate = function shouldComponentUpdate() {
-        for (var _len = arguments.length, next = Array(_len), _key = 0; _key < _len; _key++) {
-            next[_key] = arguments[_key];
+            return _utils.shouldIntlComponentUpdate.apply(undefined, [this].concat(next));
         }
-
-        return _utils.shouldIntlComponentUpdate.apply(undefined, [this].concat(next));
-    };
-
-    FormattedRelative.prototype.componentWillUpdate = function componentWillUpdate(nextProps, nextState) {
-        this.scheduleNextUpdate(nextProps, nextState);
-    };
-
-    FormattedRelative.prototype.componentDidMount = function componentDidMount() {
-        this.scheduleNextUpdate(this.props, this.state);
-    };
-
-    FormattedRelative.prototype.componentWillUnmount = function componentWillUnmount() {
-        clearTimeout(this._timer);
-    };
-
-    FormattedRelative.prototype.render = function render() {
-        var formatRelative = this.context.intl.formatRelative;
-        var _props = this.props;
-        var value = _props.value;
-        var children = _props.children;
-
-        var formattedRelative = formatRelative(value, _extends({}, this.props, this.state));
-
-        if (typeof children === 'function') {
-            return children(formattedRelative);
+    }, {
+        key: 'componentWillUpdate',
+        value: function componentWillUpdate(nextProps, nextState) {
+            this.scheduleNextUpdate(nextProps, nextState);
         }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this.scheduleNextUpdate(this.props, this.state);
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            clearTimeout(this._timer);
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var formatRelative = this.context.intl.formatRelative;
+            var _props = this.props;
+            var value = _props.value;
+            var children = _props.children;
 
-        return _react2['default'].createElement(
-            'span',
-            null,
-            formattedRelative
-        );
-    };
+            var formattedRelative = formatRelative(value, _extends({}, this.props, this.state));
+
+            if (typeof children === 'function') {
+                return children(formattedRelative);
+            }
+
+            return _react2.default.createElement(
+                'span',
+                null,
+                formattedRelative
+            );
+        }
+    }]);
 
     return FormattedRelative;
 })(_react.Component);
 
-exports['default'] = FormattedRelative;
+exports.default = FormattedRelative;
 
 FormattedRelative.displayName = 'FormattedRelative';
 
@@ -68248,25 +68336,16 @@ FormattedRelative.propTypes = _extends({}, _types.relativeFormatPropTypes, {
 FormattedRelative.defaultProps = {
     updateInterval: 1000 * 10
 };
-module.exports = exports['default'];
 },{"../types":624,"../utils":625,"react":820}],617:[function(require,module,exports){
-/*
- * Copyright 2015, Yahoo Inc.
- * Copyrights licensed under the New BSD License.
- * See the accompanying LICENSE file for terms.
- */
-
 'use strict';
-
-exports.__esModule = true;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _react = require('react');
 
@@ -68276,47 +68355,65 @@ var _types = require('../types');
 
 var _utils = require('../utils');
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyright 2015, Yahoo Inc.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyrights licensed under the New BSD License.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * See the accompanying LICENSE file for terms.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
 var FormattedTime = (function (_Component) {
     _inherits(FormattedTime, _Component);
 
     function FormattedTime(props, context) {
         _classCallCheck(this, FormattedTime);
 
-        _Component.call(this, props, context);
-        _utils.invariantIntlContext(context);
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(FormattedTime).call(this, props, context));
+
+        (0, _utils.invariantIntlContext)(context);
+        return _this;
     }
 
-    FormattedTime.prototype.shouldComponentUpdate = function shouldComponentUpdate() {
-        for (var _len = arguments.length, next = Array(_len), _key = 0; _key < _len; _key++) {
-            next[_key] = arguments[_key];
+    _createClass(FormattedTime, [{
+        key: 'shouldComponentUpdate',
+        value: function shouldComponentUpdate() {
+            for (var _len = arguments.length, next = Array(_len), _key = 0; _key < _len; _key++) {
+                next[_key] = arguments[_key];
+            }
+
+            return _utils.shouldIntlComponentUpdate.apply(undefined, [this].concat(next));
         }
+    }, {
+        key: 'render',
+        value: function render() {
+            var formatTime = this.context.intl.formatTime;
+            var _props = this.props;
+            var value = _props.value;
+            var children = _props.children;
 
-        return _utils.shouldIntlComponentUpdate.apply(undefined, [this].concat(next));
-    };
+            var formattedTime = formatTime(value, this.props);
 
-    FormattedTime.prototype.render = function render() {
-        var formatTime = this.context.intl.formatTime;
-        var _props = this.props;
-        var value = _props.value;
-        var children = _props.children;
+            if (typeof children === 'function') {
+                return children(formattedTime);
+            }
 
-        var formattedTime = formatTime(value, this.props);
-
-        if (typeof children === 'function') {
-            return children(formattedTime);
+            return _react2.default.createElement(
+                'span',
+                null,
+                formattedTime
+            );
         }
-
-        return _react2['default'].createElement(
-            'span',
-            null,
-            formattedTime
-        );
-    };
+    }]);
 
     return FormattedTime;
 })(_react.Component);
 
-exports['default'] = FormattedTime;
+exports.default = FormattedTime;
 
 FormattedTime.displayName = 'FormattedTime';
 
@@ -68329,30 +68426,26 @@ FormattedTime.propTypes = _extends({}, _types.dateTimeFormatPropTypes, {
     format: _react.PropTypes.string,
     children: _react.PropTypes.func
 });
-module.exports = exports['default'];
 },{"../types":624,"../utils":625,"react":820}],618:[function(require,module,exports){
-// GENERATED FILE
 "use strict";
 
-exports.__esModule = true;
-exports["default"] = { "locale": "en", "pluralRuleFunction": function pluralRuleFunction(n, ord) {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+// GENERATED FILE
+exports.default = { "locale": "en", "pluralRuleFunction": function pluralRuleFunction(n, ord) {
     var s = String(n).split("."),
         v0 = !s[1],
         t0 = Number(s[0]) == n,
         n10 = t0 && s[0].slice(-1),
         n100 = t0 && s[0].slice(-2);if (ord) return n10 == 1 && n100 != 11 ? "one" : n10 == 2 && n100 != 12 ? "two" : n10 == 3 && n100 != 13 ? "few" : "other";return n == 1 && v0 ? "one" : "other";
   }, "fields": { "year": { "displayName": "Year", "relative": { "0": "this year", "1": "next year", "-1": "last year" }, "relativeTime": { "future": { "one": "in {0} year", "other": "in {0} years" }, "past": { "one": "{0} year ago", "other": "{0} years ago" } } }, "month": { "displayName": "Month", "relative": { "0": "this month", "1": "next month", "-1": "last month" }, "relativeTime": { "future": { "one": "in {0} month", "other": "in {0} months" }, "past": { "one": "{0} month ago", "other": "{0} months ago" } } }, "day": { "displayName": "Day", "relative": { "0": "today", "1": "tomorrow", "-1": "yesterday" }, "relativeTime": { "future": { "one": "in {0} day", "other": "in {0} days" }, "past": { "one": "{0} day ago", "other": "{0} days ago" } } }, "hour": { "displayName": "Hour", "relativeTime": { "future": { "one": "in {0} hour", "other": "in {0} hours" }, "past": { "one": "{0} hour ago", "other": "{0} hours ago" } } }, "minute": { "displayName": "Minute", "relativeTime": { "future": { "one": "in {0} minute", "other": "in {0} minutes" }, "past": { "one": "{0} minute ago", "other": "{0} minutes ago" } } }, "second": { "displayName": "Second", "relative": { "0": "now" }, "relativeTime": { "future": { "one": "in {0} second", "other": "in {0} seconds" }, "past": { "one": "{0} second ago", "other": "{0} seconds ago" } } } } };
-module.exports = exports["default"];
 },{}],619:[function(require,module,exports){
-/*
- * Copyright 2015, Yahoo Inc.
- * Copyrights licensed under the New BSD License.
- * See the accompanying LICENSE file for terms.
- */
-
 'use strict';
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 exports.formatDate = formatDate;
 exports.formatTime = formatTime;
 exports.formatRelative = formatRelative;
@@ -68360,8 +68453,6 @@ exports.formatNumber = formatNumber;
 exports.formatPlural = formatPlural;
 exports.formatMessage = formatMessage;
 exports.formatHTMLMessage = formatHTMLMessage;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var _invariant = require('invariant');
 
@@ -68371,7 +68462,14 @@ var _types = require('./types');
 
 var _utils = require('./utils');
 
-var DATE_TIME_FORMAT_OPTIONS = Object.keys(_types.dateTimeFormatPropTypes);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var DATE_TIME_FORMAT_OPTIONS = Object.keys(_types.dateTimeFormatPropTypes); /*
+                                                                             * Copyright 2015, Yahoo Inc.
+                                                                             * Copyrights licensed under the New BSD License.
+                                                                             * See the accompanying LICENSE file for terms.
+                                                                             */
+
 var NUMBER_FORMAT_OPTIONS = Object.keys(_types.numberFormatPropTypes);
 var RELATIVE_FORMAT_OPTIONS = Object.keys(_types.relativeFormatPropTypes);
 var PLURAL_FORMAT_OPTIONS = Object.keys(_types.pluralFormatPropTypes);
@@ -68433,10 +68531,10 @@ function formatRelative(config, state, value) {
     var options = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
     var locale = config.locale;
     var formats = config.formats;
-    var now = options.now;
     var format = options.format;
 
     var date = new Date(value);
+    var now = new Date(options.now);
     var defaults = format && getNamedFormat(formats, 'relative', format);
 
     var filteredOptions = filterFormatOptions(RELATIVE_FORMAT_OPTIONS, options, defaults);
@@ -68468,7 +68566,8 @@ function formatPlural(config, state, value) {
     return state.getPluralFormat(locale, filteredOptions).format(value);
 }
 
-function formatMessage(config, state, messageDescriptor) {
+function formatMessage(config, state) {
+    var messageDescriptor = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
     var values = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
     var locale = config.locale;
     var formats = config.formats;
@@ -68478,16 +68577,17 @@ function formatMessage(config, state, messageDescriptor) {
     var id = messageDescriptor.id;
     var defaultMessage = messageDescriptor.defaultMessage;
 
-    _invariant2['default'](id, '[React Intl] An `id` must be provided to format a message.');
+    // `id` is a required field of a Message Descriptor.
+
+    (0, _invariant2.default)(id, '[React Intl] An `id` must be provided to format a message.');
 
     var message = messages && messages[id];
+    var hasValues = Object.keys(values).length > 0;
 
-    if (!(message || defaultMessage)) {
-        if ("development" !== 'production') {
-            console.error('[React Intl] Cannot format message. ' + ('Missing message: "' + id + '" for locale: "' + locale + '", ') + 'and no default message was provided.');
-        }
-
-        return id;
+    // Avoid expensive message formatting for simple messages without values. In
+    // development messages will always be formatted in case of missing values.
+    if (!hasValues && "development" === 'production') {
+        return message || defaultMessage || id;
     }
 
     var formattedMessage = undefined;
@@ -68499,8 +68599,12 @@ function formatMessage(config, state, messageDescriptor) {
             formattedMessage = formatter.format(values);
         } catch (e) {
             if ("development" !== 'production') {
-                console.error('[React Intl] Error formatting message: "' + id + '"\n' + e);
+                console.error('[React Intl] Error formatting message: "' + id + '" for locale: "' + locale + '"' + (defaultMessage ? ', using default message as fallback.' : '') + ('\n' + e));
             }
+        }
+    } else {
+        if ("development" !== 'production') {
+            console.error('[React Intl] Missing message: "' + id + '" for locale: "' + locale + '"' + (defaultMessage ? ', using default message as fallback.' : ''));
         }
     }
 
@@ -68511,14 +68615,14 @@ function formatMessage(config, state, messageDescriptor) {
             formattedMessage = formatter.format(values);
         } catch (e) {
             if ("development" !== 'production') {
-                console.error('[React Intl] Error formatting the default message for: ' + ('"' + id + '"\n' + e));
+                console.error('[React Intl] Error formatting the default message for: "' + id + '"' + ('\n' + e));
             }
         }
     }
 
     if (!formattedMessage) {
         if ("development" !== 'production') {
-            console.warn('[React Intl] Using source fallback for message: "' + id + '"');
+            console.error('[React Intl] Cannot format message: "' + id + '", ' + ('using message ' + (message || defaultMessage ? 'source' : 'id') + ' as fallback.'));
         }
     }
 
@@ -68533,37 +68637,23 @@ function formatHTMLMessage(config, state, messageDescriptor) {
     // `innerHTML`, all String-based values need to be HTML-escaped.
     var escapedValues = Object.keys(rawValues).reduce(function (escaped, name) {
         var value = rawValues[name];
-        escaped[name] = typeof value === 'string' ? _utils.escape(value) : value;
+        escaped[name] = typeof value === 'string' ? (0, _utils.escape)(value) : value;
         return escaped;
     }, {});
 
     return formatMessage(config, state, messageDescriptor, escapedValues);
 }
 },{"./types":624,"./utils":625,"invariant":644}],620:[function(require,module,exports){
-/*
- * Copyright 2015, Yahoo Inc.
- * Copyrights licensed under the New BSD License.
- * See the accompanying LICENSE file for terms.
- */
-
-// Inspired by react-redux's `connect()` HOC factory function implementation:
-// https://github.com/rackt/react-redux
-
 'use strict';
-
-exports.__esModule = true;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-exports['default'] = injectIntl;
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = injectIntl;
 
 var _react = require('react');
 
@@ -68576,6 +68666,23 @@ var _invariant2 = _interopRequireDefault(_invariant);
 var _types = require('./types');
 
 var _utils = require('./utils');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyright 2015, Yahoo Inc.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyrights licensed under the New BSD License.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * See the accompanying LICENSE file for terms.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+// Inspired by react-redux's `connect()` HOC factory function implementation:
+// https://github.com/rackt/react-redux
 
 function getDisplayName(Component) {
     return Component.displayName || Component.name || 'Component';
@@ -68594,51 +68701,65 @@ function injectIntl(WrappedComponent) {
         function InjectIntl(props, context) {
             _classCallCheck(this, InjectIntl);
 
-            _Component.call(this, props, context);
-            _utils.invariantIntlContext(context);
+            var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(InjectIntl).call(this, props, context));
+
+            (0, _utils.invariantIntlContext)(context);
+            return _this;
         }
 
-        InjectIntl.prototype.getWrappedInstance = function getWrappedInstance() {
-            _invariant2['default'](withRef, '[React Intl] To access the wrapped instance, ' + 'the `{withRef: true}` option must be set when calling: ' + '`injectIntl()`');
-        };
+        _createClass(InjectIntl, [{
+            key: 'getWrappedInstance',
+            value: function getWrappedInstance() {
+                (0, _invariant2.default)(withRef, '[React Intl] To access the wrapped instance, ' + 'the `{withRef: true}` option must be set when calling: ' + '`injectIntl()`');
 
-        InjectIntl.prototype.render = function render() {
-            return _react2['default'].createElement(WrappedComponent, _extends({}, this.props, _defineProperty({}, intlPropName, this.context.intl), {
-                ref: withRef ? 'wrappedInstance' : null
-            }));
-        };
+                return this.refs.wrappedInstance;
+            }
+        }, {
+            key: 'render',
+            value: function render() {
+                return _react2.default.createElement(WrappedComponent, _extends({}, this.props, _defineProperty({}, intlPropName, this.context.intl), {
+                    ref: withRef ? 'wrappedInstance' : null
+                }));
+            }
+        }]);
 
         return InjectIntl;
     })(_react.Component);
 
-    InjectIntl.displayName = 'IntjectIntl(' + getDisplayName(WrappedComponent) + ')';
+    InjectIntl.displayName = 'InjectIntl(' + getDisplayName(WrappedComponent) + ')';
 
     InjectIntl.contextTypes = {
         intl: _types.intlShape
     };
 
+    InjectIntl.WrappedComponent = WrappedComponent;
+
     return InjectIntl;
 }
-
-module.exports = exports['default'];
 },{"./types":624,"./utils":625,"invariant":644,"react":820}],621:[function(require,module,exports){
-/*
- * Copyright 2015, Yahoo Inc.
- * Copyrights licensed under the New BSD License.
- * See the accompanying LICENSE file for terms.
- */
-
 'use strict';
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 exports.addLocaleData = addLocaleData;
 exports.hasLocaleData = hasLocaleData;
 
 var _intlMessageformat = require('intl-messageformat');
 
+var _intlMessageformat2 = _interopRequireDefault(_intlMessageformat);
+
 var _intlRelativeformat = require('intl-relativeformat');
 
-var registeredLocales = Object.create(null);
+var _intlRelativeformat2 = _interopRequireDefault(_intlRelativeformat);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/*
+ * Copyright 2015, Yahoo Inc.
+ * Copyrights licensed under the New BSD License.
+ * See the accompanying LICENSE file for terms.
+ */
 
 function addLocaleData() {
     var data = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
@@ -68646,47 +68767,45 @@ function addLocaleData() {
     var locales = Array.isArray(data) ? data : [data];
 
     locales.forEach(function (localeData) {
-        _intlMessageformat.__addLocaleData(localeData);
-        _intlRelativeformat.__addLocaleData(localeData);
-
-        var locale = localeData.locale;
-
-        registeredLocales[locale.toLowerCase()] = locale;
+        _intlMessageformat2.default.__addLocaleData(localeData);
+        _intlRelativeformat2.default.__addLocaleData(localeData);
     });
 }
 
 function hasLocaleData(locale) {
-    return !!registeredLocales[locale.toLowerCase()];
+    var normalizedLocale = locale && locale.toLowerCase();
+
+    return !!(_intlMessageformat2.default.__localeData__[normalizedLocale] && _intlRelativeformat2.default.__localeData__[normalizedLocale]);
 }
 },{"intl-messageformat":629,"intl-relativeformat":638}],622:[function(require,module,exports){
-/*
- * Copyright 2015, Yahoo Inc.
- * Copyrights licensed under the New BSD License.
- * See the accompanying LICENSE file for terms.
- */
-
-// This is a "hack" until a proper `intl-pluralformat` package is created.
-
 'use strict';
 
-exports.__esModule = true;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _intlMessageformat = require('intl-messageformat');
 
 var _intlMessageformat2 = _interopRequireDefault(_intlMessageformat);
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } } /*
+                                                                                                                                                           * Copyright 2015, Yahoo Inc.
+                                                                                                                                                           * Copyrights licensed under the New BSD License.
+                                                                                                                                                           * See the accompanying LICENSE file for terms.
+                                                                                                                                                           */
+
+// This is a "hack" until a proper `intl-pluralformat` package is created.
+
 function resolveLocale(locales) {
     // IntlMessageFormat#_resolveLocale() does not depend on `this`.
-    return _intlMessageformat2['default'].prototype._resolveLocale(locales);
+    return _intlMessageformat2.default.prototype._resolveLocale(locales);
 }
 
 function findPluralFunction(locale) {
     // IntlMessageFormat#_findPluralFunction() does not depend on `this`.
-    return _intlMessageformat2['default'].prototype._findPluralRuleFunction(locale);
+    return _intlMessageformat2.default.prototype._findPluralRuleFunction(locale);
 }
 
 var IntlPluralFormat = function IntlPluralFormat(locales) {
@@ -68702,23 +68821,105 @@ var IntlPluralFormat = function IntlPluralFormat(locales) {
     };
 };
 
-exports['default'] = IntlPluralFormat;
-module.exports = exports['default'];
+exports.default = IntlPluralFormat;
 },{"intl-messageformat":629}],623:[function(require,module,exports){
-/*
- * Copyright 2015, Yahoo Inc.
- * Copyrights licensed under the New BSD License.
- * See the accompanying LICENSE file for terms.
- */
-
 'use strict';
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.FormattedHTMLMessage = exports.FormattedMessage = exports.FormattedPlural = exports.FormattedNumber = exports.FormattedRelative = exports.FormattedTime = exports.FormattedDate = exports.IntlProvider = exports.injectIntl = exports.intlShape = exports.addLocaleData = undefined;
+
+var _types = require('./types');
+
+Object.defineProperty(exports, 'intlShape', {
+  enumerable: true,
+  get: function get() {
+    return _types.intlShape;
+  }
+});
+
+var _inject = require('./inject');
+
+Object.defineProperty(exports, 'injectIntl', {
+  enumerable: true,
+  get: function get() {
+    return _inject.default;
+  }
+});
+
+var _intl = require('./components/intl');
+
+Object.defineProperty(exports, 'IntlProvider', {
+  enumerable: true,
+  get: function get() {
+    return _intl.default;
+  }
+});
+
+var _date = require('./components/date');
+
+Object.defineProperty(exports, 'FormattedDate', {
+  enumerable: true,
+  get: function get() {
+    return _date.default;
+  }
+});
+
+var _time = require('./components/time');
+
+Object.defineProperty(exports, 'FormattedTime', {
+  enumerable: true,
+  get: function get() {
+    return _time.default;
+  }
+});
+
+var _relative = require('./components/relative');
+
+Object.defineProperty(exports, 'FormattedRelative', {
+  enumerable: true,
+  get: function get() {
+    return _relative.default;
+  }
+});
+
+var _number = require('./components/number');
+
+Object.defineProperty(exports, 'FormattedNumber', {
+  enumerable: true,
+  get: function get() {
+    return _number.default;
+  }
+});
+
+var _plural = require('./components/plural');
+
+Object.defineProperty(exports, 'FormattedPlural', {
+  enumerable: true,
+  get: function get() {
+    return _plural.default;
+  }
+});
+
+var _message = require('./components/message');
+
+Object.defineProperty(exports, 'FormattedMessage', {
+  enumerable: true,
+  get: function get() {
+    return _message.default;
+  }
+});
+
+var _htmlMessage = require('./components/html-message');
+
+Object.defineProperty(exports, 'FormattedHTMLMessage', {
+  enumerable: true,
+  get: function get() {
+    return _htmlMessage.default;
+  }
+});
 exports.defineMessages = defineMessages;
-
-function _interopRequire(obj) { return obj && obj.__esModule ? obj['default'] : obj; }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var _en = require('./en');
 
@@ -68726,67 +68927,35 @@ var _en2 = _interopRequireDefault(_en);
 
 var _localeDataRegistry = require('./locale-data-registry');
 
-_localeDataRegistry.addLocaleData(_en2['default']);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.addLocaleData = _localeDataRegistry.addLocaleData;
-
-var _types = require('./types');
-
-exports.intlShape = _types.intlShape;
-
-var _inject = require('./inject');
-
-exports.injectIntl = _interopRequire(_inject);
-
-var _componentsIntl = require('./components/intl');
-
-exports.IntlProvider = _interopRequire(_componentsIntl);
-
-var _componentsDate = require('./components/date');
-
-exports.FormattedDate = _interopRequire(_componentsDate);
-
-var _componentsTime = require('./components/time');
-
-exports.FormattedTime = _interopRequire(_componentsTime);
-
-var _componentsRelative = require('./components/relative');
-
-exports.FormattedRelative = _interopRequire(_componentsRelative);
-
-var _componentsNumber = require('./components/number');
-
-exports.FormattedNumber = _interopRequire(_componentsNumber);
-
-var _componentsPlural = require('./components/plural');
-
-exports.FormattedPlural = _interopRequire(_componentsPlural);
-
-var _componentsMessage = require('./components/message');
-
-exports.FormattedMessage = _interopRequire(_componentsMessage);
-
-var _componentsHtmlMessage = require('./components/html-message');
-
-exports.FormattedHTMLMessage = _interopRequire(_componentsHtmlMessage);
-
-function defineMessages(messageDescriptors) {
-  // This simply returns what's passed-in because it's meant to be a hook for
-  // babel-plugin-react-intl.
-  return messageDescriptors;
-}
-},{"./components/date":610,"./components/html-message":611,"./components/intl":612,"./components/message":613,"./components/number":614,"./components/plural":615,"./components/relative":616,"./components/time":617,"./en":618,"./inject":620,"./locale-data-registry":621,"./types":624}],624:[function(require,module,exports){
 /*
  * Copyright 2015, Yahoo Inc.
  * Copyrights licensed under the New BSD License.
  * See the accompanying LICENSE file for terms.
  */
 
+(0, _localeDataRegistry.addLocaleData)(_en2.default);
+
+exports.addLocaleData = _localeDataRegistry.addLocaleData;
+function defineMessages(messageDescriptors) {
+  // This simply returns what's passed-in because it's meant to be a hook for
+  // babel-plugin-react-intl.
+  return messageDescriptors;
+}
+},{"./components/date":610,"./components/html-message":611,"./components/intl":612,"./components/message":613,"./components/number":614,"./components/plural":615,"./components/relative":616,"./components/time":617,"./en":618,"./inject":620,"./locale-data-registry":621,"./types":624}],624:[function(require,module,exports){
 'use strict';
 
-exports.__esModule = true;
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /*
+                                                                                                                                                                                                                                                                   * Copyright 2015, Yahoo Inc.
+                                                                                                                                                                                                                                                                   * Copyrights licensed under the New BSD License.
+                                                                                                                                                                                                                                                                   * See the accompanying LICENSE file for terms.
+                                                                                                                                                                                                                                                                   */
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.pluralFormatPropTypes = exports.relativeFormatPropTypes = exports.numberFormatPropTypes = exports.dateTimeFormatPropTypes = exports.messageDescriptorPropTypes = exports.intlShape = exports.intlFormatPropTypes = exports.intlConfigPropTypes = undefined;
 
 var _react = require('react');
 
@@ -68797,8 +68966,8 @@ var func = _react.PropTypes.func;
 var object = _react.PropTypes.object;
 var oneOf = _react.PropTypes.oneOf;
 var shape = _react.PropTypes.shape;
-var intlPropTypes = {
-    locale: string.isRequired,
+var intlConfigPropTypes = exports.intlConfigPropTypes = {
+    locale: string,
     formats: object,
     messages: object,
 
@@ -68806,8 +68975,7 @@ var intlPropTypes = {
     defaultFormats: object
 };
 
-exports.intlPropTypes = intlPropTypes;
-var intlFormatPropTypes = {
+var intlFormatPropTypes = exports.intlFormatPropTypes = {
     formatDate: func.isRequired,
     formatTime: func.isRequired,
     formatRelative: func.isRequired,
@@ -68817,13 +68985,17 @@ var intlFormatPropTypes = {
     formatHTMLMessage: func.isRequired
 };
 
-exports.intlFormatPropTypes = intlFormatPropTypes;
-var intlShape = shape(_extends({}, intlPropTypes, intlFormatPropTypes, {
+var intlShape = exports.intlShape = shape(_extends({}, intlConfigPropTypes, intlFormatPropTypes, {
     now: func.isRequired
 }));
 
-exports.intlShape = intlShape;
-var dateTimeFormatPropTypes = {
+var messageDescriptorPropTypes = exports.messageDescriptorPropTypes = {
+    id: string.isRequired,
+    description: string,
+    defaultMessage: string
+};
+
+var dateTimeFormatPropTypes = exports.dateTimeFormatPropTypes = {
     localeMatcher: oneOf(['best fit', 'lookup']),
     formatMatcher: oneOf(['basic', 'best fit']),
 
@@ -68841,8 +69013,7 @@ var dateTimeFormatPropTypes = {
     timeZoneName: oneOf(['short', 'long'])
 };
 
-exports.dateTimeFormatPropTypes = dateTimeFormatPropTypes;
-var numberFormatPropTypes = {
+var numberFormatPropTypes = exports.numberFormatPropTypes = {
     localeMatcher: oneOf(['best fit', 'lookup']),
 
     style: oneOf(['decimal', 'currency', 'percent']),
@@ -68857,18 +69028,32 @@ var numberFormatPropTypes = {
     maximumSignificantDigits: number
 };
 
-exports.numberFormatPropTypes = numberFormatPropTypes;
-var relativeFormatPropTypes = {
+var relativeFormatPropTypes = exports.relativeFormatPropTypes = {
     style: oneOf(['best fit', 'numeric']),
     units: oneOf(['second', 'minute', 'hour', 'day', 'month', 'year'])
 };
 
-exports.relativeFormatPropTypes = relativeFormatPropTypes;
-var pluralFormatPropTypes = {
+var pluralFormatPropTypes = exports.pluralFormatPropTypes = {
     style: oneOf(['cardinal', 'ordinal'])
 };
-exports.pluralFormatPropTypes = pluralFormatPropTypes;
 },{"react":820}],625:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.escape = escape;
+exports.invariantIntlContext = invariantIntlContext;
+exports.shallowEquals = shallowEquals;
+exports.shouldIntlComponentUpdate = shouldIntlComponentUpdate;
+
+var _invariant = require('invariant');
+
+var _invariant2 = _interopRequireDefault(_invariant);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 /*
 HTML escaping and shallow-equals implementations are the same as React's
 (on purpose.) Therefore, it has the following Copyright and Licensing:
@@ -68879,20 +69064,6 @@ All rights reserved.
 This source code is licensed under the BSD-style license found in the LICENSE
 file in the root directory of React's source tree.
 */
-
-'use strict';
-
-exports.__esModule = true;
-exports.escape = escape;
-exports.invariantIntlContext = invariantIntlContext;
-exports.shallowEquals = shallowEquals;
-exports.shouldIntlComponentUpdate = shouldIntlComponentUpdate;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _invariant = require('invariant');
-
-var _invariant2 = _interopRequireDefault(_invariant);
 
 var ESCAPED_CHARS = {
     '&': '&amp;',
@@ -68915,7 +69086,7 @@ function invariantIntlContext() {
 
     var intl = _ref.intl;
 
-    _invariant2['default'](intl, '[React Intl] Could not find required `intl` object. ' + '<IntlProvider> needs to exist in the component ancestry.');
+    (0, _invariant2.default)(intl, '[React Intl] Could not find required `intl` object. ' + '<IntlProvider> needs to exist in the component ancestry.');
 }
 
 function shallowEquals(objA, objB) {
@@ -68923,7 +69094,7 @@ function shallowEquals(objA, objB) {
         return true;
     }
 
-    if (typeof objA !== 'object' || objA === null || typeof objB !== 'object' || objB === null) {
+    if ((typeof objA === 'undefined' ? 'undefined' : _typeof(objA)) !== 'object' || objA === null || (typeof objB === 'undefined' ? 'undefined' : _typeof(objB)) !== 'object' || objB === null) {
         return false;
     }
 
@@ -68945,14 +69116,18 @@ function shallowEquals(objA, objB) {
     return true;
 }
 
-function shouldIntlComponentUpdate(instance, nextProps, nextState) {
+function shouldIntlComponentUpdate(_ref2, nextProps, nextState) {
+    var props = _ref2.props;
+    var state = _ref2.state;
+    var _ref2$context = _ref2.context;
+    var context = _ref2$context === undefined ? {} : _ref2$context;
     var nextContext = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
+    var _context$intl = context.intl;
+    var intl = _context$intl === undefined ? {} : _context$intl;
+    var _nextContext$intl = nextContext.intl;
+    var nextIntl = _nextContext$intl === undefined ? {} : _nextContext$intl;
 
-    var context = instance.context || {};
-    var intl = context.intl || {};
-    var nextIntl = nextContext.intl || {};
-
-    return !shallowEquals(nextProps, instance.props) || !shallowEquals(nextState, instance.state) || !shallowEquals(nextIntl, intl);
+    return !shallowEquals(nextProps, props) || !shallowEquals(nextState, state) || !shallowEquals(nextIntl, intl);
 }
 },{"invariant":644}],626:[function(require,module,exports){
 'use strict';
@@ -68962,6 +69137,42 @@ exports['default'] = exports;
 
 },{"./lib/memoizer":628}],627:[function(require,module,exports){
 "use strict";
+/*
+Copyright (c) 2014, Yahoo! Inc. All rights reserved.
+Copyrights licensed under the New BSD License.
+See the accompanying LICENSE file for terms.
+*/
+
+/* jslint esnext: true */
+
+// Function.prototype.bind implementation from Mozilla Developer Network:
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Polyfill
+
+var bind = Function.prototype.bind || function (oThis) {
+    if (typeof this !== 'function') {
+      // closest thing possible to the ECMAScript 5
+      // internal IsCallable function
+      throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
+    }
+
+    var aArgs   = Array.prototype.slice.call(arguments, 1),
+        fToBind = this,
+        fNOP    = function() {},
+        fBound  = function() {
+          return fToBind.apply(this instanceof fNOP
+                 ? this
+                 : oThis,
+                 aArgs.concat(Array.prototype.slice.call(arguments)));
+        };
+
+    if (this.prototype) {
+      // native functions don't have a prototype
+      fNOP.prototype = this.prototype;
+    }
+    fBound.prototype = new fNOP();
+
+    return fBound;
+};
 
 // Purposely using the same implementation as the Intl.js `Intl` polyfill.
 // Copyright 2013 Andy Earnshaw, MIT License
@@ -69000,7 +69211,8 @@ var objCreate = Object.create || function (proto, props) {
 
     return obj;
 };
-exports.defineProperty = defineProperty, exports.objCreate = objCreate;
+
+exports.bind = bind, exports.defineProperty = defineProperty, exports.objCreate = objCreate;
 
 
 },{}],628:[function(require,module,exports){
@@ -69019,8 +69231,7 @@ function createFormatCache(FormatConstructor) {
         var format  = cacheId && cache[cacheId];
 
         if (!format) {
-            format = src$es5$$.objCreate(FormatConstructor.prototype);
-            FormatConstructor.apply(format, args);
+            format = new (src$es5$$.bind.apply(FormatConstructor, [null].concat(args)))();
 
             if (cacheId) {
                 cache[cacheId] = format;
