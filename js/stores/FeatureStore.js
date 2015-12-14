@@ -92,9 +92,7 @@ class FeatureStore extends EventEmitter {
             selectedStyle = layer.get('selectedStyle');
           }
           if (selectedStyle) {
-            if (selectedStyle instanceof ol.style.Style) {
-              return [selectedStyle];
-            } else if (Array.isArray(selectedStyle)) {
+            if (selectedStyle instanceof ol.style.Style || Array.isArray(selectedStyle)) {
               return selectedStyle;
             } else {
               return selectedStyle.call(this, feature, resolution);

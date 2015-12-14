@@ -4842,15 +4842,13 @@ var Playback = (function (_React$Component) {
         lyr.setStyle(function (feature, resolution) {
           var start = timeInfo.start === parseInt(timeInfo.start, 10) ? timeInfo.start : Date.parse(feature.get(timeInfo.start));
           if (isNaN(start) || start > me.state.date) {
-            return undefined;
+            return null;
           }
           var end = timeInfo.end === parseInt(timeInfo.end, 10) ? timeInfo.end : Date.parse(feature.get(timeInfo.end));
           if (isNaN(end) || end < me.state.date) {
-            return undefined;
+            return null;
           }
-          if (style instanceof _openlayers2['default'].style.Style) {
-            return [style];
-          } else if (Array.isArray(style)) {
+          if (style instanceof _openlayers2['default'].style.Style || Array.isArray(style)) {
             return style;
           } else {
             return style.call(this, feature, resolution);
@@ -6488,9 +6486,7 @@ var FeatureStore = (function (_EventEmitter) {
               selectedStyle = layer.get('selectedStyle');
             }
             if (selectedStyle) {
-              if (selectedStyle instanceof _openlayers2['default'].style.Style) {
-                return [selectedStyle];
-              } else if (Array.isArray(selectedStyle)) {
+              if (selectedStyle instanceof _openlayers2['default'].style.Style || Array.isArray(selectedStyle)) {
                 return selectedStyle;
               } else {
                 return selectedStyle.call(this, feature, resolution);
@@ -6785,7 +6781,7 @@ _dispatchersAppDispatcherJs2['default'].register(function (payload) {
 exports['default'] = _FeatureStore;
 module.exports = exports['default'];
 
-},{"../constants/SelectConstants.js":47,"../dispatchers/AppDispatcher.js":49,"./LayerStore.js":52,"events":59,"openlayers":126}],52:[function(require,module,exports){
+},{"../constants/SelectConstants.js":47,"../dispatchers/AppDispatcher.js":49,"./LayerStore.js":52,"events":60,"openlayers":126}],52:[function(require,module,exports){
 /* global document */
 
 'use strict';
@@ -6948,9 +6944,9 @@ _dispatchersAppDispatcherJs2['default'].register(function (payload) {
 });
 module.exports = exports['default'];
 
-},{"../constants/LayerConstants.js":46,"../dispatchers/AppDispatcher.js":49,"events":59,"openlayers":126}],53:[function(require,module,exports){
+},{"../constants/LayerConstants.js":46,"../dispatchers/AppDispatcher.js":49,"events":60,"openlayers":126}],53:[function(require,module,exports){
 /*
- * JavaScript Canvas to Blob 2.0.5
+ * JavaScript Canvas to Blob
  * https://github.com/blueimp/JavaScript-Canvas-to-Blob
  *
  * Copyright 2012, Sebastian Tschan
@@ -6987,20 +6983,35 @@ module.exports = exports['default'];
             }()),
         BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder ||
             window.MozBlobBuilder || window.MSBlobBuilder,
+        dataURIPattern = /^data:((.*?)(;charset=.*?)?)(;base64)?,/,
         dataURLtoBlob = (hasBlobConstructor || BlobBuilder) && window.atob &&
             window.ArrayBuffer && window.Uint8Array && function (dataURI) {
-                var byteString,
+                var matches,
+                    mediaType,
+                    isBase64,
+                    dataString,
+                    byteString,
                     arrayBuffer,
                     intArray,
                     i,
-                    mimeString,
                     bb;
-                if (dataURI.split(',')[0].indexOf('base64') >= 0) {
+                // Parse the dataURI components as per RFC 2397
+                matches = dataURI.match(dataURIPattern);
+                if (!matches) {
+                    throw new Error('invalid data URI');
+                }
+                // Default to text/plain;charset=US-ASCII
+                mediaType = matches[2] ?
+                    matches[1] :
+                    'text/plain' + (matches[3] || ';charset=US-ASCII');
+                isBase64 = !!matches[4];
+                dataString = dataURI.slice(matches[0].length);
+                if (isBase64) {
                     // Convert base64 to raw binary data held in a string:
-                    byteString = atob(dataURI.split(',')[1]);
+                    byteString = atob(dataString);
                 } else {
-                    // Convert base64/URLEncoded data component to raw binary data:
-                    byteString = decodeURIComponent(dataURI.split(',')[1]);
+                    // Convert base64/URLEncoded data component to raw binary:
+                    byteString = decodeURIComponent(dataString);
                 }
                 // Write the bytes of the string to an ArrayBuffer:
                 arrayBuffer = new ArrayBuffer(byteString.length);
@@ -7008,18 +7019,16 @@ module.exports = exports['default'];
                 for (i = 0; i < byteString.length; i += 1) {
                     intArray[i] = byteString.charCodeAt(i);
                 }
-                // Separate out the mime component:
-                mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
                 // Write the ArrayBuffer (or ArrayBufferView) to a blob:
                 if (hasBlobConstructor) {
                     return new Blob(
                         [hasArrayBufferViewSupport ? intArray : arrayBuffer],
-                        {type: mimeString}
+                        {type: mediaType}
                     );
                 }
                 bb = new BlobBuilder();
                 bb.append(arrayBuffer);
-                return bb.getBlob(mimeString);
+                return bb.getBlob(mediaType);
             };
     if (window.HTMLCanvasElement && !CanvasPrototype.toBlob) {
         if (CanvasPrototype.mozGetAsFile) {
@@ -8853,7 +8862,7 @@ function blitBuffer (src, dst, offset, length) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"base64-js":57,"ieee754":58,"isarray":60}],57:[function(require,module,exports){
+},{"base64-js":57,"ieee754":58,"isarray":59}],57:[function(require,module,exports){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 ;(function (exports) {
@@ -9066,6 +9075,13 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 }
 
 },{}],59:[function(require,module,exports){
+var toString = {}.toString;
+
+module.exports = Array.isArray || function (arr) {
+  return toString.call(arr) == '[object Array]';
+};
+
+},{}],60:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -9367,11 +9383,6 @@ function isObject(arg) {
 function isUndefined(arg) {
   return arg === void 0;
 }
-
-},{}],60:[function(require,module,exports){
-module.exports = Array.isArray || function (arr) {
-  return Object.prototype.toString.call(arr) == '[object Array]';
-};
 
 },{}],61:[function(require,module,exports){
 // shim for using process in browser
@@ -42689,6 +42700,16 @@ function createUncontrollable(mixins, set) {
     }));
 
     component.ControlledComponent = Component;
+
+    /**
+     * useful when wrapping a Component and you want to control
+     * everything
+     */
+    component.deferControlTo = function (newComponent, additions, nextMethods) {
+      if (additions === undefined) additions = {};
+
+      return uncontrollable(newComponent, _extends({}, controlledValues, additions), nextMethods);
+    };
 
     return component;
 

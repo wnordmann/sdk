@@ -70,15 +70,13 @@ class Playback extends React.Component {
       lyr.setStyle(function(feature, resolution) {
         var start = (timeInfo.start === parseInt(timeInfo.start, 10)) ? timeInfo.start : Date.parse(feature.get(timeInfo.start));
         if (isNaN(start) || start > me.state.date) {
-          return undefined;
+          return null;
         }
         var end = (timeInfo.end === parseInt(timeInfo.end, 10)) ? timeInfo.end : Date.parse(feature.get(timeInfo.end));
         if (isNaN(end) || end < me.state.date) {
-          return undefined;
+          return null;
         }
-        if (style instanceof ol.style.Style) {
-          return [style];
-        } else if (Array.isArray(style)) {
+        if (style instanceof ol.style.Style || Array.isArray(style)) {
           return style;
         } else {
           return style.call(this, feature, resolution);
