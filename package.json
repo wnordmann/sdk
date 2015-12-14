@@ -22,7 +22,7 @@
   "author": "Boundless Spatial, Inc.",
   "license": "Apache-2.0",
   "dependencies": {
-    "blueimp-canvas-to-blob": "^2.2.0",
+    "blueimp-canvas-to-blob": "2.2.2",
     "bootstrap": "3.3.5",
     "browser-filesaver": "^1.1.0",
     "c3-windows": "^0.4.11-rc4",

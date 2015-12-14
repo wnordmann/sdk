@@ -4715,7 +4715,7 @@ exports['default'] = (0, _reactIntl.injectIntl)(Measure);
 module.exports = exports['default'];
 
 },{"./MapTool.js":30,"./Measure.css":31,"openlayers":126,"pui-react-dropdowns":172,"pure-render-decorator":557,"react":820,"react-intl":623}],33:[function(require,module,exports){
-var css = ".playback input {\n  height: 36px;\n}\ninput::-webkit-clear-button {\n  -webkit-appearance: none;\n  margin: 0;\n}\n#timeline {\n\tbackground-color: rgba(255,255,255,.7);\n}"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/Playback.css'); module.exports = css;
+var css = ".playback input {\n  height: 36px;\n}\ninput::-webkit-clear-button {\n  -webkit-appearance: none;\n  margin: 0;\n}\n#timeline {\n\tbackground-color: rgba(255,255,255,.7);\n\t/*width: 675px;*/\n}\n\n/*FireFox Fix*/\n@-moz-document url-prefix() {\n\t#timeline{\n\t\twidth: 675px;\n\t}\n}\n\n/*Safari Fix*/\n_::-webkit-:not(:root:root), #timeline{ \n\twidth: 675px;\n}\n\n\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/Playback.css'); module.exports = css;
 },{"./../../node_modules/cssify":64}],34:[function(require,module,exports){
 'use strict';
 
