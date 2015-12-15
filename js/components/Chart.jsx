@@ -151,6 +151,9 @@ class Chart extends React.Component {
         columns: columns,
         type: 'bar'
       },
+      padding: {
+        right: 30
+      },
       axis: {
         x: {
           type: 'category',
