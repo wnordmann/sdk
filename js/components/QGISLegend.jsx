@@ -37,7 +37,7 @@ class QGISLegend extends React.Component {
     var legendNodes = [];
     var symbolFunc = function(symbol) {
       var src = legendBasePath + symbol.href;
-      return (<img key={symbol.title} src={src}></img>);
+      return (<li><img key={symbol.title} src={src}></img> {symbol.title}</li>);
     };
     for (var id in legendData) {
       var title = LayerStore.findLayer(id).get('title');
@@ -47,7 +47,7 @@ class QGISLegend extends React.Component {
         legendNodes.push(
           <li key={id}>
             <ul>
-              {symbols} {title}
+              {title} {symbols}
             </ul>
           </li>
         );

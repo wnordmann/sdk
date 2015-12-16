@@ -920,6 +920,9 @@ var Chart = (function (_React$Component) {
           columns: columns,
           type: 'bar'
         },
+        padding: {
+          right: 30
+        },
         axis: {
           x: {
             type: 'category',
@@ -5079,7 +5082,13 @@ var QGISLegend = (function (_React$Component) {
       var legendNodes = [];
       var symbolFunc = function symbolFunc(symbol) {
         var src = legendBasePath + symbol.href;
-        return _react2['default'].createElement('img', { key: symbol.title, src: src });
+        return _react2['default'].createElement(
+          'li',
+          null,
+          _react2['default'].createElement('img', { key: symbol.title, src: src }),
+          ' ',
+          symbol.title
+        );
       };
       for (var id in legendData) {
         var title = _storesLayerStoreJs2['default'].findLayer(id).get('title');
@@ -5092,9 +5101,9 @@ var QGISLegend = (function (_React$Component) {
             _react2['default'].createElement(
               'ul',
               null,
-              symbols,
+              title,
               ' ',
-              title
+              symbols
             )
           ));
         }
