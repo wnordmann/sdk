@@ -5084,8 +5084,8 @@ var QGISLegend = (function (_React$Component) {
         var src = legendBasePath + symbol.href;
         return _react2['default'].createElement(
           'li',
-          null,
-          _react2['default'].createElement('img', { key: symbol.title, src: src }),
+          { key: symbol.title },
+          _react2['default'].createElement('img', { src: src }),
           ' ',
           symbol.title
         );
@@ -36016,95 +36016,6 @@ module.exports = {
    */
   ErrorAlert: defAlert({ bsStyle: 'danger', alertIcon: 'fa-exclamation-triangle' })
 };
-
-/*doc
----
-title: Alerts
-name: alerts_react
-categories:
- - react_components_alerts
- - react_all
----
-
-<code class="pam">
-<i class="fa fa-download" alt="Install the Component"></i>
-npm install pui-react-alerts --save
-</code>
-
-Require the subcomponents:
-
-```
-var SuccessAlert = require('pui-react-alerts').SuccessAlert;
-var InfoAlert = require('pui-react-alerts').InfoAlert;
-var WarningAlert = require('pui-react-alerts').WarningAlert;
-var ErrorAlert = require('pui-react-alerts').ErrorAlert;
-```
-
-
-```react_example_table
-<SuccessAlert>Everything is wonderful</SuccessAlert>
-
-<InfoAlert>Here's some information for you</InfoAlert>
-
-<WarningAlert>There is no parking on the dancefloor</WarningAlert>
-
-<ErrorAlert>Something has gone horribly awry</ErrorAlert>
-```
-*/
-
-/*doc
----
-title: Dismissable
-name: alerts_dismissable_react
-parent: alerts_react
----
-
-Add the `dismissable` property to add a close button to the alert.
-
-```react_example_table
-<SuccessAlert dismissable>Everything is wonderful</SuccessAlert>
-```
-
-If you want a callback to be called when the close button is
-clicked, set the `dismissable` property to that callback.
-
-```jsx_example
-var callback = function() {
-  alert('Dismissed!');
-};
-```
-
-```react_example_table
-<InfoAlert dismissable={callback}>with callback</InfoAlert>
-```
-
-*/
-
-/*doc
----
-title: Alerts with Icons
-name: alerts_icon_react
-parent: alerts_react
----
-
-If you want an icon to be displayed, set the `withIcon` property.
-
-```react_example_table
-<SuccessAlert withIcon>success</SuccessAlert>
-
-<InfoAlert withIcon>info</InfoAlert>
-
-<WarningAlert withIcon>warning</WarningAlert>
-
-<ErrorAlert withIcon>error</ErrorAlert>
-```
-
-Here's a dismissable alert with an icon
-
-```react_example_table
-<WarningAlert dismissable withIcon>warning</WarningAlert>
-```
-*/
 },{"babel-runtime/helpers/extends":129,"babel-runtime/helpers/object-without-properties":131,"pui-react-media":146,"react":820,"react-bootstrap/lib/Alert":148}],128:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/object/assign"), __esModule: true };
 },{"core-js/library/fn/object/assign":132}],129:[function(require,module,exports){
@@ -36467,153 +36378,6 @@ var Flag = React.createClass({
 });
 
 module.exports = { Media: Media, Flag: Flag };
-
-/*doc
----
-title: Media
-name: media_react
-categories:
- - react_utilities_media
- - react_all
----
-
-<code class="pam">
-<i class="fa fa-download" alt="Install the Component">
-npm install pui-react-media --save
-</i>
-</code>
-
-For the example, you also need to install [Images](#image_react) and require `Image` from it.
-
-
-Require the subcomponents:
-
-```
-var Media = require('pui-react-media').Media;
-var Flag = require('pui-react-media').Flag;
-```
-
-A Flag is a special type of media that is vAlign='middle'.
-
-## General media object modifiers
-
-Media Modifiers     | Options                                        | Description
-------------------- | ---------------------------------------------- | --------------------------------------------------------------------------
-`bodyAlignment`     | top (default), "middle", "bottom"              | Vertical alignment of the body (used for large images with small content next to it, usually centered)
-`stackSize    `     | "xsmall", "small", "medium", "large"           | At what breakpoint should the media object stack
-
-The images or other media can be aligned top, middle, or bottom. The default is top aligned.
-
-The base button renderer. You won't really interact with this directly.
-
-```jsx_example
-var mediaBasicImage = <Image src='http://placehold.it/50x50' alt='A sample media object'/>;
-var mediaBasicLinkedImage = <Image src='http://placehold.it/50x50' href="http://google.com" alt='A sample media object'/>;
-```
-
-```react_example_table
-<Media
-  leftImage={mediaBasicImage}
-  innerClassName='my-media-body'>
-  left media
-</Media>
-
-<Media
-  rightImage={mediaBasicLinkedImage}
-  vAlign='middle'>
-  right media
-</Media>
-
-<Media
-  leftImage={mediaBasicImage}
-  rightImage={mediaBasicImage}
-  vAlign='middle'
-  stackSize='medium'>
-  left and right media
-</Media>
-```
-
-*/
-
-/*doc
----
-title: Alignment
-name: media_alignment_react
-parent: media_react
----
-
-```jsx_example
-var mediaAlignmentImage = <Image href='http://www.google.com' src='http://placehold.it/50x50'  alt='A sample media object'/>;
-```
-
-```react_example
-<div>
-  <Media leftImage={mediaAlignmentImage}>
-    Media: top aligned image - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-  </Media>
-
-  <Flag leftImage={mediaAlignmentImage}>
-    Flag: middle aligned image - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-  </Flag>
-
-  <Flag leftImage={mediaAlignmentImage}>
-    Flag: middle aligned and middle body (for short text and big images)
-  </Flag>
-
-  <Media
-    leftImage={mediaAlignmentImage}
-    vAlign='bottom'>
-    Media: bottom aligned - This is rarely, if ever, used. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-  </Media>
-</div>
-```
-*/
-
-/*doc
----
-title: Spacing
-name: media_spacing_react
-parent: media_react
----
-
-
-Media spacing can be added to the left and right medias. If no spacing is defined, it defaults to large.
-
-```jsx_example
-var mediaSpacingImage = <Image href='http://www.google.com' src='http://placehold.it/50x50' alt='A sample media object'/>;
-```
-
-```react_example_table
-<Media leftImage={mediaSpacingImage}>
-  default image spacing media
-</Media>
-
-<Media
-  leftImage={mediaSpacingImage}
-  leftMediaSpacing='small'>
-  small image spacing media
-</Media>
-
-<Media
-  leftImage={mediaSpacingImage}
-  leftMediaSpacing='medium'>
-  medium image spacing media
-</Media>
-
-<Media
-  leftImage={mediaSpacingImage}
-  leftMediaSpacing='large'>
-  large image spacing media
-</Media>
-
-<Media
-  leftImage={mediaSpacingImage}
-  leftMediaSpacing='xlarge'>
-  xlarge image spacing media
-</Media>
-```
-
- */
 },{"babel-runtime/helpers/extends":129,"babel-runtime/helpers/object-without-properties":131,"classnames":147,"react":820}],147:[function(require,module,exports){
 /*!
   Copyright (c) 2015 Jed Watson.
@@ -37131,95 +36895,6 @@ module.exports = {
    */
   HighlightAltButton: defButton({ kind: 'highlight-alt' })
 };
-
-/*doc
----
-title: Buttons
-name: button_react
-categories:
- - react_base_buttons
- - react_all
----
-
-<code class="pam">
-<i class="fa fa-download" alt="Install the Component">
-npm install pui-react-buttons --save
-</i>
-</code>
-
-Require the subcomponents:
-
-```
-var DefaultButton = require('pui-react-buttons').DefaultButton;
-var DefaultAltButton = require('pui-react-buttons').DefaultAltButton;
-var LowlightButton = require('pui-react-buttons').LowlightButton;
-var DangerButton = require('pui-react-buttons').DangerButton;
-var HighlightButton = require('pui-react-buttons').HighlightButton;
-var HighlightAltButton = require('pui-react-buttons').HighlightAltButton;
-var UIButton = require('pui-react-buttons').UIButton;
-```
-
-
-Buttons use the button tag by default. If you'd like a link rather than a button, simply add an `href` attribute.
-
-```react_example_table
-<DefaultButton href="http://example.com">
-  Default
-</DefaultButton>
-```
-
-To make a button large, set the `large` property to true.
-
-```react_example_table
-<HighlightButton large={true}>
-  Big Button
-</HighlightButton>
-```
-
-To make a button full-width, set the `block` property to true.
-
-```react_example
-<DangerButton block={true} >
-  Danger Zone
-</DangerButton>
-```
-
-Specific button types.
-
-```react_example_table
-<DefaultButton>
-  Default
-</DefaultButton>
-
-<DefaultAltButton>
-  Default alternate
-</DefaultAltButton>
-
-<LowlightButton>
-  Lowlight
-</LowlightButton>
-
-<DangerButton>
-  Danger
-</DangerButton>
-
-<HighlightButton>
-  Highlight
-</HighlightButton>
-
-<HighlightAltButton>
-  Highlight alternate
-</HighlightAltButton>
-```
-
-The base button renderer. You won't really interact with this directly.
-
-```react_example_table
-<UIButton>
-  I'm a button
-</UIButton>
-```
-*/
 },{"babel-runtime/helpers/extends":156,"babel-runtime/helpers/object-without-properties":157,"pui-react-helpers":339,"react":820}],155:[function(require,module,exports){
 arguments[4][128][0].apply(exports,arguments)
 },{"core-js/library/fn/object/assign":158,"dup":128}],156:[function(require,module,exports){
@@ -37411,118 +37086,6 @@ module.exports = {
    */
   HighlightAltDropdown: defDropdown({ buttonClassName: 'btn-highlight-alt', bsStyle: null })
 };
-
-/*doc
----
-title: Dropdowns
-name: dropdown_react
-categories:
- - react_components_dropdowns
- - react_all
----
-
-<code class="pam">
-<i class="fa fa-download" alt="Install the Component">
-npm install pui-react-dropdowns --save
-</i>
-</code>
-
-Require the subcomponents:
-
-```
-var Dropdown = require('pui-react-dropdowns').Dropdown;
-var DropdownItem = require('pui-react-dropdowns').DropdownItem;
-var LinkDropdown = require('pui-react-dropdowns').LinkDropdown;
-var DefaultAltDropdown = require('pui-react-dropdowns').DefaultAltDropdown;
-var LowlightDropdown = require('pui-react-dropdowns').LowlightDropdown;
-var DangerDropdown = require('pui-react-dropdowns').DangerDropdown;
-var HighlightDropdown = require('pui-react-dropdowns').HighlightDropdown;
-var HighlightAltDropdown = require('pui-react-dropdowns').HighlightAltDropdown;
-```
-
-This is the basic bootstrap dropdown:
-
-```react_example_table
-<Dropdown title='DropDown'>
-  <DropdownItem href="http://media.giphy.com/media/13py6c5BSnBkic/giphy.gif">Booyeah</DropdownItem>
-  <DropdownItem href="http://media.giphy.com/media/TlK63EQERmiAVzMEgO4/giphy.gif">Adorable</DropdownItem>
-</Dropdown>
-```
-
-Here are all the different dropdown styles:
-
-```react_example_table
-<LinkDropdown title='Link'>
-  <DropdownItem href="http://media.giphy.com/media/TlK63EQERmiAVzMEgO4/giphy.gif">Adorable</DropdownItem>
-</LinkDropdown>
-
-<DefaultAltDropdown title='Default Alt'>
-  <DropdownItem href="http://media.giphy.com/media/TlK63EQERmiAVzMEgO4/giphy.gif">Adorable</DropdownItem>
-</DefaultAltDropdown>
-
-<LowlightDropdown title='Lowlight'>
-  <DropdownItem href="http://media.giphy.com/media/TlK63EQERmiAVzMEgO4/giphy.gif">Adorable</DropdownItem>
-</LowlightDropdown>
-
-<DangerDropdown title='Danger'>
-  <DropdownItem href="http://media.giphy.com/media/TlK63EQERmiAVzMEgO4/giphy.gif">Adorable</DropdownItem>
-</DangerDropdown>
-
-<HighlightDropdown title='Highlight'>
-  <DropdownItem href="http://media.giphy.com/media/TlK63EQERmiAVzMEgO4/giphy.gif">Adorable</DropdownItem>
-</HighlightDropdown>
-
-<HighlightAltDropdown title='Highlight Alt'>
-  <DropdownItem href="http://media.giphy.com/media/TlK63EQERmiAVzMEgO4/giphy.gif">Adorable</DropdownItem>
-</HighlightAltDropdown>
-```
-
-If you want to customize the dropdown, you can use `className` to add a modifier class to the `btn-group`.
-
-To customize the dropdown button, you can add modifier classes to it
-using the `buttonClassName` property. `id` and `style` will also be applied to the dropdown button.
-
-```react_example
-<DefaultAltDropdown title='DropDown' buttonClassName='btn-lg'>
-  <DropdownItem href="http://media.giphy.com/media/13py6c5BSnBkic/giphy.gif">Booyeah</DropdownItem>
-  <DropdownItem href="http://media.giphy.com/media/TlK63EQERmiAVzMEgO4/giphy.gif">Adorable</DropdownItem>
-</DefaultAltDropdown>
-```
-
-If you want to add borders between items, you can pass a `border` attribute to any of our Dropdowns.
-
-```react_example
-<DefaultAltDropdown title='DropDown' border>
-  <DropdownItem href="http://media.giphy.com/media/13py6c5BSnBkic/giphy.gif">Booyeah</DropdownItem>
-  <DropdownItem href="http://media.giphy.com/media/TlK63EQERmiAVzMEgO4/giphy.gif">Adorable</DropdownItem>
-  <DropdownItem href="http://media.giphy.com/media/13py6c5BSnBkic/giphy.gif">Booyeah</DropdownItem>
-  <DropdownItem href="http://media.giphy.com/media/TlK63EQERmiAVzMEgO4/giphy.gif">Adorable</DropdownItem>
-</DefaultAltDropdown>
-```
-
-If you want to right align the dropdown menu, you can pass a `pullRight` attribute to any of our Dropdowns.
-
-```react_example
-<DefaultAltDropdown title='DropDown' pullRight>
-  <DropdownItem href="http://media.giphy.com/media/13py6c5BSnBkic/giphy.gif">Booyeah</DropdownItem>
-  <DropdownItem href="http://media.giphy.com/media/TlK63EQERmiAVzMEgO4/giphy.gif">Adorable</DropdownItem>
-</DefaultAltDropdown>
-```
-
-If you want to divide the dropdown menu with dividers, you can pass a `divider` attribute to a DropdownItem.
-
-```react_example
-<DefaultAltDropdown title='DropDown'>
-  <DropdownItem href="http://media.giphy.com/media/13py6c5BSnBkic/giphy.gif">Booyeah</DropdownItem>
-  <DropdownItem href="http://media.giphy.com/media/TlK63EQERmiAVzMEgO4/giphy.gif">Adorable</DropdownItem>
-  <DropdownItem href="http://media.giphy.com/media/13py6c5BSnBkic/giphy.gif">Booyeah</DropdownItem>
-  <DropdownItem divider></DropdownItem>
-  <DropdownItem href="http://media.giphy.com/media/TlK63EQERmiAVzMEgO4/giphy.gif">Adorable</DropdownItem>
-  <DropdownItem href="http://media.giphy.com/media/13py6c5BSnBkic/giphy.gif">Booyeah</DropdownItem>
-</DefaultAltDropdown>
-```
-
-*/
 },{"babel-runtime/helpers/extends":177,"babel-runtime/helpers/interop-require-default":179,"babel-runtime/helpers/object-without-properties":180,"classnames":201,"lodash.uniqueid":123,"react":820,"react-bootstrap/lib/Dropdown":206,"react-bootstrap/lib/MenuItem":212}],173:[function(require,module,exports){
 arguments[4][128][0].apply(exports,arguments)
 },{"core-js/library/fn/object/assign":181,"dup":128}],174:[function(require,module,exports){
@@ -43050,131 +42613,6 @@ var Row = React.createClass({
 var Col = require('react-bootstrap/lib/Col');
 
 module.exports = { Row: Row, Col: Col };
-
-/*doc
----
-title: Grids
-name: grid_react
-categories:
- - react_utilities_grids
- - react_all
----
-
-
-<code class="pam">
-<i class="fa fa-download" alt="Install the Component">
-npm install pui-react-grids --save
-</i>
-</code>
-
-Require the subcomponents:
-
-```
-var Row = require('pui-react-grids').Row;
-var Col = require('pui-react-grids').Col;
-```
-
-The react grids depend on [React-Bootstrap](http://react-bootstrap.github.io/components.html#grids). Check out their docs
-for advanced stuff like pushing, pulling, and offsets.
-
-*/
-
-/*doc
----
-title: Examples
-name: 04_grid_examples_react
-parent: grid_react
----
-
-
-```react_example
-<div>
-  <Row className="grid-show">
-    <Col md={2}></Col>
-    <Col md={2}></Col>
-    <Col md={2}></Col>
-    <Col md={2}></Col>
-    <Col md={2}></Col>
-    <Col md={2}></Col>
-    <Col md={2}></Col>
-    <Col md={2}></Col>
-    <Col md={2}></Col>
-    <Col md={2}></Col>
-    <Col md={2}></Col>
-    <Col md={2}></Col>
-  </Row>
-
-  <Row className="grid-show">
-    <Col md={16}></Col>
-    <Col md={8}></Col>
-  </Row>
-
-  <Row className="grid-show">
-    <Col md={8}></Col>
-    <Col md={8}></Col>
-    <Col md={8}></Col>
-  </Row>
-
-  <Row className="grid-show">
-    <Col md={12}></Col>
-    <Col md={12}></Col>
-  </Row>
-</div>
- ```
- */
-
-/*doc
----
-title: "Example: Mobile and Desktop"
-name: 04_a_grid_mobile_and_desktop_react
-parent: 04_grid_examples_react
----
-Don't want your columns to simply stack in smaller devices?
-Use the extra small and medium device grid classes by adding `.col-xs-*` `.col-md-*` to your columns.
-See the example below for a better idea of how it all works.
-
-```react_example
-<div>
-  <Row className="grid-show">
-    <Col xs={24} md={16}></Col>
-    <Col xs={12} md={8}></Col>
-  </Row>
-  <Row className="grid-show">
-    <Col xs={12} md={8}></Col>
-    <Col xs={12} md={8}></Col>
-    <Col xs={12} md={8}></Col>
-  </Row>
-  <Row className="grid-show">
-    <Col xs={12}></Col>
-    <Col xs={12}></Col>
-  </Row>
-</div>
-```
- */
-
-/*doc
----
-title: Gutter Sizes
-name: 04_grid_gutter_sizes_react
-parent: grid_react
----
-```react_example
-<div>
-  <Row className="grid-show">
-    <Col md={12}></Col>
-    <Col md={12}></Col>
-  </Row>
-  <Row className="grid-show" gutter="md">
-    <Col md={12}></Col>
-    <Col md={12}></Col>
-  </Row>
-  <Row className="grid-show" gutter="sm">
-    <Col md={12}></Col>
-    <Col md={12}></Col>
-  </Row>
-</div>
-```
-*/
 },{"babel-runtime/helpers/object-without-properties":315,"pui-react-helpers":339,"react":820,"react-bootstrap/lib/Col":333,"react-bootstrap/lib/Row":334}],311:[function(require,module,exports){
 arguments[4][128][0].apply(exports,arguments)
 },{"core-js/library/fn/object/assign":316,"dup":128}],312:[function(require,module,exports){
@@ -43717,86 +43155,6 @@ module.exports = {
    */
   Icon: Icon
 };
-
-/*doc
----
-title: Iconography
-name: iconography_react
-categories:
- - react_base_iconography
- - react_all
----
-
-
-<code class="pam">
-<i class="fa fa-download" alt="Install the Component">
-npm install pui-react-iconography --save
-</i>
-</code>
-
-Require the subcomponent:
-
-```
-var Icon = require('pui-react-iconography');
-```
-
-
-
-We use [Font Awesome](http://fortawesome.github.io/Font-Awesome/icons/).
-Specify the icon by changing the name. The name is the font-awesome class sans the `fa-`.
-To spin the icon, add `spin` to the Icon.
-
-```react_example_table
-<Icon name="plus" />
-
-<Icon spin name="angellist" />
-```
-*/
-
-/*doc
----
-title: React Iconography Sizing
-name: iconography_sizing_react
-parent: iconography_react
----
-
-Pass in any PUI typography size modifier in the size attribute.
-These are useful if you want your icon to match the size of a text element.
-
-```react_example_table
-<Icon name="plus" size="title" />
-
-<Icon name="plus" size="h1" />
-
-<Icon name="plus" size="h2" />
-
-<Icon name="plus" size="h3" />
-
-<Icon name="plus" size="h4" />
-
-<Icon name="plus" size="h5" />
-
-<Icon name="plus" size="h6" />
-
-<Icon name="plus" size="sm" />
-
-<Icon name="plus" size="xs" />
-```
-
-You can also pass in any FontAwesome size modifier as well.
-
-```react_example_table
-<Icon name="plus" size="lg" />
-
-<Icon name="plus" size="2x" />
-
-<Icon name="plus" size="3x" />
-
-<Icon name="plus" size="4x" />
-
-<Icon name="plus" size="5x" />
-```
-*/
 },{"babel-runtime/core-js/get-iterator":360,"babel-runtime/helpers/class-call-check":364,"babel-runtime/helpers/extends":365,"babel-runtime/helpers/inherits":366,"babel-runtime/helpers/object-without-properties":367,"object-assign":413,"react":820,"react-fa/lib/Icon":414}],360:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/get-iterator"), __esModule: true };
 },{"core-js/library/fn/get-iterator":368}],361:[function(require,module,exports){
@@ -44774,135 +44132,6 @@ module.exports = {
   MarketingH6: MarketingH6,
   Heading: Heading
 };
-
-/*doc
----
-title: Typography
-name: type_react
-categories:
- - react_base_typography
- - react_all
----
-
-<code class="pam">
-<i class="fa fa-download" alt="Install the Component">
-npm install pui-react-typography --save
-</i>
-</code>
-
-Require the subcomponents:
-
-```
-var DefaultH1 = require('pui-react-typography').DefaultH1;
-var DefaultH2 = require('pui-react-typography').DefaultH2;
-var DefaultH3 = require('pui-react-typography').DefaultH3;
-var DefaultH4 = require('pui-react-typography').DefaultH4;
-var DefaultH5 = require('pui-react-typography').DefaultH5;
-var DefaultH6 = require('pui-react-typography').DefaultH6;
-var AlternateH1 = require('pui-react-typography').AlternateH1;
-var AlternateH2 = require('pui-react-typography').AlternateH2;
-var AlternateH3 = require('pui-react-typography').AlternateH3;
-var AlternateH4 = require('pui-react-typography').AlternateH4;
-var AlternateH5 = require('pui-react-typography').AlternateH5;
-var AlternateH6 = require('pui-react-typography').AlternateH6;
-var MarketingH1 = require('pui-react-typography').MarketingH1;
-var MarketingH2 = require('pui-react-typography').MarketingH2;
-var MarketingH3 = require('pui-react-typography').MarketingH3;
-var MarketingH4 = require('pui-react-typography').MarketingH4;
-var MarketingH5 = require('pui-react-typography').MarketingH5;
-var MarketingH6 = require('pui-react-typography').MarketingH6;
-var Heading = require('pui-react-typography').Heading;
-```
-
-We have three type systems. Which one you choose depends on your product.
-
-* Marketing sites should use the largest styles, for example `<MarketingH1>A Top Level Heading</MarketingH1>`
-* Most sites will use our default headings, for example `<DefaultH1>A Top Level Heading</DefaultH1>`
-* Rarely, sites will need a smaller type scale, for example `<AlternateH1>A Top Level Heading</AlternateH1>`
-*/
-
-/*doc
----
-title: Default
-name: 01_type_default_react
-parent: type_react
----
-
-```react_example_table
-<DefaultH1>h1 31px</DefaultH1>
-
-<DefaultH2>h2 25px</DefaultH2>
-
-<DefaultH3>h3 20px</DefaultH3>
-
-<DefaultH4>h4 18px</DefaultH4>
-
-<DefaultH5>h5 16px</DefaultH5>
-
-<DefaultH6>h6 13px</DefaultH6>
-```
-*/
-
-/*doc
----
-title: Alternate
-name: 02_type_alt_react
-parent: type_react
----
-
-
-```react_example_table
-<AlternateH1>This is an H1</AlternateH1>
-
-<AlternateH2>This is an H2</AlternateH2>
-
-<AlternateH3>This is an H3</AlternateH3>
-
-<AlternateH4>This is an H4</AlternateH4>
-
-<AlternateH5>This is an H5</AlternateH5>
-
-<AlternateH6>This is an H6</AlternateH6>
-```
-*/
-
-/*doc
----
-title: Marketing
-name: 03_type_marketing_react
-parent: type_react
----
-
-```react_example_table
-<MarketingH1>This is an h1</MarketingH1>
-
-<MarketingH2>This is an h2</MarketingH2>
-
-<MarketingH3>This is an h3</MarketingH3>
-
-<MarketingH4>This is an h4</MarketingH4>
-
-<MarketingH5>This is an h5</MarketingH5>
-
-<MarketingH6>This is an h6</MarketingH6>
-```
-*/
-
-/*doc
----
-title: Custom
-name: 04_type_custom_react
-parent: type_react
----
-
-Usually, you want to use the provided headings. If your mock doesn't exactly match, you should try the normal headings,
-and see if it still looks ok. If it doesn't (this should be rare!) you can use our custom type generator.
-
-You may want to wrap this in a custom reusable React component rather than calling it directly.
-
-```react_example
-<Heading element="h1" bold="high" color="type-brand-5">This is a custom h1</Heading>
-```*/
 },{"babel-runtime/helpers/extends":422,"babel-runtime/helpers/object-without-properties":425,"pui-react-helpers":339,"react":820}],452:[function(require,module,exports){
 arguments[4][149][0].apply(exports,arguments)
 },{"./styleMaps":460,"babel-runtime/helpers/interop-require-default":424,"dup":149,"react":820,"react-prop-types/lib/keyOf":483}],453:[function(require,module,exports){
@@ -46770,75 +45999,6 @@ var SearchInput = React.createClass({
 });
 
 module.exports = { SearchInput: SearchInput };
-
-/*doc
----
-title: Search Inputs
-name: form_search_input_react
-parent: form_react
----
-
-
-<code class="pam">
-<i class="fa fa-download" alt="Install the Component">
-npm install pui-react-search-input --save
-</i>
-</code>
-
-Require the subcomponent:
-
-```
-var SearchInput = require('pui-react-search-input').SearchInput;
-```
-
-A `SearchInput` component can be used on its own as an input. It accepts standard
-text input properties (such as `placeholder`).
-
-```react_example
-<SearchInput placeholder="Search..."/>
-```
-
-To demonstrate how to use a SearchInput in a more complex example, let's say
-we want to filter a list based on the user's input. We can accomplish this
-by creating a stateful component which is composed of the SearchInput and the
-list to filter.
-
-```jsx_example
-var FilteringSearchExample = React.createClass({
-  getInitialState: function () {
-    return {
-      filter: "",
-      items: ['Apple', 'Banana', 'Orange']
-    }
-  },
-
-  updateFilter: function (event) {
-    this.setState({ filter: event.target.value });
-  },
-
-  render: function () {
-    var filterRegex = new RegExp(this.state.filter, "i");
-    var listItems = this.state.items.map(function (item) {
-      return item.match(filterRegex) && <li key={item}>{item}</li>;
-    });
-
-    return (
-      <div>
-        <SearchInput placeholder='Filter by...' onChange={this.updateFilter}/>
-        <ul>
-          {listItems}
-        </ul>
-      </div>
-    )
-  }
-});
-```
-
-```react_example
-<FilteringSearchExample />
-```
-
-*/
 },{"pui-react-helpers":339,"react":820}],486:[function(require,module,exports){
 /*(c) Copyright 2015 Pivotal Software, Inc. All Rights Reserved.*/
 "use strict";
@@ -48786,9 +47946,9 @@ arguments[4][484][0].apply(exports,arguments)
 /*(c) Copyright 2015 Pivotal Software, Inc. All Rights Reserved.*/
 'use strict';
 
-var _objectWithoutProperties = require('babel-runtime/helpers/object-without-properties')['default'];
-
 var _extends = require('babel-runtime/helpers/extends')['default'];
+
+var _objectWithoutProperties = require('babel-runtime/helpers/object-without-properties')['default'];
 
 var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
@@ -48930,9 +48090,10 @@ var BaseTabs = _react2['default'].createClass({
 
       tabs = _react2['default'].createElement(
         _reactBootstrapLibAccordion2['default'],
-        { className: smallScreenClasses,
+        _extends({ className: smallScreenClasses,
           activeKey: this.state.activeKey,
-          onSelect: this.handleSelect },
+          onSelect: this.handleSelect
+        }, props),
         childrenAsPanels
       );
     } else {
@@ -48941,12 +48102,12 @@ var BaseTabs = _react2['default'].createClass({
         { className: largeScreenClasses },
         _react2['default'].createElement(
           _reactBootstrapLibTabs2['default'],
-          { id: this.state.id || this.props.id,
-            position: position,
+          _extends({ position: position,
             tabWidth: tabWidth,
             paneWidth: paneWidth,
             activeKey: this.state.activeKey,
-            onSelect: this.handleSelect },
+            onSelect: this.handleSelect
+          }, _extends({ id: this.state.id }, props)),
           children
         )
       );
@@ -48954,7 +48115,7 @@ var BaseTabs = _react2['default'].createClass({
 
     return _react2['default'].createElement(
       'div',
-      props,
+      null,
       tabs
     );
   }
@@ -49141,128 +48302,6 @@ module.exports = {
   Tab: Tab,
   LeftTabs: LeftTabs
 };
-
-/*doc
----
-title: Tabs
-name: tabs_react
-categories:
- - react_components_tabs
- - react_all
----
-
-<code class="pam">
-<i class="fa fa-download" alt="Install the Component">
-npm install pui-react-tabs --save
-</i>
-</code>
-
-Require the subcomponents:
-
-```
-var SimpleTabs = require('pui-react-tabs').SimpleTabs;
-var SimpleAltTabs = require('pui-react-tabs').SimpleAltTabs;
-var LeftTabs = require('pui-react-tabs').LeftTabs;
-var Tab = require('pui-react-tabs').Tab;
-```
-
-
-Using Tab components in React consists of a parent element for the desired Tab type (for example,
-`SimpleTabs` or `SimpleAltTabs`). Each `Tab` is a child of this and has a `tab` property for the
-string value a Tab should display. Additionally, each `Tab` must define an `eventKey` property
-for uniquely identifying this tab to its parent component.
-
-Property   | Required? | Type             | Description
------------| ----------|------------------| --------------------------------------------------------------------------
-`responsiveBreakpoint` | no        | one of: `"xs"`, `"sm"`, `"md"`, `lg`,          | The size at which the small-screen tabs (accordion-style) should switch to large-screen tabs (folder-style)
-`defaultActiveKey` | no            | should equal one of your tab's event keys | The tab which will start out open
-`smallScreenClassName` | no  | css class | Will be applied to small screen tabs only
-`largeScreenClassName` | no  | css class | Will be applied to large screen tabs only
-`onSelect` | no | function | Will override default behavior when clicking on a tab. If you want to retain the default behavior as well as add new functionality, change default active key in the function you provide
-
-*/
-
-/*doc
----
-title: Simple
-name: 01_simple_tabs_react
-parent: tabs_react
----
-
-```react_example
-<SimpleTabs defaultActiveKey={1}>
-  <Tab eventKey={1} title="Tab 1">Wow!</Tab>
-  <Tab eventKey={2} title="Tab 2">
-    <h2>Neat!</h2>
-    <span>So much content.</span>
-  </Tab>
-</SimpleTabs>
-```
-*/
-
-/*doc
----
-title: Alt
-name: 02_alt_tabs_react
-parent: tabs_react
----
-
-```react_example
-<SimpleAltTabs defaultActiveKey={2}>
-  <Tab eventKey={1} title="Tab 1">Wow!</Tab>
-  <Tab eventKey={2} title="Tab 2">
-    <h2>Neat!</h2>
-    <span>So much content.</span>
-  </Tab>
-</SimpleAltTabs>
-```
-*/
-
-/*doc
- ---
- title: Left
- name: 03_left_tabs_react
- parent: tabs_react
- ---
-
- `LeftTabs` can be used to create tabs where the nav is stacked on the left. They
- take a few optional special properties in addition to the same properties as SimpleTabs and SimpleAltTabs.
-
- Property   | Required? | Type             | Description                                  | Default
- -----------| ----------|------------------| ---------------------------------------------|------------------------
- `tabWidth` | no        |  `number`        | The number of bs columns for the tabs        | 6
- `paneWidth` | no       | `number`         | The number of bs columns for the tab content | 24 - `tabWidth`
-
-```react_example
-<LeftTabs defaultActiveKey={1} tabWidth={3} paneWidth={9}>
-  <Tab eventKey={1} title="Tab 1">Wow!</Tab>
-  <Tab eventKey={2} title="Tab 2">
-    Neat!
-    <span>So much content.</span>
-  </Tab>
-</LeftTabs>
-```
-
- */
-
-/*doc
----
-title: Responsive Breakpoints
-name: 04_responsive_tabs_react
-parent: tabs_react
----
-
- Tabs can be responsive, and will display accordion-style on small screens and folder-style on large
- screens.
-
-```react_example
-<SimpleTabs defaultActiveKey={1} responsiveBreakpoint="md">
-  <Tab eventKey={1} title="Tab 1"> I'm so responsive </Tab>
-  <Tab eventKey={2} title="Tab 2"> Me too </Tab>
-</SimpleTabs>
-```
-
- */
 },{"./media-size":486,"babel-runtime/helpers/extends":492,"babel-runtime/helpers/interop-require-default":494,"babel-runtime/helpers/object-without-properties":495,"classnames":519,"lodash.uniqueid":123,"raf":520,"react":820,"react-bootstrap/lib/Accordion":522,"react-bootstrap/lib/Panel":528,"react-bootstrap/lib/Tab":531,"react-bootstrap/lib/Tabs":532}],557:[function(require,module,exports){
 /**
  * @author Félix Girault <felix.girault@gmail.com>
