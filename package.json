@@ -10,7 +10,9 @@
   "scripts": {
     "postinstall" : "node scripts/install.js",
     "i18n": "node scripts/generate-locale.js",
-    "css": "node_modules/.bin/dr-frankenstyle dist/css",
+    "css:drfrankenstyle": "node_modules/.bin/dr-frankenstyle dist/css",
+    "css:append": "node scripts/generate-css.js",
+    "css": "node_modules/.bin/npm-run-all css:drfrankenstyle css:append",
     "minify:css": "node_modules/.bin/cleancss -o dist/css/components.min.css dist/css/components.css",
     "build:full": "node_modules/.bin/browserify -g [envify --NODE_ENV production] -p [minifyify --no-map --exclude node_modules/openlayers/dist/ol.js]  js/full.jsx -o dist/js/full.js",
     "build:full:debug": "node_modules/.bin/browserify -g [envify --NODE_ENV development] js/full.jsx -o dist/js/full-debug.js",
