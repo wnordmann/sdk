@@ -3650,6 +3650,25 @@ var _puiReactButtons2 = _interopRequireDefault(_puiReactButtons);
 
 var _reactIntl = require('react-intl');
 
+var messages = (0, _reactIntl.defineMessages)({
+  title: {
+    'id': 'labelmodal.title',
+    'defaultMessage': 'Label for layer {layer}'
+  },
+  applybutton: {
+    'id': 'labelmodal.applybutton',
+    'defaultMessage': 'Apply'
+  },
+  clearbutton: {
+    'id': 'labelmodal.clearbutton',
+    'defaultMessage': 'Clear'
+  },
+  attributelabel: {
+    'id': 'labelmodal.attributelabel',
+    'defaultMessage': 'Attribute'
+  }
+});
+
 var LabelModal = (function (_Dialog$Modal) {
   _inherits(LabelModal, _Dialog$Modal);
 
@@ -3748,6 +3767,8 @@ var LabelModal = (function (_Dialog$Modal) {
   }, {
     key: 'render',
     value: function render() {
+      var formatMessage = this.props.intl.formatMessage;
+
       var me = this;
       var attributeItems = this.state.attributes.map(function (attribute, idx) {
         return _react2['default'].createElement(
@@ -3758,31 +3779,52 @@ var LabelModal = (function (_Dialog$Modal) {
       });
       return _react2['default'].createElement(
         _puiReactModals2['default'].BaseModal,
-        _extends({ title: 'foo', show: this.state.isVisible, onHide: this.close }, this.props),
+        _extends({ title: formatMessage(messages.title, { layer: this.props.layer.get('title') }), show: this.state.isVisible, onHide: this.close }, this.props),
         _react2['default'].createElement(
           _puiReactModals2['default'].ModalBody,
           null,
           _react2['default'].createElement(
             'form',
-            { onSubmit: this._onSubmit },
+            { onSubmit: this._onSubmit, className: 'form-horizontal' },
             _react2['default'].createElement(
-              'select',
-              { defaultValue: this.state.attribute, onChange: this._onItemChange.bind(this) },
-              attributeItems
-            ),
-            _react2['default'].createElement(
-              _puiReactButtons2['default'].DefaultButton,
-              { onClick: this._setLabel.bind(this) },
-              'Apply'
-            ),
-            _react2['default'].createElement(
-              _puiReactButtons2['default'].DefaultButton,
-              { onClick: this._clearLabel.bind(this) },
-              'Clear'
+              'div',
+              { className: 'form-group' },
+              _react2['default'].createElement(
+                _puiReactGrids2['default'].Col,
+                { md: 4 },
+                _react2['default'].createElement(
+                  'label',
+                  { htmlFor: 'labelSelector' },
+                  formatMessage(messages.attributelabel),
+                  ':'
+                )
+              ),
+              _react2['default'].createElement(
+                _puiReactGrids2['default'].Col,
+                { md: 8 },
+                _react2['default'].createElement(
+                  'select',
+                  { id: 'labelSelector', defaultValue: this.state.attribute, onChange: this._onItemChange.bind(this) },
+                  attributeItems
+                )
+              )
             )
           )
         ),
-        _react2['default'].createElement(_puiReactModals2['default'].ModalFooter, null)
+        _react2['default'].createElement(
+          _puiReactModals2['default'].ModalFooter,
+          null,
+          _react2['default'].createElement(
+            _puiReactButtons2['default'].DefaultButton,
+            { onClick: this._setLabel.bind(this) },
+            formatMessage(messages.applybutton)
+          ),
+          _react2['default'].createElement(
+            _puiReactButtons2['default'].DefaultButton,
+            { onClick: this._clearLabel.bind(this) },
+            formatMessage(messages.clearbutton)
+          )
+        )
       );
     }
   }]);

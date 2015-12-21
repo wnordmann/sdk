@@ -6,6 +6,29 @@ import Grids from 'pui-react-grids';
 import UI from 'pui-react-buttons';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
+const messages = defineMessages({
+  title: {
+    id: 'labelmodal.title',
+    description: 'Title for the label modal dialog',
+    defaultMessage: 'Label for layer {layer}'
+  },
+  applybutton: {
+    id: 'labelmodal.applybutton',
+    description: 'Text for the apply button',
+    defaultMessage: 'Apply'
+  },
+  clearbutton: {
+    id: 'labelmodal.clearbutton',
+    description: 'Text for the clear button',
+    defaultMessage: 'Clear'
+  },
+  attributelabel: {
+    id: 'labelmodal.attributelabel',
+    description: 'Text for label for the attribute select combo',
+    defaultMessage: 'Attribute'
+  }
+});
+
 class LabelModal extends Dialog.Modal {
   constructor(props) {
     super(props);
@@ -87,6 +110,7 @@ class LabelModal extends Dialog.Modal {
     }
   }
   render() {
+    const {formatMessage} = this.props.intl;
     var me = this;
     var attributeItems = this.state.attributes.map(function(attribute, idx) {
       return (
@@ -94,17 +118,25 @@ class LabelModal extends Dialog.Modal {
       );
     });
     return (
-      <Dialog.BaseModal title='foo' show={this.state.isVisible} onHide={this.close} {...this.props}>
+      <Dialog.BaseModal title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} show={this.state.isVisible} onHide={this.close} {...this.props}>
         <Dialog.ModalBody>
-          <form onSubmit={this._onSubmit}>
-            <select defaultValue={this.state.attribute} onChange={this._onItemChange.bind(this)}>
-              {attributeItems}
-            </select>
-            <UI.DefaultButton onClick={this._setLabel.bind(this)}>Apply</UI.DefaultButton>
-            <UI.DefaultButton onClick={this._clearLabel.bind(this)}>Clear</UI.DefaultButton>
+          <form onSubmit={this._onSubmit} className='form-horizontal'>
+            <div className="form-group">
+              <Grids.Col md={4}>
+                <label htmlFor='labelSelector'>{formatMessage(messages.attributelabel)}:</label>
+              </Grids.Col>
+              <Grids.Col md={8}>
+                <select id='labelSelector' defaultValue={this.state.attribute} onChange={this._onItemChange.bind(this)}>
+                  {attributeItems}
+                </select>
+              </Grids.Col>
+            </div>
           </form>
         </Dialog.ModalBody>
-        <Dialog.ModalFooter />
+        <Dialog.ModalFooter>
+          <UI.DefaultButton onClick={this._setLabel.bind(this)}>{formatMessage(messages.applybutton)}</UI.DefaultButton>
+          <UI.DefaultButton onClick={this._clearLabel.bind(this)}>{formatMessage(messages.clearbutton)}</UI.DefaultButton>
+        </Dialog.ModalFooter>
       </Dialog.BaseModal>
     );
   }
