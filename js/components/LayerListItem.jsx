@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
+import FilterModal from './FilterModal.jsx';
 import LayerActions from '../actions/LayerActions.js';
 import Dialog from 'pui-react-modals';
 import Grids from 'pui-react-grids';
 import UI from 'pui-react-buttons';
-import filtrex from 'filtrex';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import './LayerListItem.css';
@@ -26,11 +26,6 @@ const messages = defineMessages({
     description: 'Label for layer visibility checkbox, only used for screen readers',
     defaultMessage: 'Layer visibility'
   },
-  filtermodalinputlabel: {
-    id: 'layerlistitem.filtermodalinputlabel',
-    description: 'Label for filter input in modal dialog, only used for screen readers',
-    defaultMessage: 'Text to filter features in layer by'
-  },
   zoomtotitle: {
     id: 'layerlistitem.zoomtotitle',
     description: 'Title for the zoom to layer button',
@@ -45,21 +40,6 @@ const messages = defineMessages({
     id: 'layerlistitem.filtertitle',
     description: 'Title for the filter button',
     defaultMessage: 'Filter layer'
-  },
-  filtermodaltitle: {
-    id: 'layerlistitem.filtermodaltitle',
-    description: 'Title for the filter button',
-    defaultMessage: 'Filters for layer {layer}'
-  },
-  addfiltertext: {
-    id: 'layerlistitem.addfiltertext',
-    description: 'Title for the add filter button',
-    defaultMessage: 'Add'
-  },
-  removefiltertext: {
-    id: 'layerlistitem.removefiltertext',
-    description: 'Title for the remove filter button',
-    defaultMessage: 'Remove'
   },
   movedowntitle: {
     id: 'layerlistitem.movedowntitle',
@@ -89,46 +69,8 @@ class LayerListItem extends React.Component {
       this.setState({checked: evt.target.getVisible()});
     }, this);
     this.state = {
-      hasError: false,
-      filters: [],
       checked: props.layer.getVisible()
     };
-  }
-  componentDidMount() {
-    this._setStyleFunction();
-  }
-  _setStyleFunction() {
-    var layer = this.props.layer;
-    if (this.props.allowFiltering && layer instanceof ol.layer.Vector) {
-      var cluster = layer.getSource() instanceof ol.source.Cluster;
-      var style = layer.getStyle();
-      var me = this;
-      layer.setStyle(function(feature, resolution) {
-        var hide = false;
-        if (!cluster) {
-          for (var i = 0, ii = me.state.filters.length; i < ii; i++){
-            if (!me.state.filters[i].filter(feature.getProperties())){
-              hide = true;
-              continue;
-            }
-          }
-        }
-        if (hide) {
-          return undefined;
-        } else {
-          if (style instanceof ol.style.Style) {
-            return [style];
-          } else if (Array.isArray(style)) {
-            return style;
-          } else {
-            return style.call(this, feature, resolution);
-          }
-        }
-      });
-    }
-  }
-  _onSubmit(evt) {
-    evt.preventDefault();
   }
   _handleChange(event) {
     var visible = event.target.checked;
@@ -167,80 +109,17 @@ class LayerListItem extends React.Component {
     dl.setAttribute('download', layer.get('title') + '.geojson');
     dl.click();
   }
-  _removeFilter(filter) {
-    var layer = this.props.layer;
-    var filters = this.state.filters;
-    for (var i = 0, ii = filters.length; i < ii; i++){
-      if (filters[i] === filter){
-        filters.splice(i, 1);
-        break;
-      }
-    }
-    this.setState({filters: filters});
-    if (layer.getSource() instanceof ol.source.Cluster) {
-      this._updateCluster();
-    }
-    layer.getSource().changed();
-  }
-  _updateCluster() {
-    var layer = this.props.layer;
-    var features = layer.getSource().getFeatures();
-    for (var i = 0, ii = features.length; i < ii; ++i) {
-      var subFeatures = features[i].get('features');
-      for (var j = 0, jj = subFeatures.length; j < jj; ++j) {
-        var hide = false;
-        for (var f = 0, ff = this.state.filters.length; f < ff; f++){
-          if (!this.state.filters[f].filter(subFeatures[j].getProperties())) {
-            hide = true;
-            continue;
-          }
-        }
-        // do not use an observable property, we do not want to notify
-        subFeatures[j].hide = hide;
-      }
-    }
-  }
-  _addFilter() {
-    var layer = this.props.layer;
-    var filters = this.state.filters;
-    var filter;
-    var expression = ReactDOM.findDOMNode(this.refs.filterTextBox).value;
-    try {
-      filter = filtrex(expression);
-    } catch (e) {
-      this.setState({hasError: true});
-      return;
-    }
-    var exists = false;
-    for (var i = 0, ii = filters.length; i < ii; ++i) {
-      if (filters[i].title === expression) {
-        exists = true;
-        break;
-      }
-    }
-    if (exists === false) {
-      filters.push({title: expression, filter: filter});
-      this.setState({
-        filters: filters,
-        hasError: false
-      });
-      if (layer.getSource() instanceof ol.source.Cluster) {
-        this._updateCluster();
-      }
-      layer.getSource().changed();
-    }
-  }
   _filter() {
     if (this.props.onModalOpen) {
       this.props.onModalOpen.call();
     }
-    this.refs.filtermodal.open();
+    this.refs.filtermodal.getWrappedInstance().open();
   }
   _onCloseModal() {
     if (this.props.onModalClose) {
       this.props.onModalClose.call();
     }
-    this.refs.filtermodal.close();
+    this.refs.filtermodal.getWrappedInstance().close();
   }
   _zoomTo() {
     var map = this.props.map;
@@ -263,10 +142,6 @@ class LayerListItem extends React.Component {
   }
   render() {
     const {formatMessage} = this.props.intl;
-    var inputClassName = 'form-control';
-    if (this.state.hasError) {
-      inputClassName += ' input-has-error';
-    }
     const layer = this.props.layer;
     const source = layer.getSource ? layer.getSource() : undefined;
     var opacity;
@@ -316,19 +191,6 @@ class LayerListItem extends React.Component {
       var inputId = 'layerlistitem-' + layer.get('id') + '-visibility';
       input = (<ul><div className='input-group'><label className='sr-only' htmlFor={inputId}>{formatMessage(messages.layervisibilitylabel)}</label><input id={inputId} type="checkbox" checked={this.state.checked} onChange={this._handleChange.bind(this)} />{this.props.title}</div></ul>);
     }
-    var filters = this.state.filters.map(function(f) {
-      var filterName = f.title.replace(/\W+/g, '');
-      return (
-        <div key={filterName} className='form-group' ref={filterName}>
-          <Grids.Col md={20}>
-            <label>{f.title}</label>
-          </Grids.Col>
-          <Grids.Col md={4}>
-            <UI.DefaultButton onClick={this._removeFilter.bind(this, f)}>{formatMessage(messages.removefiltertext)}</UI.DefaultButton>
-          </Grids.Col>
-        </div>
-      );
-    }, this);
     return (
       <li>
         {heading}
@@ -342,24 +204,7 @@ class LayerListItem extends React.Component {
         {remove}</ul>
         {this.props.children}
         <span>
-          <Dialog.Modal onHide={this._onCloseModal.bind(this)} title={formatMessage(messages.filtermodaltitle, {layer: this.props.layer.get('title')})} ref="filtermodal">
-            <Dialog.ModalBody>
-              <form onSubmit={this._onSubmit} className='form-horizontal layerlistitem'>
-                <div className="form-group">
-                  <Grids.Col md={20}>
-                    <label htmlFor='layerlistitem-filtertext' className='sr-only'>{formatMessage(messages.filtermodalinputlabel)}</label>
-                    <input id='layerlistitem-filtertext' ref='filterTextBox' type='text' className={inputClassName}/>
-                  </Grids.Col>
-                  <Grids.Col md={4}>
-                    <UI.DefaultButton onClick={this._addFilter.bind(this)}>{formatMessage(messages.addfiltertext)}</UI.DefaultButton>
-                  </Grids.Col>
-                </div>
-                {filters}
-              </form>
-            </Dialog.ModalBody>
-            <Dialog.ModalFooter>
-            </Dialog.ModalFooter>
-          </Dialog.Modal>
+          <FilterModal layer={this.props.layer} onHide={this._onCloseModal.bind(this)} ref='filtermodal'></FilterModal>
         </span>
       </li>
     );
