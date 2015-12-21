@@ -79,7 +79,7 @@ export default class LayerList extends React.Component {
       <div onMouseOut={this._hidePanel.bind(this)} onMouseOver={this._showPanel.bind(this)} className={className}>
         <UI.DefaultButton className='layerlistbutton' onClick={this._showPanel.bind(this)} title="Layers"><Icon.Icon name="map" /></UI.DefaultButton>
         <div className="layer-tree-panel">
-          <ul><h4><strong>Overlays</strong></h4></ul>
+          <ul><h4><strong>Layers</strong></h4></ul>
           {this.renderLayers(layers)}
         </div>
       </div>
