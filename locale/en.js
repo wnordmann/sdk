@@ -56,6 +56,7 @@ var enMessages = {
   "layerlistitem.baselayergrouplabel": "Select base layer",
   "layerlistitem.downloadtitle": "Download layer",
   "layerlistitem.filtertitle": "Filter layer",
+  "layerlistitem.labeltitle": "Label layer",
   "layerlistitem.layervisibilitylabel": "Layer visibility",
   "layerlistitem.movedowntitle": "Move down",
   "layerlistitem.moveuptitle": "Move up",
@@ -86,7 +87,12 @@ var enMessages = {
   "querybuilder.selectintext": "Select",
   "querybuilder.selectintitle": "Select in current selection",
   "select.menubuttontext": "Selection",
-  "select.rectangletext": "Select by rectangle"
+  "select.rectangletext": "Select by rectangle",
+  "wfst.deletefeature": "Delete",
+  "wfst.deletemsg": "There was an issue deleting the feature.",
+  "wfst.drawfeature": "Draw",
+  "wfst.errormsg": "Error saving this feature to GeoServer. {msg}",
+  "wfst.layerlabel": "Layer",
+  "wfst.modifyfeature": "Modify / Select"
 };
-
 export default enMessages;

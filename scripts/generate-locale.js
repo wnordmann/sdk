@@ -2,7 +2,7 @@ var fs = require('fs');
 var path = require('path')
 
 var dir = 'build/messages/js/components/';
-var output = 'build/locale-template.json';
+var output = 'locale/en.js';
 var info = {};
 
 fs.readdir(dir, function(err, files) {
@@ -26,7 +26,7 @@ fs.readdir(dir, function(err, files) {
           Object.keys(info).sort().forEach(function(key) {
             ordered[key] = info[key];
           });
-          var result = JSON.stringify(ordered, null, '  ');
+          var result = 'var enMessages = ' + JSON.stringify(ordered, null, '  ') + ';\nexport default enMessages;';
           fs.writeFileSync(output, result);
         }
       });
