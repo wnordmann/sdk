@@ -1,0 +1,6 @@
+.filterform .input-has-error {
+  background-color: #fdd;
+}
+.filterform label {
+  font-weight: bold;
+}

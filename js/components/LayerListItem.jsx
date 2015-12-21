@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import FilterModal from './FilterModal.jsx';
+import LabelModal from './LabelModal.jsx';
 import LayerActions from '../actions/LayerActions.js';
 import Dialog from 'pui-react-modals';
 import Grids from 'pui-react-grids';
@@ -40,6 +41,11 @@ const messages = defineMessages({
     id: 'layerlistitem.filtertitle',
     description: 'Title for the filter button',
     defaultMessage: 'Filter layer'
+  },
+  labeltitle: {
+    id: 'layerlistitem.labeltitle',
+    description: 'Title for the label button',
+    defaultMessage: 'Label layer'
   },
   movedowntitle: {
     id: 'layerlistitem.movedowntitle',
@@ -115,6 +121,9 @@ class LayerListItem extends React.Component {
     }
     this.refs.filtermodal.getWrappedInstance().open();
   }
+  _label() {
+    this.refs.labelmodal.getWrappedInstance().open();
+  }
   _onCloseModal() {
     if (this.props.onModalClose) {
       this.props.onModalClose.call();
@@ -157,24 +166,28 @@ class LayerListItem extends React.Component {
     }
     var zoomTo;
     if (layer.get('type') !== 'base' && layer.get('type') !== 'base-group' && (source && source.getExtent) && this.props.showZoomTo) {
-      zoomTo = <a title={formatMessage(messages.zoomtotitle)} href='#' onClick={this._zoomTo.bind(this)}><i className='layer-zoom-to glyphicon glyphicon-zoom-in'></i></a>;
+      zoomTo = <a title={formatMessage(messages.zoomtotitle)} href='#' onClick={this._zoomTo.bind(this)}><i className='layerlayeritem glyphicon glyphicon-zoom-in'></i></a>;
     }
     var download;
     if (layer instanceof ol.layer.Vector && this.props.showDownload) {
-      download = <a title={formatMessage(messages.downloadtitle)} href='#' onClick={this._download.bind(this)}><i className='layer-download glyphicon glyphicon-download-alt'></i></a>;
+      download = <a title={formatMessage(messages.downloadtitle)} href='#' onClick={this._download.bind(this)}><i className='layerlayeritem glyphicon glyphicon-download-alt'></i></a>;
     }
     var filter;
     if (layer instanceof ol.layer.Vector && this.props.allowFiltering) {
-      filter = <a title={formatMessage(messages.filtertitle)} href='#' onClick={this._filter.bind(this)}><i className='layer-set-filters glyphicon glyphicon-filter'></i></a>;
+      filter = <a title={formatMessage(messages.filtertitle)} href='#' onClick={this._filter.bind(this)}><i className='layerlayeritem glyphicon glyphicon-filter'></i></a>;
+    }
+    var label;
+    if (layer instanceof ol.layer.Vector && this.props.allowLabeling) {
+      label = <a title={formatMessage(messages.labeltitle)} href='#' onClick={this._label.bind(this)}><i className='layerlayeritem glyphicon glyphicon-font'></i></a>;
     }
     var reorderUp, reorderDown;
     if (layer.get('type') !== 'base' && this.props.allowReordering && !this.props.children) {
-      reorderUp = <a title={formatMessage(messages.moveuptitle)} href='#' onClick={this._moveUp.bind(this)}><i className='layer-move-up glyphicon glyphicon-triangle-top'></i></a>;
-      reorderDown = <a title={formatMessage(messages.movedowntitle)} href='#' onClick={this._moveDown.bind(this)}><i className='layer-move-down glyphicon glyphicon-triangle-bottom'></i></a>;
+      reorderUp = <a title={formatMessage(messages.moveuptitle)} href='#' onClick={this._moveUp.bind(this)}><i className='layerlayeritem glyphicon glyphicon-triangle-top'></i></a>;
+      reorderDown = <a title={formatMessage(messages.movedowntitle)} href='#' onClick={this._moveDown.bind(this)}><i className='layerlayeritem glyphicon glyphicon-triangle-bottom'></i></a>;
     }
     var remove;
     if (layer.get('isRemovable') === true) {
-      remove = <a title={formatMessage(messages.removetitle)} href='#' onClick={this._remove.bind(this)}><i className='layer-remove glyphicon glyphicon-remove'></i></a>;
+      remove = <a title={formatMessage(messages.removetitle)} href='#' onClick={this._remove.bind(this)}><i className='layerlayeritem glyphicon glyphicon-remove'></i></a>;
     }
     var input;
     if (layer.get('type') === 'base') {
@@ -191,6 +204,11 @@ class LayerListItem extends React.Component {
       var inputId = 'layerlistitem-' + layer.get('id') + '-visibility';
       input = (<ul><div className='input-group'><label className='sr-only' htmlFor={inputId}>{formatMessage(messages.layervisibilitylabel)}</label><input id={inputId} type="checkbox" checked={this.state.checked} onChange={this._handleChange.bind(this)} />{this.props.title}</div></ul>);
     }
+    var labelModal, filterModal;
+    if (this.props.layer instanceof ol.layer.Vector) {
+      labelModal = (<LabelModal layer={this.props.layer} ref='labelmodal'></LabelModal>);
+      filterModal = (<FilterModal layer={this.props.layer} onHide={this._onCloseModal.bind(this)} ref='filtermodal' />);
+    }
     return (
       <li>
         {heading}
@@ -199,12 +217,14 @@ class LayerListItem extends React.Component {
         <ul>{zoomTo}
         {download}
         {filter}
+        {label}
         {reorderUp}
         {reorderDown}
         {remove}</ul>
         {this.props.children}
         <span>
-          <FilterModal layer={this.props.layer} onHide={this._onCloseModal.bind(this)} ref='filtermodal'></FilterModal>
+          {filterModal}
+          {labelModal}
         </span>
       </li>
     );
@@ -236,6 +256,10 @@ LayerListItem.propTypes = {
    * Should we allow for filtering of features in a layer?
    */
   allowFiltering: React.PropTypes.bool,
+  /**
+   * Should we allow for labeling of features in a layer?
+   */
+  allowLabeling: React.PropTypes.bool,
   /**
    * Should we show a download button?
    */

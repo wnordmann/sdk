@@ -105,6 +105,10 @@ LayerList.propTypes = {
    */
   allowFiltering: React.PropTypes.bool,
   /**
+   * Should we allow for labeling of features in a layer?
+   */
+  allowLabeling: React.PropTypes.bool,
+  /**
    * Should we show the contents of layer groups?
    */
   showGroupContent: React.PropTypes.bool,
@@ -122,6 +126,7 @@ LayerList.defaultProps = {
   showZoomTo: false,
   allowReordering: false,
   allowFiltering: false,
+  allowLabeling: false,
   showGroupContent: false,
   showDownload: false,
   showOpacity: false

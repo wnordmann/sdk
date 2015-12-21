@@ -5,6 +5,7 @@ import filtrex from 'filtrex';
 import Grids from 'pui-react-grids';
 import UI from 'pui-react-buttons';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import './FilterModal.css';
 
 const messages = defineMessages({
   inputlabel: {
@@ -156,11 +157,11 @@ class FilterModal extends Dialog.Modal {
     return (
       <Dialog.BaseModal title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} show={this.state.isVisible} onHide={this.close} {...this.props}>
         <Dialog.ModalBody>
-          <form onSubmit={this._onSubmit} className='form-horizontal layerlistitem'>
+          <form onSubmit={this._onSubmit} className='form-horizontal filterform'>
             <div className="form-group">
               <Grids.Col md={20}>
-                <label htmlFor='layerlistitem-filtertext' className='sr-only'>{formatMessage(messages.inputlabel)}</label>
-                <input id='layerlistitem-filtertext' ref='filterTextBox' type='text' className={inputClassName}/>
+                <label htmlFor='filtermodal-filtertext' className='sr-only'>{formatMessage(messages.inputlabel)}</label>
+                <input id='filtermodal-filtertext' ref='filterTextBox' type='text' className={inputClassName}/>
               </Grids.Col>
               <Grids.Col md={4}>
                 <UI.DefaultButton onClick={this._addFilter.bind(this)}>{formatMessage(messages.addfiltertext)}</UI.DefaultButton>
