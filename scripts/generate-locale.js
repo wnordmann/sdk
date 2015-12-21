@@ -26,7 +26,7 @@ fs.readdir(dir, function(err, files) {
           Object.keys(info).sort().forEach(function(key) {
             ordered[key] = info[key];
           });
-          var result = 'var enMessages = ' + JSON.stringify(ordered, null, '  ') + ';\nexport default enMessages;';
+          var result = 'var enMessages = ' + JSON.stringify(ordered, null, '  ') + ';\nexport default enMessages;\n';
           fs.writeFileSync(output, result);
         }
       });
