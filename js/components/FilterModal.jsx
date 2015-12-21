@@ -29,7 +29,7 @@ const messages = defineMessages({
   }
 });
 
-class LabelModal extends Dialog.Modal {
+class FilterModal extends Dialog.Modal {
   constructor(props) {
     super(props);
     this.state = {
@@ -175,11 +175,11 @@ class LabelModal extends Dialog.Modal {
   }
 }
 
-LabelModal.propTypes = {
+FilterModal.propTypes = {
   /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
 };
 
-export default injectIntl(LabelModal, {withRef: true});
+export default injectIntl(FilterModal, {withRef: true});

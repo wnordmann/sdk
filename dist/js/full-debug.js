@@ -2342,20 +2342,20 @@ var messages = (0, _reactIntl.defineMessages)({
   }
 });
 
-var LabelModal = (function (_Dialog$Modal) {
-  _inherits(LabelModal, _Dialog$Modal);
+var FilterModal = (function (_Dialog$Modal) {
+  _inherits(FilterModal, _Dialog$Modal);
 
-  function LabelModal(props) {
-    _classCallCheck(this, LabelModal);
+  function FilterModal(props) {
+    _classCallCheck(this, FilterModal);
 
-    _get(Object.getPrototypeOf(LabelModal.prototype), 'constructor', this).call(this, props);
+    _get(Object.getPrototypeOf(FilterModal.prototype), 'constructor', this).call(this, props);
     this.state = {
       filters: [],
       hasError: false
     };
   }
 
-  _createClass(LabelModal, [{
+  _createClass(FilterModal, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
       this._setStyleFunction();
@@ -2538,17 +2538,17 @@ var LabelModal = (function (_Dialog$Modal) {
     }
   }]);
 
-  return LabelModal;
+  return FilterModal;
 })(_puiReactModals2['default'].Modal);
 
-LabelModal.propTypes = {
+FilterModal.propTypes = {
   /**
    * i18n message strings. Provided through the application through context.
    */
   intl: _reactIntl.intlShape.isRequired
 };
 
-exports['default'] = (0, _reactIntl.injectIntl)(LabelModal, { withRef: true });
+exports['default'] = (0, _reactIntl.injectIntl)(FilterModal, { withRef: true });
 module.exports = exports['default'];
 
 },{"filtrex":68,"pui-react-buttons":155,"pui-react-grids":311,"pui-react-modals":416,"react":821,"react-dom":608,"react-intl":624}],16:[function(require,module,exports){
