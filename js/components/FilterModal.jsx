@@ -38,12 +38,10 @@ class FilterModal extends Dialog.Modal {
       hasError: false
     };
   }
-  componentDidMount() {
-    this._setStyleFunction();
-  }
   _setStyleFunction() {
     var layer = this.props.layer;
     if (layer instanceof ol.layer.Vector) {
+      this._styleSet = true;
       var cluster = layer.getSource() instanceof ol.source.Cluster;
       var style = layer.getStyle();
       var me = this;
@@ -74,6 +72,9 @@ class FilterModal extends Dialog.Modal {
   }
   _addFilter() {
     var layer = this.props.layer;
+    if (!this._styleSet) {
+      this._setStyleFunction();
+    }
     var filters = this.state.filters;
     var filter;
     var expression = ReactDOM.findDOMNode(this.refs.filterTextBox).value;

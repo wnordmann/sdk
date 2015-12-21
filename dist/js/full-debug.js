@@ -2360,15 +2360,11 @@ var FilterModal = (function (_Dialog$Modal) {
   }
 
   _createClass(FilterModal, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      this._setStyleFunction();
-    }
-  }, {
     key: '_setStyleFunction',
     value: function _setStyleFunction() {
       var layer = this.props.layer;
       if (layer instanceof ol.layer.Vector) {
+        this._styleSet = true;
         var cluster = layer.getSource() instanceof ol.source.Cluster;
         var style = layer.getStyle();
         var me = this;
@@ -2403,6 +2399,9 @@ var FilterModal = (function (_Dialog$Modal) {
     key: '_addFilter',
     value: function _addFilter() {
       var layer = this.props.layer;
+      if (!this._styleSet) {
+        this._setStyleFunction();
+      }
       var filters = this.state.filters;
       var filter;
       var expression = _reactDom2['default'].findDOMNode(this.refs.filterTextBox).value;
