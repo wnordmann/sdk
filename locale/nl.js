@@ -49,6 +49,7 @@ var nlMessages = {
   "imageexport.buttontitle": "Exporteer als plaatje",
   "infopopup.nofeatures": "Geen features op deze locatie",
   "infopopup.nulltext": "NULL",
+  "layerlist.layertitle": "Lagen",
   "layerlistitem.baselayergrouplabel": "Selecteer ondergrond laag",
   "layerlistitem.downloadtitle": "Download laag",
   "layerlistitem.filtertitle": "Filter laag",
@@ -82,7 +83,13 @@ var nlMessages = {
   "querybuilder.selectintext": "Selecteer",
   "querybuilder.selectintitle": "Selecteer in huidigie selectie",
   "select.menubuttontext": "Selectie",
-  "select.rectangletext": "Selecteer d.m.v. rechthoek"
+  "select.rectangletext": "Selecteer d.m.v. rechthoek",
+  "wfst.deletefeature": "Verwijder",
+  "wfst.deletemsg": "Er was een probleem met het verwijderen.",
+  "wfst.drawfeature": "Teken",
+  "wfst.errormsg": "Fout bij het opslaan van dit feature middels GeoServer WFS-T. {msg}",
+  "wfst.layerlabel": "Laag",
+  "wfst.modifyfeature": "Wijzig / Selecteer"
 };
 
 export default nlMessages;
