@@ -3838,11 +3838,20 @@ var _puiReactIconography = require('pui-react-iconography');
 
 var _puiReactIconography2 = _interopRequireDefault(_puiReactIconography);
 
+var _reactIntl = require('react-intl');
+
 var _pureRenderDecorator = require('pure-render-decorator');
 
 var _pureRenderDecorator2 = _interopRequireDefault(_pureRenderDecorator);
 
 require('./LayerList.css');
+
+var messages = (0, _reactIntl.defineMessages)({
+  layertitle: {
+    'id': 'layerlist.layertitle',
+    'defaultMessage': 'Layers'
+  }
+});
 
 /**
  * A list of layers in the map. Allows setting visibility and opacity.
@@ -3930,8 +3939,23 @@ var LayerList = (function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var formatMessage = this.props.intl.formatMessage;
+
       var layers = this.state.layers.slice(0).reverse();
       var className = 'layer-switcher';
+      var heading = _react2['default'].createElement(
+        'ul',
+        null,
+        _react2['default'].createElement(
+          'h4',
+          null,
+          _react2['default'].createElement(
+            'strong',
+            null,
+            formatMessage(messages.layertitle)
+          )
+        )
+      );
       if (this.state.visible) {
         className += ' shown';
       }
@@ -3946,19 +3970,7 @@ var LayerList = (function (_React$Component) {
         _react2['default'].createElement(
           'div',
           { className: 'layer-tree-panel' },
-          _react2['default'].createElement(
-            'ul',
-            null,
-            _react2['default'].createElement(
-              'h4',
-              null,
-              _react2['default'].createElement(
-                'strong',
-                null,
-                'Overlays'
-              )
-            )
-          ),
+          heading,
           this.renderLayers(layers)
         )
       );
@@ -3969,8 +3981,6 @@ var LayerList = (function (_React$Component) {
   LayerList = (0, _pureRenderDecorator2['default'])(LayerList) || LayerList;
   return LayerList;
 })(_react2['default'].Component);
-
-exports['default'] = LayerList;
 
 LayerList.propTypes = {
   /**
@@ -4004,7 +4014,11 @@ LayerList.propTypes = {
   /**
    * Should we show an opacity slider for layers?
    */
-  showOpacity: _react2['default'].PropTypes.bool
+  showOpacity: _react2['default'].PropTypes.bool,
+  /**
+  * i18n message strings. Provided through the application through context.
+  */
+  intl: _reactIntl.intlShape.isRequired
 };
 
 LayerList.defaultProps = {
@@ -4016,9 +4030,11 @@ LayerList.defaultProps = {
   showDownload: false,
   showOpacity: false
 };
+
+exports['default'] = (0, _reactIntl.injectIntl)(LayerList);
 module.exports = exports['default'];
 
-},{"../stores/LayerStore.js":55,"./LayerList.css":27,"./LayerListItem.jsx":30,"openlayers":129,"pui-react-buttons":157,"pui-react-iconography":362,"pure-render-decorator":560,"react":823}],29:[function(require,module,exports){
+},{"../stores/LayerStore.js":55,"./LayerList.css":27,"./LayerListItem.jsx":30,"openlayers":129,"pui-react-buttons":157,"pui-react-iconography":362,"pure-render-decorator":560,"react":823,"react-intl":626}],29:[function(require,module,exports){
 var css = ".layerlayeritem {\n  padding-left: 15px;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/LayerListItem.css'); module.exports = css;
 },{"./../../node_modules/cssify":67}],30:[function(require,module,exports){
 'use strict';

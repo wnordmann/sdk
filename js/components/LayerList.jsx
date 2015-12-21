@@ -4,14 +4,24 @@ import LayerStore from '../stores/LayerStore.js';
 import LayerListItem from './LayerListItem.jsx';
 import UI from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import './LayerList.css';
+
+
+const messages = defineMessages({
+ layertitle: {
+   id: 'layerlist.layertitle',
+   description: 'List of layers',
+   defaultMessage: 'Layers'
+ }
+});
 
 /**
  * A list of layers in the map. Allows setting visibility and opacity.
  */
 @pureRender
-export default class LayerList extends React.Component {
+class LayerList extends React.Component {
   constructor(props) {
     super(props);
     LayerStore.bindMap(this.props.map);
@@ -70,8 +80,10 @@ export default class LayerList extends React.Component {
     }
   }
   render() {
+    const {formatMessage} = this.props.intl;
     var layers = this.state.layers.slice(0).reverse();
     var className = 'layer-switcher';
+    var heading = <ul><h4><strong>{formatMessage(messages.layertitle)}</strong></h4></ul>;
     if (this.state.visible) {
       className += ' shown';
     }
@@ -79,7 +91,7 @@ export default class LayerList extends React.Component {
       <div onMouseOut={this._hidePanel.bind(this)} onMouseOver={this._showPanel.bind(this)} className={className}>
         <UI.DefaultButton className='layerlistbutton' onClick={this._showPanel.bind(this)} title="Layers"><Icon.Icon name="map" /></UI.DefaultButton>
         <div className="layer-tree-panel">
-          <ul><h4><strong>Overlays</strong></h4></ul>
+          {heading}
           {this.renderLayers(layers)}
         </div>
       </div>
@@ -119,8 +131,14 @@ LayerList.propTypes = {
   /**
    * Should we show an opacity slider for layers?
    */
-  showOpacity: React.PropTypes.bool
+  showOpacity: React.PropTypes.bool,
+  /**
+  * i18n message strings. Provided through the application through context.
+  */
+  intl: intlShape.isRequired
 };
+
+
 
 LayerList.defaultProps = {
   showZoomTo: false,
@@ -131,3 +149,5 @@ LayerList.defaultProps = {
   showDownload: false,
   showOpacity: false
 };
+
+export default injectIntl(LayerList);
