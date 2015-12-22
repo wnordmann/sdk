@@ -1955,9 +1955,11 @@ var FeatureTable = (function (_React$Component2) {
   }, {
     key: '_onRowClick',
     value: function _onRowClick(evt, index) {
-      var lyr = this._layer;
-      var feature = this.state.features[this._transformIndex(index)];
-      _actionsSelectActionsJs2['default'].toggleFeature(lyr, feature);
+      if (evt.target.tagName.toLowerCase() !== 'a') {
+        var lyr = this._layer;
+        var feature = this.state.features[this._transformIndex(index)];
+        _actionsSelectActionsJs2['default'].toggleFeature(lyr, feature);
+      }
     }
   }, {
     key: '_rowClassNameGetter',

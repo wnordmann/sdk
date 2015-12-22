@@ -207,9 +207,11 @@ class FeatureTable extends React.Component {
     return this.state.sortIndexes ? this.state.sortIndexes[index] : index;
   }
   _onRowClick(evt, index) {
-    var lyr = this._layer;
-    var feature = this.state.features[this._transformIndex(index)];
-    SelectActions.toggleFeature(lyr, feature);
+    if (evt.target.tagName.toLowerCase() !== 'a') {
+      var lyr = this._layer;
+      var feature = this.state.features[this._transformIndex(index)];
+      SelectActions.toggleFeature(lyr, feature);
+    }
   }
   _rowClassNameGetter(index) {
     var feature = this.state.features[this._transformIndex(index)];
