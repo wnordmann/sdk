@@ -3678,13 +3678,12 @@ var LabelModal = (function (_Dialog$Modal) {
 
     _get(Object.getPrototypeOf(LabelModal.prototype), 'constructor', this).call(this, props);
     this.state = {
-      attributes: [],
-      active: false
+      attributes: []
     };
     var source = this.props.layer.getSource();
     if (source && !(source instanceof ol.source.Cluster)) {
       source.on('change', function (evt) {
-        if (evt.target.getState() === 'ready') {
+        if (evt.target.getState() === 'ready' && this.state.attributes.length === 0) {
           var feature = evt.target.getFeatures()[0];
           if (feature) {
             var geom = feature.getGeometryName();
