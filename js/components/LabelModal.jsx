@@ -4,6 +4,8 @@ import Dialog from 'pui-react-modals';
 import filtrex from 'filtrex';
 import Grids from 'pui-react-grids';
 import UI from 'pui-react-buttons';
+import ColorPicker from 'react-color';
+import {transformColor} from '../util.js';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 const messages = defineMessages({
@@ -26,12 +28,18 @@ const messages = defineMessages({
     id: 'labelmodal.attributelabel',
     description: 'Text for label for the attribute select combo',
     defaultMessage: 'Attribute'
+  },
+  fillcolorlabel: {
+    id: 'labelmodal.fillcolorlabel',
+    description: 'Label for fill color picker',
+    defaultMessage: 'Text color'
   }
 });
 
 class LabelModal extends Dialog.Modal {
   constructor(props) {
     super(props);
+    this._fillColor = '#000';
     this.state = {
       attributes: []
     };
@@ -52,6 +60,9 @@ class LabelModal extends Dialog.Modal {
       }, this);
     }
   }
+  _onChangeFill(color) {
+    this._fillColor = transformColor(color);
+  }
   _setStyleFunction() {
     var layer = this.props.layer;
     var style = layer.getStyle();
@@ -68,7 +79,7 @@ class LabelModal extends Dialog.Modal {
         text: value,
         font: '12px Calibri,sans-serif',
         fill: new ol.style.Fill({
-          color: '#000'
+          color: me._fillColor
         })
       });
       var modifyStyle = function(s) {
@@ -124,10 +135,18 @@ class LabelModal extends Dialog.Modal {
               <Grids.Col md={4}>
                 <label htmlFor='labelSelector'>{formatMessage(messages.attributelabel)}:</label>
               </Grids.Col>
-              <Grids.Col md={8}>
+              <Grids.Col md={12}>
                 <select id='labelSelector' defaultValue={this.state.attribute} onChange={this._onItemChange.bind(this)}>
                   {attributeItems}
                 </select>
+              </Grids.Col>
+            </div>
+            <div className='form-group'>
+              <Grids.Col md={4}>
+                <label>{formatMessage(messages.fillcolorlabel)}:</label>
+              </Grids.Col>
+              <Grids.Col md={12}>
+                <ColorPicker type='compact' onChangeComplete={this._onChangeFill.bind(this)} color={this._fillColor} />
               </Grids.Col>
             </div>
           </form>

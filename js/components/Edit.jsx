@@ -7,6 +7,7 @@ import UI from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
 import Dialog from 'pui-react-modals';
 import Grids from 'pui-react-grids';
+import {transformColor} from '../util.js';
 import ColorPicker from 'react-color';
 import Pui from 'pui-react-alerts';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -132,15 +133,11 @@ class Edit extends MapTool {
   _onSubmit(evt) {
     evt.preventDefault();
   }
-  _transformColor(color) {
-    var colorObj = color.rgb;
-    return [colorObj.r, colorObj.g, colorObj.b, colorObj.a];
-  }
   _onChangeStroke(color) {
-    this._strokeColor = this._transformColor(color);
+    this._strokeColor = transformColor(color);
   }
   _onChangeFill(color) {
-    this._fillColor = this._transformColor(color);
+    this._fillColor = transformColor(color);
   }
   _generateId() {
     return ID_PREFIX + this.state.layers.length;

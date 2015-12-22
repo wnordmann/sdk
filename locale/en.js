@@ -55,6 +55,7 @@ var enMessages = {
   "labelmodal.applybutton": "Apply",
   "labelmodal.attributelabel": "Attribute",
   "labelmodal.clearbutton": "Clear",
+  "labelmodal.fillcolorlabel": "Text color",
   "labelmodal.title": "Label for layer {layer}",
   "layerlist.layertitle": "Layers",
   "layerlistitem.baselayergrouplabel": "Select base layer",

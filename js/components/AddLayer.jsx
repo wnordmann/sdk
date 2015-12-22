@@ -5,6 +5,7 @@ import Icon from 'pui-react-iconography';
 import Dialog from 'pui-react-modals';
 import Dropzone from 'react-dropzone';
 import Grids from 'pui-react-grids';
+import {transformColor} from '../util.js';
 import ColorPicker from 'react-color';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
@@ -145,15 +146,11 @@ class AddLayer extends React.Component {
       r.readAsText(file);
     }
   }
-  _transformColor(color) {
-    var colorObj = color.rgb;
-    return [colorObj.r, colorObj.g, colorObj.b, colorObj.a];
-  }
   _onChangeStroke(color) {
-    this._strokeColor = this._transformColor(color);
+    this._strokeColor = transformColor(color);
   }
   _onChangeFill(color) {
-    this._fillColor = this._transformColor(color);
+    this._fillColor = transformColor(color);
   }
   render() {
     const {formatMessage} = this.props.intl;
