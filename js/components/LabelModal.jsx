@@ -84,7 +84,7 @@ class LabelModal extends Dialog.Modal {
       if (style instanceof ol.style.Style || Array.isArray(style)) {
         return modifyStyle(style);
       } else {
-        var result = style.call(feature, resolution);
+        var result = style.call(this, feature, resolution);
         return modifyStyle(result);
       }
     });
