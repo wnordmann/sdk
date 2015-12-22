@@ -53,6 +53,7 @@ var nlMessages = {
   "labelmodal.attributelabel": "Attribuut",
   "labelmodal.clearbutton": "Wis",
   "labelmodal.fillcolorlabel": "Tekstkleur",
+  "labelmodal.sizelabel": "Tekstgrootte",
   "labelmodal.title": "Label voor laag {layer}",
   "layerlist.layertitle": "Lagen",
   "layerlistitem.baselayergrouplabel": "Selecteer ondergrond laag",

@@ -26,13 +26,18 @@ const messages = defineMessages({
   },
   attributelabel: {
     id: 'labelmodal.attributelabel',
-    description: 'Text for label for the attribute select combo',
+    description: 'Label for the attribute select combo',
     defaultMessage: 'Attribute'
   },
   fillcolorlabel: {
     id: 'labelmodal.fillcolorlabel',
     description: 'Label for fill color picker',
-    defaultMessage: 'Text color'
+    defaultMessage: 'Font color'
+  },
+  sizelabel: {
+    id: 'labelmodal.sizelabel',
+    description: 'Label for the font size input',
+    defaultMessage: 'Font size'
   }
 });
 
@@ -40,6 +45,7 @@ class LabelModal extends Dialog.Modal {
   constructor(props) {
     super(props);
     this._fillColor = '#000';
+    this._fontSize = '12';
     this.state = {
       attributes: []
     };
@@ -60,6 +66,9 @@ class LabelModal extends Dialog.Modal {
       }, this);
     }
   }
+  _onChangeFontSize(evt) {
+    this._fontSize = evt.target.value;
+  }
   _onChangeFill(color) {
     this._fillColor = transformColor(color);
   }
@@ -77,7 +86,7 @@ class LabelModal extends Dialog.Modal {
       }
       var text = new ol.style.Text({
         text: value,
-        font: '12px Calibri,sans-serif',
+        font: me._fontSize + 'px Calibri,sans-serif',
         fill: new ol.style.Fill({
           color: me._fillColor
         })
@@ -139,6 +148,14 @@ class LabelModal extends Dialog.Modal {
                 <select id='labelSelector' defaultValue={this.state.attribute} onChange={this._onItemChange.bind(this)}>
                   {attributeItems}
                 </select>
+              </Grids.Col>
+            </div>
+            <div className='form-group'>
+              <Grids.Col md={4}>
+                <label htmlFor='fontSize'>{formatMessage(messages.sizelabel)}:</label>
+              </Grids.Col>
+              <Grids.Col md={12}>
+                <input ref='fontSize' id='fontSize' defaultValue={this._fontSize} onChange={this._onChangeFontSize.bind(this)} />
               </Grids.Col>
             </div>
             <div className='form-group'>

@@ -3668,7 +3668,11 @@ var messages = (0, _reactIntl.defineMessages)({
   },
   fillcolorlabel: {
     'id': 'labelmodal.fillcolorlabel',
-    'defaultMessage': 'Text color'
+    'defaultMessage': 'Font color'
+  },
+  sizelabel: {
+    'id': 'labelmodal.sizelabel',
+    'defaultMessage': 'Font size'
   }
 });
 
@@ -3680,6 +3684,7 @@ var LabelModal = (function (_Dialog$Modal) {
 
     _get(Object.getPrototypeOf(LabelModal.prototype), 'constructor', this).call(this, props);
     this._fillColor = '#000';
+    this._fontSize = '12';
     this.state = {
       attributes: []
     };
@@ -3702,6 +3707,11 @@ var LabelModal = (function (_Dialog$Modal) {
   }
 
   _createClass(LabelModal, [{
+    key: '_onChangeFontSize',
+    value: function _onChangeFontSize(evt) {
+      this._fontSize = evt.target.value;
+    }
+  }, {
     key: '_onChangeFill',
     value: function _onChangeFill(color) {
       this._fillColor = (0, _utilJs.transformColor)(color);
@@ -3722,7 +3732,7 @@ var LabelModal = (function (_Dialog$Modal) {
         }
         var text = new ol.style.Text({
           text: value,
-          font: '12px Calibri,sans-serif',
+          font: me._fontSize + 'px Calibri,sans-serif',
           fill: new ol.style.Fill({
             color: me._fillColor
           })
@@ -3815,6 +3825,25 @@ var LabelModal = (function (_Dialog$Modal) {
                   { id: 'labelSelector', defaultValue: this.state.attribute, onChange: this._onItemChange.bind(this) },
                   attributeItems
                 )
+              )
+            ),
+            _react2['default'].createElement(
+              'div',
+              { className: 'form-group' },
+              _react2['default'].createElement(
+                _puiReactGrids2['default'].Col,
+                { md: 4 },
+                _react2['default'].createElement(
+                  'label',
+                  { htmlFor: 'fontSize' },
+                  formatMessage(messages.sizelabel),
+                  ':'
+                )
+              ),
+              _react2['default'].createElement(
+                _puiReactGrids2['default'].Col,
+                { md: 12 },
+                _react2['default'].createElement('input', { ref: 'fontSize', id: 'fontSize', defaultValue: this._fontSize, onChange: this._onChangeFontSize.bind(this) })
               )
             ),
             _react2['default'].createElement(
