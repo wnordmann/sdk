@@ -1762,7 +1762,7 @@ SortHeaderCell.propTypes = {
   onSortChange: _react2['default'].PropTypes.func,
   columnKey: _react2['default'].PropTypes.string,
   sortDir: _react2['default'].PropTypes.string,
-  children: _react2['default'].PropTypes.element
+  children: _react2['default'].PropTypes.node
 };
 
 var messages = (0, _reactIntl.defineMessages)({

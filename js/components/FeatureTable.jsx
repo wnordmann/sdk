@@ -58,7 +58,7 @@ SortHeaderCell.propTypes = {
   onSortChange: React.PropTypes.func,
   columnKey: React.PropTypes.string,
   sortDir: React.PropTypes.string,
-  children: React.PropTypes.element
+  children: React.PropTypes.node
 };
 
 const messages = defineMessages({
