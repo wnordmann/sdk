@@ -10,11 +10,11 @@ import './LayerList.css';
 
 
 const messages = defineMessages({
- layertitle: {
-   id: 'layerlist.layertitle',
-   description: 'List of layers',
-   defaultMessage: 'Layers'
- }
+  layertitle: {
+    id: 'layerlist.layertitle',
+    description: 'List of layers',
+    defaultMessage: 'Layers'
+  }
 });
 
 /**

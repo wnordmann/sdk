@@ -8,7 +8,7 @@
     "url": "https://github.com/boundlessgeo/sdk.git"
   },
   "scripts": {
-    "postinstall" : "node scripts/install.js",
+    "postinstall": "node scripts/install.js",
     "i18n": "node scripts/generate-locale.js",
     "css:drfrankenstyle": "node_modules/.bin/dr-frankenstyle dist/css",
     "css:append": "node scripts/generate-css.js",
@@ -58,6 +58,7 @@
     "slick-carousel-dr-frankenstyle": "^1.5.8"
   },
   "devDependencies": {
+    "babel-eslint": "^4.1.6",
     "babel-plugin-react-intl": "1.0.0-beta-5",
     "babelify": "^6.0.2",
     "browserify": "^11.2.0",

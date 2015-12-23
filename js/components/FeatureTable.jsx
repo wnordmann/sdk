@@ -31,16 +31,6 @@ class SortHeaderCell extends React.Component {
     super(props);
     this._onSortChange = this._onSortChange.bind(this);
   }
-  render() {
-    var {sortDir, children, ...props} = this.props;
-    return (
-      <Cell {...props}>
-        <a onClick={this._onSortChange}>
-          {children} {sortDir ? (sortDir === SortTypes.DESC ? '↓' : '↑') : ''}
-        </a>
-      </Cell>
-    );
-  }
   _onSortChange(e) {
     e.preventDefault();
     if (this.props.onSortChange) {
@@ -52,7 +42,24 @@ class SortHeaderCell extends React.Component {
       );
     }
   }
+  render() {
+    var {sortDir, children, ...props} = this.props;
+    return (
+      <Cell {...props}>
+        <a onClick={this._onSortChange}>
+          {children} {sortDir ? (sortDir === SortTypes.DESC ? '↓' : '↑') : ''}
+        </a>
+      </Cell>
+    );
+  }
 }
+
+SortHeaderCell.propTypes = {
+  onSortChange: React.PropTypes.func,
+  columnKey: React.PropTypes.string,
+  sortDir: React.PropTypes.string,
+  children: React.PropTypes.element
+};
 
 const messages = defineMessages({
   layerlabel: {

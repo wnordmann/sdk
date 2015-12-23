@@ -1725,6 +1725,14 @@ var SortHeaderCell = (function (_React$Component) {
   }
 
   _createClass(SortHeaderCell, [{
+    key: '_onSortChange',
+    value: function _onSortChange(e) {
+      e.preventDefault();
+      if (this.props.onSortChange) {
+        this.props.onSortChange(this.props.columnKey, this.props.sortDir ? reverseSortDirection(this.props.sortDir) : SortTypes.DESC);
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
       var _props = this.props;
@@ -1745,18 +1753,17 @@ var SortHeaderCell = (function (_React$Component) {
         )
       );
     }
-  }, {
-    key: '_onSortChange',
-    value: function _onSortChange(e) {
-      e.preventDefault();
-      if (this.props.onSortChange) {
-        this.props.onSortChange(this.props.columnKey, this.props.sortDir ? reverseSortDirection(this.props.sortDir) : SortTypes.DESC);
-      }
-    }
   }]);
 
   return SortHeaderCell;
 })(_react2['default'].Component);
+
+SortHeaderCell.propTypes = {
+  onSortChange: _react2['default'].PropTypes.func,
+  columnKey: _react2['default'].PropTypes.string,
+  sortDir: _react2['default'].PropTypes.string,
+  children: _react2['default'].PropTypes.element
+};
 
 var messages = (0, _reactIntl.defineMessages)({
   layerlabel: {

@@ -206,7 +206,7 @@ class LayerListItem extends React.Component {
     }
     var labelModal, filterModal;
     if (this.props.layer instanceof ol.layer.Vector) {
-      labelModal = (<LabelModal layer={this.props.layer} ref='labelmodal'></LabelModal>);
+      labelModal = (<LabelModal layer={this.props.layer} ref='labelmodal' />);
       filterModal = (<FilterModal layer={this.props.layer} onHide={this._onCloseModal.bind(this)} ref='filtermodal' />);
     }
     return (
