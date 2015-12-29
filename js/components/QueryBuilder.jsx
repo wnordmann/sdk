@@ -157,14 +157,14 @@ class QueryBuilder extends React.Component {
         </div>
         <div className='form-group'>
           <Grids.Col md={7}>
-          <UI.DefaultButton onClick={this._newSelection.bind(this)} title={formatMessage(messages.newbuttontitle)}> {formatMessage(messages.newbuttontext)}</UI.DefaultButton>
+            <UI.DefaultButton onClick={this._newSelection.bind(this)} title={formatMessage(messages.newbuttontitle)}> {formatMessage(messages.newbuttontext)}</UI.DefaultButton>
           </Grids.Col>
           <Grids.Col md={8}>
-        <UI.DefaultButton onClick={this._addSelection.bind(this)} title={formatMessage(messages.addbuttontitle)}> {formatMessage(messages.addbuttontext)}</UI.DefaultButton>
-        </Grids.Col>
-        <Grids.Col md={8}>
-        <UI.DefaultButton onClick={this._inSelection.bind(this)} title={formatMessage(messages.selectintitle)}> {formatMessage(messages.selectintext)}</UI.DefaultButton>
-        </Grids.Col>
+            <UI.DefaultButton onClick={this._addSelection.bind(this)} title={formatMessage(messages.addbuttontitle)}> {formatMessage(messages.addbuttontext)}</UI.DefaultButton>
+          </Grids.Col>
+          <Grids.Col md={8}>
+            <UI.DefaultButton onClick={this._inSelection.bind(this)} title={formatMessage(messages.selectintitle)}> {formatMessage(messages.selectintext)}</UI.DefaultButton>
+          </Grids.Col>
       </div>
       </form>
     );
