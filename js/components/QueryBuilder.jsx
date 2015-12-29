@@ -37,7 +37,7 @@ const messages = defineMessages({
   newbuttontext: {
     id: 'querybuilder.newbuttontext',
     description: 'Text for the new selection button',
-    defaultMessage: 'New'
+    defaultMessage: 'New Selection'
   },
   addbuttontitle: {
     id: 'querybuilder.addbuttontitle',
@@ -47,17 +47,17 @@ const messages = defineMessages({
   addbuttontext: {
     id: 'querybuilder.addbuttontext',
     description: 'Text for the add to current selection button',
-    defaultMessage: 'Add'
+    defaultMessage: 'Add to Selection'
   },
   selectintitle: {
     id: 'querybuilder.selectintitle',
-    description: 'Title for the select in current selection button',
-    defaultMessage: 'Select in current selection'
+    description: 'Title for the refine current selection button',
+    defaultMessage: 'Refine current selection'
   },
   selectintext: {
     id: 'querybuilder.selectintext',
-    description: 'Text for the select in current selection button',
-    defaultMessage: 'Select'
+    description: 'Text for the refine current selection button',
+    defaultMessage: 'Refine Selection'
   }
 });
 
@@ -155,11 +155,17 @@ class QueryBuilder extends React.Component {
           <Grids.Col md={6}><label htmlFor='query-expression'>{formatMessage(messages.filterlabel)}</label></Grids.Col>
           <Grids.Col md={18}><input onKeyUp={this._setQueryFilter.bind(this)} className={inputClassName} ref='queryExpression' id='query-expression' placeholder={formatMessage(messages.filterplaceholder)} type='text'/></Grids.Col>
         </div>
-        <div className='form-group text-center'>
-            <UI.DefaultButton onClick={this._newSelection.bind(this)} title={formatMessage(messages.newbuttontitle)}><Icon.Icon name="file" /> {formatMessage(messages.newbuttontext)}</UI.DefaultButton>
-            <UI.DefaultButton onClick={this._addSelection.bind(this)} title={formatMessage(messages.addbuttontitle)}><Icon.Icon name="plus" /> {formatMessage(messages.addbuttontext)}</UI.DefaultButton>
-            <UI.DefaultButton onClick={this._inSelection.bind(this)} title={formatMessage(messages.selectintitle)}><Icon.Icon name="filter" /> {formatMessage(messages.selectintext)}</UI.DefaultButton>
-        </div>
+        <div className='form-group'>
+          <Grids.Col md={7}>
+          <UI.DefaultButton onClick={this._newSelection.bind(this)} title={formatMessage(messages.newbuttontitle)}> {formatMessage(messages.newbuttontext)}</UI.DefaultButton>
+          </Grids.Col>
+          <Grids.Col md={8}>
+        <UI.DefaultButton onClick={this._addSelection.bind(this)} title={formatMessage(messages.addbuttontitle)}> {formatMessage(messages.addbuttontext)}</UI.DefaultButton>
+        </Grids.Col>
+        <Grids.Col md={8}>
+        <UI.DefaultButton onClick={this._inSelection.bind(this)} title={formatMessage(messages.selectintitle)}> {formatMessage(messages.selectintext)}</UI.DefaultButton>
+        </Grids.Col>
+      </div>
       </form>
     );
   }

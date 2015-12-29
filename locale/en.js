@@ -83,22 +83,16 @@ var enMessages = {
   "qgisprint.printmenutext": "Print",
   "qgisprint.resolutionlabel": "Resolution",
   "qgisprint.waittext": "Generating PDF ...",
-  "querybuilder.addbuttontext": "Add",
+  "querybuilder.addbuttontext": "Add to Selection",
   "querybuilder.addbuttontitle": "Add to current selection",
   "querybuilder.filterlabel": "Filter",
   "querybuilder.filterplaceholder": "Type expression ....",
   "querybuilder.layerlabel": "Layer",
-  "querybuilder.newbuttontext": "New",
+  "querybuilder.newbuttontext": "New Selection",
   "querybuilder.newbuttontitle": "New selection",
-  "querybuilder.selectintext": "Select",
-  "querybuilder.selectintitle": "Select in current selection",
+  "querybuilder.selectintext": "Refine Selection",
+  "querybuilder.selectintitle": "Refine current selection",
   "select.menubuttontext": "Selection",
-  "select.rectangletext": "Select by rectangle",
-  "wfst.deletefeature": "Delete",
-  "wfst.deletemsg": "There was an issue deleting the feature.",
-  "wfst.drawfeature": "Draw",
-  "wfst.errormsg": "Error saving this feature to GeoServer. {msg}",
-  "wfst.layerlabel": "Layer",
-  "wfst.modifyfeature": "Modify / Select"
+  "select.rectangletext": "Select by rectangle"
 };
 export default enMessages;
