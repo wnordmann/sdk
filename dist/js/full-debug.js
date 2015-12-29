@@ -1032,7 +1032,7 @@ exports['default'] = (0, _reactIntl.injectIntl)(Chart);
 module.exports = exports['default'];
 
 },{"../stores/FeatureStore.js":54,"./Chart.css":9,"./c3.min.css":45,"c3-windows":66,"pui-react-dropdowns":176,"pure-render-decorator":561,"react":824,"react-intl":627}],11:[function(require,module,exports){
-var css = ".error-alert {\n  max-width: 350px;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/elizabeththiry/Git/sdk/js/components/Edit.css'); module.exports = css;
+var css = ".error-alert {\n  max-width: 350px;\n}\nlabel{\n  line-height: 2.8;\n}\n\n.modal-content{\n  top: 70px;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/elizabeththiry/Git/sdk/js/components/Edit.css'); module.exports = css;
 },{"./../../node_modules/cssify":68}],12:[function(require,module,exports){
 /* eslint react/prop-types: 0 */
 'use strict';
@@ -1108,6 +1108,10 @@ var messages = (0, _reactIntl.defineMessages)({
   enable: {
     'id': 'edit.enable',
     'defaultMessage': 'Enable edit mode'
+  },
+  newlayer: {
+    'id': 'edit.newlayer',
+    'defaultMessage': 'New layer'
   },
   disable: {
     'id': 'edit.disable',
@@ -1420,23 +1424,47 @@ var Edit = (function (_MapTool) {
           'form',
           { onSubmit: this._onSubmit, className: 'form-inline' },
           _react2['default'].createElement(
-            'label',
-            null,
-            formatMessage(messages.layerlabel),
-            ':'
+            _puiReactGrids2['default'].Col,
+            { md: 6 },
+            _react2['default'].createElement(
+              _puiReactButtons2['default'].DefaultButton,
+              { onClick: this._showModal.bind(this) },
+              formatMessage(message.newlayer)
+            )
           ),
           _react2['default'].createElement(
-            'select',
-            { onChange: this._onLayerChange.bind(this), ref: 'layer', className: 'form-control' },
-            options
+            _puiReactGrids2['default'].Col,
+            { md: 10 },
+            _react2['default'].createElement(
+              _puiReactGrids2['default'].Col,
+              { md: 8 },
+              _react2['default'].createElement(
+                'label',
+                null,
+                formatMessage(messages.layerlabel),
+                ':'
+              )
+            ),
+            _react2['default'].createElement(
+              _puiReactGrids2['default'].Col,
+              { md: 16 },
+              _react2['default'].createElement(
+                'select',
+                { onChange: this._onLayerChange.bind(this), ref: 'layer', className: 'form-control' },
+                options
+              )
+            )
           ),
           _react2['default'].createElement(
-            _puiReactButtons2['default'].DefaultButton,
-            { onClick: this._showModal.bind(this) },
-            _react2['default'].createElement(_puiReactIconography2['default'].Icon, { name: 'plus' })
+            _puiReactGrids2['default'].Col,
+            { md: 8 },
+            button
           ),
-          button,
-          error
+          _react2['default'].createElement(
+            _puiReactGrids2['default'].Col,
+            { md: 3 },
+            error
+          )
         ),
         _react2['default'].createElement(
           _puiReactModals2['default'].Modal,
@@ -6300,7 +6328,7 @@ var QueryBuilder = (function (_React$Component) {
           { className: 'form-group' },
           _react2['default'].createElement(
             _puiReactGrids2['default'].Col,
-            { md: 8 },
+            { md: 7 },
             _react2['default'].createElement(
               _puiReactButtons2['default'].DefaultButton,
               { onClick: this._newSelection.bind(this), title: formatMessage(messages.newbuttontitle) },

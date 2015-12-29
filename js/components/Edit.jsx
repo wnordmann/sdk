@@ -27,6 +27,11 @@ const messages = defineMessages({
     description: 'Button text to enable edit mode',
     defaultMessage: 'Enable edit mode'
   },
+  newlayer:{
+    id: 'edit.newlayer',
+    description: 'Button text to create a new layer',
+    defaultMessage: 'New layer'
+  },
   disable: {
     id: 'edit.disable',
     description: 'Button text to disable edit mode',
@@ -273,11 +278,25 @@ class Edit extends MapTool {
     return (
       <article>
         <form onSubmit={this._onSubmit} className='form-inline'>
-          <label>{formatMessage(messages.layerlabel)}:</label>
-          <select onChange={this._onLayerChange.bind(this)} ref='layer' className='form-control'>{options}</select>
-          <UI.DefaultButton onClick={this._showModal.bind(this)}><Icon.Icon name='plus' /></UI.DefaultButton>
-          {button}
-          {error}
+          <Grids.Col md={6}>
+            <UI.DefaultButton onClick={this._showModal.bind(this)}>{formatMessage(messages.newlayer)}</UI.DefaultButton>
+          </Grids.Col>
+          <Grids.Col md={10}>
+            <Grids.Col md={8}>
+            <label>{formatMessage(messages.layerlabel)}:</label>
+            </Grids.Col>
+            <Grids.Col md={16}>
+            <select onChange={this._onLayerChange.bind(this)} ref='layer' className='form-control'>{options}</select>
+            </Grids.Col>
+          </Grids.Col>
+          <Grids.Col md={8}>
+            {button}
+          </Grids.Col>
+
+
+          <Grids.Col md={3}>
+            {error}
+          </Grids.Col>
         </form>
         <Dialog.Modal title={formatMessage(messages.newfeaturemodaltitle)} ref="attributesModal">
           <Dialog.ModalBody>
