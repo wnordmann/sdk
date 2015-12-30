@@ -6,6 +6,7 @@ import LayerStore from '../stores/LayerStore.js';
 import './QGISLegend.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
+import Grids from 'pui-react-grids';
 
 const messages = defineMessages({
   buttontitle: {
