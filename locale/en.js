@@ -94,6 +94,12 @@ var enMessages = {
   "querybuilder.selectintext": "Refine Selection",
   "querybuilder.selectintitle": "Refine current selection",
   "select.menubuttontext": "Selection",
-  "select.rectangletext": "Select by rectangle"
+  "select.rectangletext": "Select by rectangle",
+  "wfst.deletefeature": "Delete",
+  "wfst.deletemsg": "There was an issue deleting the feature.",
+  "wfst.drawfeature": "Draw",
+  "wfst.errormsg": "Error saving this feature to GeoServer. {msg}",
+  "wfst.layerlabel": "Layer",
+  "wfst.modifyfeature": "Modify / Select"
 };
 export default enMessages;

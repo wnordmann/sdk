@@ -33,6 +33,8 @@ var nlMessages = {
   "featuretable.filterlabel": "Filter",
   "featuretable.filterplaceholder": "Type filter expressie",
   "featuretable.layerlabel": "Laag",
+  "featuretable.movebuttontext": "Naar boven",
+  "featuretable.movebuttontitle": "Verplaats geselecteerde features naar boven",
   "featuretable.onlyselected": "Toon alleen geselecteerde features",
   "featuretable.zoombuttontext": "Zoom",
   "featuretable.zoombuttontitle": "Zoom naar selectie",
