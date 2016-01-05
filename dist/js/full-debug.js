@@ -823,7 +823,8 @@ var Chart = (function (_React$Component) {
 
     _get(Object.getPrototypeOf(_Chart.prototype), 'constructor', this).call(this, props);
     this.state = {
-      chart: this.props.charts[0]
+      chart: this.props.charts[0],
+      selected: null
     };
   }
 
@@ -843,18 +844,19 @@ var Chart = (function (_React$Component) {
     value: function _onChange() {
       this._storeConfig = _storesFeatureStoreJs2['default'].getState();
       if (this.state.chart && this.state.chart.layer) {
-        this._drawFromSelection(this.state.chart);
+        this.setState({ selected: this._storeConfig[this.state.chart.layer].selected });
       }
     }
   }, {
-    key: '_drawFromSelection',
-    value: function _drawFromSelection(chart) {
+    key: '_getColumns',
+    value: function _getColumns() {
+      var chart = this.state.chart;
       var formatMessage = this.props.intl.formatMessage;
 
       var i, ii, j, jj, values, cat, key;
       var categoryField = chart.categoryField;
       var valueFields = chart.valueFields;
-      var selectedFeatures = this._storeConfig[chart.layer] ? this._storeConfig[chart.layer].selected : [];
+      var selectedFeatures = this.state.selected ? this.state.selected : [];
       var columns = [['x']];
       if (chart.displayMode === DISPLAY_MODE_COUNT) {
         var count = formatMessage(messages.count);
@@ -941,11 +943,33 @@ var Chart = (function (_React$Component) {
         default:
           break;
       }
-      if (this.state.chart !== chart) {
-        this.setState({
-          chart: chart
-        });
+      return columns;
+    }
+  }, {
+    key: '_selectChart',
+    value: function _selectChart(evt) {
+      for (var i = 0, ii = this.props.charts.length; i < ii; ++i) {
+        var chart = this.props.charts[i];
+        if (chart.title === evt.target.value) {
+          this.setState({
+            chart: chart,
+            selected: this._storeConfig[chart.layer].selected
+          });
+          break;
+        }
       }
+    }
+  }, {
+    key: '_onClick',
+    value: function _onClick() {
+      if (this.props.container) {
+        document.getElementById(this.props.container).style.display = 'block';
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var columns = this._getColumns();
       _c3Windows2['default'].generate({
         bindto: '#chart',
         data: {
@@ -967,28 +991,6 @@ var Chart = (function (_React$Component) {
           }
         }
       });
-    }
-  }, {
-    key: '_selectChart',
-    value: function _selectChart(evt) {
-      for (var i = 0, ii = this.props.charts.length; i < ii; ++i) {
-        var chart = this.props.charts[i];
-        if (chart.title === evt.target.value) {
-          this._drawFromSelection(chart);
-          break;
-        }
-      }
-    }
-  }, {
-    key: '_onClick',
-    value: function _onClick() {
-      if (this.props.container) {
-        document.getElementById(this.props.container).style.display = 'block';
-      }
-    }
-  }, {
-    key: 'render',
-    value: function render() {
       if (this.props.combo === true) {
         var options = this.props.charts.map(function (chart, idx) {
           var title = chart.title;

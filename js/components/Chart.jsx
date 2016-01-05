@@ -31,7 +31,8 @@ class Chart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      chart: this.props.charts[0]
+      chart: this.props.charts[0],
+      selected: null
     };
   }
   componentWillMount() {
@@ -44,15 +45,16 @@ class Chart extends React.Component {
   _onChange() {
     this._storeConfig = FeatureStore.getState();
     if (this.state.chart && this.state.chart.layer) {
-      this._drawFromSelection(this.state.chart);
+      this.setState({selected: this._storeConfig[this.state.chart.layer].selected});
     }
   }
-  _drawFromSelection(chart) {
+  _getColumns() {
+    var chart = this.state.chart;
     const {formatMessage} = this.props.intl;
     var i, ii, j, jj, values, cat, key;
     var categoryField = chart.categoryField;
     var valueFields = chart.valueFields;
-    var selectedFeatures = this._storeConfig[chart.layer] ? this._storeConfig[chart.layer].selected : [];
+    var selectedFeatures = this.state.selected ? this.state.selected : [];
     var columns = [['x']];
     if (chart.displayMode === DISPLAY_MODE_COUNT) {
       var count = formatMessage(messages.count);
@@ -139,38 +141,16 @@ class Chart extends React.Component {
       default:
         break;
     }
-    if (this.state.chart !== chart) {
-      this.setState({
-        chart: chart
-      });
-    }
-    c3.generate({
-      bindto: '#chart',
-      data: {
-        x: 'x',
-        columns: columns,
-        type: 'bar'
-      },
-      padding: {
-        right: 30
-      },
-      axis: {
-        x: {
-          type: 'category',
-          tick: {
-            rotate: 70,
-            multiline: false
-          },
-          height: 80
-        }
-      }
-    });
+    return columns;
   }
   _selectChart(evt) {
     for (var i = 0, ii = this.props.charts.length; i < ii; ++i) {
       var chart = this.props.charts[i];
       if (chart.title === evt.target.value) {
-        this._drawFromSelection(chart);
+          this.setState({
+            chart: chart,
+            selected: this._storeConfig[chart.layer].selected
+          });
         break;
       }
     }
@@ -181,6 +161,28 @@ class Chart extends React.Component {
     }
   }
   render() {
+   var columns = this._getColumns();
+   c3.generate({
+        bindto: '#chart',
+        data: {
+          x: 'x',
+          columns: columns,
+          type: 'bar'
+        },
+        padding: {
+          right: 30
+        },
+        axis: {
+          x: {
+            type: 'category',
+            tick: {
+              rotate: 70,
+              multiline: false
+            },
+            height: 80
+          }
+        }
+      });
     if (this.props.combo === true) {
       var options = this.props.charts.map(function(chart, idx) {
         var title = chart.title;
