@@ -27,6 +27,25 @@ class Bookmarks extends React.Component {
     this._center = view.getCenter();
     this._zoom = view.getZoom();
   }
+  componentDidMount() {
+    if (this.props.showMarker) {
+      this._layer = new ol.layer.Vector({
+        title: null,
+        managed: false,
+        style: new ol.style.Style({
+          image: new ol.style.Icon({
+            anchor: [0.5, 46],
+            anchorXUnits: 'fraction',
+            anchorYUnits: 'pixels',
+            opacity: 0.75,
+            src: '../../resources/marker.png'
+          })
+        }),
+        source: new ol.source.Vector()
+      });
+      this.props.map.addLayer(this._layer);
+    }
+  }
   _selectBookmark(bookmark) {
     var map = this.props.map, view = map.getView();
     if (this.props.animatePanZoom === true) {
@@ -41,12 +60,23 @@ class Bookmarks extends React.Component {
       });
       map.beforeRender(pan, zoom);
     }
+    var center;
     if (bookmark) {
       var extent = bookmark.extent;
       view.fit(extent, map.getSize());
+      center = ol.extent.getCenter(extent);
     } else {
       view.setCenter(this._center);
       view.setZoom(this._zoom);
+      center = this._center;
+    }
+    if (this.props.showMarker) {
+      var source = this._layer.getSource();
+      source.clear();
+      var feature = new ol.Feature({
+        geometry: new ol.geom.Point(center)
+      });
+      source.addFeature(feature);
     }
   }
   _afterChange(idx) {
@@ -124,7 +154,11 @@ Bookmarks.propTypes = {
   /**
    * Display as a menu drop down list.
    */
-  menu: React.PropTypes.bool
+  menu: React.PropTypes.bool,
+  /**
+   * Should we display a marker for the bookmark? Default is true.
+   */
+  showMarker: React.PropTypes.bool
 };
 
 Bookmarks.defaultProps = {
@@ -134,7 +168,8 @@ Bookmarks.defaultProps = {
   introTitle: '',
   introDescription: '',
   animationDuration: 500,
-  menu: false
+  menu: false,
+  showMarker: true
 };
 
 export default injectIntl(Bookmarks);

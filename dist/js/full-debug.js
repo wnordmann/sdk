@@ -483,7 +483,7 @@ exports['default'] = (0, _reactIntl.injectIntl)(AddLayer);
 module.exports = exports['default'];
 
 },{"../util.js":56,"./AddLayer.css":5,"openlayers":130,"pui-react-buttons":158,"pui-react-grids":314,"pui-react-iconography":363,"pui-react-modals":419,"pure-render-decorator":561,"react":824,"react-color":593,"react-dropzone":612,"react-intl":627}],7:[function(require,module,exports){
-var css = ".slick-prev:before, .slick-next:before {\n  color: grey;\n}\n.slick-list {\n  max-height: 450px;\n  max-width: 450px;\n}\n.story-panel {\n  display: block;\n  position: absolute;\n  background: rgba(255,255,255,0.7);\n  padding: 15px;\n  border-radius: 5px;\n  border: 1px solid #000000;\n  top: 100px;\n  left: 50px;\n  height: 500px;\n  width: 500px;\n  min-width: 400px;\n  z-index: 100\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/Bookmarks.css'); module.exports = css;
+var css = ".slick-prev:before, .slick-next:before {\n  color: grey;\n}\n.slick-list {\n  max-height: 450px;\n  max-width: 450px;\n}\n.story-panel {\n  display: block;\n  position: absolute;\n  background: rgba(255,255,255,0.7);\n  padding: 15px;\n  border-radius: 5px;\n  border: 1px solid #000000;\n  top: 100px;\n  left: 50px;\n  min-width: 400px;\n  z-index: 100\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/Bookmarks.css'); module.exports = css;
 },{"./../../node_modules/cssify":68}],8:[function(require,module,exports){
 'use strict';
 
@@ -555,6 +555,27 @@ var Bookmarks = (function (_React$Component) {
   }
 
   _createClass(Bookmarks, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      if (this.props.showMarker) {
+        this._layer = new _openlayers2['default'].layer.Vector({
+          title: null,
+          managed: false,
+          style: new _openlayers2['default'].style.Style({
+            image: new _openlayers2['default'].style.Icon({
+              anchor: [0.5, 46],
+              anchorXUnits: 'fraction',
+              anchorYUnits: 'pixels',
+              opacity: 0.75,
+              src: '../../resources/marker.png'
+            })
+          }),
+          source: new _openlayers2['default'].source.Vector()
+        });
+        this.props.map.addLayer(this._layer);
+      }
+    }
+  }, {
     key: '_selectBookmark',
     value: function _selectBookmark(bookmark) {
       var map = this.props.map,
@@ -571,12 +592,23 @@ var Bookmarks = (function (_React$Component) {
         });
         map.beforeRender(pan, zoom);
       }
+      var center;
       if (bookmark) {
         var extent = bookmark.extent;
         view.fit(extent, map.getSize());
+        center = _openlayers2['default'].extent.getCenter(extent);
       } else {
         view.setCenter(this._center);
         view.setZoom(this._zoom);
+        center = this._center;
+      }
+      if (this.props.showMarker) {
+        var source = this._layer.getSource();
+        source.clear();
+        var feature = new _openlayers2['default'].Feature({
+          geometry: new _openlayers2['default'].geom.Point(center)
+        });
+        source.addFeature(feature);
       }
     }
   }, {
@@ -696,7 +728,11 @@ Bookmarks.propTypes = {
   /**
    * Display as a menu drop down list.
    */
-  menu: _react2['default'].PropTypes.bool
+  menu: _react2['default'].PropTypes.bool,
+  /**
+   * Should we display a marker for the bookmark? Default is true.
+   */
+  showMarker: _react2['default'].PropTypes.bool
 };
 
 Bookmarks.defaultProps = {
@@ -706,7 +742,8 @@ Bookmarks.defaultProps = {
   introTitle: '',
   introDescription: '',
   animationDuration: 500,
-  menu: false
+  menu: false,
+  showMarker: true
 };
 
 exports['default'] = (0, _reactIntl.injectIntl)(Bookmarks);
@@ -3927,7 +3964,7 @@ exports['default'] = (0, _reactIntl.injectIntl)(LabelModal, { withRef: true });
 module.exports = exports['default'];
 
 },{"../util.js":56,"filtrex":71,"pui-react-buttons":158,"pui-react-grids":314,"pui-react-modals":419,"react":824,"react-color":593,"react-dom":611,"react-intl":627}],27:[function(require,module,exports){
-var css = ".layer-switcher {\n  position: absolute;\n  top: 3.5em;\n  right: 0.5em;\n  text-align: left;\n  max-width: 350px;\n}\n.layer-switcher .layer-tree-panel {\n  display: none;\n}\n.layer-switcher.shown .layer-tree-panel {\n  display: block;\n}\n.layerlistbutton {\n  color: white;\n  float: right;\n  width: 38px;\n  height: 38px;\n  background-color: #7b98bc;\n  background-color: rgba(0,60,136,.5);\n  border: none;\n  padding: 2px;\n}\n.layerlistbutton button:focus, .layerlistbutton button:hover {\n  background-color: white;\n}\n.layer-tree-panel {\n  padding-right: 50px;\n  border: 1px solid #cccccc;\n  background-color: white;\n  max-height: 450px;\n  overflow: auto;\n}\n.layer-tree-panel li {\n  list-style-type: none;\n}\n\n.layer-tree-panel li span {\n  display: inline-block;\n  padding: 3px 8px;\n  text-decoration: none;\n}\n.layer-tree-panel li.parent_li>span {\n  cursor: pointer;\n}\n.layer-tree-panel >ul>li::before, .layer-tree-panel >ul>li::after {\n  border: 0;\n}\n.layer-tree-panel  li:last-child::before {\n  height: 30px;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/LayerList.css'); module.exports = css;
+var css = ".layer-switcher {\n  position: absolute;\n  top: 3.5em;\n  right: 0.5em;\n  text-align: left;\n  max-width: 350px;\n}\n.layer-switcher .layer-tree-panel {\n  display: none;\n}\n.layer-switcher.shown .layer-tree-panel {\n  display: block;\n}\n.layerlistbutton {\n  color: white;\n  float: right;\n  width: 38px;\n  height: 38px;\n  background-color: #7b98bc;\n  border: 3px solid rgba(225, 225, 220, 0.8);\n  padding: 2px;\n}\n.layerlistbutton button:focus, .layerlistbutton button:hover {\n  background-color: white;\n}\n.layer-tree-panel {\n  padding-right: 50px;\n  border: 1px solid #cccccc;\n  background-color: white;\n  max-height: 450px;\n  overflow: auto;\n}\n.layer-tree-panel li {\n  list-style-type: none;\n}\n\n.layer-tree-panel li span {\n  display: inline-block;\n  padding: 3px 8px;\n  text-decoration: none;\n}\n.layer-tree-panel li.parent_li>span {\n  cursor: pointer;\n}\n.layer-tree-panel >ul>li::before, .layer-tree-panel >ul>li::after {\n  border: 0;\n}\n.layer-tree-panel  li:last-child::before {\n  height: 30px;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/LayerList.css'); module.exports = css;
 },{"./../../node_modules/cssify":68}],28:[function(require,module,exports){
 'use strict';
 
@@ -5499,6 +5536,10 @@ var _pureRenderDecorator = require('pure-render-decorator');
 
 var _pureRenderDecorator2 = _interopRequireDefault(_pureRenderDecorator);
 
+var _puiReactGrids = require('pui-react-grids');
+
+var _puiReactGrids2 = _interopRequireDefault(_puiReactGrids);
+
 var messages = (0, _reactIntl.defineMessages)({
   buttontitle: {
     'id': 'qgislegend.buttontitle',
@@ -5629,7 +5670,7 @@ QGISLegend.defaultProps = {
 exports['default'] = (0, _reactIntl.injectIntl)(QGISLegend);
 module.exports = exports['default'];
 
-},{"../stores/LayerStore.js":55,"./QGISLegend.css":38,"openlayers":130,"pui-react-buttons":158,"pui-react-iconography":363,"pure-render-decorator":561,"react":824,"react-intl":627}],40:[function(require,module,exports){
+},{"../stores/LayerStore.js":55,"./QGISLegend.css":38,"openlayers":130,"pui-react-buttons":158,"pui-react-grids":314,"pui-react-iconography":363,"pure-render-decorator":561,"react":824,"react-intl":627}],40:[function(require,module,exports){
 var css = ".spinner {\n  margin-top: 5px;\n  font-weight: bold;\n  font-size: 16px;\n  text-align: center;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/QGISPrint.css'); module.exports = css;
 },{"./../../node_modules/cssify":68}],41:[function(require,module,exports){
 'use strict';
