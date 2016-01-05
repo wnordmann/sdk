@@ -13,6 +13,7 @@ import UI from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import filtrex from 'filtrex';
+import pureRender from 'pure-render-decorator';
 import './FeatureTable.css';
 
 const {Table, Column, Cell} = FixedDataTable;
@@ -26,6 +27,7 @@ function reverseSortDirection(sortDir) {
   return sortDir === SortTypes.DESC ? SortTypes.ASC : SortTypes.DESC;
 }
 
+@pureRender
 class SortHeaderCell extends React.Component {
   constructor(props) {
     super(props);
@@ -129,6 +131,7 @@ const TextCell = ({rowIndex,col, layer, sortIndexes, ...props}) => (
 /**
  * A table to show features. Allows for selection of features.
  */
+@pureRender
 class FeatureTable extends React.Component {
   constructor(props) {
     super(props);
@@ -195,7 +198,11 @@ class FeatureTable extends React.Component {
     for (var index = 0; index < size; index++) {
       this._defaultSortIndexes.push(index);
     }
-    this.setState(state);
+    var newState = {};
+    newState.features = state.features.slice();
+    newState.originalFeatures = state.originalFeatures.slice();
+    newState.selected = state.selected.slice();
+    this.setState(newState);
     // re-sort
     if (this.state.sortIndexes && (this.state.sortIndexes.length !== state.features.length)) {
       var columnKey = Object.keys(this.state.colSortDirs)[0];

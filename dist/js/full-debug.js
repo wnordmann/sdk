@@ -1503,7 +1503,7 @@ var Edit = (function (_MapTool) {
           ),
           _react2['default'].createElement(
             _puiReactGrids2['default'].Col,
-            { md: 3 },
+            { md: 8 },
             error
           )
         ),
@@ -1770,6 +1770,10 @@ var _filtrex = require('filtrex');
 
 var _filtrex2 = _interopRequireDefault(_filtrex);
 
+var _pureRenderDecorator = require('pure-render-decorator');
+
+var _pureRenderDecorator2 = _interopRequireDefault(_pureRenderDecorator);
+
 require('./FeatureTable.css');
 
 var Table = _fixedDataTable2['default'].Table;
@@ -1789,9 +1793,9 @@ var SortHeaderCell = (function (_React$Component) {
   _inherits(SortHeaderCell, _React$Component);
 
   function SortHeaderCell(props) {
-    _classCallCheck(this, SortHeaderCell);
+    _classCallCheck(this, _SortHeaderCell);
 
-    _get(Object.getPrototypeOf(SortHeaderCell.prototype), 'constructor', this).call(this, props);
+    _get(Object.getPrototypeOf(_SortHeaderCell.prototype), 'constructor', this).call(this, props);
     this._onSortChange = this._onSortChange.bind(this);
   }
 
@@ -1826,6 +1830,8 @@ var SortHeaderCell = (function (_React$Component) {
     }
   }]);
 
+  var _SortHeaderCell = SortHeaderCell;
+  SortHeaderCell = (0, _pureRenderDecorator2['default'])(SortHeaderCell) || SortHeaderCell;
   return SortHeaderCell;
 })(_react2['default'].Component);
 
@@ -1921,9 +1927,9 @@ var FeatureTable = (function (_React$Component2) {
   _inherits(FeatureTable, _React$Component2);
 
   function FeatureTable(props) {
-    _classCallCheck(this, FeatureTable);
+    _classCallCheck(this, _FeatureTable);
 
-    _get(Object.getPrototypeOf(FeatureTable.prototype), 'constructor', this).call(this, props);
+    _get(Object.getPrototypeOf(_FeatureTable.prototype), 'constructor', this).call(this, props);
     this._onSortChange = this._onSortChange.bind(this);
     this._onChange = this._onChange.bind(this);
     _storesFeatureStoreJs2['default'].bindMap(this.props.map);
@@ -2000,7 +2006,11 @@ var FeatureTable = (function (_React$Component2) {
       for (var index = 0; index < size; index++) {
         this._defaultSortIndexes.push(index);
       }
-      this.setState(state);
+      var newState = {};
+      newState.features = state.features.slice();
+      newState.originalFeatures = state.originalFeatures.slice();
+      newState.selected = state.selected.slice();
+      this.setState(newState);
       // re-sort
       if (this.state.sortIndexes && this.state.sortIndexes.length !== state.features.length) {
         var columnKey = Object.keys(this.state.colSortDirs)[0];
@@ -2280,6 +2290,8 @@ var FeatureTable = (function (_React$Component2) {
     }
   }]);
 
+  var _FeatureTable = FeatureTable;
+  FeatureTable = (0, _pureRenderDecorator2['default'])(FeatureTable) || FeatureTable;
   return FeatureTable;
 })(_react2['default'].Component);
 
@@ -2350,7 +2362,7 @@ exports['default'] = (0, _reactIntl.injectIntl)(FeatureTable, { withRef: true })
 module.exports = exports['default'];
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../actions/SelectActions.js":3,"../constants/LayerConstants.js":49,"../dispatchers/AppDispatcher.js":52,"../stores/FeatureStore.js":54,"./FeatureTable.css":13,"./LayerSelector.jsx":32,"./fixed-data-table.css":46,"debounce":69,"filtrex":71,"fixed-data-table":121,"openlayers":130,"pui-react-buttons":158,"pui-react-iconography":363,"react":824,"react-dom":611,"react-intl":627}],15:[function(require,module,exports){
+},{"../actions/SelectActions.js":3,"../constants/LayerConstants.js":49,"../dispatchers/AppDispatcher.js":52,"../stores/FeatureStore.js":54,"./FeatureTable.css":13,"./LayerSelector.jsx":32,"./fixed-data-table.css":46,"debounce":69,"filtrex":71,"fixed-data-table":121,"openlayers":130,"pui-react-buttons":158,"pui-react-iconography":363,"pure-render-decorator":561,"react":824,"react-dom":611,"react-intl":627}],15:[function(require,module,exports){
 var css = ".filterform .input-has-error {\n  background-color: #fdd;\n}\n.filterform label {\n  font-weight: bold;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/FilterModal.css'); module.exports = css;
 },{"./../../node_modules/cssify":68}],16:[function(require,module,exports){
 'use strict';
