@@ -294,9 +294,7 @@ class Edit extends MapTool {
           <Grids.Col md={8}>
             {button}
           </Grids.Col>
-
-
-          <Grids.Col md={3}>
+          <Grids.Col md={8}>
             {error}
           </Grids.Col>
         </form>
