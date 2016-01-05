@@ -11,6 +11,7 @@ import {transformColor} from '../util.js';
 import ColorPicker from 'react-color';
 import Pui from 'pui-react-alerts';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import pureRender from 'pure-render-decorator';
 import './Edit.css';
 
 const NEW_ATTR_PREFIX = 'new-attr-';
@@ -122,6 +123,7 @@ const messages = defineMessages({
 /**
  * A component that allows creating new features, so drawing their geometries and setting feature attributes through a form.
  */
+@pureRender
 class Edit extends MapTool {
   constructor(props) {
     super(props);
@@ -170,7 +172,7 @@ class Edit extends MapTool {
         source: new ol.source.Vector({useSpatialIndex: false})
       });
       this.props.map.addLayer(layer);
-      var layers = this.state.layers;
+      var layers = this.state.layers.slice();
       layers.push(layer);
       this.refs.modal.close();
       this.setState({layers: layers});

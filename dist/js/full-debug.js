@@ -1132,6 +1132,10 @@ var _puiReactAlerts2 = _interopRequireDefault(_puiReactAlerts);
 
 var _reactIntl = require('react-intl');
 
+var _pureRenderDecorator = require('pure-render-decorator');
+
+var _pureRenderDecorator2 = _interopRequireDefault(_pureRenderDecorator);
+
 require('./Edit.css');
 
 var NEW_ATTR_PREFIX = 'new-attr-';
@@ -1228,9 +1232,9 @@ var Edit = (function (_MapTool) {
   _inherits(Edit, _MapTool);
 
   function Edit(props) {
-    _classCallCheck(this, Edit);
+    _classCallCheck(this, _Edit);
 
-    _get(Object.getPrototypeOf(Edit.prototype), 'constructor', this).call(this, props);
+    _get(Object.getPrototypeOf(_Edit.prototype), 'constructor', this).call(this, props);
     this._interactions = {};
     this.state = {
       layers: [],
@@ -1287,7 +1291,7 @@ var Edit = (function (_MapTool) {
           source: new _openlayers2['default'].source.Vector({ useSpatialIndex: false })
         });
         this.props.map.addLayer(layer);
-        var layers = this.state.layers;
+        var layers = this.state.layers.slice();
         layers.push(layer);
         this.refs.modal.close();
         this.setState({ layers: layers });
@@ -1658,6 +1662,8 @@ var Edit = (function (_MapTool) {
     }
   }]);
 
+  var _Edit = Edit;
+  Edit = (0, _pureRenderDecorator2['default'])(Edit) || Edit;
   return Edit;
 })(_MapToolJs2['default']);
 
@@ -1684,7 +1690,7 @@ Edit.defaultProps = {
 exports['default'] = (0, _reactIntl.injectIntl)(Edit);
 module.exports = exports['default'];
 
-},{"../util.js":56,"./Edit.css":11,"./MapTool.js":33,"openlayers":130,"pui-react-alerts":131,"pui-react-buttons":158,"pui-react-grids":314,"pui-react-iconography":363,"pui-react-modals":419,"react":824,"react-color":593,"react-dom":611,"react-intl":627}],13:[function(require,module,exports){
+},{"../util.js":56,"./Edit.css":11,"./MapTool.js":33,"openlayers":130,"pui-react-alerts":131,"pui-react-buttons":158,"pui-react-grids":314,"pui-react-iconography":363,"pui-react-modals":419,"pure-render-decorator":561,"react":824,"react-color":593,"react-dom":611,"react-intl":627}],13:[function(require,module,exports){
 var css = ".row-selected .public_fixedDataTableCell_main {\n  background-color: yellow;\n}\n\n.btn-default{\n\theight: 42px;\n}\n\n.input-group-addon{\n\theight: 42px;\n}\n\n.form-inline .input-group{\n\tpadding: 10px;\n\n}\n\nlabel{\n\tmargin-bottom: 0px;\n}\n\ninput[type=\"radio\"], input[type=\"checkbox\"]{\n\tmargin: 4px 4px 0px;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/FeatureTable.css'); module.exports = css;
 },{"./../../node_modules/cssify":68}],14:[function(require,module,exports){
 (function (global){
