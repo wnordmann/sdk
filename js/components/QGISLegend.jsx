@@ -40,18 +40,35 @@ class QGISLegend extends React.Component {
       var src = legendBasePath + symbol.href;
       return (<li key={symbol.title}><img src={src}></img> {symbol.title}</li>);
     };
+    var symbolFuncB = function(symbol) {
+      var src = legendBasePath + symbol.href;
+      return (<img key={symbol.title} src={src}></img>);
+    };
     for (var id in legendData) {
       var title = LayerStore.findLayer(id).get('title');
       if (title !== null) {
-        var symbols = legendData[id].map(symbolFunc);
-        var forLabel = 'legend-layer-' + id;
-        legendNodes.push(
-          <li key={id}>
-            <ul>
-              {title} {symbols}
-            </ul>
-          </li>
-        );
+        if (legendData[id].length > 1){
+          var symbols = legendData[id].map(symbolFunc);
+          var forLabel = 'legend-layer-' + id;
+          legendNodes.push(
+            <li key={id}>
+              <ul>
+                {title} {symbols}
+              </ul>
+            </li>
+          );
+        } else {
+          var symbols = legendData[id].map(symbolFuncB);
+          var forLabel = 'legend-layer-' + id;
+          legendNodes.push(
+            <li key={id}>
+              <ul>
+                {symbols} {title}
+              </ul>
+            </li>
+          );
+        }
+
       }
     }
     return (
