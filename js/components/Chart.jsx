@@ -35,7 +35,7 @@ class Chart extends React.Component {
       selected: null
     };
   }
-  componentWillMount() {
+  componentDidMount() {
     this._onChangeCb = this._onChange.bind(this);
     FeatureStore.addChangeListener(this._onChangeCb);
   }

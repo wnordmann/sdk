@@ -829,8 +829,8 @@ var Chart = (function (_React$Component) {
   }
 
   _createClass(Chart, [{
-    key: 'componentWillMount',
-    value: function componentWillMount() {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
       this._onChangeCb = this._onChange.bind(this);
       _storesFeatureStoreJs2['default'].addChangeListener(this._onChangeCb);
     }
