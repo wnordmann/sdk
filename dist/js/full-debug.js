@@ -2409,6 +2409,10 @@ var _puiReactButtons2 = _interopRequireDefault(_puiReactButtons);
 
 var _reactIntl = require('react-intl');
 
+var _pureRenderDecorator = require('pure-render-decorator');
+
+var _pureRenderDecorator2 = _interopRequireDefault(_pureRenderDecorator);
+
 require('./FilterModal.css');
 
 var messages = (0, _reactIntl.defineMessages)({
@@ -2434,9 +2438,9 @@ var FilterModal = (function (_Dialog$Modal) {
   _inherits(FilterModal, _Dialog$Modal);
 
   function FilterModal(props) {
-    _classCallCheck(this, FilterModal);
+    _classCallCheck(this, _FilterModal);
 
-    _get(Object.getPrototypeOf(FilterModal.prototype), 'constructor', this).call(this, props);
+    _get(Object.getPrototypeOf(_FilterModal.prototype), 'constructor', this).call(this, props);
     this.state = {
       filters: [],
       hasError: false
@@ -2486,7 +2490,7 @@ var FilterModal = (function (_Dialog$Modal) {
       if (!this._styleSet) {
         this._setStyleFunction();
       }
-      var filters = this.state.filters;
+      var filters = this.state.filters.slice();
       var filter;
       var expression = _reactDom2['default'].findDOMNode(this.refs.filterTextBox).value;
       try {
@@ -2518,7 +2522,7 @@ var FilterModal = (function (_Dialog$Modal) {
     key: '_removeFilter',
     value: function _removeFilter(filter) {
       var layer = this.props.layer;
-      var filters = this.state.filters;
+      var filters = this.state.filters.slice();
       for (var i = 0, ii = filters.length; i < ii; i++) {
         if (filters[i] === filter) {
           filters.splice(i, 1);
@@ -2625,6 +2629,8 @@ var FilterModal = (function (_Dialog$Modal) {
     }
   }]);
 
+  var _FilterModal = FilterModal;
+  FilterModal = (0, _pureRenderDecorator2['default'])(FilterModal) || FilterModal;
   return FilterModal;
 })(_puiReactModals2['default'].Modal);
 
@@ -2638,7 +2644,7 @@ FilterModal.propTypes = {
 exports['default'] = (0, _reactIntl.injectIntl)(FilterModal, { withRef: true });
 module.exports = exports['default'];
 
-},{"./FilterModal.css":15,"filtrex":71,"pui-react-buttons":158,"pui-react-grids":314,"pui-react-modals":419,"react":824,"react-dom":611,"react-intl":627}],17:[function(require,module,exports){
+},{"./FilterModal.css":15,"filtrex":71,"pui-react-buttons":158,"pui-react-grids":314,"pui-react-modals":419,"pure-render-decorator":561,"react":824,"react-dom":611,"react-intl":627}],17:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {

@@ -5,6 +5,7 @@ import filtrex from 'filtrex';
 import Grids from 'pui-react-grids';
 import UI from 'pui-react-buttons';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import pureRender from 'pure-render-decorator';
 import './FilterModal.css';
 
 const messages = defineMessages({
@@ -30,6 +31,7 @@ const messages = defineMessages({
   }
 });
 
+@pureRender
 class FilterModal extends Dialog.Modal {
   constructor(props) {
     super(props);
@@ -75,7 +77,7 @@ class FilterModal extends Dialog.Modal {
     if (!this._styleSet) {
       this._setStyleFunction();
     }
-    var filters = this.state.filters;
+    var filters = this.state.filters.slice();
     var filter;
     var expression = ReactDOM.findDOMNode(this.refs.filterTextBox).value;
     try {
@@ -105,7 +107,7 @@ class FilterModal extends Dialog.Modal {
   }
   _removeFilter(filter) {
     var layer = this.props.layer;
-    var filters = this.state.filters;
+    var filters = this.state.filters.slice();
     for (var i = 0, ii = filters.length; i < ii; i++){
       if (filters[i] === filter){
         filters.splice(i, 1);
