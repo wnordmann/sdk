@@ -843,9 +843,7 @@ var Chart = (function (_React$Component) {
     key: '_onChange',
     value: function _onChange() {
       this._storeConfig = _storesFeatureStoreJs2['default'].getState();
-      if (this.state.chart && this.state.chart.layer) {
-        this.setState({ selected: this._storeConfig[this.state.chart.layer].selected });
-      }
+      this.setState({ selected: this._storeConfig[this.state.chart.layer].selected });
     }
   }, {
     key: '_getColumns',

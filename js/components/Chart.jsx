@@ -44,9 +44,7 @@ class Chart extends React.Component {
   }
   _onChange() {
     this._storeConfig = FeatureStore.getState();
-    if (this.state.chart && this.state.chart.layer) {
-      this.setState({selected: this._storeConfig[this.state.chart.layer].selected});
-    }
+    this.setState({selected: this._storeConfig[this.state.chart.layer].selected});
   }
   _getColumns() {
     var chart = this.state.chart;
