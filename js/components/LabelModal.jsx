@@ -7,6 +7,7 @@ import UI from 'pui-react-buttons';
 import ColorPicker from 'react-color';
 import {transformColor} from '../util.js';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   title: {
@@ -41,6 +42,7 @@ const messages = defineMessages({
   }
 });
 
+@pureRender
 class LabelModal extends Dialog.Modal {
   constructor(props) {
     super(props);

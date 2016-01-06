@@ -3763,6 +3763,10 @@ var _utilJs = require('../util.js');
 
 var _reactIntl = require('react-intl');
 
+var _pureRenderDecorator = require('pure-render-decorator');
+
+var _pureRenderDecorator2 = _interopRequireDefault(_pureRenderDecorator);
+
 var messages = (0, _reactIntl.defineMessages)({
   title: {
     'id': 'labelmodal.title',
@@ -3794,9 +3798,9 @@ var LabelModal = (function (_Dialog$Modal) {
   _inherits(LabelModal, _Dialog$Modal);
 
   function LabelModal(props) {
-    _classCallCheck(this, LabelModal);
+    _classCallCheck(this, _LabelModal);
 
-    _get(Object.getPrototypeOf(LabelModal.prototype), 'constructor', this).call(this, props);
+    _get(Object.getPrototypeOf(_LabelModal.prototype), 'constructor', this).call(this, props);
     this._fillColor = '#000';
     this._fontSize = '12';
     this.state = {
@@ -3999,13 +4003,15 @@ var LabelModal = (function (_Dialog$Modal) {
     }
   }]);
 
+  var _LabelModal = LabelModal;
+  LabelModal = (0, _pureRenderDecorator2['default'])(LabelModal) || LabelModal;
   return LabelModal;
 })(_puiReactModals2['default'].Modal);
 
 exports['default'] = (0, _reactIntl.injectIntl)(LabelModal, { withRef: true });
 module.exports = exports['default'];
 
-},{"../util.js":56,"filtrex":71,"pui-react-buttons":158,"pui-react-grids":314,"pui-react-modals":419,"react":824,"react-color":593,"react-dom":611,"react-intl":627}],27:[function(require,module,exports){
+},{"../util.js":56,"filtrex":71,"pui-react-buttons":158,"pui-react-grids":314,"pui-react-modals":419,"pure-render-decorator":561,"react":824,"react-color":593,"react-dom":611,"react-intl":627}],27:[function(require,module,exports){
 var css = ".layer-switcher {\n  position: absolute;\n  top: 3.5em;\n  right: 0.5em;\n  text-align: left;\n  max-width: 350px;\n}\n.layer-switcher .layer-tree-panel {\n  display: none;\n}\n.layer-switcher.shown .layer-tree-panel {\n  display: block;\n}\n.layerlistbutton {\n  color: white;\n  float: right;\n  width: 38px;\n  height: 38px;\n  background-color: #7b98bc;\n  border: 3px solid rgba(225, 225, 220, 0.8);\n  padding: 2px;\n}\n.layerlistbutton button:focus, .layerlistbutton button:hover {\n  background-color: white;\n}\n.layer-tree-panel {\n  padding-right: 50px;\n  border: 1px solid #cccccc;\n  background-color: white;\n  max-height: 450px;\n  overflow: auto;\n}\n.layer-tree-panel li {\n  list-style-type: none;\n}\n\n.layer-tree-panel li span {\n  display: inline-block;\n  padding: 3px 8px;\n  text-decoration: none;\n}\n.layer-tree-panel li.parent_li>span {\n  cursor: pointer;\n}\n.layer-tree-panel >ul>li::before, .layer-tree-panel >ul>li::after {\n  border: 0;\n}\n.layer-tree-panel  li:last-child::before {\n  height: 30px;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/LayerList.css'); module.exports = css;
 },{"./../../node_modules/cssify":68}],28:[function(require,module,exports){
 'use strict';
