@@ -1050,7 +1050,14 @@ Chart.propTypes = {
    * The statistic function to use when displayMode is by category (1) is defined in the operation key.
    * A value of 0 means MIN, a value of 1 means MAX, a value of 2 means SUM and a value of 3 means AVG (Average).
    */
-  charts: _react2['default'].PropTypes.array.isRequired,
+  charts: _react2['default'].PropTypes.arrayOf(_react2['default'].PropTypes.shape({
+    title: _react2['default'].PropTypes.string.isRequired,
+    categoryField: _react2['default'].PropTypes.string,
+    layer: _react2['default'].PropTypes.string.isRequired,
+    valueFields: _react2['default'].PropTypes.arrayOf(_react2['default'].PropTypes.string).isRequired,
+    displayMode: _react2['default'].PropTypes.oneOf([0, 1, 2]).isRequired,
+    operation: _react2['default'].PropTypes.oneOf([0, 1, 2, 3])
+  })).isRequired,
   /**
    * If true, show a combo box to select charts instead of dropdown button.
    */
