@@ -2,6 +2,7 @@ import React from 'react';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import './Geolocation.css';
+import pureRender from 'pure-render-decorator';
 import Pui from 'pui-react-alerts';
 
 const messages = defineMessages({
@@ -20,6 +21,7 @@ const messages = defineMessages({
 /**
  * Enable geolocation which uses the current position of the user in the map.
  */
+@pureRender
 class Geolocation extends React.Component {
   constructor(props) {
     super(props);

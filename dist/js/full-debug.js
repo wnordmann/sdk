@@ -2972,6 +2972,10 @@ var _reactIntl = require('react-intl');
 
 require('./Geolocation.css');
 
+var _pureRenderDecorator = require('pure-render-decorator');
+
+var _pureRenderDecorator2 = _interopRequireDefault(_pureRenderDecorator);
+
 var _puiReactAlerts = require('pui-react-alerts');
 
 var _puiReactAlerts2 = _interopRequireDefault(_puiReactAlerts);
@@ -2995,9 +2999,9 @@ var Geolocation = (function (_React$Component) {
   _inherits(Geolocation, _React$Component);
 
   function Geolocation(props) {
-    _classCallCheck(this, Geolocation);
+    _classCallCheck(this, _Geolocation);
 
-    _get(Object.getPrototypeOf(Geolocation.prototype), 'constructor', this).call(this, props);
+    _get(Object.getPrototypeOf(_Geolocation.prototype), 'constructor', this).call(this, props);
     this.state = {
       error: false
     };
@@ -3066,6 +3070,8 @@ var Geolocation = (function (_React$Component) {
     }
   }]);
 
+  var _Geolocation = Geolocation;
+  Geolocation = (0, _pureRenderDecorator2['default'])(Geolocation) || Geolocation;
   return Geolocation;
 })(_react2['default'].Component);
 
@@ -3083,7 +3089,7 @@ Geolocation.propTypes = {
 exports['default'] = (0, _reactIntl.injectIntl)(Geolocation);
 module.exports = exports['default'];
 
-},{"./Geolocation.css":19,"openlayers":130,"pui-react-alerts":131,"react":824,"react-intl":627}],21:[function(require,module,exports){
+},{"./Geolocation.css":19,"openlayers":130,"pui-react-alerts":131,"pure-render-decorator":561,"react":824,"react-intl":627}],21:[function(require,module,exports){
 (function (global){
 /* global Cesium */
 'use strict';
