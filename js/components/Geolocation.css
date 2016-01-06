@@ -5,3 +5,10 @@
   background-position: center;
   border: none;
 }
+.alert {
+  width: 400px;
+  height: 103px;
+}
+button.close.sr-only {
+  visibility: hidden;
+}
