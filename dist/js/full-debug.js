@@ -4754,6 +4754,9 @@ var LayerSelector = (function (_React$Component) {
 
     _get(Object.getPrototypeOf(_LayerSelector.prototype), 'constructor', this).call(this, props);
     _storesLayerStoreJs2['default'].bindMap(this.props.map);
+    this.state = {
+      flatLayers: []
+    };
   }
 
   _createClass(LayerSelector, [{
@@ -4784,7 +4787,8 @@ var LayerSelector = (function (_React$Component) {
   }, {
     key: '_onChange',
     value: function _onChange() {
-      this.setState(_storesLayerStoreJs2['default'].getState());
+      var flatLayers = _storesLayerStoreJs2['default'].getState().flatLayers.slice();
+      this.setState({ flatLayers: flatLayers });
     }
   }, {
     key: '_onItemChange',

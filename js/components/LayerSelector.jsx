@@ -14,6 +14,9 @@ export default class LayerSelector extends React.Component {
   constructor(props) {
     super(props);
     LayerStore.bindMap(this.props.map);
+    this.state = {
+      flatLayers: []
+    };
   }
   componentWillMount() {
     this._onChangeCb = this._onChange.bind(this);
@@ -33,7 +36,8 @@ export default class LayerSelector extends React.Component {
     return LayerStore.findLayer(select.value);
   }
   _onChange() {
-    this.setState(LayerStore.getState());
+    var flatLayers = LayerStore.getState().flatLayers.slice();
+    this.setState({flatLayers: flatLayers});
   }
   _onItemChange(evt) {
     var layer = LayerStore.findLayer(evt.target.value);
