@@ -17,6 +17,7 @@ For example usage see: https://github.com/boundlessgeo/sdk-template
 In order to keep the full build (used by the free version of QGIS Web Application Builder) up to date, install a pre commit hook in your local git repository (.git/hooks/pre-commit):
 
     #!/bin/sh
+    npm test
     npm run build:full
     npm run build:full:debug
     git add dist/js

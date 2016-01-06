@@ -145,10 +145,10 @@ class Chart extends React.Component {
     for (var i = 0, ii = this.props.charts.length; i < ii; ++i) {
       var chart = this.props.charts[i];
       if (chart.title === evt.target.value) {
-          this.setState({
-            chart: chart,
-            selected: this._storeConfig[chart.layer].selected
-          });
+        this.setState({
+          chart: chart,
+          selected: this._storeConfig[chart.layer].selected
+        });
         break;
       }
     }
@@ -159,28 +159,28 @@ class Chart extends React.Component {
     }
   }
   render() {
-   var columns = this._getColumns();
-   c3.generate({
-        bindto: '#chart',
-        data: {
-          x: 'x',
-          columns: columns,
-          type: 'bar'
-        },
-        padding: {
-          right: 30
-        },
-        axis: {
-          x: {
-            type: 'category',
-            tick: {
-              rotate: 70,
-              multiline: false
-            },
-            height: 80
-          }
+    var columns = this._getColumns();
+    c3.generate({
+      bindto: '#chart',
+      data: {
+        x: 'x',
+        columns: columns,
+        type: 'bar'
+      },
+      padding: {
+        right: 30
+      },
+      axis: {
+        x: {
+          type: 'category',
+          tick: {
+            rotate: 70,
+            multiline: false
+          },
+          height: 80
         }
-      });
+      }
+    });
     if (this.props.combo === true) {
       var options = this.props.charts.map(function(chart, idx) {
         var title = chart.title;
