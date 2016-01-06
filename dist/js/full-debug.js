@@ -2124,7 +2124,7 @@ var FeatureTable = (function (_React$Component2) {
     value: function _filterByText(evt) {
       var filterBy = evt.target.value;
       var state = _storesFeatureStoreJs2['default'].getState(this._layer);
-      var rows = state.originalFeatures.slice();
+      var rows = state.originalFeatures;
       var filteredRows = [];
       var queryFilter;
       try {
@@ -5612,22 +5612,42 @@ var QGISLegend = (function (_React$Component) {
           symbol.title
         );
       };
+      var symbolFuncB = function symbolFuncB(symbol) {
+        var src = legendBasePath + symbol.href;
+        return _react2['default'].createElement('img', { key: symbol.title, src: src });
+      };
       for (var id in legendData) {
         var title = _storesLayerStoreJs2['default'].findLayer(id).get('title');
         if (title !== null) {
-          var symbols = legendData[id].map(symbolFunc);
-          var forLabel = 'legend-layer-' + id;
-          legendNodes.push(_react2['default'].createElement(
-            'li',
-            { key: id },
-            _react2['default'].createElement(
-              'ul',
-              null,
-              title,
-              ' ',
-              symbols
-            )
-          ));
+          if (legendData[id].length > 1) {
+            var symbols = legendData[id].map(symbolFunc);
+            var forLabel = 'legend-layer-' + id;
+            legendNodes.push(_react2['default'].createElement(
+              'li',
+              { key: id },
+              _react2['default'].createElement(
+                'ul',
+                null,
+                title,
+                ' ',
+                symbols
+              )
+            ));
+          } else {
+            var symbols = legendData[id].map(symbolFuncB);
+            var forLabel = 'legend-layer-' + id;
+            legendNodes.push(_react2['default'].createElement(
+              'li',
+              { key: id },
+              _react2['default'].createElement(
+                'ul',
+                null,
+                symbols,
+                ' ',
+                title
+              )
+            ));
+          }
         }
       }
       return _react2['default'].createElement(
