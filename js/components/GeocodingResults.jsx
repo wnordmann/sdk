@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import GeocodingConstants from '../constants/GeocodingConstants.js';
+import pureRender from 'pure-render-decorator';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 const messages = defineMessages({
@@ -16,6 +17,7 @@ const messages = defineMessages({
 /**
  * This component displays the results of geocoding search. The geocoding search is initiated by the Geocoding component.
  */
+@pureRender
 class GeocodingResults extends React.Component {
   constructor(props) {
     super(props);

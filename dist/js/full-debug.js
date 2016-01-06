@@ -2790,6 +2790,10 @@ var _constantsGeocodingConstantsJs = require('../constants/GeocodingConstants.js
 
 var _constantsGeocodingConstantsJs2 = _interopRequireDefault(_constantsGeocodingConstantsJs);
 
+var _pureRenderDecorator = require('pure-render-decorator');
+
+var _pureRenderDecorator2 = _interopRequireDefault(_pureRenderDecorator);
+
 var _reactIntl = require('react-intl');
 
 var messages = (0, _reactIntl.defineMessages)({
@@ -2807,9 +2811,9 @@ var GeocodingResults = (function (_React$Component) {
   _inherits(GeocodingResults, _React$Component);
 
   function GeocodingResults(props) {
-    _classCallCheck(this, GeocodingResults);
+    _classCallCheck(this, _GeocodingResults);
 
-    _get(Object.getPrototypeOf(GeocodingResults.prototype), 'constructor', this).call(this, props);
+    _get(Object.getPrototypeOf(_GeocodingResults.prototype), 'constructor', this).call(this, props);
     var me = this;
     _dispatchersAppDispatcherJs2['default'].register(function (payload) {
       var action = payload.action;
@@ -2910,6 +2914,8 @@ var GeocodingResults = (function (_React$Component) {
     }
   }]);
 
+  var _GeocodingResults = GeocodingResults;
+  GeocodingResults = (0, _pureRenderDecorator2['default'])(GeocodingResults) || GeocodingResults;
   return GeocodingResults;
 })(_react2['default'].Component);
 
@@ -2935,7 +2941,7 @@ GeocodingResults.defaultProps = {
 exports['default'] = (0, _reactIntl.injectIntl)(GeocodingResults);
 module.exports = exports['default'];
 
-},{"../constants/GeocodingConstants.js":48,"../dispatchers/AppDispatcher.js":52,"openlayers":130,"react":824,"react-dom":611,"react-intl":627}],19:[function(require,module,exports){
+},{"../constants/GeocodingConstants.js":48,"../dispatchers/AppDispatcher.js":52,"openlayers":130,"pure-render-decorator":561,"react":824,"react-dom":611,"react-intl":627}],19:[function(require,module,exports){
 var css = "#geolocation-button {\n  float: right;\n  background-image: url('data:image/png;base64,R0lGODlhEAAQALMAAJmZzMzM/2aZzJnM/2bM/8DAwPf3583NzczMzAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAAUALAAAAAAQABAAQARVsMhJqxzCYMPFMB4VCAJyGAdCBtVYnulqScFgs9aIGAApAAYVrqDj+YDCWe02azqJPd9vOOntaoHgj4I5jD6YwCF0EXgFBI1ATJZYDVgtIBc9Up+WCAA7');\n  background-repeat: no-repeat;\n  background-position: center;\n  border: none;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/Geolocation.css'); module.exports = css;
 },{"./../../node_modules/cssify":68}],20:[function(require,module,exports){
 'use strict';
