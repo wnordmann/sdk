@@ -118,7 +118,11 @@ Bookmarks.propTypes = {
    * The bookmark data. An array of objects with name, description and extent keys.
    * The extent should be in the view projection.
    */
-  bookmarks: React.PropTypes.array.isRequired,
+  bookmarks: React.PropTypes.arrayOf(React.PropTypes.shape({
+    name: React.PropTypes.string.isRequired,
+    description: React.PropTypes.string.isRequired,
+    extent: React.PropTypes.arrayOf(React.PropTypes.number).isRequired
+  })).isRequired,
   /**
    * Should we show indicators? These are dots to navigate the bookmark pages.
    */
