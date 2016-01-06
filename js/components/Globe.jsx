@@ -2,11 +2,13 @@
 import React from 'react';
 import ol from 'openlayers';
 global.ol = ol;
+import pureRender from 'pure-render-decorator';
 import olcs from 'ol3-cesium';
 
 /**
  * Adds a button to toggle 3D mode.
  */
+@pureRender
 export default class Globe extends React.Component {
   constructor(props) {
     super(props);

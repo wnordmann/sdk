@@ -3116,6 +3116,10 @@ var _openlayers = require('openlayers');
 
 var _openlayers2 = _interopRequireDefault(_openlayers);
 
+var _pureRenderDecorator = require('pure-render-decorator');
+
+var _pureRenderDecorator2 = _interopRequireDefault(_pureRenderDecorator);
+
 var _ol3Cesium = require('ol3-cesium');
 
 var _ol3Cesium2 = _interopRequireDefault(_ol3Cesium);
@@ -3130,9 +3134,9 @@ var Globe = (function (_React$Component) {
   _inherits(Globe, _React$Component);
 
   function Globe(props) {
-    _classCallCheck(this, Globe);
+    _classCallCheck(this, _Globe);
 
-    _get(Object.getPrototypeOf(Globe.prototype), 'constructor', this).call(this, props);
+    _get(Object.getPrototypeOf(_Globe.prototype), 'constructor', this).call(this, props);
     this.state = {
       globe: false
     };
@@ -3172,6 +3176,8 @@ var Globe = (function (_React$Component) {
     }
   }]);
 
+  var _Globe = Globe;
+  Globe = (0, _pureRenderDecorator2['default'])(Globe) || Globe;
   return Globe;
 })(_react2['default'].Component);
 
@@ -3186,7 +3192,7 @@ Globe.propTypes = {
 module.exports = exports['default'];
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"ol3-cesium":129,"openlayers":130,"react":824}],22:[function(require,module,exports){
+},{"ol3-cesium":129,"openlayers":130,"pure-render-decorator":561,"react":824}],22:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
