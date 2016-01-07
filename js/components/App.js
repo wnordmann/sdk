@@ -47,8 +47,8 @@ export default class App extends React.Component {
     global.history.pushState(state, 'map', hash);
   }
   _initViewFromHash() {
+    var view = this.props.map.getView();
     if (global.location.hash !== '') {
-      var view = this.props.map.getView();
       var hash = global.location.hash.replace('#map=', '');
       var parts = hash.split('/');
       if (parts.length === 4) {
@@ -62,6 +62,8 @@ export default class App extends React.Component {
         view.setCenter(center);
         view.setRotation(rotation);
       }
+    } else if (this.props.extent) {
+      view.fit(this.props.extent, this.props.map.getSize());
     }
   }
 }
@@ -71,6 +73,10 @@ App.propTypes = {
    * The map to use for this application.
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * Extent to fit on the map on loading of the application.
+   */
+  extent: React.PropTypes.arrayOf(React.PropTypes.number),
   /**
    * Use the back and forward buttons of the browser for navigation history.
    */
