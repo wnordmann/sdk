@@ -4,13 +4,14 @@ var assert = require('chai').assert;
 var ol = require('openlayers');
 
 var FeatureStore = require('../../js/stores/FeatureStore.js');
+var SelectActions = require('../../js/actions/SelectActions.js');
 
 describe('FeatureStore', function() {
 
   var map, layer, features;
   beforeEach(function() {
     map = new ol.Map({view: new ol.View()});
-    layer = new ol.layer.Vector({id: 'xxx', source: new ol.source.Vector()});
+    layer = new ol.layer.Vector({id: Date.now(), source: new ol.source.Vector()});
     features = [
       new ol.Feature({'foo': '1'}),
       new ol.Feature({'foo': '2'}),
@@ -54,6 +55,37 @@ describe('FeatureStore', function() {
     assert.equal(config.features[0].get('foo'), '1');
     FeatureStore.restoreOriginalFeatures(layer);
     assert.equal(config.features.length, 5);
+  });
+
+  it('listens to app dispatcher', function() {
+    FeatureStore.addLayer(layer);
+    var config = FeatureStore._config[layer.get('id')];
+    assert.equal(config.selected.length, 0);
+    SelectActions.toggleFeature(layer, layer.getSource().getFeatures()[0]);
+    assert.equal(config.selected.length, 1);
+    SelectActions.toggleFeature(layer, layer.getSource().getFeatures()[0]);
+    assert.equal(config.selected.length, 0);
+    SelectActions.selectFeatures(layer, layer.getSource().getFeatures());
+    assert.equal(config.selected.length, 5);
+    SelectActions.selectFeatures(layer, [layer.getSource().getFeatures()[0]], true);
+    assert.equal(config.selected.length, 1);
+    SelectActions.clear(layer);
+    assert.equal(config.selected.length, 0);
+    SelectActions.toggleFeature(layer, layer.getSource().getFeatures()[0]);
+    SelectActions.toggleFeature(layer, layer.getSource().getFeatures()[1]);
+    assert.equal(config.selected.length, 2);
+    SelectActions.selectFeaturesInCurrentSelection(layer, [layer.getSource().getFeatures()[3]]);
+    assert.equal(config.selected.length, 0);
+  });
+
+  it('listens for change on the source', function() {
+    FeatureStore.addLayer(layer);
+    var config = FeatureStore._config[layer.get('id')];
+    assert.equal(config.features.length, 5);
+    assert.equal(config.originalFeatures.length, 5);
+    layer.getSource().addFeature(new ol.Feature({'foo': '6'}));
+    assert.equal(config.features.length, 6);
+    assert.equal(config.originalFeatures.length, 6);
   });
 
 });
