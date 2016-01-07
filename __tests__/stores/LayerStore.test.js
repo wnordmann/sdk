@@ -4,6 +4,7 @@ var assert = require('chai').assert;
 var ol = require('openlayers');
 
 var LayerStore = require('../../js/stores/LayerStore.js');
+var LayerActions = require('../../js/actions/LayerActions.js');
 
 describe('LayerStore', function() {
 
@@ -56,6 +57,31 @@ describe('LayerStore', function() {
     assert.equal(layer !== undefined, true);
     layer = LayerStore.findLayer('level4');
     assert.equal(layer !== undefined, false);
+  });
+
+  it('fires change when layer gets added / removed on the map', function() {
+    LayerStore.bindMap(map);
+    var count = 0;
+    var onChangeCb = function() {
+      count++;
+    };
+    LayerStore.addChangeListener(onChangeCb);
+    assert.equal(LayerStore.getState().flatLayers.length, 1);
+    map.addLayer(new ol.layer.Vector());
+    assert.equal(LayerStore.getState().flatLayers.length, 2);
+    assert.equal(count, 1);
+    map.getLayers().pop();
+    assert.equal(count, 2);
+    assert.equal(LayerStore.getState().flatLayers.length, 1);
+  });
+
+  it('listens to the app dispatcher', function() {
+    LayerStore.bindMap(map);
+    var vector = new ol.layer.Vector({id: '1'});
+    map.addLayer(vector);
+    assert.equal(LayerStore.findLayer('1'), vector);
+    LayerActions.removeLayer(vector);
+    assert.equal(LayerStore.findLayer('1'), undefined);
   });
 
 });
