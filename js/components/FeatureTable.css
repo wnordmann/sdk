@@ -7,7 +7,7 @@
 }
 
 .input-group-addon{
-	height: 42px;
+  padding: 0px 12px;
 }
 
 .form-inline .input-group{
