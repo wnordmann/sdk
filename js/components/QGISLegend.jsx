@@ -53,7 +53,7 @@ class QGISLegend extends React.Component {
           legendNodes.push(
             <li key={id}>
               <ul>
-                {title} {symbols}
+                <h5><strong>{title}</strong></h5> {symbols}
               </ul>
             </li>
           );
