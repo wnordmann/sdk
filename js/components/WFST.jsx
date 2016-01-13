@@ -10,6 +10,7 @@ import MapTool from './MapTool.js';
 import Pui from 'pui-react-alerts';
 import UI from 'pui-react-buttons';
 import pureRender from 'pure-render-decorator';
+import './WFST.css';
 
 const messages = defineMessages({
   layerlabel: {
