@@ -61,6 +61,11 @@ const messages = defineMessages({
     id: 'layerlistitem.removetitle',
     description: 'Title for the remove button',
     defaultMessage: 'Remove'
+  },
+  layertitle: {
+    id: 'layerlistitem.basemapstitle',
+    description: 'List of base maps',
+    defaultMessage: 'Base Maps'
   }
 });
 
@@ -199,7 +204,7 @@ class LayerListItem extends React.Component {
       }
     } else if (layer.get('type') === 'base-group'){
       var baselayerId = 'layerlistitem-' + layer.get('id') + '-baselayergroup';
-      var heading = (<h4><strong>Base maps</strong></h4>);
+      var heading = (<h4><strong>{formatMessage(messages.layertitle)}</strong></h4>);
     } else {
       var inputId = 'layerlistitem-' + layer.get('id') + '-visibility';
       input = (<ul><div className='input-group'><label className='sr-only' htmlFor={inputId}>{formatMessage(messages.layervisibilitylabel)}</label><input id={inputId} type="checkbox" checked={this.state.checked} onChange={this._handleChange.bind(this)} />{this.props.title}</div></ul>);
