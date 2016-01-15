@@ -51,6 +51,15 @@ class LayerList extends React.Component {
         </ul>
     );
   }
+  typeLayers(layers) {
+    var me = this;
+    var layerNodes = layers.map(function(lyr) {
+      return me.getLayerNode(lyr);
+    });
+    return (
+        {layerNodes}
+    );
+  }
   _showPanel() {
     this.setState({visible: true});
   }
@@ -83,7 +92,10 @@ class LayerList extends React.Component {
     const {formatMessage} = this.props.intl;
     var layers = this.state.layers.slice(0).reverse();
     var className = 'layer-switcher';
-    var heading = <ul><h4><strong>{formatMessage(messages.layertitle)}</strong></h4></ul>;
+    var heading;
+    if(this.state.layers[this.state.layers.length-1].values_.type !== 'base-group'){
+      heading = <ul><h4><strong>{formatMessage(messages.layertitle)}</strong></h4></ul>;
+    };
     if (this.state.visible) {
       className += ' shown';
     }

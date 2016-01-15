@@ -4,6 +4,7 @@
   right: 0.5em;
   text-align: left;
   max-width: 350px;
+  min-width: 250px;
 }
 .layer-switcher .layer-tree-panel {
   display: none;
