@@ -145,7 +145,7 @@ LayerList.defaultProps = {
   allowReordering: false,
   allowFiltering: false,
   allowLabeling: false,
-  showGroupContent: false,
+  showGroupContent: true,
   showDownload: false,
   showOpacity: false
 };
