@@ -51,15 +51,6 @@ class LayerList extends React.Component {
         </ul>
     );
   }
-  typeLayers(layers) {
-    var me = this;
-    var layerNodes = layers.map(function(lyr) {
-      return me.getLayerNode(lyr);
-    });
-    return (
-        {layerNodes}
-    );
-  }
   _showPanel() {
     this.setState({visible: true});
   }
