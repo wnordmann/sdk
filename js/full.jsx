@@ -49,6 +49,9 @@ global.Globe = Globe;
 import HomeButton from './components/HomeButton.jsx';
 global.HomeButton = HomeButton;
 
+import LoadingPanel from './components/LoadingPanel.jsx';
+global.LoadingPanel = LoadingPanel;
+
 import ICON from 'pui-react-iconography';
 global.ICON = ICON;
 
