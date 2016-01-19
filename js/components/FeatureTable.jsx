@@ -118,7 +118,7 @@ const messages = defineMessages({
 
 const LinkCell = ({rowIndex, col, layer, sortIndexes, ...props}) => (
   <Cell {...props}>
-    <a href={FeatureStore.getFieldValue(layer, sortIndexes ? sortIndexes[rowIndex] : rowIndex, col)} target="_blank">{FeatureStore.getFieldValue(layer, sortIndexes ? sortIndexes[rowIndex] : rowIndex, col)}</a>
+    <a href={FeatureStore.getFieldValue(layer, sortIndexes ? sortIndexes[rowIndex] : rowIndex, col)}>{FeatureStore.getFieldValue(layer, sortIndexes ? sortIndexes[rowIndex] : rowIndex, col)}</a>
   </Cell>
 );
 

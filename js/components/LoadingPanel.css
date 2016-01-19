@@ -1,0 +1,11 @@
+.loading-panel {
+  margin-left: 50%;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  margin-top: 22.5%;
+}
+.loading-panel, .spinner-lg .fa-spin {
+  color: #00776D;
+  opacity: 0.9;
+}
