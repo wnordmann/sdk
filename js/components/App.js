@@ -19,7 +19,7 @@ export default class App extends React.Component {
           }
           var view = me.props.map.getView();
           view.setCenter(event.state.center);
-          view.setZoom(event.state.zoom);
+          view.setResolution(event.state.resolution);
           view.setRotation(event.state.rotation);
           me._shouldUpdate = false;
         });
@@ -35,12 +35,12 @@ export default class App extends React.Component {
     var view = this.props.map.getView();
     var center = view.getCenter();
     var hash = '#map=' +
-      view.getZoom() + '/' +
+      view.getResolution() + '/' +
       Math.round(center[0] * 100) / 100 + '/' +
       Math.round(center[1] * 100) / 100 + '/' +
       view.getRotation();
     var state = {
-      zoom: view.getZoom(),
+      resolution: view.getResolution(),
       center: view.getCenter(),
       rotation: view.getRotation()
     };
@@ -52,13 +52,13 @@ export default class App extends React.Component {
       var hash = global.location.hash.replace('#map=', '');
       var parts = hash.split('/');
       if (parts.length === 4) {
-        var zoom = parseInt(parts[0], 10);
+        var resolution = parseFloat(parts[0]);
         var center = [
           parseFloat(parts[1]),
           parseFloat(parts[2])
         ];
         var rotation = parseFloat(parts[3]);
-        view.setZoom(zoom);
+        view.setResolution(resolution);
         view.setCenter(center);
         view.setRotation(rotation);
       }
