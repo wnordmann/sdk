@@ -1909,7 +1909,7 @@ var LinkCell = function LinkCell(_ref) {
     props,
     _react2['default'].createElement(
       'a',
-      { href: _storesFeatureStoreJs2['default'].getFieldValue(layer, sortIndexes ? sortIndexes[rowIndex] : rowIndex, col), target: '_blank' },
+      { href: _storesFeatureStoreJs2['default'].getFieldValue(layer, sortIndexes ? sortIndexes[rowIndex] : rowIndex, col) },
       _storesFeatureStoreJs2['default'].getFieldValue(layer, sortIndexes ? sortIndexes[rowIndex] : rowIndex, col)
     )
   );
