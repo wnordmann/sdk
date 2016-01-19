@@ -4182,7 +4182,7 @@ var LayerList = (function (_React$Component) {
       var layers = this.state.layers.slice(0).reverse();
       var className = 'layer-switcher';
       var heading;
-      if (this.state.layers[this.state.layers.length - 1].values_.type !== 'base-group') {
+      if (this.state.layers[this.state.layers.length - 1].get('type') !== 'base-group') {
         heading = _react2['default'].createElement(
           'ul',
           null,
