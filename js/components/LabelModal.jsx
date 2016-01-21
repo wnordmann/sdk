@@ -1,4 +1,5 @@
 import React from 'react';
+import ol from 'openlayers';
 import Dialog from 'pui-react-modals';
 import Grids from 'pui-react-grids';
 import UI from 'pui-react-buttons';

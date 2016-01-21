@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ol from 'openlayers';
 import Dialog from 'pui-react-modals';
 import filtrex from 'filtrex';
 import Grids from 'pui-react-grids';

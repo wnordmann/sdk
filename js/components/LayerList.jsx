@@ -86,7 +86,7 @@ class LayerList extends React.Component {
     var heading;
     if(this.state.layers[this.state.layers.length-1].get('type') !== 'base-group'){
       heading = <ul><h4><strong>{formatMessage(messages.layertitle)}</strong></h4></ul>;
-    };
+    }
     if (this.state.visible) {
       className += ' shown';
     }
@@ -140,8 +140,6 @@ LayerList.propTypes = {
   */
   intl: intlShape.isRequired
 };
-
-
 
 LayerList.defaultProps = {
   showZoomTo: false,

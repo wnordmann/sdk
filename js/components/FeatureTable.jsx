@@ -329,7 +329,7 @@ class FeatureTable extends React.Component {
     var sortIndexes = this._defaultSortIndexes.slice();
     sortIndexes.sort((indexA, indexB) => {
       var valueA = FeatureStore.getFieldValue(this._layer, indexA, columnKey);
-      var valueB = FeatureStore.getFieldValue(this._layer, indexB, columnKey); 
+      var valueB = FeatureStore.getFieldValue(this._layer, indexB, columnKey);
       var sortVal = 0;
       if (valueA > valueB) {
         sortVal = 1;

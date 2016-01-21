@@ -2403,6 +2403,10 @@ var _reactDom = require('react-dom');
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
+var _openlayers = require('openlayers');
+
+var _openlayers2 = _interopRequireDefault(_openlayers);
+
 var _puiReactModals = require('pui-react-modals');
 
 var _puiReactModals2 = _interopRequireDefault(_puiReactModals);
@@ -2463,9 +2467,9 @@ var FilterModal = (function (_Dialog$Modal) {
     key: '_setStyleFunction',
     value: function _setStyleFunction() {
       var layer = this.props.layer;
-      if (layer instanceof ol.layer.Vector) {
+      if (layer instanceof _openlayers2['default'].layer.Vector) {
         this._styleSet = true;
-        var cluster = layer.getSource() instanceof ol.source.Cluster;
+        var cluster = layer.getSource() instanceof _openlayers2['default'].source.Cluster;
         var style = layer.getStyle();
         var me = this;
         layer.setStyle(function (feature, resolution) {
@@ -2481,7 +2485,7 @@ var FilterModal = (function (_Dialog$Modal) {
           if (hide) {
             return null;
           } else {
-            if (style instanceof ol.style.Style || Array.isArray(style)) {
+            if (style instanceof _openlayers2['default'].style.Style || Array.isArray(style)) {
               return style;
             } else {
               return style.call(this, feature, resolution);
@@ -2524,7 +2528,7 @@ var FilterModal = (function (_Dialog$Modal) {
           filters: filters,
           hasError: false
         });
-        if (layer.getSource() instanceof ol.source.Cluster) {
+        if (layer.getSource() instanceof _openlayers2['default'].source.Cluster) {
           this._updateCluster();
         }
         layer.getSource().changed();
@@ -2542,7 +2546,7 @@ var FilterModal = (function (_Dialog$Modal) {
         }
       }
       this.setState({ filters: filters });
-      if (layer.getSource() instanceof ol.source.Cluster) {
+      if (layer.getSource() instanceof _openlayers2['default'].source.Cluster) {
         this._updateCluster();
       }
       layer.getSource().changed();
@@ -2656,7 +2660,7 @@ FilterModal.propTypes = {
 exports['default'] = (0, _reactIntl.injectIntl)(FilterModal, { withRef: true });
 module.exports = exports['default'];
 
-},{"./FilterModal.css":15,"filtrex":73,"pui-react-buttons":160,"pui-react-grids":316,"pui-react-modals":421,"pure-render-decorator":563,"react":826,"react-dom":613,"react-intl":629}],17:[function(require,module,exports){
+},{"./FilterModal.css":15,"filtrex":73,"openlayers":132,"pui-react-buttons":160,"pui-react-grids":316,"pui-react-modals":421,"pure-render-decorator":563,"react":826,"react-dom":613,"react-intl":629}],17:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3748,6 +3752,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _openlayers = require('openlayers');
+
+var _openlayers2 = _interopRequireDefault(_openlayers);
+
 var _puiReactModals = require('pui-react-modals');
 
 var _puiReactModals2 = _interopRequireDefault(_puiReactModals);
@@ -3812,7 +3820,7 @@ var LabelModal = (function (_Dialog$Modal) {
       attributes: []
     };
     var source = this.props.layer.getSource();
-    if (source && !(source instanceof ol.source.Cluster)) {
+    if (source && !(source instanceof _openlayers2['default'].source.Cluster)) {
       source.on('change', function (evt) {
         if (evt.target.getState() === 'ready' && this.state.attributes.length === 0) {
           var feature = evt.target.getFeatures()[0];
@@ -3853,24 +3861,24 @@ var LabelModal = (function (_Dialog$Modal) {
         if (rawValue !== undefined) {
           value += rawValue;
         }
-        var text = new ol.style.Text({
+        var text = new _openlayers2['default'].style.Text({
           text: value,
           font: me._fontSize + 'px Calibri,sans-serif',
-          fill: new ol.style.Fill({
+          fill: new _openlayers2['default'].style.Fill({
             color: me._fillColor
           })
         });
         var modifyStyle = function modifyStyle(s) {
-          if (s instanceof ol.style.Style) {
+          if (s instanceof _openlayers2['default'].style.Style) {
             s.setText(text);
           } else if (Array.isArray(s)) {
-            s.push(new ol.style.Style({
+            s.push(new _openlayers2['default'].style.Style({
               text: text
             }));
           }
           return s;
         };
-        if (style instanceof ol.style.Style || Array.isArray(style)) {
+        if (style instanceof _openlayers2['default'].style.Style || Array.isArray(style)) {
           return modifyStyle(style);
         } else {
           var result = style.call(this, feature, resolution);
@@ -4015,7 +4023,7 @@ var LabelModal = (function (_Dialog$Modal) {
 exports['default'] = (0, _reactIntl.injectIntl)(LabelModal, { withRef: true });
 module.exports = exports['default'];
 
-},{"../util.js":58,"pui-react-buttons":160,"pui-react-grids":316,"pui-react-modals":421,"pure-render-decorator":563,"react":826,"react-color":595,"react-intl":629}],27:[function(require,module,exports){
+},{"../util.js":58,"openlayers":132,"pui-react-buttons":160,"pui-react-grids":316,"pui-react-modals":421,"pure-render-decorator":563,"react":826,"react-color":595,"react-intl":629}],27:[function(require,module,exports){
 var css = ".layer-switcher {\n  position: absolute;\n  top: 3.5em;\n  right: 0.5em;\n  text-align: left;\n  max-width: 450px;\n}\n.layer-switcher .layer-tree-panel {\n  display: none;\n}\n.layer-switcher.shown .layer-tree-panel {\n  display: block;\n}\n.layerlistbutton {\n  color: white;\n  float: right;\n  width: 38px;\n  height: 38px;\n  background-color: #7b98bc;\n  border: 3px solid rgba(225, 225, 220, 0.8);\n  padding: 2px;\n}\n.layerlistbutton button:focus, .layerlistbutton button:hover {\n  background-color: white;\n}\n.layer-tree-panel {\n  padding-right: 50px;\n  border: 1px solid #cccccc;\n  background-color: white;\n  max-height: 450px;\n  overflow: auto;\n}\n.layer-tree-panel li {\n  list-style-type: none;\n}\n\n.layer-tree-panel li span {\n  display: inline-block;\n  padding: 3px 8px;\n  text-decoration: none;\n}\n.layer-tree-panel li.parent_li>span {\n  cursor: pointer;\n}\n.layer-tree-panel >ul>li::before, .layer-tree-panel >ul>li::after {\n  border: 0;\n}\n.layer-tree-panel  li:last-child::before {\n  height: 30px;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/LayerList.css'); module.exports = css;
 },{"./../../node_modules/cssify":70}],28:[function(require,module,exports){
 'use strict';
@@ -4180,7 +4188,7 @@ var LayerList = (function (_React$Component) {
             )
           )
         );
-      };
+      }
       if (this.state.visible) {
         className += ' shown';
       }

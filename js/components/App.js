@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ol from 'openlayers';
 
 export default class App extends React.Component {
   componentDidMount() {
