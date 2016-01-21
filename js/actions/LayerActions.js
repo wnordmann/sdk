@@ -1,6 +1,5 @@
 import LayerConstants from '../constants/LayerConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
-import ol from 'openlayers';
 
 export default {
   selectLayer: (layer, cmp) => {

@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import LayerStore from '../stores/LayerStore.js';
 import pureRender from 'pure-render-decorator';

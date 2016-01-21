@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import MapTool from './MapTool.js';
 import UI from 'pui-react-buttons';
-import Icon from 'pui-react-iconography';
 import Dialog from 'pui-react-modals';
 import Grids from 'pui-react-grids';
 import {transformColor} from '../util.js';

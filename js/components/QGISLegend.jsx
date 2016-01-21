@@ -6,7 +6,6 @@ import LayerStore from '../stores/LayerStore.js';
 import './QGISLegend.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
-import Grids from 'pui-react-grids';
 
 const messages = defineMessages({
   buttontitle: {
@@ -49,7 +48,6 @@ class QGISLegend extends React.Component {
       if (title !== null) {
         if (legendData[id].length > 1){
           var symbols = legendData[id].map(symbolFunc);
-          var forLabel = 'legend-layer-' + id;
           legendNodes.push(
             <li key={id}>
               <ul>
@@ -59,7 +57,6 @@ class QGISLegend extends React.Component {
           );
         } else {
           var symbols = legendData[id].map(symbolFuncB);
-          var forLabel = 'legend-layer-' + id;
           legendNodes.push(
             <li key={id}>
               <ul>

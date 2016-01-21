@@ -42,10 +42,6 @@ var _dispatchersAppDispatcherJs = require('../dispatchers/AppDispatcher.js');
 
 var _dispatchersAppDispatcherJs2 = _interopRequireDefault(_dispatchersAppDispatcherJs);
 
-var _openlayers = require('openlayers');
-
-var _openlayers2 = _interopRequireDefault(_openlayers);
-
 exports['default'] = {
   selectLayer: function selectLayer(layer, cmp) {
     _dispatchersAppDispatcherJs2['default'].handleAction({
@@ -75,7 +71,7 @@ exports['default'] = {
 };
 module.exports = exports['default'];
 
-},{"../constants/LayerConstants.js":51,"../dispatchers/AppDispatcher.js":54,"openlayers":132}],3:[function(require,module,exports){
+},{"../constants/LayerConstants.js":51,"../dispatchers/AppDispatcher.js":54}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1119,10 +1115,6 @@ var _puiReactButtons = require('pui-react-buttons');
 
 var _puiReactButtons2 = _interopRequireDefault(_puiReactButtons);
 
-var _puiReactIconography = require('pui-react-iconography');
-
-var _puiReactIconography2 = _interopRequireDefault(_puiReactIconography);
-
 var _puiReactModals = require('pui-react-modals');
 
 var _puiReactModals2 = _interopRequireDefault(_puiReactModals);
@@ -1701,7 +1693,7 @@ Edit.defaultProps = {
 exports['default'] = (0, _reactIntl.injectIntl)(Edit);
 module.exports = exports['default'];
 
-},{"../util.js":58,"./Edit.css":11,"./MapTool.js":35,"openlayers":132,"pui-react-alerts":133,"pui-react-buttons":160,"pui-react-grids":316,"pui-react-iconography":365,"pui-react-modals":421,"pure-render-decorator":563,"react":826,"react-color":595,"react-dom":613,"react-intl":629}],13:[function(require,module,exports){
+},{"../util.js":58,"./Edit.css":11,"./MapTool.js":35,"openlayers":132,"pui-react-alerts":133,"pui-react-buttons":160,"pui-react-grids":316,"pui-react-modals":421,"pure-render-decorator":563,"react":826,"react-color":595,"react-dom":613,"react-intl":629}],13:[function(require,module,exports){
 var css = ".row-selected .public_fixedDataTableCell_main {\n  background-color: yellow;\n}\n\n.btn-default{\n\theight: 42px;\n}\n\n.input-group-addon{\n  padding: 0px 12px;\n}\n\n.form-inline .input-group{\n\tpadding: 10px;\n}\n\nlabel{\n\tmargin-bottom: 0px;\n}\n\ninput[type=\"radio\"], input[type=\"checkbox\"]{\n\tmargin: 4px 4px 0px;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/FeatureTable.css'); module.exports = css;
 },{"./../../node_modules/cssify":70}],14:[function(require,module,exports){
 (function (global){
@@ -3746,17 +3738,9 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = require('react-dom');
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
 var _puiReactModals = require('pui-react-modals');
 
 var _puiReactModals2 = _interopRequireDefault(_puiReactModals);
-
-var _filtrex = require('filtrex');
-
-var _filtrex2 = _interopRequireDefault(_filtrex);
 
 var _puiReactGrids = require('pui-react-grids');
 
@@ -3916,7 +3900,6 @@ var LabelModal = (function (_Dialog$Modal) {
     value: function render() {
       var formatMessage = this.props.intl.formatMessage;
 
-      var me = this;
       var attributeItems = this.state.attributes.map(function (attribute, idx) {
         return _react2['default'].createElement(
           'option',
@@ -4022,7 +4005,7 @@ var LabelModal = (function (_Dialog$Modal) {
 exports['default'] = (0, _reactIntl.injectIntl)(LabelModal, { withRef: true });
 module.exports = exports['default'];
 
-},{"../util.js":58,"filtrex":73,"pui-react-buttons":160,"pui-react-grids":316,"pui-react-modals":421,"pure-render-decorator":563,"react":826,"react-color":595,"react-dom":613,"react-intl":629}],27:[function(require,module,exports){
+},{"../util.js":58,"pui-react-buttons":160,"pui-react-grids":316,"pui-react-modals":421,"pure-render-decorator":563,"react":826,"react-color":595,"react-intl":629}],27:[function(require,module,exports){
 var css = ".layer-switcher {\n  position: absolute;\n  top: 3.5em;\n  right: 0.5em;\n  text-align: left;\n  max-width: 450px;\n}\n.layer-switcher .layer-tree-panel {\n  display: none;\n}\n.layer-switcher.shown .layer-tree-panel {\n  display: block;\n}\n.layerlistbutton {\n  color: white;\n  float: right;\n  width: 38px;\n  height: 38px;\n  background-color: #7b98bc;\n  border: 3px solid rgba(225, 225, 220, 0.8);\n  padding: 2px;\n}\n.layerlistbutton button:focus, .layerlistbutton button:hover {\n  background-color: white;\n}\n.layer-tree-panel {\n  padding-right: 50px;\n  border: 1px solid #cccccc;\n  background-color: white;\n  max-height: 450px;\n  overflow: auto;\n}\n.layer-tree-panel li {\n  list-style-type: none;\n}\n\n.layer-tree-panel li span {\n  display: inline-block;\n  padding: 3px 8px;\n  text-decoration: none;\n}\n.layer-tree-panel li.parent_li>span {\n  cursor: pointer;\n}\n.layer-tree-panel >ul>li::before, .layer-tree-panel >ul>li::after {\n  border: 0;\n}\n.layer-tree-panel  li:last-child::before {\n  height: 30px;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/LayerList.css'); module.exports = css;
 },{"./../../node_modules/cssify":70}],28:[function(require,module,exports){
 'use strict';
@@ -4289,10 +4272,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = require('react-dom');
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
 var _openlayers = require('openlayers');
 
 var _openlayers2 = _interopRequireDefault(_openlayers);
@@ -4308,18 +4287,6 @@ var _LabelModalJsx2 = _interopRequireDefault(_LabelModalJsx);
 var _actionsLayerActionsJs = require('../actions/LayerActions.js');
 
 var _actionsLayerActionsJs2 = _interopRequireDefault(_actionsLayerActionsJs);
-
-var _puiReactModals = require('pui-react-modals');
-
-var _puiReactModals2 = _interopRequireDefault(_puiReactModals);
-
-var _puiReactGrids = require('pui-react-grids');
-
-var _puiReactGrids2 = _interopRequireDefault(_puiReactGrids);
-
-var _puiReactButtons = require('pui-react-buttons');
-
-var _puiReactButtons2 = _interopRequireDefault(_puiReactButtons);
 
 var _reactIntl = require('react-intl');
 
@@ -4715,7 +4682,7 @@ LayerListItem.propTypes = {
 exports['default'] = (0, _reactIntl.injectIntl)(LayerListItem);
 module.exports = exports['default'];
 
-},{"../actions/LayerActions.js":2,"./FilterModal.jsx":16,"./LabelModal.jsx":26,"./LayerListItem.css":29,"openlayers":132,"pui-react-buttons":160,"pui-react-grids":316,"pui-react-modals":421,"pure-render-decorator":563,"react":826,"react-dom":613,"react-intl":629}],31:[function(require,module,exports){
+},{"../actions/LayerActions.js":2,"./FilterModal.jsx":16,"./LabelModal.jsx":26,"./LayerListItem.css":29,"openlayers":132,"pure-render-decorator":563,"react":826,"react-intl":629}],31:[function(require,module,exports){
 var css = "select.form-control{\n  border-radius: 4px;\n  box-shadow: 0px 1px 0px rgba(211, 217, 217, 0.5);\n}\n\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/LayerSelector.css'); module.exports = css;
 },{"./../../node_modules/cssify":70}],32:[function(require,module,exports){
 'use strict';
@@ -4884,10 +4851,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = require('react-dom');
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
 var _openlayers = require('openlayers');
 
 var _openlayers2 = _interopRequireDefault(_openlayers);
@@ -5016,7 +4979,7 @@ exports['default'] = LoadingPanel;
 module.exports = exports['default'];
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../stores/LayerStore.js":57,"./LoadingPanel.css":33,"openlayers":132,"pure-render-decorator":563,"react":826,"react-dom":613}],35:[function(require,module,exports){
+},{"../stores/LayerStore.js":57,"./LoadingPanel.css":33,"openlayers":132,"pure-render-decorator":563,"react":826}],35:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -5294,7 +5257,6 @@ var Measure = (function (_MapTool) {
       } else {
         area = polygon.getArea();
       }
-      var output;
       if (area > 10000) {
         return Math.round(area / 1000000 * 100) / 100 + ' ' + 'km<sup>2</sup>';
       } else {
@@ -5317,7 +5279,6 @@ var Measure = (function (_MapTool) {
       } else {
         length = Math.round(line.getLength() * 100) / 100;
       }
-      var output;
       if (length > 100) {
         return Math.round(length / 1000 * 100) / 100 + ' ' + 'km';
       } else {
@@ -5460,10 +5421,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== 'function' 
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = require('react-dom');
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
 
 var _openlayers = require('openlayers');
 
@@ -5715,7 +5672,7 @@ Playback.defaultProps = {
 exports['default'] = (0, _reactIntl.injectIntl)(Playback);
 module.exports = exports['default'];
 
-},{"./Playback.css":38,"openlayers":132,"pui-react-buttons":160,"pui-react-grids":316,"pui-react-iconography":365,"pure-render-decorator":563,"react":826,"react-dom":613,"react-intl":629}],40:[function(require,module,exports){
+},{"./Playback.css":38,"openlayers":132,"pui-react-buttons":160,"pui-react-grids":316,"pui-react-iconography":365,"pure-render-decorator":563,"react":826,"react-intl":629}],40:[function(require,module,exports){
 var css = ".legend {\n  position: absolute;\n  top: 7.5em;\n  right: 0.5em;\n  text-align: left;\n}\n.legend-panel {\n  /*padding-right: 50px;*/\n  border: 1px solid #cccccc;\n  background-color: white;\n  height: auto;\n  max-height:500px;\n  overflow-y: auto;\n  overflow-x: hidden;\n}\n.legend .legend-panel {\n  display: none;\n}\n.legend.shown .legend-panel {\n  display: block;\n}\n.legend button {\n  color: white;\n  float: right;\n  width: 38px;\n  height: 38px;\n  background-color: #7b98bc;\n  border: 3px solid rgba(225, 225, 220, 0.8);\n  padding: 2px;\n}\n.legend button:focus, .legend button:hover {\n  background-color: white;\n}\n.expandableList ul {\n  padding: 0 0 0 30px;\n  width: 300px;\n}\n.expandableList li {\n  position: relative;\n  list-style: none;\n  margin-left: -15px;\n  margin-top:15px;\n  padding: 0;\n}\n.expandableList li input {\n  position: absolute;\n  left: 0;\n  margin-left: 0;\n  opacity: 0;\n  z-index: 2;\n  cursor: pointer;\n  height: 1em;\n  width: 1em;\n  top: 0;\n}\n.expandableList li input + ul {\n  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAURJREFUeNpi/P//PwMlgImBQkCxASwwRlLLKwYmJqZgRkbGbiBXEYva+0Dvlv7792/tvBoxTAO+fv0MororE6UU9VU5MHRfvP1DsX3+M5DhaxkYxDC98ObNGxBW1FVmY/j16xcYu6SdYvjw4QPDixcvGGSEvoLlQeqweuHdu7dg+vfv32D85ctXsNijR4/B4hwcnHA1WA348uUbmP779y+DUchOuIKQsltgetsUE7garAb8/w9h/vz5h+H0Sk8w2yRsN8OZVa5g9ocPn+BqsBrAzs4PdQEzw48ff+Fi375B2Gxs3HA1WNPB45NlDNzcIvfPXv8LVMwJxmdWOcDZF2//A8uD1GF1wefXZ8Q+Pt42oWN+VBED41d5DKv+/30IlJ8IVCcF5D2DCTPC8gIwAXEDKT4Qk0Di+wzU8xnDgKGbmQACDAAtTZadqmiADQAAAABJRU5ErkJggg==') 40px 0px no-repeat;\n  margin: -22px 0 0 -44px; /* 15px */\n  height: 1em;\n}\n.expandableList li input + ul > li {\n  display: none;\n  margin-left:-14px !important;\n  padding-left: 1px;\n}\n.expandableList li label {\n  cursor: pointer;\n  display: block;\n  padding-left: 20px;\n}\n.expandableList li input {\n  display: none;\n}\n.expandableList li input:checked + ul {\n  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAASxJREFUeNpi/P//PwMlgImBQkCxASwwRlLLKwYmJqZgRkbGbiBXEYva+0Dvlv7792/tvBoxTAO+fv0MororE6UU9VU5MHRfvP1DsX3+M5DhaxkYsBjw5s0bEKWoq6zA8OvXL7AYKIC/f//O8OPHDwYZIVaQGqjLlDENePfuLZj+/fs3GH/58pXh/fv3YDYIcHBwwtVgDYMvX76B6b9//zIYhezEULhtiglcDVYD/v+HMH/+/MNweqUnhsIPHz7B1WA1gJ2dH+oCZqCf/2IoZGPjhqvBmg4enyxj4OYWuX/2+l+gYk4MfPH2P7A8SB1WF3x+fUbs4+NtEzrmRxUxMH6Vx7Dq/9+HQPmJQHVSQN4zmDAjLC8AExA3kOIDMQkkvs9APZ8xDBi6mQkgwADDMYZH9Ls66AAAAABJRU5ErkJggg==') 40px 0px no-repeat;\n  margin: -22px 0 0 -44px; /* 20px */\n  padding: 1.563em 0 0 80px;\n  height: auto;\n}\n.expandableList li input:checked + ul > li {\n  display: block;\n  margin: 0 0 0.125em; /* 2px */\n}\n.expandableList li input:checked + ul > li:last-child {\n  margin: 0 0 0.063em; /* 1px */\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/QGISLegend.css'); module.exports = css;
 },{"./../../node_modules/cssify":70}],41:[function(require,module,exports){
 'use strict';
@@ -5761,10 +5718,6 @@ var _reactIntl = require('react-intl');
 var _pureRenderDecorator = require('pure-render-decorator');
 
 var _pureRenderDecorator2 = _interopRequireDefault(_pureRenderDecorator);
-
-var _puiReactGrids = require('pui-react-grids');
-
-var _puiReactGrids2 = _interopRequireDefault(_puiReactGrids);
 
 var messages = (0, _reactIntl.defineMessages)({
   buttontitle: {
@@ -5823,7 +5776,6 @@ var QGISLegend = (function (_React$Component) {
         if (title !== null) {
           if (legendData[id].length > 1) {
             var symbols = legendData[id].map(symbolFunc);
-            var forLabel = 'legend-layer-' + id;
             legendNodes.push(_react2['default'].createElement(
               'li',
               { key: id },
@@ -5845,7 +5797,6 @@ var QGISLegend = (function (_React$Component) {
             ));
           } else {
             var symbols = legendData[id].map(symbolFuncB);
-            var forLabel = 'legend-layer-' + id;
             legendNodes.push(_react2['default'].createElement(
               'li',
               { key: id },
@@ -5924,7 +5875,7 @@ QGISLegend.defaultProps = {
 exports['default'] = (0, _reactIntl.injectIntl)(QGISLegend);
 module.exports = exports['default'];
 
-},{"../stores/LayerStore.js":57,"./QGISLegend.css":40,"openlayers":132,"pui-react-buttons":160,"pui-react-grids":316,"pui-react-iconography":365,"pure-render-decorator":563,"react":826,"react-intl":629}],42:[function(require,module,exports){
+},{"../stores/LayerStore.js":57,"./QGISLegend.css":40,"openlayers":132,"pui-react-buttons":160,"pui-react-iconography":365,"pure-render-decorator":563,"react":826,"react-intl":629}],42:[function(require,module,exports){
 var css = ".spinner {\n  margin-top: 5px;\n  font-weight: bold;\n  font-size: 16px;\n  text-align: center;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/QGISPrint.css'); module.exports = css;
 },{"./../../node_modules/cssify":70}],43:[function(require,module,exports){
 'use strict';
@@ -6442,10 +6393,6 @@ var _puiReactGrids = require('pui-react-grids');
 
 var _puiReactGrids2 = _interopRequireDefault(_puiReactGrids);
 
-var _puiReactIconography = require('pui-react-iconography');
-
-var _puiReactIconography2 = _interopRequireDefault(_puiReactIconography);
-
 require('./QueryBuilder.css');
 
 var _reactIntl = require('react-intl');
@@ -6697,7 +6644,7 @@ QueryBuilder.propTypes = {
 exports['default'] = (0, _reactIntl.injectIntl)(QueryBuilder);
 module.exports = exports['default'];
 
-},{"../actions/SelectActions.js":3,"../constants/LayerConstants.js":51,"../dispatchers/AppDispatcher.js":54,"./LayerSelector.jsx":32,"./QueryBuilder.css":44,"filtrex":73,"openlayers":132,"pui-react-buttons":160,"pui-react-grids":316,"pui-react-iconography":365,"pure-render-decorator":563,"react":826,"react-dom":613,"react-intl":629}],46:[function(require,module,exports){
+},{"../actions/SelectActions.js":3,"../constants/LayerConstants.js":51,"../dispatchers/AppDispatcher.js":54,"./LayerSelector.jsx":32,"./QueryBuilder.css":44,"filtrex":73,"openlayers":132,"pui-react-buttons":160,"pui-react-grids":316,"pure-render-decorator":563,"react":826,"react-dom":613,"react-intl":629}],46:[function(require,module,exports){
 /* eslint react/prop-types: 0 */
 'use strict';
 

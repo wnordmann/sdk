@@ -1,12 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Dialog from 'pui-react-modals';
-import filtrex from 'filtrex';
 import Grids from 'pui-react-grids';
 import UI from 'pui-react-buttons';
 import ColorPicker from 'react-color';
 import {transformColor} from '../util.js';
-import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import {defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -132,7 +130,6 @@ class LabelModal extends Dialog.Modal {
   }
   render() {
     const {formatMessage} = this.props.intl;
-    var me = this;
     var attributeItems = this.state.attributes.map(function(attribute, idx) {
       return (
         <option value={attribute} key={idx}>{attribute}</option>

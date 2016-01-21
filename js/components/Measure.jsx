@@ -120,7 +120,6 @@ class Measure extends MapTool {
     } else {
       area = polygon.getArea();
     }
-    var output;
     if (area > 10000) {
       return (Math.round(area / 1000000 * 100) / 100) + ' ' + 'km<sup>2</sup>';
     } else {
@@ -141,7 +140,6 @@ class Measure extends MapTool {
     } else {
       length = Math.round(line.getLength() * 100) / 100;
     }
-    var output;
     if (length > 100) {
       return (Math.round(length / 1000 * 100) / 100) + ' ' + 'km';
     } else {

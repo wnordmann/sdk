@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import Button from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';

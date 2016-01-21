@@ -8,7 +8,6 @@ import SelectActions from '../actions/SelectActions.js';
 import filtrex from 'filtrex';
 import UI from 'pui-react-buttons';
 import Grids from 'pui-react-grids';
-import Icon from 'pui-react-iconography';
 import './QueryBuilder.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';

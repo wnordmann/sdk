@@ -1,12 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import FilterModal from './FilterModal.jsx';
 import LabelModal from './LabelModal.jsx';
 import LayerActions from '../actions/LayerActions.js';
-import Dialog from 'pui-react-modals';
-import Grids from 'pui-react-grids';
-import UI from 'pui-react-buttons';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import './LayerListItem.css';
