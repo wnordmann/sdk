@@ -23,9 +23,19 @@ const messages = defineMessages({
 class Bookmarks extends React.Component {
   constructor(props) {
     super(props);
-    var map = this.props.map, view = map.getView();
+    var view = this.props.map.getView();
     this._center = view.getCenter();
-    this._zoom = view.getZoom();
+    this._resolution = view.getResolution();
+    if (this._center === null) {
+      view.once('change:center', function(evt) {
+        this._center = evt.target.getCenter();
+      }, this);
+    }
+    if (this._resolution === undefined) {
+      view.once('change:resolution', function(evt) {
+        this._resolution = evt.target.getResolution();
+      }, this);
+    }
   }
   componentDidMount() {
     if (this.props.showMarker) {
@@ -67,7 +77,7 @@ class Bookmarks extends React.Component {
       center = ol.extent.getCenter(extent);
     } else {
       view.setCenter(this._center);
-      view.setZoom(this._zoom);
+      view.setResolution(this._resolution);
       center = this._center;
     }
     if (this.props.showMarker) {
