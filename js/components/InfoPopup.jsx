@@ -82,6 +82,7 @@ class InfoPopup extends MapTool {
       }
     };
     const {formatMessage} = this.props.intl;
+    var popupDef;
     var onReady = function() {
       if (xmlhttp.status === 200 && xmlhttp.readyState === 4) {
         var features = geojsonFormat.readFeatures(xmlhttp.responseText);
@@ -110,7 +111,7 @@ class InfoPopup extends MapTool {
     var called = false;
     for (var i = 0; i < len; i++) {
       var layer = allLayers[i];
-      var popupDef = layer.get('popupInfo');
+      popupDef = layer.get('popupInfo');
       if (popupDef === ALL_ATTRS) {
         called = true;
         url = layer.getSource().getGetFeatureInfoUrl(

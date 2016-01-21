@@ -224,10 +224,11 @@ class FeatureStore extends EventEmitter {
   setSelection(layer, features, clear) {
     // special handling for clusters
     // if a cluster has children selected, it should not show up as well
+    var i, ii;
     if (clear && layer instanceof ol.layer.Vector && layer.getSource() instanceof ol.source.Cluster) {
       var dirty = [];
       var f = layer.getSource().getFeatures();
-      for (var i = 0, ii = f.length; i < ii; ++i) {
+      for (i = 0, ii = f.length; i < ii; ++i) {
         var children = f[i].get('features');
         for (var j = 0, jj = children.length; j < jj; ++j) {
           if (features.indexOf(children[j]) === -1) {
@@ -255,7 +256,7 @@ class FeatureStore extends EventEmitter {
         this._config[id].features = features;
       }
     } else {
-      for (var i = 0, ii = features.length; i < ii; ++i) {
+      for (i = 0, ii = features.length; i < ii; ++i) {
         if (this._config[id].selected.indexOf(features[i]) === -1) {
           this._config[id].selected.push(features[i]);
         }

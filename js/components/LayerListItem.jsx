@@ -190,17 +190,17 @@ class LayerListItem extends React.Component {
     if (layer.get('isRemovable') === true) {
       remove = <a title={formatMessage(messages.removetitle)} href='#' onClick={this._remove.bind(this)}><i className='layerlayeritem glyphicon glyphicon-remove'></i></a>;
     }
-    var input;
+    var input, baselayerId, heading;
     if (layer.get('type') === 'base') {
-      var baselayerId = 'layerlistitem-' + layer.get('id') + '-baselayergroup';
+      baselayerId = 'layerlistitem-' + layer.get('id') + '-baselayergroup';
       if (this.state.checked) {
         input = (<div className='input-group'><label className='sr-only' htmlFor={baselayerId}>{formatMessage(messages.baselayergrouplabel)}</label><input id={baselayerId} type="radio" name="baselayergroup" value={this.props.title} checked onChange={this._handleChange.bind(this)} />{this.props.title}</div>);
       } else {
         input = (<div className='input-group'><label className='sr-only' htmlFor={baselayerId}>{formatMessage(messages.baselayergrouplabel)}</label><input id={baselayerId} type="radio" name="baselayergroup" value={this.props.title} onChange={this._handleChange.bind(this)} />{this.props.title}</div>);
       }
     } else if (layer.get('type') === 'base-group'){
-      var baselayerId = 'layerlistitem-' + layer.get('id') + '-baselayergroup';
-      var heading = (<h4><strong>{formatMessage(messages.layertitle)}</strong></h4>);
+      baselayerId = 'layerlistitem-' + layer.get('id') + '-baselayergroup';
+      heading = (<h4><strong>{formatMessage(messages.layertitle)}</strong></h4>);
     } else {
       var inputId = 'layerlistitem-' + layer.get('id') + '-visibility';
       input = (<ul><div className='input-group'><label className='sr-only' htmlFor={inputId}>{formatMessage(messages.layervisibilitylabel)}</label><input id={inputId} type="checkbox" checked={this.state.checked} onChange={this._handleChange.bind(this)} />{this.props.title}</div></ul>);

@@ -46,8 +46,9 @@ class QGISLegend extends React.Component {
     for (var id in legendData) {
       var title = LayerStore.findLayer(id).get('title');
       if (title !== null) {
+        var symbols;
         if (legendData[id].length > 1){
-          var symbols = legendData[id].map(symbolFunc);
+          symbols = legendData[id].map(symbolFunc);
           legendNodes.push(
             <li key={id}>
               <ul>
@@ -56,7 +57,7 @@ class QGISLegend extends React.Component {
             </li>
           );
         } else {
-          var symbols = legendData[id].map(symbolFuncB);
+          symbols = legendData[id].map(symbolFuncB);
           legendNodes.push(
             <li key={id}>
               <ul>

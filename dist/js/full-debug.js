@@ -3561,6 +3561,7 @@ var InfoPopup = (function (_MapTool) {
       };
       var formatMessage = this.props.intl.formatMessage;
 
+      var popupDef;
       var onReady = function onReady() {
         if (xmlhttp.status === 200 && xmlhttp.readyState === 4) {
           var features = geojsonFormat.readFeatures(xmlhttp.responseText);
@@ -3589,7 +3590,7 @@ var InfoPopup = (function (_MapTool) {
       var called = false;
       for (var i = 0; i < len; i++) {
         var layer = allLayers[i];
-        var popupDef = layer.get('popupInfo');
+        popupDef = layer.get('popupInfo');
         if (popupDef === ALL_ATTRS) {
           called = true;
           url = layer.getSource().getGetFeatureInfoUrl(evt.coordinate, resolution, projection, {
@@ -4538,9 +4539,9 @@ var LayerListItem = (function (_React$Component) {
           _react2['default'].createElement('i', { className: 'layerlayeritem glyphicon glyphicon-remove' })
         );
       }
-      var input;
+      var input, baselayerId, heading;
       if (layer.get('type') === 'base') {
-        var baselayerId = 'layerlistitem-' + layer.get('id') + '-baselayergroup';
+        baselayerId = 'layerlistitem-' + layer.get('id') + '-baselayergroup';
         if (this.state.checked) {
           input = _react2['default'].createElement(
             'div',
@@ -4567,8 +4568,8 @@ var LayerListItem = (function (_React$Component) {
           );
         }
       } else if (layer.get('type') === 'base-group') {
-        var baselayerId = 'layerlistitem-' + layer.get('id') + '-baselayergroup';
-        var heading = _react2['default'].createElement(
+        baselayerId = 'layerlistitem-' + layer.get('id') + '-baselayergroup';
+        heading = _react2['default'].createElement(
           'h4',
           null,
           _react2['default'].createElement(
@@ -5783,8 +5784,9 @@ var QGISLegend = (function (_React$Component) {
       for (var id in legendData) {
         var title = _storesLayerStoreJs2['default'].findLayer(id).get('title');
         if (title !== null) {
+          var symbols;
           if (legendData[id].length > 1) {
-            var symbols = legendData[id].map(symbolFunc);
+            symbols = legendData[id].map(symbolFunc);
             legendNodes.push(_react2['default'].createElement(
               'li',
               { key: id },
@@ -5805,7 +5807,7 @@ var QGISLegend = (function (_React$Component) {
               )
             ));
           } else {
-            var symbols = legendData[id].map(symbolFuncB);
+            symbols = legendData[id].map(symbolFuncB);
             legendNodes.push(_react2['default'].createElement(
               'li',
               { key: id },
@@ -7396,10 +7398,11 @@ var FeatureStore = (function (_EventEmitter) {
     value: function setSelection(layer, features, clear) {
       // special handling for clusters
       // if a cluster has children selected, it should not show up as well
+      var i, ii;
       if (clear && layer instanceof _openlayers2['default'].layer.Vector && layer.getSource() instanceof _openlayers2['default'].source.Cluster) {
         var dirty = [];
         var f = layer.getSource().getFeatures();
-        for (var i = 0, ii = f.length; i < ii; ++i) {
+        for (i = 0, ii = f.length; i < ii; ++i) {
           var children = f[i].get('features');
           for (var j = 0, jj = children.length; j < jj; ++j) {
             if (features.indexOf(children[j]) === -1) {
@@ -7427,7 +7430,7 @@ var FeatureStore = (function (_EventEmitter) {
           this._config[id].features = features;
         }
       } else {
-        for (var i = 0, ii = features.length; i < ii; ++i) {
+        for (i = 0, ii = features.length; i < ii; ++i) {
           if (this._config[id].selected.indexOf(features[i]) === -1) {
             this._config[id].selected.push(features[i]);
           }
