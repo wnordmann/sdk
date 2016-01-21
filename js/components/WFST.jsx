@@ -21,17 +21,17 @@ const messages = defineMessages({
   drawfeature: {
     id: 'wfst.drawfeature',
     description: 'Button text for draw new feature',
-    defaultMessage: 'Draw',
+    defaultMessage: 'Draw'
   },
   modifyfeature: {
     id: 'wfst.modifyfeature',
     description: 'Button text for modify / select existing feature',
-    defaultMessage: 'Modify / Select',
+    defaultMessage: 'Modify / Select'
   },
   deletefeature: {
     id: 'wfst.deletefeature',
     description: 'Button text for delete selected feature',
-    defaultMessage: 'Delete',
+    defaultMessage: 'Delete'
   },
   errormsg: {
     id: 'wfst.errormsg',
