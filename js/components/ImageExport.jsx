@@ -32,7 +32,7 @@ class ImageExport extends React.Component {
     var map = this.props.map;
     map.once('postcompose', function(evt) {
       var canvas = evt.context.canvas;
-      canvas.toBlob(function (blob) {
+      canvas.toBlob(function(blob) {
         FileSaver.saveAs(blob, 'map.png');
       });
     });

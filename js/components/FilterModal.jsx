@@ -51,8 +51,8 @@ class FilterModal extends Dialog.Modal {
       layer.setStyle(function(feature, resolution) {
         var hide = false;
         if (!cluster) {
-          for (var i = 0, ii = me.state.filters.length; i < ii; i++){
-            if (!me.state.filters[i].filter(feature.getProperties())){
+          for (var i = 0, ii = me.state.filters.length; i < ii; i++) {
+            if (!me.state.filters[i].filter(feature.getProperties())) {
               hide = true;
               continue;
             }
@@ -109,8 +109,8 @@ class FilterModal extends Dialog.Modal {
   _removeFilter(filter) {
     var layer = this.props.layer;
     var filters = this.state.filters.slice();
-    for (var i = 0, ii = filters.length; i < ii; i++){
-      if (filters[i] === filter){
+    for (var i = 0, ii = filters.length; i < ii; i++) {
+      if (filters[i] === filter) {
         filters.splice(i, 1);
         break;
       }
@@ -128,7 +128,7 @@ class FilterModal extends Dialog.Modal {
       var subFeatures = features[i].get('features');
       for (var j = 0, jj = subFeatures.length; j < jj; ++j) {
         var hide = false;
-        for (var f = 0, ff = this.state.filters.length; f < ff; f++){
+        for (var f = 0, ff = this.state.filters.length; f < ff; f++) {
           if (!this.state.filters[f].filter(subFeatures[j].getProperties())) {
             hide = true;
             continue;

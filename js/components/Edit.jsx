@@ -234,7 +234,7 @@ class Edit extends MapTool {
       };
       var schema = layer.get('schema').trim();
       if (schema.length > 0) {
-        this._interactions[layerId].draw.on('drawend', function(evt){
+        this._interactions[layerId].draw.on('drawend', function(evt) {
           this._addFeatureDialog(evt.feature, schema.split(','));
         }, this);
       }

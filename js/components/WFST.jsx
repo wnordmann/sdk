@@ -65,7 +65,7 @@ class WFST extends MapTool {
     var me = this;
     AppDispatcher.register((payload) => {
       let action = payload.action;
-      switch(action.type) {
+      switch (action.type) {
         case LayerConstants.SELECT_LAYER:
           if (action.cmp === me.refs.layerSelector) {
             me._setLayer(action.layer);

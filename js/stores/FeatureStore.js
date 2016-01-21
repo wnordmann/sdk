@@ -325,7 +325,7 @@ let _FeatureStore = new FeatureStore();
 
 AppDispatcher.register((payload) => {
   let action = payload.action;
-  switch(action.type) {
+  switch (action.type) {
     case SelectConstants.SELECT_FEATURES_IN:
       _FeatureStore.selectFeaturesInCurrentSelection(action.layer, action.features);
       break;

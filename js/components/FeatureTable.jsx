@@ -142,7 +142,7 @@ class FeatureTable extends React.Component {
     var me = this;
     AppDispatcher.register((payload) => {
       let action = payload.action;
-      switch(action.type) {
+      switch (action.type) {
         case LayerConstants.SELECT_LAYER:
           if (action.cmp === me.refs.layerSelector) {
             ReactDOM.findDOMNode(me.refs.filter).value = '';
@@ -278,7 +278,7 @@ class FeatureTable extends React.Component {
         extent = ol.extent.extend(extent, selected[i].getGeometry().getExtent());
       }
       var map = this.props.map;
-      if (extent[0] === extent[2]){
+      if (extent[0] === extent[2]) {
         map.getView().setCenter([extent[0], extent[1]]);
         map.getView().setZoom(this.props.pointZoom);
       } else {

@@ -24,7 +24,7 @@ class GeocodingResults extends React.Component {
     var me = this;
     AppDispatcher.register((payload) => {
       let action = payload.action;
-      switch(action.type) {
+      switch (action.type) {
         case GeocodingConstants.SHOW_SEARCH_RESULTS:
           me.setState({searchResults: action.searchResults});
           me._setVisible(true);

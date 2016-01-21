@@ -62,7 +62,7 @@ class Chart extends React.Component {
         columns.push([valueFields[i]]);
       }
     }
-    switch(chart.displayMode) {
+    switch (chart.displayMode) {
       case DISPLAY_MODE_FEATURE:
         for (i = 0, ii = selectedFeatures; i < ii; ++i) {
           columns[0].push(selectedFeatures[i].get(categoryField));
@@ -77,7 +77,7 @@ class Chart extends React.Component {
           cat = selectedFeatures[i].get(categoryField);
           if (cat !== undefined) {
             cat = cat.toString();
-            if (!(cat in values)){
+            if (!(cat in values)) {
               values[cat] = [];
               for (j = 0, jj = valueFields.length; j < jj; j++) {
                 values[cat].push([selectedFeatures[i].get(valueFields[j])]);
@@ -117,7 +117,7 @@ class Chart extends React.Component {
           cat = selectedFeatures[i].get(categoryField);
           if (cat !== undefined) {
             cat = cat.toString();
-            if (!(cat in values)){
+            if (!(cat in values)) {
               values[cat] = 1;
             } else {
               values[cat]++;
@@ -125,7 +125,7 @@ class Chart extends React.Component {
           }
         }
         var sorted = [];
-        for (key in values){
+        for (key in values) {
           sorted.push([key, values[key]]);
         }
         sorted.sort(function(a, b) {

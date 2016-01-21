@@ -14,7 +14,7 @@ export default class MapTool extends React.Component {
     var me = this;
     AppDispatcher.register((payload) => {
       let action = payload.action;
-      switch(action.type) {
+      switch (action.type) {
         case ToolConstants.ACTIVATE_TOOL:
           if (me.props.toggleGroup && me.props.toggleGroup === action.toggleGroup) {
             if (me !== action.tool) {

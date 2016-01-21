@@ -95,7 +95,7 @@ class QGISPrint extends React.Component {
   }
   _tileLayerLoaded() {
     this._tiledLayersLoaded++;
-    if (this._tiledLayersLoaded === this._tileLayers.length){
+    if (this._tiledLayersLoaded === this._tileLayers.length) {
       var me = this;
       window.setTimeout(function() {
         me._paintMapInPdf();
@@ -106,7 +106,7 @@ class QGISPrint extends React.Component {
     var data, error;
     try {
       data = this._canvas.toDataURL('image/jpeg');
-    } catch(e) {
+    } catch (e) {
       error = true;
       this.setState({loading: false, error: true, msg: e});
     }
@@ -181,7 +181,7 @@ class QGISPrint extends React.Component {
         this._pdf.setFontSize(element.size);
         this._pdf.text(element.x, element.y + element.size * MM_PER_POINT, labels[element.name]);
         this._elementLoaded();
-      } else if (element.type === 'map'){
+      } else if (element.type === 'map') {
         this._mapElement = element;
         var width = Math.round(element.width * resolution / MM_PER_INCH);
         var height = Math.round(element.height * resolution / MM_PER_INCH);

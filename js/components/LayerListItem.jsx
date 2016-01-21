@@ -198,7 +198,7 @@ class LayerListItem extends React.Component {
       } else {
         input = (<div className='input-group'><label className='sr-only' htmlFor={baselayerId}>{formatMessage(messages.baselayergrouplabel)}</label><input id={baselayerId} type="radio" name="baselayergroup" value={this.props.title} onChange={this._handleChange.bind(this)} />{this.props.title}</div>);
       }
-    } else if (layer.get('type') === 'base-group'){
+    } else if (layer.get('type') === 'base-group') {
       baselayerId = 'layerlistitem-' + layer.get('id') + '-baselayergroup';
       heading = (<h4><strong>{formatMessage(messages.layertitle)}</strong></h4>);
     } else {

@@ -65,7 +65,7 @@ class InfoPopup extends MapTool {
     this._forEachLayer(allLayers, map.getLayerGroup());
     var len = allLayers.length;
     var finishedQueries = 0;
-    var finishedQuery = function(){
+    var finishedQuery = function() {
       finishedQueries++;
       if (len === finishedQueries) {
         cb();

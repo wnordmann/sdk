@@ -194,7 +194,7 @@ class Measure extends MapTool {
   _clear() {
     var map = this.props.map;
     this.deactivate();
-    for (var i = 0, ii = this._tooltips.length; i < ii; i++){
+    for (var i = 0, ii = this._tooltips.length; i < ii; i++) {
       map.removeOverlay(this._tooltips[i]);
     }
     this._layer.getSource().clear();

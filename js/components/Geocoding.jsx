@@ -18,7 +18,7 @@ const messages = defineMessages({
 @pureRender
 class Geocoding extends React.Component {
   _searchBoxKeyPressed(e) {
-    if (e.which === 13){
+    if (e.which === 13) {
       this._searchAddress();
     }
   }

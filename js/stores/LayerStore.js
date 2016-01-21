@@ -74,7 +74,7 @@ export default _LayerStore;
 AppDispatcher.register((payload) => {
   let action = payload.action;
   let layers, index;
-  switch(action.type) {
+  switch (action.type) {
     case LayerConstants.REMOVE_LAYER:
       layers = _LayerStore.getMap().getLayers();
       layers.remove(action.layer);
