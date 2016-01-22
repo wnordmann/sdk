@@ -2911,7 +2911,7 @@ var GeocodingResults = (function (_React$Component) {
           resultNodes = this.state.searchResults.map(function (result) {
             return _react2['default'].createElement(
               'a',
-              { href: '#', key: result.place_id },
+              { href: '#', target: '_self', key: result.place_id },
               _react2['default'].createElement(
                 'li',
                 { key: result.place_id, onClick: me._zoomTo.bind(me, result) },

@@ -86,7 +86,7 @@ class GeocodingResults extends React.Component {
       if (this.state.searchResults.length > 0) {
         resultNodes = this.state.searchResults.map(function(result) {
           return (
-            <a href='#' key={result.place_id}><li key={result.place_id} onClick={me._zoomTo.bind(me, result)}>{result.display_name}</li></a>
+            <a href='#' target='_self' key={result.place_id}><li key={result.place_id} onClick={me._zoomTo.bind(me, result)}>{result.display_name}</li></a>
           );
         });
       } else {
