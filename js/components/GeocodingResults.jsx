@@ -122,7 +122,7 @@ GeocodingResults.propTypes = {
 
 GeocodingResults.defaultProps = {
   zoom: 10,
-  markerUrl: '/resources/marker.png' 
+  markerUrl: './resources/marker.png'
 };
 
 export default injectIntl(GeocodingResults);

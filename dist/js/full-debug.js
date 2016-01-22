@@ -2961,7 +2961,7 @@ GeocodingResults.propTypes = {
 
 GeocodingResults.defaultProps = {
   zoom: 10,
-  markerUrl: '/resources/marker.png'
+  markerUrl: './resources/marker.png'
 };
 
 exports['default'] = (0, _reactIntl.injectIntl)(GeocodingResults);
