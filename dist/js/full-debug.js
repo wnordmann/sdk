@@ -572,7 +572,7 @@ var Bookmarks = (function (_React$Component) {
               anchorXUnits: 'fraction',
               anchorYUnits: 'pixels',
               opacity: 0.75,
-              src: '../../resources/marker.png'
+              src: this.props.markerUrl
             })
           }),
           source: new _openlayers2['default'].source.Vector()
@@ -741,7 +741,11 @@ Bookmarks.propTypes = {
   /**
    * Should we display a marker for the bookmark? Default is true.
    */
-  showMarker: _react2['default'].PropTypes.bool
+  showMarker: _react2['default'].PropTypes.bool,
+  /**
+   * Url to the marker image to use for bookmark position.
+   */
+  markerUrl: _react2['default'].PropTypes.string
 };
 
 Bookmarks.defaultProps = {
@@ -752,7 +756,8 @@ Bookmarks.defaultProps = {
   introDescription: '',
   animationDuration: 500,
   menu: false,
-  showMarker: true
+  showMarker: true,
+  markerUrl: './resources/marker.png'
 };
 
 exports['default'] = (0, _reactIntl.injectIntl)(Bookmarks);
@@ -2859,7 +2864,7 @@ var GeocodingResults = (function (_React$Component) {
             anchorXUnits: 'fraction',
             anchorYUnits: 'pixels',
             opacity: 0.75,
-            src: '../../resources/marker.png'
+            src: this.props.markerUrl
           })
         }),
         source: new _openlayers2['default'].source.Vector()
@@ -2945,13 +2950,18 @@ GeocodingResults.propTypes = {
    */
   zoom: _react2['default'].PropTypes.number,
   /**
+   * Url to the marker image to use for bookmark position.
+   */
+  markerUrl: _react2['default'].PropTypes.string,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: _reactIntl.intlShape.isRequired
 };
 
 GeocodingResults.defaultProps = {
-  zoom: 10
+  zoom: 10,
+  markerUrl: '/resources/marker.png'
 };
 
 exports['default'] = (0, _reactIntl.injectIntl)(GeocodingResults);

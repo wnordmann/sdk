@@ -47,7 +47,7 @@ class GeocodingResults extends React.Component {
           anchorXUnits: 'fraction',
           anchorYUnits: 'pixels',
           opacity: 0.75,
-          src: '../../resources/marker.png'
+          src: this.props.markerUrl
         })
       }),
       source: new ol.source.Vector()
@@ -111,13 +111,18 @@ GeocodingResults.propTypes = {
    */
   zoom: React.PropTypes.number,
   /**
+   * Url to the marker image to use for bookmark position.
+   */
+  markerUrl: React.PropTypes.string,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
 };
 
 GeocodingResults.defaultProps = {
-  zoom: 10
+  zoom: 10,
+  markerUrl: '/resources/marker.png' 
 };
 
 export default injectIntl(GeocodingResults);

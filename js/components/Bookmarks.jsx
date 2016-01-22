@@ -48,7 +48,7 @@ class Bookmarks extends React.Component {
             anchorXUnits: 'fraction',
             anchorYUnits: 'pixels',
             opacity: 0.75,
-            src: '../../resources/marker.png'
+            src: this.props.markerUrl
           })
         }),
         source: new ol.source.Vector()
@@ -172,7 +172,11 @@ Bookmarks.propTypes = {
   /**
    * Should we display a marker for the bookmark? Default is true.
    */
-  showMarker: React.PropTypes.bool
+  showMarker: React.PropTypes.bool,
+  /**
+   * Url to the marker image to use for bookmark position.
+   */
+  markerUrl: React.PropTypes.string
 };
 
 Bookmarks.defaultProps = {
@@ -183,7 +187,8 @@ Bookmarks.defaultProps = {
   introDescription: '',
   animationDuration: 500,
   menu: false,
-  showMarker: true
+  showMarker: true,
+  markerUrl: './resources/marker.png'
 };
 
 export default injectIntl(Bookmarks);
