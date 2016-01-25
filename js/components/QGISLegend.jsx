@@ -24,7 +24,7 @@ class QGISLegend extends React.Component {
     super(props);
     LayerStore.bindMap(this.props.map);
     this.state = {
-      visible: false
+      visible: this.props.showExpandedOnStartup
     };
   }
   _hidePanel() {
@@ -32,6 +32,9 @@ class QGISLegend extends React.Component {
   }
   _showPanel() {
     this.setState({visible: true});
+  }
+  _togglePanel() {
+    this.setState({visible: !this.state.visible});
   }
   _renderItems(legendData, legendBasePath) {
     var legendNodes = [];
@@ -82,9 +85,12 @@ class QGISLegend extends React.Component {
       className += ' shown';
     }
     var items = this._renderItems(this.props.legendData, this.props.legendBasePath);
+    var onMouseOut = this.props.expandOnHover ? this._hidePanel.bind(this) : undefined;
+    var onMouseOver = this.props.expandOnHover ? this._showPanel.bind(this) : undefined;
+    var onClick = !this.props.expandOnHover ? this._togglePanel.bind(this) : undefined;
     return (
-      <div onMouseOut={this._hidePanel.bind(this)} onMouseOver={this._showPanel.bind(this)} className={className}>
-        <UI.DefaultButton title={formatMessage(messages.buttontitle)} onClick={this._showPanel.bind(this)}><Icon.Icon name="file-picture-o" /></UI.DefaultButton>
+      <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} className={className}>
+        <UI.DefaultButton title={formatMessage(messages.buttontitle)} onClick={onClick}><Icon.Icon name="file-picture-o" /></UI.DefaultButton>
         <div className='legend-panel' id='legend'>{items}</div>
       </div>
     );
@@ -105,13 +111,23 @@ QGISLegend.propTypes = {
    */
   legendData: React.PropTypes.object.isRequired,
   /**
+   * Should we expand on startup of the application?
+   */
+  showExpandedOnStartup: React.PropTypes.bool,
+  /**
+   * Should we expand when hovering over the legend button?
+   */
+  expandOnHover: React.PropTypes.bool,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
 };
 
 QGISLegend.defaultProps = {
-  legendBasePath: './legend/'
+  legendBasePath: './legend/',
+  showExpandedOnStartup: false,
+  expandOnHover: true
 };
 
 export default injectIntl(QGISLegend);

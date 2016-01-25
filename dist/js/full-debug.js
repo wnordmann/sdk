@@ -5767,7 +5767,7 @@ var QGISLegend = (function (_React$Component) {
     _get(Object.getPrototypeOf(_QGISLegend.prototype), 'constructor', this).call(this, props);
     _storesLayerStoreJs2['default'].bindMap(this.props.map);
     this.state = {
-      visible: false
+      visible: this.props.showExpandedOnStartup
     };
   }
 
@@ -5780,6 +5780,11 @@ var QGISLegend = (function (_React$Component) {
     key: '_showPanel',
     value: function _showPanel() {
       this.setState({ visible: true });
+    }
+  }, {
+    key: '_togglePanel',
+    value: function _togglePanel() {
+      this.setState({ visible: !this.state.visible });
     }
   }, {
     key: '_renderItems',
@@ -5856,12 +5861,15 @@ var QGISLegend = (function (_React$Component) {
         className += ' shown';
       }
       var items = this._renderItems(this.props.legendData, this.props.legendBasePath);
+      var onMouseOut = this.props.expandOnHover ? this._hidePanel.bind(this) : undefined;
+      var onMouseOver = this.props.expandOnHover ? this._showPanel.bind(this) : undefined;
+      var onClick = !this.props.expandOnHover ? this._togglePanel.bind(this) : undefined;
       return _react2['default'].createElement(
         'div',
-        { onMouseOut: this._hidePanel.bind(this), onMouseOver: this._showPanel.bind(this), className: className },
+        { onMouseOut: onMouseOut, onMouseOver: onMouseOver, className: className },
         _react2['default'].createElement(
           _puiReactButtons2['default'].DefaultButton,
-          { title: formatMessage(messages.buttontitle), onClick: this._showPanel.bind(this) },
+          { title: formatMessage(messages.buttontitle), onClick: onClick },
           _react2['default'].createElement(_puiReactIconography2['default'].Icon, { name: 'file-picture-o' })
         ),
         _react2['default'].createElement(
@@ -5892,13 +5900,23 @@ QGISLegend.propTypes = {
    */
   legendData: _react2['default'].PropTypes.object.isRequired,
   /**
+   * Should we expand on startup of the application?
+   */
+  showExpandedOnStartup: _react2['default'].PropTypes.bool,
+  /**
+   * Should we expand when hovering over the legend button?
+   */
+  expandOnHover: _react2['default'].PropTypes.bool,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: _reactIntl.intlShape.isRequired
 };
 
 QGISLegend.defaultProps = {
-  legendBasePath: './legend/'
+  legendBasePath: './legend/',
+  showExpandedOnStartup: false,
+  expandOnHover: true
 };
 
 exports['default'] = (0, _reactIntl.injectIntl)(QGISLegend);
