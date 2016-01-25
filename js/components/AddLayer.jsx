@@ -124,7 +124,18 @@ class AddLayer extends React.Component {
               isSelectable: true
             });
             map.addLayer(lyr);
-            map.getView().fit(lyr.getSource().getExtent(), map.getSize());
+            var extent = lyr.getSource().getExtent();
+            var valid = true;
+            for (var i = 0, ii = extent.length; i < ii; ++i) {
+              var value = extent[i];
+              if (Math.abs(value) == Infinity || isNaN(value)) {
+                valid = false;
+                break;
+              }
+            }
+            if (valid) {
+              map.getView().fit(extent, map.getSize());
+            }
             this._closeDialog();
           }
         } catch (e) {
