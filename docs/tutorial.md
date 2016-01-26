@@ -81,7 +81,7 @@ Again, we will start by adding an ```import``` statement to import our component
 import AddLayer from './node_modules/boundless-sdk/js/components/AddLayer.jsx';
 ```
 
-In the ```render``` function of our application, we need to add a toolbar to accomodate for the button of the upload component:
+In the ```render``` function of our application, we need to add a toolbar to accommodate for the button of the upload component:
 
 ```
   <nav role='navigation'>
@@ -93,10 +93,27 @@ In the ```render``` function of our application, we need to add a toolbar to acc
 
 Add the ```nav``` just after the ```<article>``` opening tag.
 
-Open up app.css to give a bit of space to the button in the toolbar:
+Also add a div to group the map and featuretable divs, with id ```content```:
 
 ```
+  <div id='content'>
+    <div ref='map' id='map'></div>
+    <div><LayerList map={map} /></div>
+    <div id='table'><FeatureTable resizeTo='table' map={map} layer={map.getLayers().item(1)} /></div>
+  </div>
+```
+
+Open up app.css to give a bit of space to the button in the toolbar with ```padding-top```, also give the toolbar a fixed height and adjust the ```content``` div's height accordingly:
+
+```
+.toolbar {
+  height: 50px;
+}
+#content {
+  width: 100%;
+  height:  calc(100% - 50px);
+}
 .toolbar ul {
-  margin-top: 10px;
+  padding-top: 4px;
 }
 ```
