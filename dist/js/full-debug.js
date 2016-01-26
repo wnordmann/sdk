@@ -4166,6 +4166,14 @@ var LayerList = (function (_React$Component) {
       }
     }
   }, {
+    key: '_togglePanel',
+    value: function _togglePanel() {
+      var newVisible = !this.state.visible;
+      if (newVisible || this._modalOpen !== true) {
+        this.setState({ visible: newVisible });
+      }
+    }
+  }, {
     key: '_onModalOpen',
     value: function _onModalOpen() {
       this._modalOpen = true;
@@ -4195,6 +4203,7 @@ var LayerList = (function (_React$Component) {
       var layers = this.state.layers.slice(0).reverse();
       var className = 'layer-switcher';
       var heading;
+      var tipLabel = this.props.tipLabel || formatMessage(messages.layertitle);
       if (this.state.layers[this.state.layers.length - 1].get('type') !== 'base-group') {
         heading = _react2['default'].createElement(
           'ul',
@@ -4205,7 +4214,7 @@ var LayerList = (function (_React$Component) {
             _react2['default'].createElement(
               'strong',
               null,
-              formatMessage(messages.layertitle)
+              tipLabel
             )
           )
         );
@@ -4213,12 +4222,15 @@ var LayerList = (function (_React$Component) {
       if (this.state.visible) {
         className += ' shown';
       }
+      var onMouseOut = this.props.expandOnHover ? this._hidePanel.bind(this) : undefined;
+      var onMouseOver = this.props.expandOnHover ? this._showPanel.bind(this) : undefined;
+      var onClick = !this.props.expandOnHover ? this._togglePanel.bind(this) : undefined;
       return _react2['default'].createElement(
         'div',
-        { onMouseOut: this._hidePanel.bind(this), onMouseOver: this._showPanel.bind(this), className: className },
+        { onMouseOut: onMouseOut, onMouseOver: onMouseOver, className: className },
         _react2['default'].createElement(
           _puiReactButtons2['default'].DefaultButton,
-          { className: 'layerlistbutton', onClick: this._showPanel.bind(this), title: 'Layers' },
+          { className: 'layerlistbutton', onClick: onClick, title: 'Layers' },
           _react2['default'].createElement(_puiReactIconography2['default'].Icon, { name: 'map' })
         ),
         _react2['default'].createElement(
@@ -4270,6 +4282,14 @@ LayerList.propTypes = {
    */
   showOpacity: _react2['default'].PropTypes.bool,
   /**
+   * Text to show on top of layers.
+   */
+  tipLabel: _react2['default'].PropTypes.string,
+  /**
+   * Should we expand when hovering over the layers button?
+   */
+  expandOnHover: _react2['default'].PropTypes.bool,
+  /**
   * i18n message strings. Provided through the application through context.
   */
   intl: _reactIntl.intlShape.isRequired
@@ -4282,7 +4302,8 @@ LayerList.defaultProps = {
   allowLabeling: false,
   showGroupContent: true,
   showDownload: false,
-  showOpacity: false
+  showOpacity: false,
+  expandOnHover: true
 };
 
 exports['default'] = (0, _reactIntl.injectIntl)(LayerList);

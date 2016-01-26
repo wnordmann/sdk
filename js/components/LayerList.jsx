@@ -59,6 +59,12 @@ class LayerList extends React.Component {
       this.setState({visible: false});
     }
   }
+  _togglePanel() {
+    var newVisible = !this.state.visible;
+    if (newVisible || this._modalOpen !== true) {
+      this.setState({visible: newVisible});
+    }
+  }
   _onModalOpen() {
     this._modalOpen = true;
   }
@@ -84,15 +90,19 @@ class LayerList extends React.Component {
     var layers = this.state.layers.slice(0).reverse();
     var className = 'layer-switcher';
     var heading;
+    var tipLabel = this.props.tipLabel || formatMessage(messages.layertitle);
     if (this.state.layers[this.state.layers.length - 1].get('type') !== 'base-group') {
-      heading = <ul><h4><strong>{formatMessage(messages.layertitle)}</strong></h4></ul>;
+      heading = <ul><h4><strong>{tipLabel}</strong></h4></ul>;
     }
     if (this.state.visible) {
       className += ' shown';
     }
+    var onMouseOut = this.props.expandOnHover ? this._hidePanel.bind(this) : undefined;
+    var onMouseOver = this.props.expandOnHover ? this._showPanel.bind(this) : undefined;
+    var onClick = !this.props.expandOnHover ? this._togglePanel.bind(this) : undefined;
     return (
-      <div onMouseOut={this._hidePanel.bind(this)} onMouseOver={this._showPanel.bind(this)} className={className}>
-        <UI.DefaultButton className='layerlistbutton' onClick={this._showPanel.bind(this)} title="Layers"><Icon.Icon name="map" /></UI.DefaultButton>
+      <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} className={className}>
+        <UI.DefaultButton className='layerlistbutton' onClick={onClick} title="Layers"><Icon.Icon name="map" /></UI.DefaultButton>
         <div className="layer-tree-panel">
           {heading}
           {this.renderLayers(layers)}
@@ -136,6 +146,14 @@ LayerList.propTypes = {
    */
   showOpacity: React.PropTypes.bool,
   /**
+   * Text to show on top of layers.
+   */
+  tipLabel: React.PropTypes.string,
+  /**
+   * Should we expand when hovering over the layers button?
+   */
+  expandOnHover: React.PropTypes.bool,
+  /**
   * i18n message strings. Provided through the application through context.
   */
   intl: intlShape.isRequired
@@ -148,7 +166,8 @@ LayerList.defaultProps = {
   allowLabeling: false,
   showGroupContent: true,
   showDownload: false,
-  showOpacity: false
+  showOpacity: false,
+  expandOnHover: true
 };
 
 export default injectIntl(LayerList);
