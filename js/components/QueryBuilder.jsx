@@ -23,10 +23,20 @@ const messages = defineMessages({
     description: 'Label for the filter expression input field',
     defaultMessage: 'Filter'
   },
+  filterbuttontext: {
+    id: 'querybuilder.filterbuttontext',
+    description: 'Text for the filter button',
+    defaultMessage: 'Selected items based on your criteria'
+  },
   filterplaceholder: {
     id: 'querybuilder.filterplaceholder',
     description: 'Placeholder for the expression input field',
     defaultMessage: 'Type expression ....'
+  },
+  filterhelptext: {
+    id: 'querybuilder.filterhelptext',
+    description: 'filter help text',
+    defaultMessage: 'ATTRIBUTE == "Value"'
   },
   newbuttontitle: {
     id: 'querybuilder.newbuttontitle',
@@ -151,8 +161,8 @@ class QueryBuilder extends React.Component {
           <Grids.Col md={18}><LayerSelector id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /></Grids.Col>
         </div>
         <div className='form-group'>
-          <Grids.Col md={6}><label htmlFor='query-expression'>{formatMessage(messages.filterlabel)}</label></Grids.Col>
-          <Grids.Col md={18}><input onKeyUp={this._setQueryFilter.bind(this)} className={inputClassName} ref='queryExpression' id='query-expression' placeholder={formatMessage(messages.filterplaceholder)} type='text'/></Grids.Col>
+          <Grids.Col md={6}><label htmlFor='query-expression' title={formatMessage(messages.filterbuttontext)}>{formatMessage(messages.filterlabel)}</label></Grids.Col>
+          <Grids.Col md={18}><input onKeyUp={this._setQueryFilter.bind(this)} className={inputClassName} ref='queryExpression' id='query-expression' placeholder={formatMessage(messages.filterplaceholder)} type='text' title={formatMessage(messages.filterhelptext)}/></Grids.Col>
         </div>
         <div className='form-group'>
           <Grids.Col md={7}>

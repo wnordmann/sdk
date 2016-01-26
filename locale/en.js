@@ -32,6 +32,8 @@ var enMessages = {
   "edit.strokecolorlabel": "Stroke color",
   "featuretable.clearbuttontext": "Clear",
   "featuretable.clearbuttontitle": "Clear selected",
+  "featuretable.filterbuttontext": "Filter results based on your criteria",
+  "featuretable.filterhelptext": "ATTRIBUTE == \"Value\"",
   "featuretable.filterlabel": "Filter",
   "featuretable.filterplaceholder": "Type filter expression",
   "featuretable.layerlabel": "Layer",
@@ -87,6 +89,8 @@ var enMessages = {
   "qgisprint.waittext": "Generating PDF ...",
   "querybuilder.addbuttontext": "Add to Selection",
   "querybuilder.addbuttontitle": "Add to current selection",
+  "querybuilder.filterbuttontext": "Selected items based on your criteria",
+  "querybuilder.filterhelptext": "ATTRIBUTE == \"Value\"",
   "querybuilder.filterlabel": "Filter",
   "querybuilder.filterplaceholder": "Type expression ....",
   "querybuilder.layerlabel": "Layer",
@@ -95,12 +99,6 @@ var enMessages = {
   "querybuilder.selectintext": "Refine Selection",
   "querybuilder.selectintitle": "Refine current selection",
   "select.menubuttontext": "Selection",
-  "select.rectangletext": "Select by rectangle",
-  "wfst.deletefeature": "Delete",
-  "wfst.deletemsg": "There was an issue deleting the feature.",
-  "wfst.drawfeature": "Draw",
-  "wfst.errormsg": "Error saving this feature to GeoServer. {msg}",
-  "wfst.layerlabel": "Layer",
-  "wfst.modifyfeature": "Modify / Select"
+  "select.rectangletext": "Select by rectangle"
 };
 export default enMessages;

@@ -109,10 +109,20 @@ const messages = defineMessages({
     description: 'Placeholder for filter expression input field',
     defaultMessage: 'Type filter expression'
   },
+  filterhelptext: {
+    id: 'featuretable.filterhelptext',
+    description: 'filter help text',
+    defaultMessage: 'ATTRIBUTE == "Value"'
+  },
   filterlabel: {
     id: 'featuretable.filterlabel',
     description: 'Label for the filter expression input field',
     defaultMessage: 'Filter'
+  },
+  filterbuttontext: {
+    id: 'featuretable.filterbuttontext',
+    description: 'Text for the filter button',
+    defaultMessage: 'Filter results based on your criteria'
   }
 });
 
@@ -127,7 +137,6 @@ const TextCell = ({rowIndex,col, layer, sortIndexes, ...props}) => (
     {FeatureStore.getFieldValue(layer, sortIndexes ? sortIndexes[rowIndex] : rowIndex, col)}
   </Cell>
 );
-
 /**
  * A table to show features. Allows for selection of features.
  */
@@ -388,8 +397,8 @@ class FeatureTable extends React.Component {
           <UI.DefaultButton onClick={this._clearSelected.bind(this)} title={formatMessage(messages.clearbuttontitle)}><Icon.Icon name="trash" /> {formatMessage(messages.clearbuttontext)}</UI.DefaultButton>
           <UI.DefaultButton onClick={this._moveSelectedToTop.bind(this)} title={formatMessage(messages.movebuttontitle)}><Icon.Icon name="arrow-up" /> {formatMessage(messages.movebuttontext)}</UI.DefaultButton>
           <div className='input-group'>
-            <span className='input-group-addon'><label htmlFor='featuretable-filter'>{formatMessage(messages.filterlabel)}</label></span>
-            <input type='text' id='featuretable-filter' ref='filter' className='form-control' onChange={this._filterByText.bind(this)} placeholder={formatMessage(messages.filterplaceholder)}></input>
+            <span className='input-group-addon'><label htmlFor='featuretable-filter' title={formatMessage(messages.filterbuttontext)}>{formatMessage(messages.filterlabel)}</label></span>
+            <input type='text' id='featuretable-filter' ref='filter' className='form-control'  onChange={this._filterByText.bind(this)} title={formatMessage(messages.filterhelptext)} placeholder={formatMessage(messages.filterplaceholder)}></input>
           </div>
           <label htmlFor='featuretable-onlyselected'><input id='featuretable-onlyselected' type='checkbox' checked={this._selectedOnly} onChange={this._filter.bind(this)}></input> {formatMessage(messages.onlyselected)}</label>
         </form>
