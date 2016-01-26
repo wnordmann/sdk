@@ -71,3 +71,32 @@ If you reload the debug server ```index.html``` page at http://localhost:3000/ y
 ```
 
 When you click a row in the feature table, it will select the corresponding geometry in the map.
+
+## 4. Adding an upload component
+In this step we'll be adding a button to the application that will open up a dialog where the user can upload a vector file, such as a KML, GPX or GeoJSON file.
+
+Again, we will start by adding an ```import``` statement to import our component:
+
+```
+import AddLayer from './node_modules/boundless-sdk/js/components/AddLayer.jsx';
+```
+
+In the ```render``` function of our application, we need to add a toolbar to accomodate for the button of the upload component:
+
+```
+  <nav role='navigation'>
+    <div className='toolbar'>
+      <ul><AddLayer map={map} /></ul>
+    </div>
+  </nav>
+```
+
+Add the ```nav``` just after the ```<article>``` opening tag.
+
+Open up app.css to give a bit of space to the button in the toolbar:
+
+```
+.toolbar ul {
+  margin-top: 10px;
+}
+```
