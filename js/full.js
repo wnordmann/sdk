@@ -22,6 +22,9 @@ global.BUTTON = BUTTON;
 import AddLayer from './components/AddLayer.jsx';
 global.AddLayer = AddLayer;
 
+import App from './components/App.js';
+global.App = App;
+
 import Bookmarks from './components/Bookmarks.jsx';
 global.Bookmarks = Bookmarks;
 
