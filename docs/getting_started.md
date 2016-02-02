@@ -1,5 +1,8 @@
 # Getting Started
 
+## JSFiddle
+Check out the following [JSFiddle example](https://jsfiddle.net/bartvde/69z2wepo/29812/).
+
 ## Using the web-sdk application generator
 The easiest way to get started is to use the web-sdk application generator. We will also outline the manual steps at the end of this section for advanced users, but the preferred way is to use the application generator.
 
@@ -99,6 +102,14 @@ $ npm start
 info serve-lib Parsing dependencies.
 info serve-lib Debug server running http://localhost:3000/loader.js (Ctrl+C to stop)
 ```
+
+To create a zip file package for production use the following command:
+
+```
+$ npm run package
+```
+
+You will be prompted for a destination file path and file name for the zip file, for instance ```/tmp/myapp.zip```.
 
 ## Using Boundless Web SDK from npm
 The following packages are relevant for the Boundless Web SDK:
