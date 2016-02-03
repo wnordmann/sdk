@@ -4,7 +4,7 @@ var path = require('path');
 var generateMarkdown = require('./generateMarkdown');
 
 var dir = 'js/components/';
-var output = 'api/';
+var output = 'docs/api/';
 
 fs.readdir(dir, function(err, files) {
   if (err) {
