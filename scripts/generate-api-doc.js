@@ -1,34 +1,25 @@
 var reactDocs = require('react-docgen');
 var fs = require('fs');
-var path = require('path')
+var path = require('path');
+var generateMarkdown = require('./generateMarkdown');
 
 var dir = 'js/components/';
-var output = 'api/info.json';
-var info = {};
+var output = 'api/';
 
 fs.readdir(dir, function(err, files) {
   if (err) {
     throw err;
   }
-  var c = 0;
   files.forEach(function(file) {
     if (path.extname(file) === '.js' || path.extname(file) === '.jsx') {
-      c++;
       fs.readFile(dir + file, 'utf-8', function(err,src) {
         if (err) {
           throw err;
         }
         var componentInfo = reactDocs.parse(src, reactDocs.resolver.findAllComponentDefinitions);
         if (componentInfo[0].description !== '') {
-          info[dir+file] = componentInfo[0];
-        }
-        if (0 === --c) {
-          const ordered = {};
-          Object.keys(info).sort().forEach(function(key) {
-            ordered[key] = info[key];
-          });
-          var result = JSON.stringify(ordered);
-          fs.writeFileSync(output, result);
+          var markdown = generateMarkdown(file, componentInfo[0]);
+          fs.writeFileSync(output + file.split('.')[0] + '.md', markdown);
         }
       });
     }
