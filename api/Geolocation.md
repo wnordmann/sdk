@@ -1,5 +1,5 @@
-`Geolocation.jsx` (component)
-=============================
+`Geolocation` (component)
+=========================
 
 Enable geolocation which uses the current position of the user in the map.
 

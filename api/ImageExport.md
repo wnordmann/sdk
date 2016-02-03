@@ -1,5 +1,5 @@
-`ImageExport.jsx` (component)
-=============================
+`ImageExport` (component)
+=========================
 
 Export the map as a PNG file.
 

@@ -1,5 +1,5 @@
-`LayerList.jsx` (component)
-===========================
+`LayerList` (component)
+=======================
 
 A list of layers in the map. Allows setting visibility and opacity.
 

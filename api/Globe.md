@@ -1,5 +1,5 @@
-`Globe.jsx` (component)
-=======================
+`Globe` (component)
+===================
 
 Adds a button to toggle 3D mode.
 

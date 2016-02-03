@@ -1,5 +1,5 @@
-`Bookmarks.jsx` (component)
-===========================
+`Bookmarks` (component)
+=======================
 
 Adds the ability to retrieve spatial bookmarks.
 A spatial bookmark consists of a name, an extent and a description.

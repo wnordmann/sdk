@@ -1,5 +1,5 @@
-`LayerListItem.jsx` (component)
-===============================
+`LayerListItem` (component)
+===========================
 
 An item in the LayerList component.
 

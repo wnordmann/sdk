@@ -1,5 +1,5 @@
-`MapTool.js` (component)
-========================
+`MapTool` (component)
+=====================
 
 A tool that manages interactions on the map. The interactions will be
 activated and deactivated depending on toggleGroup.

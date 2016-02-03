@@ -18,8 +18,9 @@ fs.readdir(dir, function(err, files) {
         }
         var componentInfo = reactDocs.parse(src, reactDocs.resolver.findAllComponentDefinitions);
         if (componentInfo[0].description !== '') {
-          var markdown = generateMarkdown(file, componentInfo[0]);
-          fs.writeFileSync(output + file.split('.')[0] + '.md', markdown);
+          var name = file.split('.')[0];
+          var markdown = generateMarkdown(name, componentInfo[0]);
+          fs.writeFileSync(output + name + '.md', markdown);
         }
       });
     }

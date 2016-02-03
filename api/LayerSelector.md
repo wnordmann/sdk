@@ -1,5 +1,5 @@
-`LayerSelector.jsx` (component)
-===============================
+`LayerSelector` (component)
+===========================
 
 A combobox to select a layer.
 

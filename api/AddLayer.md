@@ -1,5 +1,5 @@
-`AddLayer.jsx` (component)
-==========================
+`AddLayer` (component)
+======================
 
 Adds a menu entry that can be used by the web app user to add a layer to the map.
 Only vector layers can be added. Supported formats for layers are GeoJSON, GPX and KML.

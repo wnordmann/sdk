@@ -1,5 +1,5 @@
-`GeocodingResults.jsx` (component)
-==================================
+`GeocodingResults` (component)
+==============================
 
 This component displays the results of geocoding search. The geocoding search is initiated by the Geocoding component.
 

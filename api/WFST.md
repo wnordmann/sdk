@@ -1,5 +1,5 @@
-`WFST.jsx` (component)
-======================
+`WFST` (component)
+==================
 
 Allows users to make changes to WFS-T layers. This can be drawing new
 features and deleting or modifying existing features. Only geometry

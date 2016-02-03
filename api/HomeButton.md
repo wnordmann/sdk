@@ -1,5 +1,5 @@
-`HomeButton.jsx` (component)
-============================
+`HomeButton` (component)
+========================
 
 A button to go back to the initial extent of the map.
 

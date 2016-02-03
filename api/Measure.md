@@ -1,5 +1,5 @@
-`Measure.jsx` (component)
-=========================
+`Measure` (component)
+=====================
 
 Adds area and length measure tools to the map.
 

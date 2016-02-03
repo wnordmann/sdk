@@ -1,5 +1,5 @@
-`Chart.jsx` (component)
-=======================
+`Chart` (component)
+===================
 
 Allow for the creation of charts based on selected features of a layer.
 
