@@ -6,7 +6,7 @@ For example usage see: https://github.com/boundlessgeo/sdk-template
 
     npm run css
 
-## Generating API docs
+## Generating docs
 
     npm run docs
 
