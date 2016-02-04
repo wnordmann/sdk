@@ -1,7 +1,7 @@
 # Getting Started
 
 ## JSFiddle
-Check out the following [JSFiddle example](https://jsfiddle.net/69z2wepo/30190/).
+Check out the following [JSFiddle example](https://jsfiddle.net/bartvde/69z2wepo/30192/).
 
 ## Using the web-sdk application generator
 The easiest way to get started is to use the web-sdk application generator. We will also outline the manual steps at the end of this section for advanced users, but the preferred way is to use the application generator.
