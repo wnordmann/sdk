@@ -1452,6 +1452,7 @@ var Edit = (function (_MapTool) {
         var layers = this.state.layers.slice();
         layers.push(layer);
         this.refs.modal.close();
+        this._layer = layer.get('id');
         this.setState({ layers: layers });
       }
     }
@@ -1462,9 +1463,22 @@ var Edit = (function (_MapTool) {
       this.deactivate();
     }
   }, {
+    key: '_findLayerById',
+    value: function _findLayerById(layerId) {
+      for (var i = 0, ii = this.state.layers.length; i < ii; ++i) {
+        if (this.state.layers[i].get('id') === layerId) {
+          return this.state.layers[i];
+        }
+      }
+    }
+  }, {
     key: '_onLayerChange',
-    value: function _onLayerChange() {
-      this._activate();
+    value: function _onLayerChange(evt) {
+      this._layer = evt.target.value;
+      this.setState({ layer: this._layer });
+      if (!this.state.enable) {
+        this._activate();
+      }
     }
   }, {
     key: '_enableEditMode',
@@ -1499,14 +1513,8 @@ var Edit = (function (_MapTool) {
   }, {
     key: '_activate',
     value: function _activate() {
-      var layerId = _reactDom2['default'].findDOMNode(this.refs.layer).value;
-      var layer;
-      for (var i = 0, ii = this.state.layers.length; i < ii; ++i) {
-        if (this.state.layers[i].get('id') === layerId) {
-          layer = this.state.layers[i];
-          break;
-        }
-      }
+      var layerId = this._layer;
+      var layer = this._findLayerById(layerId);
       var featColl = layer.getSource().getFeaturesCollection();
       if (!this._interactions[layerId]) {
         this._interactions[layerId] = {
@@ -1541,6 +1549,9 @@ var Edit = (function (_MapTool) {
   }, {
     key: 'render',
     value: function render() {
+      if (!this.state.enable) {
+        this._activate();
+      }
       var formatMessage = this.props.intl.formatMessage;
 
       var options = [],
@@ -1649,7 +1660,7 @@ var Edit = (function (_MapTool) {
               { md: 16 },
               _react2['default'].createElement(
                 'select',
-                { onChange: this._onLayerChange.bind(this), ref: 'layer', className: 'form-control' },
+                { onChange: this._onLayerChange.bind(this), value: this._layer, ref: 'layer', className: 'form-control' },
                 options
               )
             )

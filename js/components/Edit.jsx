@@ -174,6 +174,7 @@ class Edit extends MapTool {
       var layers = this.state.layers.slice();
       layers.push(layer);
       this.refs.modal.close();
+      this._layer = layer.get('id');
       this.setState({layers: layers});
     }
   }
@@ -181,8 +182,19 @@ class Edit extends MapTool {
     this.setState({enable: true});
     this.deactivate();
   }
-  _onLayerChange() {
-    this._activate();
+  _findLayerById(layerId) {
+    for (var i = 0, ii = this.state.layers.length; i < ii; ++i) {
+      if (this.state.layers[i].get('id') === layerId) {
+        return this.state.layers[i];
+      }
+    }
+  }
+  _onLayerChange(evt) {
+    this._layer = evt.target.value;
+    this.setState({layer: this._layer});
+    if (!this.state.enable) {
+      this._activate();
+    }
   }
   _enableEditMode() {
     if (this.state.layers.length === 0) {
@@ -209,14 +221,8 @@ class Edit extends MapTool {
     this.refs.attributesModal.close();
   }
   _activate() {
-    var layerId = ReactDOM.findDOMNode(this.refs.layer).value;
-    var layer;
-    for (var i = 0, ii = this.state.layers.length; i < ii; ++i) {
-      if (this.state.layers[i].get('id') === layerId) {
-        layer = this.state.layers[i];
-        break;
-      }
-    }
+    var layerId = this._layer;
+    var layer = this._findLayerById(layerId);
     var featColl = layer.getSource().getFeaturesCollection();
     if (!this._interactions[layerId]) {
       this._interactions[layerId] = {
@@ -248,6 +254,9 @@ class Edit extends MapTool {
     this.refs.modal.open();
   }
   render() {
+    if (!this.state.enable) {
+      this._activate();
+    }
     const {formatMessage} = this.props.intl;
     var options = [], i, ii;
     for (i = 0, ii = this.state.layers.length; i < ii; ++i) {
@@ -287,7 +296,7 @@ class Edit extends MapTool {
             <label>{formatMessage(messages.layerlabel)}:</label>
             </Grids.Col>
             <Grids.Col md={16}>
-            <select onChange={this._onLayerChange.bind(this)} ref='layer' className='form-control'>{options}</select>
+            <select onChange={this._onLayerChange.bind(this)} value={this._layer} ref='layer' className='form-control'>{options}</select>
             </Grids.Col>
           </Grids.Col>
           <Grids.Col md={8}>
