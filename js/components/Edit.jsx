@@ -192,9 +192,6 @@ class Edit extends MapTool {
   _onLayerChange(evt) {
     this._layer = evt.target.value;
     this.setState({layer: this._layer});
-    if (!this.state.enable) {
-      this._activate();
-    }
   }
   _enableEditMode() {
     if (this.state.layers.length === 0) {
