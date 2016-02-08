@@ -67,7 +67,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^4.1.6",
-    "babel-plugin-react-intl": "1.0.0-beta-5",
+    "babel-plugin-react-intl": "2.1.1",
     "babelify": "^6.0.2",
     "browserify": "^11.2.0",
     "chai": "^1.10.0",
