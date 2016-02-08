@@ -4401,6 +4401,7 @@ LayerList.propTypes = {
   /**
    * Should we show a button that allows the user to zoom to the layer's extent?
    */
+
   showZoomTo: _react2['default'].PropTypes.bool,
   /**
    * Should we allow for reordering of layers?
@@ -4422,6 +4423,10 @@ LayerList.propTypes = {
    * Should we show a download button for layers?
    */
   showDownload: _react2['default'].PropTypes.bool,
+  /**
+   * The feature format to serialize in for downloads.
+   */
+  downloadFormat: _react2['default'].PropTypes.oneOf(['GeoJSON', 'KML', 'GPX']),
   /**
    * Should we show an opacity slider for layers?
    */
@@ -4447,6 +4452,7 @@ LayerList.defaultProps = {
   allowLabeling: false,
   showGroupContent: true,
   showDownload: false,
+  downloadFormat: 'GeoJSON',
   showOpacity: false,
   expandOnHover: true
 };
@@ -4559,6 +4565,23 @@ var LayerListItem = (function (_React$Component) {
     _classCallCheck(this, _LayerListItem);
 
     _get(Object.getPrototypeOf(_LayerListItem.prototype), 'constructor', this).call(this, props);
+    this.formats_ = {
+      GeoJSON: {
+        format: new _openlayers2['default'].format.GeoJSON(),
+        mimeType: 'text/json',
+        extension: 'geojson'
+      },
+      KML: {
+        format: new _openlayers2['default'].format.KML(),
+        mimeType: 'application/vnd.google-earth.kml+xml',
+        extension: 'kml'
+      },
+      GPX: {
+        format: new _openlayers2['default'].format.GPX(),
+        mimeType: 'application/gpx+xml',
+        extension: 'gpx'
+      }
+    };
     props.layer.on('change:visible', function (evt) {
       this.setState({ checked: evt.target.getVisible() });
     }, this);
@@ -4595,17 +4618,19 @@ var LayerListItem = (function (_React$Component) {
   }, {
     key: '_download',
     value: function _download() {
+      var formatInfo = this.formats_[this.props.downloadFormat];
+      var format = formatInfo.format;
       var layer = this.props.layer;
-      var geojson = new _openlayers2['default'].format.GeoJSON();
       var source = layer.getSource();
       if (source instanceof _openlayers2['default'].source.Cluster) {
         source = source.getSource();
       }
       var features = source.getFeatures();
-      var json = geojson.writeFeatures(features);
+      var output = format.writeFeatures(features, { featureProjection: this.props.map.getView().getProjection() });
       var dl = document.createElement('a');
-      dl.setAttribute('href', 'data:text/json;charset=utf-8,' + encodeURIComponent(json));
-      dl.setAttribute('download', layer.get('title') + '.geojson');
+      var mimeType = formatInfo.mimeType;
+      dl.setAttribute('href', 'data:' + mimeType + ';charset=utf-8,' + encodeURIComponent(output));
+      dl.setAttribute('download', layer.get('title') + '.' + formatInfo.extension);
       dl.click();
     }
   }, {
@@ -4838,6 +4863,10 @@ LayerListItem.propTypes = {
    * The layer associated with this item.
    */
   layer: _react2['default'].PropTypes.instanceOf(_openlayers2['default'].layer.Base).isRequired,
+  /**
+   * The feature format to serialize in for downloads.
+   */
+  downloadFormat: _react2['default'].PropTypes.oneOf(['GeoJSON', 'KML', 'GPX']),
   /**
    * The title to show for the layer.
    */

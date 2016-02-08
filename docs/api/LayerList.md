@@ -30,6 +30,14 @@ type: `bool`
 defaultValue: `false`
 
 
+### `downloadFormat`
+
+The feature format to serialize in for downloads.
+
+type: `enum('GeoJSON'|'KML'|'GPX')`
+defaultValue: `'GeoJSON'`
+
+
 ### `expandOnHover`
 
 Should we expand when hovering over the layers button?

@@ -120,6 +120,7 @@ LayerList.propTypes = {
   /**
    * Should we show a button that allows the user to zoom to the layer's extent?
    */
+
   showZoomTo: React.PropTypes.bool,
   /**
    * Should we allow for reordering of layers?
@@ -141,6 +142,10 @@ LayerList.propTypes = {
    * Should we show a download button for layers?
    */
   showDownload: React.PropTypes.bool,
+  /**
+   * The feature format to serialize in for downloads.
+   */
+  downloadFormat: React.PropTypes.oneOf(['GeoJSON', 'KML', 'GPX']),
   /**
    * Should we show an opacity slider for layers?
    */
@@ -166,6 +171,7 @@ LayerList.defaultProps = {
   allowLabeling: false,
   showGroupContent: true,
   showDownload: false,
+  downloadFormat: 'GeoJSON',
   showOpacity: false,
   expandOnHover: true
 };

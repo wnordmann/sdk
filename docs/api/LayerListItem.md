@@ -34,6 +34,13 @@ The child items to show for this item.
 type: `element`
 
 
+### `downloadFormat`
+
+The feature format to serialize in for downloads.
+
+type: `enum('GeoJSON'|'KML'|'GPX')`
+
+
 ### `intl`
 
 i18n message strings. Provided through the application through context.

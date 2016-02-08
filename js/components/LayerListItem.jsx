@@ -72,6 +72,23 @@ const messages = defineMessages({
 class LayerListItem extends React.Component {
   constructor(props) {
     super(props);
+    this.formats_ = {
+      GeoJSON: {
+        format: new ol.format.GeoJSON(),
+        mimeType: 'text/json',
+        extension: 'geojson'
+      },
+      KML: {
+        format: new ol.format.KML(),
+        mimeType: 'application/vnd.google-earth.kml+xml',
+        extension: 'kml'
+      },
+      GPX: {
+        format: new ol.format.GPX(),
+        mimeType: 'application/gpx+xml',
+        extension: 'gpx'
+      }
+    };
     props.layer.on('change:visible', function(evt) {
       this.setState({checked: evt.target.getVisible()});
     }, this);
@@ -103,17 +120,19 @@ class LayerListItem extends React.Component {
     this.setState({checked: visible});
   }
   _download() {
+    var formatInfo = this.formats_[this.props.downloadFormat];
+    var format = formatInfo.format;
     var layer = this.props.layer;
-    var geojson = new ol.format.GeoJSON();
     var source = layer.getSource();
     if (source instanceof ol.source.Cluster) {
       source = source.getSource();
     }
     var features = source.getFeatures();
-    var json = geojson.writeFeatures(features);
+    var output = format.writeFeatures(features, {featureProjection: this.props.map.getView().getProjection()});
     var dl = document.createElement('a');
-    dl.setAttribute('href', 'data:text/json;charset=utf-8,' + encodeURIComponent(json));
-    dl.setAttribute('download', layer.get('title') + '.geojson');
+    var mimeType = formatInfo.mimeType;
+    dl.setAttribute('href', 'data:' + mimeType + ';charset=utf-8,' + encodeURIComponent(output));
+    dl.setAttribute('download', layer.get('title') + '.' + formatInfo.extension);
     dl.click();
   }
   _filter() {
@@ -241,6 +260,10 @@ LayerListItem.propTypes = {
    * The layer associated with this item.
    */
   layer: React.PropTypes.instanceOf(ol.layer.Base).isRequired,
+  /**
+   * The feature format to serialize in for downloads.
+   */
+  downloadFormat: React.PropTypes.oneOf(['GeoJSON', 'KML', 'GPX']),
   /**
    * The title to show for the layer.
    */
