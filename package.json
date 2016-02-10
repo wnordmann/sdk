@@ -46,6 +46,7 @@
     "lodash.uniqueid": "^3.0.0",
     "ol3-cesium": "3.9.2",
     "openlayers": "~3.13.0",
+    "pui-css-spinners": "3.0.0-alpha.2",
     "pui-react-alerts": "3.0.0-alpha.2",
     "pui-react-buttons": "3.0.0-alpha.2",
     "pui-react-dropdowns": "3.0.0-alpha.2",
@@ -54,7 +55,6 @@
     "pui-react-iconography": "3.0.0-alpha.2",
     "pui-react-modals": "3.0.0-alpha.2",
     "pui-react-search-input": "3.0.0-alpha.2",
-    "pui-css-spinners": "3.0.0-alpha.2",
     "pui-react-tabs": "3.0.0-alpha.2",
     "pure-render-decorator": "^0.2.0",
     "react": "0.14.3",
@@ -62,6 +62,7 @@
     "react-dom": "0.14.3",
     "react-dropzone": "3.0.0",
     "react-intl": "2.0.0-beta-2",
+    "react-responsive-decorator": "0.0.1",
     "react-slick": "0.9.1",
     "slick-carousel-dr-frankenstyle": "^1.5.8"
   },
