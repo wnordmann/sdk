@@ -88,5 +88,8 @@ global.QueryBuilder = QueryBuilder;
 import Select from './components/Select.jsx';
 global.Select = Select;
 
+import Toolbar from './components/Toolbar.jsx';
+global.Toolbar = Toolbar;
+
 import WFST from './components/WFST.jsx';
 global.WFST = WFST;

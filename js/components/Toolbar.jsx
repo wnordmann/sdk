@@ -45,12 +45,14 @@ class Toolbar extends React.Component {
         }
       }
       return (
-        <article>
-          <DD.Dropdown title='=' className='pull-right'>
-            {items}
-          </DD.Dropdown>
-          {nonTextItems}
-        </article>
+        <nav role='navigation'>
+          <div className='toolbar'>
+            <DD.Dropdown title='=' className='pull-right'>
+              {items}
+            </DD.Dropdown>
+            {nonTextItems}
+          </div>
+        </nav>
       );
     } else {
       var buttons = this.props.options.map(function(option) {
