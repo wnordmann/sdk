@@ -19,19 +19,19 @@ class Toolbar extends React.Component {
     };
   }
   componentDidMount() {
-    this.props.media({ minWidth: 768 }, () => {
+    this.props.media({minWidth: this.props.width}, () => {
       this.setState({
         isMobile: false
       });
     });
-    this.props.media({ maxWidth: 768 }, () => {
+    this.props.media({maxWidth: this.props.width}, () => {
       this.setState({
         isMobile: true
       });
     });
   }
   render() {
-    const { isMobile } = this.state;
+    const {isMobile} = this.state;
     if (isMobile) {
       var nonTextItems = [];
       var items = [];
@@ -61,7 +61,7 @@ class Toolbar extends React.Component {
           return (<ul className='pull-right' key={option.title}><UI.DefaultButton onClick={option.onClick} title={option.title}>{icon} {option.title}</UI.DefaultButton></ul>);
         }
       });
-      return(
+      return (
         <nav role='navigation'>
           <div className='toolbar'>
             {buttons}
@@ -82,7 +82,19 @@ Toolbar.propTypes = {
     icon: React.PropTypes.string,
     title: React.PropTypes.string,
     onClick: React.PropTypes.func
-  })).isRequired
+  })).isRequired,
+  /**
+   * Handled automatically by the responsive decorator.
+   */
+  media: React.PropTypes.func,
+  /**
+   * Width in pixels below which mobile layout should kick in.
+   */
+  width: React.PropTypes.number
+};
+
+Toolbar.defaultProps = {
+  width: 1024
 };
 
 export default Toolbar;
