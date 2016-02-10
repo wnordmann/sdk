@@ -38,10 +38,14 @@ class Toolbar extends React.Component {
       for (var i = 0, ii = this.props.options.length; i < ii; ++i) {
         var option = this.props.options[i];
         if (option.jsx) {
-          nonTextItems.push(option.jsx);
+          if (option.exclude) {
+            nonTextItems.push(option.jsx);
+          } else {
+            items.push(option.jsx);
+          }
         } else {
           var icon = option.icon ? (<Icon.Icon name={option.icon} />) : undefined;
-          items.push(<DD.DropdownItem key={option.title} onSelect={option.onClick}>{icon} {option.title}</DD.DropdownItem>);
+          items.push(<DD.DropdownItem key={i} onSelect={option.onClick}>{icon} {option.text}</DD.DropdownItem>);
         }
       }
       var dropdown;
@@ -61,12 +65,12 @@ class Toolbar extends React.Component {
         </nav>
       );
     } else {
-      var buttons = this.props.options.map(function(option) {
+      var buttons = this.props.options.map(function(option, idx) {
         if (option.jsx) {
-          return option.jsx;
+          return (<ul className='pull-right' key={idx}>{option.jsx}</ul>);
         } else {
           var icon = option.icon ? (<Icon.Icon name={option.icon} />) : undefined;
-          return (<ul className='pull-right' key={option.title}><UI.DefaultButton onClick={option.onClick} title={option.title}>{icon} {option.title}</UI.DefaultButton></ul>);
+          return (<ul className='pull-right' key={idx}><UI.DefaultButton onClick={option.onClick} title={option.title}>{icon} {option.text}</UI.DefaultButton></ul>);
         }
       });
       return (
@@ -82,12 +86,15 @@ class Toolbar extends React.Component {
 
 Toolbar.propTypes = {
   /**
-   * The options to show in the toolbar. An array of objects with jsx, icon, title and onClick keys.
-   * When using the jsx option, make sure to use a key property in the root element.
+   * The options to show in the toolbar. An array of objects with jsx, icon, text, title and onClick keys.
+   * When using the jsx option, make sure to use a key property in the root element. When using jsx, use
+   * exclude to not have the item show up in the menu on small screens, but separate in the toolbar.
    */
   options: React.PropTypes.arrayOf(React.PropTypes.shape({
     jsx: React.PropTypes.element,
+    exclude: React.PropTypes.bool,
     icon: React.PropTypes.string,
+    text: React.PropTypes.string,
     title: React.PropTypes.string,
     onClick: React.PropTypes.func
   })).isRequired,

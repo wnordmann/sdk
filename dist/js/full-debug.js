@@ -7146,15 +7146,19 @@ var Toolbar = (function (_React$Component) {
         for (var i = 0, ii = this.props.options.length; i < ii; ++i) {
           var option = this.props.options[i];
           if (option.jsx) {
-            nonTextItems.push(option.jsx);
+            if (option.exclude) {
+              nonTextItems.push(option.jsx);
+            } else {
+              items.push(option.jsx);
+            }
           } else {
             var icon = option.icon ? _react2['default'].createElement(_puiReactIconography2['default'].Icon, { name: option.icon }) : undefined;
             items.push(_react2['default'].createElement(
               _puiReactDropdowns2['default'].DropdownItem,
-              { key: option.title, onSelect: option.onClick },
+              { key: i, onSelect: option.onClick },
               icon,
               ' ',
-              option.title
+              option.text
             ));
           }
         }
@@ -7177,20 +7181,24 @@ var Toolbar = (function (_React$Component) {
           )
         );
       } else {
-        var buttons = this.props.options.map(function (option) {
+        var buttons = this.props.options.map(function (option, idx) {
           if (option.jsx) {
-            return option.jsx;
+            return _react2['default'].createElement(
+              'ul',
+              { className: 'pull-right', key: idx },
+              option.jsx
+            );
           } else {
             var icon = option.icon ? _react2['default'].createElement(_puiReactIconography2['default'].Icon, { name: option.icon }) : undefined;
             return _react2['default'].createElement(
               'ul',
-              { className: 'pull-right', key: option.title },
+              { className: 'pull-right', key: idx },
               _react2['default'].createElement(
                 _puiReactButtons2['default'].DefaultButton,
                 { onClick: option.onClick, title: option.title },
                 icon,
                 ' ',
-                option.title
+                option.text
               )
             );
           }
@@ -7216,12 +7224,15 @@ var Toolbar = (function (_React$Component) {
 
 Toolbar.propTypes = {
   /**
-   * The options to show in the toolbar. An array of objects with jsx, icon, title and onClick keys.
-   * When using the jsx option, make sure to use a key property in the root element.
+   * The options to show in the toolbar. An array of objects with jsx, icon, text, title and onClick keys.
+   * When using the jsx option, make sure to use a key property in the root element. When using jsx, use
+   * exclude to not have the item show up in the menu on small screens, but separate in the toolbar.
    */
   options: _react2['default'].PropTypes.arrayOf(_react2['default'].PropTypes.shape({
     jsx: _react2['default'].PropTypes.element,
+    exclude: _react2['default'].PropTypes.bool,
     icon: _react2['default'].PropTypes.string,
+    text: _react2['default'].PropTypes.string,
     title: _react2['default'].PropTypes.string,
     onClick: _react2['default'].PropTypes.func
   })).isRequired,
