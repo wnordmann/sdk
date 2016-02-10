@@ -44,12 +44,18 @@ class Toolbar extends React.Component {
           items.push(<DD.DropdownItem key={option.title} onSelect={option.onClick}>{icon} {option.title}</DD.DropdownItem>);
         }
       }
+      var dropdown;
+      if (items.length > 0) {
+        dropdown = (
+          <DD.Dropdown title='=' className='pull-right'>
+            {items}
+          </DD.Dropdown>
+        );
+      }
       return (
         <nav role='navigation'>
           <div className='toolbar'>
-            <DD.Dropdown title='=' className='pull-right'>
-              {items}
-            </DD.Dropdown>
+            {dropdown}
             {nonTextItems}
           </div>
         </nav>

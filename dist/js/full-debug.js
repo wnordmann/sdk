@@ -7158,17 +7158,21 @@ var Toolbar = (function (_React$Component) {
             ));
           }
         }
+        var dropdown;
+        if (items.length > 0) {
+          dropdown = _react2['default'].createElement(
+            _puiReactDropdowns2['default'].Dropdown,
+            { title: '=', className: 'pull-right' },
+            items
+          );
+        }
         return _react2['default'].createElement(
           'nav',
           { role: 'navigation' },
           _react2['default'].createElement(
             'div',
             { className: 'toolbar' },
-            _react2['default'].createElement(
-              _puiReactDropdowns2['default'].Dropdown,
-              { title: '=', className: 'pull-right' },
-              items
-            ),
+            dropdown,
             nonTextItems
           )
         );
