@@ -7225,8 +7225,8 @@ var Toolbar = (function (_React$Component) {
 Toolbar.propTypes = {
   /**
    * The options to show in the toolbar. An array of objects with jsx, icon, text, title and onClick keys.
-   * When using the jsx option, make sure to use a key property in the root element. When using jsx, use
-   * exclude to not have the item show up in the menu on small screens, but separate in the toolbar.
+   * When using jsx, use exclude to not have the item show up in the menu on small screens,
+   * but separate in the toolbar.
    */
   options: _react2['default'].PropTypes.arrayOf(_react2['default'].PropTypes.shape({
     jsx: _react2['default'].PropTypes.element,
