@@ -1,4 +1,16 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -26,6 +38,18 @@ exports['default'] = {
 module.exports = exports['default'];
 
 },{"../constants/GeocodingConstants.js":54,"../dispatchers/AppDispatcher.js":58}],2:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -72,6 +96,18 @@ exports['default'] = {
 module.exports = exports['default'];
 
 },{"../constants/LayerConstants.js":55,"../dispatchers/AppDispatcher.js":58}],3:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -122,6 +158,18 @@ exports['default'] = {
 module.exports = exports['default'];
 
 },{"../constants/SelectConstants.js":56,"../dispatchers/AppDispatcher.js":58}],4:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -152,6 +200,18 @@ module.exports = exports['default'];
 },{"../constants/ToolConstants.js":57,"../dispatchers/AppDispatcher.js":58}],5:[function(require,module,exports){
 var css = ".dropzone {\n  height: 300px;\n  border-width: 2px;\n  border-color: #666;\n  border-style: dashed;\n  border-radius: 5px;\n}\n.modal-content{\n  width: 750px;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/AddLayer.css'); module.exports = css;
 },{"./../../node_modules/cssify":74}],6:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -491,6 +551,18 @@ module.exports = exports['default'];
 
 },{"../util.js":62,"./AddLayer.css":5,"openlayers":136,"pui-react-buttons":164,"pui-react-grids":320,"pui-react-iconography":369,"pui-react-modals":425,"pure-render-decorator":567,"react":836,"react-color":601,"react-dropzone":620,"react-intl":635}],7:[function(require,module,exports){
 (function (global){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -622,6 +694,18 @@ module.exports = exports['default'];
 },{"openlayers":136,"react":836,"react-dom":619}],8:[function(require,module,exports){
 var css = ".slick-prev:before, .slick-next:before {\n  color: grey;\n}\n.slick-list {\n  max-height: 450px;\n  max-width: 450px;\n}\n.story-panel {\n  display: block;\n  position: absolute;\n  background: rgba(255,255,255,0.7);\n  padding: 15px;\n  border-radius: 5px;\n  border: 1px solid #000000;\n  top: 100px;\n  left: 50px;\n  min-width: 400px;\n  z-index: 100\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/Bookmarks.css'); module.exports = css;
 },{"./../../node_modules/cssify":74}],9:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -907,6 +991,18 @@ module.exports = exports['default'];
 },{"./Bookmarks.css":8,"./slick.css":53,"openlayers":136,"pui-react-dropdowns":182,"pure-render-decorator":567,"react":836,"react-intl":635,"react-slick":665}],10:[function(require,module,exports){
 var css = "#chart-selector {\n  margin-bottom: 10px;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/Chart.css'); module.exports = css;
 },{"./../../node_modules/cssify":74}],11:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1233,6 +1329,18 @@ module.exports = exports['default'];
 },{"../stores/FeatureStore.js":60,"./Chart.css":10,"./c3.min.css":51,"c3-windows":72,"pui-react-dropdowns":182,"pure-render-decorator":567,"react":836,"react-intl":635}],12:[function(require,module,exports){
 var css = ".error-alert {\n  max-width: 350px;\n}\nlabel{\n  line-height: 2.8;\n}\n\n.modal-content{\n  top: 75px;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/Edit.css'); module.exports = css;
 },{"./../../node_modules/cssify":74}],13:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 /* eslint react/prop-types: 0 */
 'use strict';
 
@@ -1860,6 +1968,18 @@ module.exports = exports['default'];
 var css = ".row-selected .public_fixedDataTableCell_main {\n  background-color: yellow;\n}\n\n.btn-default{\n\theight: 42px;\n}\n\n.input-group-addon{\n  padding: 0px 12px;\n}\n\n.form-inline .input-group{\n\tpadding: 10px;\n}\n\nlabel{\n\tmargin-bottom: 0px;\n}\n\ninput[type=\"radio\"], input[type=\"checkbox\"]{\n\tmargin: 4px 4px 0px;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/FeatureTable.css'); module.exports = css;
 },{"./../../node_modules/cssify":74}],15:[function(require,module,exports){
 (function (global){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2538,6 +2658,18 @@ module.exports = exports['default'];
 },{"../actions/SelectActions.js":3,"../constants/LayerConstants.js":55,"../dispatchers/AppDispatcher.js":58,"../stores/FeatureStore.js":60,"./FeatureTable.css":14,"./LayerSelector.jsx":33,"./fixed-data-table.css":52,"debounce":75,"filtrex":77,"fixed-data-table":127,"openlayers":136,"pui-react-buttons":164,"pui-react-iconography":369,"pure-render-decorator":567,"react":836,"react-dom":619,"react-intl":635}],16:[function(require,module,exports){
 var css = ".filterform .input-has-error {\n  background-color: #fdd;\n}\n.filterform label {\n  font-weight: bold;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/FilterModal.css'); module.exports = css;
 },{"./../../node_modules/cssify":74}],17:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2822,6 +2954,18 @@ exports['default'] = (0, _reactIntl.injectIntl)(FilterModal, { withRef: true });
 module.exports = exports['default'];
 
 },{"./FilterModal.css":16,"filtrex":77,"openlayers":136,"pui-react-buttons":164,"pui-react-grids":320,"pui-react-modals":425,"pure-render-decorator":567,"react":836,"react-dom":619,"react-intl":635}],18:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2931,6 +3075,18 @@ exports['default'] = (0, _reactIntl.injectIntl)(Geocoding);
 module.exports = exports['default'];
 
 },{"../actions/GeocodingActions.js":1,"pui-react-search-input":495,"pure-render-decorator":567,"react":836,"react-intl":635}],19:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3126,6 +3282,18 @@ module.exports = exports['default'];
 },{"../constants/GeocodingConstants.js":54,"../dispatchers/AppDispatcher.js":58,"openlayers":136,"pure-render-decorator":567,"react":836,"react-dom":619,"react-intl":635}],20:[function(require,module,exports){
 var css = "#geolocation-button {\n  float: right;\n  background-image: url('data:image/png;base64,R0lGODlhEAAQALMAAJmZzMzM/2aZzJnM/2bM/8DAwPf3583NzczMzAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAAUALAAAAAAQABAAQARVsMhJqxzCYMPFMB4VCAJyGAdCBtVYnulqScFgs9aIGAApAAYVrqDj+YDCWe02azqJPd9vOOntaoHgj4I5jD6YwCF0EXgFBI1ATJZYDVgtIBc9Up+WCAA7');\n  background-repeat: no-repeat;\n  background-position: center;\n  border: none;\n}\n.alert {\n  width: 400px;\n  height: 103px;\n}\nbutton.close.sr-only {\n  visibility: hidden;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/Geolocation.css'); module.exports = css;
 },{"./../../node_modules/cssify":74}],21:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3273,6 +3441,18 @@ module.exports = exports['default'];
 
 },{"./Geolocation.css":20,"openlayers":136,"pui-react-alerts":137,"pure-render-decorator":567,"react":836,"react-intl":635}],22:[function(require,module,exports){
 (function (global){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 /* global Cesium */
 'use strict';
 
@@ -3375,6 +3555,18 @@ module.exports = exports['default'];
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"ol3-cesium":135,"openlayers":136,"pure-render-decorator":567,"react":836}],23:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3480,6 +3672,18 @@ exports['default'] = (0, _reactIntl.injectIntl)(HomeButton);
 module.exports = exports['default'];
 
 },{"openlayers":136,"pure-render-decorator":567,"react":836,"react-intl":635}],24:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3597,6 +3801,18 @@ module.exports = exports['default'];
 },{"blueimp-canvas-to-blob":63,"browser-filesaver":64,"openlayers":136,"pui-react-buttons":164,"pui-react-iconography":369,"pure-render-decorator":567,"react":836,"react-intl":635}],25:[function(require,module,exports){
 var css = ".ol-popup {\n  display: none;\n  position: absolute;\n  background-color: white;\n  -moz-box-shadow: 0 1px 4px rgba(0,0,0,0.2);\n  -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));\n  filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));\n  padding: 15px;\n  padding-top:35px;\n  border-radius: 10px;\n  border: 1px solid #cccccc;\n  bottom: 12px;\n  left: -50px;\n  height: auto;\n  width: auto;\n  min-width: 250px;\n  max-height: 350px;\n  max-width: 500px;\n}\n\n.popup-closer{\n  padding: 5px;\n}\n\n.popup-content{\n  overflow: auto;\n  height: auto;\n  width: auto;\n  min-width: 250px;\n  max-height: 300px;\n  max-width: 500px;\n}"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/InfoPopup.css'); module.exports = css;
 },{"./../../node_modules/cssify":74}],26:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3896,6 +4112,18 @@ exports['default'] = (0, _reactIntl.injectIntl)(InfoPopup);
 module.exports = exports['default'];
 
 },{"./InfoPopup.css":25,"./MapTool.js":36,"openlayers":136,"pure-render-decorator":567,"react":836,"react-dom":619,"react-intl":635}],27:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4192,6 +4420,18 @@ module.exports = exports['default'];
 },{"../util.js":62,"openlayers":136,"pui-react-buttons":164,"pui-react-grids":320,"pui-react-modals":425,"pure-render-decorator":567,"react":836,"react-color":601,"react-intl":635}],28:[function(require,module,exports){
 var css = ".layer-switcher {\n  position: absolute;\n  top: 3.5em;\n  right: 0.5em;\n  text-align: left;\n  max-width: 450px;\n}\n.layer-switcher .layer-tree-panel {\n  display: none;\n}\n.layer-switcher.shown .layer-tree-panel {\n  display: block;\n}\n.layerlistbutton {\n  color: white;\n  float: right;\n  width: 38px;\n  height: 38px;\n  background-color: #7b98bc;\n  border: 3px solid rgba(225, 225, 220, 0.8);\n  padding: 2px;\n}\n.layerlistbutton button:focus, .layerlistbutton button:hover {\n  background-color: white;\n}\n.layer-tree-panel {\n  padding-right: 50px;\n  border: 1px solid #cccccc;\n  background-color: white;\n  max-height: 450px;\n  overflow: auto;\n}\n.layer-tree-panel li {\n  list-style-type: none;\n}\n\n.layer-tree-panel li span {\n  display: inline-block;\n  padding: 3px 8px;\n  text-decoration: none;\n}\n.layer-tree-panel li.parent_li>span {\n  cursor: pointer;\n}\n.layer-tree-panel >ul>li::before, .layer-tree-panel >ul>li::after {\n  border: 0;\n}\n.layer-tree-panel  li:last-child::before {\n  height: 30px;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/LayerList.css'); module.exports = css;
 },{"./../../node_modules/cssify":74}],29:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4463,6 +4703,18 @@ module.exports = exports['default'];
 },{"../stores/LayerStore.js":61,"./LayerList.css":28,"./LayerListItem.jsx":31,"openlayers":136,"pui-react-buttons":164,"pui-react-iconography":369,"pure-render-decorator":567,"react":836,"react-intl":635}],30:[function(require,module,exports){
 var css = ".layerlayeritem {\n  padding-left: 8px;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/LayerListItem.css'); module.exports = css;
 },{"./../../node_modules/cssify":74}],31:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4919,6 +5171,18 @@ module.exports = exports['default'];
 },{"../actions/LayerActions.js":2,"./FilterModal.jsx":17,"./LabelModal.jsx":27,"./LayerListItem.css":30,"openlayers":136,"pure-render-decorator":567,"react":836,"react-intl":635}],32:[function(require,module,exports){
 var css = "select.form-control{\n  border-radius: 4px;\n  box-shadow: 0px 1px 0px rgba(211, 217, 217, 0.5);\n}\n\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/LayerSelector.css'); module.exports = css;
 },{"./../../node_modules/cssify":74}],33:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -5065,6 +5329,18 @@ module.exports = exports['default'];
 var css = ".loading-panel {\n  top: 50%;\n  left: 50%;\n  margin-top: auto;\n  margin-left: auto;\n  position: absolute;\n\n}\n.loading-panel, .spinner-lg .fa-spin {\n  color: #00776D;\n  opacity: 0.9;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/LoadingPanel.css'); module.exports = css;
 },{"./../../node_modules/cssify":74}],35:[function(require,module,exports){
 (function (global){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -5214,6 +5490,18 @@ module.exports = exports['default'];
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"../stores/LayerStore.js":61,"./LoadingPanel.css":34,"openlayers":136,"pure-render-decorator":567,"react":836}],36:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -5326,6 +5614,18 @@ module.exports = exports['default'];
 },{"../actions/ToolActions.js":4,"../constants/ToolConstants.js":57,"../dispatchers/AppDispatcher.js":58,"openlayers":136,"react":836}],37:[function(require,module,exports){
 var css = ".tooltip {\n  position: relative;\n  background: rgba(0, 0, 0, 0.5);\n  border-radius: 4px;\n  color: white;\n  padding: 4px 8px;\n  opacity: 0.7;\n  white-space: nowrap;\n}\n.tooltip-measure {\n  opacity: 1;\n  font-weight: bold;\n}\n.tooltip-static {\n  background-color: #ffcc33;\n  color: black;\n  border: 1px solid white;\n}\n.tooltip-measure:before, .tooltip-static:before {\n  border-top: 6px solid rgba(0, 0, 0, 0.5);\n  border-right: 6px solid transparent;\n  border-left: 6px solid transparent;\n  content: \"\";\n  position: absolute;\n  bottom: -6px;\n  margin-left: -7px;\n  left: 50%;\n}\n.tooltip-static:before {\n  border-top-color: #ffcc33;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/Measure.css'); module.exports = css;
 },{"./../../node_modules/cssify":74}],38:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 /* eslint react/prop-types: 0 */
 'use strict';
 
@@ -5636,6 +5936,18 @@ module.exports = exports['default'];
 },{"./MapTool.js":36,"./Measure.css":37,"openlayers":136,"pui-react-dropdowns":182,"pure-render-decorator":567,"react":836,"react-intl":635}],39:[function(require,module,exports){
 var css = ".playback input {\n  height: 36px;\n}\ninput::-webkit-clear-button {\n  -webkit-appearance: none;\n  margin: 0;\n}\n#timeline {\n\tbackground-color: rgba(255,255,255,.7);\n\t/*width: 675px;*/\n}\n\n/*FireFox Fix*/\n@-moz-document url-prefix() {\n\t#timeline{\n\t\twidth: 675px;\n\t}\n}\n\n/*Safari Fix*/\n_::-webkit-:not(:root:root), #timeline{ \n\twidth: 675px;\n}\n\n\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/Playback.css'); module.exports = css;
 },{"./../../node_modules/cssify":74}],40:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -5909,6 +6221,18 @@ module.exports = exports['default'];
 },{"./Playback.css":39,"openlayers":136,"pui-react-buttons":164,"pui-react-grids":320,"pui-react-iconography":369,"pure-render-decorator":567,"react":836,"react-intl":635}],41:[function(require,module,exports){
 var css = ".legend {\n  position: absolute;\n  top: 7.5em;\n  right: 0.5em;\n  text-align: left;\n}\n.legend-panel {\n  /*padding-right: 50px;*/\n  border: 1px solid #cccccc;\n  background-color: white;\n  height: auto;\n  max-height:500px;\n  overflow-y: auto;\n  overflow-x: hidden;\n}\n.legend .legend-panel {\n  display: none;\n}\n.legend.shown .legend-panel {\n  display: block;\n}\n.legend button {\n  color: white;\n  float: right;\n  width: 38px;\n  height: 38px;\n  background-color: #7b98bc;\n  border: 3px solid rgba(225, 225, 220, 0.8);\n  padding: 2px;\n}\n.legend button:focus, .legend button:hover {\n  background-color: white;\n}\n.expandableList ul {\n  padding: 0 0 0 30px;\n  width: 300px;\n}\n.expandableList li {\n  position: relative;\n  list-style: none;\n  margin-left: -15px;\n  margin-top:15px;\n  padding: 0;\n}\n.expandableList li input {\n  position: absolute;\n  left: 0;\n  margin-left: 0;\n  opacity: 0;\n  z-index: 2;\n  cursor: pointer;\n  height: 1em;\n  width: 1em;\n  top: 0;\n}\n.expandableList li input + ul {\n  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAURJREFUeNpi/P//PwMlgImBQkCxASwwRlLLKwYmJqZgRkbGbiBXEYva+0Dvlv7792/tvBoxTAO+fv0MororE6UU9VU5MHRfvP1DsX3+M5DhaxkYxDC98ObNGxBW1FVmY/j16xcYu6SdYvjw4QPDixcvGGSEvoLlQeqweuHdu7dg+vfv32D85ctXsNijR4/B4hwcnHA1WA348uUbmP779y+DUchOuIKQsltgetsUE7garAb8/w9h/vz5h+H0Sk8w2yRsN8OZVa5g9ocPn+BqsBrAzs4PdQEzw48ff+Fi375B2Gxs3HA1WNPB45NlDNzcIvfPXv8LVMwJxmdWOcDZF2//A8uD1GF1wefXZ8Q+Pt42oWN+VBED41d5DKv+/30IlJ8IVCcF5D2DCTPC8gIwAXEDKT4Qk0Di+wzU8xnDgKGbmQACDAAtTZadqmiADQAAAABJRU5ErkJggg==') 40px 0px no-repeat;\n  margin: -22px 0 0 -44px; /* 15px */\n  height: 1em;\n}\n.expandableList li input + ul > li {\n  display: none;\n  margin-left:-14px !important;\n  padding-left: 1px;\n}\n.expandableList li label {\n  cursor: pointer;\n  display: block;\n  padding-left: 20px;\n}\n.expandableList li input {\n  display: none;\n}\n.expandableList li input:checked + ul {\n  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAASxJREFUeNpi/P//PwMlgImBQkCxASwwRlLLKwYmJqZgRkbGbiBXEYva+0Dvlv7792/tvBoxTAO+fv0MororE6UU9VU5MHRfvP1DsX3+M5DhaxkYsBjw5s0bEKWoq6zA8OvXL7AYKIC/f//O8OPHDwYZIVaQGqjLlDENePfuLZj+/fs3GH/58pXh/fv3YDYIcHBwwtVgDYMvX76B6b9//zIYhezEULhtiglcDVYD/v+HMH/+/MNweqUnhsIPHz7B1WA1gJ2dH+oCZqCf/2IoZGPjhqvBmg4enyxj4OYWuX/2+l+gYk4MfPH2P7A8SB1WF3x+fUbs4+NtEzrmRxUxMH6Vx7Dq/9+HQPmJQHVSQN4zmDAjLC8AExA3kOIDMQkkvs9APZ8xDBi6mQkgwADDMYZH9Ls66AAAAABJRU5ErkJggg==') 40px 0px no-repeat;\n  margin: -22px 0 0 -44px; /* 20px */\n  padding: 1.563em 0 0 80px;\n  height: auto;\n}\n.expandableList li input:checked + ul > li {\n  display: block;\n  margin: 0 0 0.125em; /* 2px */\n}\n.expandableList li input:checked + ul > li:last-child {\n  margin: 0 0 0.063em; /* 1px */\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/QGISLegend.css'); module.exports = css;
 },{"./../../node_modules/cssify":74}],42:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -6131,6 +6455,18 @@ module.exports = exports['default'];
 },{"../stores/LayerStore.js":61,"./QGISLegend.css":41,"openlayers":136,"pui-react-buttons":164,"pui-react-iconography":369,"pure-render-decorator":567,"react":836,"react-intl":635}],43:[function(require,module,exports){
 var css = ".spinner {\n  margin-top: 5px;\n  font-weight: bold;\n  font-size: 16px;\n  text-align: center;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/QGISPrint.css'); module.exports = css;
 },{"./../../node_modules/cssify":74}],44:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -6590,6 +6926,18 @@ module.exports = exports['default'];
 },{"./QGISPrint.css":43,"jspdf-browserify":131,"openlayers":136,"pui-react-alerts":137,"pui-react-buttons":164,"pui-react-dropdowns":182,"pui-react-iconography":369,"pui-react-modals":425,"pure-render-decorator":567,"react":836,"react-dom":619,"react-intl":635}],45:[function(require,module,exports){
 var css = ".query-builder .input-has-error {\n  background-color: #fdd;\n}\n.btn .btn-default {\n  padding: 120px;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/QueryBuilder.css'); module.exports = css;
 },{"./../../node_modules/cssify":74}],46:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -6906,6 +7254,18 @@ exports['default'] = (0, _reactIntl.injectIntl)(QueryBuilder);
 module.exports = exports['default'];
 
 },{"../actions/SelectActions.js":3,"../constants/LayerConstants.js":55,"../dispatchers/AppDispatcher.js":58,"./LayerSelector.jsx":33,"./QueryBuilder.css":45,"filtrex":77,"openlayers":136,"pui-react-buttons":164,"pui-react-grids":320,"pure-render-decorator":567,"react":836,"react-dom":619,"react-intl":635}],47:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 /* eslint react/prop-types: 0 */
 'use strict';
 
@@ -7062,6 +7422,18 @@ exports['default'] = (0, _reactIntl.injectIntl)(Select);
 module.exports = exports['default'];
 
 },{"../actions/SelectActions.js":3,"../stores/FeatureStore.js":60,"./MapTool.js":36,"openlayers":136,"pui-react-dropdowns":182,"pure-render-decorator":567,"react":836,"react-intl":635}],48:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -7257,6 +7629,18 @@ module.exports = exports['default'];
 var css = ".error-alert {\n  max-width: 350px;\n}\n"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/WFST.css'); module.exports = css;
 },{"./../../node_modules/cssify":74}],50:[function(require,module,exports){
 (function (global){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -7664,6 +8048,18 @@ var css = "/**\n * FixedDataTable v0.6.0 \n *\n * Copyright (c) 2015, Facebook, 
 },{"./../../node_modules/cssify":74}],53:[function(require,module,exports){
 var css = "/* Slider */\n.slick-slider\n{\n    position: relative;\n\n    display: block;\n\n    -moz-box-sizing: border-box;\n         box-sizing: border-box;\n\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n\n    -webkit-touch-callout: none;\n    -khtml-user-select: none;\n    -ms-touch-action: pan-y;\n        touch-action: pan-y;\n    -webkit-tap-highlight-color: transparent;\n}\n\n.slick-list\n{\n    position: relative;\n\n    display: block;\n    overflow: hidden;\n\n    margin: 0;\n    padding: 0;\n}\n.slick-list:focus\n{\n    outline: none;\n}\n.slick-list.dragging\n{\n    cursor: pointer;\n    cursor: hand;\n}\n\n.slick-slider .slick-track,\n.slick-slider .slick-list\n{\n    -webkit-transform: translate3d(0, 0, 0);\n       -moz-transform: translate3d(0, 0, 0);\n        -ms-transform: translate3d(0, 0, 0);\n         -o-transform: translate3d(0, 0, 0);\n            transform: translate3d(0, 0, 0);\n}\n\n.slick-track\n{\n    position: relative;\n    top: 0;\n    left: 0;\n\n    display: block;\n}\n.slick-track:before,\n.slick-track:after\n{\n    display: table;\n\n    content: '';\n}\n.slick-track:after\n{\n    clear: both;\n}\n.slick-loading .slick-track\n{\n    visibility: hidden;\n}\n\n.slick-slide\n{\n    display: none;\n    float: left;\n\n    height: 100%;\n    min-height: 1px;\n}\n[dir='rtl'] .slick-slide\n{\n    float: right;\n}\n.slick-slide img\n{\n    display: block;\n}\n.slick-slide.slick-loading img\n{\n    display: none;\n}\n.slick-slide.dragging img\n{\n    pointer-events: none;\n}\n.slick-initialized .slick-slide\n{\n    display: block;\n}\n.slick-loading .slick-slide\n{\n    visibility: hidden;\n}\n.slick-vertical .slick-slide\n{\n    display: block;\n\n    height: auto;\n\n    border: 1px solid transparent;\n}\n.slick-arrow.slick-hidden {\n    display: none;\n}"; (require("./../../node_modules/cssify"))(css, undefined, '/Users/bartvandeneijnden/opengeo/git/sdk/js/components/slick.css'); module.exports = css;
 },{"./../../node_modules/cssify":74}],54:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -7682,6 +8078,18 @@ exports['default'] = (0, _keymirror2['default'])({
 module.exports = exports['default'];
 
 },{"keymirror":132}],55:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -7704,6 +8112,18 @@ exports['default'] = (0, _keymirror2['default'])({
 module.exports = exports['default'];
 
 },{"keymirror":132}],56:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -7725,6 +8145,18 @@ exports['default'] = (0, _keymirror2['default'])({
 module.exports = exports['default'];
 
 },{"keymirror":132}],57:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -7743,6 +8175,18 @@ exports['default'] = (0, _keymirror2['default'])({
 module.exports = exports['default'];
 
 },{"keymirror":132}],58:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -7787,6 +8231,18 @@ module.exports = exports['default'];
 
 },{"flux":128}],59:[function(require,module,exports){
 (function (global){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -7983,6 +8439,18 @@ global.WFST = _componentsWFSTJsx2['default'];
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./actions/ToolActions.js":4,"./components/AddLayer.jsx":6,"./components/App.js":7,"./components/Bookmarks.jsx":9,"./components/Chart.jsx":11,"./components/Edit.jsx":13,"./components/FeatureTable.jsx":15,"./components/Geocoding.jsx":18,"./components/GeocodingResults.jsx":19,"./components/Geolocation.jsx":21,"./components/Globe.jsx":22,"./components/HomeButton.jsx":23,"./components/ImageExport.jsx":24,"./components/InfoPopup.jsx":26,"./components/LayerList.jsx":29,"./components/LoadingPanel.jsx":35,"./components/Measure.jsx":38,"./components/Playback.jsx":40,"./components/QGISLegend.jsx":42,"./components/QGISPrint.jsx":44,"./components/QueryBuilder.jsx":46,"./components/Select.jsx":47,"./components/Toolbar.jsx":48,"./components/WFST.jsx":50,"openlayers":136,"pui-react-buttons":164,"pui-react-dropdowns":182,"pui-react-iconography":369,"pui-react-tabs":566,"react":836,"react-dom":619,"react-intl":635}],60:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 /* global document */
 
 'use strict';
@@ -8408,6 +8876,18 @@ exports['default'] = _FeatureStore;
 module.exports = exports['default'];
 
 },{"../constants/SelectConstants.js":56,"../dispatchers/AppDispatcher.js":58,"./LayerStore.js":61,"events":70,"openlayers":136}],61:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 /* global document */
 
 'use strict';
@@ -8571,6 +9051,18 @@ _dispatchersAppDispatcherJs2['default'].register(function (payload) {
 module.exports = exports['default'];
 
 },{"../constants/LayerConstants.js":55,"../dispatchers/AppDispatcher.js":58,"events":70,"openlayers":136}],62:[function(require,module,exports){
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
