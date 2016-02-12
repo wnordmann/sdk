@@ -6,6 +6,14 @@ A list of layers in the map. Allows setting visibility and opacity.
 Props
 -----
 
+### `addWMS`
+
+Should we allow adding layers from a WMS service?
+
+type: `bool`
+defaultValue: `false`
+
+
 ### `allowFiltering`
 
 Should we allow for filtering of features in a layer?
@@ -95,6 +103,14 @@ defaultValue: `false`
 ### `tipLabel`
 
 Text to show on top of layers.
+
+type: `string`
+
+
+### `wmsUrl`
+
+When addWMS is true, this WMS will be used to retrieve layers from.
+Should end with a ? or &.
 
 type: `string`
 

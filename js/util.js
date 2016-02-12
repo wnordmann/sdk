@@ -14,5 +14,21 @@ export default {
   transformColor(color) {
     var colorObj = color.rgb;
     return [colorObj.r, colorObj.g, colorObj.b, colorObj.a];
+  },
+  doGET(url, success, failure, scope) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+      if (xmlhttp.readyState === 4) {
+        if (xmlhttp.status === 200) {
+          if (success) {
+            success.call(scope, xmlhttp);
+          }
+        } else if (failure) {
+          failure.call(scope, xmlhttp);
+        }
+      }
+    };
+    xmlhttp.open('GET', url, true);
+    xmlhttp.send();
   }
 };

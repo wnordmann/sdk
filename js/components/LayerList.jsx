@@ -14,6 +14,7 @@ import React from 'react';
 import ol from 'openlayers';
 import LayerStore from '../stores/LayerStore.js';
 import LayerListItem from './LayerListItem.jsx';
+import AddWMSLayerModal from './AddWMSLayerModal.jsx';
 import UI from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -26,6 +27,11 @@ const messages = defineMessages({
     id: 'layerlist.layertitle',
     description: 'List of layers',
     defaultMessage: 'Layers'
+  },
+  addwmstitle: {
+    id: 'layerlist.addwmstitle',
+    description: 'Title for Add WMS layers button',
+    defaultMessage: 'Add WMS layers'
   }
 });
 
@@ -97,6 +103,9 @@ class LayerList extends React.Component {
       }
     }
   }
+  _showAddWMS() {
+    this.refs.addwmsmodal.getWrappedInstance().open();
+  }
   render() {
     const {formatMessage} = this.props.intl;
     var layers = this.state.layers.slice(0).reverse();
@@ -109,13 +118,23 @@ class LayerList extends React.Component {
     if (this.state.visible) {
       className += ' shown';
     }
+    var addWMS;
+    if (this.props.addWMS) {
+      addWMS = (
+        <UI.LowlightButton onClick={this._showAddWMS.bind(this)} className="pull-right" title={formatMessage(messages.addwmstitle)}>
+          <Icon.Icon name="plus" />
+          <AddWMSLayerModal map={this.props.map} url={this.props.wmsUrl} ref='addwmsmodal'/>
+        </UI.LowlightButton>
+      );
+    }
     var onMouseOut = this.props.expandOnHover ? this._hidePanel.bind(this) : undefined;
     var onMouseOver = this.props.expandOnHover ? this._showPanel.bind(this) : undefined;
     var onClick = !this.props.expandOnHover ? this._togglePanel.bind(this) : undefined;
     return (
       <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} className={className}>
-        <UI.DefaultButton className='layerlistbutton' onClick={onClick} title="Layers"><Icon.Icon name="map" /></UI.DefaultButton>
-        <div className="layer-tree-panel">
+        <UI.DefaultButton className='layerlistbutton' onClick={onClick} title={formatMessage(messages.layertitle)}><Icon.Icon name="map" /></UI.DefaultButton>
+        <div className="layer-tree-panel clearfix">
+          {addWMS}
           {heading}
           {this.renderLayers(layers)}
         </div>
@@ -132,7 +151,6 @@ LayerList.propTypes = {
   /**
    * Should we show a button that allows the user to zoom to the layer's extent?
    */
-
   showZoomTo: React.PropTypes.bool,
   /**
    * Should we allow for reordering of layers?
@@ -171,6 +189,15 @@ LayerList.propTypes = {
    */
   expandOnHover: React.PropTypes.bool,
   /**
+   * Should we allow adding layers from a WMS service?
+   */
+  addWMS: React.PropTypes.bool,
+  /**
+   * When addWMS is true, this WMS will be used to retrieve layers from.
+   * Should end with a ? or &.
+   */
+  wmsUrl: React.PropTypes.string,
+  /**
   * i18n message strings. Provided through the application through context.
   */
   intl: intlShape.isRequired
@@ -185,7 +212,8 @@ LayerList.defaultProps = {
   showDownload: false,
   downloadFormat: 'GeoJSON',
   showOpacity: false,
-  expandOnHover: true
+  expandOnHover: true,
+  addWMS: false
 };
 
 export default injectIntl(LayerList);
