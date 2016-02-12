@@ -16,7 +16,7 @@ type: `func`
 
 ### `options` (required)
 
-The options to show in the toolbar. An array of objects with jsx, icon, text, title and onClick keys.
+The options to show in the toolbar. An array of objects with jsx, icon, text, title, pullRight and onClick keys.
 When using jsx, use exclude to not have the item show up in the menu on small screens,
 but separate in the toolbar.
 

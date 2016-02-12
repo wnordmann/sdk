@@ -8314,14 +8314,14 @@ var Toolbar = (function (_React$Component) {
           if (option.jsx) {
             return _react2['default'].createElement(
               'ul',
-              { className: 'pull-right', key: idx },
+              { className: option.pullRight === false ? '' : 'pull-right', key: idx },
               option.jsx
             );
           } else {
             var icon = option.icon ? _react2['default'].createElement(_puiReactIconography2['default'].Icon, { name: option.icon }) : undefined;
             return _react2['default'].createElement(
               'ul',
-              { className: 'pull-right', key: idx },
+              { className: option.pullRight === false ? '' : 'pull-right', key: idx },
               _react2['default'].createElement(
                 _puiReactButtons2['default'].DefaultButton,
                 { onClick: option.onClick, title: option.title },
@@ -8353,7 +8353,7 @@ var Toolbar = (function (_React$Component) {
 
 Toolbar.propTypes = {
   /**
-   * The options to show in the toolbar. An array of objects with jsx, icon, text, title and onClick keys.
+   * The options to show in the toolbar. An array of objects with jsx, icon, text, title, pullRight and onClick keys.
    * When using jsx, use exclude to not have the item show up in the menu on small screens,
    * but separate in the toolbar.
    */
@@ -8363,7 +8363,8 @@ Toolbar.propTypes = {
     icon: _react2['default'].PropTypes.string,
     text: _react2['default'].PropTypes.string,
     title: _react2['default'].PropTypes.string,
-    onClick: _react2['default'].PropTypes.func
+    onClick: _react2['default'].PropTypes.func,
+    pullRight: _react2['default'].PropTypes.bool
   })).isRequired,
   /**
    * Handled automatically by the responsive decorator.

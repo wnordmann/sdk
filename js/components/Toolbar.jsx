@@ -79,10 +79,10 @@ class Toolbar extends React.Component {
     } else {
       var buttons = this.props.options.map(function(option, idx) {
         if (option.jsx) {
-          return (<ul className='pull-right' key={idx}>{option.jsx}</ul>);
+          return (<ul className={option.pullRight === false ? '' : 'pull-right'} key={idx}>{option.jsx}</ul>);
         } else {
           var icon = option.icon ? (<Icon.Icon name={option.icon} />) : undefined;
-          return (<ul className='pull-right' key={idx}><UI.DefaultButton onClick={option.onClick} title={option.title}>{icon} {option.text}</UI.DefaultButton></ul>);
+          return (<ul className={option.pullRight === false ? '' : 'pull-right'} key={idx}><UI.DefaultButton onClick={option.onClick} title={option.title}>{icon} {option.text}</UI.DefaultButton></ul>);
         }
       });
       return (
@@ -98,7 +98,7 @@ class Toolbar extends React.Component {
 
 Toolbar.propTypes = {
   /**
-   * The options to show in the toolbar. An array of objects with jsx, icon, text, title and onClick keys.
+   * The options to show in the toolbar. An array of objects with jsx, icon, text, title, pullRight and onClick keys.
    * When using jsx, use exclude to not have the item show up in the menu on small screens,
    * but separate in the toolbar.
    */
@@ -108,7 +108,8 @@ Toolbar.propTypes = {
     icon: React.PropTypes.string,
     text: React.PropTypes.string,
     title: React.PropTypes.string,
-    onClick: React.PropTypes.func
+    onClick: React.PropTypes.func,
+    pullRight: React.PropTypes.bool
   })).isRequired,
   /**
    * Handled automatically by the responsive decorator.
