@@ -1198,6 +1198,7 @@ var AddWMSLayerModal = (function (_Dialog$Modal) {
         extent: extent,
         title: layer.Title,
         id: layer.Name,
+        isRemovable: true,
         source: new _openlayers2['default'].source.TileWMS({
           url: this.props.url,
           params: {

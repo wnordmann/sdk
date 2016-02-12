@@ -82,6 +82,7 @@ class AddWMSLayerModal extends Dialog.Modal {
       extent: extent,
       title: layer.Title,
       id: layer.Name,
+      isRemovable: true,
       source: new ol.source.TileWMS({
         url: this.props.url,
         params: {
