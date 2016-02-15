@@ -16,7 +16,7 @@ import DD from 'pui-react-dropdowns';
 import Icon from 'pui-react-iconography';
 import Responsive from 'react-responsive-decorator';
 import pureRender from 'pure-render-decorator';
-
+import './Toolbar.css';
 /**
  * Adds the ability to show a toolbar with buttons. On small screen sizes
  * a dropdown will be shown instead.
