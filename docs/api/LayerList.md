@@ -8,10 +8,11 @@ Props
 
 ### `addWMS`
 
-Should we allow adding layers from a WMS service?
+Should we allow adding layers through WMS GetCapabilities?
+Object with keys url (should end with ? or &) and asVector.
+If asVector is true, layers will be added as vector.
 
-type: `bool`
-defaultValue: `false`
+type: `shape[object Object]`
 
 
 ### `allowFiltering`
@@ -103,14 +104,6 @@ defaultValue: `false`
 ### `tipLabel`
 
 Text to show on top of layers.
-
-type: `string`
-
-
-### `wmsUrl`
-
-When addWMS is true, this WMS will be used to retrieve layers from.
-Should end with a ? or &.
 
 type: `string`
 

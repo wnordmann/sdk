@@ -68,6 +68,7 @@ var enMessages = {
   "layerlistitem.baselayergrouplabel": "Select base layer",
   "layerlistitem.basemapstitle": "Base Maps",
   "layerlistitem.downloadtitle": "Download layer",
+  "layerlistitem.edittitle": "Edit",
   "layerlistitem.filtertitle": "Filter layer",
   "layerlistitem.labeltitle": "Label layer",
   "layerlistitem.layervisibilitylabel": "Layer visibility",

@@ -17,6 +17,8 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import {doGET} from '../util.js';
 import Pui from 'pui-react-alerts';
 import pureRender from 'pure-render-decorator';
+import {Jsonix} from 'jsonix';
+import {XSD_1_0} from 'w3c-schemas';
 
 const messages = defineMessages({
   title: {
@@ -78,21 +80,74 @@ class AddWMSLayerModal extends Dialog.Modal {
       EX_GeographicBoundingBox[3] = Math.min(ol.proj.EPSG3857.WORLD_EXTENT[3], EX_GeographicBoundingBox[3]);
     }
     var extent = ol.proj.transformExtent(layer.EX_GeographicBoundingBox, 'EPSG:4326', view.getProjection());
-    var wmsLayer = new ol.layer.Tile({
-      extent: extent,
-      title: layer.Title,
-      id: layer.Name,
-      isRemovable: true,
-      source: new ol.source.TileWMS({
-        url: this.props.url,
-        params: {
-          LAYERS: layer.Name,
-          TILED: true
-        },
-        serverType: 'geoserver'
-      })
-    });
-    map.addLayer(wmsLayer);
+    var olLayer;
+    if (this.props.asVector) {
+      var me = this;
+      olLayer = new ol.layer.Vector({
+        title: layer.Title,
+        id: layer.Name,
+        isWFST: true,
+        source: new ol.source.Vector({
+          url: function(extent) {
+            return me.props.url.replace('wms', 'wfs') + 'service=WFS' +
+              '&version=1.1.0&request=GetFeature&typename=' + layer.Name +
+              '&outputFormat=application/json&srsname=EPSG:3857' +
+              '&bbox=' + extent.join(',') + ',EPSG:3857';
+          },
+          format: new ol.format.GeoJSON(),
+          strategy: ol.loadingstrategy.tile(ol.tilegrid.createXYZ({
+            maxZoom: 19
+          }))
+        })
+      });
+      // do a WFS DescribeFeatureType request to get wfsInfo
+      var url = me.props.url.replace('wms', 'wfs') + 'service=WFS&request=DescribeFeatureType&version=1.0.0&typename=' + layer.Name;
+      doGET(url, function(xmlhttp) {
+        var context = new Jsonix.Context([XSD_1_0]);
+        var unmarshaller = context.createUnmarshaller();
+        var schema = unmarshaller.unmarshalString(xmlhttp.responseText).value;
+        var element = schema.complexType[0].complexContent.extension.sequence.element;
+        var geometryType, geometryName;
+        for (var i = 0, ii = element.length; i < ii; ++i) {
+          var el = element[i];
+          if (el.type.namespaceURI === 'http://www.opengis.net/gml') {
+            geometryName = el.name;
+            var lp = el.type.localPart;
+            if (lp.indexOf('Polygon') !== -1) {
+              geometryType = 'Polygon';
+            } else if (lp.indexOf('LineString') !== -1) {
+              geometryType = 'Line';
+            } else if (lp.indexOf('Point') !== -1) {
+              geometryType = 'Point';
+            }
+          }
+        }
+        this.set('wfsInfo', {
+          featureNS: schema.targetNamespace,
+          featureType: schema.element[0].name, 
+          geometryType: geometryType,
+          geometryName: geometryName,
+          url: me.props.url.replace('wms', 'wfs')
+        });
+      }, function(xmlhttp) { }, olLayer);
+      // TODO handle failure
+    } else {
+      olLayer = new ol.layer.Tile({
+        extent: extent,
+        title: layer.Title,
+        id: layer.Name,
+        isRemovable: true,
+        source: new ol.source.TileWMS({
+          url: this.props.url,
+          params: {
+            LAYERS: layer.Name,
+            TILED: true
+          },
+          serverType: 'geoserver'
+        })
+      });
+    }
+    map.addLayer(olLayer);
     view.fit(extent, map.getSize());
   }
   render() {
@@ -123,9 +178,17 @@ AddWMSLayerModal.propTypes = {
    */
   url: React.PropTypes.string,
   /**
+   * Should we add layers as vector (only works for combined WMS/WFS)?
+   */
+  asVector: React.PropTypes.bool,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
+};
+
+AddWMSLayerModal.defaultProps = {
+  asVector: false
 };
 
 export default injectIntl(AddWMSLayerModal, {withRef: true});

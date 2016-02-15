@@ -103,8 +103,12 @@ class WFST extends MapTool {
     this._serializer = new XMLSerializer();
   }
   componentDidMount() {
-    var layerId = ReactDOM.findDOMNode(this.refs.layerSelector).value;
-    this._setLayer(LayerStore.findLayer(layerId));
+    if (this.props.layer) {
+      this._setLayer(this.props.layer);
+    } else {
+      var layerId = ReactDOM.findDOMNode(this.refs.layerSelector).value;
+      this._setLayer(LayerStore.findLayer(layerId));
+    }
   }
   _setError(msg) {
     this.setState({
@@ -287,10 +291,18 @@ class WFST extends MapTool {
     if (this.state.error === true) {
       error = (<div className='error-alert'><Pui.ErrorAlert dismissable={false} withIcon={true}>{formatMessage(messages.errormsg, {msg: this.state.msg})}</Pui.ErrorAlert></div>);
     }
+    var layerSelector;
+    if (!this.props.layer) {
+      layerSelector = (
+        <article>
+          <label htmlFor='layerSelector'>{formatMessage(messages.layerlabel)}</label>
+          <LayerSelector id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} />
+        </article>
+      );
+    }
     return (
       <form onSubmit={this._onSubmit} role='form'>
-        <label htmlFor='layerSelector'>{formatMessage(messages.layerlabel)}</label>
-        <LayerSelector id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} />
+        {layerSelector}
         <UI.DefaultButton onClick={this._drawFeature.bind(this)}>{formatMessage(messages.drawfeature)}</UI.DefaultButton>
         <UI.DefaultButton onClick={this._modifyFeature.bind(this)}>{formatMessage(messages.modifyfeature)}</UI.DefaultButton>
         <UI.DefaultButton onClick={this._deleteFeature.bind(this)}>{formatMessage(messages.deletefeature)}</UI.DefaultButton>
@@ -305,6 +317,10 @@ WFST.propTypes = {
    * The ol3 map whose layers can be used for the WFS-T tool.
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * The layer to use for this WFS-T tool. If not provided, a combo box will be presented to the user.
+   */
+  layer: React.PropTypes.instanceOf(ol.layer.Vector),
   /**
    * i18n message strings. Provided through the application through context.
    */

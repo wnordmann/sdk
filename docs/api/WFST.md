@@ -23,6 +23,13 @@ i18n message strings. Provided through the application through context.
 type: `custom`
 
 
+### `layer`
+
+The layer to use for this WFS-T tool. If not provided, a combo box will be presented to the user.
+
+type: `instanceOfol.layer.Vector`
+
+
 ### `map` (required)
 
 The ol3 map whose layers can be used for the WFS-T tool.

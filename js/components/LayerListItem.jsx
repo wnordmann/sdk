@@ -70,6 +70,11 @@ const messages = defineMessages({
     description: 'Title for the remove button',
     defaultMessage: 'Remove'
   },
+  edittitle: {
+    id: 'layerlistitem.edittitle',
+    description: 'Title for the edit button',
+    defaultMessage: 'Edit'
+  },
   layertitle: {
     id: 'layerlistitem.basemapstitle',
     description: 'List of base maps',
@@ -178,6 +183,9 @@ class LayerListItem extends React.Component {
   _remove() {
     LayerActions.removeLayer(this.props.layer);
   }
+  _edit() {
+    this.props.onEdit.call(this, this.props.layer);
+  }
   _changeOpacity(event) {
     this.props.layer.setOpacity(parseFloat(event.target.value));
   }
@@ -221,6 +229,10 @@ class LayerListItem extends React.Component {
     if (layer.get('isRemovable') === true) {
       remove = <a title={formatMessage(messages.removetitle)} href='#' onClick={this._remove.bind(this)}><i className='layerlayeritem glyphicon glyphicon-remove'></i></a>;
     }
+    var edit;
+    if (layer.get('isWFST') === true) {
+      edit = <a title={formatMessage(messages.edittitle)} href='#' onClick={this._edit.bind(this)}><i className='layerlayeritem glyphicon glyphicon-pencil'></i></a>;
+    }
     var input, baselayerId, heading;
     if (layer.get('type') === 'base') {
       baselayerId = 'layerlistitem-' + layer.get('id') + '-baselayergroup';
@@ -252,7 +264,8 @@ class LayerListItem extends React.Component {
         {label}
         {reorderUp}
         {reorderDown}
-        {remove}</ul>
+        {remove}
+        {edit}</ul>
         {this.props.children}
         <span>
           {filterModal}

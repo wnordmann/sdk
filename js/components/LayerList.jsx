@@ -15,6 +15,7 @@ import ol from 'openlayers';
 import LayerStore from '../stores/LayerStore.js';
 import LayerListItem from './LayerListItem.jsx';
 import AddWMSLayerModal from './AddWMSLayerModal.jsx';
+import WFST from './WFST.jsx';
 import UI from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -89,16 +90,19 @@ class LayerList extends React.Component {
   _onModalClose() {
     this._modalOpen = false;
   }
+  _onEdit(layer) {
+    this.setState({edit: true, layer: layer});
+  }
   getLayerNode(lyr) {
     if (lyr.get('title') !== null) {
       if (lyr instanceof ol.layer.Group) {
         var children = this.props.showGroupContent ? this.renderLayerGroup(lyr) : undefined;
         return (
-          <LayerListItem {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('title')} layer={lyr} children={children} title={lyr.get('title')} />
+          <LayerListItem {...this.props} onEdit={this._onEdit.bind(this)} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('title')} layer={lyr} children={children} title={lyr.get('title')} />
         );
       } else {
         return (
-          <LayerListItem {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('title')} layer={lyr} title={lyr.get('title')} />
+          <LayerListItem {...this.props} onEdit={this._onEdit.bind(this)} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('title')} layer={lyr} title={lyr.get('title')} />
         );
       }
     }
@@ -123,17 +127,22 @@ class LayerList extends React.Component {
       addWMS = (
         <UI.LowlightButton onClick={this._showAddWMS.bind(this)} className="pull-right" title={formatMessage(messages.addwmstitle)}>
           <Icon.Icon name="plus" />
-          <AddWMSLayerModal map={this.props.map} url={this.props.wmsUrl} ref='addwmsmodal'/>
+          <AddWMSLayerModal asVector={this.props.addWMS.asVector} map={this.props.map} url={this.props.addWMS.url} ref='addwmsmodal'/>
         </UI.LowlightButton>
       );
     }
     var onMouseOut = this.props.expandOnHover ? this._hidePanel.bind(this) : undefined;
     var onMouseOver = this.props.expandOnHover ? this._showPanel.bind(this) : undefined;
     var onClick = !this.props.expandOnHover ? this._togglePanel.bind(this) : undefined;
+    var editPanel;
+    if (this.state.edit) {
+      editPanel = (<WFST layer={this.state.layer} map={this.props.map} />);
+    } 
     return (
       <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} className={className}>
         <UI.DefaultButton className='layerlistbutton' onClick={onClick} title={formatMessage(messages.layertitle)}><Icon.Icon name="map" /></UI.DefaultButton>
         <div className="layer-tree-panel clearfix">
+          {editPanel}
           {addWMS}
           {heading}
           {this.renderLayers(layers)}
@@ -189,14 +198,14 @@ LayerList.propTypes = {
    */
   expandOnHover: React.PropTypes.bool,
   /**
-   * Should we allow adding layers from a WMS service?
+   * Should we allow adding layers through WMS GetCapabilities?
+   * Object with keys url (should end with ? or &) and asVector.
+   * If asVector is true, layers will be added as vector.
    */
-  addWMS: React.PropTypes.bool,
-  /**
-   * When addWMS is true, this WMS will be used to retrieve layers from.
-   * Should end with a ? or &.
-   */
-  wmsUrl: React.PropTypes.string,
+  addWMS: React.PropTypes.shape({
+    url: React.PropTypes.string.isRequired,
+    asVector: React.PropTypes.bool
+  }),
   /**
   * i18n message strings. Provided through the application through context.
   */
@@ -212,8 +221,7 @@ LayerList.defaultProps = {
   showDownload: false,
   downloadFormat: 'GeoJSON',
   showOpacity: false,
-  expandOnHover: true,
-  addWMS: false
+  expandOnHover: true
 };
 
 export default injectIntl(LayerList);

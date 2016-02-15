@@ -41,6 +41,7 @@
     "fixed-data-table": "0.6.0",
     "flux": "^2.0.1",
     "font-awesome": "^4.4.0",
+    "jsonix": "^2.4.1",
     "jspdf-browserify": "^1.0.272",
     "keymirror": "~0.1.0",
     "lodash.uniqueid": "^3.0.0",
@@ -64,7 +65,8 @@
     "react-intl": "2.0.0-beta-2",
     "react-responsive-decorator": "0.0.1",
     "react-slick": "0.9.1",
-    "slick-carousel-dr-frankenstyle": "^1.5.8"
+    "slick-carousel-dr-frankenstyle": "^1.5.8",
+    "w3c-schemas": "^1.4.0"
   },
   "devDependencies": {
     "babel-eslint": "^4.1.6",
