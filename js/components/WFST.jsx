@@ -108,6 +108,9 @@ class WFST extends MapTool {
       this._setLayer(LayerStore.findLayer(layerId));
     }
   }
+  componentWillUnmount() {
+    this.deactivate();
+  }
   _setError(msg) {
     this.setState({
       error: true,
