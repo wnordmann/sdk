@@ -103,9 +103,7 @@ class WFST extends MapTool {
     this._serializer = new XMLSerializer();
   }
   componentDidMount() {
-    if (this.props.layer) {
-      this._setLayer(this.props.layer);
-    } else {
+    if (!this.props.layer) {
       var layerId = ReactDOM.findDOMNode(this.refs.layerSelector).value;
       this._setLayer(LayerStore.findLayer(layerId));
     }
@@ -118,12 +116,10 @@ class WFST extends MapTool {
   }
   _setLayer(layer) {
     this._layer = layer;
-    var layers = LayerStore.getState().flatLayers;
-    for (var i = 0, ii = layers.length; i < ii; ++i) {
-      if (layers[i].get('isWFST')) {
-        layers[i].setVisible(layers[i] === this._layer);
-      }
-    }
+    this.props.map.getView().fit(
+      this._layer.getSource().getExtent(),
+      this.props.map.getSize()
+    );
   }
   _modifyFeature() {
     this.deactivate();
@@ -286,6 +282,9 @@ class WFST extends MapTool {
     this.activate([draw]);
   }
   render() {
+    if (this.props.layer) {
+      this._setLayer(this.props.layer);
+    }
     const {formatMessage} = this.props.intl;
     var error;
     if (this.state.error === true) {

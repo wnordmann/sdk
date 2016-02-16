@@ -73,7 +73,7 @@ const messages = defineMessages({
   edittitle: {
     id: 'layerlistitem.edittitle',
     description: 'Title for the edit button',
-    defaultMessage: 'Edit'
+    defaultMessage: 'Toggle edit function'
   },
   layertitle: {
     id: 'layerlistitem.basemapstitle',

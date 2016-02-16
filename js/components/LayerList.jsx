@@ -91,7 +91,12 @@ class LayerList extends React.Component {
     this._modalOpen = false;
   }
   _onEdit(layer) {
-    this.setState({edit: true, layer: layer});
+    if (layer === this.state.layer) {
+      // toggle
+      this.setState({edit: !this.state.edit});
+    } else {
+      this.setState({edit: true, layer: layer});
+    }
   }
   getLayerNode(lyr) {
     if (lyr.get('title') !== null) {
