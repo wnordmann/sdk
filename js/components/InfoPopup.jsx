@@ -166,6 +166,10 @@ class InfoPopup extends MapTool {
       cb();
     }
   }
+  _onChangeField(evt) {
+    this._dirty = true;
+    this._values[evt.target.id] = evt.target.value;
+  }
   _onMapClick(evt) {
     if (this.active) {
       const {formatMessage} = this.props.intl;
@@ -192,11 +196,13 @@ class InfoPopup extends MapTool {
             var inputs = [];
             me._feature = feature;
             me._layer = layer;
+            me._dirty = false;
+            me._values = {};
             var keys = feature.getKeys();
             for (var k = 0, kk = keys.length; k < kk; ++k) {
               var key = keys[k];
               if (key !== feature.getGeometryName()) {
-                inputs.push(<BasicInput label={key} key={key} id={key} defaultValue={feature.get(key)} />);
+                inputs.push(<BasicInput label={key} key={key} id={key} onChange={me._onChangeField.bind(me)} defaultValue={feature.get(key)} />);
               }
             }
             cont = true;
@@ -242,20 +248,8 @@ class InfoPopup extends MapTool {
     }
   }
   _save() {
-    var keys = this._feature.getKeys();
-    var values = {};
-    var dirty = false;
-    for (var i = 0, ii = keys.length; i < ii; ++i) {
-      var key = keys[i];
-      if (document.getElementById(key)) {
-        if (document.getElementById(key).value !== '' + this._feature.get(key)) {
-          values[key] = document.getElementById(key).value;
-          dirty = true;
-        }
-      }
-    }
-    if (dirty) {
-      FeatureActions.modifyFeatureAttributes(this._layer, this._feature, values);
+    if (this._dirty) {
+      FeatureActions.modifyFeatureAttributes(this._layer, this._feature, this._values);
     }
   }
   render() {
