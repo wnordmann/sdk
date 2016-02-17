@@ -30,5 +30,20 @@ export default {
     };
     xmlhttp.open('GET', url, true);
     xmlhttp.send();
+  },
+  doPOST(url, data, success, failure, scope) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open('POST', url, true);
+    xmlhttp.setRequestHeader('Content-Type', 'text/xml');
+    xmlhttp.onreadystatechange = function() {
+      if (xmlhttp.readyState === 4) {
+        if (xmlhttp.status === 200) {
+          success.call(scope, xmlhttp);
+        } else {
+          failure.call(scope, xmlhttp);
+        }
+      }
+    };
+    xmlhttp.send(data);
   }
 };

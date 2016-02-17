@@ -23,6 +23,7 @@ import MapTool from './MapTool.js';
 import Pui from 'pui-react-alerts';
 import UI from 'pui-react-buttons';
 import pureRender from 'pure-render-decorator';
+import {doPOST} from '../util.js';
 import './WFST.css';
 
 const messages = defineMessages({
@@ -58,11 +59,30 @@ const messages = defineMessages({
   }
 });
 
+let format = new ol.format.WFS();
+let serializer = new XMLSerializer();
+
 AppDispatcher.register((payload) => {
   let action = payload.action;
   switch (action.type) {
     case FeatureConstants.MODIFY_FEATURE_ATTRIBUTES:
-      // TODO handle WFS-T
+      var layer = action.layer;
+      var wfsInfo = layer.get('wfsInfo');
+      var feature = action.feature;
+      var attributes = action.attributes;
+      var newFeature = new ol.Feature(attributes);
+      newFeature.setId(feature.getId());
+      var node = format.writeTransaction(null, [newFeature], null, {
+        featureNS: wfsInfo.featureNS,
+        featureType: wfsInfo.featureType
+      });
+      // TODO handle success / failure, close popup automatically
+      doPOST(layer.get('wfsInfo').url, serializer.serializeToString(node),
+        function(xmlhttp) {
+        },
+        function(xmlhttp) {
+        }
+      );
       break;
     default:
       break;
@@ -150,7 +170,7 @@ class WFST extends MapTool {
         featureNS: wfsInfo.featureNS,
         featureType: wfsInfo.featureType
       });
-      this._doPOST(this._serializer.serializeToString(node),
+      doPOST(this._layer.get('wfsInfo').url, this._serializer.serializeToString(node),
         function(xmlhttp) {
           var data = xmlhttp.responseText;
           var result = this._readResponse(data);
@@ -206,7 +226,7 @@ class WFST extends MapTool {
         featureNS: wfsInfo.featureNS,
         featureType: wfsInfo.featureType
       });
-      this._doPOST(this._serializer.serializeToString(node),
+      doPOST(this._layer.get('wfsInfo').url, this._serializer.serializeToString(node),
         function(xmlhttp) {
           var data = xmlhttp.responseText;
           var result = this._readResponse(data);
@@ -220,22 +240,6 @@ class WFST extends MapTool {
         this
       );
     }
-  }
-  _doPOST(data, success, failure, scope) {
-    var xmlhttp = new XMLHttpRequest();
-    var url = this._layer.get('wfsInfo').url;
-    xmlhttp.open('POST', url, true);
-    xmlhttp.setRequestHeader('Content-Type', 'text/xml');
-    xmlhttp.onreadystatechange = function() {
-      if (xmlhttp.readyState === 4) {
-        if (xmlhttp.status === 200) {
-          success.call(scope, xmlhttp);
-        } else {
-          failure.call(scope, xmlhttp);
-        }
-      }
-    };
-    xmlhttp.send(data);
   }
   _readResponse(data) {
     var result;
@@ -257,7 +261,7 @@ class WFST extends MapTool {
       featureNS: wfsInfo.featureNS,
       featureType: wfsInfo.featureType
     });
-    this._doPOST(this._serializer.serializeToString(node),
+    doPOST(this._layer.get('wfsInfo').url, this._serializer.serializeToString(node),
       function(xmlhttp) {
         var data = xmlhttp.responseText;
         var result = this._readResponse(data);
