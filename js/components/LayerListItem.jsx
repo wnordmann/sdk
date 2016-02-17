@@ -330,6 +330,10 @@ LayerListItem.propTypes = {
    */
   onModalClose: React.PropTypes.func,
   /**
+   * Callback when edit layer button gets clicked.
+   */
+  onEdit: React.PropTypes.func,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired

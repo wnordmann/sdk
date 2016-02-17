@@ -62,6 +62,13 @@ The map in which the layer of this item resides.
 type: `instanceOfol.Map`
 
 
+### `onEdit`
+
+Callback when edit layer button gets clicked.
+
+type: `func`
+
+
 ### `onModalClose`
 
 Called when a modal is closed by this layer list item.

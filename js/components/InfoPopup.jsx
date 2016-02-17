@@ -19,7 +19,6 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import {BasicInput} from 'pui-react-inputs';
 import UI from 'pui-react-buttons';
 import FeatureActions from '../actions/FeatureActions.js';
-import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   nofeatures: {
@@ -41,7 +40,6 @@ const messages = defineMessages({
 
 const ALL_ATTRS = '#AllAttributes';
 
-@pureRender
 class InfoPopup extends MapTool {
   constructor(props) {
     super(props);
@@ -53,7 +51,9 @@ class InfoPopup extends MapTool {
     this._format = new ol.format.GeoJSON();
     this.active = true;
     this.state = {
-      popupTexts: []
+      popupTexts: [],
+      values: {},
+      dirty: {}
     };
   }
   componentDidMount() {
@@ -167,8 +167,11 @@ class InfoPopup extends MapTool {
     }
   }
   _onChangeField(evt) {
-    this._dirty = true;
-    this._values[evt.target.id] = evt.target.value;
+    var dirty = this.state.dirty;
+    var values = this.state.values;
+    values[evt.target.id] = evt.target.value;
+    dirty[evt.target.id] = true;
+    this.setState({values: values, dirty: dirty});
   }
   _onMapClick(evt) {
     if (this.active) {
@@ -193,20 +196,13 @@ class InfoPopup extends MapTool {
               }
             }
           } else if (layer.get('isWFST')) {
-            var inputs = [];
-            me._feature = feature;
-            me._layer = layer;
-            me._dirty = false;
-            me._values = {};
-            var keys = feature.getKeys();
-            for (var k = 0, kk = keys.length; k < kk; ++k) {
-              var key = keys[k];
-              if (key !== feature.getGeometryName()) {
-                inputs.push(<BasicInput label={key} key={key} id={key} onChange={me._onChangeField.bind(me)} defaultValue={feature.get(key)} />);
-              }
-            }
             cont = true;
-            me.setState({inputs: inputs});
+            me.setState({
+              feature: feature,
+              dirty: {},
+              layer: layer,
+              values: feature.getProperties()
+            });
           }
           if (popupDef) {
             popupTexts.push(popupDef);
@@ -248,18 +244,32 @@ class InfoPopup extends MapTool {
     }
   }
   _save() {
-    if (this._dirty) {
-      FeatureActions.modifyFeatureAttributes(this._layer, this._feature, this._values);
+    if (this.state.dirty) {
+      var values = {};
+      for (var key in this.state.dirty) {
+        values[key] = this.state.values[key];
+        // TODO do this in the success handler
+        this.state.feature.set(key, values[key]);
+      }
+      FeatureActions.modifyFeatureAttributes(this.state.layer, this.state.feature, values);
     }
   }
   render() {
     const {formatMessage} = this.props.intl;
-    if (this.state.inputs && this.state.inputs.length > 0) {
+    if (this.state.feature) {
+      var keys = this.state.feature.getKeys();
+      var inputs = [];
+      for (var i = 0, ii = keys.length; i < ii; ++i) {
+        var key = keys[i];
+        if (key !== this.state.feature.getGeometryName()) {
+          inputs.push(<BasicInput label={key} key={key} id={key} onChange={this._onChangeField.bind(this)} value={this.state.values[key]} />);
+        }
+      }
       return (
         <article>
           <a href="#" ref="popupCloser" className="popup-closer fa fa-times fa-pull-right"></a>
           <div className='popup-content' ref='content'>
-            {this.state.inputs}
+            {inputs}
             <UI.DefaultButton ref="saveButton">{formatMessage(messages.save)}</UI.DefaultButton>
           </div>
         </article>

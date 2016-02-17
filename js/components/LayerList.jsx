@@ -142,7 +142,7 @@ class LayerList extends React.Component {
     var editPanel;
     if (this.state.edit) {
       editPanel = (<WFST layer={this.state.layer} map={this.props.map} />);
-    } 
+    }
     return (
       <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} className={className}>
         <UI.DefaultButton className='layerlistbutton' onClick={onClick} title={formatMessage(messages.layertitle)}><Icon.Icon name="map" /></UI.DefaultButton>

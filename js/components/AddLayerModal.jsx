@@ -58,7 +58,7 @@ class AddLayerModal extends Dialog.Modal {
         var unmarshaller = context.createUnmarshaller();
         info = unmarshaller.unmarshalDocument(xmlhttp.responseXML).value;
         if (info && info.featureTypeList && info.featureTypeList.featureType) {
-          for (var i=0, ii=info.featureTypeList.featureType.length; i<ii; ++i) {
+          for (var i = 0, ii = info.featureTypeList.featureType.length; i < ii; ++i) {
             var ft = info.featureTypeList.featureType[i];
             layer = {};
             layer.Name = ft.name.prefix + ':' + ft.name.localPart;
@@ -150,7 +150,7 @@ class AddLayerModal extends Dialog.Modal {
         }
         this.set('wfsInfo', {
           featureNS: schema.targetNamespace,
-          featureType: schema.element[0].name, 
+          featureType: schema.element[0].name,
           geometryType: geometryType,
           geometryName: geometryName,
           url: me.props.url.replace('wms', 'wfs')
