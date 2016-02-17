@@ -64,7 +64,7 @@ var enMessages = {
   "labelmodal.fillcolorlabel": "Font color",
   "labelmodal.sizelabel": "Font size",
   "labelmodal.title": "Label for layer {layer}",
-  "layerlist.addwmstitle": "Add WMS layers",
+  "layerlist.addlayertitle": "Add layers",
   "layerlist.layertitle": "Layers",
   "layerlistitem.baselayergrouplabel": "Select base layer",
   "layerlistitem.basemapstitle": "Base Maps",

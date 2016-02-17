@@ -6,11 +6,11 @@ A list of layers in the map. Allows setting visibility and opacity.
 Props
 -----
 
-### `addWMS`
+### `addLayer`
 
-Should we allow adding layers through WMS GetCapabilities?
+Should we allow adding layers through WMS or WFS GetCapabilities?
 Object with keys url (should end with ? or &) and asVector.
-If asVector is true, layers will be added as vector.
+If asVector is true, layers will be retrieved from WFS and added as vector.
 
 type: `shape[object Object]`
 

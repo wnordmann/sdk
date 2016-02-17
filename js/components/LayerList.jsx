@@ -14,7 +14,7 @@ import React from 'react';
 import ol from 'openlayers';
 import LayerStore from '../stores/LayerStore.js';
 import LayerListItem from './LayerListItem.jsx';
-import AddWMSLayerModal from './AddWMSLayerModal.jsx';
+import AddLayerModal from './AddLayerModal.jsx';
 import WFST from './WFST.jsx';
 import UI from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
@@ -29,10 +29,10 @@ const messages = defineMessages({
     description: 'List of layers',
     defaultMessage: 'Layers'
   },
-  addwmstitle: {
-    id: 'layerlist.addwmstitle',
-    description: 'Title for Add WMS layers button',
-    defaultMessage: 'Add WMS layers'
+  addlayertitle: {
+    id: 'layerlist.addlayertitle',
+    description: 'Title for Add layers button',
+    defaultMessage: 'Add layers'
   }
 });
 
@@ -112,8 +112,8 @@ class LayerList extends React.Component {
       }
     }
   }
-  _showAddWMS() {
-    this.refs.addwmsmodal.getWrappedInstance().open();
+  _showAddLayer() {
+    this.refs.addlayermodal.getWrappedInstance().open();
   }
   render() {
     const {formatMessage} = this.props.intl;
@@ -127,12 +127,12 @@ class LayerList extends React.Component {
     if (this.state.visible) {
       className += ' shown';
     }
-    var addWMS;
-    if (this.props.addWMS) {
-      addWMS = (
-        <UI.LowlightButton onClick={this._showAddWMS.bind(this)} className="pull-right" title={formatMessage(messages.addwmstitle)}>
+    var addLayer;
+    if (this.props.addLayer) {
+      addLayer = (
+        <UI.LowlightButton onClick={this._showAddLayer.bind(this)} className="pull-right" title={formatMessage(messages.addlayertitle)}>
           <Icon.Icon name="plus" />
-          <AddWMSLayerModal asVector={this.props.addWMS.asVector} map={this.props.map} url={this.props.addWMS.url} ref='addwmsmodal'/>
+          <AddLayerModal asVector={this.props.addLayer.asVector} map={this.props.map} url={this.props.addLayer.url} ref='addlayermodal'/>
         </UI.LowlightButton>
       );
     }
@@ -148,7 +148,7 @@ class LayerList extends React.Component {
         <UI.DefaultButton className='layerlistbutton' onClick={onClick} title={formatMessage(messages.layertitle)}><Icon.Icon name="map" /></UI.DefaultButton>
         <div className="layer-tree-panel clearfix">
           {editPanel}
-          {addWMS}
+          {addLayer}
           {heading}
           {this.renderLayers(layers)}
         </div>
@@ -203,11 +203,11 @@ LayerList.propTypes = {
    */
   expandOnHover: React.PropTypes.bool,
   /**
-   * Should we allow adding layers through WMS GetCapabilities?
+   * Should we allow adding layers through WMS or WFS GetCapabilities?
    * Object with keys url (should end with ? or &) and asVector.
-   * If asVector is true, layers will be added as vector.
+   * If asVector is true, layers will be retrieved from WFS and added as vector.
    */
-  addWMS: React.PropTypes.shape({
+  addLayer: React.PropTypes.shape({
     url: React.PropTypes.string.isRequired,
     asVector: React.PropTypes.bool
   }),

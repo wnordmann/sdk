@@ -18,12 +18,13 @@ import {doGET} from '../util.js';
 import Pui from 'pui-react-alerts';
 import pureRender from 'pure-render-decorator';
 import {Jsonix} from 'jsonix';
-import {XSD_1_0} from 'w3c-schemas';
+import {XSD_1_0, XLink_1_0} from 'w3c-schemas';
+import {OWS_1_0_0, Filter_1_1_0, SMIL_2_0, SMIL_2_0_Language, GML_3_1_1, WFS_1_1_0} from 'ogc-schemas';
 
 const messages = defineMessages({
   title: {
     id: 'addwmslayermodal.title',
-    description: 'Title for the modal Add WMS layer dialog',
+    description: 'Title for the modal Add layer dialog',
     defaultMessage: 'Add Layer'
   },
   errormsg: {
@@ -34,7 +35,7 @@ const messages = defineMessages({
 });
 
 @pureRender
-class AddWMSLayerModal extends Dialog.Modal {
+class AddLayerModal extends Dialog.Modal {
   constructor(props) {
     super(props);
     this.state = {
@@ -44,11 +45,36 @@ class AddWMSLayerModal extends Dialog.Modal {
   }
   componentDidMount() {
     var layers = [];
-    doGET(this.props.url + '?service=WMS&request=GetCapabilities&version=1.3.0', function(xmlhttp) {
-      var info = new ol.format.WMSCapabilities().read(xmlhttp.responseText);
-      var root = info.Capability.Layer;
-      this._recurseLayers(root, layers);
-      this.setState({layers: layers});
+    var url;
+    if (this.props.asVector) {
+      url = this.props.url + 'service=WFS&VERSION=1.1.0&request=GetCapabilities';
+    } else {
+      url = this.props.url + 'service=WMS&request=GetCapabilities&version=1.3.0';
+    }
+    doGET(url, function(xmlhttp) {
+      var info, layer;
+      if (this.props.asVector) {
+        var context = new Jsonix.Context([OWS_1_0_0, Filter_1_1_0, SMIL_2_0, SMIL_2_0_Language, XLink_1_0, GML_3_1_1, WFS_1_1_0]);
+        var unmarshaller = context.createUnmarshaller();
+        info = unmarshaller.unmarshalDocument(xmlhttp.responseXML).value;
+        if (info && info.featureTypeList && info.featureTypeList.featureType) {
+          for (var i=0, ii=info.featureTypeList.featureType.length; i<ii; ++i) {
+            var ft = info.featureTypeList.featureType[i];
+            layer = {};
+            layer.Name = ft.name.prefix + ':' + ft.name.localPart;
+            layer.Title = ft.title;
+            layer.Abstract = ft._abstract;
+            layer.EX_GeographicBoundingBox = [ft.wgs84BoundingBox[0].lowerCorner[0], ft.wgs84BoundingBox[0].lowerCorner[1], ft.wgs84BoundingBox[0].upperCorner[0], ft.wgs84BoundingBox[0].upperCorner[1]];
+            layers.push(layer);
+          }
+        }
+        this.setState({layers: layers});
+      } else {
+        info = new ol.format.WMSCapabilities().read(xmlhttp.responseText);
+        var root = info.Capability.Layer;
+        this._recurseLayers(root, layers);
+        this.setState({layers: layers});
+      }
     }, function(xmlhttp) {
       this._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
     }, this);
@@ -172,13 +198,13 @@ class AddWMSLayerModal extends Dialog.Modal {
   }
 }
 
-AddWMSLayerModal.propTypes = {
+AddLayerModal.propTypes = {
   /**
-   * WMS url that will be used to retrieve layers from. Should end with a ? or &.
+   * url that will be used to retrieve layers from (WMS or WFS). Should end with a ? or &.
    */
   url: React.PropTypes.string,
   /**
-   * Should we add layers as vector (only works for combined WMS/WFS)?
+   * Should we add layers as vector? Will use WFS GetCapabilities.
    */
   asVector: React.PropTypes.bool,
   /**
@@ -187,8 +213,8 @@ AddWMSLayerModal.propTypes = {
   intl: intlShape.isRequired
 };
 
-AddWMSLayerModal.defaultProps = {
+AddLayerModal.defaultProps = {
   asVector: false
 };
 
-export default injectIntl(AddWMSLayerModal, {withRef: true});
+export default injectIntl(AddLayerModal, {withRef: true});
