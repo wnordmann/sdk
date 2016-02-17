@@ -15,6 +15,7 @@ import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import LayerConstants from '../constants/LayerConstants.js';
+import FeatureConstants from '../constants/FeatureConstants';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LayerSelector from './LayerSelector.jsx';
 import LayerStore from '../stores/LayerStore.js';
@@ -54,6 +55,17 @@ const messages = defineMessages({
     id: 'wfst.deletemsg',
     description: 'Error message to show when delete fails',
     defaultMessage: 'There was an issue deleting the feature.'
+  }
+});
+
+AppDispatcher.register((payload) => {
+  let action = payload.action;
+  switch (action.type) {
+    case FeatureConstants.MODIFY_FEATURE_ATTRIBUTES:
+      // TODO handle WFS-T
+      break;
+    default:
+      break;
   }
 });
 
