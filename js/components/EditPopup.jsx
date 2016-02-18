@@ -17,13 +17,24 @@ import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import {BasicInput} from 'pui-react-inputs';
 import UI from 'pui-react-buttons';
-import FeatureActions from '../actions/FeatureActions.js';
+import {doPOST} from '../util.js';
+import Pui from 'pui-react-alerts';
 
 const messages = defineMessages({
   save: {
-    id: 'infopopup.save',
+    id: 'editpopup.save',
     description: 'Text to show on the save button',
     defaultMessage: 'Save'
+  },
+  errormsg: {
+    id: 'editpopup.errormsg',
+    description: 'Error message to show the user when a request fails',
+    defaultMessage: 'Error saving this feature to GeoServer. {msg}'
+  },
+  updatemsg: {
+    id: 'editpopup.updatemsg',
+    description: 'Text to show if the transaction fails',
+    defaultMessage: 'Error updating the feature\'s attributes using WFS-T.'
   }
 });
 
@@ -32,7 +43,10 @@ class EditPopup extends BasePopup {
     super(props);
     this.props.map.on('singleclick', this._onMapClick, this);
     this.active = true;
+    this._format = new ol.format.WFS();
+    this._serializer = new XMLSerializer();
     this.state = {
+      error: false,
       values: {},
       dirty: {}
     };
@@ -83,19 +97,66 @@ class EditPopup extends BasePopup {
       };
     }
   }
+  _readResponse(data) {
+    var result;
+    if (global.Document && data instanceof global.Document && data.documentElement &&
+      data.documentElement.localName == 'ExceptionReport') {
+      this._setError(data.getElementsByTagNameNS('http://www.opengis.net/ows', 'ExceptionText').item(0).textContent);
+    } else {
+      result = this._format.readTransactionResponse(data);
+    }
+    return result;
+  }
+  _setError(msg) {
+    this.setState({
+      error: true,
+      msg: msg
+    });
+  }
   _save() {
+    const {formatMessage} = this.props.intl;
     if (this.state.dirty) {
-      var values = {};
-      for (var key in this.state.dirty) {
+      var values = {}, key;
+      for (key in this.state.dirty) {
         values[key] = this.state.values[key];
-        // TODO do this in the success handler
-        this.state.feature.set(key, values[key]);
       }
-      FeatureActions.modifyFeatureAttributes(this.state.layer, this.state.feature, values);
+      var layer = this.state.layer;
+      var wfsInfo = layer.get('wfsInfo');
+      var feature = this.state.feature;
+      var newFeature = new ol.Feature(values);
+      newFeature.setId(feature.getId());
+      var node = this._format.writeTransaction(null, [newFeature], null, {
+        featureNS: wfsInfo.featureNS,
+        featureType: wfsInfo.featureType
+      });
+      doPOST(layer.get('wfsInfo').url, this._serializer.serializeToString(node),
+        function(xmlhttp) {
+          var data = xmlhttp.responseText;
+          var result = this._readResponse(data);
+          if (result && result.transactionSummary.totalUpdated === 1) {
+            for (key in this.state.dirty) {
+              this.state.feature.set(key, values[key]);
+            }
+            this.setVisible(false);
+            this.state.values = {};
+            this.state.dirty = {};
+          } else {
+            this._setError(formatMessage(messages.updatemsg));
+          }
+        },
+        function(xmlhttp) {
+          this._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
+        },
+        this
+      );
     }
   }
   render() {
     const {formatMessage} = this.props.intl;
+    var error;
+    if (this.state.error === true) {
+      error = (<div className='error-alert'><Pui.ErrorAlert dismissable={false} withIcon={true}>{formatMessage(messages.errormsg, {msg: this.state.msg})}</Pui.ErrorAlert></div>);
+    }
     var inputs = [];
     if (this.state.feature) {
       var keys = this.state.feature.getKeys();
@@ -110,6 +171,7 @@ class EditPopup extends BasePopup {
       <article>
         <a href="#" ref="popupCloser" className="popup-closer fa fa-times fa-pull-right"></a>
         <div className='popup-content' ref='content'>
+          {error}
           {inputs}
           <UI.DefaultButton ref="saveButton">{formatMessage(messages.save)}</UI.DefaultButton>
         </div>

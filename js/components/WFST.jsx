@@ -15,7 +15,6 @@ import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import LayerConstants from '../constants/LayerConstants.js';
-import FeatureConstants from '../constants/FeatureConstants';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LayerSelector from './LayerSelector.jsx';
 import LayerStore from '../stores/LayerStore.js';
@@ -56,36 +55,6 @@ const messages = defineMessages({
     id: 'wfst.deletemsg',
     description: 'Error message to show when delete fails',
     defaultMessage: 'There was an issue deleting the feature.'
-  }
-});
-
-let format = new ol.format.WFS();
-let serializer = new XMLSerializer();
-
-AppDispatcher.register((payload) => {
-  let action = payload.action;
-  switch (action.type) {
-    case FeatureConstants.MODIFY_FEATURE_ATTRIBUTES:
-      var layer = action.layer;
-      var wfsInfo = layer.get('wfsInfo');
-      var feature = action.feature;
-      var attributes = action.attributes;
-      var newFeature = new ol.Feature(attributes);
-      newFeature.setId(feature.getId());
-      var node = format.writeTransaction(null, [newFeature], null, {
-        featureNS: wfsInfo.featureNS,
-        featureType: wfsInfo.featureType
-      });
-      // TODO handle success / failure, close popup automatically
-      doPOST(layer.get('wfsInfo').url, serializer.serializeToString(node),
-        function(xmlhttp) {
-        },
-        function(xmlhttp) {
-        }
-      );
-      break;
-    default:
-      break;
   }
 });
 
