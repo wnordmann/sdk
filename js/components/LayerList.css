@@ -48,3 +48,6 @@
 .layer-tree-panel  li:last-child::before {
   height: 30px;
 }
+.add_layer_button{
+ margin-bottom: 10px;
+}

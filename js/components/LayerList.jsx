@@ -130,8 +130,8 @@ class LayerList extends React.Component {
     var addLayer;
     if (this.props.addLayer) {
       addLayer = (
-        <UI.LowlightButton onClick={this._showAddLayer.bind(this)} className="pull-right" title={formatMessage(messages.addlayertitle)}>
-          <Icon.Icon name="plus" />
+        <UI.LowlightButton>
+          <UI.DefaultButton  onClick={this._showAddLayer.bind(this)}  className="pull-right add_layer_button" title={formatMessage(messages.addlayertitle)}> <Icon.Icon name="plus" /> Add Layer </UI.DefaultButton>
           <AddLayerModal asVector={this.props.addLayer.asVector} map={this.props.map} url={this.props.addLayer.url} ref='addlayermodal'/>
         </UI.LowlightButton>
       );
@@ -148,9 +148,9 @@ class LayerList extends React.Component {
         <UI.DefaultButton className='layerlistbutton' onClick={onClick} title={formatMessage(messages.layertitle)}><Icon.Icon name="map" /></UI.DefaultButton>
         <div className="layer-tree-panel clearfix">
           {editPanel}
-          {addLayer}
           {heading}
           {this.renderLayers(layers)}
+          {addLayer}
         </div>
       </div>
     );
