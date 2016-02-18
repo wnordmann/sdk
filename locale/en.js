@@ -57,7 +57,6 @@ var enMessages = {
   "imageexport.buttontitle": "Export as image",
   "infopopup.nofeatures": "No features at this location",
   "infopopup.nulltext": "NULL",
-  "infopopup.save": "Save",
   "labelmodal.applybutton": "Apply",
   "labelmodal.attributelabel": "Attribute",
   "labelmodal.clearbutton": "Clear",

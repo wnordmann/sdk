@@ -11,14 +11,9 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import MapTool from './MapTool.js';
+import BasePopup from './BasePopup.jsx';
 import ol from 'openlayers';
-import './InfoPopup.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import {BasicInput} from 'pui-react-inputs';
-import UI from 'pui-react-buttons';
-import FeatureActions from '../actions/FeatureActions.js';
 
 const messages = defineMessages({
   nofeatures: {
@@ -30,17 +25,12 @@ const messages = defineMessages({
     id: 'infopopup.nulltext',
     description: 'Text to show if attribute has no value',
     defaultMessage: 'NULL'
-  },
-  save: {
-    id: 'infopopup.save',
-    description: 'Text to show on the save button',
-    defaultMessage: 'Save'
   }
 });
 
 const ALL_ATTRS = '#AllAttributes';
 
-class InfoPopup extends MapTool {
+class InfoPopup extends BasePopup {
   constructor(props) {
     super(props);
     if (this.props.hover === true) {
@@ -51,24 +41,8 @@ class InfoPopup extends MapTool {
     this._format = new ol.format.GeoJSON();
     this.active = true;
     this.state = {
-      popupTexts: [],
-      values: {},
-      dirty: {}
+      popupTexts: []
     };
-  }
-  componentDidMount() {
-    this._overlayPopup = new ol.Overlay({
-      element: ReactDOM.findDOMNode(this).parentNode
-    });
-    this.props.map.addOverlay(this._overlayPopup);
-  }
-  activate(interactions) {
-    this.active = true;
-    super.activate(interactions);
-  }
-  deactivate() {
-    this.active = false;
-    super.deactivate();
   }
   _forEachLayer(layers, layer) {
     if (layer instanceof ol.layer.Group) {
@@ -166,13 +140,6 @@ class InfoPopup extends MapTool {
       cb();
     }
   }
-  _onChangeField(evt) {
-    var dirty = this.state.dirty;
-    var values = this.state.values;
-    values[evt.target.id] = evt.target.value;
-    dirty[evt.target.id] = true;
-    this.setState({values: values, dirty: dirty});
-  }
   _onMapClick(evt) {
     if (this.active) {
       const {formatMessage} = this.props.intl;
@@ -181,7 +148,6 @@ class InfoPopup extends MapTool {
       var coord = evt.coordinate;
       var popupTexts = [];
       var me = this;
-      var cont = false;
       map.forEachFeatureAtPixel(pixel, function(feature, layer) {
         if (feature) {
           var popupDef = layer.get('popupInfo');
@@ -195,94 +161,32 @@ class InfoPopup extends MapTool {
                 popupDef = popupDef.replace('[' + featureKeys[i] + ']', formatMessage(messages.nulltext));
               }
             }
-          } else if (layer.get('isWFST')) {
-            cont = true;
-            me.setState({
-              feature: feature,
-              dirty: {},
-              layer: layer,
-              values: feature.getProperties()
-            });
-          }
-          if (popupDef) {
-            popupTexts.push(popupDef);
           }
         }
       });
       this._fetchData(evt, popupTexts, function() {
-        if (cont === true || popupTexts.length) {
-          me._overlayPopup.setPosition(coord);
+        if (popupTexts.length) {
+          me.overlayPopup.setPosition(coord);
           if (popupTexts.length) {
             me.setState({
               popupTexts: popupTexts
             });
           }
-          me._setVisible(true);
+          me.setVisible(true);
         } else {
-          me._setVisible(false);
+          me.setVisible(false);
         }
       });
     }
   }
-  _setVisible(visible) {
-    ReactDOM.findDOMNode(this).parentNode.style.display = visible ? 'block' : 'none';
-    var me = this;
-    // regular jsx onClick does not work when stopEvent is true
-    var closer = ReactDOM.findDOMNode(this.refs.popupCloser);
-    if (closer.onclick === null) {
-      closer.onclick = function() {
-        me._setVisible(false);
-        return false;
-      };
-    }
-    var saveButton = ReactDOM.findDOMNode(this.refs.saveButton);
-    if (saveButton && saveButton.onclick === null) {
-      saveButton.onclick = function() {
-        me._save();
-        return false;
-      };
-    }
-  }
-  _save() {
-    if (this.state.dirty) {
-      var values = {};
-      for (var key in this.state.dirty) {
-        values[key] = this.state.values[key];
-        // TODO do this in the success handler
-        this.state.feature.set(key, values[key]);
-      }
-      FeatureActions.modifyFeatureAttributes(this.state.layer, this.state.feature, values);
-    }
-  }
   render() {
-    const {formatMessage} = this.props.intl;
-    if (this.state.feature) {
-      var keys = this.state.feature.getKeys();
-      var inputs = [];
-      for (var i = 0, ii = keys.length; i < ii; ++i) {
-        var key = keys[i];
-        if (key !== this.state.feature.getGeometryName()) {
-          inputs.push(<BasicInput label={key} key={key} id={key} onChange={this._onChangeField.bind(this)} value={this.state.values[key]} />);
-        }
-      }
-      return (
-        <article>
-          <a href="#" ref="popupCloser" className="popup-closer fa fa-times fa-pull-right"></a>
-          <div className='popup-content' ref='content'>
-            {inputs}
-            <UI.DefaultButton ref="saveButton">{formatMessage(messages.save)}</UI.DefaultButton>
-          </div>
-        </article>
-      );
-    } else {
-      var content = this.state.popupTexts.join('<hr>');
-      return (
-        <article>
-          <a href="#" ref="popupCloser" className="popup-closer fa fa-times fa-pull-right"></a>
-          <div className='popup-content' ref='content' dangerouslySetInnerHTML={{__html: content}}></div>
-        </article>
-      );
-    }
+    var content = this.state.popupTexts.join('<hr>');
+    return (
+      <article>
+        <a href="#" ref="popupCloser" className="popup-closer fa fa-times fa-pull-right"></a>
+        <div className='popup-content' ref='content' dangerouslySetInnerHTML={{__html: content}}></div>
+      </article>
+    );
   }
 }
 
