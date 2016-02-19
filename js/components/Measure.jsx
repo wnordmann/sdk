@@ -226,6 +226,14 @@ class Measure extends MapTool {
 
 Measure.propTypes = {
   /**
+   * The map onto which to activate and deactivate the interactions.
+   */
+  map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * The toggleGroup to use. When this tool is activated, all other tools in the same toggleGroup will be deactivated.
+   */
+  toggleGroup: React.PropTypes.string,
+  /**
    * Should measurements be geodesic?
    */
   geodesic: React.PropTypes.bool,
