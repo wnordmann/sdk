@@ -137,7 +137,7 @@ class LayerList extends React.Component {
       addLayer = (
           <UI.DefaultButton  onClick={this._showAddLayer.bind(this)}  className="pull-right add_layer_button" title={formatMessage(messages.addlayertitle)}> <Icon.Icon name="plus" />
           {formatMessage(messages.addlayertext)}
-          <AddLayerModal asVector={this.props.addLayer.asVector} map={this.props.map} url={this.props.addLayer.url} ref='addlayermodal'/>
+          <AddLayerModal allowUserInput={this.props.addLayer.allowUserInput} asVector={this.props.addLayer.asVector} map={this.props.map} url={this.props.addLayer.url} ref='addlayermodal'/>
         </UI.DefaultButton>
       );
     }
@@ -209,11 +209,13 @@ LayerList.propTypes = {
   expandOnHover: React.PropTypes.bool,
   /**
    * Should we allow adding layers through WMS or WFS GetCapabilities?
-   * Object with keys url (should end with ? or &) and asVector.
+   * Object with keys url and asVector.
    * If asVector is true, layers will be retrieved from WFS and added as vector.
+   * If allowUserInput is true, the user will be able to provide a url through an input.
    */
   addLayer: React.PropTypes.shape({
     url: React.PropTypes.string.isRequired,
+    allowUserInput: React.PropTypes.bool,
     asVector: React.PropTypes.bool
   }),
   /**

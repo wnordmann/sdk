@@ -17,6 +17,8 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import {doGET} from '../util.js';
 import Pui from 'pui-react-alerts';
 import pureRender from 'pure-render-decorator';
+import {BasicInput} from 'pui-react-inputs';
+import UI from 'pui-react-buttons';
 import {Jsonix} from 'jsonix';
 import {XSD_1_0, XLink_1_0} from 'w3c-schemas';
 import {OWS_1_0_0, Filter_1_1_0, SMIL_2_0, SMIL_2_0_Language, GML_3_1_1, WFS_1_1_0} from 'ogc-schemas';
@@ -31,6 +33,16 @@ const messages = defineMessages({
     id: 'addwmslayermodal.errormsg',
     description: 'Error message to show the user when a GetCapabilities request fails',
     defaultMessage: 'Error retrieving GetCapabilities. {msg}'
+  },
+  inputfieldlabel: {
+    id: 'addwmslayermodal.inputfieldlabel',
+    description: 'Label for input field',
+    defaultMessage: '{serviceType} Endpoint'
+  },
+  connectbutton: {
+    id: 'addwmslayermodal.connectbutton',
+    description: 'Text for connect button',
+    defaultMessage: 'Connect'
   }
 });
 
@@ -44,13 +56,12 @@ class AddLayerModal extends Dialog.Modal {
     };
   }
   componentDidMount() {
-    var layers = [];
-    var url;
-    if (this.props.asVector) {
-      url = this.props.url + 'service=WFS&VERSION=1.1.0&request=GetCapabilities';
-    } else {
-      url = this.props.url + 'service=WMS&request=GetCapabilities&version=1.3.0';
+    if (this.props.allowUserInput === false) {
+      this._getCaps(this._getServiceUrl(this.props.url));
     }
+  }
+  _getCaps(url) {
+    var layers = [];
     doGET(url, function(xmlhttp) {
       var info, layer;
       if (this.props.asVector) {
@@ -176,6 +187,25 @@ class AddLayerModal extends Dialog.Modal {
     map.addLayer(olLayer);
     view.fit(extent, map.getSize());
   }
+  _getServiceUrl(url) {
+    if (url.indexOf('?') !== -1) {
+      if (url.slice(-1) !== '?' && url.slice(-1) !== '&') {
+        url += '&';
+      }
+    } else {
+      url += '?';
+    }
+    if (this.props.asVector) {
+      url += 'service=WFS&VERSION=1.1.0&request=GetCapabilities';
+    } else {
+      url += 'service=WMS&request=GetCapabilities&version=1.3.0';
+    }
+    return url;
+  }
+  _connect() {
+    var url = document.getElementById('url').value;
+    this._getCaps(this._getServiceUrl(url));
+  }
   render() {
     const {formatMessage} = this.props.intl;
     var layers = this.state.layers.map(function(layer) {
@@ -185,9 +215,18 @@ class AddLayerModal extends Dialog.Modal {
     if (this.state.error === true) {
       error = (<div className='error-alert'><Pui.ErrorAlert dismissable={false} withIcon={true}>{formatMessage(messages.errormsg, {msg: this.state.msg})}</Pui.ErrorAlert></div>);
     }
+    var input;
+    if (this.props.allowUserInput) {
+      var serviceType = this.props.asVector ? 'WFS' : 'WMS';
+      input = (<article>
+        <BasicInput label={formatMessage(messages.inputfieldlabel, {serviceType: serviceType})}  id='url' defaultValue={this.props.url} />
+        <UI.DefaultButton onClick={this._connect.bind(this)} ref="connectButton">{formatMessage(messages.connectbutton)}</UI.DefaultButton>
+      </article>);
+    }
     return (
       <Dialog.BaseModal title={formatMessage(messages.title)} show={this.state.isVisible} onHide={this.close} {...this.props}>
         <Dialog.ModalBody>
+          {input}
           <ul>
             {layers}
           </ul>
@@ -200,7 +239,7 @@ class AddLayerModal extends Dialog.Modal {
 
 AddLayerModal.propTypes = {
   /**
-   * url that will be used to retrieve layers from (WMS or WFS). Should end with a ? or &.
+   * url that will be used to retrieve layers from (WMS or WFS).
    */
   url: React.PropTypes.string,
   /**
@@ -208,13 +247,18 @@ AddLayerModal.propTypes = {
    */
   asVector: React.PropTypes.bool,
   /**
+   * Should be user be able to provide their own url?
+   */
+  allowUserInput: React.PropTypes.bool,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
 };
 
 AddLayerModal.defaultProps = {
-  asVector: false
+  asVector: false,
+  allowUserInput: false
 };
 
 export default injectIntl(AddLayerModal, {withRef: true});
