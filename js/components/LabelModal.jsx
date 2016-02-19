@@ -105,19 +105,21 @@ class LabelModal extends Dialog.Modal {
         })
       });
       var modifyStyle = function(s) {
+        // TODO, see if we can optimize / cache this
         if (s instanceof ol.style.Style) {
-          s.setText(text);
-        } else if (Array.isArray(s)) {
-          s.push(new ol.style.Style({
-            text: text
-          }));
+          s = [s];
+        } else {
+          s = s.slice();
         }
+        s.push(new ol.style.Style({
+          text: text
+        }));
         return s;
       };
       if (style instanceof ol.style.Style || Array.isArray(style)) {
         return modifyStyle(style);
       } else {
-        var result = style.call(this, feature, resolution);
+        var result = style.call(me, feature, resolution);
         return modifyStyle(result);
       }
     });
