@@ -63,6 +63,7 @@ var enMessages = {
   "labelmodal.fillcolorlabel": "Font color",
   "labelmodal.sizelabel": "Font size",
   "labelmodal.title": "Label for layer {layer}",
+  "layerlist.addlayertext": "Add Layer",
   "layerlist.addlayertitle": "Add layers",
   "layerlist.layertitle": "Layers",
   "layerlistitem.baselayergrouplabel": "Select base layer",

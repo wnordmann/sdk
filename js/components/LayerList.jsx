@@ -33,6 +33,11 @@ const messages = defineMessages({
     id: 'layerlist.addlayertitle',
     description: 'Title for Add layers button',
     defaultMessage: 'Add layers'
+  },
+  addlayertext: {
+    id: 'layerlist.addlayertext',
+    description: 'Text for Add layers button',
+    defaultMessage: ' Add Layer '
   }
 });
 
@@ -130,10 +135,10 @@ class LayerList extends React.Component {
     var addLayer;
     if (this.props.addLayer) {
       addLayer = (
-        <UI.LowlightButton>
-          <UI.DefaultButton  onClick={this._showAddLayer.bind(this)}  className="pull-right add_layer_button" title={formatMessage(messages.addlayertitle)}> <Icon.Icon name="plus" /> Add Layer </UI.DefaultButton>
+          <UI.DefaultButton  onClick={this._showAddLayer.bind(this)}  className="pull-right add_layer_button" title={formatMessage(messages.addlayertitle)}> <Icon.Icon name="plus" />
+          {formatMessage(messages.addlayertext)}
           <AddLayerModal asVector={this.props.addLayer.asVector} map={this.props.map} url={this.props.addLayer.url} ref='addlayermodal'/>
-        </UI.LowlightButton>
+        </UI.DefaultButton>
       );
     }
     var onMouseOut = this.props.expandOnHover ? this._hidePanel.bind(this) : undefined;
