@@ -58,10 +58,10 @@ class RuleEditor extends React.Component {
           <ColorPicker onChangeComplete={this._onChangeFill.bind(this)} color={this.state.fillColor} />
         </UI.Tab>
         <UI.Tab eventKey={2} title={formatMessage(messages.stroketitle)}>
-          <StrokeEditor layer={this.props.layer} onChange={this.props.onChange} />
+          <StrokeEditor onChange={this.props.onChange} />
         </UI.Tab>
         <UI.Tab eventKey={3} title={formatMessage(messages.labeltitle)}>
-          <LabelEditor layer={this.props.layer} onChange={this.props.onChange} attributes={this.props.attributes} />
+          <LabelEditor onChange={this.props.onChange} attributes={this.props.attributes} />
         </UI.Tab>
       </UI.SimpleTabs>
     );
@@ -73,10 +73,6 @@ RuleEditor.propTypes = {
    * List of attributes.
    */
   attributes: React.PropTypes.array,
-  /**
-   * The layer associated with this rule editor.
-   */
-  layer: React.PropTypes.instanceOf(ol.layer.Base).isRequired,
   /**
    * Callback that is called when a change is made.
    */
