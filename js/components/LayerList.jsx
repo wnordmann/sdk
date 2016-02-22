@@ -184,6 +184,10 @@ LayerList.propTypes = {
    */
   allowLabeling: React.PropTypes.bool,
   /**
+   * Should we allow for styling of features in a vector layer?
+   */
+  allowStyling: React.PropTypes.bool,
+  /**
    * Should we show the contents of layer groups?
    */
   showGroupContent: React.PropTypes.bool,
@@ -229,6 +233,7 @@ LayerList.defaultProps = {
   allowReordering: false,
   allowFiltering: false,
   allowLabeling: false,
+  allowStyling: false,
   showGroupContent: true,
   showDownload: false,
   downloadFormat: 'GeoJSON',

@@ -105,8 +105,8 @@ class LabelModal extends Dialog.Modal {
     }
   }
   _onChangeLabel(labelState) {
-    this._fillColor = labelState.fillColor;
-    this._attribute = labelState.attribute;
+    this._fillColor = labelState.fontColor;
+    this._attribute = labelState.labelAttribute;
     this._fontSize = labelState.fontSize;
   }
   _setLabel() {

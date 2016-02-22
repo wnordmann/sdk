@@ -40,9 +40,9 @@ class LabelEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      attribute: this.props.attributes[0],
+      labelAttribute: this.props.attributes[0],
       fontSize: 12,
-      fillColor: [0, 0, 0, 1]
+      fontColor: [0, 0, 0, 1]
     };
     this.props.onChange(this.state);
   }
@@ -58,7 +58,7 @@ class LabelEditor extends React.Component {
     this.props.onChange(this.state);
   }
   _onChangeFill(color) {
-    this.state.fillColor = transformColor(color);
+    this.state.fontColor = transformColor(color);
     this.props.onChange(this.state);
   }
   render() {
@@ -75,7 +75,7 @@ class LabelEditor extends React.Component {
             <label htmlFor='labelSelector'>{formatMessage(messages.attributelabel)}:</label>
           </Grids.Col>
           <Grids.Col md={12}>
-            <select id='labelSelector' defaultValue={this.state.attribute} onChange={this._onItemChange.bind(this)}>
+            <select id='labelSelector' defaultValue={this.state.labelAttribute} onChange={this._onItemChange.bind(this)}>
               {attributeItems}
             </select>
           </Grids.Col>
@@ -93,7 +93,7 @@ class LabelEditor extends React.Component {
             <label>{formatMessage(messages.fillcolorlabel)}:</label>
           </Grids.Col>
           <Grids.Col md={12}>
-            <ColorPicker type='compact' onChangeComplete={this._onChangeFill.bind(this)} color={this.state.fillColor} />
+            <ColorPicker type='compact' onChangeComplete={this._onChangeFill.bind(this)} color={this.state.fontColor} />
           </Grids.Col>
         </div>
       </form>
@@ -109,7 +109,7 @@ LabelEditor.propTypes = {
   /**
    * Callback that is called when a change is made.
    */
-  onChange: React.PropTypes.func,
+  onChange: React.PropTypes.func.isRequired,
   /**
   * i18n message strings. Provided through the application through context.
   */

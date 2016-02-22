@@ -14,6 +14,7 @@ import React from 'react';
 import ol from 'openlayers';
 import FilterModal from './FilterModal.jsx';
 import LabelModal from './LabelModal.jsx';
+import StyleModal from './StyleModal.jsx';
 import LayerActions from '../actions/LayerActions.js';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
@@ -54,6 +55,11 @@ const messages = defineMessages({
     id: 'layerlistitem.labeltitle',
     description: 'Title for the label button',
     defaultMessage: 'Label layer'
+  },
+  stylingtitle: {
+    id: 'layerlistitem.stylingtitle',
+    description: 'Title for the style button',
+    defaultMessage: 'Style layer'
   },
   movedowntitle: {
     id: 'layerlistitem.movedowntitle',
@@ -161,6 +167,9 @@ class LayerListItem extends React.Component {
   _label() {
     this.refs.labelmodal.getWrappedInstance().open();
   }
+  _style() {
+    this.refs.stylemodal.getWrappedInstance().open();
+  }
   _onCloseModal() {
     if (this.props.onModalClose) {
       this.props.onModalClose.call();
@@ -220,6 +229,10 @@ class LayerListItem extends React.Component {
     if (layer instanceof ol.layer.Vector && this.props.allowLabeling) {
       label = <a title={formatMessage(messages.labeltitle)} href='#' onClick={this._label.bind(this)}><i className='layerlayeritem glyphicon glyphicon-font'></i></a>;
     }
+    var styling;
+    if (layer instanceof ol.layer.Vector && this.props.allowStyling) {
+      styling =  <a title={formatMessage(messages.stylingtitle)} href='#' onClick={this._style.bind(this)}><i className='layerlayeritem glyphicon glyphicon-list-alt'></i></a>;
+    }
     var reorderUp, reorderDown;
     if (layer.get('type') !== 'base' && this.props.allowReordering && !this.props.children) {
       reorderUp = <a title={formatMessage(messages.moveuptitle)} href='#' onClick={this._moveUp.bind(this)}><i className='layerlayeritem glyphicon glyphicon-triangle-top'></i></a>;
@@ -248,10 +261,11 @@ class LayerListItem extends React.Component {
       var inputId = 'layerlistitem-' + layer.get('id') + '-visibility';
       input = (<ul><div className='input-group'><label className='sr-only' htmlFor={inputId}>{formatMessage(messages.layervisibilitylabel)}</label><input id={inputId} type="checkbox" checked={this.state.checked} onChange={this._handleChange.bind(this)} />{this.props.title}</div></ul>);
     }
-    var labelModal, filterModal;
+    var labelModal, filterModal, styleModal;
     if (this.props.layer instanceof ol.layer.Vector) {
       labelModal = (<LabelModal layer={this.props.layer} ref='labelmodal' />);
       filterModal = (<FilterModal layer={this.props.layer} onHide={this._onCloseModal.bind(this)} ref='filtermodal' />);
+      styleModal = (<StyleModal layer={this.props.layer} ref='stylemodal' />);
     }
     return (
       <li>
@@ -262,6 +276,7 @@ class LayerListItem extends React.Component {
         {download}
         {filter}
         {label}
+        {styling}
         {reorderUp}
         {reorderDown}
         {remove}
@@ -270,6 +285,7 @@ class LayerListItem extends React.Component {
         <span>
           {filterModal}
           {labelModal}
+          {styleModal}
         </span>
       </li>
     );
@@ -309,6 +325,10 @@ LayerListItem.propTypes = {
    * Should we allow for labeling of features in a layer?
    */
   allowLabeling: React.PropTypes.bool,
+  /**
+   * Should we allow for styling of features in a vector layer?
+   */
+  allowStyling: React.PropTypes.bool,
   /**
    * Should we show a download button?
    */
