@@ -13,12 +13,10 @@
 import React from 'react';
 import ol from 'openlayers';
 import Dialog from 'pui-react-modals';
-import Grids from 'pui-react-grids';
 import UI from 'pui-react-buttons';
-import ColorPicker from 'react-color';
-import {transformColor} from '../util.js';
 import {defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
+import LabelEditor from './LabelEditor.jsx';
 
 const messages = defineMessages({
   title: {
@@ -35,21 +33,6 @@ const messages = defineMessages({
     id: 'labelmodal.clearbutton',
     description: 'Text for the clear button',
     defaultMessage: 'Clear'
-  },
-  attributelabel: {
-    id: 'labelmodal.attributelabel',
-    description: 'Label for the attribute select combo',
-    defaultMessage: 'Attribute'
-  },
-  fillcolorlabel: {
-    id: 'labelmodal.fillcolorlabel',
-    description: 'Label for fill color picker',
-    defaultMessage: 'Font color'
-  },
-  sizelabel: {
-    id: 'labelmodal.sizelabel',
-    description: 'Label for the font size input',
-    defaultMessage: 'Font size'
   }
 });
 
@@ -57,8 +40,6 @@ const messages = defineMessages({
 class LabelModal extends Dialog.Modal {
   constructor(props) {
     super(props);
-    this._fillColor = '#000';
-    this._fontSize = '12';
     this.state = {
       attributes: []
     };
@@ -73,17 +54,10 @@ class LabelModal extends Dialog.Modal {
             var idx = keys.indexOf(geom);
             keys.splice(idx, 1);
             this.state.attributes = keys;
-            this.state.attribute = keys[0];
           }
         }
       }, this);
     }
-  }
-  _onChangeFontSize(evt) {
-    this._fontSize = evt.target.value;
-  }
-  _onChangeFill(color) {
-    this._fillColor = transformColor(color);
   }
   _setStyleFunction() {
     var layer = this.props.layer;
@@ -92,7 +66,7 @@ class LabelModal extends Dialog.Modal {
     this._styleSet = true;
     var me = this;
     layer.setStyle(function(feature, resolution) {
-      var rawValue = feature.get(me.state.attribute);
+      var rawValue = feature.get(me._attribute);
       var value = '';
       if (rawValue !== undefined) {
         value += rawValue;
@@ -124,17 +98,16 @@ class LabelModal extends Dialog.Modal {
       }
     });
   }
-  _onSubmit(evt) {
-    evt.preventDefault();
-  }
-  _onItemChange(evt) {
-    this.state.attribute = evt.target.value;
-  }
   _clearLabel() {
     if (this._style) {
       this.props.layer.setStyle(this._style);
       this._styleSet = false;
     }
+  }
+  _onChangeLabel(labelState) {
+    this._fillColor = labelState.fillColor;
+    this._attribute = labelState.attribute;
+    this._fontSize = labelState.fontSize;
   }
   _setLabel() {
     if (!this._styleSet) {
@@ -145,42 +118,10 @@ class LabelModal extends Dialog.Modal {
   }
   render() {
     const {formatMessage} = this.props.intl;
-    var attributeItems = this.state.attributes.map(function(attribute, idx) {
-      return (
-        <option value={attribute} key={idx}>{attribute}</option>
-      );
-    });
     return (
       <Dialog.BaseModal title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} show={this.state.isVisible} onHide={this.close} {...this.props}>
         <Dialog.ModalBody>
-          <form onSubmit={this._onSubmit} className='form-horizontal'>
-            <div className="form-group">
-              <Grids.Col md={4}>
-                <label htmlFor='labelSelector'>{formatMessage(messages.attributelabel)}:</label>
-              </Grids.Col>
-              <Grids.Col md={12}>
-                <select id='labelSelector' defaultValue={this.state.attribute} onChange={this._onItemChange.bind(this)}>
-                  {attributeItems}
-                </select>
-              </Grids.Col>
-            </div>
-            <div className='form-group'>
-              <Grids.Col md={4}>
-                <label htmlFor='fontSize'>{formatMessage(messages.sizelabel)}:</label>
-              </Grids.Col>
-              <Grids.Col md={12}>
-                <input ref='fontSize' id='fontSize' defaultValue={this._fontSize} onChange={this._onChangeFontSize.bind(this)} />
-              </Grids.Col>
-            </div>
-            <div className='form-group'>
-              <Grids.Col md={4}>
-                <label>{formatMessage(messages.fillcolorlabel)}:</label>
-              </Grids.Col>
-              <Grids.Col md={12}>
-                <ColorPicker type='compact' onChangeComplete={this._onChangeFill.bind(this)} color={this._fillColor} />
-              </Grids.Col>
-            </div>
-          </form>
+          <LabelEditor onChange={this._onChangeLabel.bind(this)} attributes={this.state.attributes} />
         </Dialog.ModalBody>
         <Dialog.ModalFooter>
           <UI.DefaultButton onClick={this._setLabel.bind(this)}>{formatMessage(messages.applybutton)}</UI.DefaultButton>
