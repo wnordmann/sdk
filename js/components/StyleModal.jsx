@@ -74,7 +74,7 @@ class StyleModal extends Dialog.Modal {
     return (
       <Dialog.BaseModal title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} show={this.state.isVisible} onHide={this.close} {...this.props}>
         <Dialog.ModalBody>
-          <RuleEditor onChange={this._onChange.bind(this)} attributes={this.state.attributes} />
+          <RuleEditor styling={this._styleState} onChange={this._onChange.bind(this)} attributes={this.state.attributes} />
         </Dialog.ModalBody>
         <Dialog.ModalFooter>
           <UI.DefaultButton onClick={this._setStyle.bind(this)}>{formatMessage(messages.applybutton)}</UI.DefaultButton>

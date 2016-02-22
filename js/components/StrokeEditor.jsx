@@ -34,11 +34,17 @@ const messages = defineMessages({
 class StrokeEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      strokeColor: [0, 0, 0, 1],
-      strokeWidth: 1
-    };
+    this.state = {};
+    this._setInitialStateFromProp('strokeColor', [0, 0, 0, 1]);
+    this._setInitialStateFromProp('strokeWidth', 1);
     this.props.onChange(this.state);
+  }
+  _setInitialStateFromProp(prop, defaultVal) {
+    if (this.props.styling && this.props.styling[prop]) {
+      this.state[prop] = this.props.styling[prop];
+    } else {
+      this.state[prop] = defaultVal;
+    }
   }
   _onSubmit(evt) {
     evt.preventDefault();
@@ -81,6 +87,10 @@ StrokeEditor.propTypes = {
    * Callback that is called when a change is made.
    */
   onChange: React.PropTypes.func.isRequired,
+  /**
+   * Initial state.
+   */
+  styling: React.PropTypes.object,
   /**
   * i18n message strings. Provided through the application through context.
   */

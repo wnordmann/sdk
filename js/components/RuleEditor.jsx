@@ -11,13 +11,11 @@
  */
 
 import React from 'react';
-import ol from 'openlayers';
-import ColorPicker from 'react-color';
-import {transformColor} from '../util.js';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import UI from 'pui-react-tabs';
 import LabelEditor from './LabelEditor.jsx';
 import StrokeEditor from './StrokeEditor.jsx';
+import FillEditor from './FillEditor.jsx';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -42,26 +40,19 @@ const messages = defineMessages({
 class RuleEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      fillColor: [255, 0, 0, 0.5]
-    };
-  }
-  _onChangeFill(color) {
-    this.state.fillColor = transformColor(color);
-    this.props.onChange(this.state);
   }
   render() {
     const {formatMessage} = this.props.intl;
     return (
       <UI.SimpleTabs defaultActiveKey={1}>
         <UI.Tab eventKey={1} title={formatMessage(messages.filltitle)}>
-          <ColorPicker onChangeComplete={this._onChangeFill.bind(this)} color={this.state.fillColor} />
+          <FillEditor {...this.props} />
         </UI.Tab>
         <UI.Tab eventKey={2} title={formatMessage(messages.stroketitle)}>
-          <StrokeEditor onChange={this.props.onChange} />
+          <StrokeEditor {...this.props} />
         </UI.Tab>
         <UI.Tab eventKey={3} title={formatMessage(messages.labeltitle)}>
-          <LabelEditor onChange={this.props.onChange} attributes={this.props.attributes} />
+          <LabelEditor {...this.props} />
         </UI.Tab>
       </UI.SimpleTabs>
     );

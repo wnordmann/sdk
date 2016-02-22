@@ -39,12 +39,18 @@ const messages = defineMessages({
 class LabelEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      labelAttribute: this.props.attributes[0],
-      fontSize: 12,
-      fontColor: [0, 0, 0, 1]
-    };
+    this.state = {};
+    this._setInitialStateFromProp('labelAttribute', this.props.attributes[0]);
+    this._setInitialStateFromProp('fontSize', 12);
+    this._setInitialStateFromProp('fontColor', [0, 0, 0, 1]);
     this.props.onChange(this.state);
+  }
+  _setInitialStateFromProp(prop, defaultVal) {
+    if (this.props.styling && this.props.styling[prop]) {
+      this.state[prop] = this.props.styling[prop];
+    } else {
+      this.state[prop] = defaultVal;
+    }
   }
   _onSubmit(evt) {
     evt.preventDefault();
@@ -110,6 +116,10 @@ LabelEditor.propTypes = {
    * Callback that is called when a change is made.
    */
   onChange: React.PropTypes.func.isRequired,
+  /**
+   * Initial state.
+   */
+  styling: React.PropTypes.object,
   /**
   * i18n message strings. Provided through the application through context.
   */
