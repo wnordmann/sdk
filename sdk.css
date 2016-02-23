@@ -1,3 +1,9 @@
 .dropdown{
   color: transparent;
 }
+.modal-body {
+  padding: 5px;
+}
+.modal-title {
+  text-transform: none !important;
+}
