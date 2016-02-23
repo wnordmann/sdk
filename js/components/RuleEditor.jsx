@@ -48,27 +48,35 @@ class RuleEditor extends React.Component {
     super(props);
   }
   render() {
-    const {formatMessage} = this.props.intl;
-    return (
-      <UI.SimpleTabs defaultActiveKey={1}>
-        <UI.Tab eventKey={1} title={formatMessage(messages.filltitle)}>
-          <FillEditor {...this.props} />
-        </UI.Tab>
-        <UI.Tab eventKey={2} title={formatMessage(messages.stroketitle)}>
-          <StrokeEditor {...this.props} />
-        </UI.Tab>
-        <UI.Tab eventKey={3} title={formatMessage(messages.labeltitle)}>
-          <LabelEditor {...this.props} />
-        </UI.Tab>
-        <UI.Tab eventKey={4} title={formatMessage(messages.filtertitle)}>
-          <FilterEditor {...this.props} />
-        </UI.Tab>
-      </UI.SimpleTabs>
-    );
+    if (this.props.visible) {
+      const {formatMessage} = this.props.intl;
+      return (
+        <UI.SimpleTabs defaultActiveKey={1}>
+          <UI.Tab eventKey={1} title={formatMessage(messages.filltitle)}>
+            <FillEditor {...this.props} />
+          </UI.Tab>
+          <UI.Tab eventKey={2} title={formatMessage(messages.stroketitle)}>
+            <StrokeEditor {...this.props} />
+          </UI.Tab>
+          <UI.Tab eventKey={3} title={formatMessage(messages.labeltitle)}>
+            <LabelEditor {...this.props} />
+          </UI.Tab>
+          <UI.Tab eventKey={4} title={formatMessage(messages.filtertitle)}>
+            <FilterEditor {...this.props} />
+          </UI.Tab>
+        </UI.SimpleTabs>
+      );
+    } else {
+      return (<article />);
+    }
   }
 }
 
 RuleEditor.propTypes = {
+  /**
+   * Are we visible or not?
+   */
+  visible: React.PropTypes.bool,
   /**
    * List of attributes.
    */

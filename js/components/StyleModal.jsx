@@ -13,6 +13,7 @@
 import React from 'react';
 import ol from 'openlayers';
 import Dialog from 'pui-react-modals';
+import Grids from 'pui-react-grids';
 import UI from 'pui-react-buttons';
 import {defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
@@ -29,6 +30,21 @@ const messages = defineMessages({
     id: 'stylemodal.applybutton',
     description: 'Text for the apply button',
     defaultMessage: 'Apply'
+  },
+  addrulebutton: {
+    id: 'stylemodal.addrulebutton',
+    description: 'Text for the add rule button',
+    defaultMessage: 'Add'
+  },
+  removerulebutton: {
+    id: 'stylemodal.removerulebutton',
+    description: 'Text for the remove rule button',
+    defaultMessage: 'Remove'
+  },
+  rulelabel: {
+    id: 'stylemodal.rulelabel',
+    description: 'Label for the rule combo box',
+    defaultMessage: 'Rule'
   }
 });
 
@@ -38,7 +54,11 @@ class StyleModal extends Dialog.Modal {
     super(props);
     this._styleState = {};
     this.state = {
-      attributes: []
+      attributes: [],
+      rule: 'Rule 1',
+      rules: [{
+        title: 'Rule 1'
+      }]
     };
     var source = this.props.layer.getSource();
     if (source && !(source instanceof ol.source.Cluster)) {
@@ -56,54 +76,90 @@ class StyleModal extends Dialog.Modal {
       }, this);
     }
   }
-  _setStyle() {
+  _createStyle(styleState) {
     var fill = new ol.style.Fill({
-      color: transformColor(this._styleState.fillColor)
+      color: transformColor(styleState.fillColor)
     });
     var stroke = new ol.style.Stroke({
-      color: transformColor(this._styleState.strokeColor),
-      width: this._styleState.strokeWidth
+      color: transformColor(styleState.strokeColor),
+      width: styleState.strokeWidth
     });
-    var style = new ol.style.Style({
-      fill: fill,
-      stroke: stroke
-    });
-    if (this._styleState.filter !== null || this._styleState.labelAttribute) {
-      var me = this;
-      style = new ol.style.Style({
-        fill: fill,
-        stroke: stroke,
-        text: new ol.style.Text({
-          font: this._styleState.fontSize + 'px Calibri,sans-serif',
-          fill: new ol.style.Fill({
-            color: transformColor(this._styleState.fontColor)
-          })
+    var text;
+    if (styleState.labelAttribute) {
+      text = new ol.style.Text({
+        font: styleState.fontSize + 'px Calibri,sans-serif',
+        fill: new ol.style.Fill({
+          color: transformColor(styleState.fontColor)
         })
       });
-      this.props.layer.setStyle(function(feature) {
-        var hide = false;
-        if (me._styleState.filter) {
-          hide = !me._styleState.filter(feature.getProperties());
-        }
-        if (me._styleState.labelAttribute) {
-          var text = feature.get(me._styleState.labelAttribute);
-          style.getText().setText(text ? text : '');
-        }
-        return hide ? null : style;
-      });
-    } else {
-      this.props.layer.setStyle(style);
     }
+    return new ol.style.Style({
+      fill: fill,
+      stroke: stroke,
+      text: text
+    });
+  }
+  _setStyle() {
+    var me = this;
+    // TODO cache as many style objects as possible
+    this.props.layer.setStyle(function(feature) {
+      // loop over the rules and see which one we match
+      for (var i = 0, ii = me.state.rules.length; i < ii; ++i) {
+        var rule = me.state.rules[i].title;
+        var styleState = me._styleState[rule];
+        if (styleState.filter) {
+          if (styleState.filter(feature.getProperties())) {
+            var style = me._createStyle(styleState);
+            if (styleState.labelAttribute) {
+              var text = feature.get(styleState.labelAttribute);
+              style.getText().setText(text ? text : '');
+            }
+            return style;
+          }
+        }
+      }
+      return null;
+    });
   }
   _onChange(state) {
-    Object.assign(this._styleState, state);
+    var rule = this.state.rule;
+    if (!this._styleState[rule]) {
+      this._styleState[rule] = {};
+    }
+    Object.assign(this._styleState[rule], state);
+  }
+  _onRuleChange(evt) {
+    this.setState({rule: evt.target.value});
+  }
+  _addRule() {
+    var rules = this.state.rules.slice();
+    var title = 'Rule ' + (this.state.rules.length + 1);
+    rules.push({
+      title: title
+    });
+    this.setState({rule: title, rules: rules});
+  }
+  _removeRule() {
   }
   render() {
     const {formatMessage} = this.props.intl;
+    var ruleItems = this.state.rules.map(function(rule, key) {
+      return (<option key={key} value={rule.title}>{rule.title}</option>);
+    });
+    // TODO see if we can do with a single rule editor
+    var ruleEditors = this.state.rules.map(function(rule, key) {
+      return (<RuleEditor visible={rule.title === this.state.rule} key={key} styling={this._styleState[rule.title]} onChange={this._onChange.bind(this)} attributes={this.state.attributes} />)
+    }, this);
     return (
       <Dialog.BaseModal title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} show={this.state.isVisible} onHide={this.close} {...this.props}>
         <Dialog.ModalBody>
-          <RuleEditor styling={this._styleState} onChange={this._onChange.bind(this)} attributes={this.state.attributes} />
+          <div className="clearfix form-group">
+            <Grids.Col md={6}><label htmlFor='ruleSelector'>{formatMessage(messages.rulelabel)}</label></Grids.Col>
+            <Grids.Col md={6}><select ref='ruleSelector' value={this.state.rule} className='form-control' onChange={this._onRuleChange.bind(this)}>{ruleItems}</select></Grids.Col>
+            <Grids.Col md={6}><UI.DefaultButton onClick={this._addRule.bind(this)}>{formatMessage(messages.addrulebutton)}</UI.DefaultButton></Grids.Col>
+            <Grids.Col md={6}><UI.DefaultButton onClick={this._removeRule.bind(this)}>{formatMessage(messages.removerulebutton)}</UI.DefaultButton></Grids.Col>
+          </div>
+          {ruleEditors}
         </Dialog.ModalBody>
         <Dialog.ModalFooter>
           <UI.DefaultButton onClick={this._setStyle.bind(this)}>{formatMessage(messages.applybutton)}</UI.DefaultButton>
