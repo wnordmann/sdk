@@ -19,6 +19,7 @@ import {defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import {transformColor} from '../util.js';
 import RuleEditor from './RuleEditor.jsx';
+import './StyleModal.css';
 
 const messages = defineMessages({
   title: {
@@ -34,17 +35,17 @@ const messages = defineMessages({
   addrulebutton: {
     id: 'stylemodal.addrulebutton',
     description: 'Text for the add rule button',
-    defaultMessage: 'Add'
+    defaultMessage: 'Add New Rule'
   },
   removerulebutton: {
     id: 'stylemodal.removerulebutton',
     description: 'Text for the remove rule button',
-    defaultMessage: 'Remove'
+    defaultMessage: 'Remove Selected Rule'
   },
   rulelabel: {
     id: 'stylemodal.rulelabel',
     description: 'Label for the rule combo box',
-    defaultMessage: 'Rule'
+    defaultMessage: 'Select Rule:'
   }
 });
 
@@ -107,15 +108,13 @@ class StyleModal extends Dialog.Modal {
       for (var i = 0, ii = me.state.rules.length; i < ii; ++i) {
         var rule = me.state.rules[i].title;
         var styleState = me._styleState[rule];
-        if (styleState.filter) {
-          if (styleState.filter(feature.getProperties())) {
-            var style = me._createStyle(styleState);
-            if (styleState.labelAttribute) {
-              var text = feature.get(styleState.labelAttribute);
-              style.getText().setText(text ? text : '');
-            }
-            return style;
+        if (!styleState.filter || styleState.filter(feature.getProperties())) {
+          var style = me._createStyle(styleState);
+          if (styleState.labelAttribute) {
+            var text = feature.get(styleState.labelAttribute);
+            style.getText().setText(text ? text : '');
           }
+          return style;
         }
       }
       return null;
@@ -140,6 +139,16 @@ class StyleModal extends Dialog.Modal {
     this.setState({rule: title, rules: rules});
   }
   _removeRule() {
+    var rules = this.state.rules.slice();
+    var idx;
+    for (var i = 0, ii = rules.length; i < ii; ++i) {
+      if (rules[i].title === this.state.rule) {
+        idx = i;
+        break;
+      }
+    }
+    rules.splice(idx, 1);
+    this.setState({rules: rules, rule: rules.length > 0 ? rules[0].title: null});
   }
   render() {
     const {formatMessage} = this.props.intl;
@@ -154,10 +163,10 @@ class StyleModal extends Dialog.Modal {
       <Dialog.BaseModal title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} show={this.state.isVisible} onHide={this.close} {...this.props}>
         <Dialog.ModalBody>
           <div className="clearfix form-group">
-            <Grids.Col md={6}><label htmlFor='ruleSelector'>{formatMessage(messages.rulelabel)}</label></Grids.Col>
-            <Grids.Col md={6}><select ref='ruleSelector' value={this.state.rule} className='form-control' onChange={this._onRuleChange.bind(this)}>{ruleItems}</select></Grids.Col>
+            <Grids.Col md={5}><label className="rule-label" htmlFor='ruleSelector'>{formatMessage(messages.rulelabel)}</label></Grids.Col>
+            <Grids.Col md={4}><select ref='ruleSelector' value={this.state.rule} className='form-control' onChange={this._onRuleChange.bind(this)}>{ruleItems}</select></Grids.Col>
             <Grids.Col md={6}><UI.DefaultButton onClick={this._addRule.bind(this)}>{formatMessage(messages.addrulebutton)}</UI.DefaultButton></Grids.Col>
-            <Grids.Col md={6}><UI.DefaultButton onClick={this._removeRule.bind(this)}>{formatMessage(messages.removerulebutton)}</UI.DefaultButton></Grids.Col>
+            <Grids.Col md={9}><UI.DefaultButton onClick={this._removeRule.bind(this)}>{formatMessage(messages.removerulebutton)}</UI.DefaultButton></Grids.Col>
           </div>
           {ruleEditors}
         </Dialog.ModalBody>
