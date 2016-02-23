@@ -9355,3 +9355,6 @@ button.close {
 .modal-title {
   text-transform: none !important;
 }
+.modal-header {
+  padding: 10px !important;
+}
