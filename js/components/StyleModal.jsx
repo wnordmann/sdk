@@ -57,15 +57,37 @@ class StyleModal extends Dialog.Modal {
     }
   }
   _setStyle() {
-    this.props.layer.setStyle(new ol.style.Style({
-      fill: new ol.style.Fill({
-        color: transformColor(this._styleState.fillColor)
-      }),
-      stroke: new ol.style.Stroke({
-        color: transformColor(this._styleState.strokeColor),
-        width: this._styleState.strokeWidth
-      })
-    }));
+    var fill = new ol.style.Fill({
+      color: transformColor(this._styleState.fillColor)
+    });
+    var stroke = new ol.style.Stroke({
+      color: transformColor(this._styleState.strokeColor),
+      width: this._styleState.strokeWidth
+    });
+    var style = new ol.style.Style({
+      fill: fill,
+      stroke: stroke
+    });
+    if (this._styleState.labelAttribute) {
+      var me = this;
+      style = new ol.style.Style({
+        fill: fill,
+        stroke: stroke,
+        text: new ol.style.Text({
+          font: this._styleState.fontSize + 'px Calibri,sans-serif',
+          fill: new ol.style.Fill({
+            color: transformColor(this._styleState.fontColor)
+          })
+        })
+      });
+      this.props.layer.setStyle(function(feature) {
+        var text = feature.get(me._styleState.labelAttribute);
+        style.getText().setText(text ? text : '');
+        return style;
+      });
+    } else {
+      this.props.layer.setStyle(style);
+    }
   }
   _onChange(state) {
     Object.assign(this._styleState, state);
