@@ -34,12 +34,14 @@ const messages = defineMessages({
   }
 });
 
+const nullValue = 'NULL';
+
 @pureRender
 class LabelEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this._setInitialStateFromProp('labelAttribute', this.props.attributes[0]);
+    this._setInitialStateFromProp('labelAttribute', null);
     this._setInitialStateFromProp('fontSize', 12);
     this._setInitialStateFromProp('fontColor', {r: 0, g: 0, b: 0, a: 1});
     this.props.onChange(this.state);
@@ -55,7 +57,7 @@ class LabelEditor extends React.Component {
     evt.preventDefault();
   }
   _onItemChange(evt) {
-    this.state.labelAttribute = evt.target.value;
+    this.state.labelAttribute = evt.target.value === nullValue ? null : evt.target.value;
     this.props.onChange(this.state);
   }
   _onChangeFontSize(evt) {
@@ -68,11 +70,11 @@ class LabelEditor extends React.Component {
   }
   render() {
     const {formatMessage} = this.props.intl;
-    var attributeItems = this.props.attributes.map(function(attribute, idx) {
-      return (
-        <option value={attribute} key={idx}>{attribute}</option>
-      );
-    });
+    var attributeItems = [(<option value={nullValue} key={0}>Select an attribute</option>)];
+    for (var i = 0, ii = this.props.attributes.length; i < ii; ++i) {
+      var attribute = this.props.attributes[i];
+      attributeItems.push(<option value={attribute} key={i + 1}>{attribute}</option>);
+    }
     return (
       <form onSubmit={this._onSubmit} className='form-horizontal'>
         <div className="form-group">
