@@ -29,9 +29,6 @@ class FillEditor extends React.Component {
       this.state[prop] = defaultVal;
     }
   }
-  _onSubmit(evt) {
-    evt.preventDefault();
-  }
   _onChangeFill(color) {
     this.state.fillColor = color.rgb;
     this.props.onChange(this.state);

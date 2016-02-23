@@ -68,7 +68,7 @@ class StyleModal extends Dialog.Modal {
       fill: fill,
       stroke: stroke
     });
-    if (this._styleState.labelAttribute) {
+    if (this._styleState.filter !== null || this._styleState.labelAttribute) {
       var me = this;
       style = new ol.style.Style({
         fill: fill,
@@ -81,9 +81,15 @@ class StyleModal extends Dialog.Modal {
         })
       });
       this.props.layer.setStyle(function(feature) {
-        var text = feature.get(me._styleState.labelAttribute);
-        style.getText().setText(text ? text : '');
-        return style;
+        var hide = false;
+        if (me._styleState.filter) {
+          hide = !me._styleState.filter(feature.getProperties());
+        }
+        if (me._styleState.labelAttribute) {
+          var text = feature.get(me._styleState.labelAttribute);
+          style.getText().setText(text ? text : '');
+        }
+        return hide ? null : style;
       });
     } else {
       this.props.layer.setStyle(style);

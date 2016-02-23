@@ -16,6 +16,7 @@ import UI from 'pui-react-tabs';
 import LabelEditor from './LabelEditor.jsx';
 import StrokeEditor from './StrokeEditor.jsx';
 import FillEditor from './FillEditor.jsx';
+import FilterEditor from './FilterEditor.jsx';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -33,6 +34,11 @@ const messages = defineMessages({
     id: 'ruleeditor.labeltitle',
     description: 'Title for the label tab',
     defaultMessage: 'Label'
+  },
+  filtertitle: {
+    id: 'ruleeditor.filtertitle',
+    description: 'Title for the filter tab',
+    defaultMessage: 'Filter'
   }
 });
 
@@ -53,6 +59,9 @@ class RuleEditor extends React.Component {
         </UI.Tab>
         <UI.Tab eventKey={3} title={formatMessage(messages.labeltitle)}>
           <LabelEditor {...this.props} />
+        </UI.Tab>
+        <UI.Tab eventKey={4} title={formatMessage(messages.filtertitle)}>
+          <FilterEditor {...this.props} />
         </UI.Tab>
       </UI.SimpleTabs>
     );
