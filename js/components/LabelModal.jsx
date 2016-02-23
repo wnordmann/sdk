@@ -16,6 +16,7 @@ import Dialog from 'pui-react-modals';
 import UI from 'pui-react-buttons';
 import {defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
+import {transformColor} from '../util.js';
 import LabelEditor from './LabelEditor.jsx';
 
 const messages = defineMessages({
@@ -66,16 +67,16 @@ class LabelModal extends Dialog.Modal {
     this._styleSet = true;
     var me = this;
     layer.setStyle(function(feature, resolution) {
-      var rawValue = feature.get(me._attribute);
+      var rawValue = feature.get(me._labelState.labelAttribute);
       var value = '';
       if (rawValue !== undefined) {
         value += rawValue;
       }
       var text = new ol.style.Text({
         text: value,
-        font: me._fontSize + 'px Calibri,sans-serif',
+        font: me._labelState.fontSize + 'px Calibri,sans-serif',
         fill: new ol.style.Fill({
-          color: me._fillColor
+          color: transformColor(me._labelState.fontColor)
         })
       });
       var modifyStyle = function(s) {
@@ -105,9 +106,7 @@ class LabelModal extends Dialog.Modal {
     }
   }
   _onChangeLabel(labelState) {
-    this._fillColor = labelState.fontColor;
-    this._attribute = labelState.labelAttribute;
-    this._fontSize = labelState.fontSize;
+    this._labelState = labelState;
   }
   _setLabel() {
     if (!this._styleSet) {
@@ -121,7 +120,7 @@ class LabelModal extends Dialog.Modal {
     return (
       <Dialog.BaseModal title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} show={this.state.isVisible} onHide={this.close} {...this.props}>
         <Dialog.ModalBody>
-          <LabelEditor onChange={this._onChangeLabel.bind(this)} attributes={this.state.attributes} />
+          <LabelEditor styling={this._labelState} onChange={this._onChangeLabel.bind(this)} attributes={this.state.attributes} />
         </Dialog.ModalBody>
         <Dialog.ModalFooter>
           <UI.DefaultButton onClick={this._setLabel.bind(this)}>{formatMessage(messages.applybutton)}</UI.DefaultButton>

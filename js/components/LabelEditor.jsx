@@ -13,7 +13,6 @@
 import React from 'react';
 import Grids from 'pui-react-grids';
 import ColorPicker from 'react-color';
-import {transformColor} from '../util.js';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 
@@ -42,7 +41,7 @@ class LabelEditor extends React.Component {
     this.state = {};
     this._setInitialStateFromProp('labelAttribute', this.props.attributes[0]);
     this._setInitialStateFromProp('fontSize', 12);
-    this._setInitialStateFromProp('fontColor', [0, 0, 0, 1]);
+    this._setInitialStateFromProp('fontColor', {r: 0, g: 0, b: 0, a: 1});
     this.props.onChange(this.state);
   }
   _setInitialStateFromProp(prop, defaultVal) {
@@ -56,7 +55,7 @@ class LabelEditor extends React.Component {
     evt.preventDefault();
   }
   _onItemChange(evt) {
-    this.state.attribute = evt.target.value;
+    this.state.labelAttribute = evt.target.value;
     this.props.onChange(this.state);
   }
   _onChangeFontSize(evt) {
@@ -64,7 +63,7 @@ class LabelEditor extends React.Component {
     this.props.onChange(this.state);
   }
   _onChangeFill(color) {
-    this.state.fontColor = transformColor(color);
+    this.state.fontColor = color.rgb;
     this.props.onChange(this.state);
   }
   render() {

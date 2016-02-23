@@ -12,7 +12,6 @@
 
 import React from 'react';
 import ColorPicker from 'react-color';
-import {transformColor} from '../util.js';
 import pureRender from 'pure-render-decorator';
 
 @pureRender
@@ -20,7 +19,7 @@ class FillEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this._setInitialStateFromProp('fillColor', [255, 0, 0, 0.5]);
+    this._setInitialStateFromProp('fillColor', {r: 255, g: 0, b: 0, a: 0.5});
     this.props.onChange(this.state);
   }
   _setInitialStateFromProp(prop, defaultVal) {
@@ -34,7 +33,7 @@ class FillEditor extends React.Component {
     evt.preventDefault();
   }
   _onChangeFill(color) {
-    this.state.fillColor = transformColor(color);
+    this.state.fillColor = color.rgb;
     this.props.onChange(this.state);
   }
   render() {

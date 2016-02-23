@@ -13,7 +13,6 @@
 import React from 'react';
 import Grids from 'pui-react-grids';
 import ColorPicker from 'react-color';
-import {transformColor} from '../util.js';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 
@@ -35,7 +34,7 @@ class StrokeEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this._setInitialStateFromProp('strokeColor', [0, 0, 0, 1]);
+    this._setInitialStateFromProp('strokeColor', {r: 0, g: 0, b: 0, a: 1});
     this._setInitialStateFromProp('strokeWidth', 1);
     this.props.onChange(this.state);
   }
@@ -54,7 +53,7 @@ class StrokeEditor extends React.Component {
     this.props.onChange(this.state);
   }
   _onChangeStroke(color) {
-    this.state.strokeColor = transformColor(color);
+    this.state.strokeColor = color.rgb;
     this.props.onChange(this.state);
   }
   render() {

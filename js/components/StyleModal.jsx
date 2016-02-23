@@ -16,6 +16,7 @@ import Dialog from 'pui-react-modals';
 import UI from 'pui-react-buttons';
 import {defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
+import {transformColor} from '../util.js';
 import RuleEditor from './RuleEditor.jsx';
 
 const messages = defineMessages({
@@ -58,10 +59,10 @@ class StyleModal extends Dialog.Modal {
   _setStyle() {
     this.props.layer.setStyle(new ol.style.Style({
       fill: new ol.style.Fill({
-        color: this._styleState.fillColor
+        color: transformColor(this._styleState.fillColor)
       }),
       stroke: new ol.style.Stroke({
-        color: this._styleState.strokeColor,
+        color: transformColor(this._styleState.strokeColor),
         width: this._styleState.strokeWidth
       })
     }));

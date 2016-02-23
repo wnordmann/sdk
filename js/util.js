@@ -12,7 +12,7 @@
 
 export default {
   transformColor(color) {
-    var colorObj = color.rgb;
+    var colorObj = color.rgb ? color.rgb : color;
     return [colorObj.r, colorObj.g, colorObj.b, colorObj.a];
   },
   doGET(url, success, failure, scope) {
