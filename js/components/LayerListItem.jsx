@@ -243,7 +243,7 @@ class LayerListItem extends React.Component {
       remove = <a title={formatMessage(messages.removetitle)} href='#' onClick={this._remove.bind(this)}><i className='layerlayeritem glyphicon glyphicon-remove'></i></a>;
     }
     var edit;
-    if (layer.get('isWFST') === true) {
+    if (this.props.allowEditing && layer.get('isWFST') === true) {
       edit = <a title={formatMessage(messages.edittitle)} href='#' onClick={this._edit.bind(this)}><i className='layerlayeritem glyphicon glyphicon-pencil'></i></a>;
     }
     var input, baselayerId, heading;
@@ -321,6 +321,10 @@ LayerListItem.propTypes = {
    * Should we allow for filtering of features in a layer?
    */
   allowFiltering: React.PropTypes.bool,
+  /**
+   * Should we allow editing of features in a vector layer?
+   */
+  allowEditing: React.PropTypes.bool,
   /**
    * Should we allow for labeling of features in a layer?
    */

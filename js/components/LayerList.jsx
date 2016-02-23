@@ -188,6 +188,10 @@ LayerList.propTypes = {
    */
   allowStyling: React.PropTypes.bool,
   /**
+   * Should we allow for editing of features in a vector layer?
+   */
+  allowEditing: React.PropTypes.bool,
+  /**
    * Should we show the contents of layer groups?
    */
   showGroupContent: React.PropTypes.bool,
@@ -231,6 +235,7 @@ LayerList.propTypes = {
 LayerList.defaultProps = {
   showZoomTo: false,
   allowReordering: false,
+  allowEditing: false,
   allowFiltering: false,
   allowLabeling: false,
   allowStyling: false,
