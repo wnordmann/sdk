@@ -86,6 +86,10 @@ RuleEditor.propTypes = {
    */
   onChange: React.PropTypes.func.isRequired,
   /**
+   * The geometry type.
+   */
+  geometryType: React.PropTypes.oneOf(['Polygon', 'LineString', 'Point']),
+  /**
   * i18n message strings. Provided through the application through context.
   */
   intl: intlShape.isRequired

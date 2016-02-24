@@ -15,7 +15,7 @@ import ol from 'openlayers';
 import Dialog from 'pui-react-modals';
 import Grids from 'pui-react-grids';
 import UI from 'pui-react-buttons';
-import {defineMessages, injectIntl} from 'react-intl';
+import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import {transformColor} from '../util.js';
 import RuleEditor from './RuleEditor.jsx';
@@ -54,13 +54,16 @@ class StyleModal extends Dialog.Modal {
   constructor(props) {
     super(props);
     this._styleState = {};
+    this._styleCache = {};
     this.state = {
       attributes: [],
       rule: 'Rule 1',
+      geometryType: null,
       rules: [{
         title: 'Rule 1'
       }]
     };
+    this.props.layer.on('change:wfsInfo', this._setGeomType, this);
     var source = this.props.layer.getSource();
     if (source && !(source instanceof ol.source.Cluster)) {
       source.on('change', function(evt) {
@@ -76,6 +79,10 @@ class StyleModal extends Dialog.Modal {
         }
       }, this);
     }
+  }
+  _setGeomType() {
+    this.setState({geometryType: this.props.layer.get('wfsInfo').geometryType});
+    this.props.layer.un('change:wfsInfo', this._setGeomType, this);
   }
   _createStyle(styleState) {
     var fill = new ol.style.Fill({
@@ -94,11 +101,29 @@ class StyleModal extends Dialog.Modal {
         })
       });
     }
-    return new ol.style.Style({
-      fill: fill,
-      stroke: stroke,
-      text: text
-    });
+    var result;
+    if (this.state.geometryType === 'Polygon') {
+      result = new ol.style.Style({
+        fill: fill,
+        stroke: stroke,
+        text: text
+      });
+    } else if (this.state.geometryType === 'LineString') {
+      result = new ol.style.Style({
+        stroke: stroke,
+        text: text
+      });
+    } else if (this.state.geometryType === 'Point') {
+      result = new ol.style.Style({
+        image: new ol.style.Circle({
+          fill: fill,
+          stroke: stroke,
+          radius: 4
+        }),
+        text: text
+      });
+    }
+    return result;
   }
   _setStyle() {
     var me = this;
@@ -112,7 +137,7 @@ class StyleModal extends Dialog.Modal {
           var style = me._createStyle(styleState);
           if (styleState.labelAttribute) {
             var text = feature.get(styleState.labelAttribute);
-            style.getText().setText(text ? text : '');
+            style.getText().setText(text ? '' + text : '');
           }
           return style;
         }
@@ -148,7 +173,7 @@ class StyleModal extends Dialog.Modal {
       }
     }
     rules.splice(idx, 1);
-    this.setState({rules: rules, rule: rules.length > 0 ? rules[0].title: null});
+    this.setState({rules: rules, rule: rules.length > 0 ? rules[0].title : null});
   }
   render() {
     const {formatMessage} = this.props.intl;
@@ -157,7 +182,7 @@ class StyleModal extends Dialog.Modal {
     });
     // TODO see if we can do with a single rule editor
     var ruleEditors = this.state.rules.map(function(rule, key) {
-      return (<RuleEditor visible={rule.title === this.state.rule} key={key} styling={this._styleState[rule.title]} onChange={this._onChange.bind(this)} attributes={this.state.attributes} />)
+      return (<RuleEditor geometryType={this.state.geometryType} visible={rule.title === this.state.rule} key={key} styling={this._styleState[rule.title]} onChange={this._onChange.bind(this)} attributes={this.state.attributes} />)
     }, this);
     return (
       <Dialog.BaseModal title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} show={this.state.isVisible} onHide={this.close} {...this.props}>
@@ -177,5 +202,16 @@ class StyleModal extends Dialog.Modal {
     );
   }
 }
+
+StyleModal.propTypes = {
+  /**
+   * The layer associated with the style modal.
+   */
+  layer: React.PropTypes.instanceOf(ol.layer.Vector).isRequired,
+  /**
+   * i18n message strings. Provided through the application through context.
+   */
+  intl: intlShape.isRequired
+};
 
 export default injectIntl(StyleModal, {withRef: true});
