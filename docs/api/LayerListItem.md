@@ -6,6 +6,13 @@ An item in the LayerList component.
 Props
 -----
 
+### `allowEditing`
+
+Should we allow editing of features in a vector layer?
+
+type: `bool`
+
+
 ### `allowFiltering`
 
 Should we allow for filtering of features in a layer?
@@ -23,6 +30,13 @@ type: `bool`
 ### `allowReordering`
 
 Should we show up and down buttons to allow reordering?
+
+type: `bool`
+
+
+### `allowStyling`
+
+Should we allow for styling of features in a vector layer?
 
 type: `bool`
 

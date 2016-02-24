@@ -16,8 +16,12 @@ fs.readdir(dir, function(err, files) {
         if (err) {
           throw err;
         }
-        var componentInfo = reactDocs.parse(src, reactDocs.resolver.findAllComponentDefinitions);
-        if (componentInfo[0].description !== '') {
+        var componentInfo;
+        try {
+          componentInfo = reactDocs.parse(src, reactDocs.resolver.findAllComponentDefinitions);
+        } catch(e) {
+        }
+        if (componentInfo  && componentInfo[0].description !== '') {
           var name = file.split('.')[0];
           var markdown = generateMarkdown(name, componentInfo[0]);
           fs.writeFileSync(output + name + '.md', markdown);

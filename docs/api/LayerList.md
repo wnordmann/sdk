@@ -9,10 +9,19 @@ Props
 ### `addLayer`
 
 Should we allow adding layers through WMS or WFS GetCapabilities?
-Object with keys url (should end with ? or &) and asVector.
+Object with keys url and asVector.
 If asVector is true, layers will be retrieved from WFS and added as vector.
+If allowUserInput is true, the user will be able to provide a url through an input.
 
 type: `shape[object Object]`
+
+
+### `allowEditing`
+
+Should we allow for editing of features in a vector layer?
+
+type: `bool`
+defaultValue: `false`
 
 
 ### `allowFiltering`
@@ -34,6 +43,14 @@ defaultValue: `false`
 ### `allowReordering`
 
 Should we allow for reordering of layers?
+
+type: `bool`
+defaultValue: `false`
+
+
+### `allowStyling`
+
+Should we allow for styling of features in a vector layer?
 
 type: `bool`
 defaultValue: `false`
