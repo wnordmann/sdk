@@ -49,8 +49,8 @@ class FilterEditor extends React.Component {
     this._setInitialStateFromProp('expression', null);
   }
   _setInitialStateFromProp(prop, defaultVal) {
-    if (this.props.styling && this.props.styling[prop]) {
-      this.state[prop] = this.props.styling[prop];
+    if (this.props.initialState && this.props.initialState[prop]) {
+      this.state[prop] = this.props.initialState[prop];
     } else {
       this.state[prop] = defaultVal;
     }
@@ -92,7 +92,7 @@ FilterEditor.propTypes = {
   /**
    * Initial state.
    */
-  styling: React.PropTypes.object,
+  initialState: React.PropTypes.object,
   /**
    * i18n message strings. Provided through the application through context.
    */

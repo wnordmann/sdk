@@ -185,7 +185,7 @@ class StyleModal extends Dialog.Modal {
     });
     // TODO see if we can do with a single rule editor
     var ruleEditors = this.state.rules.map(function(rule, key) {
-      return (<RuleEditor geometryType={this.state.geometryType} visible={rule.title === this.state.rule} key={key} styling={this._styleState[rule.title]} onChange={this._onChange.bind(this)} attributes={this.state.attributes} />)
+      return (<RuleEditor geometryType={this.state.geometryType} visible={rule.title === this.state.rule} key={key} initialState={this._styleState[rule.title]} onChange={this._onChange.bind(this)} attributes={this.state.attributes} />)
     }, this);
     return (
       <Dialog.BaseModal title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} show={this.state.isVisible} onHide={this.close} {...this.props}>

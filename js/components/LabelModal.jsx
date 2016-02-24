@@ -123,7 +123,7 @@ class LabelModal extends Dialog.Modal {
     return (
       <Dialog.BaseModal title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} show={this.state.isVisible} onHide={this.close} {...this.props}>
         <Dialog.ModalBody>
-          <LabelEditor styling={this._labelState} onChange={this._onChangeLabel.bind(this)} attributes={this.state.attributes} />
+          <LabelEditor initialState={this._labelState} onChange={this._onChangeLabel.bind(this)} attributes={this.state.attributes} />
         </Dialog.ModalBody>
         <Dialog.ModalFooter>
           <UI.DefaultButton onClick={this._setLabel.bind(this)}>{formatMessage(messages.applybutton)}</UI.DefaultButton>
