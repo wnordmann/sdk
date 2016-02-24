@@ -37,6 +37,9 @@ const messages = defineMessages({
   }
 });
 
+/**
+ * A modal window for applying labels to a vector layer.
+ */
 @pureRender
 class LabelModal extends Dialog.Modal {
   constructor(props) {

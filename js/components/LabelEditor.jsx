@@ -36,6 +36,9 @@ const messages = defineMessages({
 
 const nullValue = 'NULL';
 
+/**
+ * Editor for label properties. Can edit the label attribute, fontSize and fontColor.
+ */
 @pureRender
 class LabelEditor extends React.Component {
   constructor(props) {

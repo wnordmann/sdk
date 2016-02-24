@@ -35,6 +35,9 @@ const messages = defineMessages({
   }
 });
 
+/**
+ * Editor for a single using filtrex. Can for instance be used in a style dialog.
+ */
 @pureRender
 class FilterEditor extends React.Component {
   constructor(props) {

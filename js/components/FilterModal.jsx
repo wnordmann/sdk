@@ -44,6 +44,9 @@ const messages = defineMessages({
   }
 });
 
+/**
+ * Modal for building filters to filter a vector layer.
+ */
 @pureRender
 class FilterModal extends Dialog.Modal {
   constructor(props) {

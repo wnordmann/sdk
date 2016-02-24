@@ -29,6 +29,9 @@ const messages = defineMessages({
   }
 });
 
+/**
+ * Style editor for stroke properties (color and width).
+ */
 @pureRender
 class StrokeEditor extends React.Component {
   constructor(props) {

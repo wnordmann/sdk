@@ -30,6 +30,9 @@ const messages = defineMessages({
 
 const ALL_ATTRS = '#AllAttributes';
 
+/**
+ * Popup to show feature info. This can be through WMS GetFeatureInfo or local vector data.
+ */
 class InfoPopup extends BasePopup {
   constructor(props) {
     super(props);

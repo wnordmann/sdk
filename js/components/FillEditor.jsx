@@ -14,6 +14,9 @@ import React from 'react';
 import ColorPicker from 'react-color';
 import pureRender from 'pure-render-decorator';
 
+/**
+ * Style editor for fill color.
+ */
 @pureRender
 class FillEditor extends React.Component {
   constructor(props) {

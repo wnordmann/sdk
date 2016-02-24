@@ -49,6 +49,9 @@ const messages = defineMessages({
   }
 });
 
+/**
+ * A modal for editing the style of a vector layer.
+ */
 @pureRender
 class StyleModal extends Dialog.Modal {
   constructor(props) {

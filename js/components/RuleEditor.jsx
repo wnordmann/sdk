@@ -42,6 +42,9 @@ const messages = defineMessages({
   }
 });
 
+/**
+ * Editor for a style rule. This means editing symbolizer properties and filter.
+ */
 @pureRender
 class RuleEditor extends React.Component {
   constructor(props) {
