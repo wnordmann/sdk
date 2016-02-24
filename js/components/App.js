@@ -14,6 +14,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 
+/**
+ * Base class for applications.
+ */
 export default class App extends React.Component {
   componentDidMount() {
     if (this.refs.map) {

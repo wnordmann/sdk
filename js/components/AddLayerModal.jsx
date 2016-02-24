@@ -46,6 +46,9 @@ const messages = defineMessages({
   }
 });
 
+/**
+ * Modal window to add layers from a WMS or WFS service.
+ */
 @pureRender
 class AddLayerModal extends Dialog.Modal {
   constructor(props) {
