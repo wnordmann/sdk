@@ -38,6 +38,9 @@ const messages = defineMessages({
   }
 });
 
+/**
+ * Popup that can be used for feature editing (attribute form).
+ */
 class EditPopup extends BasePopup {
   constructor(props) {
     super(props);
