@@ -57,7 +57,6 @@ function generateProp(propName, prop) {
 
 function generateProps(props) {
   var title = 'Props';
-
   return (
     title + '\n' +
     stringOfLength('-', title.length) + '\n' +

@@ -14,7 +14,7 @@ import React from 'react';
 import ol from 'openlayers';
 import Dialog from 'pui-react-modals';
 import UI from 'pui-react-buttons';
-import {defineMessages, injectIntl} from 'react-intl';
+import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import {transformColor} from '../util.js';
 import LabelEditor from './LabelEditor.jsx';
@@ -133,5 +133,16 @@ class LabelModal extends Dialog.Modal {
     );
   }
 }
+
+LabelModal.propTypes = {
+  /**
+   * The layer associated with the style modal.
+   */
+  layer: React.PropTypes.instanceOf(ol.layer.Vector).isRequired,
+  /**
+   * i18n message strings. Provided through the application through context.
+   */
+  intl: intlShape.isRequired
+};
 
 export default injectIntl(LabelModal, {withRef: true});
