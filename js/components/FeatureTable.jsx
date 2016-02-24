@@ -31,7 +31,7 @@ import filtrex from 'filtrex';
 import pureRender from 'pure-render-decorator';
 import './FeatureTable.css';
 
-const {Table, Column, Cell} = FixedDataTable;
+const {Table, Column} = FixedDataTable;
 
 const messages = defineMessages({
   layerlabel: {
