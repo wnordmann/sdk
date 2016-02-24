@@ -114,10 +114,10 @@ class AddLayerModal extends Dialog.Modal {
     var view = map.getView();
     var EX_GeographicBoundingBox = layer.EX_GeographicBoundingBox;
     if (view.getProjection().getCode() === 'EPSG:3857') {
-      EX_GeographicBoundingBox[0] = Math.max(ol.proj.EPSG3857.WORLD_EXTENT[0], EX_GeographicBoundingBox[0]);
-      EX_GeographicBoundingBox[1] = Math.max(ol.proj.EPSG3857.WORLD_EXTENT[1], EX_GeographicBoundingBox[1]);
-      EX_GeographicBoundingBox[2] = Math.min(ol.proj.EPSG3857.WORLD_EXTENT[2], EX_GeographicBoundingBox[2]);
-      EX_GeographicBoundingBox[3] = Math.min(ol.proj.EPSG3857.WORLD_EXTENT[3], EX_GeographicBoundingBox[3]);
+      EX_GeographicBoundingBox[0] = Math.max(-180, EX_GeographicBoundingBox[0]);
+      EX_GeographicBoundingBox[1] = Math.max(-85, EX_GeographicBoundingBox[1]);
+      EX_GeographicBoundingBox[2] = Math.min(180, EX_GeographicBoundingBox[2]);
+      EX_GeographicBoundingBox[3] = Math.min(85, EX_GeographicBoundingBox[3]);
     }
     var extent = ol.proj.transformExtent(layer.EX_GeographicBoundingBox, 'EPSG:4326', view.getProjection());
     var olLayer;
