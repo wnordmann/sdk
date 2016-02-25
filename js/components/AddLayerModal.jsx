@@ -153,13 +153,7 @@ class AddLayerModal extends Dialog.Modal {
           if (el.type.namespaceURI === 'http://www.opengis.net/gml') {
             geometryName = el.name;
             var lp = el.type.localPart;
-            if (lp.indexOf('Polygon') !== -1) {
-              geometryType = 'Polygon';
-            } else if (lp.indexOf('LineString') !== -1) {
-              geometryType = 'Line';
-            } else if (lp.indexOf('Point') !== -1) {
-              geometryType = 'Point';
-            }
+            geometryType = lp.replace('PropertyType', '');
           }
         }
         this.set('wfsInfo', {
