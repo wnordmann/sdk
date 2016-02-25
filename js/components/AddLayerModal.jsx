@@ -189,6 +189,7 @@ class AddLayerModal extends Dialog.Modal {
     }
     map.addLayer(olLayer);
     view.fit(extent, map.getSize());
+    this.close();
   }
   _getServiceUrl(url) {
     if (url.indexOf('?') !== -1) {
