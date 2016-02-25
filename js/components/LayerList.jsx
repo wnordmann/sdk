@@ -149,7 +149,7 @@ class LayerList extends React.Component {
     var onClick = !this.props.expandOnHover ? this._togglePanel.bind(this) : undefined;
     var editPanel;
     if (this.state.edit) {
-      editPanel = (<WFST layer={this.state.layer} map={this.props.map} />);
+      editPanel = (<WFST toggleGroup={this.props.editingToggleGroup} layer={this.state.layer} map={this.props.map} />);
     }
     return (
       <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} className={className}>
@@ -194,6 +194,10 @@ LayerList.propTypes = {
    * Should we allow for editing of features in a vector layer?
    */
   allowEditing: React.PropTypes.bool,
+  /**
+   * Toggle group to use for the editing tools.
+   */
+  editingToggleGroup: React.PropTypes.string,
   /**
    * Should we show the contents of layer groups?
    */

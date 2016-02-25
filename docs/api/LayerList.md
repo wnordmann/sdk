@@ -64,6 +64,13 @@ type: `enum('GeoJSON'|'KML'|'GPX')`
 defaultValue: `'GeoJSON'`
 
 
+### `editingToggleGroup`
+
+Toggle group to use for the editing tools.
+
+type: `string`
+
+
 ### `expandOnHover`
 
 Should we expand when hovering over the layers button?
