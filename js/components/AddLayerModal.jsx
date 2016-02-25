@@ -15,6 +15,7 @@ import ol from 'openlayers';
 import Dialog from 'pui-react-modals';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import {doGET} from '../util.js';
+import Grids from 'pui-react-grids';
 import Pui from 'pui-react-alerts';
 import pureRender from 'pure-render-decorator';
 import {BasicInput} from 'pui-react-inputs';
@@ -22,6 +23,7 @@ import UI from 'pui-react-buttons';
 import {Jsonix} from 'jsonix';
 import {XSD_1_0, XLink_1_0} from 'w3c-schemas';
 import {OWS_1_0_0, Filter_1_1_0, SMIL_2_0, SMIL_2_0_Language, GML_3_1_1, WFS_1_1_0} from 'ogc-schemas';
+import './AddLayerModal.css';
 
 const messages = defineMessages({
   title: {
@@ -59,9 +61,7 @@ class AddLayerModal extends Dialog.Modal {
     };
   }
   componentDidMount() {
-    if (this.props.allowUserInput === false) {
-      this._getCaps(this._getServiceUrl(this.props.url));
-    }
+    this._getCaps(this._getServiceUrl(this.props.url));
   }
   _getCaps(url) {
     var layers = [];
@@ -221,10 +221,14 @@ class AddLayerModal extends Dialog.Modal {
     var input;
     if (this.props.allowUserInput) {
       var serviceType = this.props.asVector ? 'WFS' : 'WMS';
-      input = (<article>
-        <BasicInput label={formatMessage(messages.inputfieldlabel, {serviceType: serviceType})}  id='url' defaultValue={this.props.url} />
-        <UI.DefaultButton onClick={this._connect.bind(this)} ref="connectButton">{formatMessage(messages.connectbutton)}</UI.DefaultButton>
-      </article>);
+      input = (<div className="clearfix">
+        <Grids.Col md={18}>
+          <BasicInput label={formatMessage(messages.inputfieldlabel, {serviceType: serviceType})}  id='url' defaultValue={this.props.url} />
+        </Grids.Col>
+        <Grids.Col md={6} className='connect-button'>
+          <UI.DefaultButton onClick={this._connect.bind(this)} ref="connectButton">{formatMessage(messages.connectbutton)}</UI.DefaultButton>
+        </Grids.Col>
+      </div>);
     }
     return (
       <Dialog.BaseModal title={formatMessage(messages.title)} show={this.state.isVisible} onHide={this.close} {...this.props}>
