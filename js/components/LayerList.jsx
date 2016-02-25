@@ -54,6 +54,9 @@ class LayerList extends React.Component {
     this._onChangeCb = this._onChange.bind(this);
     LayerStore.addChangeListener(this._onChangeCb);
     this._onChange();
+    if (this.props.showOnStart) {
+      this._showPanel();
+    }
   }
   componentWillUnmount() {
     LayerStore.removeChangeListener(this._onChangeCb);
@@ -216,6 +219,10 @@ LayerList.propTypes = {
    */
   expandOnHover: React.PropTypes.bool,
   /**
+   * Should we show this component on start of the application?
+   */
+  showOnStart: React.PropTypes.bool,
+  /**
    * Should we allow adding layers through WMS or WFS GetCapabilities?
    * Object with keys url and asVector.
    * If asVector is true, layers will be retrieved from WFS and added as vector.
@@ -243,7 +250,8 @@ LayerList.defaultProps = {
   showDownload: false,
   downloadFormat: 'GeoJSON',
   showOpacity: false,
-  expandOnHover: true
+  expandOnHover: true,
+  showOnStart: false
 };
 
 export default injectIntl(LayerList);

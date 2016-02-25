@@ -102,6 +102,14 @@ type: `bool`
 defaultValue: `true`
 
 
+### `showOnStart`
+
+Should we show this component on start of the application?
+
+type: `bool`
+defaultValue: `false`
+
+
 ### `showOpacity`
 
 Should we show an opacity slider for layers?
