@@ -46,6 +46,9 @@ global.Chart = Chart;
 import Edit from './components/Edit.jsx';
 global.Edit = Edit;
 
+import EditPopup from './components/EditPopup.jsx';
+global.EditPopup = EditPopup;
+
 import FeatureTable from './components/FeatureTable.jsx';
 global.FeatureTable = FeatureTable;
 
