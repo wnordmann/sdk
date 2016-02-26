@@ -84,7 +84,7 @@ class StyleModal extends Dialog.Modal {
     }
   }
   _setGeomType() {
-    this.setState({geometryType: this.props.layer.get('wfsInfo').geometryType});
+    this.setState({geometryType: this.props.layer.get('wfsInfo').geometryType.replace('Multi', '')});
     this.props.layer.un('change:wfsInfo', this._setGeomType, this);
   }
   _createStyle(styleState) {
@@ -147,6 +147,7 @@ class StyleModal extends Dialog.Modal {
       }
       return null;
     });
+    this.close();
   }
   _onChange(state) {
     var rule = this.state.rule;
