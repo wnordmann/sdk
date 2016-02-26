@@ -64,12 +64,21 @@ class EditPopup extends BasePopup {
   _onMapClick(evt) {
     if (this.active) {
       var map = this.props.map;
+      var hasActiveDrawModify = false;
+      map.getInteractions().forEach(function(interaction) {
+        if (interaction.getActive() && (interaction instanceof ol.interaction.Draw || interaction instanceof ol.interaction.Modify)) {
+          hasActiveDrawModify = true;
+        }
+      });
+      if (hasActiveDrawModify) {
+        return;
+      }
       var pixel = map.getEventPixel(evt.originalEvent);
       var coord = evt.coordinate;
       var me = this;
       var cont = false;
       map.forEachFeatureAtPixel(pixel, function(feature, layer) {
-        if (feature && feature.getId() !== undefined) {
+        if (feature) {
           if (layer.get('isWFST')) {
             cont = true;
             me.setState({
