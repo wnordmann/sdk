@@ -19,6 +19,7 @@ import {BasicInput} from 'pui-react-inputs';
 import UI from 'pui-react-buttons';
 import {doPOST} from '../util.js';
 import Pui from 'pui-react-alerts';
+import './EditPopup.css';
 
 const messages = defineMessages({
   save: {
@@ -170,7 +171,9 @@ class EditPopup extends BasePopup {
       error = (<div className='error-alert'><Pui.ErrorAlert dismissable={false} withIcon={true}>{formatMessage(messages.errormsg, {msg: this.state.msg})}</Pui.ErrorAlert></div>);
     }
     var inputs = [];
+    var fid;
     if (this.state.feature) {
+      fid = this.state.feature.getId();
       var keys = this.state.feature.getKeys();
       for (var i = 0, ii = keys.length; i < ii; ++i) {
         var key = keys[i];
@@ -184,6 +187,7 @@ class EditPopup extends BasePopup {
         <a href="#" ref="popupCloser" className="popup-closer fa fa-times fa-pull-right"></a>
         <div className='popup-content' ref='content'>
           {error}
+          <span className='popup-fid'>{fid}</span>
           {inputs}
           <UI.DefaultButton ref="saveButton">{formatMessage(messages.save)}</UI.DefaultButton>
         </div>
