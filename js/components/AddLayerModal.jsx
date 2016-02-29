@@ -82,12 +82,10 @@ class AddLayerModal extends Dialog.Modal {
             layers.push(layer);
           }
         }
-        this.setState({layers: layers});
+        this.setState({layerInfo: {Title: info.serviceIdentification.title, Layer: layers}});
       } else {
         info = new ol.format.WMSCapabilities().read(xmlhttp.responseText);
-        var root = info.Capability.Layer;
-        this._recurseLayers(root, layers);
-        this.setState({layers: layers});
+        this.setState({layerInfo: info.Capability.Layer});
       }
     }, function(xmlhttp) {
       this._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
@@ -98,16 +96,6 @@ class AddLayerModal extends Dialog.Modal {
       error: true,
       msg: msg
     });
-  }
-  _recurseLayers(layer, layers) {
-    if (layer.Name) {
-      layers.push(layer);
-    }
-    if (layer.Layer) {
-      for (var i = 0, ii = layer.Layer.length; i < ii; ++i) {
-        this._recurseLayers(layer.Layer[i], layers);
-      }
-    }
   }
   _onLayerClick(layer) {
     var map = this.props.map;
@@ -204,11 +192,43 @@ class AddLayerModal extends Dialog.Modal {
     var url = document.getElementById('url').value;
     this._getCaps(this._getServiceUrl(url));
   }
+  _getLayersMarkup(layer) {
+    var childList;
+    if (layer.Layer) {
+      var children = layer.Layer.map(function(child) {
+        return this._getLayersMarkup(child);
+      }, this);
+      childList = (
+        <ul className='addlayer'>
+          {children}
+        </ul>
+      );
+    }
+    var markup;
+    if (layer.Name) {
+      markup = (<a className='layername' title={layer.Abstract || layer.Title} href="#" onClick={this._onLayerClick.bind(this, layer)}>{layer.Title}</a>);
+    } else {
+      markup = (<span>{layer.Title}</span>);
+    }
+    var className;
+    if (layer.Layer) {
+      className = 'fa fa-folder-open-o';
+    } else if (layer.Name) {
+      className = 'fa-file-o';
+    }
+    return (
+      <li className={className} key={layer.Title}>
+        {markup}
+        {childList}
+      </li>
+    );
+  }
   render() {
     const {formatMessage} = this.props.intl;
-    var layers = this.state.layers.map(function(layer) {
-      return (<li key={layer.Name}><a title={layer.Abstract || layer.Title} href="#" onClick={this._onLayerClick.bind(this, layer)}>{layer.Title}</a></li>);
-    }, this);
+    var layers;
+    if (this.state.layerInfo) {
+      layers = this._getLayersMarkup(this.state.layerInfo);
+    }
     var error;
     if (this.state.error === true) {
       error = (<div className='error-alert'><Pui.ErrorAlert dismissable={false} withIcon={true}>{formatMessage(messages.errormsg, {msg: this.state.msg})}</Pui.ErrorAlert></div>);
@@ -229,7 +249,7 @@ class AddLayerModal extends Dialog.Modal {
       <Dialog.BaseModal title={formatMessage(messages.title)} show={this.state.isVisible} onHide={this.close} {...this.props}>
         <Dialog.ModalBody>
           {input}
-          <ul>
+          <ul className='addlayer'>
             {layers}
           </ul>
           {error}
