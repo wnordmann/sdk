@@ -271,7 +271,8 @@ class WFST extends MapTool {
   }
   render() {
     if (this.props.layer) {
-      this._setLayer(this.props.layer);
+      // do not use _setLayer since we do not want to fit the extent
+      this._layer = this.props.layer;
     }
     const {formatMessage} = this.props.intl;
     var error;
