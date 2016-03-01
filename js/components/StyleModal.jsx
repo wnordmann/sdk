@@ -77,7 +77,9 @@ class StyleModal extends Dialog.Modal {
             var keys = feature.getKeys();
             var idx = keys.indexOf(geom);
             keys.splice(idx, 1);
-            this.state.attributes = keys;
+            this.state.attributes = keys.sort(function(a, b) {
+              return a.toLowerCase().localeCompare(b.toLowerCase());
+            });
           }
         }
       }, this);
