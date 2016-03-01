@@ -193,7 +193,14 @@ class LayerListItem extends React.Component {
     LayerActions.removeLayer(this.props.layer);
   }
   _edit() {
-    this.props.onEdit.call(this, this.props.layer);
+/*    if (layer === this.state.layer) {
+      // toggle
+      this.setState({edit: !this.state.edit});
+    } else {
+      this.setState({edit: true, layer: layer});
+    }*/
+
+    LayerActions.editLayer(this.props.layer);
   }
   _changeOpacity(event) {
     this.props.layer.setOpacity(parseFloat(event.target.value));
@@ -353,10 +360,6 @@ LayerListItem.propTypes = {
    * Called when a modal is closed by this layer list item.
    */
   onModalClose: React.PropTypes.func,
-  /**
-   * Callback when edit layer button gets clicked.
-   */
-  onEdit: React.PropTypes.func,
   /**
    * i18n message strings. Provided through the application through context.
    */

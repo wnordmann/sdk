@@ -17,5 +17,6 @@ export default keymirror({
   REMOVE_LAYER: null,
   MOVE_LAYER_UP: null,
   MOVE_LAYER_DOWN: null,
-  SELECT_LAYER: null
+  SELECT_LAYER: null,
+  EDIT_LAYER: null
 });

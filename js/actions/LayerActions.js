@@ -38,5 +38,11 @@ export default {
       type: LayerConstants.MOVE_LAYER_UP,
       layer: layer
     });
+  },
+  editLayer: (layer) => {
+    AppDispatcher.handleAction({
+      type: LayerConstants.EDIT_LAYER,
+      layer: layer
+    });
   }
 };

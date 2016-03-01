@@ -15,7 +15,6 @@ import ol from 'openlayers';
 import LayerStore from '../stores/LayerStore.js';
 import LayerListItem from './LayerListItem.jsx';
 import AddLayerModal from './AddLayerModal.jsx';
-import WFST from './WFST.jsx';
 import UI from 'pui-react-buttons';
 import Icon from 'pui-react-iconography';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -98,24 +97,16 @@ class LayerList extends React.Component {
   _onModalClose() {
     this._modalOpen = false;
   }
-  _onEdit(layer) {
-    if (layer === this.state.layer) {
-      // toggle
-      this.setState({edit: !this.state.edit});
-    } else {
-      this.setState({edit: true, layer: layer});
-    }
-  }
   getLayerNode(lyr) {
     if (lyr.get('title') !== null) {
       if (lyr instanceof ol.layer.Group) {
         var children = this.props.showGroupContent ? this.renderLayerGroup(lyr) : undefined;
         return (
-          <LayerListItem {...this.props} onEdit={this._onEdit.bind(this)} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('title')} layer={lyr} children={children} title={lyr.get('title')} />
+          <LayerListItem {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('title')} layer={lyr} children={children} title={lyr.get('title')} />
         );
       } else {
         return (
-          <LayerListItem {...this.props} onEdit={this._onEdit.bind(this)} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('title')} layer={lyr} title={lyr.get('title')} />
+          <LayerListItem {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('title')} layer={lyr} title={lyr.get('title')} />
         );
       }
     }
@@ -147,15 +138,10 @@ class LayerList extends React.Component {
     var onMouseOut = this.props.expandOnHover ? this._hidePanel.bind(this) : undefined;
     var onMouseOver = this.props.expandOnHover ? this._showPanel.bind(this) : undefined;
     var onClick = !this.props.expandOnHover ? this._togglePanel.bind(this) : undefined;
-    var editPanel;
-    if (this.state.edit) {
-      editPanel = (<WFST toggleGroup={this.props.editingToggleGroup} layer={this.state.layer} map={this.props.map} />);
-    }
     return (
       <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} className={className}>
         <UI.DefaultButton className='layerlistbutton' onClick={onClick} title={formatMessage(messages.layertitle)}><Icon.Icon name="map" /></UI.DefaultButton>
         <div className="layer-tree-panel clearfix">
-          {editPanel}
           {heading}
           {this.renderLayers(layers)}
           {addLayer}
@@ -192,12 +178,9 @@ LayerList.propTypes = {
   allowStyling: React.PropTypes.bool,
   /**
    * Should we allow for editing of features in a vector layer?
+   * This does require having a WFST component in your application.
    */
   allowEditing: React.PropTypes.bool,
-  /**
-   * Toggle group to use for the editing tools.
-   */
-  editingToggleGroup: React.PropTypes.string,
   /**
    * Should we show the contents of layer groups?
    */

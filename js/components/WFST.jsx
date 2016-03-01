@@ -79,6 +79,9 @@ class WFST extends MapTool {
     AppDispatcher.register((payload) => {
       let action = payload.action;
       switch (action.type) {
+        case LayerConstants.EDIT_LAYER:
+          me._toggleLayer(action.layer);
+          break;
         case LayerConstants.SELECT_LAYER:
           if (action.cmp === me.refs.layerSelector) {
             me._setLayer(action.layer);
@@ -89,7 +92,8 @@ class WFST extends MapTool {
       }
     });
     this.state = {
-      error: false
+      error: false,
+      visible: this.props.visible
     };
     this._interactions = {};
     this._select = new ol.interaction.Select();
@@ -104,13 +108,25 @@ class WFST extends MapTool {
     this._serializer = new XMLSerializer();
   }
   componentDidMount() {
-    if (!this.props.layer) {
+    if (this.props.layerSelector) {
       var layerId = ReactDOM.findDOMNode(this.refs.layerSelector).value;
       this._setLayer(LayerStore.findLayer(layerId));
     }
   }
   componentWillUnmount() {
     this.deactivate();
+  }
+  _toggleLayer(layer) {
+    if (layer === this.state.layer) {
+      // toggle visibility
+      var newVis = !this.state.visible;
+      this.setState({visible: newVis});
+      if (newVis === false) {
+        this.deactivate();
+      }
+    } else {
+      this.setState({visible: true, layer: layer});
+    }
   }
   _setError(msg) {
     this.setState({
@@ -119,18 +135,18 @@ class WFST extends MapTool {
     });
   }
   _setLayer(layer) {
-    this._layer = layer;
     this.props.map.getView().fit(
-      this._layer.getSource().getExtent(),
+      layer.getSource().getExtent(),
       this.props.map.getSize()
     );
+    this.setState({layer: layer});
   }
   _modifyFeature() {
     this.deactivate();
     this.activate([this._select, this._modify]);
   }
   _deleteFeature() {
-    var wfsInfo = this._layer.get('wfsInfo');
+    var wfsInfo = this.state.layer.get('wfsInfo');
     const {formatMessage} = this.props.intl;
     var features = this._select.getFeatures();
     if (features.getLength() === 1) {
@@ -139,13 +155,13 @@ class WFST extends MapTool {
         featureNS: wfsInfo.featureNS,
         featureType: wfsInfo.featureType
       });
-      doPOST(this._layer.get('wfsInfo').url, this._serializer.serializeToString(node),
+      doPOST(this.state.layer.get('wfsInfo').url, this._serializer.serializeToString(node),
         function(xmlhttp) {
           var data = xmlhttp.responseText;
           var result = this._readResponse(data);
           if (result && result.transactionSummary.totalDeleted === 1) {
             this._select.getFeatures().clear();
-            this._layer.getSource().removeFeature(feature);
+            this.state.layer.getSource().removeFeature(feature);
           } else {
             this._setError(formatMessage(messages.deletemsg));
           }
@@ -171,7 +187,7 @@ class WFST extends MapTool {
   }
   _onSelectRemove(evt) {
     var feature = evt.element;
-    var wfsInfo = this._layer.get('wfsInfo');
+    var wfsInfo = this.state.layer.get('wfsInfo');
     var fid = feature.getId();
     if (this._dirty[fid]) {
       var featureGeometryName = feature.getGeometryName();
@@ -195,7 +211,7 @@ class WFST extends MapTool {
         featureNS: wfsInfo.featureNS,
         featureType: wfsInfo.featureType
       });
-      doPOST(this._layer.get('wfsInfo').url, this._serializer.serializeToString(node),
+      doPOST(this.state.layer.get('wfsInfo').url, this._serializer.serializeToString(node),
         function(xmlhttp) {
           var data = xmlhttp.responseText;
           var result = this._readResponse(data);
@@ -221,7 +237,7 @@ class WFST extends MapTool {
     return result;
   }
   _onDrawEnd(evt) {
-    var wfsInfo = this._layer.get('wfsInfo');
+    var wfsInfo = this.state.layer.get('wfsInfo');
     var feature = evt.feature;
     var node = this._format.writeTransaction([feature], null, null, {
       gmlOptions: {
@@ -230,7 +246,7 @@ class WFST extends MapTool {
       featureNS: wfsInfo.featureNS,
       featureType: wfsInfo.featureType
     });
-    doPOST(this._layer.get('wfsInfo').url, this._serializer.serializeToString(node),
+    doPOST(this.state.layer.get('wfsInfo').url, this._serializer.serializeToString(node),
       function(xmlhttp) {
         var data = xmlhttp.responseText;
         var result = this._readResponse(data);
@@ -238,7 +254,7 @@ class WFST extends MapTool {
           var insertId = result.insertIds[0];
           if (insertId == 'new0') {
             // reload data if we're dealing with a shapefile store
-            this._layer.getSource().clear();
+            this.state.layer.getSource().clear();
           } else {
             feature.setId(insertId);
           }
@@ -252,9 +268,9 @@ class WFST extends MapTool {
     );
   }
   _drawFeature() {
-    var layerId = this._layer.get('id');
-    var wfsInfo = this._layer.get('wfsInfo');
-    var source = this._layer.getSource();
+    var layerId = this.state.layer.get('id');
+    var wfsInfo = this.state.layer.get('wfsInfo');
+    var source = this.state.layer.getSource();
     if (!this._interactions[layerId]) {
       this._interactions[layerId] = {
         draw:  new ol.interaction.Draw({
@@ -270,33 +286,36 @@ class WFST extends MapTool {
     this.activate([draw]);
   }
   render() {
-    if (this.props.layer) {
-      // do not use _setLayer since we do not want to fit the extent
-      this._layer = this.props.layer;
-    }
-    const {formatMessage} = this.props.intl;
-    var error;
-    if (this.state.error === true) {
-      error = (<div className='error-alert'><Pui.ErrorAlert dismissable={false} withIcon={true}>{formatMessage(messages.errormsg, {msg: this.state.msg})}</Pui.ErrorAlert></div>);
-    }
-    var layerSelector;
-    if (!this.props.layer) {
-      layerSelector = (
-        <article>
-          <label htmlFor='layerSelector'>{formatMessage(messages.layerlabel)}</label>
-          <LayerSelector id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} />
-        </article>
+    if (!this.state.visible) {
+      return (<article />);
+    } else {
+      const {formatMessage} = this.props.intl;
+      var error;
+      if (this.state.error === true) {
+        error = (<div className='error-alert'><Pui.ErrorAlert dismissable={false} withIcon={true}>{formatMessage(messages.errormsg, {msg: this.state.msg})}</Pui.ErrorAlert></div>);
+      }
+      var layerSelector;
+      if (this.props.layerSelector) {
+        layerSelector = (
+          <article>
+            <label htmlFor='layerSelector'>{formatMessage(messages.layerlabel)}</label>
+            <LayerSelector id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} />
+          </article>
+        );
+      } else if (this.state.layer) {
+        var label = formatMessage(messages.layerlabel) + ': ' + this.state.layer.get('title');
+        layerSelector = (<div>{label}</div>);
+      }
+      return (
+        <form onSubmit={this._onSubmit} role='form'>
+          {layerSelector}
+          <UI.DefaultButton onClick={this._drawFeature.bind(this)}>{formatMessage(messages.drawfeature)}</UI.DefaultButton>
+          <UI.DefaultButton onClick={this._modifyFeature.bind(this)}>{formatMessage(messages.modifyfeature)}</UI.DefaultButton>
+          <UI.DefaultButton onClick={this._deleteFeature.bind(this)}>{formatMessage(messages.deletefeature)}</UI.DefaultButton>
+          {error}
+        </form>
       );
     }
-    return (
-      <form onSubmit={this._onSubmit} role='form'>
-        {layerSelector}
-        <UI.DefaultButton onClick={this._drawFeature.bind(this)}>{formatMessage(messages.drawfeature)}</UI.DefaultButton>
-        <UI.DefaultButton onClick={this._modifyFeature.bind(this)}>{formatMessage(messages.modifyfeature)}</UI.DefaultButton>
-        <UI.DefaultButton onClick={this._deleteFeature.bind(this)}>{formatMessage(messages.deletefeature)}</UI.DefaultButton>
-        {error}
-      </form>
-    );
   }
 }
 
@@ -306,13 +325,22 @@ WFST.propTypes = {
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
   /**
-   * The layer to use for this WFS-T tool. If not provided, a combo box will be presented to the user.
+   * Show a layer selector for the user to choose from?
    */
-  layer: React.PropTypes.instanceOf(ol.layer.Vector),
+  layerSelector: React.PropTypes.bool,
+  /**
+   * Should this component be visible from the start?
+   */
+  visible: React.PropTypes.bool,
   /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
+};
+
+WFST.defaultProps = {
+  layerSelector: true,
+  visibile: true
 };
 
 export default injectIntl(WFST);

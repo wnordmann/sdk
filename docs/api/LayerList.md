@@ -19,6 +19,7 @@ type: `shape[object Object]`
 ### `allowEditing`
 
 Should we allow for editing of features in a vector layer?
+This does require having a WFST component in your application.
 
 type: `bool`
 defaultValue: `false`
@@ -62,13 +63,6 @@ The feature format to serialize in for downloads.
 
 type: `enum('GeoJSON'|'KML'|'GPX')`
 defaultValue: `'GeoJSON'`
-
-
-### `editingToggleGroup`
-
-Toggle group to use for the editing tools.
-
-type: `string`
 
 
 ### `expandOnHover`
