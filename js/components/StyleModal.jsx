@@ -66,28 +66,12 @@ class StyleModal extends Dialog.Modal {
         title: 'Rule 1'
       }]
     };
-    this.props.layer.on('change:wfsInfo', this._setGeomType, this);
-    var source = this.props.layer.getSource();
-    if (source && !(source instanceof ol.source.Cluster)) {
-      source.on('change', function(evt) {
-        if (evt.target.getState() === 'ready' && this.state.attributes.length === 0) {
-          var feature = evt.target.getFeatures()[0];
-          if (feature) {
-            var geom = feature.getGeometryName();
-            var keys = feature.getKeys();
-            var idx = keys.indexOf(geom);
-            keys.splice(idx, 1);
-            this.state.attributes = keys.sort(function(a, b) {
-              return a.toLowerCase().localeCompare(b.toLowerCase());
-            });
-          }
-        }
-      }, this);
-    }
+    this.props.layer.on('change:wfsInfo', this._setGeomTypeAndAttributes, this);
   }
-  _setGeomType() {
-    this.setState({geometryType: this.props.layer.get('wfsInfo').geometryType.replace('Multi', '')});
-    this.props.layer.un('change:wfsInfo', this._setGeomType, this);
+  _setGeomTypeAndAttributes() {
+    var wfsInfo = this.props.layer.get('wfsInfo');
+    this.setState({attributes: wfsInfo.attributes, geometryType: wfsInfo.geometryType.replace('Multi', '')});
+    this.props.layer.un('change:wfsInfo', this._setGeomTypeAndAttributes, this);
   }
   _createStyle(styleState) {
     var fill = new ol.style.Fill({

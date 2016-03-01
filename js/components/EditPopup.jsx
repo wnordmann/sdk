@@ -174,12 +174,10 @@ class EditPopup extends BasePopup {
     var fid;
     if (this.state.feature) {
       fid = this.state.feature.getId();
-      var keys = this.state.feature.getKeys();
+      var keys = this.state.layer.get('wfsInfo').attributes;
       for (var i = 0, ii = keys.length; i < ii; ++i) {
         var key = keys[i];
-        if (key !== this.state.feature.getGeometryName()) {
-          inputs.push(<BasicInput label={key} key={key} id={key} onChange={this._onChangeField.bind(this)} value={this.state.values[key]} />);
-        }
+        inputs.push(<BasicInput label={key} key={key} id={key} onChange={this._onChangeField.bind(this)} value={this.state.values[key]} />);
       }
     }
     return (

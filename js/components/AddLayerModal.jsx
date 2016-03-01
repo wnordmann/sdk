@@ -136,19 +136,27 @@ class AddLayerModal extends Dialog.Modal {
         var schema = unmarshaller.unmarshalString(xmlhttp.responseText).value;
         var element = schema.complexType[0].complexContent.extension.sequence.element;
         var geometryType, geometryName;
+        var attributes = [];
         for (var i = 0, ii = element.length; i < ii; ++i) {
           var el = element[i];
           if (el.type.namespaceURI === 'http://www.opengis.net/gml') {
             geometryName = el.name;
             var lp = el.type.localPart;
             geometryType = lp.replace('PropertyType', '');
+          } else {
+            // TODO if needed, use attribute type as well
+            attributes.push(el.name);
           }
         }
+        attributes.sort(function(a, b) {
+          return a.toLowerCase().localeCompare(b.toLowerCase());
+        });
         this.set('wfsInfo', {
           featureNS: schema.targetNamespace,
           featureType: schema.element[0].name,
           geometryType: geometryType,
           geometryName: geometryName,
+          attributes: attributes,
           url: me.props.url.replace('wms', 'wfs')
         });
       }, function(xmlhttp) { }, olLayer);
