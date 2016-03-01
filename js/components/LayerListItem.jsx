@@ -193,13 +193,6 @@ class LayerListItem extends React.Component {
     LayerActions.removeLayer(this.props.layer);
   }
   _edit() {
-/*    if (layer === this.state.layer) {
-      // toggle
-      this.setState({edit: !this.state.edit});
-    } else {
-      this.setState({edit: true, layer: layer});
-    }*/
-
     LayerActions.editLayer(this.props.layer);
   }
   _changeOpacity(event) {

@@ -38,14 +38,10 @@ The ol3 map whose layers can be used for the WFS-T tool.
 type: `instanceOfol.Map`
 
 
-### `visibile`
-
-defaultValue: `true`
-
-
 ### `visible`
 
 Should this component be visible from the start?
 
 type: `bool`
+defaultValue: `true`
 

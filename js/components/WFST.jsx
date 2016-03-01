@@ -340,7 +340,7 @@ WFST.propTypes = {
 
 WFST.defaultProps = {
   layerSelector: true,
-  visibile: true
+  visible: true
 };
 
 export default injectIntl(WFST);
