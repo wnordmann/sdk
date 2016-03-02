@@ -119,7 +119,7 @@ class StyleModal extends Dialog.Modal {
     // TODO cache as many style objects as possible
     this.props.layer.setStyle(function(feature) {
       // loop over the rules and see which one we match
-      for (var i = 0, ii = me.state.rules.length; i < ii; ++i) {
+      for (var i = me.state.rules.length - 1; i >= 0; --i) {
         var rule = me.state.rules[i].title;
         var styleState = me._styleState[rule];
         if (!styleState.filter || styleState.filter(feature.getProperties())) {
