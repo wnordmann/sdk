@@ -76,7 +76,7 @@ class StrokeEditor extends React.Component {
             <label>{formatMessage(messages.strokecolorlabel)}:</label>
           </Grids.Col>
           <Grids.Col md={12}>
-            <ColorPicker type='compact' onChangeComplete={this._onChangeStroke.bind(this)} color={this.state.strokeColor} />
+            <ColorPicker type='chrome' onChangeComplete={this._onChangeStroke.bind(this)} color={this.state.strokeColor} />
           </Grids.Col>
         </div>
       </form>
