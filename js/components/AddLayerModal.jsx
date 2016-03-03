@@ -21,14 +21,14 @@ import pureRender from 'pure-render-decorator';
 import {BasicInput} from 'pui-react-inputs';
 import UI from 'pui-react-buttons';
 import {Jsonix} from 'jsonix';
-import XSD_1_0 from '../../node_modules/w3c-schemas/lib/XSD_1_0.js';
-import XLink_1_0 from '../../node_modules/w3c-schemas/lib/XLink_1_0.js';
-import OWS_1_1_0 from '../../node_modules/ogc-schemas/lib/OWS_1_1_0.js';
-import Filter_1_1_0 from '../../node_modules/ogc-schemas/lib/Filter_1_1_0.js';
-import SMIL_2_0 from '../../node_modules/ogc-schemas/lib/SMIL_2_0.js';
-import SMIL_2_0_Language from '../../node_modules/ogc-schemas/lib/SMIL_2_0_Language.js';
-import GML_3_1_1 from '../../node_modules/ogc-schemas/lib/GML_3_1_1.js';
-import WFS_1_1_0 from '../../node_modules/ogc-schemas/lib/WFS_1_1_0.js';
+import {XSD_1_0} from '../../node_modules/w3c-schemas/lib/XSD_1_0.js';
+import {XLink_1_0} from '../../node_modules/w3c-schemas/lib/XLink_1_0.js';
+import {OWS_1_0_0} from '../../node_modules/ogc-schemas/lib/OWS_1_0_0.js';
+import {Filter_1_1_0} from '../../node_modules/ogc-schemas/lib/Filter_1_1_0.js';
+import {SMIL_2_0} from '../../node_modules/ogc-schemas/lib/SMIL_2_0.js';
+import {SMIL_2_0_Language} from '../../node_modules/ogc-schemas/lib/SMIL_2_0_Language.js';
+import {GML_3_1_1} from '../../node_modules/ogc-schemas/lib/GML_3_1_1.js';
+import {WFS_1_1_0} from '../../node_modules/ogc-schemas/lib/WFS_1_1_0.js';
 import './AddLayerModal.css';
 
 const messages = defineMessages({
