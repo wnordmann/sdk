@@ -1,4 +1,8 @@
 {
+  "ignore": [
+    "node_modules/ogc-schemas/**/*.js",
+    "node_modules/w3c-schemas/**/*.js"
+  ],
   "optional": ['es7.decorators'],
   "plugins": ["react-intl"],
   "extra": {
