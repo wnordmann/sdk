@@ -64,7 +64,7 @@
     "react-color": "1.2.1",
     "react-dom": "0.14.7",
     "react-dropzone": "3.0.0",
-    "react-intl": "2.0.0-beta-2",
+    "react-intl": "2.0.0-rc-1",
     "react-responsive-decorator": "0.0.1",
     "react-slick": "0.9.1",
     "slick-carousel-dr-frankenstyle": "^1.5.8",
