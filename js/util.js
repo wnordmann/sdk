@@ -31,10 +31,10 @@ export default {
     xmlhttp.open('GET', url, true);
     xmlhttp.send();
   },
-  doPOST(url, data, success, failure, scope) {
+  doPOST(url, data, success, failure, scope, contentType) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open('POST', url, true);
-    xmlhttp.setRequestHeader('Content-Type', 'text/xml');
+    xmlhttp.setRequestHeader('Content-Type', contentType ? contentType : 'text/xml');
     xmlhttp.onreadystatechange = function() {
       if (xmlhttp.readyState === 4) {
         if (xmlhttp.status === 200) {
