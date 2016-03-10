@@ -1,4 +1,4 @@
-/*
+n/*
  * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
@@ -74,7 +74,7 @@ class LoginModal extends Dialog.Modal {
       error = (<div className='error-alert'><Pui.ErrorAlert dismissable={false} withIcon={true}>{formatMessage(messages.errormsg)}</Pui.ErrorAlert></div>);
     }
     return (
-      <Dialog.BaseModal className='login-dialog' title={formatMessage(messages.title)} show={this.state.isVisible} onHide={this.close} {...this.props}>
+      <Dialog.BaseModal title={formatMessage(messages.title)} show={this.state.isVisible} onHide={this.close} {...this.props}>
         <Dialog.ModalBody>
           <form onSubmit={this._onSubmit}>
             {error}
