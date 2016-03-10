@@ -12,8 +12,8 @@
 
 import React from 'react';
 import Dialog from 'pui-react-modals';
-import {defineMessages, injectIntl} from 'react-intl';
-import {doPOST} from '../util.js';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import LoginActions from '../actions/LoginActions.js';
 import {BasicInput} from 'pui-react-inputs';
 import UI from 'pui-react-buttons';
 import pureRender from 'pure-render-decorator';
@@ -53,16 +53,7 @@ class LoginModal extends Dialog.Modal {
     evt.preventDefault();
   }
   _doLogin() {
-    var url = '/geoserver/app/api/login';
-    var contentType = 'application/x-www-form-urlencoded';
-    var data = 'username=' + document.getElementById('username').value + '&password=' + document.getElementById('password').value;
-    var success = function(xmlhttp) {
-      var response = JSON.parse(xmlhttp.responseText);
-      document.cookie = 'JSESSIONID=' + response.session;
-    };
-    var failure = function(xmlhttp) {
-    };
-    doPOST(url, data, success, failure, this, contentType);
+    LoginActions.login(document.getElementById('username').value, document.getElementById('password').value);
   }
   render() {
     const {formatMessage} = this.props.intl;
