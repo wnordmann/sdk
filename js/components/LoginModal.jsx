@@ -80,4 +80,11 @@ class LoginModal extends Dialog.Modal {
   }
 }
 
+LoginModal.propTypes = {
+  /**
+   * i18n message strings. Provided through the application through context.
+   */
+  intl: intlShape.isRequired
+};
+
 export default injectIntl(LoginModal, {withRef: true});

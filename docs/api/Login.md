@@ -1,7 +1,7 @@
 `Login` (component)
 ===================
 
-Login dialog for integration with GeoServer securiry.
+Login dialog for integration with GeoServer security.
 
 Props
 -----
