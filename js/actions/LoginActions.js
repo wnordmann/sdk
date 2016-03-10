@@ -14,11 +14,13 @@ import LoginConstants from '../constants/LoginConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 
 export default {
-  login: (user, pwd) => {
+  login: (user, pwd, failure, scope) => {
     AppDispatcher.handleAction({
       type: LoginConstants.LOGIN,
       user: user,
-      pwd: pwd
+      pwd: pwd,
+      failure: failure,
+      scope: scope
     });
   },
   logout: () => {

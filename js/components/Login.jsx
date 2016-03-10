@@ -49,7 +49,7 @@ class Login extends React.Component {
       let action = payload.action;
       switch (action.type) {
         case LoginConstants.LOGIN:
-          me._doLogin(action.user, action.pwd);
+          me._doLogin(action.user, action.pwd, action.failure, action.scope);
           break;
         default:
           break;
@@ -70,7 +70,7 @@ class Login extends React.Component {
   _getURL() {
     return this.props.url + (this.props.url.slice(-1) === '/' ? '' : '/') + 'app/api/login';
   }
-  _doLogin(user, pwd) {
+  _doLogin(user, pwd, failureCb, scope) {
     var url = this._getURL();
     var contentType = 'application/x-www-form-urlencoded';
     var data = 'username=' + user + '&password=' + pwd;
@@ -80,6 +80,7 @@ class Login extends React.Component {
       this.setState({user: user});
     };
     var failure = function(xmlhttp) {
+      failureCb.call(scope);
       this.setState({user: null});
     };
     doPOST(url, data, success, failure, this, contentType);

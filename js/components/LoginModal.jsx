@@ -16,6 +16,7 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import LoginActions from '../actions/LoginActions.js';
 import {BasicInput} from 'pui-react-inputs';
 import UI from 'pui-react-buttons';
+import Pui from 'pui-react-alerts';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -38,6 +39,11 @@ const messages = defineMessages({
     id: 'loginmodal.loginbutton',
     description: 'Text for the login button',
     defaultMessage: 'Login'
+  },
+  errormsg: {
+    id: 'loginmodal.errormsg',
+    description: 'Error message to show the user when a login request fails',
+    defaultMessage: 'Invalid credentials'
   }
 });
 
@@ -48,19 +54,30 @@ const messages = defineMessages({
 class LoginModal extends Dialog.Modal {
   constructor(props) {
     super(props);
+    this.state = {
+      error: false
+    };
   }
   _onSubmit(evt) {
     evt.preventDefault();
   }
   _doLogin() {
-    LoginActions.login(document.getElementById('username').value, document.getElementById('password').value);
+    LoginActions.login(document.getElementById('username').value, document.getElementById('password').value, this.failureCb, this);
+  }
+  failureCb() {
+    this.setState({error: true});
   }
   render() {
     const {formatMessage} = this.props.intl;
+    var error;
+    if (this.state.error === true) {
+      error = (<div className='error-alert'><Pui.ErrorAlert dismissable={false} withIcon={true}>{formatMessage(messages.errormsg)}</Pui.ErrorAlert></div>);
+    }
     return (
-      <Dialog.BaseModal title={formatMessage(messages.title)} show={this.state.isVisible} onHide={this.close} {...this.props}>
+      <Dialog.BaseModal className='login-dialog' title={formatMessage(messages.title)} show={this.state.isVisible} onHide={this.close} {...this.props}>
         <Dialog.ModalBody>
-          <form onSubmit={this._onSubmit} role='form'>
+          <form onSubmit={this._onSubmit}>
+            {error}
             <BasicInput label={formatMessage(messages.usernamelabel)} id='username' />
             <BasicInput label={formatMessage(messages.passwordlabel)} id='password' type='password' />
             <UI.DefaultButton onClick={this._doLogin.bind(this)}>{formatMessage(messages.loginbutton)}</UI.DefaultButton>
