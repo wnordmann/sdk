@@ -18,6 +18,7 @@ import {BasicInput} from 'pui-react-inputs';
 import UI from 'pui-react-buttons';
 import Pui from 'pui-react-alerts';
 import pureRender from 'pure-render-decorator';
+import './LoginModal.css';
 
 const messages = defineMessages({
   title: {
@@ -74,7 +75,7 @@ class LoginModal extends Dialog.Modal {
       error = (<div className='error-alert'><Pui.ErrorAlert dismissable={false} withIcon={true}>{formatMessage(messages.errormsg)}</Pui.ErrorAlert></div>);
     }
     return (
-      <Dialog.BaseModal title={formatMessage(messages.title)} show={this.state.isVisible} onHide={this.close} {...this.props}>
+      <Dialog.BaseModal className='login' title={formatMessage(messages.title)} show={this.state.isVisible} onHide={this.close} {...this.props}>
         <Dialog.ModalBody>
           <form onSubmit={this._onSubmit}>
             {error}
