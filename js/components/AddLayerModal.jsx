@@ -13,6 +13,8 @@
 import React from 'react';
 import ol from 'openlayers';
 import Dialog from 'pui-react-modals';
+import AppDispatcher from '../dispatchers/AppDispatcher.js';
+import LoginConstants from '../constants/LoginConstants.js';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import {doGET} from '../util.js';
 import Grids from 'pui-react-grids';
@@ -65,6 +67,20 @@ class AddLayerModal extends Dialog.Modal {
       error: false,
       layers: []
     };
+    var me = this;
+    AppDispatcher.register((payload) => {
+      let action = payload.action;
+      switch (action.type) {
+        case LoginConstants.LOGIN:
+          me._updateLayers();
+          break;
+        case LoginConstants.LOGOUT:
+          me._updateLayers();
+          break;
+        default:
+          break;
+      }
+    });
   }
   componentDidMount() {
     this._getCaps(this._getServiceUrl(this.props.url));
@@ -96,6 +112,13 @@ class AddLayerModal extends Dialog.Modal {
     }, function(xmlhttp) {
       this._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
     }, this);
+  }
+  _updateLayers() {
+    var me = this;
+    // this needs a timeout for the cookie to be set apparently
+    window.setTimeout(function() {
+      me._getCaps(me._getServiceUrl(me.props.url));
+    }, 500);
   }
   _setError(msg) {
     this.setState({

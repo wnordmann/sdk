@@ -17,6 +17,7 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import LoginModal from './LoginModal.jsx';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LoginConstants from '../constants/LoginConstants.js';
+import LoginActions from '../actions/LoginActions.js';
 import {doGET, doPOST} from '../util.js';
 import pureRender from 'pure-render-decorator';
 
@@ -60,6 +61,9 @@ class Login extends React.Component {
       var response = JSON.parse(xmlhttp.responseText);
       this.setState({user: response.user});
     }, function(xmlhttp) {
+      if (xmlhttp['status'] === 401) {
+        document.cookie = 'JSESSIONID=; path=/geoserver; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+      }
       this.setState({user: null});
     }, this);
   }
@@ -72,7 +76,7 @@ class Login extends React.Component {
     var data = 'username=' + user + '&password=' + pwd;
     var success = function(xmlhttp) {
       var response = JSON.parse(xmlhttp.responseText);
-      document.cookie = 'JSESSIONID=' + response.session;
+      document.cookie = 'JSESSIONID=' + response.session + '; path=/geoserver;';
       this.setState({user: user});
     };
     var failure = function(xmlhttp) {
@@ -85,7 +89,8 @@ class Login extends React.Component {
     this.refs.loginmodal.getWrappedInstance().open();
   }
   _doLogout() {
-    document.cookie = 'JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    document.cookie = 'JSESSIONID=; path=/geoserver; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    LoginActions.logout();
     this.setState({user: null});
   }
   render() {
