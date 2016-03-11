@@ -126,6 +126,16 @@ class AddLayerModal extends Dialog.Modal {
       msg: msg
     });
   }
+  _getStyleName(olLayer) {
+    var url = this.props.url;
+    url = url.replace(/wms|ows|wfs/g, 'rest/layers/' + olLayer.get('id') + '.json');
+    doGET(url, function(xmlhttp) {
+      var styleInfo = JSON.parse(xmlhttp.responseText);
+      olLayer.set('styleName', styleInfo.layer.defaultStyle.name);
+    }, function(xmlhttp) {
+      olLayer.set('canStyle', false);
+    });
+  }
   _getWfsInfo(layer, olLayer) {
     var me = this;
     // do a WFS DescribeFeatureType request to get wfsInfo
@@ -210,6 +220,7 @@ class AddLayerModal extends Dialog.Modal {
           serverType: 'geoserver'
         })
       });
+      this._getStyleName.call(this, olLayer);
     }
     this._getWfsInfo.call(this, layer, olLayer);
     map.addLayer(olLayer);

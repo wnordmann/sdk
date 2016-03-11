@@ -17,7 +17,7 @@ import Grids from 'pui-react-grids';
 import UI from 'pui-react-buttons';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
-import {transformColor} from '../util.js';
+import {transformColor, doPOST} from '../util.js';
 import RuleEditor from './RuleEditor.jsx';
 import {createSLD} from '../sld.js';
 import './StyleModal.css';
@@ -135,6 +135,12 @@ class StyleModal extends Dialog.Modal {
   }
   _generateSLD() {
     var sld = createSLD(this.props.layer.get('id'), this.state.geometryType, this.state.rules, this._styleState);
+    var url = '/geoserver/rest/styles/' + this.props.layer.get('styleName') + '.xml';
+    doPOST(url, sld, function(xmlhttp) {
+      this.props.layer.getSource().updateParams({'_olSalt': Math.random()});
+      this.close();
+    }, function(xmlhttp) {
+    }, this, 'application/vnd.ogc.sld+xml; charset=UTF-8', true);
   }
   _setStyleVector() {
     var me = this;
