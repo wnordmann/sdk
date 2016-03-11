@@ -126,6 +126,42 @@ class AddLayerModal extends Dialog.Modal {
       msg: msg
     });
   }
+  _getWfsInfo(layer, olLayer) {
+    var me = this;
+    // do a WFS DescribeFeatureType request to get wfsInfo
+    var url = me.props.url.replace('wms', 'wfs') + 'service=WFS&request=DescribeFeatureType&version=1.0.0&typename=' + layer.Name;
+    doGET(url, function(xmlhttp) {
+      var context = new Jsonix.Context([XSD_1_0]);
+      var unmarshaller = context.createUnmarshaller();
+      var schema = unmarshaller.unmarshalString(xmlhttp.responseText).value;
+      var element = schema.complexType[0].complexContent.extension.sequence.element;
+      var geometryType, geometryName;
+      var attributes = [];
+      for (var i = 0, ii = element.length; i < ii; ++i) {
+        var el = element[i];
+        if (el.type.namespaceURI === 'http://www.opengis.net/gml') {
+          geometryName = el.name;
+          var lp = el.type.localPart;
+          geometryType = lp.replace('PropertyType', '');
+        } else {
+          // TODO if needed, use attribute type as well
+          attributes.push(el.name);
+        }
+      }
+      attributes.sort(function(a, b) {
+        return a.toLowerCase().localeCompare(b.toLowerCase());
+      });
+      this.set('wfsInfo', {
+        featureNS: schema.targetNamespace,
+        featureType: schema.element[0].name,
+        geometryType: geometryType,
+        geometryName: geometryName,
+        attributes: attributes,
+        url: me.props.url.replace('wms', 'wfs')
+      });
+    }, function(xmlhttp) { }, olLayer);
+    // TODO handle failure
+  }
   _onLayerClick(layer) {
     var map = this.props.map;
     var view = map.getView();
@@ -144,6 +180,7 @@ class AddLayerModal extends Dialog.Modal {
         title: layer.Title,
         id: layer.Name,
         isWFST: true,
+        canStyle: true,
         source: new ol.source.Vector({
           url: function(extent) {
             return me.props.url.replace('wms', 'wfs') + 'service=WFS' +
@@ -157,45 +194,13 @@ class AddLayerModal extends Dialog.Modal {
           }))
         })
       });
-      // do a WFS DescribeFeatureType request to get wfsInfo
-      var url = me.props.url.replace('wms', 'wfs') + 'service=WFS&request=DescribeFeatureType&version=1.0.0&typename=' + layer.Name;
-      doGET(url, function(xmlhttp) {
-        var context = new Jsonix.Context([XSD_1_0]);
-        var unmarshaller = context.createUnmarshaller();
-        var schema = unmarshaller.unmarshalString(xmlhttp.responseText).value;
-        var element = schema.complexType[0].complexContent.extension.sequence.element;
-        var geometryType, geometryName;
-        var attributes = [];
-        for (var i = 0, ii = element.length; i < ii; ++i) {
-          var el = element[i];
-          if (el.type.namespaceURI === 'http://www.opengis.net/gml') {
-            geometryName = el.name;
-            var lp = el.type.localPart;
-            geometryType = lp.replace('PropertyType', '');
-          } else {
-            // TODO if needed, use attribute type as well
-            attributes.push(el.name);
-          }
-        }
-        attributes.sort(function(a, b) {
-          return a.toLowerCase().localeCompare(b.toLowerCase());
-        });
-        this.set('wfsInfo', {
-          featureNS: schema.targetNamespace,
-          featureType: schema.element[0].name,
-          geometryType: geometryType,
-          geometryName: geometryName,
-          attributes: attributes,
-          url: me.props.url.replace('wms', 'wfs')
-        });
-      }, function(xmlhttp) { }, olLayer);
-      // TODO handle failure
     } else {
       olLayer = new ol.layer.Tile({
         extent: extent,
         title: layer.Title,
         id: layer.Name,
         isRemovable: true,
+        canStyle: true,
         source: new ol.source.TileWMS({
           url: this.props.url,
           params: {
@@ -206,6 +211,7 @@ class AddLayerModal extends Dialog.Modal {
         })
       });
     }
+    this._getWfsInfo.call(this, layer, olLayer);
     map.addLayer(olLayer);
     if (!this.props.asVector) {
       view.fit(extent, map.getSize());

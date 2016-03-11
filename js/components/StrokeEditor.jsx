@@ -56,7 +56,7 @@ class StrokeEditor extends React.Component {
     this.props.onChange(this.state);
   }
   _onChangeStroke(color) {
-    this.state.strokeColor = color.rgb;
+    this.state.strokeColor = color;
     this.props.onChange(this.state);
   }
   render() {

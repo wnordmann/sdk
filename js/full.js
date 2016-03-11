@@ -85,6 +85,12 @@ global.ToolActions = ToolActions;
 import LayerList from './components/LayerList.jsx';
 global.LayerList = LayerList;
 
+import Login from './components/Login.jsx';
+global.Login = Login;
+
+import LoginModal from './components/LoginModal.jsx';
+global.LoginModal = LoginModal;
+
 import Measure from './components/Measure.jsx';
 global.Measure = Measure;
 

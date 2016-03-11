@@ -19,6 +19,7 @@ import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import {transformColor} from '../util.js';
 import RuleEditor from './RuleEditor.jsx';
+import {createSLD} from '../sld.js';
 import './StyleModal.css';
 
 const messages = defineMessages({
@@ -35,17 +36,27 @@ const messages = defineMessages({
   addrulebutton: {
     id: 'stylemodal.addrulebutton',
     description: 'Text for the add rule button',
+    defaultMessage: 'Add'
+  },
+  addrulebuttontitle: {
+    id: 'stylemodal.addrulebuttontitle',
+    description: 'Title for the add rule button',
     defaultMessage: 'Add New Rule'
   },
   removerulebutton: {
     id: 'stylemodal.removerulebutton',
+    description: 'Text for the remove rule button',
+    defaultMessage: 'Remove'
+  },
+  removerulebuttontitle: {
+    id: 'stylemodal.removerulebuttontitle',
     description: 'Text for the remove rule button',
     defaultMessage: 'Remove Selected Rule'
   },
   rulelabel: {
     id: 'stylemodal.rulelabel',
     description: 'Label for the rule combo box',
-    defaultMessage: 'Select Rule:'
+    defaultMessage: 'Rule:'
   }
 });
 
@@ -115,6 +126,17 @@ class StyleModal extends Dialog.Modal {
     return result;
   }
   _setStyle() {
+    var layer = this.props.layer;
+    if (layer instanceof ol.layer.Vector) {
+      this._setStyleVector();
+    } else {
+      this._generateSLD();
+    }
+  }
+  _generateSLD() {
+    var sld = createSLD(this.props.layer.get('id'), this.state.geometryType, this.state.rules, this._styleState);
+  }
+  _setStyleVector() {
     var me = this;
     // TODO cache as many style objects as possible
     this.props.layer.setStyle(function(feature) {
@@ -178,10 +200,10 @@ class StyleModal extends Dialog.Modal {
       <Dialog.BaseModal title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} show={this.state.isVisible} onHide={this.close} {...this.props}>
         <Dialog.ModalBody>
           <div className="clearfix form-group">
-            <Grids.Col md={5}><label className="rule-label" htmlFor='ruleSelector'>{formatMessage(messages.rulelabel)}</label></Grids.Col>
+            <Grids.Col md={2}><label className="rule-label" htmlFor='ruleSelector'>{formatMessage(messages.rulelabel)}</label></Grids.Col>
             <Grids.Col md={4}><select ref='ruleSelector' value={this.state.rule} className='form-control' onChange={this._onRuleChange.bind(this)}>{ruleItems}</select></Grids.Col>
-            <Grids.Col md={6}><UI.DefaultButton onClick={this._addRule.bind(this)}>{formatMessage(messages.addrulebutton)}</UI.DefaultButton></Grids.Col>
-            <Grids.Col md={9}><UI.DefaultButton onClick={this._removeRule.bind(this)}>{formatMessage(messages.removerulebutton)}</UI.DefaultButton></Grids.Col>
+            <Grids.Col md={3}><UI.DefaultButton onClick={this._addRule.bind(this)} title={formatMessage(messages.addrulebuttontitle)}>{formatMessage(messages.addrulebutton)}</UI.DefaultButton></Grids.Col>
+            <Grids.Col md={4}><UI.DefaultButton onClick={this._removeRule.bind(this)} title={formatMessage(messages.removerulebuttontitle)}>{formatMessage(messages.removerulebutton)}</UI.DefaultButton></Grids.Col>
           </div>
           {ruleEditors}
         </Dialog.ModalBody>
@@ -197,7 +219,7 @@ StyleModal.propTypes = {
   /**
    * The layer associated with the style modal.
    */
-  layer: React.PropTypes.instanceOf(ol.layer.Vector).isRequired,
+  layer: React.PropTypes.instanceOf(ol.layer.Base).isRequired,
   /**
    * i18n message strings. Provided through the application through context.
    */

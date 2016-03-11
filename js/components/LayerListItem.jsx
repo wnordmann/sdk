@@ -230,7 +230,7 @@ class LayerListItem extends React.Component {
       label = <a title={formatMessage(messages.labeltitle)} href='#' onClick={this._label.bind(this)}><i className='layerlayeritem glyphicon glyphicon-font'></i></a>;
     }
     var styling;
-    if (layer instanceof ol.layer.Vector && this.props.allowStyling) {
+    if (layer.get('canStyle') && this.props.allowStyling) {
       styling =  <a title={formatMessage(messages.stylingtitle)} href='#' onClick={this._style.bind(this)}><i className='layerlayeritem glyphicon glyphicon-list-alt'></i></a>;
     }
     var reorderUp, reorderDown;
@@ -265,6 +265,8 @@ class LayerListItem extends React.Component {
     if (this.props.layer instanceof ol.layer.Vector) {
       labelModal = (<LabelModal layer={this.props.layer} ref='labelmodal' />);
       filterModal = (<FilterModal layer={this.props.layer} onHide={this._onCloseModal.bind(this)} ref='filtermodal' />);
+    }
+    if (this.props.layer.get('canStyle')) {
       styleModal = (<StyleModal layer={this.props.layer} ref='stylemodal' />);
     }
     return (
