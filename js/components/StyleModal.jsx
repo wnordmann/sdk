@@ -135,7 +135,8 @@ class StyleModal extends Dialog.Modal {
   }
   _generateSLD() {
     var sld = createSLD(this.props.layer.get('id'), this.state.geometryType, this.state.rules, this._styleState);
-    var url = '/geoserver/rest/styles/' + this.props.layer.get('styleName') + '.xml';
+    var url = this.props.layer.getSource().getUrls()[0];
+    url = url.replace(/wms|ows|wfs/g, 'rest/styles/' + this.props.layer.get('styleName') + '.xml');
     doPOST(url, sld, function(xmlhttp) {
       this.props.layer.getSource().updateParams({'_olSalt': Math.random()});
       this.close();
