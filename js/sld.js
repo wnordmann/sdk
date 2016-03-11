@@ -65,21 +65,56 @@ var createPolygonSymbolizer = function(styleState) {
   };
 };
 
+var createLineSymbolizer = function(styleState) {
+  return {
+    name: {
+      localPart: 'LineSymbolizer',
+      namespaceURI: 'http://www.opengis.net/sld'
+    },
+    value: {
+      stroke: createStroke(styleState)
+    }
+  };
+};
+
+var createPointSymbolizer = function(styleState) {
+  var graphicOrMark = [{
+    TYPE_NAME: 'SLD_1_0_0.Mark',
+    fill: createFill(styleState),
+    stroke: createStroke(styleState),
+    wellKnownName: 'circle'
+  }];
+  return {
+    name: {
+      localPart: 'PointSymbolizer',
+      namespaceURI: 'http://www.opengis.net/sld'
+    },
+    value: {
+      graphic: {
+        externalGraphicOrMark: graphicOrMark,
+        size: {
+          content: ['4']
+        }
+      }
+    }
+  };
+};
+
 var createRule = function(geometryType, styleState) {
+  var symbolizer;
   if (geometryType === 'Polygon') {
-    return {
-      symbolizer: [
-        createPolygonSymbolizer(styleState)
-      ]
-    };
+    symbolizer = createPolygonSymbolizer(styleState);
+  } else if (geometryType === 'LineString') {
+    symbolizer = createLineSymbolizer(styleState);
+  } else if (geometryType === 'Point') {
+    symbolizer = createPointSymbolizer(styleState);
   }
+  return {
+    symbolizer: [symbolizer]
+  };
 };
 
 export default {
-  createFill,
-  createStroke,
-  createPolygonSymbolizer: createPolygonSymbolizer,
-  createRule: createRule,
   createSLD(layerName, geometryType, rules, styleState) {
     var result = {
       name: {
