@@ -100,17 +100,72 @@ var createPointSymbolizer = function(styleState) {
   };
 };
 
+var createTextSymbolizer = function(styleState) {
+  var fontFamily = 'sans-serif';
+  return {
+    name: {
+      localPart: 'TextSymbolizer',
+      namespaceURI: 'http://www.opengis.net/sld'
+    },
+    value: {
+      fill: {
+        cssParameter: [{
+          name: 'fill',
+          content: ['#' + styleState.fontColor.hex]
+        }]
+      },
+      halo: {
+        fill: {
+          cssParameter: [{
+            name: 'fill',
+            content: ['#FFFFFF']
+          }]
+        },
+        radius: {
+          content: ['1']
+        }
+      },
+      labelPlacement: {
+        linePlacement: {}
+      },
+      font: {
+        cssParameter: [{
+          name: 'font-family',
+          content: [fontFamily]
+        }, {
+          name: 'font-size',
+          content: [String(styleState.fontSize)]
+        }]
+      },
+      label: {
+        content: [{
+          name: {
+            localPart: "PropertyName",
+            namespaceURI: "http://www.opengis.net/ogc"
+          },
+          value: {
+            content: [styleState.labelAttribute]
+          }
+        }]
+      }
+    }
+  };
+};
+
 var createRule = function(geometryType, styleState) {
-  var symbolizer;
+  var symbolizer = [];
   if (geometryType === 'Polygon') {
-    symbolizer = createPolygonSymbolizer(styleState);
+    symbolizer.push(createPolygonSymbolizer(styleState));
   } else if (geometryType === 'LineString') {
-    symbolizer = createLineSymbolizer(styleState);
+    symbolizer.push(createLineSymbolizer(styleState));
   } else if (geometryType === 'Point') {
-    symbolizer = createPointSymbolizer(styleState);
+    symbolizer.push(createPointSymbolizer(styleState));
+  }
+  if (styleState.labelAttribute) {
+    symbolizer.push(createTextSymbolizer(styleState));
   }
   return {
-    symbolizer: [symbolizer]
+    symbolizer: symbolizer
   };
 };
 

@@ -46,7 +46,7 @@ class LabelEditor extends React.Component {
     this.state = {};
     this._setInitialStateFromProp('labelAttribute', null);
     this._setInitialStateFromProp('fontSize', 12);
-    this._setInitialStateFromProp('fontColor', {r: 0, g: 0, b: 0, a: 1});
+    this._setInitialStateFromProp('fontColor', {rgb: {r: 0, g: 0, b: 0, a: 1}, hex: '000000'});
     this.props.onChange(this.state);
   }
   _setInitialStateFromProp(prop, defaultVal) {
@@ -68,7 +68,7 @@ class LabelEditor extends React.Component {
     this.props.onChange(this.state);
   }
   _onChangeFill(color) {
-    this.state.fontColor = color.rgb;
+    this.state.fontColor = color;
     this.props.onChange(this.state);
   }
   render() {
