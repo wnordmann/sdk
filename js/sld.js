@@ -16,6 +16,9 @@ import {Filter_1_0_0} from '../node_modules/ogc-schemas/lib/Filter_1_0_0.js';
 import {GML_2_1_2} from '../node_modules/ogc-schemas/lib/GML_2_1_2.js';
 import {SLD_1_0_0} from '../node_modules/ogc-schemas/lib/SLD_1_0_0.js';
 
+const sldNamespace = 'http://www.opengis.net/sld';
+const ogcNamespace = 'http://www.opengis.net/ogc';
+
 var context = new Jsonix.Context([XLink_1_0, Filter_1_0_0, GML_2_1_2, SLD_1_0_0], {
   namespacePrefixes: {
     'http://www.w3.org/1999/xlink': 'xlink',
@@ -56,7 +59,7 @@ var createPolygonSymbolizer = function(styleState) {
   return {
     name: {
       localPart: 'PolygonSymbolizer',
-      namespaceURI: 'http://www.opengis.net/sld'
+      namespaceURI: sldNamespace
     },
     value: {
       fill: createFill(styleState),
@@ -69,7 +72,7 @@ var createLineSymbolizer = function(styleState) {
   return {
     name: {
       localPart: 'LineSymbolizer',
-      namespaceURI: 'http://www.opengis.net/sld'
+      namespaceURI: sldNamespace
     },
     value: {
       stroke: createStroke(styleState)
@@ -87,7 +90,7 @@ var createPointSymbolizer = function(styleState) {
   return {
     name: {
       localPart: 'PointSymbolizer',
-      namespaceURI: 'http://www.opengis.net/sld'
+      namespaceURI: sldNamespace
     },
     value: {
       graphic: {
@@ -105,7 +108,7 @@ var createTextSymbolizer = function(styleState) {
   return {
     name: {
       localPart: 'TextSymbolizer',
-      namespaceURI: 'http://www.opengis.net/sld'
+      namespaceURI: sldNamespace
     },
     value: {
       fill: {
@@ -140,8 +143,8 @@ var createTextSymbolizer = function(styleState) {
       label: {
         content: [{
           name: {
-            localPart: "PropertyName",
-            namespaceURI: "http://www.opengis.net/ogc"
+            localPart: 'PropertyName',
+            namespaceURI: ogcNamespace
           },
           value: {
             content: [styleState.labelAttribute]
@@ -152,7 +155,60 @@ var createTextSymbolizer = function(styleState) {
   };
 };
 
+var expressionToFilter = function(expression) {
+  // TODO support more (complex) filters, but filtrex does not export its parser
+  var comparisonOps = {
+    '==': 'PropertyIsEqualTo',
+    '>=': 'PropertyIsGreaterThanOrEqualTo',
+    '>' : 'PropertyIsGreaterThan',
+    '<' : 'PropertyIsLessThan',
+    '<=': 'PropertyIsLessThanOrEqualTo'
+  };
+  var operator, property, value;
+  for (var key in comparisonOps) {
+    var idx = expression.indexOf(key);
+    if (idx !== -1) {
+      operator = comparisonOps[key];
+      property = expression.substring(0, idx).trim();
+      value = expression.substring(idx + key.length).replace(/"/g, '').trim();
+    }
+  }
+  if (operator) {
+    return {
+      comparisonOps: {
+        name: {
+          namespaceURI: ogcNamespace,
+          localPart: operator
+        },
+        value: {
+          expression: [{
+            name: {
+              namespaceURI: ogcNamespace,
+              localPart: 'PropertyName'
+            },
+            value: {
+              content: [property]
+            }
+          }, {
+            name: {
+              namespaceURI: ogcNamespace,
+              localPart: 'Literal'
+            },
+            value: {
+              content: [String(value)]
+            }
+          }]
+        }
+      }
+    };
+  }
+};
+
 var createRule = function(geometryType, styleState) {
+  var filter;
+  if (styleState.expression) {
+    filter = expressionToFilter(styleState.expression);
+  }
   var symbolizer = [];
   if (geometryType === 'Polygon') {
     symbolizer.push(createPolygonSymbolizer(styleState));
@@ -165,7 +221,8 @@ var createRule = function(geometryType, styleState) {
     symbolizer.push(createTextSymbolizer(styleState));
   }
   return {
-    symbolizer: symbolizer
+    symbolizer: symbolizer,
+    filter: filter
   };
 };
 
@@ -173,7 +230,7 @@ export default {
   createSLD(layerName, geometryType, rules, styleState) {
     var result = {
       name: {
-        namespaceURI: 'http://www.opengis.net/sld',
+        namespaceURI: sldNamespace,
         localPart: 'StyledLayerDescriptor'
       }
     };
