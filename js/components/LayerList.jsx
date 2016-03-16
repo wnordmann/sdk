@@ -129,7 +129,7 @@ class LayerList extends React.Component {
     var addLayer;
     if (this.props.addLayer) {
       addLayer = (
-          <UI.DefaultButton  onClick={this._showAddLayer.bind(this)}  className="pull-right add_layer_button" title={formatMessage(messages.addlayertitle)}> <Icon.Icon name="plus" />
+          <UI.DefaultButton  onClick={this._showAddLayer.bind(this)}  className="pull-right add_layer_button" title={formatMessage(messages.addlayertitle)}> <Icon.Icon name="plus" /> &nbsp;
           {formatMessage(messages.addlayertext)}
           <AddLayerModal allowUserInput={this.props.addLayer.allowUserInput} asVector={this.props.addLayer.asVector} map={this.props.map} url={this.props.addLayer.url} ref='addlayermodal'/>
         </UI.DefaultButton>
