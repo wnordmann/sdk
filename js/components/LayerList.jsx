@@ -120,7 +120,7 @@ class LayerList extends React.Component {
     var className = 'layer-switcher';
     var heading;
     var tipLabel = this.props.tipLabel || formatMessage(messages.layertitle);
-    if (this.state.layers[this.state.layers.length - 1].get('type') !== 'base-group') {
+    if (this.state.layers.length > 0 && this.state.layers[this.state.layers.length - 1].get('type') !== 'base-group') {
       heading = <ul><h4><strong>{tipLabel}</strong></h4></ul>;
     }
     if (this.state.visible) {
