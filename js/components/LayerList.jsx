@@ -98,15 +98,18 @@ class LayerList extends React.Component {
     this._modalOpen = false;
   }
   getLayerNode(lyr) {
+    if (lyr.get('id') === undefined) {
+      lyr.set('id', 'sdk-layer-' + Math.random());
+    }
     if (lyr.get('title') !== null) {
       if (lyr instanceof ol.layer.Group) {
         var children = this.props.showGroupContent ? this.renderLayerGroup(lyr) : undefined;
         return (
-          <LayerListItem {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('title')} layer={lyr} children={children} title={lyr.get('title')} />
+          <LayerListItem {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('id')} layer={lyr} children={children} title={lyr.get('title')} />
         );
       } else {
         return (
-          <LayerListItem {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('title')} layer={lyr} title={lyr.get('title')} />
+          <LayerListItem {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('id')} layer={lyr} title={lyr.get('title')} />
         );
       }
     }
