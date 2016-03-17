@@ -87,6 +87,7 @@ class AddLayerModal extends Dialog.Modal {
   }
   _getCaps(url) {
     var layers = [];
+    this.setState({error: false});
     doGET(url, function(xmlhttp) {
       var info, layer;
       if (this.props.asVector) {
