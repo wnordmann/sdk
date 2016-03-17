@@ -19,8 +19,8 @@ import pureRender from 'pure-render-decorator';
 const messages = defineMessages({
   menubuttontext: {
     id: 'mapconfig.menubuttontext',
-      description: 'Title for the Map Config menu',
-      defaultMessage: 'Map'
+    description: 'Title for the Map Config menu',
+    defaultMessage: 'Map'
   },
   savetext: {
     id: 'mapconfig.savetext',
@@ -89,7 +89,6 @@ class MapConfig extends React.Component {
   _save() {
     var map = this.props.map;
     var layers = [];
-    var root = map.getLayerGroup();
     map.getLayers().forEach(function(layer) {
       if (layer.get('title') !== null) {
         var config = {};
@@ -152,7 +151,7 @@ class MapConfig extends React.Component {
     config.properties = layer.getProperties();
     delete config.properties.maxResolution;
     delete config.properties.minResolution;
-    var source = (config.type !== 'Group') ? layer.getSource(): null;
+    var source = (config.type !== 'Group') ? layer.getSource() : null;
     if (source) {
       delete config.properties.source;
       config.source = this._getSourceConfig(source);
@@ -160,7 +159,6 @@ class MapConfig extends React.Component {
     if (layer instanceof ol.layer.Group) {
       delete config.properties.layers;
       config.children = [];
-      var childConfig = {};
       layer.getLayers().forEach(function(child) {
         if (child.get('title') !== null) {
           var childConfig = {};
