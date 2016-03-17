@@ -102,7 +102,7 @@ class LabelEditor extends React.Component {
           <Grids.Col md={4}>
             <label>{formatMessage(messages.fillcolorlabel)}:</label>
           </Grids.Col>
-          <Grids.Col md={12}>
+          <Grids.Col md={14}>
             <ColorPicker type='compact' onChangeComplete={this._onChangeFill.bind(this)} color={this.state.fontColor} />
           </Grids.Col>
         </div>

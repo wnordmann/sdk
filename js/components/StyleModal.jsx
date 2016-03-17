@@ -204,11 +204,11 @@ class StyleModal extends Dialog.Modal {
       return (<RuleEditor geometryType={this.state.geometryType} visible={rule.title === this.state.rule} key={key} initialState={this._styleState[rule.title]} onChange={this._onChange.bind(this)} attributes={this.state.attributes} />)
     }, this);
     return (
-      <Dialog.BaseModal title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} show={this.state.isVisible} onHide={this.close} {...this.props}>
+      <Dialog.BaseModal className="edit-layer-modal" title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} show={this.state.isVisible} onHide={this.close} {...this.props}>
         <Dialog.ModalBody>
           <div className="clearfix form-group">
             <Grids.Col md={2}><label className="rule-label" htmlFor='ruleSelector'>{formatMessage(messages.rulelabel)}</label></Grids.Col>
-            <Grids.Col md={4}><select ref='ruleSelector' value={this.state.rule} className='form-control' onChange={this._onRuleChange.bind(this)}>{ruleItems}</select></Grids.Col>
+            <Grids.Col md={6}><select ref='ruleSelector' value={this.state.rule} className='form-control' onChange={this._onRuleChange.bind(this)}>{ruleItems}</select></Grids.Col>
             <Grids.Col md={3}><UI.DefaultButton onClick={this._addRule.bind(this)} title={formatMessage(messages.addrulebuttontitle)}>{formatMessage(messages.addrulebutton)}</UI.DefaultButton></Grids.Col>
             <Grids.Col md={4}><UI.DefaultButton onClick={this._removeRule.bind(this)} title={formatMessage(messages.removerulebuttontitle)}>{formatMessage(messages.removerulebutton)}</UI.DefaultButton></Grids.Col>
           </div>
