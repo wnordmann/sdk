@@ -3,6 +3,15 @@
 ## JSFiddle
 Check out the following [JSFiddle example](https://jsfiddle.net/bartvde/69z2wepo/30192/).
 
+## Node version manager (nvm)
+Install the node version manager from https://github.com/creationix/nvm
+For the Web SDK, you should be using node 4.3.2 so:
+
+```
+nvm install 4.3.2
+nvm use 4.3.2
+```
+
 ## Using the web-sdk application generator
 The easiest way to get started is to use the web-sdk application generator. We will also outline the manual steps at the end of this section for advanced users, but the preferred way is to use the application generator.
 
