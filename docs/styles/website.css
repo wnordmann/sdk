@@ -1,0 +1,8 @@
+.book-header {
+  background-image: url("logo.png") !important;
+  background-repeat: no-repeat !important;
+  background-position-x: 200px !important;
+}
+.page-inner {
+  background: linear-gradient(to bottom, #235c73 0%, #112d39 100%) !important;
+}
