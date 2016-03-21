@@ -31,8 +31,13 @@ global.DD = DD;
 import BUTTON from 'pui-react-buttons';
 global.BUTTON = BUTTON;
 
+import ICON from 'pui-react-iconography';
+global.ICON = ICON;
+
 import AddLayer from './components/AddLayer.jsx';
 global.AddLayer = AddLayer;
+
+import AddLayerModal from './components/AddLayerModal.jsx';
 
 import App from './components/App.js';
 global.App = App;
@@ -52,6 +57,8 @@ global.EditPopup = EditPopup;
 import FeatureTable from './components/FeatureTable.jsx';
 global.FeatureTable = FeatureTable;
 
+import FilterEditor from './components/FilterEditor.jsx';
+
 import Geocoding from './components/Geocoding.jsx';
 global.Geocoding = Geocoding;
 
@@ -67,29 +74,27 @@ global.Globe = Globe;
 import HomeButton from './components/HomeButton.jsx';
 global.HomeButton = HomeButton;
 
-import LoadingPanel from './components/LoadingPanel.jsx';
-global.LoadingPanel = LoadingPanel;
-
-import ICON from 'pui-react-iconography';
-global.ICON = ICON;
-
 import ImageExport from './components/ImageExport.jsx';
 global.ImageExport = ImageExport;
 
 import InfoPopup from './components/InfoPopup.jsx';
 global.InfoPopup = InfoPopup;
 
-import ToolActions from './actions/ToolActions.js';
-global.ToolActions = ToolActions;
-
 import LayerList from './components/LayerList.jsx';
 global.LayerList = LayerList;
+
+import LayerListItem from './components/LayerListItem.jsx';
+
+import LoadingPanel from './components/LoadingPanel.jsx';
+global.LoadingPanel = LoadingPanel;
 
 import Login from './components/Login.jsx';
 global.Login = Login;
 
 import LoginModal from './components/LoginModal.jsx';
-global.LoginModal = LoginModal;
+
+import MapConfig from './components/MapConfig.jsx';
+global.MapConfig = MapConfig;
 
 import Measure from './components/Measure.jsx';
 global.Measure = Measure;
@@ -106,8 +111,17 @@ global.QGISPrint = QGISPrint;
 import QueryBuilder from './components/QueryBuilder.jsx';
 global.QueryBuilder = QueryBuilder;
 
+import RuleEditor from './components/RuleEditor.jsx';
+
 import Select from './components/Select.jsx';
 global.Select = Select;
+
+import StrokeEditor from './components/StrokeEditor.jsx';
+
+import StyleModal from './components/StyleModal.jsx';
+
+import ToolActions from './actions/ToolActions.js';
+global.ToolActions = ToolActions;
 
 import Toolbar from './components/Toolbar.jsx';
 global.Toolbar = Toolbar;
