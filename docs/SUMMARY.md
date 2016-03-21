@@ -4,6 +4,7 @@ Boundless Web SDK
 
 * [Getting started](getting_started.md)
 * [Tutorial](tutorial.md)
+* [For developers](developers.md)
 * [API](api.md)
     * [AddLayer](api/AddLayer.md)
     * [Bookmarks](api/Bookmarks.md)
