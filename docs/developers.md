@@ -22,7 +22,7 @@ Define ```propTypes``` static on the class, for example: ```Chart.propTypes = { 
 
 JSX is an XML like syntax to create components. For example:
 
-```
+```html
 <Component property1={variable1} />
 ```
 
@@ -42,7 +42,7 @@ We use a central application dispatcher that extends Flux’s Dispatcher.
 Actions are functions that ask the dispatcher to handle certain actions (using constants).
 Components (or stores) can register listener from actions on the dispatcher. An example:
 
-```
+```javascript
 AppDispatcher.register((payload) => {
   let action = payload.action;
   switch(action.type) {
@@ -59,7 +59,7 @@ AppDispatcher.register((payload) => {
 
 At the component level:
 
-```
+```javascript
 import {defineMessages, injectIntl, intlShape} from ‘react-intl';
 
 const messages = defineMessages({
@@ -70,12 +70,14 @@ const messages = defineMessages({
   }
 });
 
+class HomeButton extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     return (
       <button title={formatMessage(messages.buttontitle)} />
     );
   }
+}
 
 HomeButton.propTypes = {
  intl: intlShape.isRequired
@@ -86,7 +88,7 @@ export default injectIntl(HomeButton);
 
 At the application level:
 
-```
+```javascript
 import {addLocaleData, IntlProvider} from ‘react-intl';
 import enLocaleData from './node_modules/react-intl/dist/locale-data/en.js';
 import enMessages from ‘./node_modules/boundless-sdk/locale/en.js';
@@ -103,7 +105,7 @@ It generates JSON files per component.
 ```npm run i18n``` generates i18n template for all components in ```locale/en.js```
 In ```.babelrc``` this is activated with:
 
-```
+```json
   "plugins": ["react-intl"],
   "extra": {
     "react-intl": {
@@ -136,7 +138,7 @@ It will bundle this up with all the resources (fonts, images).
 A post install task copies css files needed from external components (such as fixed-data-table).
 By using import statements to css files, browserify bundles up the css (but won’t copy any needed resources, so this only works for plain css).
 
-```
+```javascript
   import './FeatureTable.css';
 ```
 
@@ -145,12 +147,12 @@ By using import statements to css files, browserify bundles up the css (but won�
 Can be used by any Web SDK application. In ```package.json```:
 
 ```
-  sdk-debug-server": “git+https://github.com/bartvde/sdk-debug-server.git"
+  "sdk-debug-server": "git+https://github.com/bartvde/sdk-debug-server.git"
 ```
 
 To use it in a node script file:
 
-```
+```javascript
 require('sdk-debug-server').startServer();
 ```
 
@@ -172,7 +174,7 @@ To start the proxy, add a script to the ```package.json``` file:
 
 Using ```npm run start:proxy``` will start up the proxy server on port 4000 using config from ```proxy-config.json```:
 
-```
+```json
 {
   "routes": [
     {
