@@ -98,7 +98,8 @@ class Toolbar extends React.Component {
 
 Toolbar.propTypes = {
   /**
-   * The options to show in the toolbar. An array of objects with jsx, icon, text, title, pullRight and onClick keys.
+   * The options to show in the toolbar. An array of objects with jsx (element), icon (string), text (string),
+   * title (string), pullRight (boolean) and onClick (function) keys.
    * When using jsx, use exclude to not have the item show up in the menu on small screens,
    * but separate in the toolbar.
    */

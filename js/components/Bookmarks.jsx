@@ -137,7 +137,7 @@ Bookmarks.propTypes = {
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
   /**
-   * The bookmark data. An array of objects with name, description and extent keys.
+   * The bookmark data. An array of objects with name (string, required), description (string, required) and extent (array of number, required) keys.
    * The extent should be in the view projection.
    */
   bookmarks: React.PropTypes.arrayOf(React.PropTypes.shape({

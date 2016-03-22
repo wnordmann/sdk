@@ -214,7 +214,7 @@ LayerList.propTypes = {
   showOnStart: React.PropTypes.bool,
   /**
    * Should we allow adding layers through WMS or WFS GetCapabilities?
-   * Object with keys url and asVector.
+   * Object with keys url (string, required), allowUserInput (boolean, optional) and asVector (boolean, optional).
    * If asVector is true, layers will be retrieved from WFS and added as vector.
    * If allowUserInput is true, the user will be able to provide a url through an input.
    */
