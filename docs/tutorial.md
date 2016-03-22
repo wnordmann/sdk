@@ -8,8 +8,7 @@ This application contains two base map layer, ```MapQuest``` streets and aerial,
 The main file of the application is ```app.jsx```. Open up this file in your favorite text editor. Look for the definition of the ```ol.Map```. The map gets defined with a layer group, that combines the MapQuest streets and aerial layers. The view is defined with an initial  center and zoom level. If you are not familiar with OpenLayers 3, the recommendation is to use the workshop at http://openlayers.org/workshop/ to get up to speed with OpenLayers 3.
 
 ## 2. Adding a vector layer from a GeoJSON file
-Download USA states data as GeoJSON from: http://data.okfn.org/data/datasets/geo-boundaries-us-110m
-
+Create a data subdirectory in the root of the application directory, download USA states data as GeoJSON from: http://data.okfn.org/data/datasets/geo-boundaries-us-110m and add it to the data subdirectory.
 Add the following layer definition:
 
 ```javascript
@@ -17,7 +16,7 @@ Add the following layer definition:
     id: 'states',
     title: 'USA States',
     source: new ol.source.Vector({
-      url: 'ne_110m_admin_1_states_provinces_shp_scale_rank.geojson',
+      url: 'data/ne_110m_admin_1_states_provinces_shp_scale_rank.geojson',
       format: new ol.format.GeoJSON()
     })
   })
