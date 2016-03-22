@@ -98,6 +98,16 @@ const messages = defineMessages({
 
 /**
  * A table to show features. Allows for selection of features.
+ *
+ * ```javascript
+ * var selectedLayer = map.getLayers().item(2);
+ * ```
+ *
+ * ```xml
+ * <div ref='tablePanel' id='table-panel' className='attributes-table'>
+ *   <FeatureTable ref='table' resizeTo='table-panel' offset={[30, 30]} layer={selectedLayer} map={map} />
+ * </div>
+ * ```
  */
 @pureRender
 class FeatureTable extends React.Component {

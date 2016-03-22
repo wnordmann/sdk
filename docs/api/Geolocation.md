@@ -3,6 +3,12 @@
 
 Enable geolocation which uses the current position of the user in the map.
 
+```xml
+<div id='geolocation-control' className='ol-unselectable ol-control'>
+  <Geolocation map={map} />
+</div>
+```
+
 Properties
 ----------
 

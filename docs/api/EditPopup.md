@@ -3,6 +3,10 @@
 
 Popup that can be used for feature editing (attribute form).
 
+```xml
+<div id='popup' className='ol-popup'><EditPopup map={map} /></div>
+```
+
 Properties
 ----------
 

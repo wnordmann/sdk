@@ -25,6 +25,12 @@ const messages = defineMessages({
 
 /**
  * A button to go back to the initial extent of the map.
+ *
+ * ```html
+ * <div id='home-button' className='ol-unselectable ol-control'>
+ *   <HomeButton map={map} />
+ * </div>
+ * ```
  */
 @pureRender
 class HomeButton extends React.Component {

@@ -41,6 +41,10 @@ const messages = defineMessages({
 
 /**
  * Popup that can be used for feature editing (attribute form).
+ *
+ * ```xml
+ * <div id='popup' className='ol-popup'><EditPopup map={map} /></div>
+ * ```
  */
 class EditPopup extends BasePopup {
   constructor(props) {

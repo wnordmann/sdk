@@ -3,6 +3,28 @@
 
 Allow for the creation of charts based on selected features of a layer.
 
+```javascript
+var charts = [{
+  title: 'Airports count per use category',
+  categoryField: 'USE',
+  layer: 'lyr03',
+  valueFields: [],
+  displayMode: 2,
+  operation: 2
+}, {
+  title: 'Forest area total surface',
+  categoryField: 'VEGDESC',
+  layer: 'lyr01',
+  valueFields: ['AREA_KM2'],
+  displayMode: 1,
+  operation: 2
+}];
+```
+
+```xml
+<div  id='chart-panel'><Chart ref='chartPanel' combo={true} charts={charts}/></div>
+```
+
 Properties
 ----------
 

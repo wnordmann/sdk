@@ -28,6 +28,12 @@ const messages = defineMessages({
 
 /**
  * This component displays the results of geocoding search. The geocoding search is initiated by the Geocoding component.
+ *
+ * ```xml
+ *  <div id='geocoding-results' className='geocoding-results'>
+ *    <GeocodingResults map={map} />
+ *  </div>
+ * ```
  */
 @pureRender
 class GeocodingResults extends React.Component {

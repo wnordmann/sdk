@@ -33,7 +33,11 @@ const messages = defineMessages({
 });
 
 /**
- * Export the map as a PNG file.
+ * Export the map as a PNG file. This will only work if the canvas is not tainted.
+ *
+ * ```xml
+ * <ImageExport map={map} />
+ * ```
  */
 @pureRender
 class ImageExport extends React.Component {

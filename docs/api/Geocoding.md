@@ -3,6 +3,10 @@
 
 Input field to search for placenames using a geocoding service (OSM nominatim).
 
+```xml
+<div id='geocoding' className='pull-right'><Geocoding /></div>
+```
+
 Properties
 ----------
 
