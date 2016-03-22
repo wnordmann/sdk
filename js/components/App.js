@@ -15,7 +15,25 @@ import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 
 /**
- * Base class for applications.
+ * Base class for applications. Can handle using the browser history to navigate through map extents.
+ * An initial extent can be provided as well.
+ *
+ * ```javascript
+ * class MyApp extends App {
+ *   componentDidMount() {
+ *     super.componentDidMount();
+ *     // your code here
+ *   }
+ *   render() {
+ *     // we need to provide a reference to the map
+ *     return (
+ *       <div id='map' ref='map'></div>
+ *     );
+ *   }
+ * }
+ *
+ * ReactDOM.render(<IntlProvider locale='en' messages={enMessages}><MyApp extent={[1327331, 4525032, 5123499, 5503426]} useHistory={false} map={map} /></IntlProvider>, document.getElementById('main'));
+ * ```
  */
 export default class App extends React.Component {
   componentDidMount() {
