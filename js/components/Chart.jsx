@@ -55,7 +55,7 @@ const messages = defineMessages({
  *   operation: 2
  * }];
  * ```
- * 
+ *
  * ```xml
  * <div  id='chart-panel'><Chart ref='chartPanel' combo={true} charts={charts}/></div>
  * ```
