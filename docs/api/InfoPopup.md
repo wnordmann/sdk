@@ -3,6 +3,12 @@
 
 Popup to show feature info. This can be through WMS GetFeatureInfo or local vector data.
 
+```html
+<div id='popup' className='ol-popup'>
+  <InfoPopup toggleGroup='navigation' map={map} />
+</div>
+```
+
 Properties
 ----------
 

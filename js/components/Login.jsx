@@ -35,7 +35,11 @@ const messages = defineMessages({
 });
 
 /**
- * Login dialog for integration with GeoServer security.
+ * Button that shows a login dialog for integration with GeoServer security.
+ *
+ * ```xml
+ * <Login />
+ * ```
  */
 @pureRender
 class Login extends React.Component {

@@ -13,6 +13,10 @@ configured on the layer with the following properties:
 - geometryName: the name of the geometry attribute
 - url: the online resource of the WFS endpoint
 
+```xml
+<WFST map={map} />
+```
+
 Properties
 ----------
 

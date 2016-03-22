@@ -1,7 +1,11 @@
 `Login` (component)
 ===================
 
-Login dialog for integration with GeoServer security.
+Button that shows a login dialog for integration with GeoServer security.
+
+```xml
+<Login />
+```
 
 Properties
 ----------

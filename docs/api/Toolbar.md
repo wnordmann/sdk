@@ -4,6 +4,31 @@
 Adds the ability to show a toolbar with buttons. On small screen sizes
 a dropdown will be shown instead.
 
+```javascript
+var options = [{
+  jsx: (<Login />)
+}, {
+  jsx: (<ImageExport map={map} />)
+}, {
+  jsx: (<Measure toggleGroup='navigation' map={map}/>)
+}, {
+  jsx: (<AddLayer map={map} />)
+}, {
+  jsx: (<QGISPrint map={map} layouts={printLayouts} />)
+}, {
+  jsx: (<Select toggleGroup='navigation' map={map}/>)
+}, {
+  text: formatMessage(messages.navigationbutton),
+  title: formatMessage(messages.navigationbuttontitle),
+  onClick: this._navigationFunc.bind(this),
+  icon: 'hand-paper-o'
+}];
+```
+
+```xml
+<Toolbar options={options} />
+```
+
 Properties
 ----------
 

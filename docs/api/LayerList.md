@@ -3,6 +3,12 @@
 
 A list of layers in the map. Allows setting visibility and opacity.
 
+```html
+<div id='layerlist'>
+  <LayerList allowFiltering={true} showOpacity={true} showDownload={true} showGroupContent={true} showZoomTo={true} allowReordering={true} map={map} />
+</div>
+```
+
 Properties
 ----------
 

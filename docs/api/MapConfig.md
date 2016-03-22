@@ -3,6 +3,10 @@
 
 Export the map configuration and ability to reload it from local storage.
 
+```xml
+<MapConfig map={map} />
+```
+
 Properties
 ----------
 

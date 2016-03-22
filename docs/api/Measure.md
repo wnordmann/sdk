@@ -1,7 +1,11 @@
 `Measure` (component)
 =====================
 
-Adds area and length measure tools to the map.
+Adds area and length measure tools as a menu button.
+
+```xml
+<Measure toggleGroup='navigation' map={map}/>
+```
 
 Properties
 ----------

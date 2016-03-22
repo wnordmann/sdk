@@ -45,7 +45,11 @@ const messages = defineMessages({
 const wgs84Sphere = new ol.Sphere(6378137);
 
 /**
- * Adds area and length measure tools to the map.
+ * Adds area and length measure tools as a menu button.
+ *
+ * ```xml
+ * <Measure toggleGroup='navigation' map={map}/>
+ * ```
  */
 @pureRender
 class Measure extends MapTool {

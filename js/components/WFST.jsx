@@ -70,6 +70,10 @@ const messages = defineMessages({
  * - geometryType: the type of geometry (e.g. MultiPolygon)
  * - geometryName: the name of the geometry attribute
  * - url: the online resource of the WFS endpoint
+ *
+ * ```xml
+ * <WFST map={map} />
+ * ```
  */
 @pureRender
 class WFST extends MapTool {

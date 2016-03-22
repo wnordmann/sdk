@@ -38,6 +38,10 @@ const localStorageKey = 'web-sdk-map-config';
 
 /**
  * Export the map configuration and ability to reload it from local storage.
+ *
+ * ```xml
+ * <MapConfig map={map} />
+ * ```
  */
 @pureRender
 class MapConfig extends React.Component {

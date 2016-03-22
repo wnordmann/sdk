@@ -35,6 +35,10 @@ const messages = defineMessages({
 
 /**
  * The select tool allows users to select features in multiple layers at a time by drawing a rectangle.
+ *
+ * ```xml
+ * <Select toggleGroup='navigation' map={map}/>
+ * ```
  */
 @pureRender
 class Select extends MapTool {

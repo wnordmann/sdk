@@ -18,6 +18,10 @@ import './LoadingPanel.css';
 
 /**
  * A loading panel shows a spinner when tiles or images are loading.
+ *
+ * ```xml
+ * <LoadingPanel map={map} />
+ * ```
  */
 @pureRender
 class LoadingPanel extends React.Component {
