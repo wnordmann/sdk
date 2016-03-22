@@ -19,6 +19,14 @@ import ol from 'openlayers';
  * An initial extent can be provided as well.
  *
  * ```javascript
+ *
+ * import React from 'react';
+ * import ReactDOM from 'react-dom';
+ * import ol from 'openlayers';
+ * import {IntlProvider} from 'react-intl';
+ * import App from './node_modules/boundless-sdk/js/components/App.js';
+ * import enMessages from './node_modules/boundless-sdk/locale/en.js';
+ *
  * class MyApp extends App {
  *   componentDidMount() {
  *     super.componentDidMount();
@@ -32,7 +40,8 @@ import ol from 'openlayers';
  *   }
  * }
  *
- * ReactDOM.render(<IntlProvider locale='en' messages={enMessages}><MyApp extent={[1327331, 4525032, 5123499, 5503426]} useHistory={false} map={map} /></IntlProvider>, document.getElementById('main'));
+ * var extent = [1327331, 4525032, 5123499, 5503426];
+ * ReactDOM.render(<IntlProvider locale='en' messages={enMessages}><MyApp extent={extent} useHistory={false} map={map} /></IntlProvider>, document.getElementById('main'));
  * ```
  */
 export default class App extends React.Component {
