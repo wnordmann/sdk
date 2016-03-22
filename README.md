@@ -27,6 +27,8 @@ In order to keep the full build (used by the free version of QGIS Web Applicatio
     git add docs
     npm run i18n
     git add locale/en.js
+    git add book.pdf
+    git add _book 
 
 ## npm run build
 If you run into this error: Error: EMFILE, open 'sdk/node_modules/react/package.json' run the solution from here: https://github.com/andreypopp/react-app-express/issues/1#issuecomment-34113065
