@@ -134,5 +134,5 @@ So to install them you will need to use:
 ```
 npm install boundless-sdk --registry https://repo.boundlessgeo.com/api/npm/npmall
 npm install sdk-tools --registry https://repo.boundlessgeo.com/api/npm/npmall
-npm install sdk-generator --registry https://repo.boundlessgeo.com/api/npm/npmall
+npm install web-sdk-generator --registry https://repo.boundlessgeo.com/api/npm/npmall
 ```
