@@ -34,10 +34,10 @@ function generatePropType(type) {
       }).join('|') +
       ')';
   } else {
-    values = type.value;
+    values = type.value && type.value.name ? type.value.name : type.value;
   }
 
-  return 'type: `' + type.name + (values ? values: '') + '`\n';
+  return 'type: `' + type.name + (values ? ' ' + values: '') + '`\n';
 }
 
 function generatePropDefaultValue(value) {

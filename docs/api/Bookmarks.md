@@ -43,7 +43,7 @@ type: `number`
 The bookmark data. An array of objects with name, description and extent keys.
 The extent should be in the view projection.
 
-type: `arrayOf[object Object]`
+type: `arrayOf shape`
 
 
 ### `dots`
@@ -81,7 +81,7 @@ defaultValue: `''`
 
 The ol3 map instance on whose view we should navigate.
 
-type: `instanceOfol.Map`
+type: `instanceOf ol.Map`
 
 
 ### `markerUrl`

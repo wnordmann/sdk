@@ -17,5 +17,5 @@ type: `custom`
 
 The ol3 map for whose view the initial center and zoom should be restored.
 
-type: `instanceOfol.Map`
+type: `instanceOf ol.Map`
 

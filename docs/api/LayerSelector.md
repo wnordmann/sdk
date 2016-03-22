@@ -17,7 +17,7 @@ type: `func`
 
 The map from which to extract the layers.
 
-type: `instanceOfol.Map`
+type: `instanceOf ol.Map`
 
 
 ### `value`

@@ -11,7 +11,7 @@ Props
 
 The map onto which to activate and deactivate the interactions.
 
-type: `instanceOfol.Map`
+type: `instanceOf ol.Map`
 
 
 ### `toggleGroup`

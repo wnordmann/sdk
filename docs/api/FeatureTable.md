@@ -41,14 +41,14 @@ type: `custom`
 
 The layer to use initially for loading the table.
 
-type: `instanceOfol.layer.Vector`
+type: `instanceOf ol.layer.Vector`
 
 
 ### `map` (required)
 
 The ol3 map in which the source for the table resides.
 
-type: `instanceOfol.Map`
+type: `instanceOf ol.Map`
 
 
 ### `offset`

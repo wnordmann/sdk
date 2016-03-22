@@ -21,7 +21,7 @@ category.
 The statistic function to use when displayMode is by category (1) is defined in the operation key.
 A value of 0 means MIN, a value of 1 means MAX, a value of 2 means SUM and a value of 3 means AVG (Average).
 
-type: `arrayOf[object Object]`
+type: `arrayOf shape`
 
 
 ### `combo`

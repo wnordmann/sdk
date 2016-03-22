@@ -10,5 +10,5 @@ Props
 
 The ol3 map instance to work on.
 
-type: `instanceOfol.Map`
+type: `instanceOf ol.Map`
 

@@ -17,5 +17,5 @@ type: `custom`
 
 The ol3 map whose layers can be used for the querybuilder.
 
-type: `instanceOfol.Map`
+type: `instanceOf ol.Map`
 

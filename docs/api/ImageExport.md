@@ -17,5 +17,5 @@ type: `custom`
 
 The ol3 map to export as PNG.
 
-type: `instanceOfol.Map`
+type: `instanceOf ol.Map`
 

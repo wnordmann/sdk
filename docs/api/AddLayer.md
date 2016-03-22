@@ -18,7 +18,7 @@ type: `custom`
 
 The ol3 map instance to add to.
 
-type: `instanceOfol.Map`
+type: `instanceOf ol.Map`
 
 
 ### `pointRadius`

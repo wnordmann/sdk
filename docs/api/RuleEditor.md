@@ -17,7 +17,7 @@ type: `array`
 
 The geometry type.
 
-type: `enum('Polygon'|'LineString'|'Point')`
+type: `enum ('Polygon'|'LineString'|'Point')`
 
 
 ### `intl`

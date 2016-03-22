@@ -17,14 +17,14 @@ type: `custom`
 
 An array of print layouts. Each layout is an object with keys such as: name, thumbnail, width, height and an array of elements.
 
-type: `arrayOf[object Object]`
+type: `arrayOf shape`
 
 
 ### `map` (required)
 
 The ol3 map to use for printing.
 
-type: `instanceOfol.Map`
+type: `instanceOf ol.Map`
 
 
 ### `resolutions`

@@ -8,5 +8,5 @@ Props
 
 ### `map` (required)
 
-type: `instanceOfol.Map`
+type: `instanceOf ol.Map`
 

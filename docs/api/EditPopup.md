@@ -17,5 +17,5 @@ type: `custom`
 
 The ol3 map to register for singleClick.
 
-type: `instanceOfol.Map`
+type: `instanceOf ol.Map`
 

@@ -17,5 +17,5 @@ type: `custom`
 
 The ol3 map to save the layers from.
 
-type: `instanceOfol.Map`
+type: `instanceOf ol.Map`
 

@@ -52,7 +52,7 @@ type: `element`
 
 The feature format to serialize in for downloads.
 
-type: `enum('GeoJSON'|'KML'|'GPX')`
+type: `enum ('GeoJSON'|'KML'|'GPX')`
 
 
 ### `intl`
@@ -66,14 +66,14 @@ type: `custom`
 
 The layer associated with this item.
 
-type: `instanceOfol.layer.Base`
+type: `instanceOf ol.layer.Base`
 
 
 ### `map` (required)
 
 The map in which the layer of this item resides.
 
-type: `instanceOfol.Map`
+type: `instanceOf ol.Map`
 
 
 ### `onModalClose`

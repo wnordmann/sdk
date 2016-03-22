@@ -33,7 +33,7 @@ type: `custom`
 
 The map whose time-enabled layers should be filtered. Time-enabled layers are layers that have a timeInfo property.
 
-type: `instanceOfol.Map`
+type: `instanceOf ol.Map`
 
 
 ### `maxDate` (required)

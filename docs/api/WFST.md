@@ -35,7 +35,7 @@ defaultValue: `true`
 
 The ol3 map whose layers can be used for the WFS-T tool.
 
-type: `instanceOfol.Map`
+type: `instanceOf ol.Map`
 
 
 ### `visible`

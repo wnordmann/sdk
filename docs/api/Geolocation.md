@@ -17,5 +17,5 @@ type: `custom`
 
 The ol3 map for which to change its view's center.
 
-type: `instanceOfol.Map`
+type: `instanceOf ol.Map`
 

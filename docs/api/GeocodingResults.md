@@ -17,7 +17,7 @@ type: `custom`
 
 The ol3 map on whose view to perform the center action.
 
-type: `instanceOfol.Map`
+type: `instanceOf ol.Map`
 
 
 ### `markerUrl`

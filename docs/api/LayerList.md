@@ -13,7 +13,7 @@ Object with keys url and asVector.
 If asVector is true, layers will be retrieved from WFS and added as vector.
 If allowUserInput is true, the user will be able to provide a url through an input.
 
-type: `shape[object Object]`
+type: `shape [object Object]`
 
 
 ### `allowEditing`
@@ -61,7 +61,7 @@ defaultValue: `false`
 
 The feature format to serialize in for downloads.
 
-type: `enum('GeoJSON'|'KML'|'GPX')`
+type: `enum ('GeoJSON'|'KML'|'GPX')`
 defaultValue: `'GeoJSON'`
 
 
@@ -84,7 +84,7 @@ type: `custom`
 
 The map whose layers should show up in this layer list.
 
-type: `instanceOfol.Map`
+type: `instanceOf ol.Map`
 
 
 ### `showDownload`

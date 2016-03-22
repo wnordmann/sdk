@@ -17,5 +17,5 @@ type: `custom`
 
 The layer associated with the style modal.
 
-type: `instanceOfol.layer.Base`
+type: `instanceOf ol.layer.Base`
 

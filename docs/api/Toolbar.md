@@ -20,7 +20,7 @@ The options to show in the toolbar. An array of objects with jsx, icon, text, ti
 When using jsx, use exclude to not have the item show up in the menu on small screens,
 but separate in the toolbar.
 
-type: `arrayOf[object Object]`
+type: `arrayOf shape`
 
 
 ### `width`

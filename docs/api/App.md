@@ -37,14 +37,14 @@ Props
 
 Extent to fit on the map on loading of the application.
 
-type: `arrayOf[object Object]`
+type: `arrayOf number`
 
 
 ### `map` (required)
 
 The map to use for this application.
 
-type: `instanceOfol.Map`
+type: `instanceOf ol.Map`
 
 
 ### `useHistory`
