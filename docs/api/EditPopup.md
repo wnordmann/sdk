@@ -3,8 +3,8 @@
 
 Popup that can be used for feature editing (attribute form).
 
-Props
------
+Properties
+----------
 
 ### `intl`
 

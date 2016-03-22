@@ -3,8 +3,8 @@
 
 Popup to show feature info. This can be through WMS GetFeatureInfo or local vector data.
 
-Props
------
+Properties
+----------
 
 ### `hover`
 

@@ -3,8 +3,8 @@
 
 An item in the LayerList component.
 
-Props
------
+Properties
+----------
 
 ### `allowEditing`
 

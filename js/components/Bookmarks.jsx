@@ -30,6 +30,34 @@ const messages = defineMessages({
 /**
  * Adds the ability to retrieve spatial bookmarks.
  * A spatial bookmark consists of a name, an extent and a description.
+ *
+ * ```javascript
+ * var bookmarks = [{
+ *   name: 'Le Grenier Pain',
+ *   description: '<b>Address: </b>38 rue des Abbesses<br><b>Telephone:</b> 33 (0)1 46 06 41 81<br><a href=""http://www.legrenierapain.com"">Website</a>',
+ *   extent: [259562.7661267497, 6254560.095662868, 260675.9610346824, 6256252.988234103]
+ * }, {
+ *   name: 'Poilne',
+ *   description: '<b>Address: </b>8 rue du Cherche-Midi<br><b>Telephone:</b> 33 (0)1 45 48 42 59<br><a href=""http://www.poilane.fr"">Website</a>',
+ *    extent: [258703.71361629796, 6248811.5276565505, 259816.90852423065, 6250503.271278702]
+ * }];
+ *
+ * class BookmarkApp extends App {
+ *   render() {
+ *     return (
+ *       <div id='content'>
+ *         <div ref='map' id='map'>
+ *           <div id='bookmarks-panel'>
+ *             <Bookmarks introTitle='Paris bakeries' introDescription='Explore the best bakeries of the capital of France' map={map} bookmarks={bookmarks} />
+ *           </div>
+ *         </div>
+ *       </div>
+ *     );
+ *   }
+ * }
+ *
+ * ReactDOM.render(<IntlProvider locale='en' messages={enMessages}><BookmarkApp map={map} /></IntlProvider>, document.getElementById('main'));
+ * ```
  */
 @pureRender
 class Bookmarks extends React.Component {

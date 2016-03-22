@@ -3,8 +3,8 @@
 
 A combobox to select a layer.
 
-Props
------
+Properties
+----------
 
 ### `filter`
 

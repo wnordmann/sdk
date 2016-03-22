@@ -3,8 +3,8 @@
 
 A component that shows a legend based on artefacts created by the QGIS plugin Web Application Builder.
 
-Props
------
+Properties
+----------
 
 ### `expandOnHover`
 

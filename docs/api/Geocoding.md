@@ -3,8 +3,8 @@
 
 Input field to search for placenames using a geocoding service (OSM nominatim).
 
-Props
------
+Properties
+----------
 
 ### `intl`
 

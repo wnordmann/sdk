@@ -3,8 +3,8 @@
 
 Editor for label properties. Can edit the label attribute, fontSize and fontColor.
 
-Props
------
+Properties
+----------
 
 ### `attributes`
 

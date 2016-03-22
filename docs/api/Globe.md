@@ -3,8 +3,8 @@
 
 Adds a button to toggle 3D mode.
 
-Props
------
+Properties
+----------
 
 ### `map` (required)
 

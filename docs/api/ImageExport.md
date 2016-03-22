@@ -3,8 +3,8 @@
 
 Export the map as a PNG file.
 
-Props
------
+Properties
+----------
 
 ### `intl`
 

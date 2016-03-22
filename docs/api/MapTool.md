@@ -4,8 +4,8 @@
 A tool that manages interactions on the map. The interactions will be
 activated and deactivated depending on toggleGroup.
 
-Props
------
+Properties
+----------
 
 ### `map` (required)
 

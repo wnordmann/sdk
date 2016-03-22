@@ -3,8 +3,8 @@
 
 Editor for a single filter using filtrex. Can for instance be used in a style dialog.
 
-Props
------
+Properties
+----------
 
 ### `initialState`
 

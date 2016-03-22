@@ -3,8 +3,8 @@
 
 Style editor for stroke properties (color and width).
 
-Props
------
+Properties
+----------
 
 ### `initialState`
 

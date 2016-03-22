@@ -3,8 +3,8 @@
 
 Adds area and length measure tools to the map.
 
-Props
------
+Properties
+----------
 
 ### `geodesic`
 

@@ -3,8 +3,8 @@
 
 A component that allows users to perform queries on vector layers. Queries can be new queries, added to existing queries or users can filter inside of an existing query a.k.a. drill-down.
 
-Props
------
+Properties
+----------
 
 ### `intl`
 

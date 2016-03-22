@@ -3,8 +3,8 @@
 
 Adds a slider to the map that can be used to select a given date, and modifies the visibility of layers and features depending on their timestamp and the current time.
 
-Props
------
+Properties
+----------
 
 ### `autoPlay`
 

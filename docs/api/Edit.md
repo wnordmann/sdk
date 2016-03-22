@@ -3,8 +3,8 @@
 
 A component that allows creating new features, so drawing their geometries and setting feature attributes through a form.
 
-Props
------
+Properties
+----------
 
 ### `intl`
 

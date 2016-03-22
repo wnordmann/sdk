@@ -3,8 +3,8 @@
 
 Export the map configuration and ability to reload it from local storage.
 
-Props
------
+Properties
+----------
 
 ### `intl`
 

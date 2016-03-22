@@ -3,8 +3,8 @@
 
 A modal window for applying labels to a vector layer.
 
-Props
------
+Properties
+----------
 
 ### `intl`
 

@@ -4,8 +4,8 @@
 Adds the ability to show a toolbar with buttons. On small screen sizes
 a dropdown will be shown instead.
 
-Props
------
+Properties
+----------
 
 ### `media`
 

@@ -3,8 +3,8 @@
 
 Style editor for fill color.
 
-Props
------
+Properties
+----------
 
 ### `initialState`
 

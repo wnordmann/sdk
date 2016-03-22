@@ -3,8 +3,8 @@
 
 Login dialog for integration with GeoServer security.
 
-Props
------
+Properties
+----------
 
 ### `intl`
 

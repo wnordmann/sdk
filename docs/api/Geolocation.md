@@ -3,8 +3,8 @@
 
 Enable geolocation which uses the current position of the user in the map.
 
-Props
------
+Properties
+----------
 
 ### `intl`
 

@@ -3,8 +3,8 @@
 
 A button to go back to the initial extent of the map.
 
-Props
------
+Properties
+----------
 
 ### `intl`
 

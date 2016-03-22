@@ -3,8 +3,8 @@
 
 A modal for editing the style of a vector layer.
 
-Props
------
+Properties
+----------
 
 ### `intl`
 

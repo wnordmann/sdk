@@ -3,8 +3,8 @@
 
 This component displays the results of geocoding search. The geocoding search is initiated by the Geocoding component.
 
-Props
------
+Properties
+----------
 
 ### `intl`
 

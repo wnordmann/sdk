@@ -7,7 +7,6 @@ Boundless Web SDK
 * [For developers](developers.md)
 * [API](api.md)
     * [AddLayer](api/AddLayer.md)
-    * [AddLayerModal](api/AddLayerModal.md)
     * [App](api/App.md)
     * [Bookmarks](api/Bookmarks.md)
     * [Chart](api/Chart.md)

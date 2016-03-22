@@ -3,8 +3,8 @@
 
 Modal window to add layers from a WMS or WFS service.
 
-Props
------
+Properties
+----------
 
 ### `allowUserInput`
 

@@ -3,8 +3,8 @@
 
 Modal for building filters to filter a vector layer.
 
-Props
------
+Properties
+----------
 
 ### `intl`
 

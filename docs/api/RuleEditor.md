@@ -3,8 +3,8 @@
 
 Editor for a style rule. This means editing symbolizer properties and filter.
 
-Props
------
+Properties
+----------
 
 ### `attributes`
 

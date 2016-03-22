@@ -3,8 +3,8 @@
 
 A table to show features. Allows for selection of features.
 
-Props
------
+Properties
+----------
 
 ### `columnWidth`
 

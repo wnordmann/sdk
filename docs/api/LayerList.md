@@ -3,8 +3,8 @@
 
 A list of layers in the map. Allows setting visibility and opacity.
 
-Props
------
+Properties
+----------
 
 ### `addLayer`
 

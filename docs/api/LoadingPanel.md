@@ -3,8 +3,8 @@
 
 A loading panel shows a spinner when tiles or images are loading.
 
-Props
------
+Properties
+----------
 
 ### `map` (required)
 

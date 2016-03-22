@@ -30,8 +30,8 @@ var extent = [1327331, 4525032, 5123499, 5503426];
 ReactDOM.render(<IntlProvider locale='en' messages={enMessages}><MyApp extent={extent} useHistory={false} map={map} /></IntlProvider>, document.getElementById('main'));
 ```
 
-Props
------
+Properties
+----------
 
 ### `extent`
 

@@ -3,8 +3,8 @@
 
 Modal window for login to GeoServer.
 
-Props
------
+Properties
+----------
 
 ### `intl`
 
