@@ -58,6 +58,7 @@ $ web-sdk --help
     -h, --help     output usage information
     -V, --version  output the version number
     -f, --force    force on non-empty directory
+    -d, --debug    output more debug info
 ```
 
 ### Creating the application
