@@ -75,15 +75,20 @@ class LoadingPanel extends React.Component {
     var layers = LayerStore.getState().flatLayers;
     var me = this;
     layers.forEach(function(lyr) {
-      var source = lyr.getSource();
-      if (source instanceof ol.source.Tile) {
-        source.on('tileloadstart', me._addLoading, me);
-        source.on('tileloadend', me._addLoaded, me);
-        source.on('tileloaderror', me._addLoaded, me);
-      } else if (source instanceof ol.source.Image) {
-        source.on('imageloadstart', me._addLoading, me);
-        source.on('imageloadend', me._addLoaded, me);
-        source.on('imageloaderror', me._addLoaded, me);
+      var source;
+      if (!(lyr instanceof ol.layer.Group)) {
+        source = lyr.getSource();
+      }
+      if (source) {
+        if (source instanceof ol.source.Tile) {
+          source.on('tileloadstart', me._addLoading, me);
+          source.on('tileloadend', me._addLoaded, me);
+          source.on('tileloaderror', me._addLoaded, me);
+        } else if (source instanceof ol.source.Image) {
+          source.on('imageloadstart', me._addLoading, me);
+          source.on('imageloadend', me._addLoaded, me);
+          source.on('imageloaderror', me._addLoaded, me);
+        }
       }
     });
   }
