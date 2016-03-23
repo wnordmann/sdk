@@ -1,9 +1,0 @@
-{
-  "hostname"  : "localhost",
-  "sauceLabs" : false,
-  "url"       : "http://localhost/git/tmp/test-index.html",
-  "port"      : 4444,
-  "browsers"  : [{
-    "name"    : "chrome"
-  }]
-}

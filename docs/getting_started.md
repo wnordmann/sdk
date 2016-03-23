@@ -3,6 +3,9 @@
 ## JSFiddle
 Check out the following [JSFiddle example](https://jsfiddle.net/bartvde/69z2wepo/30192/).
 
+## Requirements for development environment
+Make sure g++ is installed on your system.
+
 ## Node version manager (nvm)
 Install the node version manager from https://github.com/creationix/nvm
 For the Web SDK, you should be using node 4.3.2 so:
