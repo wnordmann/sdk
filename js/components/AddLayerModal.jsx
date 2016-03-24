@@ -213,6 +213,7 @@ class AddLayerModal extends Dialog.Modal {
         id: layer.Name,
         isRemovable: true,
         canStyle: true,
+        popupInfo: '#AllAttributes',
         source: new ol.source.TileWMS({
           url: this.props.url,
           params: {

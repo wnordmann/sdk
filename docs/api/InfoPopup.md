@@ -20,6 +20,14 @@ type: `bool`
 defaultValue: `false`
 
 
+### `infoFormat`
+
+Format to use for WMS GetFeatureInfo requests.
+
+type: `string`
+defaultValue: `'text/plain'`
+
+
 ### `intl`
 
 i18n message strings. Provided through the application through context.

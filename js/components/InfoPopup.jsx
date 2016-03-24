@@ -13,6 +13,7 @@
 import React from 'react';
 import BasePopup from './BasePopup.jsx';
 import ol from 'openlayers';
+import {doGET} from '../util.js';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 const messages = defineMessages({
@@ -25,6 +26,16 @@ const messages = defineMessages({
     id: 'infopopup.nulltext',
     description: 'Text to show if attribute has no value',
     defaultMessage: 'NULL'
+  },
+  nametext: {
+    id: 'infopopup.nametext',
+    description: 'Text to show for the name column',
+    defaultMessage: 'Name'
+  },
+  valuetext: {
+    id: 'infopopup.valuetext',
+    description: 'Text to show for the value column',
+    defaultMessage: 'Value'
   }
 });
 
@@ -47,7 +58,9 @@ class InfoPopup extends BasePopup {
     } else {
       this.props.map.on('singleclick', this._onMapClick, this);
     }
-    this._format = new ol.format.GeoJSON();
+    this._formats = {};
+    this._formats['application/json'] = new ol.format.GeoJSON();
+    this._formats['application/vnd.ogc.gml'] = new ol.format.WMSGetFeatureInfo();
     this.active = true;
     this.state = {
       popupTexts: []
@@ -74,23 +87,41 @@ class InfoPopup extends BasePopup {
         cb();
       }
     };
-    var geojsonFormat = this._format, xmlhttp, method, url, view = map.getView();
+    var url, view = map.getView();
     var resolution = view.getResolution(), projection = view.getProjection();
-    var onReadyAll = function() {
-      if (xmlhttp.status === 200 && xmlhttp.readyState === 4) {
-        if (xmlhttp.responseText.trim() !== 'no features were found') {
-          popupTexts.push(xmlhttp.responseText);
-        }
-        finishedQuery();
+    var onReadyAll = function(response) {
+      if (response.responseText.trim() !== 'no features were found') {
+        popupTexts.push(response.responseText);
       }
+      finishedQuery();
     };
     const {formatMessage} = this.props.intl;
     var popupDef;
-    var onReady = function() {
-      if (xmlhttp.status === 200 && xmlhttp.readyState === 4) {
-        var features = geojsonFormat.readFeatures(xmlhttp.responseText);
-        if (features.length) {
-          var popupContent;
+    var createSimpleTable = function(features) {
+      var result = '';
+      for (var i = 0, ii = features.length; i < ii; ++i) {
+        var feature = features[i];
+        result += '<span class="infopopup-header">' + feature.getId() + '</span>';
+        result += '<table class="infopopup-table" border="1"><tr><th>' + formatMessage(messages.nametext) + '</th><th>' + formatMessage(messages.valuetext) + '</th></tr>';
+        var keys = feature.getKeys();
+        var geom = feature.getGeometryName();
+        for (var j = 0, jj = keys.length; j < jj; ++j) {
+          var key = keys[j];
+          if (key !== geom && key !== 'boundedBy') {
+            result += '<tr><td>' + key + '</td><td>' + feature.get(key) + '</td></tr>';
+          }
+        }
+        result += '</table>';
+      }
+      return result;
+    };
+    var onReady = function(response) {
+      var features = this.readFeatures(response.responseText);
+      if (features.length) {
+        var popupContent;
+        if (popupDef === ALL_ATTRS) {
+          popupContent = createSimpleTable(features);
+        } else {
           for (var j = 0, jj = features.length; j < jj; ++j) {
             popupContent = popupDef;
             var feature = features[j];
@@ -104,12 +135,12 @@ class InfoPopup extends BasePopup {
               }
             }
           }
-          popupTexts.push(popupContent);
-        } else {
-          popupTexts.push(formatMessage(messages.nofeatures));
         }
-        finishedQuery();
+        popupTexts.push(popupContent);
+      } else {
+        popupTexts.push(formatMessage(messages.nofeatures));
       }
+      finishedQuery();
     };
     var called = false;
     for (var i = 0; i < len; i++) {
@@ -117,18 +148,19 @@ class InfoPopup extends BasePopup {
       popupDef = layer.get('popupInfo');
       if (popupDef === ALL_ATTRS) {
         called = true;
+        var infoFormat = this.props.infoFormat;
         url = layer.getSource().getGetFeatureInfoUrl(
           evt.coordinate,
           resolution,
           projection, {
-            'INFO_FORMAT': 'text/plain'
+            'INFO_FORMAT': infoFormat
           }
         );
-        xmlhttp = new XMLHttpRequest();
-        method = 'GET';
-        xmlhttp.open(method, url, true);
-        xmlhttp.onreadystatechange = onReadyAll;
-        xmlhttp.send();
+        if (infoFormat === 'text/plain' || infoFormat === 'text/html') {
+          doGET(url, onReadyAll);
+        } else {
+          doGET(url, onReady, null, this._formats[infoFormat]);
+        }
       } else if (popupDef) {
         called = true;
         url = layer.getSource().getGetFeatureInfoUrl(
@@ -138,11 +170,7 @@ class InfoPopup extends BasePopup {
             'INFO_FORMAT': 'application/json'
           }
         );
-        xmlhttp = new XMLHttpRequest();
-        method = 'GET';
-        xmlhttp.open(method, url, true);
-        xmlhttp.onreadystatechange = onReady;
-        xmlhttp.send();
+        doGET(url, onReady, null, this._formats['application/json']);
       }
     }
     if (called === false) {
@@ -209,13 +237,18 @@ InfoPopup.propTypes = {
    */
   hover: React.PropTypes.bool,
   /**
+   * Format to use for WMS GetFeatureInfo requests.
+   */
+  infoFormat: React.PropTypes.string,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
 };
 
 InfoPopup.defaultProps = {
-  hover: false
+  hover: false,
+  infoFormat: 'text/plain'
 };
 
 export default injectIntl(InfoPopup);
