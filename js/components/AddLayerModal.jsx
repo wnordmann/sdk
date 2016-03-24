@@ -83,7 +83,7 @@ class AddLayerModal extends Dialog.Modal {
     });
   }
   componentDidMount() {
-    this._getCaps(this._getServiceUrl(this.props.url));
+    this._getCaps(this._getCapabilitiesUrl(this.props.url));
   }
   _getCaps(url) {
     var layers = [];
@@ -118,7 +118,7 @@ class AddLayerModal extends Dialog.Modal {
     var me = this;
     // this needs a timeout for the cookie to be set apparently
     window.setTimeout(function() {
-      me._getCaps(me._getServiceUrl(me.props.url));
+      me._getCaps(me._getCapabilitiesUrl(me.props.url));
     }, 500);
   }
   _setError(msg) {
@@ -140,7 +140,8 @@ class AddLayerModal extends Dialog.Modal {
   _getWfsInfo(layer, olLayer) {
     var me = this;
     // do a WFS DescribeFeatureType request to get wfsInfo
-    var url = me.props.url.replace('wms', 'wfs') + 'service=WFS&request=DescribeFeatureType&version=1.0.0&typename=' + layer.Name;
+    var url = this._getServiceUrl(me.props.url);
+    url = url.replace('wms', 'wfs') + 'service=WFS&request=DescribeFeatureType&version=1.0.0&typename=' + layer.Name;
     doGET(url, function(xmlhttp) {
       var context = new Jsonix.Context([XSD_1_0]);
       var unmarshaller = context.createUnmarshaller();
@@ -238,6 +239,10 @@ class AddLayerModal extends Dialog.Modal {
     } else {
       url += '?';
     }
+    return url
+  }
+  _getCapabilitiesUrl(url) {
+    url = this._getServiceUrl(url);
     if (this.props.asVector) {
       url += 'service=WFS&VERSION=1.1.0&request=GetCapabilities';
     } else {
@@ -247,7 +252,7 @@ class AddLayerModal extends Dialog.Modal {
   }
   _connect() {
     var url = document.getElementById('url').value;
-    this._getCaps(this._getServiceUrl(url));
+    this._getCaps(this._getCapabilitiesUrl(url));
   }
   _getLayersMarkup(layer) {
     var childList;
