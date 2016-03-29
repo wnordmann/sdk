@@ -15,6 +15,7 @@ import ol from 'openlayers';
 import Dialog from 'pui-react-modals';
 import Grids from 'pui-react-grids';
 import UI from 'pui-react-buttons';
+import LayerActions from '../actions/LayerActions.js';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import {transformColor, doPOST} from '../util.js';
@@ -139,6 +140,7 @@ class StyleModal extends Dialog.Modal {
     url = url.replace(/wms|ows|wfs/g, 'rest/styles/' + this.props.layer.get('styleName') + '.xml');
     doPOST(url, sld, function(xmlhttp) {
       this.props.layer.getSource().updateParams({'_olSalt': Math.random()});
+      LayerActions.styleLayer(this.props.layer);
       this.close();
     }, function(xmlhttp) {
     }, this, 'application/vnd.ogc.sld+xml; charset=UTF-8', true);

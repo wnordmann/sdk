@@ -44,5 +44,11 @@ export default {
       type: LayerConstants.EDIT_LAYER,
       layer: layer
     });
+  },
+  styleLayer: (layer) => {
+    AppDispatcher.handleAction({
+      type: LayerConstants.STYLE_LAYER,
+      layer: layer
+    });
   }
 };

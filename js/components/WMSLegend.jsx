@@ -13,6 +13,8 @@
 import React from 'react';
 import ol from 'openlayers';
 import url from 'url';
+import AppDispatcher from '../dispatchers/AppDispatcher.js';
+import LayerConstants from '../constants/LayerConstants.js'
 import pureRender from 'pure-render-decorator';
 
 /**
@@ -20,6 +22,25 @@ import pureRender from 'pure-render-decorator';
  */
 @pureRender
 class WMSLegend extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      salt: Math.random()
+    };
+  }
+  componentDidMount() {
+    var me = this;
+    AppDispatcher.register((payload) => {
+      let action = payload.action;
+      switch (action.type) {
+        case LayerConstants.STYLE_LAYER:
+          me.setState({salt: Math.random()});
+          break;
+        default:
+          break;
+      }
+    });
+  }
   render() {
     var layer = this.props.layer;
     var source = layer.getSource();
@@ -41,6 +62,7 @@ class WMSLegend extends React.Component {
       width: this.props.width,
       legend_options: options,
       layer: params.LAYERS,
+      '_olSalt': this.state.salt,
       style: params.STYLES ? params.STYLES : ''
     };
     var legendUrl = url.format(urlObj);
