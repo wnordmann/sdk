@@ -29,6 +29,18 @@ The layer that has a WMS source.
 type: `instanceOf ol.layer.Layer`
 
 
+### `options`
+
+Options to send as LEGEND_OPTIONS parameter.
+
+type: `object`
+defaultValue: `{
+  fontAntiAliasing: true,
+  fontSize: 11,
+  fontName: 'Arial'
+}`
+
+
 ### `width`
 
 The width in pixels of the WMS GetLegendGraphic call.

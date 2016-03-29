@@ -26,13 +26,20 @@ class WMSLegend extends React.Component {
     var params = source.getParams();
     var wmsUrl = source.getUrls()[0];
     var urlObj = url.parse(wmsUrl);
+    var options = '';
+    for (var key in this.props.options) {
+      options += key + ':' + this.props.options[key] + ';';
+    }
+    options = options.slice(0, -1);
     // TODO split up LAYERS param if needed
     urlObj.query  = {
       service: 'WMS',
       request: 'GetLegendGraphic',
+      transparent: true,
       format: this.props.format,
       height: this.props.height,
       width: this.props.width,
+      legend_options: options,
       layer: params.LAYERS,
       style: params.STYLES ? params.STYLES : ''
     };
@@ -55,6 +62,10 @@ WMSLegend.propTypes = {
    */
   width: React.PropTypes.number,
   /**
+   * Options to send as LEGEND_OPTIONS parameter.
+   */
+  options: React.PropTypes.object,
+  /**
    * The format to use for the WMS GetLegendGraphic call.
    */
   format: React.PropTypes.string
@@ -63,6 +74,11 @@ WMSLegend.propTypes = {
 WMSLegend.defaultProps = {
   height: 20,
   width: 20,
+  options: {
+    fontAntiAliasing: true,
+    fontSize: 11,
+    fontName: 'Arial'
+  },
   format: 'image/png'
 };
 
