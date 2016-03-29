@@ -198,6 +198,7 @@ class InfoPopup extends BasePopup {
                 popupDef = popupDef.replace('[' + featureKeys[i] + ']', formatMessage(messages.nulltext));
               }
             }
+            popupTexts.push(popupDef);
           }
         }
       });
