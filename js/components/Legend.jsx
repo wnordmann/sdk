@@ -14,7 +14,7 @@ import React from 'react';
 import ol from 'openlayers';
 import LayerStore from '../stores/LayerStore.js';
 import pureRender from 'pure-render-decorator';
-import WMSLegend from './WMSLegend.jsx';
+import LegendItem from './LegendItem.jsx';
 
 /**
  * Legend component that can show legend graphic for multiple layer and source types dynamically.
@@ -40,11 +40,7 @@ class Legend extends React.Component {
   }
   render() {
     var legends = this.state.flatLayers.map(function(layer) {
-      var header = (<div>{layer.get('title')}</div>);
-      if ((layer instanceof ol.layer.Tile && layer.getSource() instanceof ol.source.TileWMS) ||
-        (layer instanceof ol.layer.Image && layer.getSource() instanceof ol.source.ImageWMS)) {
-        return (<span key={layer.get('id')}>{header}<WMSLegend layer={layer} /></span>);
-      }
+      return (<LegendItem key={layer.get('id')} layer={layer} />);
     });
     return (<div>{legends}</div>);
   }
