@@ -71,7 +71,7 @@ class InfoPopup extends BasePopup {
       layer.getLayers().forEach(function(groupLayer) {
         this._forEachLayer(layers, groupLayer);
       }, this);
-    } else if (layer instanceof ol.layer.Tile && layer.getSource() instanceof ol.source.TileWMS && layer.get('popupInfo') && layer.get('popupInfo') !== '') {
+    } else if (layer instanceof ol.layer.Tile && layer.getVisible() && layer.getSource() instanceof ol.source.TileWMS && layer.get('popupInfo') && layer.get('popupInfo') !== '') {
       layers.push(layer);
     }
   }
