@@ -131,6 +131,10 @@ class MapConfig extends React.Component {
     var config = {};
     if (source instanceof ol.source.TileWMS) {
       config.type = 'TileWMS';
+      config.properties = {
+        params: source.getParams(),
+        urls: source.getUrls()
+      };
     } else if (source instanceof ol.source.Cluster) {
       config.type = 'Cluster';
       config.source = this._getSourceConfig(source.getSource());
@@ -140,6 +144,10 @@ class MapConfig extends React.Component {
       config.type = 'Vector';
     } else if (source instanceof ol.source.ImageWMS) {
       config.type = 'ImageWMS';
+      config.properties = {
+        url: source.getUrl(),
+        params: source.getParams()
+      };
     } else if (source instanceof ol.source.MapQuest) {
       config.properties = {
         layer:  source.getLayer()
