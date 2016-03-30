@@ -14,8 +14,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import LayerSelector from './LayerSelector.jsx';
-import LayerConstants from '../constants/LayerConstants.js';
-import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import SelectActions from '../actions/SelectActions.js';
 import filtrex from 'filtrex';
 import UI from 'pui-react-buttons';
@@ -93,25 +91,15 @@ const messages = defineMessages({
 class QueryBuilder extends React.Component {
   constructor(props) {
     super(props);
-    var me = this;
-    AppDispatcher.register((payload) => {
-      let action = payload.action;
-      switch (action.type) {
-        case LayerConstants.SELECT_LAYER:
-          if (action.cmp === me.refs.layerSelector) {
-            me._layer = action.layer;
-          }
-          break;
-        default:
-          break;
-      }
-    });
     this.state = {
       hasError: false
     };
   }
   componentDidMount() {
     this._layer = this.refs.layerSelector.getLayer();
+  }
+  _onLayerSelectChange(layer) {
+    this._layer = layer;
   }
   _onSubmit(evt) {
     evt.preventDefault();
@@ -174,7 +162,7 @@ class QueryBuilder extends React.Component {
       <form onSubmit={this._onSubmit} role="form" className='form-horizontal query-builder'>
         <div className="form-group">
           <Grids.Col md={6}><label htmlFor='layerSelector'>{formatMessage(messages.layerlabel)}</label></Grids.Col>
-          <Grids.Col md={18}><LayerSelector id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /></Grids.Col>
+          <Grids.Col md={18}><LayerSelector onChange={this._onLayerSelectChange} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /></Grids.Col>
         </div>
         <div className='form-group'>
           <Grids.Col md={6}><label htmlFor='query-expression' title={formatMessage(messages.filterbuttontext)}>{formatMessage(messages.filterlabel)}</label></Grids.Col>

@@ -17,8 +17,6 @@ import debounce from  'debounce';
 import FixedDataTable from 'fixed-data-table';
 import './fixed-data-table.css';
 import FeatureStore from '../stores/FeatureStore.js';
-import LayerConstants from '../constants/LayerConstants.js';
-import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import SelectActions from '../actions/SelectActions.js';
 import LayerSelector from './LayerSelector.jsx';
 import {SortHeaderCell, SortTypes} from './SortHeaderCell.jsx';
@@ -117,21 +115,6 @@ class FeatureTable extends React.Component {
     this._onChange = this._onChange.bind(this);
     FeatureStore.bindMap(this.props.map);
     this._selectedOnly = false;
-    var me = this;
-    AppDispatcher.register((payload) => {
-      let action = payload.action;
-      switch (action.type) {
-        case LayerConstants.SELECT_LAYER:
-          if (action.cmp === me.refs.layerSelector) {
-            ReactDOM.findDOMNode(me.refs.filter).value = '';
-            me._layer = action.layer;
-            FeatureStore.addLayer(action.layer, me._selectedOnly);
-          }
-          break;
-        default:
-          break;
-      }
-    });
     if (this.props.layer) {
       this._layer = this.props.layer;
       FeatureStore.addLayer(this._layer);
@@ -157,6 +140,12 @@ class FeatureTable extends React.Component {
   componentWillUnmount() {
     FeatureStore.removeChangeListener(this._onChange);
     global.removeEventListener('resize', this.setDimensionsOnState);
+  }
+  _onLayerSelectChange(layer) {
+    // TODO add clearing filter back
+    //ReactDOM.findDOMNode(this.refs.filter).value = '';
+    this._layer = layer;
+    FeatureStore.addLayer(layer, this._selectedOnly);
   }
   _attachResizeEvent() {
     global.addEventListener('resize', this.setDimensionsOnState.bind(this), false);
@@ -373,7 +362,7 @@ class FeatureTable extends React.Component {
       <div id='attributes-table'>
         <form ref='form' onSubmit={this._onSubmit.bind(this)} role='form' className='form-inline'>
           <label htmlFor='table-layerSelector'>{formatMessage(messages.layerlabel)}:</label>
-          <LayerSelector id='table-layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} value={id} />
+          <LayerSelector id='table-layerSelector' ref='layerSelector' onChange={this._onLayerSelectChange} filter={this._filterLayerList} map={this.props.map} value={id} />
           <UI.DefaultButton onClick={this._zoomSelected.bind(this)} title={formatMessage(messages.zoombuttontitle)}><Icon.Icon name="search" /> {formatMessage(messages.zoombuttontext)}</UI.DefaultButton>
           <UI.DefaultButton onClick={this._clearSelected.bind(this)} title={formatMessage(messages.clearbuttontitle)}><Icon.Icon name="trash" /> {formatMessage(messages.clearbuttontext)}</UI.DefaultButton>
           <UI.DefaultButton onClick={this._moveSelectedToTop.bind(this)} title={formatMessage(messages.movebuttontitle)}><Icon.Icon name="arrow-up" /> {formatMessage(messages.movebuttontext)}</UI.DefaultButton>

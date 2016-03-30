@@ -18,6 +18,5 @@ export default keymirror({
   MOVE_LAYER_UP: null,
   MOVE_LAYER_DOWN: null,
   SELECT_LAYER: null,
-  EDIT_LAYER: null,
   STYLE_LAYER: null
 });

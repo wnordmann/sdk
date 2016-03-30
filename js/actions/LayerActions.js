@@ -14,13 +14,6 @@ import LayerConstants from '../constants/LayerConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 
 export default {
-  selectLayer: (layer, cmp) => {
-    AppDispatcher.handleAction({
-      type: LayerConstants.SELECT_LAYER,
-      layer: layer,
-      cmp: cmp
-    });
-  },
   removeLayer: (layer) => {
     AppDispatcher.handleAction({
       type: LayerConstants.REMOVE_LAYER,

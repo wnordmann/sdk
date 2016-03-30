@@ -20,6 +20,13 @@ The map from which to extract the layers.
 type: `instanceOf ol.Map`
 
 
+### `onChange` (required)
+
+Change callback function.
+
+type: `func`
+
+
 ### `value`
 
 The default value of the layer selector, i.e. the layer to select by default.

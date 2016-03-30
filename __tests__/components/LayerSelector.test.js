@@ -63,7 +63,8 @@ describe('LayerSelect', function() {
     var filter = function(lyr) {
       return !lyr.get('hideFromLayerList') && lyr instanceof ol.layer.Vector;
     };
-    ReactDOM.render(<LayerSelector filter={filter} map={map} />, container);
+    var onChange = function(layer) {};
+    ReactDOM.render(<LayerSelector onChange={onChange} filter={filter} map={map} />, container);
     var layers = container.querySelectorAll('option');
     assert.equal(layers.length, 2);
     ReactDOM.unmountComponentAtNode(container);

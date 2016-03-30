@@ -14,7 +14,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import LayerStore from '../stores/LayerStore.js';
-import LayerActions from '../actions/LayerActions.js';
 import pureRender from 'pure-render-decorator';
 import './LayerSelector.css';
 
@@ -38,7 +37,9 @@ export default class LayerSelector extends React.Component {
   componentDidMount() {
     var select = ReactDOM.findDOMNode(this.refs.layerSelect);
     var layer = LayerStore.findLayer(select.value);
-    LayerActions.selectLayer(layer, this);
+    if (layer) {
+      this.props.onChange.call(this, layer);
+    }
   }
   componentWillUnmount() {
     LayerStore.removeChangeListener(this._onChangeCb);
@@ -53,7 +54,7 @@ export default class LayerSelector extends React.Component {
   }
   _onItemChange(evt) {
     var layer = LayerStore.findLayer(evt.target.value);
-    LayerActions.selectLayer(layer, this);
+    this.props.onChange.call(this, layer);
   }
   render() {
     var me = this;
@@ -85,5 +86,9 @@ LayerSelector.propTypes = {
   /**
    * The default value of the layer selector, i.e. the layer to select by default.
    */
-  value: React.PropTypes.string
+  value: React.PropTypes.string,
+  /**
+   * Change callback function.
+   */
+  onChange: React.PropTypes.func.isRequired
 };

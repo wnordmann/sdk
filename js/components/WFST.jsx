@@ -86,11 +86,6 @@ class WFST extends MapTool {
         case LayerConstants.EDIT_LAYER:
           me._toggleLayer(action.layer);
           break;
-        case LayerConstants.SELECT_LAYER:
-          if (action.cmp === me.refs.layerSelector) {
-            me._setLayer(action.layer);
-          }
-          break;
         default:
           break;
       }
@@ -119,6 +114,9 @@ class WFST extends MapTool {
   }
   componentWillUnmount() {
     this.deactivate();
+  }
+  _onLayerSelectChange(layer) {
+    this._setLayer(layer);
   }
   _toggleLayer(layer) {
     if (layer === this.state.layer) {
@@ -303,7 +301,7 @@ class WFST extends MapTool {
         layerSelector = (
           <article>
             <label htmlFor='layerSelector'>{formatMessage(messages.layerlabel)}</label>
-            <LayerSelector id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} />
+            <LayerSelector onChange={this._onLayerSelectChange} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} />
           </article>
         );
       } else if (this.state.layer) {
