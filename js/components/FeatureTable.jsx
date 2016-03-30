@@ -132,8 +132,10 @@ class FeatureTable extends React.Component {
           break;
       }
     });
-    this._layer = this.props.layer;
-    FeatureStore.addLayer(this._layer);
+    if (this.props.layer) {
+      this._layer = this.props.layer;
+      FeatureStore.addLayer(this._layer);
+    }
     this.state = {
       gridWidth: this.props.width,
       gridHeight: this.props.height,
@@ -170,21 +172,26 @@ class FeatureTable extends React.Component {
     }
   }
   _onChange() {
-    var state = FeatureStore.getState(this._layer);
-    this._defaultSortIndexes = [];
-    var size = state.features.length;
-    for (var index = 0; index < size; index++) {
-      this._defaultSortIndexes.push(index);
+    if (!this._layer && this.refs.layerSelector) {
+      this._layer = this.refs.layerSelector.getLayer();
     }
-    var newState = {};
-    newState.features = state.features.slice();
-    newState.originalFeatures = state.originalFeatures.slice();
-    newState.selected = state.selected.slice();
-    this.setState(newState);
-    // re-sort
-    if (this.state.sortIndexes && (this.state.sortIndexes.length !== state.features.length)) {
-      var columnKey = Object.keys(this.state.colSortDirs)[0];
-      this._onSortChange(columnKey, this.state.colSortDirs[columnKey]);
+    if (this._layer) {
+      var state = FeatureStore.getState(this._layer);
+      this._defaultSortIndexes = [];
+      var size = state.features.length;
+      for (var index = 0; index < size; index++) {
+        this._defaultSortIndexes.push(index);
+      }
+      var newState = {};
+      newState.features = state.features.slice();
+      newState.originalFeatures = state.originalFeatures.slice();
+      newState.selected = state.selected.slice();
+      this.setState(newState);
+      // re-sort
+      if (this.state.sortIndexes && (this.state.sortIndexes.length !== state.features.length)) {
+        var columnKey = Object.keys(this.state.colSortDirs)[0];
+        this._onSortChange(columnKey, this.state.colSortDirs[columnKey]);
+      }
     }
   }
   _onColumnResize(width, label) {
@@ -214,7 +221,7 @@ class FeatureTable extends React.Component {
     this._updateStoreFilter();
   }
   _filterLayerList(lyr) {
-    return lyr.get('title') !== null && lyr instanceof ol.layer.Vector;
+    return lyr.get('title') !== null && (lyr instanceof ol.layer.Vector || lyr.get('wfsInfo') !== undefined);
   }
   _updateStoreFilter() {
     var lyr = this._layer;
@@ -330,8 +337,11 @@ class FeatureTable extends React.Component {
   render() {
     var {sortIndexes, colSortDirs} = this.state;
     const {formatMessage} = this.props.intl;
-    var schema = FeatureStore.getSchema(this._layer);
-    var id = this._layer.get('id');
+    var schema, id;
+    if (this._layer) {
+      schema = FeatureStore.getSchema(this._layer);
+      id = this._layer.get('id');
+    }
     var columnNodes = [];
     var defaultWidth;
     if (schema && this.state.gridWidth) {
@@ -361,7 +371,7 @@ class FeatureTable extends React.Component {
       <div id='attributes-table'>
         <form ref='form' onSubmit={this._onSubmit.bind(this)} role='form' className='form-inline'>
           <label htmlFor='table-layerSelector'>{formatMessage(messages.layerlabel)}:</label>
-          <LayerSelector id='table-layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} value={this.props.layer.get('id')} />
+          <LayerSelector id='table-layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} value={id} />
           <UI.DefaultButton onClick={this._zoomSelected.bind(this)} title={formatMessage(messages.zoombuttontitle)}><Icon.Icon name="search" /> {formatMessage(messages.zoombuttontext)}</UI.DefaultButton>
           <UI.DefaultButton onClick={this._clearSelected.bind(this)} title={formatMessage(messages.clearbuttontitle)}><Icon.Icon name="trash" /> {formatMessage(messages.clearbuttontext)}</UI.DefaultButton>
           <UI.DefaultButton onClick={this._moveSelectedToTop.bind(this)} title={formatMessage(messages.movebuttontitle)}><Icon.Icon name="arrow-up" /> {formatMessage(messages.movebuttontext)}</UI.DefaultButton>
@@ -395,7 +405,7 @@ FeatureTable.propTypes = {
   /**
    * The layer to use initially for loading the table.
    */
-  layer: React.PropTypes.instanceOf(ol.layer.Vector).isRequired,
+  layer: React.PropTypes.instanceOf(ol.layer.Vector),
   /**
    * The width of the table component in pixels.
    */

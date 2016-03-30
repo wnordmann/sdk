@@ -15,6 +15,7 @@
 import {EventEmitter} from 'events';
 import ol from 'openlayers';
 import SelectConstants from '../constants/SelectConstants.js';
+import LayerConstants from '../constants/LayerConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LayerStore from './LayerStore.js';
 
@@ -130,6 +131,13 @@ class FeatureStore extends EventEmitter {
   setSelectOnClick(active) {
     this.active = active;
   }
+  removeLayer(layer) {
+    var id = layer.get('id');
+    delete this._layers[id];
+    delete this._schema[id];
+    delete this._config[id];
+    this.emitChange();
+  }
   addLayer(layer, filter) {
     var id = layer.get('id');
     if (!this._layers[id]) {
@@ -153,23 +161,29 @@ class FeatureStore extends EventEmitter {
     this._config[id].features = features;
     this._config[id].originalFeatures = features.slice();
   }
+  setFeatures(layer, features) {
+    this._setFeatures(layer, features);
+    this.emitChange();
+  }
   bindLayer(layer) {
     var source = layer.getSource();
     if (source instanceof ol.source.Cluster) {
       source = source.getSource();
     }
-    source.on('change', function(evt) {
-      if (!this._ignoreSourceChange) {
-        if (evt.target.getState() === 'ready') {
-          var features = evt.target.getFeatures();
-          this._setFeatures(layer, features);
-          delete this._schema[layer.get('id')];
-          this.emitChange();
+    if (source instanceof ol.source.Vector) {
+      source.on('change', function(evt) {
+        if (!this._ignoreSourceChange) {
+          if (evt.target.getState() === 'ready') {
+            var features = evt.target.getFeatures();
+            this._setFeatures(layer, features);
+            delete this._schema[layer.get('id')];
+            this.emitChange();
+          }
         }
-      }
-    }, this);
-    this._setFeatures(layer, source.getFeatures());
-    delete this._schema[layer.get('id')];
+      }, this);
+      this._setFeatures(layer, source.getFeatures());
+      delete this._schema[layer.get('id')];
+    }
   }
   _determineType(value) {
     var type = 'string';
@@ -301,7 +315,7 @@ class FeatureStore extends EventEmitter {
       var geom = feature.getGeometryName();
       var values = feature.getProperties();
       for (var key in values) {
-        if (key !== geom) {
+        if (key !== geom && key !== 'boundedBy') {
           schema[key] = this._determineType(values[key]);
         }
       }
@@ -349,6 +363,9 @@ AppDispatcher.register((payload) => {
       break;
     case SelectConstants.TOGGLE_FEATURE:
       _FeatureStore.toggleFeature(action.layer, action.feature);
+      break;
+    case LayerConstants.REMOVE_LAYER:
+      _FeatureStore.removeLayer(action.layer);
       break;
     default:
       break;

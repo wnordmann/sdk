@@ -105,7 +105,7 @@ class LayerList extends React.Component {
   }
   getLayerNode(lyr) {
     if (lyr.get('id') === undefined) {
-      lyr.set('id', 'sdk-layer-' + Math.random());
+      lyr.set('id', 'sdk-layer-' + Math.floor(Math.random() * 1000));
     }
     if (lyr.get('title') !== null) {
       if (lyr instanceof ol.layer.Group) {
@@ -140,7 +140,7 @@ class LayerList extends React.Component {
       addLayer = (
           <UI.DefaultButton  onClick={this._showAddLayer.bind(this)}  className="pull-right add_layer_button" title={formatMessage(messages.addlayertitle)}> <Icon.Icon name="plus" /> &nbsp;
           {formatMessage(messages.addlayertext)}
-          <AddLayerModal allowUserInput={this.props.addLayer.allowUserInput} asVector={this.props.addLayer.asVector} map={this.props.map} url={this.props.addLayer.url} ref='addlayermodal'/>
+          <AddLayerModal srsName={this.props.map.getView().getProjection().getCode()} allowUserInput={this.props.addLayer.allowUserInput} asVector={this.props.addLayer.asVector} map={this.props.map} url={this.props.addLayer.url} ref='addlayermodal'/>
         </UI.DefaultButton>
       );
     }

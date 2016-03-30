@@ -47,7 +47,7 @@ i18n message strings. Provided through the application through context.
 type: `custom`
 
 
-### `layer` (required)
+### `layer`
 
 The layer to use initially for loading the table.
 

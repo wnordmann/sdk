@@ -29,6 +29,13 @@ i18n message strings. Provided through the application through context.
 type: `custom`
 
 
+### `srsName`
+
+The srs name that the map's view is in.
+
+type: `string`
+
+
 ### `url`
 
 url that will be used to retrieve layers from (WMS or WFS).

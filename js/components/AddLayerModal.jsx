@@ -15,8 +15,9 @@ import ol from 'openlayers';
 import Dialog from 'pui-react-modals';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LoginConstants from '../constants/LoginConstants.js';
+import FeatureStore from '../stores/FeatureStore.js';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import {doGET} from '../util.js';
+import {doGET, doPOST} from '../util.js';
 import Grids from 'pui-react-grids';
 import Pui from 'pui-react-alerts';
 import pureRender from 'pure-render-decorator';
@@ -137,6 +138,24 @@ class AddLayerModal extends Dialog.Modal {
       olLayer.set('canStyle', false);
     });
   }
+  _getWfsFeatures(layer) {
+    var wfsInfo = layer.get('wfsInfo');
+    var url = this._getServiceUrl(this.props.url);
+    url = url.replace('wms', 'wfs');
+    var format = new ol.format.WFS();
+    var payloadNode = format.writeGetFeature({
+      maxFeatures: 50,
+      srsName: this.props.srsName,
+      featureNS: wfsInfo.featureNS,
+      featurePrefix:  wfsInfo.featurePrefix,
+      featureTypes: [wfsInfo.featureType]
+    });
+    var payload = new XMLSerializer().serializeToString(payloadNode);
+    doPOST(url, payload, function(xmlhttp) {
+      var features = format.readFeatures(xmlhttp.responseXML);
+      FeatureStore.setFeatures(layer, features);
+    });
+  }
   _getWfsInfo(layer, olLayer) {
     var me = this;
     // do a WFS DescribeFeatureType request to get wfsInfo
@@ -156,7 +175,7 @@ class AddLayerModal extends Dialog.Modal {
             geometryName = el.name;
             var lp = el.type.localPart;
             geometryType = lp.replace('PropertyType', '');
-          } else {
+          } else if (el.name !== 'boundedBy') {
             // TODO if needed, use attribute type as well
             attributes.push(el.name);
           }
@@ -166,12 +185,16 @@ class AddLayerModal extends Dialog.Modal {
         });
         this.set('wfsInfo', {
           featureNS: schema.targetNamespace,
+          featurePrefix: layer.Name.split(':').shift(),
           featureType: schema.element[0].name,
           geometryType: geometryType,
           geometryName: geometryName,
           attributes: attributes,
           url: me.props.url.replace('wms', 'wfs')
         });
+        if (this instanceof ol.layer.Tile) {
+          me._getWfsFeatures(this);
+        }
       }
     }, function(xmlhttp) { }, olLayer);
     // TODO handle failure
@@ -215,6 +238,7 @@ class AddLayerModal extends Dialog.Modal {
         id: layer.Name,
         isRemovable: true,
         canStyle: true,
+        wfsInfo: true,
         popupInfo: '#AllAttributes',
         source: new ol.source.TileWMS({
           url: this.props.url,
@@ -337,6 +361,10 @@ AddLayerModal.propTypes = {
    * Should be user be able to provide their own url?
    */
   allowUserInput: React.PropTypes.bool,
+  /**
+   * The srs name that the map's view is in.
+   */
+  srsName: React.PropTypes.string,
   /**
    * i18n message strings. Provided through the application through context.
    */
