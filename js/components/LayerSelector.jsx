@@ -26,7 +26,7 @@ export default class LayerSelector extends React.Component {
     super(props);
     LayerStore.bindMap(this.props.map);
     this.state = {
-      flatLayers: []
+      layers: []
     };
   }
   componentWillMount() {
@@ -46,25 +46,31 @@ export default class LayerSelector extends React.Component {
   }
   getLayer() {
     var select = ReactDOM.findDOMNode(this.refs.layerSelect);
-    return LayerStore.findLayer(select.value);
+    if (select) {
+      return LayerStore.findLayer(select.value);
+    }
   }
   _onChange() {
-    var flatLayers = LayerStore.getState().flatLayers.slice();
-    this.setState({flatLayers: flatLayers});
+    var flatLayers = LayerStore.getState().flatLayers;
+    var layers = [];
+    for (var i = 0, ii = flatLayers.length; i < ii; ++i) {
+      var lyr = flatLayers[i];
+      if (!this.props.filter || this.props.filter(lyr) === true) {
+        layers.push(lyr);
+      }
+    }
+    this.setState({layers: layers});
   }
   _onItemChange(evt) {
     var layer = LayerStore.findLayer(evt.target.value);
     this.props.onChange.call(this, layer);
   }
   render() {
-    var me = this;
-    var selectItems = this.state.flatLayers.map(function(lyr, idx) {
+    var selectItems = this.state.layers.map(function(lyr, idx) {
       var title = lyr.get('title'), id = lyr.get('id');
-      if (!me.props.filter || me.props.filter(lyr) === true) {
-        return (
-          <option value={id} key={idx}>{title}</option>
-        );
-      }
+      return (
+        <option value={id} key={idx}>{title}</option>
+      );
     });
     return (
       <select ref='layerSelect' defaultValue={this.props.value} className='form-control' onChange={this._onItemChange.bind(this)}>
