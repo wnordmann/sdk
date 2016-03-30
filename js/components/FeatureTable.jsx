@@ -172,7 +172,7 @@ class FeatureTable extends React.Component {
     }
   }
   _onChange() {
-    if (!this._layer && this.refs.layerSelector) {
+    if (this.refs.layerSelector) {
       this._layer = this.refs.layerSelector.getLayer();
     }
     if (this._layer) {
@@ -192,6 +192,8 @@ class FeatureTable extends React.Component {
         var columnKey = Object.keys(this.state.colSortDirs)[0];
         this._onSortChange(columnKey, this.state.colSortDirs[columnKey]);
       }
+    } else {
+      this.setState({features: []});
     }
   }
   _onColumnResize(width, label) {
