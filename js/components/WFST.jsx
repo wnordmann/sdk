@@ -301,7 +301,7 @@ class WFST extends MapTool {
         layerSelector = (
           <article>
             <label htmlFor='layerSelector'>{formatMessage(messages.layerlabel)}</label>
-            <LayerSelector onChange={this._onLayerSelectChange} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} />
+            <LayerSelector onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} />
           </article>
         );
       } else if (this.state.layer) {

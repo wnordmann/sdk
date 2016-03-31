@@ -161,9 +161,6 @@ class FeatureTable extends React.Component {
     }
   }
   _onChange() {
-    if (this.refs.layerSelector) {
-      this._layer = this.refs.layerSelector.getLayer();
-    }
     if (this._layer) {
       var state = FeatureStore.getState(this._layer);
       this._defaultSortIndexes = [];
@@ -362,7 +359,7 @@ class FeatureTable extends React.Component {
       <div id='attributes-table'>
         <form ref='form' onSubmit={this._onSubmit.bind(this)} role='form' className='form-inline'>
           <label htmlFor='table-layerSelector'>{formatMessage(messages.layerlabel)}:</label>
-          <LayerSelector id='table-layerSelector' ref='layerSelector' onChange={this._onLayerSelectChange} filter={this._filterLayerList} map={this.props.map} value={id} />
+          <LayerSelector id='table-layerSelector' ref='layerSelector' onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList} map={this.props.map} value={id} />
           <UI.DefaultButton onClick={this._zoomSelected.bind(this)} title={formatMessage(messages.zoombuttontitle)}><Icon.Icon name="search" /> {formatMessage(messages.zoombuttontext)}</UI.DefaultButton>
           <UI.DefaultButton onClick={this._clearSelected.bind(this)} title={formatMessage(messages.clearbuttontitle)}><Icon.Icon name="trash" /> {formatMessage(messages.clearbuttontext)}</UI.DefaultButton>
           <UI.DefaultButton onClick={this._moveSelectedToTop.bind(this)} title={formatMessage(messages.movebuttontitle)}><Icon.Icon name="arrow-up" /> {formatMessage(messages.movebuttontext)}</UI.DefaultButton>

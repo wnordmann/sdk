@@ -304,8 +304,10 @@ class FeatureStore extends EventEmitter {
   }
   restoreOriginalFeatures(layer) {
     var id = layer.get('id');
-    this._config[id].features = this._config[id].originalFeatures;
-    this.emitChange();
+    if (this._config[id]) {
+      this._config[id].features = this._config[id].originalFeatures;
+      this.emitChange();
+    }
   }
   getSchema(layer) {
     var id = layer.get('id');

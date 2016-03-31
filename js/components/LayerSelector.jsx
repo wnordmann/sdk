@@ -60,6 +60,9 @@ export default class LayerSelector extends React.Component {
       }
     }
     this.setState({layers: layers});
+    if (layers.length > 0) {
+      this.props.onChange.call(this, layers[0]);
+    }
   }
   _onItemChange(evt) {
     var layer = LayerStore.findLayer(evt.target.value);
