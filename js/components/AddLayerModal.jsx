@@ -351,10 +351,6 @@ AddLayerModal.propTypes = {
    */
   srsName: React.PropTypes.string,
   /**
-   * maxFeatures to use when retrieving features from a WMS layer.
-   */
-  maxFeatures: React.PropTypes.number,
-  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
@@ -362,8 +358,7 @@ AddLayerModal.propTypes = {
 
 AddLayerModal.defaultProps = {
   asVector: false,
-  allowUserInput: false,
-  maxFeatures: 50
+  allowUserInput: false
 };
 
 export default injectIntl(AddLayerModal, {withRef: true});
