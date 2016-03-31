@@ -57,6 +57,15 @@ const messages = defineMessages({
   }
 });
 
+const wfsFormat = new ol.format.WFS();
+const wmsCapsFormat = new ol.format.WMSCapabilities();
+const geojsonFormat = new ol.format.GeoJSON();
+const xmlSerializer = new XMLSerializer();
+const wfsContext = new Jsonix.Context([OWS_1_0_0, Filter_1_1_0, SMIL_2_0, SMIL_2_0_Language, XLink_1_0, GML_3_1_1, WFS_1_1_0]);
+const wfsUnmarshaller = wfsContext.createUnmarshaller();
+const xsdContext = new Jsonix.Context([XSD_1_0]);
+const xsdUnmarshaller = xsdContext.createUnmarshaller();
+
 /**
  * Modal window to add layers from a WMS or WFS service.
  */
@@ -92,9 +101,7 @@ class AddLayerModal extends Dialog.Modal {
     doGET(url, function(xmlhttp) {
       var info, layer;
       if (this.props.asVector) {
-        var context = new Jsonix.Context([OWS_1_0_0, Filter_1_1_0, SMIL_2_0, SMIL_2_0_Language, XLink_1_0, GML_3_1_1, WFS_1_1_0]);
-        var unmarshaller = context.createUnmarshaller();
-        info = unmarshaller.unmarshalDocument(xmlhttp.responseXML).value;
+        info = wfsUnmarshaller.unmarshalDocument(xmlhttp.responseXML).value;
         if (info && info.featureTypeList && info.featureTypeList.featureType) {
           for (var i = 0, ii = info.featureTypeList.featureType.length; i < ii; ++i) {
             var ft = info.featureTypeList.featureType[i];
@@ -108,7 +115,7 @@ class AddLayerModal extends Dialog.Modal {
         }
         this.setState({layerInfo: {Title: info.serviceIdentification.title, Layer: layers}});
       } else {
-        info = new ol.format.WMSCapabilities().read(xmlhttp.responseText);
+        info = wmsCapsFormat.read(xmlhttp.responseText);
         this.setState({layerInfo: info.Capability.Layer});
       }
     }, function(xmlhttp) {
@@ -142,17 +149,16 @@ class AddLayerModal extends Dialog.Modal {
     var wfsInfo = layer.get('wfsInfo');
     var url = this._getServiceUrl(this.props.url);
     url = url.replace('wms', 'wfs');
-    var format = new ol.format.WFS();
-    var payloadNode = format.writeGetFeature({
+    var payloadNode = wfsFormat.writeGetFeature({
       maxFeatures: 50,
       srsName: this.props.srsName,
       featureNS: wfsInfo.featureNS,
       featurePrefix:  wfsInfo.featurePrefix,
       featureTypes: [wfsInfo.featureType]
     });
-    var payload = new XMLSerializer().serializeToString(payloadNode);
+    var payload = xmlSerializer.serializeToString(payloadNode);
     doPOST(url, payload, function(xmlhttp) {
-      var features = format.readFeatures(xmlhttp.responseXML);
+      var features = wfsFormat.readFeatures(xmlhttp.responseXML);
       FeatureStore.setFeatures(layer, features);
     });
   }
@@ -163,9 +169,7 @@ class AddLayerModal extends Dialog.Modal {
     url = url.replace('wms', 'wfs') + 'service=WFS&request=DescribeFeatureType&version=1.0.0&typename=' + layer.Name;
     doGET(url, function(xmlhttp) {
       if (xmlhttp.responseText.indexOf('ServiceExceptionReport') === -1) {
-        var context = new Jsonix.Context([XSD_1_0]);
-        var unmarshaller = context.createUnmarshaller();
-        var schema = unmarshaller.unmarshalString(xmlhttp.responseText).value;
+        var schema = xsdUnmarshaller.unmarshalString(xmlhttp.responseText).value;
         var element = schema.complexType[0].complexContent.extension.sequence.element;
         var geometryType, geometryName;
         var attributes = [];
@@ -225,7 +229,7 @@ class AddLayerModal extends Dialog.Modal {
               '&outputFormat=application/json&srsname=EPSG:3857' +
               '&bbox=' + extent.join(',') + ',EPSG:3857';
           },
-          format: new ol.format.GeoJSON(),
+          format: geojsonFormat,
           strategy: ol.loadingstrategy.tile(ol.tilegrid.createXYZ({
             maxZoom: 19
           }))
