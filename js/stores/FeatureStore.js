@@ -27,6 +27,7 @@ const maxFeatures = 50;
 class FeatureStore extends EventEmitter {
   constructor() {
     super();
+    this._pageInfo = {};
     this._createDefaultSelectStyleFunction = function() {
       var styles = {};
       var width = 3;
@@ -155,6 +156,11 @@ class FeatureStore extends EventEmitter {
       this.restoreOriginalFeatures(layer);
     }
   }
+  _appendFeatures(layer, features) {
+    var id = layer.get('id');
+    this._config[id].features = this._config[id].features.concat(features);
+    this._config[id].originalFeatures = this._config[id].features.slice();
+  }
   _setFeatures(layer, features) {
     var id = layer.get('id');
     if (!this._config[id]) {
@@ -165,6 +171,17 @@ class FeatureStore extends EventEmitter {
     }
     this._config[id].features = features;
     this._config[id].originalFeatures = features.slice();
+  }
+  loadNextPage(layer) {
+    var id = layer.get('id');
+    if (!this._pageInfo[id]) {
+      this._pageInfo[id] = {};
+    }
+    var startIndex = this._config[id].features.length;
+    if (!this._pageInfo[id][startIndex]) {
+      this._pageInfo[id][startIndex] = true;
+      this.loadFeatures(layer, startIndex);
+    }
   }
   loadFeatures(layer, startIndex) {
     var wfsInfo = layer.get('wfsInfo');
@@ -179,8 +196,17 @@ class FeatureStore extends EventEmitter {
     });
     var payload = xmlSerializer.serializeToString(payloadNode);
     doPOST(url, payload, function(xmlhttp) {
-      var features = wfsFormat.readFeatures(xmlhttp.responseXML);
-      this._setFeatures(layer, features);
+      var features;
+      if (xmlhttp.responseText.indexOf('ExceptionReport') !== -1) {
+        features = new Array(maxFeatures);
+      } else {
+        features = wfsFormat.readFeatures(xmlhttp.responseXML);
+      }
+      if (startIndex === 0) {
+        this._setFeatures(layer, features);
+      } else {
+        this._appendFeatures(layer, features);
+      }
       this.emitChange();
     }, function() {}, this);
     if (layer.get('numberOfFeatures') === undefined) {
@@ -361,7 +387,16 @@ class FeatureStore extends EventEmitter {
     return this._config[layer.get('id')].features[index].getProperties();
   }
   getFieldValue(layer, index, field) {
-    return this._config[layer.get('id')].features[index].get(field);
+    var config = this._config[layer.get('id')];
+    if (index >= config.features.length) {
+      this.loadNextPage(layer);
+    } else {
+      if (config.features[index]) {
+        return config.features[index].get(field);
+      } else {
+        return '';
+      }
+    }
   }
   getState(layer) {
     if (layer) {

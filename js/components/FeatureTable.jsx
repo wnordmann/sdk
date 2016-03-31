@@ -172,6 +172,7 @@ class FeatureTable extends React.Component {
       }
       var newState = {};
       newState.features = state.features.slice();
+      newState.rowCount = this._layer.get('numberOfFeatures') || newState.features.length;
       newState.originalFeatures = state.originalFeatures.slice();
       newState.selected = state.selected.slice();
       this.setState(newState);
@@ -181,7 +182,7 @@ class FeatureTable extends React.Component {
         this._onSortChange(columnKey, this.state.colSortDirs[columnKey]);
       }
     } else {
-      this.setState({features: []});
+      this.setState({rowCount: 0, features: []});
     }
   }
   _onColumnResize(width, label) {
@@ -378,7 +379,7 @@ class FeatureTable extends React.Component {
           rowClassNameGetter={this._rowClassNameGetter.bind(this)}
           headerHeight={this.props.headerHeight}
           onRowClick={this._onRowClick.bind(this)}
-          rowsCount={this.state.features.length}
+          rowsCount={this.state.rowCount}
           width={this.state.gridWidth}
           height={this.state.gridHeight}>
           {columnNodes}
