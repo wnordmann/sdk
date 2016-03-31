@@ -17,7 +17,12 @@ import ol from 'openlayers';
 import SelectConstants from '../constants/SelectConstants.js';
 import LayerConstants from '../constants/LayerConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
+import {doPOST} from '../util.js';
 import LayerStore from './LayerStore.js';
+
+const wfsFormat = new ol.format.WFS();
+const xmlSerializer = new XMLSerializer();
+const maxFeatures = 50;
 
 class FeatureStore extends EventEmitter {
   constructor() {
@@ -161,9 +166,36 @@ class FeatureStore extends EventEmitter {
     this._config[id].features = features;
     this._config[id].originalFeatures = features.slice();
   }
-  setFeatures(layer, features) {
-    this._setFeatures(layer, features);
-    this.emitChange();
+  loadFeatures(layer, startIndex) {
+    var wfsInfo = layer.get('wfsInfo');
+    var url = wfsInfo.url;
+    var payloadNode = wfsFormat.writeGetFeature({
+      maxFeatures: maxFeatures,
+      srsName: this._map.getView().getProjection().getCode(),
+      featureNS: wfsInfo.featureNS,
+      startIndex: startIndex,
+      featurePrefix:  wfsInfo.featurePrefix,
+      featureTypes: [wfsInfo.featureType]
+    });
+    var payload = xmlSerializer.serializeToString(payloadNode);
+    doPOST(url, payload, function(xmlhttp) {
+      var features = wfsFormat.readFeatures(xmlhttp.responseXML);
+      this._setFeatures(layer, features);
+      this.emitChange();
+    }, function() {}, this);
+    if (layer.get('numberOfFeatures') === undefined) {
+      var hitsNode = wfsFormat.writeGetFeature({
+        resultType: 'hits',
+        featureNS: wfsInfo.featureNS,
+        featurePrefix:  wfsInfo.featurePrefix,
+        featureTypes: [wfsInfo.featureType]
+      });
+      var hits = xmlSerializer.serializeToString(hitsNode);
+      doPOST(url, hits, function(xmlhttp) {
+        var info = wfsFormat.readFeatureCollectionMetadata(xmlhttp.responseXML);
+        layer.set('numberOfFeatures', info.numberOfFeatures);
+      });
+    }
   }
   bindLayer(layer) {
     var source = layer.getSource();

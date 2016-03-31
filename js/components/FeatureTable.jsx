@@ -116,8 +116,7 @@ class FeatureTable extends React.Component {
     FeatureStore.bindMap(this.props.map);
     this._selectedOnly = false;
     if (this.props.layer) {
-      this._layer = this.props.layer;
-      FeatureStore.addLayer(this._layer);
+      this._setLayer(this.props.layer);
     }
     this.state = {
       gridWidth: this.props.width,
@@ -141,11 +140,14 @@ class FeatureTable extends React.Component {
     FeatureStore.removeChangeListener(this._onChange);
     global.removeEventListener('resize', this.setDimensionsOnState);
   }
+  _setLayer(layer) {
+    this._layer = layer;
+    FeatureStore.addLayer(layer, this._selectedOnly);
+  }
   _onLayerSelectChange(layer) {
     // TODO add clearing filter back
     //ReactDOM.findDOMNode(this.refs.filter).value = '';
-    this._layer = layer;
-    FeatureStore.addLayer(layer, this._selectedOnly);
+    this._setLayer(layer);
   }
   _attachResizeEvent() {
     global.addEventListener('resize', this.setDimensionsOnState.bind(this), false);

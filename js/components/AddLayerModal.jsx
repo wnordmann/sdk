@@ -17,7 +17,7 @@ import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LoginConstants from '../constants/LoginConstants.js';
 import FeatureStore from '../stores/FeatureStore.js';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import {doGET, doPOST} from '../util.js';
+import {doGET} from '../util.js';
 import Grids from 'pui-react-grids';
 import Pui from 'pui-react-alerts';
 import pureRender from 'pure-render-decorator';
@@ -57,10 +57,8 @@ const messages = defineMessages({
   }
 });
 
-const wfsFormat = new ol.format.WFS();
 const wmsCapsFormat = new ol.format.WMSCapabilities();
 const geojsonFormat = new ol.format.GeoJSON();
-const xmlSerializer = new XMLSerializer();
 const wfsContext = new Jsonix.Context([OWS_1_0_0, Filter_1_1_0, SMIL_2_0, SMIL_2_0_Language, XLink_1_0, GML_3_1_1, WFS_1_1_0]);
 const wfsUnmarshaller = wfsContext.createUnmarshaller();
 const xsdContext = new Jsonix.Context([XSD_1_0]);
@@ -145,23 +143,6 @@ class AddLayerModal extends Dialog.Modal {
       olLayer.set('canStyle', false);
     });
   }
-  _getWfsFeatures(layer) {
-    var wfsInfo = layer.get('wfsInfo');
-    var url = this._getServiceUrl(this.props.url);
-    url = url.replace('wms', 'wfs');
-    var payloadNode = wfsFormat.writeGetFeature({
-      maxFeatures: 50,
-      srsName: this.props.srsName,
-      featureNS: wfsInfo.featureNS,
-      featurePrefix:  wfsInfo.featurePrefix,
-      featureTypes: [wfsInfo.featureType]
-    });
-    var payload = xmlSerializer.serializeToString(payloadNode);
-    doPOST(url, payload, function(xmlhttp) {
-      var features = wfsFormat.readFeatures(xmlhttp.responseXML);
-      FeatureStore.setFeatures(layer, features);
-    });
-  }
   _getWfsInfo(layer, olLayer) {
     var me = this;
     // do a WFS DescribeFeatureType request to get wfsInfo
@@ -197,7 +178,7 @@ class AddLayerModal extends Dialog.Modal {
           url: me.props.url.replace('wms', 'wfs')
         });
         if (this instanceof ol.layer.Tile) {
-          me._getWfsFeatures(this);
+          FeatureStore.loadFeatures(this, 0);
         }
       }
     }, function(xmlhttp) { }, olLayer);
@@ -370,6 +351,10 @@ AddLayerModal.propTypes = {
    */
   srsName: React.PropTypes.string,
   /**
+   * maxFeatures to use when retrieving features from a WMS layer.
+   */
+  maxFeatures: React.PropTypes.number,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
@@ -377,7 +362,8 @@ AddLayerModal.propTypes = {
 
 AddLayerModal.defaultProps = {
   asVector: false,
-  allowUserInput: false
+  allowUserInput: false,
+  maxFeatures: 50
 };
 
 export default injectIntl(AddLayerModal, {withRef: true});

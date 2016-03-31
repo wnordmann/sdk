@@ -29,6 +29,14 @@ i18n message strings. Provided through the application through context.
 type: `custom`
 
 
+### `maxFeatures`
+
+maxFeatures to use when retrieving features from a WMS layer.
+
+type: `number`
+defaultValue: `50`
+
+
 ### `srsName`
 
 The srs name that the map's view is in.
