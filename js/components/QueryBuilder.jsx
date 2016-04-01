@@ -13,6 +13,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
+import FeatureStore from '../stores/FeatureStore.js';
 import LayerSelector from './LayerSelector.jsx';
 import SelectActions from '../actions/SelectActions.js';
 import filtrex from 'filtrex';
@@ -129,7 +130,7 @@ class QueryBuilder extends React.Component {
     if (this._queryFilter === null) {
       return;
     }
-    var features = this._layer.getSource().getFeatures();
+    var features = FeatureStore.getState(this._layer).features;
     for (var i = 0, ii = features.length; i < ii; ++i) {
       var properties = features[i].getProperties();
       if (this._queryFilter(properties)) {

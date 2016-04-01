@@ -203,6 +203,9 @@ class AddLayerModal extends Dialog.Modal {
         id: layer.Name,
         isWFST: true,
         canStyle: true,
+        isRemovable: true,
+        isSelectable: true,
+        popupInfo: '#AllAttributes',
         source: new ol.source.Vector({
           url: function(extent) {
             return me.props.url.replace('wms', 'wfs') + 'service=WFS' +
@@ -222,6 +225,7 @@ class AddLayerModal extends Dialog.Modal {
         title: layer.Title,
         id: layer.Name,
         isRemovable: true,
+        isSelectable: true,
         canStyle: true,
         wfsInfo: true,
         popupInfo: '#AllAttributes',
