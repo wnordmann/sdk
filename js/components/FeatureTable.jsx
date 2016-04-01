@@ -172,7 +172,7 @@ class FeatureTable extends React.Component {
       }
       var newState = {};
       newState.features = state.features.slice();
-      newState.rowCount = this._layer.get('numberOfFeatures') || newState.features.length;
+      newState.rowCount = this._filtered ? newState.features.length : (this._layer.get('numberOfFeatures') || newState.features.length);
       newState.originalFeatures = state.originalFeatures.slice();
       newState.selected = state.selected.slice();
       this.setState(newState);
@@ -299,6 +299,7 @@ class FeatureTable extends React.Component {
         return false;
       }) : rows;
     }
+    this._filtered = (rows.length !== filteredRows.length);
     FeatureStore.setFilter(this._layer, filteredRows);
   }
   _onSortChange(columnKey, sortDir) {
