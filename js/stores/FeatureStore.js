@@ -159,7 +159,7 @@ class FeatureStore extends EventEmitter {
   _appendFeatures(layer, features) {
     var id = layer.get('id');
     this._config[id].features = this._config[id].features.concat(features);
-    this._config[id].originalFeatures = this._config[id].features.slice();
+    this._config[id].originalFeatures = this._config[id].originalFeatures.concat(features);
   }
   _setFeatures(layer, features) {
     var id = layer.get('id');
@@ -177,8 +177,8 @@ class FeatureStore extends EventEmitter {
     if (!this._pageInfo[id]) {
       this._pageInfo[id] = {};
     }
-    var startIndex = this._config[id].features.length;
-    if (!this._pageInfo[id][startIndex]) {
+    var startIndex = this._config[id].originalFeatures.length;
+    if (startIndex < layer.get('numberOfFeatures') && !this._pageInfo[id][startIndex]) {
       this._pageInfo[id][startIndex] = true;
       this.loadFeatures(layer, startIndex);
     }
