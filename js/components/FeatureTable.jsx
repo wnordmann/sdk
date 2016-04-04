@@ -176,7 +176,7 @@ class FeatureTable extends React.Component {
       if (this._filtered) {
         rowCount = newState.features.length;
       } else {
-        if (state.selected.length > 0) {
+        if (this._selectedOnly) {
           rowCount = newState.features.length;
         } else {
           rowCount = this._layer.get('numberOfFeatures') || newState.features.length;

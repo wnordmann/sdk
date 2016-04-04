@@ -80,8 +80,8 @@ class Select extends MapTool {
           });
         } else {
           var state = FeatureStore.getState(lyr);
-          for (var i = 0, ii = state.features.length; i < ii; ++i) {
-            var f = state.features[i];
+          for (var i = 0, ii = state.originalFeatures.length; i < ii; ++i) {
+            var f = state.originalFeatures[i];
             var geom = f.getGeometry();
             if (geom && geom.intersectsExtent(box)) {
               this._handleSelection(f, selected);
