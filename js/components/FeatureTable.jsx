@@ -278,7 +278,7 @@ class FeatureTable extends React.Component {
   _filterByText(evt) {
     var filterBy = evt.target.value;
     var state = FeatureStore.getState(this._layer);
-    var rows = state.originalFeatures;
+    var rows = this._selectedOnly ? state.selected : state.originalFeatures;
     var filteredRows = [];
     var queryFilter;
     try {
