@@ -55,26 +55,41 @@ class Select extends MapTool {
         })
       })
     };
-    this._interactions.RECTANGLE.on('boxend', function(evt) {
-      var box = evt.target.getGeometry().getExtent();
-      this.props.map.getLayers().forEach(function(lyr) {
-        if (lyr.getVisible() && lyr.get('isSelectable') === true) {
-          var selected = [];
+    this._interactions.RECTANGLE.on('boxend', this._onBoxEnd, this);
+  }
+  _handleSelection(feature, selected) {
+    if (feature.get('features')) {
+      var children = feature.get('features');
+      for (var i = 0, ii = children.length; i < ii; ++i) {
+        children[i].selected = true;
+      }
+      feature.changed();
+      selected = selected.concat(children);
+    } else {
+      selected.push(feature);
+    }
+  }
+  _onBoxEnd(evt) {
+    var box = evt.target.getGeometry().getExtent();
+    this.props.map.getLayers().forEach(function(lyr) {
+      if (lyr.getVisible() && lyr.get('isSelectable') === true) {
+        var selected = [];
+        if (lyr.getSource() instanceof ol.source.Vector) {
           lyr.getSource().forEachFeatureIntersectingExtent(box, function(feature) {
-            if (feature.get('features')) {
-              var children = feature.get('features');
-              for (var i = 0, ii = children.length; i < ii; ++i) {
-                children[i].selected = true;
-              }
-              feature.changed();
-              selected = selected.concat(children);
-            } else {
-              selected.push(feature);
-            }
+            this._handleSelection(feature, selected);
           });
-          SelectActions.selectFeatures(lyr, selected, true);
+        } else {
+          var state = FeatureStore.getState(lyr);
+          for (var i = 0, ii = state.features.length; i < ii; ++i) {
+            var f = state.features[i];
+            var geom = f.getGeometry();
+            if (geom && geom.intersectsExtent(box)) {
+              this._handleSelection(f, selected);
+            }
+          }
         }
-      }, this);
+        SelectActions.selectFeatures(lyr, selected, true);
+      }
     }, this);
   }
   activate(interactions) {
