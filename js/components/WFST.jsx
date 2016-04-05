@@ -144,14 +144,17 @@ class WFST extends MapTool {
     var coord = evt.coordinate;
     var buffer = this.props.pointBuffer;
     var extent = [coord[0] - buffer, coord[1] - buffer, coord[0] + buffer, coord[1] + buffer];
-    var features = FeatureStore.getState(this.state.layer).originalFeatures;
-    this._select.getFeatures().clear();
+    var state = FeatureStore.getState(this.state.layer);
     var found = false;
-    for (var i = 0, ii = features.length; i < ii; ++i) {
-      var geom = features[i].getGeometry();
-      if (geom.intersectsExtent(extent)) {
-        found = true;
-        this._select.getFeatures().push(features[i]);
+    this._select.getFeatures().clear();
+    if (state) {
+      var features = state.originalFeatures;
+      for (var i = 0, ii = features.length; i < ii; ++i) {
+        var geom = features[i].getGeometry();
+        if (geom.intersectsExtent(extent)) {
+          found = true;
+          this._select.getFeatures().push(features[i]);
+        }
       }
     }
     if (found === false) {
@@ -164,7 +167,7 @@ class WFST extends MapTool {
         version : '1.1.0',
         srsName: this.props.map.getView().getProjection().getCode(),
         typename: wfsInfo.featureType,
-        cql_filter: 'CONTAINS(' + wfsInfo.geometryName + ', Point(' + point[1] + ' ' + point[0] + '))'
+        cql_filter: 'DWITHIN(' + wfsInfo.geometryName + ', Point(' + point[1] + ' ' + point[0] + '), 0.1, meters)'
       };
       doGET(url.format(urlObj), function(xmlhttp) {
         var features = wfsFormat.readFeatures(xmlhttp.responseXML);

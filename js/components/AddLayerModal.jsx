@@ -231,6 +231,7 @@ class AddLayerModal extends Dialog.Modal {
         popupInfo: '#AllAttributes',
         source: new ol.source.TileWMS({
           url: this.props.url,
+          wrapX: false,
           params: {
             LAYERS: layer.Name
           },
