@@ -21,7 +21,8 @@ import MapTool from './MapTool.js';
 import Pui from 'pui-react-alerts';
 import UI from 'pui-react-buttons';
 import pureRender from 'pure-render-decorator';
-import {doPOST} from '../util.js';
+import url from 'url';
+import {doGET, doPOST} from '../util.js';
 import './WFST.css';
 
 const messages = defineMessages({
@@ -56,6 +57,9 @@ const messages = defineMessages({
     defaultMessage: 'There was an issue deleting the feature.'
   }
 });
+
+const wfsFormat = new ol.format.WFS();
+const xmlSerializer = new XMLSerializer();
 
 /**
  * Allows users to make changes to WFS-T layers. This can be drawing new
@@ -102,8 +106,6 @@ class WFST extends MapTool {
     features.on('add', this._onSelectAdd, this);
     features.on('remove', this._onSelectRemove, this);
     this._dirty = {};
-    this._format = new ol.format.WFS();
-    this._serializer = new XMLSerializer();
   }
   componentWillUnmount() {
     this.deactivate();
@@ -144,11 +146,32 @@ class WFST extends MapTool {
     var extent = [coord[0] - buffer, coord[1] - buffer, coord[0] + buffer, coord[1] + buffer];
     var features = FeatureStore.getState(this.state.layer).originalFeatures;
     this._select.getFeatures().clear();
+    var found = false;
     for (var i = 0, ii = features.length; i < ii; ++i) {
       var geom = features[i].getGeometry();
       if (geom.intersectsExtent(extent)) {
+        found = true;
         this._select.getFeatures().push(features[i]);
       }
+    }
+    if (found === false) {
+      var point = ol.proj.toLonLat(coord);
+      var wfsInfo = this.state.layer.get('wfsInfo');
+      var urlObj = url.parse(wfsInfo.url);
+      urlObj.query  = {
+        service: 'WFS',
+        request: 'GetFeature',
+        version : '1.1.0',
+        srsName: this.props.map.getView().getProjection().getCode(),
+        typename: wfsInfo.featureType,
+        cql_filter: 'CONTAINS(' + wfsInfo.geometryName + ', Point(' + point[1] + ' ' + point[0] + '))'
+      };
+      doGET(url.format(urlObj), function(xmlhttp) {
+        var features = wfsFormat.readFeatures(xmlhttp.responseXML);
+        for (var i = 0, ii = features.length; i < ii; ++i) {
+          this._select.getFeatures().push(features[i]);
+        }
+      }, function(xmlhttp) {}, this);
     }
   }
   _modifyFeature() {
@@ -165,17 +188,22 @@ class WFST extends MapTool {
     var features = this._select.getFeatures();
     if (features.getLength() === 1) {
       var feature = features.item(0);
-      var node = this._format.writeTransaction(null, null, [feature], {
+      var node = wfsFormat.writeTransaction(null, null, [feature], {
         featureNS: wfsInfo.featureNS,
         featureType: wfsInfo.featureType
       });
-      doPOST(this.state.layer.get('wfsInfo').url, this._serializer.serializeToString(node),
+      doPOST(this.state.layer.get('wfsInfo').url, xmlSerializer.serializeToString(node),
         function(xmlhttp) {
           var data = xmlhttp.responseText;
           var result = this._readResponse(data);
           if (result && result.transactionSummary.totalDeleted === 1) {
             this._select.getFeatures().clear();
-            this.state.layer.getSource().removeFeature(feature);
+            var source = this.state.layer.getSource();
+            if (source instanceof ol.source.Vector) {
+              source.removeFeature(feature);
+            } else {
+              this._redraw();
+            }
           } else {
             this._setError(formatMessage(messages.deletemsg));
           }
@@ -208,7 +236,9 @@ class WFST extends MapTool {
       // do a WFS transaction to update the geometry
       var properties = feature.getProperties();
       // get rid of boundedBy which is not a real property
+      // get rid of bbox (in the case of GeoJSON)
       delete properties.boundedBy;
+      delete properties.bbox;
       if (wfsInfo.geometryName !== featureGeometryName) {
         properties[wfsInfo.geometryName] = properties[featureGeometryName];
         delete properties[featureGeometryName];
@@ -218,14 +248,14 @@ class WFST extends MapTool {
       if (wfsInfo.geometryName !== featureGeometryName) {
         clone.setGeometryName(wfsInfo.geometryName);
       }
-      var node = this._format.writeTransaction(null, [clone], null, {
+      var node = wfsFormat.writeTransaction(null, [clone], null, {
         gmlOptions: {
           srsName: this.props.map.getView().getProjection().getCode()
         },
         featureNS: wfsInfo.featureNS,
         featureType: wfsInfo.featureType
       });
-      doPOST(this.state.layer.get('wfsInfo').url, this._serializer.serializeToString(node),
+      doPOST(this.state.layer.get('wfsInfo').url, xmlSerializer.serializeToString(node),
         function(xmlhttp) {
           var data = xmlhttp.responseText;
           var result = this._readResponse(data);
@@ -249,21 +279,21 @@ class WFST extends MapTool {
       data.documentElement.localName == 'ExceptionReport') {
       this._setError(data.getElementsByTagNameNS('http://www.opengis.net/ows', 'ExceptionText').item(0).textContent);
     } else {
-      result = this._format.readTransactionResponse(data);
+      result = wfsFormat.readTransactionResponse(data);
     }
     return result;
   }
   _onDrawEnd(evt) {
     var wfsInfo = this.state.layer.get('wfsInfo');
     var feature = evt.feature;
-    var node = this._format.writeTransaction([feature], null, null, {
+    var node = wfsFormat.writeTransaction([feature], null, null, {
       gmlOptions: {
         srsName: this.props.map.getView().getProjection().getCode()
       },
       featureNS: wfsInfo.featureNS,
       featureType: wfsInfo.featureType
     });
-    doPOST(this.state.layer.get('wfsInfo').url, this._serializer.serializeToString(node),
+    doPOST(this.state.layer.get('wfsInfo').url, xmlSerializer.serializeToString(node),
       function(xmlhttp) {
         var data = xmlhttp.responseText;
         var result = this._readResponse(data);
@@ -271,10 +301,11 @@ class WFST extends MapTool {
           var insertId = result.insertIds[0];
           if (insertId == 'new0') {
             // reload data if we're dealing with a shapefile store
-            if (this.state.layer instanceof ol.layer.Tile) {
-              this._redraw();
+            var source = this.state.layer.getSource();
+            if (source instanceof ol.source.Vector) {
+              source.clear();
             } else {
-              this.state.layer.getSource().clear();
+              this._redraw();
             }
           } else {
             feature.setId(insertId);

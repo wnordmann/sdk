@@ -221,7 +221,6 @@ class AddLayerModal extends Dialog.Modal {
       });
     } else {
       olLayer = new ol.layer.Tile({
-        extent: extent,
         title: layer.Title,
         id: layer.Name,
         isRemovable: true,
@@ -233,8 +232,7 @@ class AddLayerModal extends Dialog.Modal {
         source: new ol.source.TileWMS({
           url: this.props.url,
           params: {
-            LAYERS: layer.Name,
-            TILED: true
+            LAYERS: layer.Name
           },
           serverType: 'geoserver'
         })
