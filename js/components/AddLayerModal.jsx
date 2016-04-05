@@ -226,6 +226,7 @@ class AddLayerModal extends Dialog.Modal {
         id: layer.Name,
         isRemovable: true,
         isSelectable: true,
+        isWFST: true,
         canStyle: true,
         wfsInfo: true,
         popupInfo: '#AllAttributes',

@@ -42,6 +42,14 @@ The ol3 map whose layers can be used for the WFS-T tool.
 type: `instanceOf ol.Map`
 
 
+### `pointBuffer`
+
+Buffer to put around clicked point to find the feature clicked. This is in the units of the coordinate reference system of the map.
+
+type: `number`
+defaultValue: `0.5`
+
+
 ### `visible`
 
 Should this component be visible from the start?

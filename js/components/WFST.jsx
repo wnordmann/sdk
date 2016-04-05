@@ -11,13 +11,12 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import LayerConstants from '../constants/LayerConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LayerSelector from './LayerSelector.jsx';
-import LayerStore from '../stores/LayerStore.js';
+import FeatureStore from '../stores/FeatureStore.js';
 import MapTool from './MapTool.js';
 import Pui from 'pui-react-alerts';
 import UI from 'pui-react-buttons';
@@ -106,12 +105,6 @@ class WFST extends MapTool {
     this._format = new ol.format.WFS();
     this._serializer = new XMLSerializer();
   }
-  componentDidMount() {
-    if (this.props.layerSelector) {
-      var layerId = ReactDOM.findDOMNode(this.refs.layerSelector).value;
-      this._setLayer(LayerStore.findLayer(layerId));
-    }
-  }
   componentWillUnmount() {
     this.deactivate();
   }
@@ -137,15 +130,34 @@ class WFST extends MapTool {
     });
   }
   _setLayer(layer) {
-    this.props.map.getView().fit(
-      layer.getSource().getExtent(),
-      this.props.map.getSize()
-    );
+    if (layer.getSource() instanceof ol.source.Vector) {
+      this.props.map.getView().fit(
+        layer.getSource().getExtent(),
+        this.props.map.getSize()
+      );
+    }
     this.setState({layer: layer});
+  }
+  _selectWMS(evt) {
+    var coord = evt.coordinate;
+    var buffer = this.props.pointBuffer;
+    var extent = [coord[0] - buffer, coord[1] - buffer, coord[0] + buffer, coord[1] + buffer];
+    var features = FeatureStore.getState(this.state.layer).originalFeatures;
+    this._select.getFeatures().clear();
+    for (var i = 0, ii = features.length; i < ii; ++i) {
+      var geom = features[i].getGeometry();
+      if (geom.intersectsExtent(extent)) {
+        this._select.getFeatures().push(features[i]);
+      }
+    }
   }
   _modifyFeature() {
     this.deactivate();
+    var layer = this.state.layer;
     this.activate([this._select, this._modify]);
+    if (!(layer.getSource() instanceof ol.source.Vector)) {
+      this.props.map.on('singleclick', this._selectWMS, this);
+    }
   }
   _deleteFeature() {
     var wfsInfo = this.state.layer.get('wfsInfo');
@@ -195,8 +207,8 @@ class WFST extends MapTool {
       var featureGeometryName = feature.getGeometryName();
       // do a WFS transaction to update the geometry
       var properties = feature.getProperties();
-      // get rid of bbox which is not a real property
-      delete properties.bbox;
+      // get rid of boundedBy which is not a real property
+      delete properties.boundedBy;
       if (wfsInfo.geometryName !== featureGeometryName) {
         properties[wfsInfo.geometryName] = properties[featureGeometryName];
         delete properties[featureGeometryName];
@@ -219,6 +231,9 @@ class WFST extends MapTool {
           var result = this._readResponse(data);
           if (result && result.transactionSummary.totalUpdated === 1) {
             delete this._dirty[fid];
+          }
+          if (!(this.state.layer.getSource() instanceof ol.source.Vector)) {
+            this._redraw();
           }
         },
         function(xmlhttp) {
@@ -256,7 +271,11 @@ class WFST extends MapTool {
           var insertId = result.insertIds[0];
           if (insertId == 'new0') {
             // reload data if we're dealing with a shapefile store
-            this.state.layer.getSource().clear();
+            if (this.state.layer instanceof ol.layer.Tile) {
+              this._redraw();
+            } else {
+              this.state.layer.getSource().clear();
+            }
           } else {
             feature.setId(insertId);
           }
@@ -269,10 +288,17 @@ class WFST extends MapTool {
       this
     );
   }
+  _redraw() {
+    this.state.layer.getSource().updateParams({'_olSalt': Math.random()});
+  }
   _drawFeature() {
-    var layerId = this.state.layer.get('id');
-    var wfsInfo = this.state.layer.get('wfsInfo');
-    var source = this.state.layer.getSource();
+    var layer = this.state.layer;
+    var layerId = layer.get('id');
+    var wfsInfo = layer.get('wfsInfo');
+    var source;
+    if (layer.getSource() instanceof ol.source.Vector) {
+      source = layer.getSource();
+    }
     if (!this._interactions[layerId]) {
       this._interactions[layerId] = {
         draw:  new ol.interaction.Draw({
@@ -335,6 +361,10 @@ WFST.propTypes = {
    */
   visible: React.PropTypes.bool,
   /**
+   * Buffer to put around clicked point to find the feature clicked. This is in the units of the coordinate reference system of the map.
+   */
+  pointBuffer: React.PropTypes.number,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
@@ -342,7 +372,8 @@ WFST.propTypes = {
 
 WFST.defaultProps = {
   layerSelector: true,
-  visible: true
+  visible: true,
+  pointBuffer: 0.5
 };
 
 export default injectIntl(WFST);
