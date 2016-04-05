@@ -47,7 +47,7 @@
     "keymirror": "~0.1.0",
     "lodash.uniqueid": "^3.0.0",
     "ogc-schemas": "^2.6.0",
-    "ol3-cesium": "3.9.2",
+    "ol3-cesium": "3.9.4",
     "openlayers": "3.13.1",
     "pui-css-spinners": "3.2.0",
     "pui-react-alerts": "3.2.0",
