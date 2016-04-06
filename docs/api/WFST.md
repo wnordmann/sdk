@@ -50,6 +50,14 @@ type: `number`
 defaultValue: `0.5`
 
 
+### `showEditForm`
+
+Should we display an edit form for editing feature attributes on select?
+
+type: `bool`
+defaultValue: `false`
+
+
 ### `visible`
 
 Should this component be visible from the start?

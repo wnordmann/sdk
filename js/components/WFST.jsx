@@ -23,6 +23,7 @@ import UI from 'pui-react-buttons';
 import pureRender from 'pure-render-decorator';
 import url from 'url';
 import {doGET, doPOST} from '../util.js';
+import EditForm from './EditForm.jsx';
 import './WFST.css';
 
 var SelectFeature = function(handleEvent, scope) {
@@ -164,6 +165,7 @@ class WFST extends MapTool {
           var geom = features[i].getGeometry();
           if (geom.intersectsExtent(extent)) {
             found = true;
+            me.setState({feature: features[i]});
             me._select.getFeatures().push(features[i]);
           }
         }
@@ -184,6 +186,7 @@ class WFST extends MapTool {
           var features = wfsFormat.readFeatures(xmlhttp.responseXML);
           for (var i = 0, ii = features.length; i < ii; ++i) {
             me._select.getFeatures().push(features[i]);
+            me.setState({feature: features[i]});
           }
         }, function(xmlhttp) {}, me);
       }
@@ -384,12 +387,17 @@ class WFST extends MapTool {
         var label = formatMessage(messages.layerlabel) + ': ' + this.state.layer.get('title');
         layerSelector = (<div>{label}</div>);
       }
+      var editForm;
+      if (this.props.showEditForm && this.state.feature) {
+        editForm = (<EditForm feature={this.state.feature} layer={this.state.layer} />);
+      }
       return (
         <form onSubmit={this._onSubmit} role='form'>
           {layerSelector}
           <UI.DefaultButton onClick={this._drawFeature.bind(this)}>{formatMessage(messages.drawfeature)}</UI.DefaultButton>
           <UI.DefaultButton onClick={this._modifyFeature.bind(this)}>{formatMessage(messages.modifyfeature)}</UI.DefaultButton>
           <UI.DefaultButton onClick={this._deleteFeature.bind(this)}>{formatMessage(messages.deletefeature)}</UI.DefaultButton>
+          {editForm}
           {error}
         </form>
       );
@@ -415,12 +423,17 @@ WFST.propTypes = {
    */
   pointBuffer: React.PropTypes.number,
   /**
+   * Should we display an edit form for editing feature attributes on select?
+   */
+  showEditForm: React.PropTypes.bool,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
 };
 
 WFST.defaultProps = {
+  showEditForm: false,
   layerSelector: true,
   visible: true,
   pointBuffer: 0.5
