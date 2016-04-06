@@ -25,6 +25,14 @@ import url from 'url';
 import {doGET, doPOST} from '../util.js';
 import './WFST.css';
 
+var SelectFeature = function(handleEvent, scope) {
+  this._scope = scope;
+  ol.interaction.Interaction.call(this, {
+    handleEvent: handleEvent
+  });
+};
+ol.inherits(SelectFeature, ol.interaction.Interaction);
+
 const messages = defineMessages({
   layerlabel: {
     id: 'wfst.layerlabel',
@@ -105,6 +113,7 @@ class WFST extends MapTool {
     });
     features.on('add', this._onSelectAdd, this);
     features.on('remove', this._onSelectRemove, this);
+    this._selectfeature = new SelectFeature(this._selectWMS, this);
     this._dirty = {};
   }
   componentWillUnmount() {
@@ -141,49 +150,56 @@ class WFST extends MapTool {
     this.setState({layer: layer});
   }
   _selectWMS(evt) {
-    var coord = evt.coordinate;
-    var buffer = this.props.pointBuffer;
-    var extent = [coord[0] - buffer, coord[1] - buffer, coord[0] + buffer, coord[1] + buffer];
-    var state = FeatureStore.getState(this.state.layer);
-    var found = false;
-    this._select.getFeatures().clear();
-    if (state) {
-      var features = state.originalFeatures;
-      for (var i = 0, ii = features.length; i < ii; ++i) {
-        var geom = features[i].getGeometry();
-        if (geom.intersectsExtent(extent)) {
-          found = true;
-          this._select.getFeatures().push(features[i]);
+    if (evt.type === 'singleclick') {
+      var me = this._scope;
+      var coord = evt.coordinate;
+      var buffer = me.props.pointBuffer;
+      var extent = [coord[0] - buffer, coord[1] - buffer, coord[0] + buffer, coord[1] + buffer];
+      var state = FeatureStore.getState(me.state.layer);
+      var found = false;
+      me._select.getFeatures().clear();
+      if (state) {
+        var features = state.originalFeatures;
+        for (var i = 0, ii = features.length; i < ii; ++i) {
+          var geom = features[i].getGeometry();
+          if (geom.intersectsExtent(extent)) {
+            found = true;
+            me._select.getFeatures().push(features[i]);
+          }
         }
       }
-    }
-    if (found === false) {
-      var point = ol.proj.toLonLat(coord);
-      var wfsInfo = this.state.layer.get('wfsInfo');
-      var urlObj = url.parse(wfsInfo.url);
-      urlObj.query  = {
-        service: 'WFS',
-        request: 'GetFeature',
-        version : '1.1.0',
-        srsName: this.props.map.getView().getProjection().getCode(),
-        typename: wfsInfo.featureType,
-        cql_filter: 'DWITHIN(' + wfsInfo.geometryName + ', Point(' + point[1] + ' ' + point[0] + '), 0.1, meters)'
-      };
-      doGET(url.format(urlObj), function(xmlhttp) {
-        var features = wfsFormat.readFeatures(xmlhttp.responseXML);
-        for (var i = 0, ii = features.length; i < ii; ++i) {
-          this._select.getFeatures().push(features[i]);
-        }
-      }, function(xmlhttp) {}, this);
+      if (found === false) {
+        var point = ol.proj.toLonLat(coord);
+        var wfsInfo = me.state.layer.get('wfsInfo');
+        var urlObj = url.parse(wfsInfo.url);
+        urlObj.query  = {
+          service: 'WFS',
+          request: 'GetFeature',
+          version : '1.1.0',
+          srsName: me.props.map.getView().getProjection().getCode(),
+          typename: wfsInfo.featureType,
+          cql_filter: 'DWITHIN(' + wfsInfo.geometryName + ', Point(' + point[1] + ' ' + point[0] + '), 0.1, meters)'
+        };
+        doGET(url.format(urlObj), function(xmlhttp) {
+          var features = wfsFormat.readFeatures(xmlhttp.responseXML);
+          for (var i = 0, ii = features.length; i < ii; ++i) {
+            me._select.getFeatures().push(features[i]);
+          }
+        }, function(xmlhttp) {}, me);
+      }
+      return !found;
+    } else {
+      return true;
     }
   }
   _modifyFeature() {
     this.deactivate();
     var layer = this.state.layer;
-    this.activate([this._select, this._modify]);
+    var interactions = [this._select, this._modify];
     if (!(layer.getSource() instanceof ol.source.Vector)) {
-      this.props.map.on('singleclick', this._selectWMS, this);
+      interactions.push(this._selectfeature);
     }
+    this.activate(interactions);
   }
   _deleteFeature() {
     var wfsInfo = this.state.layer.get('wfsInfo');
