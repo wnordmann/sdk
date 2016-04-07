@@ -4,6 +4,8 @@ var TestUtils = require('react-addons-test-utils');
 var React = require('react');
 var ReactDOM = require('react-dom');
 var assert = require('chai').assert;
+var raf = require('raf');
+raf.polyfill();
 var ol = require('openlayers');
 var intl = require('../mock-i18n.js');
 

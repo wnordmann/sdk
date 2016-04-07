@@ -3,6 +3,8 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var assert = require('chai').assert;
+var raf = require('raf');
+raf.polyfill();
 var ol = require('openlayers');
 global.Intl = require('intl');
 var IntlProvider = require('react-intl').IntlProvider;

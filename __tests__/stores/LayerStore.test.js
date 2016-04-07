@@ -1,6 +1,8 @@
 /* global beforeEach, describe, it */
 
 var assert = require('chai').assert;
+var raf = require('raf');
+raf.polyfill();
 var ol = require('openlayers');
 
 var LayerStore = require('../../js/stores/LayerStore.js');
