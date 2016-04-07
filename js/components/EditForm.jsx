@@ -139,7 +139,7 @@ class EditForm extends React.Component {
         {error}
         <span className='edit-form-fid'>{fid}</span>
         {inputs}
-        <UI.DefaultButton onClick={this._save.bind(this)}>{formatMessage(messages.save)}</UI.DefaultButton>
+        <UI.DefaultButton ref='saveButton' onClick={this._save.bind(this)}>{formatMessage(messages.save)}</UI.DefaultButton>
       </div>
     );
   }
@@ -164,4 +164,4 @@ EditForm.propTypes = {
   intl: intlShape.isRequired
 };
 
-export default injectIntl(EditForm);
+export default injectIntl(EditForm, {withRef: true});

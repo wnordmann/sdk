@@ -14,30 +14,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import BasePopup from './BasePopup.jsx';
 import ol from 'openlayers';
-import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import {BasicInput} from 'pui-react-inputs';
-import UI from 'pui-react-buttons';
-import {doPOST} from '../util.js';
-import Pui from 'pui-react-alerts';
-import './EditPopup.css';
-
-const messages = defineMessages({
-  save: {
-    id: 'editpopup.save',
-    description: 'Text to show on the save button',
-    defaultMessage: 'Save'
-  },
-  errormsg: {
-    id: 'editpopup.errormsg',
-    description: 'Error message to show the user when a request fails',
-    defaultMessage: 'Error saving this feature to GeoServer. {msg}'
-  },
-  updatemsg: {
-    id: 'editpopup.updatemsg',
-    description: 'Text to show if the transaction fails',
-    defaultMessage: 'Error updating the feature\'s attributes using WFS-T.'
-  }
-});
+import {injectIntl, intlShape} from 'react-intl';
+import EditForm from './EditForm.jsx';
 
 /**
  * Popup that can be used for feature editing (attribute form).
@@ -49,22 +27,12 @@ const messages = defineMessages({
 class EditPopup extends BasePopup {
   constructor(props) {
     super(props);
+    this.state = {
+      feature: null,
+      layer: null
+    };
     this.props.map.on('singleclick', this._onMapClick, this);
     this.active = true;
-    this._format = new ol.format.WFS();
-    this._serializer = new XMLSerializer();
-    this.state = {
-      error: false,
-      values: {},
-      dirty: {}
-    };
-  }
-  _onChangeField(evt) {
-    var dirty = this.state.dirty;
-    var values = this.state.values;
-    values[evt.target.id] = evt.target.value;
-    dirty[evt.target.id] = true;
-    this.setState({values: values, dirty: dirty});
   }
   _onMapClick(evt) {
     if (this.active) {
@@ -82,9 +50,7 @@ class EditPopup extends BasePopup {
             cont = true;
             me.setState({
               feature: feature,
-              dirty: {},
-              layer: layer,
-              values: feature.getProperties()
+              layer: layer
             });
           }
         }
@@ -97,95 +63,30 @@ class EditPopup extends BasePopup {
       }
     }
   }
+  _onSuccess() {
+    this.setVisible(false);
+  }
   setVisible(visible) {
     super.setVisible(visible);
-    var saveButton = ReactDOM.findDOMNode(this.refs.saveButton);
-    var me = this;
+    var formInstance = this.refs.editForm.getWrappedInstance();
+    var saveButton = ReactDOM.findDOMNode(formInstance.refs.saveButton);
     if (saveButton && saveButton.onclick === null) {
       saveButton.onclick = function() {
-        me._save();
+        formInstance._save();
         return false;
       };
     }
   }
-  _readResponse(data) {
-    var result;
-    if (global.Document && data instanceof global.Document && data.documentElement &&
-      data.documentElement.localName == 'ExceptionReport') {
-      this._setError(data.getElementsByTagNameNS('http://www.opengis.net/ows', 'ExceptionText').item(0).textContent);
-    } else {
-      result = this._format.readTransactionResponse(data);
-    }
-    return result;
-  }
-  _setError(msg) {
-    this.setState({
-      error: true,
-      msg: msg
-    });
-  }
-  _save() {
-    const {formatMessage} = this.props.intl;
-    if (this.state.dirty) {
-      var values = {}, key;
-      for (key in this.state.dirty) {
-        values[key] = this.state.values[key];
-      }
-      var layer = this.state.layer;
-      var wfsInfo = layer.get('wfsInfo');
-      var feature = this.state.feature;
-      var newFeature = new ol.Feature(values);
-      newFeature.setId(feature.getId());
-      var node = this._format.writeTransaction(null, [newFeature], null, {
-        featureNS: wfsInfo.featureNS,
-        featureType: wfsInfo.featureType
-      });
-      doPOST(layer.get('wfsInfo').url, this._serializer.serializeToString(node),
-        function(xmlhttp) {
-          var data = xmlhttp.responseText;
-          var result = this._readResponse(data);
-          if (result && result.transactionSummary.totalUpdated === 1) {
-            for (key in this.state.dirty) {
-              this.state.feature.set(key, values[key]);
-            }
-            this.setVisible(false);
-            this.state.values = {};
-            this.state.dirty = {};
-          } else {
-            this._setError(formatMessage(messages.updatemsg));
-          }
-        },
-        function(xmlhttp) {
-          this._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
-        },
-        this
-      );
-    }
-  }
   render() {
-    const {formatMessage} = this.props.intl;
-    var error;
-    if (this.state.error === true) {
-      error = (<div className='error-alert'><Pui.ErrorAlert dismissable={false} withIcon={true}>{formatMessage(messages.errormsg, {msg: this.state.msg})}</Pui.ErrorAlert></div>);
-    }
-    var inputs = [];
-    var fid;
+    var editForm;
     if (this.state.feature) {
-      fid = this.state.feature.getId();
-      var keys = this.state.layer.get('wfsInfo').attributes;
-      for (var i = 0, ii = keys.length; i < ii; ++i) {
-        var key = keys[i];
-        inputs.push(<BasicInput label={key} key={key} id={key} onChange={this._onChangeField.bind(this)} value={this.state.values[key]} />);
-      }
+      editForm = (<EditForm ref='editForm' feature={this.state.feature} layer={this.state.layer} onSuccess={this._onSuccess.bind(this)} />);
     }
     return (
       <article>
         <a href="#" ref="popupCloser" className="popup-closer fa fa-times fa-pull-right"></a>
         <div className='popup-content' ref='content'>
-          {error}
-          <span className='popup-fid'>{fid}</span>
-          {inputs}
-          <UI.DefaultButton ref="saveButton">{formatMessage(messages.save)}</UI.DefaultButton>
+          {editForm}
         </div>
       </article>
     );
