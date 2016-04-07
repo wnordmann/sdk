@@ -142,9 +142,10 @@ class WFST extends MapTool {
     });
   }
   _setLayer(layer) {
-    if (layer.getSource() instanceof ol.source.Vector) {
+    var source = layer.getSource();
+    if (source instanceof ol.source.Vector && source.getFeatures().length > 0) {
       this.props.map.getView().fit(
-        layer.getSource().getExtent(),
+        source.getExtent(),
         this.props.map.getSize()
       );
     }
