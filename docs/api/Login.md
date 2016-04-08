@@ -19,8 +19,8 @@ type: `custom`
 
 ### `url`
 
-Url to geoserver.
+Url to geoserver login endpoint.
 
 type: `string`
-defaultValue: `'/geoserver/'`
+defaultValue: `'/geoserver/app/api/login'`
 

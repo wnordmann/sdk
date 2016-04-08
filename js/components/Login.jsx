@@ -17,8 +17,7 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import LoginModal from './LoginModal.jsx';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LoginConstants from '../constants/LoginConstants.js';
-import LoginActions from '../actions/LoginActions.js';
-import {doGET, doPOST} from '../util.js';
+import AuthService from '../services/AuthService.js';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -61,41 +60,27 @@ class Login extends React.Component {
     });
   }
   componentDidMount() {
-    doGET(this._getURL(), function(xmlhttp) {
-      var response = JSON.parse(xmlhttp.responseText);
-      this.setState({user: response.user});
-    }, function(xmlhttp) {
-      if (xmlhttp['status'] === 401) {
-        document.cookie = 'JSESSIONID=; path=/geoserver; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-      }
-      this.setState({user: null});
-    }, this);
-  }
-  _getURL() {
-    return this.props.url + (this.props.url.slice(-1) === '/' ? '' : '/') + 'app/api/login';
+    var me = this;
+    AuthService.getStatus(this.props.url, function(user) {
+      me.setState({user: user});
+    }, function() {
+      me.setState({user: null});
+    });
   }
   _doLogin(user, pwd, failureCb, scope) {
-    var url = this._getURL();
-    var contentType = 'application/x-www-form-urlencoded';
-    var data = 'username=' + user + '&password=' + pwd;
-    var success = function(xmlhttp) {
-      var response = JSON.parse(xmlhttp.responseText);
-      document.cookie = 'JSESSIONID=' + response.session + '; path=/geoserver;';
-      this.setState({user: user});
-    };
-    var failure = function(xmlhttp) {
+    var me = this;
+    AuthService.login(this.props.url, user, pwd, function() {
+      me.setState({user: user});
+    }, function() {
+      me.setState({user: null});
       failureCb.call(scope);
-      this.setState({user: null});
-    };
-    doPOST(url, data, success, failure, this, contentType);
-
+    });
   }
   _showLoginDialog() {
     this.refs.loginmodal.getWrappedInstance().open();
   }
   _doLogout() {
-    document.cookie = 'JSESSIONID=; path=/geoserver; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-    LoginActions.logout();
+    AuthService.logoff();
     this.setState({user: null});
   }
   render() {
@@ -118,7 +103,7 @@ class Login extends React.Component {
 
 Login.propTypes = {
   /**
-   * Url to geoserver.
+   * Url to geoserver login endpoint.
    */
   url: React.PropTypes.string,
   /**
@@ -128,7 +113,7 @@ Login.propTypes = {
 };
 
 Login.defaultProps = {
-  url: '/geoserver/'
+  url: '/geoserver/app/api/login'
 };
 
 export default injectIntl(Login);
