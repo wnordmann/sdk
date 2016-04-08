@@ -229,7 +229,11 @@ class FeatureTable extends React.Component {
     if (this._selectedOnly === true) {
       FeatureStore.setSelectedAsFilter(lyr);
     } else {
-      FeatureStore.restoreOriginalFeatures(lyr);
+      if (!this._filtered) {
+        FeatureStore.restoreOriginalFeatures(lyr);
+      } else {
+        FeatureStore.setFilter(lyr, this._filteredRows);
+      }
     }
   }
   _clearSelected() {
@@ -310,6 +314,7 @@ class FeatureTable extends React.Component {
       }) : rows;
     }
     this._filtered = (rows.length !== filteredRows.length);
+    this._filteredRows = filteredRows;
     FeatureStore.setFilter(this._layer, filteredRows);
   }
   _onSortChange(columnKey, sortDir) {
