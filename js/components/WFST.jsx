@@ -21,9 +21,8 @@ import MapTool from './MapTool.js';
 import Pui from 'pui-react-alerts';
 import UI from 'pui-react-buttons';
 import pureRender from 'pure-render-decorator';
-import url from 'url';
-import {doGET, doPOST} from '../util.js';
 import EditForm from './EditForm.jsx';
+import WFSService from '../services/WFSService.js';
 import './WFST.css';
 
 var SelectFeature = function(handleEvent, scope) {
@@ -66,9 +65,6 @@ const messages = defineMessages({
     defaultMessage: 'There was an issue deleting the feature.'
   }
 });
-
-const wfsFormat = new ol.format.WFS();
-const xmlSerializer = new XMLSerializer();
 
 /**
  * Allows users to make changes to WFS-T layers. This can be drawing new
@@ -172,24 +168,10 @@ class WFST extends MapTool {
         }
       }
       if (found === false) {
-        var point = ol.proj.toLonLat(coord);
-        var wfsInfo = me.state.layer.get('wfsInfo');
-        var urlObj = url.parse(wfsInfo.url);
-        urlObj.query  = {
-          service: 'WFS',
-          request: 'GetFeature',
-          version : '1.1.0',
-          srsName: me.props.map.getView().getProjection().getCode(),
-          typename: wfsInfo.featureType,
-          cql_filter: 'DWITHIN(' + wfsInfo.geometryName + ', Point(' + point[1] + ' ' + point[0] + '), 0.1, meters)'
-        };
-        doGET(url.format(urlObj), function(xmlhttp) {
-          var features = wfsFormat.readFeatures(xmlhttp.responseXML);
-          for (var i = 0, ii = features.length; i < ii; ++i) {
-            me._select.getFeatures().push(features[i]);
-            me.setState({feature: features[i]});
-          }
-        }, function(xmlhttp) {}, me);
+        WFSService.distanceWithin(me.state.layer, me.props.map.getView(), coord, function(feature) {
+          me._select.getFeatures().push(feature);
+          me.setState({feature: feature});
+        }, function() {});
       }
       return !found;
     } else {
@@ -206,36 +188,23 @@ class WFST extends MapTool {
     this.activate(interactions);
   }
   _deleteFeature() {
-    var wfsInfo = this.state.layer.get('wfsInfo');
     const {formatMessage} = this.props.intl;
+    var me = this;
     var features = this._select.getFeatures();
     if (features.getLength() === 1) {
       var feature = features.item(0);
-      var node = wfsFormat.writeTransaction(null, null, [feature], {
-        featureNS: wfsInfo.featureNS,
-        featureType: wfsInfo.featureType
+      WFSService.deleteFeature(this.state.layer, feature, function() {
+        me._select.getFeatures().clear();
+        var source = me.state.layer.getSource();
+        if (source instanceof ol.source.Vector) {
+          source.removeFeature(feature);
+        } else {
+          me._redraw();
+        }
+      }, function(xmlhttp, msg) {
+        msg = msg || formatMessage(messages.deletemsg) + xmlhttp.status + ' ' + xmlhttp.statusText;
+        me._setError(msg);
       });
-      doPOST(this.state.layer.get('wfsInfo').url, xmlSerializer.serializeToString(node),
-        function(xmlhttp) {
-          var data = xmlhttp.responseText;
-          var result = this._readResponse(data);
-          if (result && result.transactionSummary.totalDeleted === 1) {
-            this._select.getFeatures().clear();
-            var source = this.state.layer.getSource();
-            if (source instanceof ol.source.Vector) {
-              source.removeFeature(feature);
-            } else {
-              this._redraw();
-            }
-          } else {
-            this._setError(formatMessage(messages.deletemsg));
-          }
-        },
-        function(xmlhttp) {
-          this._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
-        },
-        this
-      );
     }
   }
   _onSubmit(evt) {
@@ -252,95 +221,39 @@ class WFST extends MapTool {
   }
   _onSelectRemove(evt) {
     var feature = evt.element;
-    var wfsInfo = this.state.layer.get('wfsInfo');
     var fid = feature.getId();
     if (this._dirty[fid]) {
-      var featureGeometryName = feature.getGeometryName();
-      // do a WFS transaction to update the geometry
-      var properties = feature.getProperties();
-      // get rid of boundedBy which is not a real property
-      // get rid of bbox (in the case of GeoJSON)
-      delete properties.boundedBy;
-      delete properties.bbox;
-      if (wfsInfo.geometryName !== featureGeometryName) {
-        properties[wfsInfo.geometryName] = properties[featureGeometryName];
-        delete properties[featureGeometryName];
-      }
-      var clone = new ol.Feature(properties);
-      clone.setId(fid);
-      if (wfsInfo.geometryName !== featureGeometryName) {
-        clone.setGeometryName(wfsInfo.geometryName);
-      }
-      var node = wfsFormat.writeTransaction(null, [clone], null, {
-        gmlOptions: {
-          srsName: this.props.map.getView().getProjection().getCode()
-        },
-        featureNS: wfsInfo.featureNS,
-        featureType: wfsInfo.featureType
+      var me = this;
+      WFSService.updateFeature(this.state.layer, this.props.map.getView(), feature, function(result) {
+        if (result && result.transactionSummary.totalUpdated === 1) {
+          delete me._dirty[fid];
+        }
+        if (!(me.state.layer.getSource() instanceof ol.source.Vector)) {
+          me._redraw();
+        }
+      }, function(xmlhttp) {
+        me._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
       });
-      doPOST(this.state.layer.get('wfsInfo').url, xmlSerializer.serializeToString(node),
-        function(xmlhttp) {
-          var data = xmlhttp.responseText;
-          var result = this._readResponse(data);
-          if (result && result.transactionSummary.totalUpdated === 1) {
-            delete this._dirty[fid];
-          }
-          if (!(this.state.layer.getSource() instanceof ol.source.Vector)) {
-            this._redraw();
-          }
-        },
-        function(xmlhttp) {
-          this._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
-        },
-        this
-      );
     }
-  }
-  _readResponse(data) {
-    var result;
-    if (global.Document && data instanceof global.Document && data.documentElement &&
-      data.documentElement.localName == 'ExceptionReport') {
-      this._setError(data.getElementsByTagNameNS('http://www.opengis.net/ows', 'ExceptionText').item(0).textContent);
-    } else {
-      result = wfsFormat.readTransactionResponse(data);
-    }
-    return result;
   }
   _onDrawEnd(evt) {
-    var wfsInfo = this.state.layer.get('wfsInfo');
-    var feature = evt.feature;
-    var node = wfsFormat.writeTransaction([feature], null, null, {
-      gmlOptions: {
-        srsName: this.props.map.getView().getProjection().getCode()
-      },
-      featureNS: wfsInfo.featureNS,
-      featureType: wfsInfo.featureType
-    });
-    doPOST(this.state.layer.get('wfsInfo').url, xmlSerializer.serializeToString(node),
-      function(xmlhttp) {
-        var data = xmlhttp.responseText;
-        var result = this._readResponse(data);
-        if (result) {
-          var insertId = result.insertIds[0];
-          if (insertId == 'new0') {
-            // reload data if we're dealing with a shapefile store
-            var source = this.state.layer.getSource();
-            if (source instanceof ol.source.Vector) {
-              source.clear();
-            } else {
-              this._redraw();
-            }
-          } else {
-            feature.setId(insertId);
-          }
+    var me = this;
+    WFSService.insertFeature(this.state.layer, this.props.map.getView(), evt.feature, function(insertId) {
+      if (insertId == 'new0') {
+        // reload data if we're dealing with a shapefile store
+        var source = me.state.layer.getSource();
+        if (source instanceof ol.source.Vector) {
+          source.clear();
+        } else {
+          me._redraw();
         }
-      },
-      function(xmlhttp) {
-        this.deactivate();
-        this._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
-      },
-      this
-    );
+      } else {
+        evt.feature.setId(insertId);
+      }
+    }, function(xmlhttp) {
+      me.deactivate();
+      me._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
+    });
   }
   _redraw() {
     this.state.layer.getSource().updateParams({'_olSalt': Math.random()});

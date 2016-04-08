@@ -1,5 +1,7 @@
-import {doGET} from '../util.js';
+import ol from 'openlayers';
+import {doGET, doPOST} from '../util.js';
 import {Jsonix} from 'jsonix';
+import urlUtils from 'url';
 import {XSD_1_0} from '../../node_modules/w3c-schemas/lib/XSD_1_0.js';
 import {XLink_1_0} from '../../node_modules/w3c-schemas/lib/XLink_1_0.js';
 import {OWS_1_0_0} from '../../node_modules/ogc-schemas/lib/OWS_1_0_0.js';
@@ -9,6 +11,8 @@ import {SMIL_2_0_Language} from '../../node_modules/ogc-schemas/lib/SMIL_2_0_Lan
 import {GML_3_1_1} from '../../node_modules/ogc-schemas/lib/GML_3_1_1.js';
 import {WFS_1_1_0} from '../../node_modules/ogc-schemas/lib/WFS_1_1_0.js';
 
+const wfsFormat = new ol.format.WFS();
+const xmlSerializer = new XMLSerializer();
 const wfsContext = new Jsonix.Context([OWS_1_0_0, Filter_1_1_0, SMIL_2_0, SMIL_2_0_Language, XLink_1_0, GML_3_1_1, WFS_1_1_0]);
 const wfsUnmarshaller = wfsContext.createUnmarshaller();
 const xsdContext = new Jsonix.Context([XSD_1_0]);
@@ -75,6 +79,115 @@ class WFSService {
     }, function(xmlhttp) {
       onFailure.call(this);
     }, this);
+  }
+  distanceWithin(layer, view, coord, onSuccess, onFailure) {
+    var point = ol.proj.toLonLat(coord);
+    var wfsInfo = layer.get('wfsInfo');
+    var urlObj = urlUtils.parse(wfsInfo.url);
+    delete urlObj.search;
+    urlObj.query  = {
+      service: 'WFS',
+      request: 'GetFeature',
+      version : '1.1.0',
+      srsName: view.getProjection().getCode(),
+      typename: wfsInfo.featureType,
+      cql_filter: 'DWITHIN(' + wfsInfo.geometryName + ', Point(' + point[1] + ' ' + point[0] + '), 0.1, meters)'
+    };
+    doGET(urlUtils.format(urlObj), function(xmlhttp) {
+      var features = wfsFormat.readFeatures(xmlhttp.responseXML);
+      if (features.length > 0) {
+        onSuccess.call(this, features[0]);
+      } else {
+        onFailure.call(this);
+      }
+    }, onFailure);
+  }
+  readResponse(data, xmlhttp, onFailure) {
+    if (global.Document && data instanceof global.Document && data.documentElement &&
+      data.documentElement.localName == 'ExceptionReport') {
+      onFailure.call(this, xmlhttp, data.getElementsByTagNameNS('http://www.opengis.net/ows', 'ExceptionText').item(0).textContent);
+      return false;
+    } else {
+      return wfsFormat.readTransactionResponse(data);
+    }
+  }
+  deleteFeature(layer, feature, onSuccess, onFailure) {
+    var wfsInfo = layer.get('wfsInfo');
+    var node = wfsFormat.writeTransaction(null, null, [feature], {
+      featureNS: wfsInfo.featureNS,
+      featureType: wfsInfo.featureType
+    });
+    doPOST(wfsInfo.url, xmlSerializer.serializeToString(node),
+      function(xmlhttp) {
+        var data = xmlhttp.responseText;
+        var result = this.readResponse(data, xmlhttp, onFailure);
+        if (result && result.transactionSummary.totalDeleted === 1) {
+          onSuccess.call(this);
+        } else {
+          onFailure.call(this, xmlhttp);
+        }
+      },
+      onFailure,
+      this
+    );
+  }
+  updateFeature(layer, view, feature, onSuccess, onFailure) {
+    var wfsInfo = layer.get('wfsInfo');
+    var fid = feature.getId();
+    var featureGeometryName = feature.getGeometryName();
+    // do a WFS transaction to update the geometry
+    var properties = feature.getProperties();
+    // get rid of boundedBy which is not a real property
+    // get rid of bbox (in the case of GeoJSON)
+    delete properties.boundedBy;
+    delete properties.bbox;
+    if (wfsInfo.geometryName !== featureGeometryName) {
+      properties[wfsInfo.geometryName] = properties[featureGeometryName];
+      delete properties[featureGeometryName];
+    }
+    var clone = new ol.Feature(properties);
+    clone.setId(fid);
+    if (wfsInfo.geometryName !== featureGeometryName) {
+      clone.setGeometryName(wfsInfo.geometryName);
+    }
+    var node = wfsFormat.writeTransaction(null, [clone], null, {
+      gmlOptions: {
+        srsName: view.getProjection().getCode()
+      },
+      featureNS: wfsInfo.featureNS,
+      featureType: wfsInfo.featureType
+    });
+    doPOST(wfsInfo.url, xmlSerializer.serializeToString(node),
+      function(xmlhttp) {
+        var data = xmlhttp.responseText;
+        var result = this.readResponse(data, onFailure);
+        onSuccess.call(this, result);
+      },
+      onFailure,
+      this
+    );
+  }
+  insertFeature(layer, view, feature, onSuccess, onFailure) {
+    var wfsInfo = layer.get('wfsInfo');
+    var node = wfsFormat.writeTransaction([feature], null, null, {
+      gmlOptions: {
+        srsName: view.getProjection().getCode()
+      },
+      featureNS: wfsInfo.featureNS,
+      featureType: wfsInfo.featureType
+    });
+    doPOST(wfsInfo.url, xmlSerializer.serializeToString(node),
+      function(xmlhttp) {
+        var data = xmlhttp.responseText;
+        var result = this.readResponse(data);
+        if (result) {
+          var insertId = result.insertIds[0];
+          onSuccess.call(this, insertId);
+        }
+      },
+      onFailure,
+      this
+    );
   }
 }
 
