@@ -160,7 +160,7 @@ class WFSService {
     doPOST(wfsInfo.url, xmlSerializer.serializeToString(node),
       function(xmlhttp) {
         var data = xmlhttp.responseText;
-        var result = this.readResponse(data, onFailure);
+        var result = this.readResponse(data, xmlhttp, onFailure);
         onSuccess.call(this, result);
       },
       onFailure,
@@ -179,7 +179,7 @@ class WFSService {
     doPOST(wfsInfo.url, xmlSerializer.serializeToString(node),
       function(xmlhttp) {
         var data = xmlhttp.responseText;
-        var result = this.readResponse(data);
+        var result = this.readResponse(data, xmlhttp, onFailure);
         if (result) {
           var insertId = result.insertIds[0];
           onSuccess.call(this, insertId);
