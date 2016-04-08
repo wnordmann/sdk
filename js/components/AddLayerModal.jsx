@@ -17,21 +17,14 @@ import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LoginConstants from '../constants/LoginConstants.js';
 import FeatureStore from '../stores/FeatureStore.js';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import {doGET} from '../util.js';
 import Grids from 'pui-react-grids';
 import Pui from 'pui-react-alerts';
 import pureRender from 'pure-render-decorator';
 import {BasicInput} from 'pui-react-inputs';
 import UI from 'pui-react-buttons';
-import {Jsonix} from 'jsonix';
-import {XSD_1_0} from '../../node_modules/w3c-schemas/lib/XSD_1_0.js';
-import {XLink_1_0} from '../../node_modules/w3c-schemas/lib/XLink_1_0.js';
-import {OWS_1_0_0} from '../../node_modules/ogc-schemas/lib/OWS_1_0_0.js';
-import {Filter_1_1_0} from '../../node_modules/ogc-schemas/lib/Filter_1_1_0.js';
-import {SMIL_2_0} from '../../node_modules/ogc-schemas/lib/SMIL_2_0.js';
-import {SMIL_2_0_Language} from '../../node_modules/ogc-schemas/lib/SMIL_2_0_Language.js';
-import {GML_3_1_1} from '../../node_modules/ogc-schemas/lib/GML_3_1_1.js';
-import {WFS_1_1_0} from '../../node_modules/ogc-schemas/lib/WFS_1_1_0.js';
+import WMSService from '../services/WMSService.js';
+import WFSService from '../services/WFSService.js';
+import RESTService from '../services/RESTService.js';
 import './AddLayerModal.css';
 
 const messages = defineMessages({
@@ -57,12 +50,7 @@ const messages = defineMessages({
   }
 });
 
-const wmsCapsFormat = new ol.format.WMSCapabilities();
 const geojsonFormat = new ol.format.GeoJSON();
-const wfsContext = new Jsonix.Context([OWS_1_0_0, Filter_1_1_0, SMIL_2_0, SMIL_2_0_Language, XLink_1_0, GML_3_1_1, WFS_1_1_0]);
-const wfsUnmarshaller = wfsContext.createUnmarshaller();
-const xsdContext = new Jsonix.Context([XSD_1_0]);
-const xsdUnmarshaller = xsdContext.createUnmarshaller();
 
 /**
  * Modal window to add layers from a WMS or WFS service.
@@ -94,31 +82,18 @@ class AddLayerModal extends Dialog.Modal {
     this._getCaps(this._getCapabilitiesUrl(this.props.url));
   }
   _getCaps(url) {
-    var layers = [];
-    this.setState({error: false});
-    doGET(url, function(xmlhttp) {
-      var info, layer;
-      if (this.props.asVector) {
-        info = wfsUnmarshaller.unmarshalDocument(xmlhttp.responseXML).value;
-        if (info && info.featureTypeList && info.featureTypeList.featureType) {
-          for (var i = 0, ii = info.featureTypeList.featureType.length; i < ii; ++i) {
-            var ft = info.featureTypeList.featureType[i];
-            layer = {};
-            layer.Name = ft.name.prefix + ':' + ft.name.localPart;
-            layer.Title = ft.title;
-            layer.Abstract = ft._abstract;
-            layer.EX_GeographicBoundingBox = [ft.wgs84BoundingBox[0].lowerCorner[0], ft.wgs84BoundingBox[0].lowerCorner[1], ft.wgs84BoundingBox[0].upperCorner[0], ft.wgs84BoundingBox[0].upperCorner[1]];
-            layers.push(layer);
-          }
-        }
-        this.setState({layerInfo: {Title: info.serviceIdentification.title, Layer: layers}});
-      } else {
-        info = wmsCapsFormat.read(xmlhttp.responseText);
-        this.setState({layerInfo: info.Capability.Layer});
-      }
-    }, function(xmlhttp) {
-      this._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
-    }, this);
+    var me = this;
+    var failureCb = function(xmlhttp) {
+      me._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
+    };
+    var successCb = function(layerInfo) {
+      me.setState({layerInfo: layerInfo});
+    };
+    if (this.props.asVector) {
+      WFSService.getCapabilities(url, successCb, failureCb);
+    } else {
+      WMSService.getCapabilities(url, successCb, failureCb);
+    }
   }
   _updateLayers() {
     var me = this;
@@ -135,11 +110,9 @@ class AddLayerModal extends Dialog.Modal {
   }
   _getStyleName(olLayer) {
     var url = this.props.url;
-    url = url.replace(/wms|ows|wfs/g, 'rest/layers/' + olLayer.get('id') + '.json');
-    doGET(url, function(xmlhttp) {
-      var styleInfo = JSON.parse(xmlhttp.responseText);
-      olLayer.set('styleName', styleInfo.layer.defaultStyle.name);
-    }, function(xmlhttp) {
+    RESTService.getStyleName(url, olLayer, function(styleName) {
+      olLayer.set('styleName', styleName);
+    }, function() {
       olLayer.set('canStyle', false);
     });
   }
@@ -147,41 +120,12 @@ class AddLayerModal extends Dialog.Modal {
     var me = this;
     // do a WFS DescribeFeatureType request to get wfsInfo
     var url = this._getServiceUrl(me.props.url);
-    url = url.replace('wms', 'wfs') + 'service=WFS&request=DescribeFeatureType&version=1.0.0&typename=' + layer.Name;
-    doGET(url, function(xmlhttp) {
-      if (xmlhttp.responseText.indexOf('ServiceExceptionReport') === -1) {
-        var schema = xsdUnmarshaller.unmarshalString(xmlhttp.responseText).value;
-        var element = schema.complexType[0].complexContent.extension.sequence.element;
-        var geometryType, geometryName;
-        var attributes = [];
-        for (var i = 0, ii = element.length; i < ii; ++i) {
-          var el = element[i];
-          if (el.type.namespaceURI === 'http://www.opengis.net/gml') {
-            geometryName = el.name;
-            var lp = el.type.localPart;
-            geometryType = lp.replace('PropertyType', '');
-          } else if (el.name !== 'boundedBy') {
-            // TODO if needed, use attribute type as well
-            attributes.push(el.name);
-          }
-        }
-        attributes.sort(function(a, b) {
-          return a.toLowerCase().localeCompare(b.toLowerCase());
-        });
-        this.set('wfsInfo', {
-          featureNS: schema.targetNamespace,
-          featurePrefix: layer.Name.split(':').shift(),
-          featureType: schema.element[0].name,
-          geometryType: geometryType,
-          geometryName: geometryName,
-          attributes: attributes,
-          url: me.props.url.replace('wms', 'wfs')
-        });
-        if (this instanceof ol.layer.Tile) {
-          FeatureStore.loadFeatures(this, 0);
-        }
+    WFSService.describeFeatureType(url, layer, function(wfsInfo) {
+      olLayer.set('wfsInfo', wfsInfo);
+      if (olLayer instanceof ol.layer.Tile) {
+        FeatureStore.loadFeatures(olLayer, 0);
       }
-    }, function(xmlhttp) { }, olLayer);
+    }, function() {});
     // TODO handle failure
   }
   _onLayerClick(layer) {
