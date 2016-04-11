@@ -171,7 +171,9 @@ class WFSService {
       function(xmlhttp) {
         var data = xmlhttp.responseXML;
         var result = this.readResponse(data, xmlhttp, onFailure);
-        onSuccess.call(this, result);
+        if (result) {
+          onSuccess.call(this, result);
+        }
       },
       onFailure,
       this

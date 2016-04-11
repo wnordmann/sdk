@@ -79,8 +79,8 @@ class EditForm extends React.Component {
           me._setError(formatMessage(messages.updatemsg));
         }
       };
-      var onFailure = function(xmlhttp) {
-        me._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
+      var onFailure = function(xmlhttp, msg) {
+        me._setError(msg || (xmlhttp.status + ' ' + xmlhttp.statusText));
       };
       WFSService.updateFeature(this.state.layer, null, this.state.feature, values, onSuccess, onFailure);
     }
@@ -111,9 +111,9 @@ class EditForm extends React.Component {
     }
     return (
       <div className='edit-form'>
-        {error}
         <span className='edit-form-fid'>{fid}</span>
         {inputs}
+        {error}
         <UI.DefaultButton ref='saveButton' onClick={this._save.bind(this)}>{formatMessage(messages.save)}</UI.DefaultButton>
       </div>
     );
