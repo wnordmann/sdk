@@ -13,7 +13,7 @@
 import React from 'react';
 import BasePopup from './BasePopup.jsx';
 import ol from 'openlayers';
-import {doGET} from '../util.js';
+import WMSService from '../services/WMSService.js';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 const messages = defineMessages({
@@ -87,11 +87,11 @@ class InfoPopup extends BasePopup {
         cb();
       }
     };
-    var url, view = map.getView();
-    var resolution = view.getResolution(), projection = view.getProjection();
+    var view = map.getView();
     var onReadyAll = function(response) {
-      if (response.responseText.trim() !== 'no features were found') {
-        popupTexts.push(response.responseText);
+      //if (response.responseText.trim() !== 'no features were found') {
+      if (response !== false && response.text) {
+        popupTexts.push(response.text);
       }
       finishedQuery();
     };
@@ -116,7 +116,7 @@ class InfoPopup extends BasePopup {
       return result;
     };
     var onReady = function(response) {
-      var features = this.readFeatures(response.responseText);
+      var features = response.features; // this.readFeatures(response.responseText);
       if (features.length) {
         var popupContent;
         if (popupDef === ALL_ATTRS) {
@@ -149,28 +149,11 @@ class InfoPopup extends BasePopup {
       if (popupDef === ALL_ATTRS) {
         called = true;
         var infoFormat = this.props.infoFormat;
-        url = layer.getSource().getGetFeatureInfoUrl(
-          evt.coordinate,
-          resolution,
-          projection, {
-            'INFO_FORMAT': infoFormat
-          }
-        );
-        if (infoFormat === 'text/plain' || infoFormat === 'text/html') {
-          doGET(url, onReadyAll);
-        } else {
-          doGET(url, onReady, null, this._formats[infoFormat]);
-        }
+        var callback = (infoFormat === 'text/plain' || infoFormat === 'text/html') ? onReadyAll : onReady;
+        WMSService.getFeatureInfo(layer, evt.coordinate, view, infoFormat, callback);
       } else if (popupDef) {
         called = true;
-        url = layer.getSource().getGetFeatureInfoUrl(
-          evt.coordinate,
-          resolution,
-          projection, {
-            'INFO_FORMAT': 'application/json'
-          }
-        );
-        doGET(url, onReady, null, this._formats['application/json']);
+        WMSService.getFeatureInfo(layer, evt.coordinate, view, 'application/json', onReady);
       }
     }
     if (called === false) {
