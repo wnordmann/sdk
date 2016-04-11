@@ -11,6 +11,7 @@
     "url": "https://github.com/boundlessgeo/sdk.git"
   },
   "scripts": {
+    "cover": "node_modules/.bin/mochify --plugin [ mochify-istanbul --report text ] --transform ./scripts/i18n-transform.js __tests__/**/*.test.js",
     "postinstall": "node scripts/install.js",
     "i18n": "node scripts/generate-locale.js",
     "css:drfrankenstyle": "node_modules/.bin/dr-frankenstyle dist/css",
@@ -91,6 +92,7 @@
     "minifyify": "^7.1.0",
     "mocha": "^2.1.0",
     "mochify": "^2.10.0",
+    "mochify-istanbul": "^2.4.1",
     "npm-run-all": "^1.2.11",
     "phantomjs": "^1.9.16",
     "raf": "^3.2.0",
