@@ -43,7 +43,7 @@ describe('HomeButton', function() {
   });
 
 
-  it('adds a select interaction to the map when active', function() {
+  it('zooms to the correct location when home button is pressed', function() {
     var container = document.createElement('div');
     ReactDOM.render((
       <HomeButton intl={intl} map={map}/>
