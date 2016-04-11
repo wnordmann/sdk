@@ -125,7 +125,7 @@ class WFSService {
     });
     doPOST(wfsInfo.url, xmlSerializer.serializeToString(node),
       function(xmlhttp) {
-        var data = xmlhttp.responseText;
+        var data = xmlhttp.responseXML;
         var result = this.readResponse(data, xmlhttp, onFailure);
         if (result && result.transactionSummary.totalDeleted === 1) {
           onSuccess.call(this);
@@ -169,7 +169,7 @@ class WFSService {
     });
     doPOST(wfsInfo.url, xmlSerializer.serializeToString(node),
       function(xmlhttp) {
-        var data = xmlhttp.responseText;
+        var data = xmlhttp.responseXML;
         var result = this.readResponse(data, xmlhttp, onFailure);
         onSuccess.call(this, result);
       },
@@ -188,7 +188,7 @@ class WFSService {
     });
     doPOST(wfsInfo.url, xmlSerializer.serializeToString(node),
       function(xmlhttp) {
-        var data = xmlhttp.responseText;
+        var data = xmlhttp.responseXML;
         var result = this.readResponse(data, xmlhttp, onFailure);
         if (result) {
           var insertId = result.insertIds[0];

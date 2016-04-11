@@ -231,8 +231,8 @@ class WFST extends MapTool {
         if (!(me.state.layer.getSource() instanceof ol.source.Vector)) {
           me._redraw();
         }
-      }, function(xmlhttp) {
-        me._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
+      }, function(xmlhttp, msg) {
+        me._setError(msg || (xmlhttp.status + ' ' + xmlhttp.statusText));
       });
     }
   }
@@ -250,9 +250,9 @@ class WFST extends MapTool {
       } else {
         evt.feature.setId(insertId);
       }
-    }, function(xmlhttp) {
+    }, function(xmlhttp, msg) {
       me.deactivate();
-      me._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
+      me._setError(msg || (xmlhttp.status + ' ' + xmlhttp.statusText));
     });
   }
   _redraw() {
@@ -311,8 +311,8 @@ class WFST extends MapTool {
           <UI.DefaultButton onClick={this._drawFeature.bind(this)}>{formatMessage(messages.drawfeature)}</UI.DefaultButton>
           <UI.DefaultButton onClick={this._modifyFeature.bind(this)}>{formatMessage(messages.modifyfeature)}</UI.DefaultButton>
           <UI.DefaultButton onClick={this._deleteFeature.bind(this)}>{formatMessage(messages.deletefeature)}</UI.DefaultButton>
-          {editForm}
           {error}
+          {editForm}
         </form>
       );
     }
