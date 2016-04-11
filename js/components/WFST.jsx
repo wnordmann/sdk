@@ -224,7 +224,7 @@ class WFST extends MapTool {
     var fid = feature.getId();
     if (this._dirty[fid]) {
       var me = this;
-      WFSService.updateFeature(this.state.layer, this.props.map.getView(), feature, function(result) {
+      WFSService.updateFeature(this.state.layer, this.props.map.getView(), feature, null, function(result) {
         if (result && result.transactionSummary.totalUpdated === 1) {
           delete me._dirty[fid];
         }

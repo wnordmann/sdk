@@ -137,29 +137,33 @@ class WFSService {
       this
     );
   }
-  updateFeature(layer, view, feature, onSuccess, onFailure) {
+  updateFeature(layer, view, feature, values, onSuccess, onFailure) {
     var wfsInfo = layer.get('wfsInfo');
     var fid = feature.getId();
+    var clone;
     var featureGeometryName = feature.getGeometryName();
-    // do a WFS transaction to update the geometry
-    var properties = feature.getProperties();
-    // get rid of boundedBy which is not a real property
-    // get rid of bbox (in the case of GeoJSON)
-    delete properties.boundedBy;
-    delete properties.bbox;
-    if (wfsInfo.geometryName !== featureGeometryName) {
-      properties[wfsInfo.geometryName] = properties[featureGeometryName];
-      delete properties[featureGeometryName];
+    if (values !== null) {
+      clone = new ol.Feature(values);
+    } else {
+      var properties = feature.getProperties();
+      // get rid of boundedBy which is not a real property
+      // get rid of bbox (in the case of GeoJSON)
+      delete properties.boundedBy;
+      delete properties.bbox;
+      if (wfsInfo.geometryName !== featureGeometryName) {
+        properties[wfsInfo.geometryName] = properties[featureGeometryName];
+        delete properties[featureGeometryName];
+      }
+      clone = new ol.Feature(properties);
     }
-    var clone = new ol.Feature(properties);
     clone.setId(fid);
-    if (wfsInfo.geometryName !== featureGeometryName) {
+    if (view !== null && wfsInfo.geometryName !== featureGeometryName) {
       clone.setGeometryName(wfsInfo.geometryName);
     }
     var node = wfsFormat.writeTransaction(null, [clone], null, {
-      gmlOptions: {
+      gmlOptions: view !== null ? {
         srsName: view.getProjection().getCode()
-      },
+      } : undefined,
       featureNS: wfsInfo.featureNS,
       featureType: wfsInfo.featureType
     });

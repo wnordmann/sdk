@@ -13,13 +13,10 @@
 import React from 'react';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import {doPOST} from '../util.js';
 import UI from 'pui-react-buttons';
 import Pui from 'pui-react-alerts';
+import WFSService from '../services/WFSService.js';
 import {BasicInput} from 'pui-react-inputs';
-
-const format = new ol.format.WFS();
-const serializer = new XMLSerializer();
 
 const messages = defineMessages({
   save: {
@@ -55,16 +52,6 @@ class EditForm extends React.Component {
       this.setState({layer: newProps.layer, feature: newProps.feature, values: newProps.feature.getProperties()});
     }
   }
-  _readResponse(data) {
-    var result;
-    if (global.Document && data instanceof global.Document && data.documentElement &&
-      data.documentElement.localName == 'ExceptionReport') {
-      this._setError(data.getElementsByTagNameNS('http://www.opengis.net/ows', 'ExceptionText').item(0).textContent);
-    } else {
-      result = format.readTransactionResponse(data);
-    }
-    return result;
-  }
   _setError(msg) {
     this.setState({
       error: true,
@@ -78,36 +65,24 @@ class EditForm extends React.Component {
       for (key in this.state.dirty) {
         values[key] = this.state.values[key];
       }
-      var layer = this.state.layer;
-      var wfsInfo = layer.get('wfsInfo');
-      var feature = this.state.feature;
-      var newFeature = new ol.Feature(values);
-      newFeature.setId(feature.getId());
-      var node = format.writeTransaction(null, [newFeature], null, {
-        featureNS: wfsInfo.featureNS,
-        featureType: wfsInfo.featureType
-      });
-      doPOST(layer.get('wfsInfo').url, serializer.serializeToString(node),
-        function(xmlhttp) {
-          var data = xmlhttp.responseText;
-          var result = this._readResponse(data);
-          if (result && result.transactionSummary.totalUpdated === 1) {
-            for (key in this.state.dirty) {
-              this.state.feature.set(key, values[key]);
-            }
-            if (this.props.onSuccess) {
-              this.props.onSuccess();
-            }
-            this.setState({dirty: {}});
-          } else {
-            this._setError(formatMessage(messages.updatemsg));
+      var me = this;
+      var onSuccess = function(result) {
+        if (result && result.transactionSummary.totalUpdated === 1) {
+          for (key in me.state.dirty) {
+            me.state.feature.set(key, values[key]);
           }
-        },
-        function(xmlhttp) {
-          this._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
-        },
-        this
-      );
+          if (me.props.onSuccess) {
+            me.props.onSuccess();
+          }
+          me.setState({dirty: {}});
+        } else {
+          me._setError(formatMessage(messages.updatemsg));
+        }
+      };
+      var onFailure = function(xmlhttp) {
+        me._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
+      };
+      WFSService.updateFeature(this.state.layer, null, this.state.feature, values, onSuccess, onFailure);
     }
   }
   _onChangeField(evt) {
