@@ -22,6 +22,7 @@ import Pui from 'pui-react-alerts';
 import pureRender from 'pure-render-decorator';
 import {BasicInput} from 'pui-react-inputs';
 import UI from 'pui-react-buttons';
+import URL from 'url-parse';
 import WMSService from '../services/WMSService.js';
 import WFSService from '../services/WFSService.js';
 import RESTService from '../services/RESTService.js';
@@ -119,8 +120,7 @@ class AddLayerModal extends Dialog.Modal {
   _getWfsInfo(layer, olLayer) {
     var me = this;
     // do a WFS DescribeFeatureType request to get wfsInfo
-    var url = this._getServiceUrl(me.props.url);
-    WFSService.describeFeatureType(url, layer, function(wfsInfo) {
+    WFSService.describeFeatureType(me.props.url, layer, function(wfsInfo) {
       olLayer.set('wfsInfo', wfsInfo);
       if (olLayer instanceof ol.layer.Tile) {
         FeatureStore.loadFeatures(olLayer, 0);
@@ -191,24 +191,22 @@ class AddLayerModal extends Dialog.Modal {
     }
     this.close();
   }
-  _getServiceUrl(url) {
-    if (url.indexOf('?') !== -1) {
-      if (url.slice(-1) !== '?' && url.slice(-1) !== '&') {
-        url += '&';
-      }
-    } else {
-      url += '?';
-    }
-    return url
-  }
   _getCapabilitiesUrl(url) {
-    url = this._getServiceUrl(url);
+    var urlObj = new URL(url);
     if (this.props.asVector) {
-      url += 'service=WFS&VERSION=1.1.0&request=GetCapabilities';
+      urlObj.set('query', {
+        service: 'WFS',
+        version: '1.1.0',
+        request: 'GetCapabilities'
+      });
     } else {
-      url += 'service=WMS&request=GetCapabilities&version=1.3.0';
+      urlObj.set('query', {
+        service: 'WMS',
+        request: 'GetCapabilities',
+        version: '1.3.0'
+      });
     }
-    return url;
+    return urlObj.toString();
   }
   _connect() {
     var url = document.getElementById('url').value;

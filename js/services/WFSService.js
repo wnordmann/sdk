@@ -45,8 +45,15 @@ class WFSService {
     }, this);
   }
   describeFeatureType(url, layer, onSuccess, onFailure) {
-    var dftUrl = url.replace('wms', 'wfs') + 'service=WFS&request=DescribeFeatureType&version=1.0.0&typename=' + layer.Name;
-    doGET(dftUrl, function(xmlhttp) {
+    var dftUrl = new URL(url);
+    dftUrl.set('pathname', dftUrl.pathname.replace('wms', 'wfs'));
+    dftUrl.set('query', {
+      service: 'WFS',
+      request: 'DescribeFeatureType',
+      version: '1.0.0',
+      typename: layer.Name
+    });
+    doGET(dftUrl.toString(), function(xmlhttp) {
       if (xmlhttp.responseText.indexOf('ServiceExceptionReport') === -1) {
         var schema = xsdUnmarshaller.unmarshalString(xmlhttp.responseText).value;
         var element = schema.complexType[0].complexContent.extension.sequence.element;
