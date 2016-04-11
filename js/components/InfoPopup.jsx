@@ -89,7 +89,6 @@ class InfoPopup extends BasePopup {
     };
     var view = map.getView();
     var onReadyAll = function(response) {
-      //if (response.responseText.trim() !== 'no features were found') {
       if (response !== false && response.text) {
         popupTexts.push(response.text);
       }
@@ -116,7 +115,7 @@ class InfoPopup extends BasePopup {
       return result;
     };
     var onReady = function(response) {
-      var features = response.features; // this.readFeatures(response.responseText);
+      var features = response.features;
       if (features.length) {
         var popupContent;
         if (popupDef === ALL_ATTRS) {
