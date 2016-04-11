@@ -12,7 +12,7 @@
 
 import React from 'react';
 import ol from 'openlayers';
-import url from 'url';
+import URL from 'url-parse';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LayerConstants from '../constants/LayerConstants.js'
 import pureRender from 'pure-render-decorator';
@@ -46,14 +46,14 @@ class WMSLegend extends React.Component {
     var source = layer.getSource();
     var params = source.getParams();
     var wmsUrl = source.getUrls()[0];
-    var urlObj = url.parse(wmsUrl);
+    var url = new URL(wmsUrl);
     var options = '';
     for (var key in this.props.options) {
       options += key + ':' + this.props.options[key] + ';';
     }
     options = options.slice(0, -1);
     // TODO split up LAYERS param if needed
-    urlObj.query  = {
+    url.set('query', {
       service: 'WMS',
       request: 'GetLegendGraphic',
       transparent: true,
@@ -64,8 +64,8 @@ class WMSLegend extends React.Component {
       layer: params.LAYERS,
       '_olSalt': this.state.salt,
       style: params.STYLES ? params.STYLES : ''
-    };
-    var legendUrl = url.format(urlObj);
+    });
+    var legendUrl = url.toString();
     return (<img src={legendUrl} />);
   }
 }

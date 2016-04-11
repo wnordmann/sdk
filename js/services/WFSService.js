@@ -1,7 +1,7 @@
 import ol from 'openlayers';
 import {doGET, doPOST} from '../util.js';
 import {Jsonix} from 'jsonix';
-import urlUtils from 'url';
+import URL from 'url-parse';
 import {XSD_1_0} from '../../node_modules/w3c-schemas/lib/XSD_1_0.js';
 import {XLink_1_0} from '../../node_modules/w3c-schemas/lib/XLink_1_0.js';
 import {OWS_1_0_0} from '../../node_modules/ogc-schemas/lib/OWS_1_0_0.js';
@@ -83,17 +83,16 @@ class WFSService {
   distanceWithin(layer, view, coord, onSuccess, onFailure) {
     var point = ol.proj.toLonLat(coord);
     var wfsInfo = layer.get('wfsInfo');
-    var urlObj = urlUtils.parse(wfsInfo.url);
-    delete urlObj.search;
-    urlObj.query  = {
+    var url = new URL(wfsInfo.url);
+    url.set('query', {
       service: 'WFS',
       request: 'GetFeature',
       version : '1.1.0',
       srsName: view.getProjection().getCode(),
       typename: wfsInfo.featureType,
       cql_filter: 'DWITHIN(' + wfsInfo.geometryName + ', Point(' + point[1] + ' ' + point[0] + '), 0.1, meters)'
-    };
-    doGET(urlUtils.format(urlObj), function(xmlhttp) {
+    });
+    doGET(url.toString(), function(xmlhttp) {
       var features = wfsFormat.readFeatures(xmlhttp.responseXML);
       if (features.length > 0) {
         onSuccess.call(this, features[0]);
