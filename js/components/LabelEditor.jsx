@@ -115,7 +115,7 @@ LabelEditor.propTypes = {
   /**
    * List of attributes.
    */
-  attributes: React.PropTypes.array,
+  attributes: React.PropTypes.array.isRequired,
   /**
    * Callback that is called when a change is made.
    */

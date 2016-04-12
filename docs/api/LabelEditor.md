@@ -6,7 +6,7 @@ Editor for label properties. Can edit the label attribute, fontSize and fontColo
 Properties
 ----------
 
-### `attributes`
+### `attributes` (required)
 
 List of attributes.
 
