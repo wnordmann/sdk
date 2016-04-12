@@ -191,7 +191,7 @@ class AddLayer extends React.Component {
             <form className='form-horizontal'>
               <div className="form-group">
                 <Grids.Col md={8}>
-                   <label>{formatMessage(messages.dropzonelabel)}</label>
+                  <label>{formatMessage(messages.dropzonelabel)}</label>
                   <Dropzone className='dropzone' multiple={false} onDrop={this._onDrop.bind(this)}>
                     <div>{formatMessage(messages.dropzonehelp)}</div>
                   </Dropzone>
@@ -201,8 +201,8 @@ class AddLayer extends React.Component {
                   <ColorPicker onChangeComplete={this._onChangeStroke.bind(this)} color='#452135' />
                 </Grids.Col>
                 <Grids.Col md={8}>
-                    <label>{formatMessage(messages.fillcolorlabel)}</label>
-                    <ColorPicker onChangeComplete={this._onChangeFill.bind(this)} color='#452135' />
+                  <label>{formatMessage(messages.fillcolorlabel)}</label>
+                  <ColorPicker onChangeComplete={this._onChangeFill.bind(this)} color='#452135' />
                 </Grids.Col>
               </div>
             </form>
