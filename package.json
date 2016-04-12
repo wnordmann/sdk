@@ -94,7 +94,7 @@
     "mochify": "^2.10.0",
     "mochify-istanbul": "^2.4.1",
     "npm-run-all": "^1.2.11",
-    "phantomjs": "^1.9.16",
+    "phantomjs": "^2.1.7",
     "raf": "^3.2.0",
     "react-addons-test-utils": "0.14.7",
     "react-docgen": "^2.2.0",
