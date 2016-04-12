@@ -11,7 +11,7 @@
     "url": "https://github.com/boundlessgeo/sdk.git"
   },
   "scripts": {
-    "cover": "node_modules/.bin/mochify --plugin [ mochify-istanbul --report text --exclude **/js/constants/* --exclude **/js/**/*.css --exclude **/__tests__/**/* ] --transform ./scripts/i18n-transform.js __tests__/**/*.test.js",
+    "cover": "node_modules/.bin/mochify --plugin [ mochify-istanbul --report text --exclude **/js/constants/* --exclude **/js/**/*.css --exclude **/__tests__/**/* ] --transform ./scripts/test-transform.js __tests__/**/*.test.js",
     "postinstall": "node scripts/install.js",
     "i18n": "node scripts/generate-locale.js",
     "css:drfrankenstyle": "node_modules/.bin/dr-frankenstyle dist/css",
@@ -26,8 +26,8 @@
     "generate:pdf": "node_modules/.bin/gitbook -v pre pdf",
     "docs": "node_modules/.bin/npm-run-all generate:docs generate:gitbook generate:pdf",
     "serve:gitbook": "node_modules/.bin/gitbook -v pre serve",
-    "test:mochify:wd": "node_modules/.bin/mochify --transform ./scripts/i18n-transform.js --wd __tests__/**/*.test.js",
-    "test:mochify": "node_modules/.bin/mochify --reporter list --transform ./scripts/i18n-transform.js __tests__/**/*.test.js",
+    "test:mochify:wd": "node_modules/.bin/mochify --transform ./scripts/test-transform.js --wd __tests__/**/*.test.js",
+    "test:mochify": "node_modules/.bin/mochify --reporter list --transform ./scripts/test-transform.js __tests__/**/*.test.js",
     "test:lint": "eslint __tests__ js --ext .jsx,.js",
     "test": "node_modules/.bin/npm-run-all --parallel test:mochify test:lint"
   },
