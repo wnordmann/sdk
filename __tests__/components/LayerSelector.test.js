@@ -7,7 +7,6 @@ var raf = require('raf');
 raf.polyfill();
 var ol = require('openlayers');
 global.Intl = require('intl');
-var IntlProvider = require('react-intl').IntlProvider;
 
 var LayerSelector = require('../../js/components/LayerSelector.jsx');
 

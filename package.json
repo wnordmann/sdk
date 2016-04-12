@@ -28,7 +28,7 @@
     "serve:gitbook": "node_modules/.bin/gitbook -v pre serve",
     "test:mochify:wd": "node_modules/.bin/mochify --transform ./scripts/i18n-transform.js --wd __tests__/**/*.test.js",
     "test:mochify": "node_modules/.bin/mochify --reporter list --transform ./scripts/i18n-transform.js __tests__/**/*.test.js",
-    "test:lint": "eslint js --ext .jsx,.js",
+    "test:lint": "eslint __tests__ js --ext .jsx,.js",
     "test": "node_modules/.bin/npm-run-all --parallel test:mochify test:lint"
   },
   "author": "Boundless Spatial, Inc.",

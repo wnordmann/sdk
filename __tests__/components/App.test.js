@@ -1,14 +1,11 @@
 /* global afterEach, beforeEach, describe, it */
 
-var TestUtils = require('react-addons-test-utils');
 var React = require('react');
 var ReactDOM = require('react-dom');
 var assert = require('chai').assert;
 var raf = require('raf');
 raf.polyfill();
 var ol = require('openlayers');
-var intl = require('../mock-i18n.js');
-var parse = require('url-parse');
 
 var App = require('../../js/components/App.js');
 
@@ -20,8 +17,6 @@ class MyApp extends App {
 
 describe('App', function() {
   var map, layer;
-  var width = 360;
-  var height = 180;
 
   beforeEach(function(done) {
     layer = new ol.layer.Vector({

@@ -1,4 +1,4 @@
-/* global beforeEach, describe, it */
+/* global describe, it */
 
 var assert = require('chai').assert;
 var Util = require('../../js/util.js');
