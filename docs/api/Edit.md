@@ -17,6 +17,13 @@ i18n message strings. Provided through the application through context.
 type: `custom`
 
 
+### `map` (required)
+
+The map onto which to activate and deactivate the interactions.
+
+type: `instanceOf ol.Map`
+
+
 ### `pointRadius`
 
 The point radius used for the circle style.

@@ -371,6 +371,10 @@ class Edit extends MapTool {
 
 Edit.propTypes = {
   /**
+   * The map onto which to activate and deactivate the interactions.
+   */
+  map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
    * The stroke width in pixels used in the style for the created features.
    */
   strokeWidth: React.PropTypes.number,
