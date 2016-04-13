@@ -8,10 +8,10 @@ raf.polyfill();
 var ol = require('openlayers');
 var intl = require('../mock-i18n.js');
 
-var EditPopup = require('../../js/components/EditPopup.jsx');
+var FeatureTable = require('../../js/components/FeatureTable.jsx');
 
-describe('EditPopup', function() {
-  var target, map;
+describe('FeatureTable', function() {
+  var target, map, layer;
   var width = 360;
   var height = 180;
 
@@ -23,8 +23,18 @@ describe('EditPopup', function() {
     style.top = '-1000px';
     style.width = width + 'px';
     style.height = height + 'px';
+    layer = new ol.layer.Vector({
+      id: 'mylayer',
+      source: new ol.source.Vector({})
+    });
+    layer.getSource().addFeatures([
+      new ol.Feature({foo: 'bar1'}),
+      new ol.Feature({foo: 'bar2'}),
+      new ol.Feature({foo: 'bar3'})
+    ]);
     document.body.appendChild(target);
     map = new ol.Map({
+      layers: [layer],
       target: target,
       view: new ol.View({
         center: [0, 0],
@@ -42,13 +52,12 @@ describe('EditPopup', function() {
   });
 
 
-  it('no edit form inputs get rendered if there is no feature', function() {
+  it('zooms to the correct location when home button is pressed', function() {
     var container = document.createElement('div');
-    ReactDOM.render((
-      <EditPopup intl={intl} map={map} />
+    var table = ReactDOM.render((
+      <FeatureTable layer={layer} intl={intl} map={map}/>
     ), container);
-    var inputs = container.querySelectorAll('input');
-    assert.equal(inputs.length, 0);
+    assert.equal(table.state.rowCount, 3);
     ReactDOM.unmountComponentAtNode(container);
   });
 
