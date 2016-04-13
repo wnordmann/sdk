@@ -36,7 +36,7 @@ The srs name that the map's view is in.
 type: `string`
 
 
-### `url`
+### `url` (required)
 
 url that will be used to retrieve layers from (WMS or WFS).
 

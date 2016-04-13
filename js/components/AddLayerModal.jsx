@@ -85,10 +85,14 @@ class AddLayerModal extends Dialog.Modal {
   _getCaps(url) {
     var me = this;
     var failureCb = function(xmlhttp) {
-      me._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
+      if (me.isMounted()) {
+        me._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
+      }
     };
     var successCb = function(layerInfo) {
-      me.setState({layerInfo: layerInfo});
+      if (me.isMounted()) {
+        me.setState({layerInfo: layerInfo});
+      }
     };
     if (this.props.asVector) {
       WFSService.getCapabilities(url, successCb, failureCb);
@@ -283,7 +287,7 @@ AddLayerModal.propTypes = {
   /**
    * url that will be used to retrieve layers from (WMS or WFS).
    */
-  url: React.PropTypes.string,
+  url: React.PropTypes.string.isRequired,
   /**
    * Should we add layers as vector? Will use WFS GetCapabilities.
    */
