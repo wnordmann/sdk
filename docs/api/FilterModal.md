@@ -12,3 +12,10 @@ i18n message strings. Provided through the application through context.
 
 type: `custom`
 
+
+### `layer` (required)
+
+vector layer to filter features on.
+
+type: `instanceOf ol.layer.Vector`
+

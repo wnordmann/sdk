@@ -52,7 +52,7 @@ describe('FeatureTable', function() {
   });
 
 
-  it('zooms to the correct location when home button is pressed', function() {
+  it('sets the correct row count', function() {
     var container = document.createElement('div');
     var table = ReactDOM.render((
       <FeatureTable layer={layer} intl={intl} map={map}/>

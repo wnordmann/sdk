@@ -197,6 +197,10 @@ class FilterModal extends Dialog.Modal {
 
 FilterModal.propTypes = {
   /**
+   * vector layer to filter features on.
+   */
+  layer: React.PropTypes.instanceOf(ol.layer.Vector).isRequired,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
