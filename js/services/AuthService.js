@@ -30,7 +30,7 @@ class AuthService {
       }
       onFailure.call();
     };
-    doGET(url, success, failure, this);
+    return doGET(url, success, failure, this);
   }
 }
 

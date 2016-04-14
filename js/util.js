@@ -30,6 +30,7 @@ export default {
     };
     xmlhttp.open('GET', url, true);
     xmlhttp.send();
+    return xmlhttp;
   },
   doPOST(url, data, success, failure, scope, contentType, put) {
     var xmlhttp = new XMLHttpRequest();
@@ -45,5 +46,6 @@ export default {
       }
     };
     xmlhttp.send(data);
+    return xmlhttp;
   }
 };

@@ -9,7 +9,7 @@ const wmsGetFeatureInfoFormats = {
 
 class WMSService {
   getCapabilities(url, onSuccess, onFailure) {
-    doGET(url, function(xmlhttp) {
+    return doGET(url, function(xmlhttp) {
       var info = wmsCapsFormat.read(xmlhttp.responseText);
       onSuccess.call(this, info.Capability.Layer);
     }, function(xmlhttp) {

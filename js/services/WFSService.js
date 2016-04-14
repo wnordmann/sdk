@@ -21,7 +21,7 @@ const xsdUnmarshaller = xsdContext.createUnmarshaller();
 class WFSService {
   getCapabilities(url, onSuccess, onFailure) {
     var layers = [];
-    doGET(url, function(xmlhttp) {
+    return doGET(url, function(xmlhttp) {
       var info = wfsUnmarshaller.unmarshalDocument(xmlhttp.responseXML).value;
       if (info && info.featureTypeList && info.featureTypeList.featureType) {
         for (var i = 0, ii = info.featureTypeList.featureType.length; i < ii; ++i) {

@@ -82,22 +82,25 @@ class AddLayerModal extends Dialog.Modal {
   componentDidMount() {
     this._getCaps(this._getCapabilitiesUrl(this.props.url));
   }
+  componentWillUnmount() {
+    if (this._request) {
+      this._request.abort();
+    }
+  }
   _getCaps(url) {
     var me = this;
     var failureCb = function(xmlhttp) {
-      if (me.isMounted()) {
-        me._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
-      }
+      delete me._request;
+      me._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
     };
     var successCb = function(layerInfo) {
-      if (me.isMounted()) {
-        me.setState({layerInfo: layerInfo});
-      }
+      delete me._request;
+      me.setState({layerInfo: layerInfo});
     };
     if (this.props.asVector) {
-      WFSService.getCapabilities(url, successCb, failureCb);
+      me._request = WFSService.getCapabilities(url, successCb, failureCb);
     } else {
-      WMSService.getCapabilities(url, successCb, failureCb);
+      me._request = WMSService.getCapabilities(url, successCb, failureCb);
     }
   }
   _updateLayers() {

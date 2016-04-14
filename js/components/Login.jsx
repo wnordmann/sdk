@@ -61,11 +61,18 @@ class Login extends React.Component {
   }
   componentDidMount() {
     var me = this;
-    AuthService.getStatus(this.props.url, function(user) {
+    this._request = AuthService.getStatus(this.props.url, function(user) {
+      delete me._request;
       me.setState({user: user});
     }, function() {
+      delete me._request;
       me.setState({user: null});
     });
+  }
+  componentWillUnmount() {
+    if (this._request) {
+      this._request.abort();
+    }
   }
   _doLogin(user, pwd, failureCb, scope) {
     var me = this;
@@ -94,7 +101,7 @@ class Login extends React.Component {
     } else {
       return (
         <UI.DefaultButton onClick={this._showLoginDialog.bind(this)}>{formatMessage(messages.buttontext)}
-          <LoginModal ref='loginmodal' />
+          <LoginModal ref='loginmodal' {...this.props} />
         </UI.DefaultButton>
       );
     }
