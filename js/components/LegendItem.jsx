@@ -40,7 +40,7 @@ class LegendItem extends React.Component {
         legendBody = (<WMSLegend {...this.props} />);
       }
       if (legendBody) {
-        return (<span><div>{layer.get('title')}</div>{legendBody}</span>);
+        return (<span><div className='legend-title'>{layer.get('title')}</div>{legendBody}</span>);
       } else {
         return (<article />);
       }

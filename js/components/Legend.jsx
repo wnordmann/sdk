@@ -33,6 +33,9 @@ class Legend extends React.Component {
     LayerStore.addChangeListener(this._onChangeCb);
     this._onChange();
   }
+  componentWillUnmount() {
+    LayerStore.removeChangeListener(this._onChangeCb);
+  }
   _onChange() {
     // TODO apply nesting to this component's structure
     var flatLayers = LayerStore.getState().flatLayers.slice();
