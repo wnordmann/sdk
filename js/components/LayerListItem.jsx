@@ -263,11 +263,11 @@ class LayerListItem extends React.Component {
     }
     var labelModal, filterModal, styleModal;
     if (this.props.layer instanceof ol.layer.Vector) {
-      labelModal = (<LabelModal layer={this.props.layer} ref='labelmodal' />);
-      filterModal = (<FilterModal layer={this.props.layer} onHide={this._onCloseModal.bind(this)} ref='filtermodal' />);
+      labelModal = (<LabelModal {...this.props} layer={this.props.layer} ref='labelmodal' />);
+      filterModal = (<FilterModal {...this.props} layer={this.props.layer} onHide={this._onCloseModal.bind(this)} ref='filtermodal' />);
     }
     if (this.props.layer.get('canStyle')) {
-      styleModal = (<StyleModal layer={this.props.layer} ref='stylemodal' />);
+      styleModal = (<StyleModal {...this.props} layer={this.props.layer} ref='stylemodal' />);
     }
     return (
       <li>
