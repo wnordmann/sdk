@@ -142,14 +142,14 @@ class Playback extends React.Component {
     var dateString = this._dateToString(this.state.date);
     var buttonIcon;
     if (this.state.play === true) {
-      buttonIcon = (<Icon.Icon name='play' />);
+      buttonIcon = 'play'
     } else {
-      buttonIcon = (<Icon.Icon name='pause' />);
+      buttonIcon = 'pause';
     }
     return (
       <form role="form" onSubmit={this._onSubmit} className='form-horizontal playback'>
         <div className="form-group">
-          <Grids.Col md={2}><Button.DefaultButton onClick={this._playPause.bind(this)}>{buttonIcon}</Button.DefaultButton></Grids.Col>
+          <Grids.Col md={2}><Button.DefaultButton onClick={this._playPause.bind(this)}><Icon.Icon name={buttonIcon} /></Button.DefaultButton></Grids.Col>
           <Grids.Col md={15}><label className='sr-only' htmlFor='rangeInput'>{formatMessage(messages.rangeinputlabel)}</label><input id='rangeInput' onChange={this._onRangeChange.bind(this)} ref='rangeInput' type='range' min={this.props.minDate} max={this.props.maxDate} value={this.state.date}/></Grids.Col>
           <Grids.Col md={5}><label htmlFor='dateInput' className='sr-only'>{formatMessage(messages.dateinputlabel)}</label><input id='dateInput' ref='dateInput' type='text' readOnly={true} value={dateString} /></Grids.Col>
         </div>
