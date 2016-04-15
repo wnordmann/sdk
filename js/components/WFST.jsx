@@ -175,7 +175,9 @@ class WFST extends MapTool {
           me._select.getFeatures().push(feature);
           me.setState({feature: feature});
           delete me._request;
-        }, function() { delete me._request; });
+        }, function() {
+          delete me._request;
+        });
       }
       return !found;
     } else {

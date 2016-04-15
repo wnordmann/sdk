@@ -20,7 +20,7 @@ import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import {transformColor, doPOST} from '../util.js';
 import RuleEditor from './RuleEditor.jsx';
-import {createSLD} from '../sld.js';
+import SLDService from '../services/SLDService.js';
 import './StyleModal.css';
 
 const messages = defineMessages({
@@ -135,7 +135,7 @@ class StyleModal extends Dialog.Modal {
     }
   }
   _generateSLD() {
-    var sld = createSLD(this.props.layer.get('id'), this.state.geometryType, this.state.rules, this._styleState);
+    var sld = SLDService.createSLD(this.props.layer.get('id'), this.state.geometryType, this.state.rules, this._styleState);
     var url = this.props.layer.getSource().getUrls()[0];
     url = url.replace(/wms|ows|wfs/g, 'rest/styles/' + this.props.layer.get('styleName') + '.xml');
     doPOST(url, sld, function(xmlhttp) {
