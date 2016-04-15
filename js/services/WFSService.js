@@ -99,7 +99,7 @@ class WFSService {
       typename: wfsInfo.featureType,
       cql_filter: 'DWITHIN(' + wfsInfo.geometryName + ', Point(' + point[1] + ' ' + point[0] + '), 0.1, meters)'
     });
-    doGET(url.toString(), function(xmlhttp) {
+    return doGET(url.toString(), function(xmlhttp) {
       var features = wfsFormat.readFeatures(xmlhttp.responseXML);
       if (features.length > 0) {
         onSuccess.call(this, features[0]);
@@ -123,7 +123,7 @@ class WFSService {
       featureNS: wfsInfo.featureNS,
       featureType: wfsInfo.featureType
     });
-    doPOST(wfsInfo.url, xmlSerializer.serializeToString(node),
+    return doPOST(wfsInfo.url, xmlSerializer.serializeToString(node),
       function(xmlhttp) {
         var data = xmlhttp.responseXML;
         var result = this.readResponse(data, xmlhttp, onFailure);
@@ -167,7 +167,7 @@ class WFSService {
       featureNS: wfsInfo.featureNS,
       featureType: wfsInfo.featureType
     });
-    doPOST(wfsInfo.url, xmlSerializer.serializeToString(node),
+    return doPOST(wfsInfo.url, xmlSerializer.serializeToString(node),
       function(xmlhttp) {
         var data = xmlhttp.responseXML;
         var result = this.readResponse(data, xmlhttp, onFailure);
@@ -188,7 +188,7 @@ class WFSService {
       featureNS: wfsInfo.featureNS,
       featureType: wfsInfo.featureType
     });
-    doPOST(wfsInfo.url, xmlSerializer.serializeToString(node),
+    return doPOST(wfsInfo.url, xmlSerializer.serializeToString(node),
       function(xmlhttp) {
         var data = xmlhttp.responseXML;
         var result = this.readResponse(data, xmlhttp, onFailure);

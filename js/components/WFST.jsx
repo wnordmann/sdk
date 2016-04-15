@@ -114,6 +114,9 @@ class WFST extends MapTool {
     this._dirty = {};
   }
   componentWillUnmount() {
+    if (this._request) {
+      this._request.abort();
+    }
     this.deactivate();
   }
   _onLayerSelectChange(layer) {
@@ -168,10 +171,11 @@ class WFST extends MapTool {
         }
       }
       if (found === false) {
-        WFSService.distanceWithin(me.state.layer, me.props.map.getView(), coord, function(feature) {
+        this._request = WFSService.distanceWithin(me.state.layer, me.props.map.getView(), coord, function(feature) {
           me._select.getFeatures().push(feature);
           me.setState({feature: feature});
-        }, function() {});
+          delete me._request;
+        }, function() { delete me._request; });
       }
       return !found;
     } else {
@@ -193,7 +197,8 @@ class WFST extends MapTool {
     var features = this._select.getFeatures();
     if (features.getLength() === 1) {
       var feature = features.item(0);
-      WFSService.deleteFeature(this.state.layer, feature, function() {
+      this._request = WFSService.deleteFeature(this.state.layer, feature, function() {
+        delete me._request;
         me._select.getFeatures().clear();
         var source = me.state.layer.getSource();
         if (source instanceof ol.source.Vector) {
@@ -202,6 +207,7 @@ class WFST extends MapTool {
           me._redraw();
         }
       }, function(xmlhttp, msg) {
+        delete me._request;
         msg = msg || formatMessage(messages.deletemsg) + xmlhttp.status + ' ' + xmlhttp.statusText;
         me._setError(msg);
       });
@@ -224,7 +230,8 @@ class WFST extends MapTool {
     var fid = feature.getId();
     if (this._dirty[fid]) {
       var me = this;
-      WFSService.updateFeature(this.state.layer, this.props.map.getView(), feature, null, function(result) {
+      this._request = WFSService.updateFeature(this.state.layer, this.props.map.getView(), feature, null, function(result) {
+        delete me._request;
         if (result && result.transactionSummary.totalUpdated === 1) {
           delete me._dirty[fid];
         }
@@ -232,13 +239,15 @@ class WFST extends MapTool {
           me._redraw();
         }
       }, function(xmlhttp, msg) {
+        delete me._request;
         me._setError(msg || (xmlhttp.status + ' ' + xmlhttp.statusText));
       });
     }
   }
   _onDrawEnd(evt) {
     var me = this;
-    WFSService.insertFeature(this.state.layer, this.props.map.getView(), evt.feature, function(insertId) {
+    this._request = WFSService.insertFeature(this.state.layer, this.props.map.getView(), evt.feature, function(insertId) {
+      delete me._request;
       if (insertId == 'new0') {
         // reload data if we're dealing with a shapefile store
         var source = me.state.layer.getSource();
@@ -251,6 +260,7 @@ class WFST extends MapTool {
         evt.feature.setId(insertId);
       }
     }, function(xmlhttp, msg) {
+      delete me._request;
       me.deactivate();
       me._setError(msg || (xmlhttp.status + ' ' + xmlhttp.statusText));
     });

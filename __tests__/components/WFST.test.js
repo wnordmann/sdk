@@ -27,6 +27,10 @@ describe('WFST', function() {
     layer = new ol.layer.Tile({
       id: 'foo',
       isWFST: true,
+      wfsInfo: {
+        geometryType: 'MultiPoint',
+        geometryName: 'the_geom'
+      },
       title: 'My Layer',
       source: new ol.source.MapQuest({layer: 'sat'})
     });
@@ -58,6 +62,38 @@ describe('WFST', function() {
     assert.equal(options.length, 1);
     assert.equal(options[0].text, 'My Layer');
     assert.equal(options[0].value, 'foo');
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('generates no layer selector', function() {
+    var container = document.createElement('div');
+    ReactDOM.render((
+      <WFST layerSelector={false} intl={intl}  map={map}/>
+    ), container);
+    var select = container.querySelector('select');
+    assert.equal(select, undefined);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('activates draw feature', function() {
+    var container = document.createElement('div');
+    var wfst = ReactDOM.render((
+      <WFST layerSelector={false} intl={intl}  map={map}/>
+    ), container);
+    wfst.state.layer = map.getLayers().item(0);
+    wfst._drawFeature();
+    var draw = wfst._interactions['foo'].draw;
+    assert.equal(draw instanceof ol.interaction.Draw, true);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('aborts pending requests on unmount', function() {
+    var container = document.createElement('div');
+    var wfst = ReactDOM.render((
+      <WFST layerSelector={false} intl={intl}  map={map}/>
+    ), container);
+    wfst.state.layer = map.getLayers().item(0);
+    wfst._onDrawEnd({feature: new ol.Feature({foo: 'bar'})});
     ReactDOM.unmountComponentAtNode(container);
   });
 
