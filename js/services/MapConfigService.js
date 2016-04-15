@@ -13,6 +13,16 @@
 import ol from 'openlayers';
 
 class MapConfigService {
+  generateSourceFromConfig(config) {
+    var props = config.properties || {};
+    if (config.type === 'Cluster') {
+      props.source = this.generateSourceFromConfig(config.source);
+    }
+    if (config.type === 'Vector') {
+      props.format = (props.format.type === 'GeoJSON') ? new ol.format.GeoJSON() : undefined;
+    }
+    return new ol.source[config.type](props);
+  }
   generateLayerFromConfig(config) {
     var type = config.type;
     var layerConfig = config.properties || {};
@@ -20,20 +30,13 @@ class MapConfigService {
     if (type === 'Group') {
       layerConfig.layers = [];
       for (var i = 0, ii = config.children.length; i < ii; ++i) {
-        layerConfig.layers.push(this._generateLayerFromConfig(config.children[i]));
+        layerConfig.layers.push(this.generateLayerFromConfig(config.children[i]));
       }
     }
     var layer = new ol.layer[type](layerConfig);
     var sourceConfig = config.source;
     if (sourceConfig) {
-      var props = sourceConfig.properties || {};
-      if (sourceConfig.type === 'Cluster') {
-        props.source = new ol.source[sourceConfig.source.type](sourceConfig.source.properties || {});
-      }
-      if (sourceConfig.type === 'Vector') {
-        props.format = (props.format === 'GeoJSON') ? new ol.format.GeoJSON() : undefined;
-      }
-      var source = new ol.source[sourceConfig.type](props);
+      var source = this.generateSourceFromConfig(sourceConfig);
       layer.setSource(source);
     }
     return layer;
@@ -84,8 +87,6 @@ class MapConfigService {
         layer:  source.getLayer()
       };
       config.type = 'MapQuest';
-    } else if (source instanceof ol.source.XYZ) {
-      config.type = 'XYZ';
     }
     return config;
   }
