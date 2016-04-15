@@ -31,8 +31,7 @@ class MapConfigService {
         props.source = new ol.source[sourceConfig.source.type](sourceConfig.source.properties || {});
       }
       if (sourceConfig.type === 'Vector') {
-        props.url = sourceConfig.url;
-        props.format = (sourceConfig.format === 'GeoJSON') ? new ol.format.GeoJSON() : undefined;
+        props.format = (props.format === 'GeoJSON') ? new ol.format.GeoJSON() : undefined;
       }
       var source = new ol.source[sourceConfig.type](props);
       layer.setSource(source);
@@ -67,9 +66,13 @@ class MapConfigService {
       config.type = 'Cluster';
       config.source = this.getSourceConfig(source.getSource());
     } else if (source instanceof ol.source.Vector) {
-      config.format = this.getFormatType(source.getFormat());
-      config.url = source.getUrl();
       config.type = 'Vector';
+      config.properties = {
+        format: {
+          type: this.getFormatType(source.getFormat())
+        },
+        url: source.getUrl()
+      };
     } else if (source instanceof ol.source.ImageWMS) {
       config.type = 'ImageWMS';
       config.properties = {
