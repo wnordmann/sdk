@@ -1,5 +1,6 @@
 /* global afterEach, beforeEach, describe, it */
 
+var TestUtils = require('react-addons-test-utils');
 var React = require('react');
 var ReactDOM = require('react-dom');
 var assert = require('chai').assert;
@@ -28,9 +29,10 @@ describe('FeatureTable', function() {
       source: new ol.source.Vector({})
     });
     layer.getSource().addFeatures([
-      new ol.Feature({foo: 'bar1'}),
-      new ol.Feature({foo: 'bar2'}),
-      new ol.Feature({foo: 'bar3'})
+      new ol.Feature({foo: 'bar1', link: 'http://www.foo.com/bar1'}),
+      new ol.Feature({foo: 'bar2', link: 'http://www.foo.com/bar2'}),
+      new ol.Feature({foo: 'bar3', link: 'http://www.foo.com/bar3'}),
+      new ol.Feature({foo: 'bar4', link: 'http://www.foo.com/bar4'})
     ]);
     document.body.appendChild(target);
     map = new ol.Map({
@@ -57,7 +59,39 @@ describe('FeatureTable', function() {
     var table = ReactDOM.render((
       <FeatureTable layer={layer} intl={intl} map={map}/>
     ), container);
-    assert.equal(table.state.rowCount, 3);
+    assert.equal(table.state.rowCount, 4);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('creates a link cell', function() {
+    var container = document.createElement('div');
+    ReactDOM.render((
+      <FeatureTable layer={layer} intl={intl} map={map}/>
+    ), container);
+    var hyperlinks = container.querySelectorAll('a');
+    assert.equal(hyperlinks.length, 4 + 2); // 4 cells and 2 column headers for sort
+    assert.equal(hyperlinks[2].getAttribute('href'), 'http://www.foo.com/bar1');
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('sorts table when clicking on a header', function() {
+    var container = document.createElement('div');
+    var table = ReactDOM.render((
+      <FeatureTable layer={layer} intl={intl} map={map}/>
+    ), container);
+    assert.equal(table.state.sortIndexes, undefined); // no sort
+    var hyperlinks = container.querySelectorAll('a');
+    var colSort1 = hyperlinks[0];
+    TestUtils.SimulateNative.click(colSort1);
+    assert.equal(table.state.sortIndexes[0], 0);
+    assert.equal(table.state.sortIndexes[1], 1);
+    assert.equal(table.state.sortIndexes[2], 2);
+    assert.equal(table.state.sortIndexes[3], 3);
+    TestUtils.SimulateNative.click(colSort1);
+    assert.equal(table.state.sortIndexes[0], 3);
+    assert.equal(table.state.sortIndexes[1], 2);
+    assert.equal(table.state.sortIndexes[2], 1);
+    assert.equal(table.state.sortIndexes[3], 0);
     ReactDOM.unmountComponentAtNode(container);
   });
 

@@ -1,4 +1,4 @@
-/* global describe, it */
+/* global describe, it, beforeEach, afterEach */
 
 var assert = require('chai').assert;
 var raf = require('raf');
