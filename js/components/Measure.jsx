@@ -125,7 +125,6 @@ class Measure extends MapTool {
     this._tooltip.setOffset([0, -7]);
     this._sketch = null;
     this._tooltipElement = null;
-    this._createTooltip();
   }
   _formatArea(polygon) {
     var area;
@@ -214,6 +213,7 @@ class Measure extends MapTool {
     for (var i = 0, ii = this._tooltips.length; i < ii; i++) {
       map.removeOverlay(this._tooltips[i]);
     }
+    this._tooltips = [];
     this._layer.getSource().clear();
     map.un('pointermove', this._pointerMoveHandler, this);
   }
