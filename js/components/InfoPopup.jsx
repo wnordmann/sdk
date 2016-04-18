@@ -75,6 +75,25 @@ class InfoPopup extends BasePopup {
       layers.push(layer);
     }
   }
+  _createSimpleTable(features) {
+    const {formatMessage} = this.props.intl;
+    var result = '';
+    for (var i = 0, ii = features.length; i < ii; ++i) {
+      var feature = features[i];
+      result += '<span class="infopopup-header">' + feature.getId() + '</span>';
+      result += '<table class="infopopup-table" border="1"><tr><th>' + formatMessage(messages.nametext) + '</th><th>' + formatMessage(messages.valuetext) + '</th></tr>';
+      var keys = feature.getKeys();
+      var geom = feature.getGeometryName();
+      for (var j = 0, jj = keys.length; j < jj; ++j) {
+        var key = keys[j];
+        if (key !== geom && key !== 'boundedBy') {
+          result += '<tr><td>' + key + '</td><td>' + feature.get(key) + '</td></tr>';
+        }
+      }
+      result += '</table>';
+    }
+    return result;
+  }
   _fetchData(evt, popupTexts, cb) {
     var map = this.props.map;
     var allLayers = [];
@@ -96,30 +115,13 @@ class InfoPopup extends BasePopup {
     };
     const {formatMessage} = this.props.intl;
     var popupDef;
-    var createSimpleTable = function(features) {
-      var result = '';
-      for (var i = 0, ii = features.length; i < ii; ++i) {
-        var feature = features[i];
-        result += '<span class="infopopup-header">' + feature.getId() + '</span>';
-        result += '<table class="infopopup-table" border="1"><tr><th>' + formatMessage(messages.nametext) + '</th><th>' + formatMessage(messages.valuetext) + '</th></tr>';
-        var keys = feature.getKeys();
-        var geom = feature.getGeometryName();
-        for (var j = 0, jj = keys.length; j < jj; ++j) {
-          var key = keys[j];
-          if (key !== geom && key !== 'boundedBy') {
-            result += '<tr><td>' + key + '</td><td>' + feature.get(key) + '</td></tr>';
-          }
-        }
-        result += '</table>';
-      }
-      return result;
-    };
+    var me = this;
     var onReady = function(response) {
       var features = response.features;
       if (features.length) {
         var popupContent;
         if (popupDef === ALL_ATTRS) {
-          popupContent = createSimpleTable(features);
+          popupContent = me._createSimpleTable(features);
         } else {
           for (var j = 0, jj = features.length; j < jj; ++j) {
             popupContent = popupDef;
