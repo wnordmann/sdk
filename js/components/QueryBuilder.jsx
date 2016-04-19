@@ -17,9 +17,10 @@ import FeatureStore from '../stores/FeatureStore.js';
 import LayerSelector from './LayerSelector.jsx';
 import SelectActions from '../actions/SelectActions.js';
 import filtrex from 'filtrex';
+import Toolbar from 'material-ui/lib/toolbar/toolbar';
+import TextField from 'material-ui/lib/text-field';
 import RaisedButton from 'material-ui/lib/raised-button';
 import Grids from 'pui-react-grids';
-import './QueryBuilder.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 
@@ -67,7 +68,7 @@ const messages = defineMessages({
   addbuttontext: {
     id: 'querybuilder.addbuttontext',
     description: 'Text for the add to current selection button',
-    defaultMessage: 'Add to Selection'
+    defaultMessage: 'Add to selection'
   },
   selectintitle: {
     id: 'querybuilder.selectintitle',
@@ -93,7 +94,7 @@ class QueryBuilder extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hasError: false
+      errorText: null
     };
   }
   componentDidMount() {
@@ -108,19 +109,23 @@ class QueryBuilder extends React.Component {
   _filterLayerList(lyr) {
     return lyr.get('isSelectable');
   }
-  _setQueryFilter() {
-    var input = ReactDOM.findDOMNode(this.refs.queryExpression);
-    var expression = input.value;
+  _setQueryFilter(evt) {
+    var expression;
+    if (evt) {
+      expression = evt.target.value;
+    } else {
+      expression = this.refs.queryExpression.getValue();
+    }
     if (!expression) {
       this._queryFilter = null;
-      this.setState({hasError: false});
+      this.setState({errorText: null});
     } else {
       try {
         this._queryFilter = filtrex(expression);
-        this.setState({hasError: false});
+        this.setState({errorText: null});
       } catch (e) {
         this._queryFilter = null;
-        this.setState({hasError: true});
+        this.setState({errorText: 'Error setting filter'});
       }
     }
   }
@@ -155,26 +160,16 @@ class QueryBuilder extends React.Component {
   }
   render() {
     const {formatMessage} = this.props.intl;
-    var inputClassName = 'form-control';
-    if (this.state.hasError) {
-      inputClassName += ' input-has-error';
-    }
     return (
-      <form onSubmit={this._onSubmit} role="form" className='form-horizontal query-builder'>
-        <div className="form-group">
-          <Grids.Col md={6}><label htmlFor='layerSelector'>{formatMessage(messages.layerlabel)}</label></Grids.Col>
-          <Grids.Col md={18}><LayerSelector onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /></Grids.Col>
-        </div>
-        <div className='form-group'>
-          <Grids.Col md={6}><label htmlFor='query-expression' title={formatMessage(messages.filterbuttontext)}>{formatMessage(messages.filterlabel)}</label></Grids.Col>
-          <Grids.Col md={18}><input onKeyUp={this._setQueryFilter.bind(this)} className={inputClassName} ref='queryExpression' id='query-expression' placeholder={formatMessage(messages.filterplaceholder)} type='text' title={formatMessage(messages.filterhelptext)}/></Grids.Col>
-        </div>
-        <div className='form-group'>
+      <div>
+        <LayerSelector onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /><br/>
+        <TextField hintText={formatMessage(messages.filterplaceholder)} floatingLabelText={formatMessage(messages.filterlabel)} errorText={this.state.errorText} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} /><br/>
+        <Toolbar>
           <RaisedButton label={formatMessage(messages.newbuttontext)} onMouseDown={this._newSelection.bind(this)} />
           <RaisedButton label={formatMessage(messages.addbuttontext)} onMouseDown={this._addSelection.bind(this)} />
           <RaisedButton label={formatMessage(messages.selectintext)} onMouseDown={this._inSelection.bind(this)} />
+        </Toolbar>
       </div>
-      </form>
     );
   }
 }
