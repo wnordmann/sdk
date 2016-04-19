@@ -6,7 +6,7 @@ var assert = require('chai').assert;
 var raf = require('raf');
 raf.polyfill();
 var ol = require('openlayers');
-global.Intl = require('intl');
+var intl = require('../mock-i18n.js');
 
 var LayerSelector = require('../../js/components/LayerSelector.jsx');
 
@@ -65,7 +65,7 @@ describe('LayerSelect', function() {
       return !lyr.get('hideFromLayerList') && lyr instanceof ol.layer.Vector;
     };
     var onChange = function(layer) {};
-    ReactDOM.render(<LayerSelector onChange={onChange} filter={filter} map={map} />, container);
+    ReactDOM.render(<LayerSelector intl={intl} onChange={onChange} filter={filter} map={map} />, container);
     var layers = container.querySelectorAll('option');
     assert.equal(layers.length, 2);
     ReactDOM.unmountComponentAtNode(container);

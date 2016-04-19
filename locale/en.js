@@ -89,6 +89,7 @@ var enMessages = {
   "layerlistitem.removetitle": "Remove",
   "layerlistitem.stylingtitle": "Style layer",
   "layerlistitem.zoomtotitle": "Zoom to layer",
+  "layerselector.emptytext": "Select a layer",
   "login.buttontext": "Login",
   "login.logouttext": "Logout",
   "loginmodal.errormsg": "Invalid credentials",

@@ -17,7 +17,7 @@ import FeatureStore from '../stores/FeatureStore.js';
 import LayerSelector from './LayerSelector.jsx';
 import SelectActions from '../actions/SelectActions.js';
 import filtrex from 'filtrex';
-import UI from 'pui-react-buttons';
+import RaisedButton from 'material-ui/lib/raised-button';
 import Grids from 'pui-react-grids';
 import './QueryBuilder.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -97,7 +97,7 @@ class QueryBuilder extends React.Component {
     };
   }
   componentDidMount() {
-    this._layer = this.refs.layerSelector.getLayer();
+    this._layer = this.refs.layerSelector.getWrappedInstance().getLayer();
   }
   _onLayerSelectChange(layer) {
     this._layer = layer;
@@ -170,15 +170,9 @@ class QueryBuilder extends React.Component {
           <Grids.Col md={18}><input onKeyUp={this._setQueryFilter.bind(this)} className={inputClassName} ref='queryExpression' id='query-expression' placeholder={formatMessage(messages.filterplaceholder)} type='text' title={formatMessage(messages.filterhelptext)}/></Grids.Col>
         </div>
         <div className='form-group'>
-          <Grids.Col md={7}>
-            <UI.DefaultButton onClick={this._newSelection.bind(this)} title={formatMessage(messages.newbuttontitle)}> {formatMessage(messages.newbuttontext)}</UI.DefaultButton>
-          </Grids.Col>
-          <Grids.Col md={8}>
-            <UI.DefaultButton onClick={this._addSelection.bind(this)} title={formatMessage(messages.addbuttontitle)}> {formatMessage(messages.addbuttontext)}</UI.DefaultButton>
-          </Grids.Col>
-          <Grids.Col md={8}>
-            <UI.DefaultButton onClick={this._inSelection.bind(this)} title={formatMessage(messages.selectintitle)}> {formatMessage(messages.selectintext)}</UI.DefaultButton>
-          </Grids.Col>
+          <RaisedButton label={formatMessage(messages.newbuttontext)} onMouseDown={this._newSelection.bind(this)} />
+          <RaisedButton label={formatMessage(messages.addbuttontext)} onMouseDown={this._addSelection.bind(this)} />
+          <RaisedButton label={formatMessage(messages.selectintext)} onMouseDown={this._inSelection.bind(this)} />
       </div>
       </form>
     );

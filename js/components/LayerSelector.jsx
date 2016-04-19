@@ -11,22 +11,33 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import LayerStore from '../stores/LayerStore.js';
 import pureRender from 'pure-render-decorator';
+import SelectField from 'material-ui/lib/select-field';
+import MenuItem from 'material-ui/lib/menus/menu-item';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import './LayerSelector.css';
+
+const messages = defineMessages({
+  emptytext: {
+    id: 'layerselector.emptytext',
+    description: 'Empty text for layer selector',
+    defaultMessage: 'Select a layer'
+  }
+});
 
 /**
  * A combobox to select a layer.
  */
 @pureRender
-export default class LayerSelector extends React.Component {
+class LayerSelector extends React.Component {
   constructor(props) {
     super(props);
     LayerStore.bindMap(this.props.map);
     this.state = {
-      layers: []
+      layers: [],
+      value: this.props.value
     };
   }
   componentWillMount() {
@@ -35,19 +46,19 @@ export default class LayerSelector extends React.Component {
     this._onChange();
   }
   componentDidMount() {
-    var select = ReactDOM.findDOMNode(this.refs.layerSelect);
-    var layer = LayerStore.findLayer(select.value);
-    if (layer) {
-      this.props.onChange.call(this, layer);
+    if (this.state.value) {
+      var layer = LayerStore.findLayer(this.state.value);
+      if (layer) {
+        this.props.onChange.call(this, layer);
+      }
     }
   }
   componentWillUnmount() {
     LayerStore.removeChangeListener(this._onChangeCb);
   }
   getLayer() {
-    var select = ReactDOM.findDOMNode(this.refs.layerSelect);
-    if (select) {
-      return LayerStore.findLayer(select.value);
+    if (this.state.value !== null) {
+      return LayerStore.findLayer(this.state.value);
     }
   }
   _onChange() {
@@ -64,21 +75,23 @@ export default class LayerSelector extends React.Component {
       this.props.onChange.call(this, layers[0]);
     }
   }
-  _onItemChange(evt) {
-    var layer = LayerStore.findLayer(evt.target.value);
+  _onItemChange(evt, index, value) {
+    var layer = LayerStore.findLayer(value);
     this.props.onChange.call(this, layer);
+    this.setState({value: value});
   }
   render() {
+    const {formatMessage} = this.props.intl;
     var selectItems = this.state.layers.map(function(lyr, idx) {
       var title = lyr.get('title'), id = lyr.get('id');
       return (
-        <option value={id} key={idx}>{title}</option>
+        <MenuItem key={id} value={id} label={title} primaryText={title} />
       );
     });
     return (
-      <select ref='layerSelect' defaultValue={this.props.value} className='form-control' onChange={this._onItemChange.bind(this)}>
+      <SelectField hintText={formatMessage(messages.emptytext)} value={this.state.value} onChange={this._onItemChange.bind(this)}>
         {selectItems}
-      </select>
+      </SelectField>
     );
   }
 }
@@ -99,5 +112,11 @@ LayerSelector.propTypes = {
   /**
    * Change callback function.
    */
-  onChange: React.PropTypes.func.isRequired
+  onChange: React.PropTypes.func.isRequired,
+  /**
+   * i18n message strings. Provided through the application through context.
+   */
+  intl: intlShape.isRequired
 };
+
+export default injectIntl(LayerSelector, {withRef: true});
