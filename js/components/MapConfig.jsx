@@ -12,7 +12,10 @@
 
 import React from 'react';
 import ol from 'openlayers';
-import UI from 'pui-react-dropdowns';
+import IconMenu from 'material-ui/lib/menus/icon-menu';
+import IconButton from 'material-ui/lib/icon-button';
+import MenuItem from 'material-ui/lib/menus/menu-item';
+import MapsPlace from 'material-ui/lib/svg-icons/maps/map';
 import MapConfigService from '../services/MapConfigService.js';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
@@ -48,6 +51,7 @@ const localStorageKey = 'web-sdk-map-config';
 class MapConfig extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {value: null};
   }
   _load() {
     var config = global.localStorage.getItem(localStorageKey);
@@ -59,13 +63,21 @@ class MapConfig extends React.Component {
     var output = JSON.stringify(config);
     global.localStorage.setItem(localStorageKey, output);
   }
+  _handleChange(event, value) {
+    if (value === 1) {
+      this._load();
+    } else if (value === 2) {
+      this._save();
+    }
+    this.setState({value: value});
+  }
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <UI.Dropdown {...this.props} title={formatMessage(messages.menubuttontext)}>
-        <UI.DropdownItem onSelect={this._load.bind(this)}>{formatMessage(messages.loadtext)}</UI.DropdownItem>
-        <UI.DropdownItem onSelect={this._save.bind(this)}>{formatMessage(messages.savetext)}</UI.DropdownItem>
-      </UI.Dropdown>
+      <IconMenu iconButtonElement={<IconButton><MapsPlace /></IconButton>} value={this.state.value} onChange={this._handleChange.bind(this)}>
+        <MenuItem value={1} primaryText={formatMessage(messages.loadtext)}/>
+        <MenuItem value={2} primaryText={formatMessage(messages.savetext)}/>
+      </IconMenu>
     );
   }
 }

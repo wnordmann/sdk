@@ -47,6 +47,7 @@
     "jspdf-browserify": "^1.0.272",
     "keymirror": "~0.1.0",
     "lodash.uniqueid": "^3.0.0",
+    "material-ui": "^0.14.4",
     "ogc-schemas": "^2.6.0",
     "ol3-cesium": "3.9.4",
     "openlayers": "3.15.0",
@@ -69,6 +70,7 @@
     "react-intl": "2.0.0-rc-1",
     "react-responsive-decorator": "0.0.1",
     "react-slick": "0.9.1",
+    "react-tap-event-plugin": "^0.2.2",
     "slick-carousel-dr-frankenstyle": "^1.5.8",
     "url-parse": "^1.1.1",
     "w3c-schemas": "^1.4.0"
