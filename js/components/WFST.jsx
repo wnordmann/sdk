@@ -187,11 +187,13 @@ class WFST extends MapTool {
   _modifyFeature() {
     this.deactivate();
     var layer = this.state.layer;
-    var interactions = [this._select, this._modify];
-    if (!(layer.getSource() instanceof ol.source.Vector)) {
-      interactions.push(this._selectfeature);
+    if (layer) {
+      var interactions = [this._select, this._modify];
+      if (!(layer.getSource() instanceof ol.source.Vector)) {
+        interactions.push(this._selectfeature);
+      }
+      this.activate(interactions);
     }
-    this.activate(interactions);
   }
   _deleteFeature() {
     const {formatMessage} = this.props.intl;

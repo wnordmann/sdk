@@ -11,7 +11,6 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import FeatureStore from '../stores/FeatureStore.js';
 import LayerSelector from './LayerSelector.jsx';
@@ -20,7 +19,6 @@ import filtrex from 'filtrex';
 import Toolbar from 'material-ui/lib/toolbar/toolbar';
 import TextField from 'material-ui/lib/text-field';
 import RaisedButton from 'material-ui/lib/raised-button';
-import Grids from 'pui-react-grids';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import './QueryBuilder.css';
 import pureRender from 'pure-render-decorator';
@@ -167,9 +165,9 @@ class QueryBuilder extends React.Component {
         <LayerSelector onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /><br/>
         <TextField hintText={formatMessage(messages.filterplaceholder)} floatingLabelText={formatMessage(messages.filterlabel)} errorText={this.state.errorText} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} /><br/>
         <Toolbar>
-          <RaisedButton label={formatMessage(messages.newbuttontext)} onMouseDown={this._newSelection.bind(this)} />
-          <RaisedButton label={formatMessage(messages.addbuttontext)} onMouseDown={this._addSelection.bind(this)} />
-          <RaisedButton label={formatMessage(messages.selectintext)} onMouseDown={this._inSelection.bind(this)} />
+          <RaisedButton label={formatMessage(messages.newbuttontext)} onTouchTap={this._newSelection.bind(this)} />
+          <RaisedButton label={formatMessage(messages.addbuttontext)} onTouchTap={this._addSelection.bind(this)} />
+          <RaisedButton label={formatMessage(messages.selectintext)} onTouchTap={this._inSelection.bind(this)} />
         </Toolbar>
       </div>
     );
