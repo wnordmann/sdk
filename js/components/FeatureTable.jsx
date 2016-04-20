@@ -16,14 +16,18 @@ import ol from 'openlayers';
 import debounce from  'debounce';
 import FixedDataTable from 'fixed-data-table';
 import './fixed-data-table.css';
+import RaisedButton from 'material-ui/lib/raised-button';
+import ActionSearch from 'material-ui/lib/svg-icons/action/search';
+import ActionDelete from 'material-ui/lib/svg-icons/action/delete';
+import ArrowUp from 'material-ui/lib/svg-icons/hardware/keyboard-arrow-up';
+import TextField from 'material-ui/lib/text-field';
+import Checkbox from 'material-ui/lib/checkbox';
 import FeatureStore from '../stores/FeatureStore.js';
 import SelectActions from '../actions/SelectActions.js';
 import LayerSelector from './LayerSelector.jsx';
 import {SortHeaderCell, SortTypes} from './SortHeaderCell.jsx';
 import {LinkCell} from './LinkCell.jsx';
 import {TextCell} from './TextCell.jsx';
-import UI from 'pui-react-buttons';
-import Icon from 'pui-react-iconography';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import filtrex from 'filtrex';
 import pureRender from 'pure-render-decorator';
@@ -377,16 +381,12 @@ class FeatureTable extends React.Component {
     return (
       <div id='attributes-table'>
         <form ref='form' onSubmit={this._onSubmit.bind(this)} role='form' className='form-inline'>
-          <label htmlFor='table-layerSelector'>{formatMessage(messages.layerlabel)}:</label>
-          <LayerSelector {...this.props} id='table-layerSelector' ref='layerSelector' onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList} map={this.props.map} value={id} />
-          <UI.DefaultButton onClick={this._zoomSelected.bind(this)} title={formatMessage(messages.zoombuttontitle)}><Icon.Icon name="search" /> {formatMessage(messages.zoombuttontext)}</UI.DefaultButton>
-          <UI.DefaultButton onClick={this._clearSelected.bind(this)} title={formatMessage(messages.clearbuttontitle)}><Icon.Icon name="trash" /> {formatMessage(messages.clearbuttontext)}</UI.DefaultButton>
-          <UI.DefaultButton onClick={this._moveSelectedToTop.bind(this)} title={formatMessage(messages.movebuttontitle)}><Icon.Icon name="arrow-up" /> {formatMessage(messages.movebuttontext)}</UI.DefaultButton>
-          <div className='input-group'>
-            <span className='input-group-addon'><label htmlFor='featuretable-filter' title={formatMessage(messages.filterbuttontext)}>{formatMessage(messages.filterlabel)}</label></span>
-            <input type='text' id='featuretable-filter' ref='filter' className='form-control'  onChange={this._filterByText.bind(this)} title={formatMessage(messages.filterhelptext)} placeholder={formatMessage(messages.filterplaceholder)}></input>
-          </div>
-          <label htmlFor='featuretable-onlyselected'><input id='featuretable-onlyselected' type='checkbox' checked={this._selectedOnly} onChange={this._filter.bind(this)}></input> {formatMessage(messages.onlyselected)}</label>
+          <LayerSelector {...this.props} id='table-layerSelector' ref='layerSelector' onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList} map={this.props.map} value={id} /><br/>
+          <RaisedButton icon={<ActionSearch />} label={formatMessage(messages.zoombuttontext)} onTouchTap={this._zoomSelected.bind(this)} />
+          <RaisedButton icon={<ActionDelete />} label={formatMessage(messages.clearbuttontext)} onTouchTap={this._clearSelected.bind(this)} />
+          <RaisedButton icon={<ArrowUp />} label={formatMessage(messages.movebuttontext)} onTouchTap={this._moveSelectedToTop.bind(this)} />
+          <TextField floatingLabelText={formatMessage(messages.filterlabel)} id='featuretable-filter' ref='filter' onChange={this._filterByText.bind(this)} hintText={formatMessage(messages.filterplaceholder)} /> 
+          <Checkbox label={formatMessage(messages.onlyselected)} id='featuretable-onlyselected' checked={this._selectedOnly} onCheck={this._filter.bind(this)} />
         </form>
         <Table
           onColumnResizeEndCallback={this._onColumnResize.bind(this)}

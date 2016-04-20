@@ -313,10 +313,7 @@ class WFST extends MapTool {
       var layerSelector;
       if (this.props.layerSelector) {
         layerSelector = (
-          <article>
-            <label htmlFor='layerSelector'>{formatMessage(messages.layerlabel)}</label>
-            <LayerSelector onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} />
-          </article>
+          <LayerSelector onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} />
         );
       } else if (this.state.layer) {
         var label = formatMessage(messages.layerlabel) + ': ' + this.state.layer.get('title');
