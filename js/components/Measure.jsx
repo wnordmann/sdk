@@ -15,7 +15,9 @@ import React from 'react';
 import ol from 'openlayers';
 import './Measure.css';
 import MapTool from './MapTool.js';
-import UI from 'pui-react-dropdowns';
+import IconMenu from 'material-ui/lib/menus/icon-menu';
+import MenuItem from 'material-ui/lib/menus/menu-item';
+import RaisedButton from 'material-ui/lib/raised-button';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 
@@ -56,6 +58,9 @@ class Measure extends MapTool {
   constructor(props) {
     super(props);
     this._tooltips = [];
+    this.state = {
+      value: null
+    };
   }
   componentDidMount() {
     this._layer = new ol.layer.Vector({
@@ -217,14 +222,24 @@ class Measure extends MapTool {
     this._layer.getSource().clear();
     map.un('pointermove', this._pointerMoveHandler, this);
   }
+  _handleChange(event, value) {
+    if (value === 1) {
+      this._measureDistance();
+    } else if (value === 2) {
+      this._measureArea();
+    } else if (value === 3) {
+      this._clear();
+    }
+    this.setState({value: value});
+  }
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <UI.Dropdown {...this.props} title={formatMessage(messages.dropdowntext)}>
-        <UI.DropdownItem onSelect={this._measureDistance.bind(this)}>{formatMessage(messages.measuredistancetext)}</UI.DropdownItem>
-        <UI.DropdownItem onSelect={this._measureArea.bind(this)}>{formatMessage(messages.measureareatext)}</UI.DropdownItem>
-        <UI.DropdownItem onSelect={this._clear.bind(this)}>{formatMessage(messages.cleartext)}</UI.DropdownItem>
-      </UI.Dropdown>
+     <IconMenu iconButtonElement={<RaisedButton label={formatMessage(messages.dropdowntext)} />} value={this.state.value} onChange={this._handleChange.bind(this)}>
+        <MenuItem value={1} primaryText={formatMessage(messages.measuredistancetext)}/>
+        <MenuItem value={2} primaryText={formatMessage(messages.measureareatext)}/>
+        <MenuItem value={3} primaryText={formatMessage(messages.cleartext)}/>
+      </IconMenu>
     );
   }
 }

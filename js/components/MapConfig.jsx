@@ -13,9 +13,8 @@
 import React from 'react';
 import ol from 'openlayers';
 import IconMenu from 'material-ui/lib/menus/icon-menu';
-import IconButton from 'material-ui/lib/icon-button';
+import RaisedButton from 'material-ui/lib/raised-button';
 import MenuItem from 'material-ui/lib/menus/menu-item';
-import MapsPlace from 'material-ui/lib/svg-icons/maps/map';
 import MapConfigService from '../services/MapConfigService.js';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
@@ -74,7 +73,7 @@ class MapConfig extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <IconMenu iconButtonElement={<IconButton><MapsPlace /></IconButton>} value={this.state.value} onChange={this._handleChange.bind(this)}>
+      <IconMenu iconButtonElement={<RaisedButton label={formatMessage(messages.menubuttontext)} />} value={this.state.value} onChange={this._handleChange.bind(this)}>
         <MenuItem value={1} primaryText={formatMessage(messages.loadtext)}/>
         <MenuItem value={2} primaryText={formatMessage(messages.savetext)}/>
       </IconMenu>

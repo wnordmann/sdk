@@ -99,11 +99,9 @@ class AddLayer extends React.Component {
   }
   _showDialog() {
     this.setState({open: true});
-    //this.refs.modal.open();
   }
   _closeDialog() {
     this.setState({open: false});
-    //this.refs.modal.close();
   }
   _readFile(text) {
     this._text = text;
