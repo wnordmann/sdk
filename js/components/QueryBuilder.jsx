@@ -22,6 +22,7 @@ import TextField from 'material-ui/lib/text-field';
 import RaisedButton from 'material-ui/lib/raised-button';
 import Grids from 'pui-react-grids';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import './QueryBuilder.css';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -45,10 +46,10 @@ const messages = defineMessages({
     description: 'Placeholder for the expression input field',
     defaultMessage: 'Type expression ....'
   },
-  filterhelptext: {
-    id: 'querybuilder.filterhelptext',
-    description: 'filter help text',
-    defaultMessage: 'ATTRIBUTE == "Value"'
+  errortext: {
+    id: 'querybuilder.errortext',
+    description: 'error text to shown when filter does not validate',
+    defaultMessage: 'Error setting filter, should be for instance ATTRIBUTE == "Value"'
   },
   newbuttontitle: {
     id: 'querybuilder.newbuttontitle',
@@ -110,6 +111,7 @@ class QueryBuilder extends React.Component {
     return lyr.get('isSelectable');
   }
   _setQueryFilter(evt) {
+    const {formatMessage} = this.props.intl;
     var expression;
     if (evt) {
       expression = evt.target.value;
@@ -125,7 +127,7 @@ class QueryBuilder extends React.Component {
         this.setState({errorText: null});
       } catch (e) {
         this._queryFilter = null;
-        this.setState({errorText: 'Error setting filter'});
+        this.setState({errorText: formatMessage(messages.errortext)});
       }
     }
   }
@@ -161,7 +163,7 @@ class QueryBuilder extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <div>
+      <div className='querybuilder'>
         <LayerSelector onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /><br/>
         <TextField hintText={formatMessage(messages.filterplaceholder)} floatingLabelText={formatMessage(messages.filterlabel)} errorText={this.state.errorText} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} /><br/>
         <Toolbar>
