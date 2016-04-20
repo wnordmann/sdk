@@ -284,7 +284,7 @@ class AddLayerModal extends React.Component {
       );
     }
     return (
-      <Dialog bodyStyle={{overflow: 'auto'}} modal={true} title={formatMessage(messages.title)} open={this.state.open} onRequestClose={this.close.bind(this)}>
+      <Dialog autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title)} open={this.state.open} onRequestClose={this.close.bind(this)}>
         {input}
         <ul className='addlayer'>
           {layers}
@@ -296,6 +296,10 @@ class AddLayerModal extends React.Component {
 }
 
 AddLayerModal.propTypes = {
+  /**
+   * The ol3 map to upload to.
+   */
+  map: React.PropTypes.instanceOf(ol.Map).isRequired,
   /**
    * url that will be used to retrieve layers from (WMS or WFS).
    */

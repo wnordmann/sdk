@@ -1,6 +1,6 @@
 var enMessages = {
   "addlayer.applybuttontext": "Apply",
-  "addlayer.applybuttontitle": "Apply",
+  "addlayer.closebuttontext": "Close",
   "addlayer.dropzonehelp": "Drop a KML, GPX or GeoJSON file here, or click to select it.",
   "addlayer.dropzonelabel": "File",
   "addlayer.fillcolorlabel": "Fill color",

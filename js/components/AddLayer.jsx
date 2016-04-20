@@ -12,11 +12,12 @@
 
 import React from 'react';
 import ol from 'openlayers';
-import UI from 'pui-react-buttons';
-import Icon from 'pui-react-iconography';
-import Dialog from 'pui-react-modals';
+import RaisedButton from 'material-ui/lib/raised-button';
+import UploadIcon from 'material-ui/lib/svg-icons/file/file-upload';
+import Dialog from 'material-ui/lib/dialog';
 import Dropzone from 'react-dropzone';
-import Grids from 'pui-react-grids';
+import GridList from 'material-ui/lib/grid-list/grid-list';
+import GridTile from 'material-ui/lib/grid-list/grid-tile';
 import {transformColor} from '../util.js';
 import ColorPicker from 'react-color';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -61,10 +62,10 @@ const messages = defineMessages({
     description: 'Label text for the fill color colorpicker',
     defaultMessage: 'Fill color'
   },
-  applybuttontitle: {
-    id: 'addlayer.applybuttontitle',
-    description: 'Title of the apply button',
-    defaultMessage: 'Apply'
+  closebuttontext: {
+    id: 'addlayer.closebuttontext',
+    description: 'Title of the close button',
+    defaultMessage: 'Close'
   },
   applybuttontext: {
     id: 'addlayer.applybuttontext',
@@ -92,12 +93,17 @@ class AddLayer extends React.Component {
       'gpx': new ol.format.GPX()
     };
     this._counter = 0;
+    this.state = {
+      open: false
+    };
   }
   _showDialog() {
-    this.refs.modal.open();
+    this.setState({open: true});
+    //this.refs.modal.open();
   }
   _closeDialog() {
-    this.refs.modal.close();
+    this.setState({open: false});
+    //this.refs.modal.close();
   }
   _readFile(text) {
     this._text = text;
@@ -181,36 +187,31 @@ class AddLayer extends React.Component {
   }
   render() {
     const {formatMessage} = this.props.intl;
+    var actions = [
+      (<RaisedButton label={formatMessage(messages.applybuttontext)} onTouchTap={this._readVectorFile.bind(this)} />),
+      (<RaisedButton label={formatMessage(messages.closebuttontext)} onTouchTap={this._closeDialog.bind(this)} />)
+    ];
     return (
       <article>
-        <UI.DefaultButton title={formatMessage(messages.menutitle)} onClick={this._showDialog.bind(this)}>
-          <Icon.Icon name="upload" /> {formatMessage(messages.menutext)}
-        </UI.DefaultButton>
-        <Dialog.Modal title={formatMessage(messages.modaltitle)} ref="modal">
-          <Dialog.ModalBody>
-            <form className='form-horizontal'>
-              <div className="form-group">
-                <Grids.Col md={8}>
-                  <label>{formatMessage(messages.dropzonelabel)}</label>
-                  <Dropzone className='dropzone' multiple={false} onDrop={this._onDrop.bind(this)}>
-                    <div>{formatMessage(messages.dropzonehelp)}</div>
-                  </Dropzone>
-                </Grids.Col>
-                <Grids.Col md={8}>
-                  <label>{formatMessage(messages.strokecolorlabel)}</label>
-                  <ColorPicker onChangeComplete={this._onChangeStroke.bind(this)} color='#452135' />
-                </Grids.Col>
-                <Grids.Col md={8}>
-                  <label>{formatMessage(messages.fillcolorlabel)}</label>
-                  <ColorPicker onChangeComplete={this._onChangeFill.bind(this)} color='#452135' />
-                </Grids.Col>
-              </div>
-            </form>
-          </Dialog.ModalBody>
-          <Dialog.ModalFooter>
-            <UI.DefaultButton title={formatMessage(messages.applybuttontitle)} onClick={this._readVectorFile.bind(this)}>{formatMessage(messages.applybuttontext)}</UI.DefaultButton>
-          </Dialog.ModalFooter>
-        </Dialog.Modal>
+        <RaisedButton icon={<UploadIcon />} label={formatMessage(messages.menutext)} onTouchTap={this._showDialog.bind(this)} />
+        <Dialog autoScrollBodyContent={true} actions={actions} open={this.state.open} onRequestClose={this._closeDialog.bind(this)} modal={true} title={formatMessage(messages.modaltitle)}>
+          <GridList cols={3} cellHeight={350}>
+            <GridTile>
+              <label>{formatMessage(messages.dropzonelabel)}</label>
+              <Dropzone className='dropzone' multiple={false} onDrop={this._onDrop.bind(this)}>
+                <div>{formatMessage(messages.dropzonehelp)}</div>
+              </Dropzone>
+            </GridTile>
+            <GridTile>
+              <label>{formatMessage(messages.strokecolorlabel)}</label>
+              <ColorPicker onChangeComplete={this._onChangeStroke.bind(this)} color='#452135' />
+            </GridTile>
+            <GridTile>
+              <label>{formatMessage(messages.fillcolorlabel)}</label>
+              <ColorPicker onChangeComplete={this._onChangeFill.bind(this)} color='#452135' />
+            </GridTile>
+          </GridList>
+        </Dialog>
       </article>
     );
   }

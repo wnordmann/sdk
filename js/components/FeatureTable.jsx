@@ -385,7 +385,7 @@ class FeatureTable extends React.Component {
           <RaisedButton icon={<ActionSearch />} label={formatMessage(messages.zoombuttontext)} onTouchTap={this._zoomSelected.bind(this)} />
           <RaisedButton icon={<ActionDelete />} label={formatMessage(messages.clearbuttontext)} onTouchTap={this._clearSelected.bind(this)} />
           <RaisedButton icon={<ArrowUp />} label={formatMessage(messages.movebuttontext)} onTouchTap={this._moveSelectedToTop.bind(this)} />
-          <TextField floatingLabelText={formatMessage(messages.filterlabel)} id='featuretable-filter' ref='filter' onChange={this._filterByText.bind(this)} hintText={formatMessage(messages.filterplaceholder)} /> 
+          <TextField floatingLabelText={formatMessage(messages.filterlabel)} id='featuretable-filter' ref='filter' onChange={this._filterByText.bind(this)} hintText={formatMessage(messages.filterplaceholder)} />
           <Checkbox label={formatMessage(messages.onlyselected)} id='featuretable-onlyselected' checked={this._selectedOnly} onCheck={this._filter.bind(this)} />
         </form>
         <Table
