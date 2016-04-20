@@ -18,8 +18,8 @@ import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LayerSelector from './LayerSelector.jsx';
 import FeatureStore from '../stores/FeatureStore.js';
 import MapTool from './MapTool.js';
-import Pui from 'pui-react-alerts';
-import UI from 'pui-react-buttons';
+import RaisedButton from 'material-ui/lib/raised-button';
+import Popover from 'material-ui/lib/popover/popover';
 import pureRender from 'pure-render-decorator';
 import EditForm from './EditForm.jsx';
 import WFSService from '../services/WFSService.js';
@@ -100,6 +100,7 @@ class WFST extends MapTool {
     });
     this.state = {
       error: false,
+      open: false,
       visible: this.props.visible
     };
     this._interactions = {};
@@ -137,6 +138,7 @@ class WFST extends MapTool {
   _setError(msg) {
     this.setState({
       error: true,
+      open: true,
       msg: msg
     });
   }
@@ -294,6 +296,11 @@ class WFST extends MapTool {
     this.deactivate();
     this.activate([draw]);
   }
+  _handleRequestClose() {
+    this.setState({
+      open: false
+    });
+  }
   render() {
     if (!this.state.visible) {
       return (<article />);
@@ -301,7 +308,7 @@ class WFST extends MapTool {
       const {formatMessage} = this.props.intl;
       var error;
       if (this.state.error === true) {
-        error = (<div className='error-alert'><Pui.ErrorAlert dismissable={false} withIcon={true}>{formatMessage(messages.errormsg, {msg: this.state.msg})}</Pui.ErrorAlert></div>);
+        error = (<Popover open={this.state.open} onRequestClose={this._handleRequestClose.bind(this)}><div className='error-alert'>{formatMessage(messages.errormsg, {msg: this.state.msg})}</div></Popover>);
       }
       var layerSelector;
       if (this.props.layerSelector) {
@@ -322,9 +329,9 @@ class WFST extends MapTool {
       return (
         <form onSubmit={this._onSubmit} role='form'>
           {layerSelector}
-          <UI.DefaultButton onClick={this._drawFeature.bind(this)}>{formatMessage(messages.drawfeature)}</UI.DefaultButton>
-          <UI.DefaultButton onClick={this._modifyFeature.bind(this)}>{formatMessage(messages.modifyfeature)}</UI.DefaultButton>
-          <UI.DefaultButton onClick={this._deleteFeature.bind(this)}>{formatMessage(messages.deletefeature)}</UI.DefaultButton>
+          <RaisedButton label={formatMessage(messages.drawfeature)} onTouchTap={this._drawFeature.bind(this)} />
+          <RaisedButton label={formatMessage(messages.modifyfeature)} onTouchTap={this._modifyFeature.bind(this)} />
+          <RaisedButton label={formatMessage(messages.deletefeature)} onTouchTap={this._deleteFeature.bind(this)} />
           {error}
           {editForm}
         </form>
