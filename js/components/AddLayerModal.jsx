@@ -12,16 +12,15 @@
 
 import React from 'react';
 import ol from 'openlayers';
-import Dialog from 'pui-react-modals';
+import Dialog from 'material-ui/lib/dialog';
+import Popover from 'material-ui/lib/popover/popover';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LoginConstants from '../constants/LoginConstants.js';
 import FeatureStore from '../stores/FeatureStore.js';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import Grids from 'pui-react-grids';
-import Pui from 'pui-react-alerts';
 import pureRender from 'pure-render-decorator';
-import {BasicInput} from 'pui-react-inputs';
-import UI from 'pui-react-buttons';
+import TextField from 'material-ui/lib/text-field';
+import RaisedButton from 'material-ui/lib/raised-button';
 import URL from 'url-parse';
 import WMSService from '../services/WMSService.js';
 import WFSService from '../services/WFSService.js';
@@ -57,11 +56,13 @@ const geojsonFormat = new ol.format.GeoJSON();
  * Modal window to add layers from a WMS or WFS service.
  */
 @pureRender
-class AddLayerModal extends Dialog.Modal {
+class AddLayerModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       error: false,
+      errorOpen: false,
+      open: false,
       layers: []
     };
     var me = this;
@@ -112,6 +113,7 @@ class AddLayerModal extends Dialog.Modal {
   }
   _setError(msg) {
     this.setState({
+      errorOpen: true,
       error: true,
       msg: msg
     });
@@ -250,6 +252,17 @@ class AddLayerModal extends Dialog.Modal {
       </li>
     );
   }
+  open() {
+    this.setState({open: true});
+  }
+  close() {
+    this.setState({open: false});
+  }
+  _handleRequestClose() {
+    this.setState({
+      errorOpen: false
+    });
+  }
   render() {
     const {formatMessage} = this.props.intl;
     var layers;
@@ -258,30 +271,26 @@ class AddLayerModal extends Dialog.Modal {
     }
     var error;
     if (this.state.error === true) {
-      error = (<div className='error-alert'><Pui.ErrorAlert dismissable={false} withIcon={true}>{formatMessage(messages.errormsg, {msg: this.state.msg})}</Pui.ErrorAlert></div>);
+      error = (<Popover open={this.state.errorOpen} onRequestClose={this._handleRequestClose.bind(this)}><div className='error-alert'>{formatMessage(messages.errormsg, {msg: this.state.msg})}</div></Popover>);
     }
     var input;
     if (this.props.allowUserInput) {
       var serviceType = this.props.asVector ? 'WFS' : 'WMS';
-      input = (<div className="clearfix">
-        <Grids.Col md={18}>
-          <BasicInput label={formatMessage(messages.inputfieldlabel, {serviceType: serviceType})}  id='url' defaultValue={this.props.url} />
-        </Grids.Col>
-        <Grids.Col md={6} className='connect-button'>
-          <UI.DefaultButton onClick={this._connect.bind(this)} ref="connectButton">{formatMessage(messages.connectbutton)}</UI.DefaultButton>
-        </Grids.Col>
-      </div>);
+      input = (
+        <div className="clearfix">
+          <TextField floatingLabelText={formatMessage(messages.inputfieldlabel, {serviceType: serviceType})} defaultValue={this.props.url} id='url' />
+          <RaisedButton label={formatMessage(messages.connectbutton)} onTouchTap={this._connect.bind(this)} />
+        </div>
+      );
     }
     return (
-      <Dialog.BaseModal title={formatMessage(messages.title)} show={this.state.isVisible} onHide={this.close} {...this.props}>
-        <Dialog.ModalBody>
-          {input}
-          <ul className='addlayer'>
-            {layers}
-          </ul>
-          {error}
-        </Dialog.ModalBody>
-      </Dialog.BaseModal>
+      <Dialog bodyStyle={{overflow: 'auto'}} modal={true} title={formatMessage(messages.title)} open={this.state.open} onRequestClose={this.close.bind(this)}>
+        {input}
+        <ul className='addlayer'>
+          {layers}
+        </ul>
+        {error}
+      </Dialog>
     );
   }
 }
