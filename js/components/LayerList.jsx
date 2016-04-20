@@ -15,8 +15,12 @@ import ol from 'openlayers';
 import LayerStore from '../stores/LayerStore.js';
 import LayerListItem from './LayerListItem.jsx';
 import AddLayerModal from './AddLayerModal.jsx';
-import UI from 'pui-react-buttons';
-import Icon from 'pui-react-iconography';
+import RaisedButton from 'material-ui/lib/raised-button';
+import IconButton from 'material-ui/lib/icon-button';
+import NoteAdd from 'material-ui/lib/svg-icons/action/note-add';
+import LayersIcon from 'material-ui/lib/svg-icons/maps/layers';
+import Toolbar from 'material-ui/lib/toolbar/toolbar';
+import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import './LayerList.css';
@@ -138,10 +142,10 @@ class LayerList extends React.Component {
     var addLayer;
     if (this.props.addLayer) {
       addLayer = (
-          <UI.DefaultButton  onClick={this._showAddLayer.bind(this)}  className="pull-right add_layer_button" title={formatMessage(messages.addlayertitle)}> <Icon.Icon name="plus" /> &nbsp;
-          {formatMessage(messages.addlayertext)}
+          <article>
+          <Toolbar><ToolbarGroup firstChild={true} float="right"><RaisedButton icon={<NoteAdd />} label={formatMessage(messages.addlayertext)} onTouchTap={this._showAddLayer.bind(this)} /></ToolbarGroup></Toolbar>
           <AddLayerModal srsName={this.props.map.getView().getProjection().getCode()} allowUserInput={this.props.addLayer.allowUserInput} asVector={this.props.addLayer.asVector} map={this.props.map} url={this.props.addLayer.url} ref='addlayermodal'/>
-        </UI.DefaultButton>
+          </article>
       );
     }
     var onMouseOut = this.props.expandOnHover ? this._hidePanel.bind(this) : undefined;
@@ -149,7 +153,7 @@ class LayerList extends React.Component {
     var onClick = !this.props.expandOnHover ? this._togglePanel.bind(this) : undefined;
     return (
       <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} className={className}>
-        <UI.DefaultButton className='layerlistbutton' onClick={onClick} title={formatMessage(messages.layertitle)}><Icon.Icon name="map" /></UI.DefaultButton>
+        <IconButton tooltip={formatMessage(messages.layertitle)} onTouchTap={onClick}><LayersIcon /></IconButton>
         <div className="layer-tree-panel clearfix">
           {heading}
           {this.renderLayers(layers)}
