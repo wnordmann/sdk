@@ -93,6 +93,7 @@ var enMessages = {
   "layerselector.labeltext": "Layer",
   "login.buttontext": "Login",
   "login.logouttext": "Logout",
+  "loginmodal.closebutton": "Close",
   "loginmodal.errormsg": "Invalid credentials",
   "loginmodal.loginbutton": "Login",
   "loginmodal.passwordlabel": "Password",
