@@ -190,8 +190,7 @@ class AddLayer extends React.Component {
       (<RaisedButton label={formatMessage(messages.closebuttontext)} onTouchTap={this._closeDialog.bind(this)} />)
     ];
     return (
-      <article>
-        <RaisedButton icon={<UploadIcon />} label={formatMessage(messages.menutext)} onTouchTap={this._showDialog.bind(this)} />
+      <RaisedButton icon={<UploadIcon />} label={formatMessage(messages.menutext)} onTouchTap={this._showDialog.bind(this)}>
         <Dialog autoScrollBodyContent={true} actions={actions} open={this.state.open} onRequestClose={this._closeDialog.bind(this)} modal={true} title={formatMessage(messages.modaltitle)}>
           <GridList cols={3} cellHeight={350}>
             <GridTile>
@@ -210,7 +209,7 @@ class AddLayer extends React.Component {
             </GridTile>
           </GridList>
         </Dialog>
-      </article>
+      </RaisedButton>
     );
   }
 }

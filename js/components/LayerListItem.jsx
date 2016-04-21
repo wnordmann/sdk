@@ -208,7 +208,6 @@ class LayerListItem extends React.Component {
       var opacityInputId = 'layerlistitem-' + layer.get('id') + '-opacity';
       opacity = (
         <ul><div className='input-group'>
-          <label className='sr-only' htmlFor={opacityInputId}>{formatMessage(messages.opacitylabel)}</label>
           <input id={opacityInputId} onChange={this._changeOpacity.bind(this)} defaultValue={val} type="range" name="opacity" min="0" max="1" step="0.01" />
         </div></ul>
       );
@@ -250,16 +249,16 @@ class LayerListItem extends React.Component {
     if (layer.get('type') === 'base') {
       baselayerId = 'layerlistitem-' + layer.get('id') + '-baselayergroup';
       if (this.state.checked) {
-        input = (<div className='input-group'><label className='sr-only' htmlFor={baselayerId}>{formatMessage(messages.baselayergrouplabel)}</label><input id={baselayerId} type="radio" name="baselayergroup" value={this.props.title} checked onChange={this._handleChange.bind(this)} />{this.props.title}</div>);
+        input = (<div className='input-group'><input id={baselayerId} type="radio" name="baselayergroup" value={this.props.title} checked onChange={this._handleChange.bind(this)} />{this.props.title}</div>);
       } else {
-        input = (<div className='input-group'><label className='sr-only' htmlFor={baselayerId}>{formatMessage(messages.baselayergrouplabel)}</label><input id={baselayerId} type="radio" name="baselayergroup" value={this.props.title} onChange={this._handleChange.bind(this)} />{this.props.title}</div>);
+        input = (<div className='input-group'><input id={baselayerId} type="radio" name="baselayergroup" value={this.props.title} onChange={this._handleChange.bind(this)} />{this.props.title}</div>);
       }
     } else if (layer.get('type') === 'base-group') {
       baselayerId = 'layerlistitem-' + layer.get('id') + '-baselayergroup';
       heading = (<h4><strong>{formatMessage(messages.layertitle)}</strong></h4>);
     } else {
       var inputId = 'layerlistitem-' + layer.get('id') + '-visibility';
-      input = (<ul><div className='input-group'><label className='sr-only' htmlFor={inputId}>{formatMessage(messages.layervisibilitylabel)}</label><input id={inputId} type="checkbox" checked={this.state.checked} onChange={this._handleChange.bind(this)} />{this.props.title}</div></ul>);
+      input = (<ul><div className='input-group'><input id={inputId} type="checkbox" checked={this.state.checked} onChange={this._handleChange.bind(this)} />{this.props.title}</div></ul>);
     }
     var labelModal, filterModal, styleModal;
     if (this.props.layer instanceof ol.layer.Vector) {

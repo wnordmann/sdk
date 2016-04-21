@@ -109,8 +109,5 @@ global.Select = Select;
 import ToolActions from './actions/ToolActions.js';
 global.ToolActions = ToolActions;
 
-import Toolbar from './components/Toolbar.jsx';
-global.Toolbar = Toolbar;
-
 import WFST from './components/WFST.jsx';
 global.WFST = WFST;
