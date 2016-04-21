@@ -235,7 +235,7 @@ class Measure extends MapTool {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-     <IconMenu iconButtonElement={<RaisedButton label={formatMessage(messages.dropdowntext)} />} value={this.state.value} onChange={this._handleChange.bind(this)}>
+     <IconMenu {...this.props} iconButtonElement={<RaisedButton label={formatMessage(messages.dropdowntext)} />} value={this.state.value} onChange={this._handleChange.bind(this)}>
         <MenuItem value={1} primaryText={formatMessage(messages.measuredistancetext)}/>
         <MenuItem value={2} primaryText={formatMessage(messages.measureareatext)}/>
         <MenuItem value={3} primaryText={formatMessage(messages.cleartext)}/>

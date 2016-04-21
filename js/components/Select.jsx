@@ -102,7 +102,7 @@ class Select extends MapTool {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-     <RaisedButton label={formatMessage(messages.menubuttontext)} onTouchTap={this._selectByRectangle.bind(this)} />
+     <RaisedButton {...this.props} label={formatMessage(messages.menubuttontext)} onTouchTap={this._selectByRectangle.bind(this)} />
     );
   }
 }

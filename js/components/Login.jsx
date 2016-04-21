@@ -102,13 +102,13 @@ class Login extends React.Component {
     const {formatMessage} = this.props.intl;
     if (this.state.user !== null) {
       return (
-        <IconMenu iconButtonElement={<RaisedButton label={this.state.user} />} value={this.state.value} onChange={this._handleChange.bind(this)}>
+        <IconMenu {...this.props} iconButtonElement={<RaisedButton label={this.state.user} />} value={this.state.value} onChange={this._handleChange.bind(this)}>
           <MenuItem value={1} primaryText={formatMessage(messages.logouttext)}/>
         </IconMenu>
       );
     } else {
       return (
-        <RaisedButton label={formatMessage(messages.buttontext)} onTouchTap={this._showLoginDialog.bind(this)}>
+        <RaisedButton {...this.props} label={formatMessage(messages.buttontext)} onTouchTap={this._showLoginDialog.bind(this)}>
           <LoginModal ref='loginmodal' {...this.props} />
         </RaisedButton>
       );

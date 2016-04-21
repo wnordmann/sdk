@@ -20,6 +20,7 @@ import FeatureStore from '../stores/FeatureStore.js';
 import MapTool from './MapTool.js';
 import RaisedButton from 'material-ui/lib/raised-button';
 import Popover from 'material-ui/lib/popover/popover';
+import Toolbar from 'material-ui/lib/toolbar/toolbar';
 import pureRender from 'pure-render-decorator';
 import EditForm from './EditForm.jsx';
 import WFSService from '../services/WFSService.js';
@@ -219,9 +220,6 @@ class WFST extends MapTool {
       });
     }
   }
-  _onSubmit(evt) {
-    evt.preventDefault();
-  }
   _filterLayerList(lyr) {
     return lyr.get('isWFST');
   }
@@ -323,15 +321,18 @@ class WFST extends MapTool {
       if (this.props.showEditForm && this.state.feature) {
         editForm = (<EditForm feature={this.state.feature} layer={this.state.layer} />);
       }
+      const buttonStyle = this.props.buttonStyle;
       return (
-        <form onSubmit={this._onSubmit} role='form'>
+        <div>
           {layerSelector}
-          <RaisedButton label={formatMessage(messages.drawfeature)} onTouchTap={this._drawFeature.bind(this)} />
-          <RaisedButton label={formatMessage(messages.modifyfeature)} onTouchTap={this._modifyFeature.bind(this)} />
-          <RaisedButton label={formatMessage(messages.deletefeature)} onTouchTap={this._deleteFeature.bind(this)} />
+          <Toolbar>
+            <RaisedButton style={buttonStyle} label={formatMessage(messages.drawfeature)} onTouchTap={this._drawFeature.bind(this)} />
+            <RaisedButton style={buttonStyle} label={formatMessage(messages.modifyfeature)} onTouchTap={this._modifyFeature.bind(this)} />
+            <RaisedButton style={buttonStyle} label={formatMessage(messages.deletefeature)} onTouchTap={this._deleteFeature.bind(this)} />
+          </Toolbar>
           {error}
           {editForm}
-        </form>
+        </div>
       );
     }
   }
@@ -359,12 +360,19 @@ WFST.propTypes = {
    */
   showEditForm: React.PropTypes.bool,
   /**
+   * Style for the buttons in the toolbar.
+   */
+  buttonStyle: React.PropTypes.object,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
 };
 
 WFST.defaultProps = {
+  buttonStyle: {
+    margin: '10px 12px'
+  },
   showEditForm: false,
   layerSelector: true,
   visible: true,

@@ -160,14 +160,15 @@ class QueryBuilder extends React.Component {
   }
   render() {
     const {formatMessage} = this.props.intl;
+    const buttonStyle = this.props.buttonStyle;
     return (
       <div className='querybuilder'>
         <LayerSelector onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /><br/>
         <TextField hintText={formatMessage(messages.filterplaceholder)} floatingLabelText={formatMessage(messages.filterlabel)} errorText={this.state.errorText} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} /><br/>
         <Toolbar>
-          <RaisedButton label={formatMessage(messages.newbuttontext)} onTouchTap={this._newSelection.bind(this)} />
-          <RaisedButton label={formatMessage(messages.addbuttontext)} onTouchTap={this._addSelection.bind(this)} />
-          <RaisedButton label={formatMessage(messages.selectintext)} onTouchTap={this._inSelection.bind(this)} />
+          <RaisedButton style={buttonStyle} label={formatMessage(messages.newbuttontext)} onTouchTap={this._newSelection.bind(this)} />
+          <RaisedButton style={buttonStyle} label={formatMessage(messages.addbuttontext)} onTouchTap={this._addSelection.bind(this)} />
+          <RaisedButton style={buttonStyle} label={formatMessage(messages.selectintext)} onTouchTap={this._inSelection.bind(this)} />
         </Toolbar>
       </div>
     );
@@ -182,7 +183,17 @@ QueryBuilder.propTypes = {
   /**
    * i18n message strings. Provided through the application through context.
    */
-  intl: intlShape.isRequired
+  intl: intlShape.isRequired,
+  /**
+   * Style for the buttons in the toolbar.
+   */
+  buttonStyle: React.PropTypes.object
+};
+
+QueryBuilder.defaultProps = {
+  buttonStyle: {
+    margin: '10px 12px'
+  }
 };
 
 export default injectIntl(QueryBuilder);
