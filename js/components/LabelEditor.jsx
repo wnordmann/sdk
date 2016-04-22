@@ -76,7 +76,7 @@ class LabelEditor extends React.Component {
     var attributeItems = [];
     for (var i = 0, ii = this.props.attributes.length; i < ii; ++i) {
       var attribute = this.props.attributes[i];
-      attributeItems.push(<MenuItem key={i} value={attribute} label={attribute} primaryText={attribute} />);
+      attributeItems.push(<MenuItem key={i} value={attribute} primaryText={attribute} />);
     }
     return (
       <div>

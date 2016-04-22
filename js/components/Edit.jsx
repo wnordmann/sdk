@@ -13,14 +13,15 @@
 /* eslint react/prop-types: 0 */
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Dialog from 'material-ui/lib/dialog';
+import Popover from 'material-ui/lib/popover/popover';
+import TextField from 'material-ui/lib/text-field';
+import MenuItem from 'material-ui/lib/menus/menu-item';
+import SelectField from 'material-ui/lib/select-field';
 import ol from 'openlayers';
 import MapTool from './MapTool.js';
-import UI from 'pui-react-buttons';
-import Dialog from 'pui-react-modals';
-import Grids from 'pui-react-grids';
 import {transformColor} from '../util.js';
 import ColorPicker from 'react-color';
-import Pui from 'pui-react-alerts';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import './Edit.css';
@@ -147,13 +148,13 @@ class Edit extends MapTool {
       layers: [],
       enable: true,
       error: false,
-      attributes: null
+      errorOpen: false,
+      attributes: null,
+      attributeOpen: false,
+      open: false
     };
     this._strokeColor = '#452135';
     this._fillColor = '#452135';
-  }
-  _onSubmit(evt) {
-    evt.preventDefault();
   }
   _onChangeStroke(color) {
     this._strokeColor = transformColor(color);
@@ -165,9 +166,9 @@ class Edit extends MapTool {
     return ID_PREFIX + this.state.layers.length;
   }
   _createLayer() {
-    var layerName = ReactDOM.findDOMNode(this.refs.layerName).value;
-    var geometryType = ReactDOM.findDOMNode(this.refs.geometryType).value;
-    var attributes = ReactDOM.findDOMNode(this.refs.attributes).value;
+    var layerName = this.refs.layerName.getValue();
+    var geometryType = this.refs.geometryType.getValue();
+    var attributes = this.refs.attributes.getValue();
     if (layerName !== '') {
       var fill = this._fillColor ? new ol.style.Fill({color: this._fillColor}) : undefined;
       var stroke = this._strokeColor ? new ol.style.Stroke({color: this._strokeColor, width: this.props.strokeWidth}) : undefined;
@@ -189,9 +190,8 @@ class Edit extends MapTool {
       this.props.map.addLayer(layer);
       var layers = this.state.layers.slice();
       layers.push(layer);
-      this.refs.modal.close();
       this._layer = layer.get('id');
-      this.setState({layers: layers});
+      this.setState({open: false, layers: layers});
     }
   }
   _disableEditMode() {
@@ -205,24 +205,24 @@ class Edit extends MapTool {
       }
     }
   }
-  _onLayerChange(evt) {
-    this._layer = evt.target.value;
+  _onLayerChange(evt, idx, value) {
+    this._layer = value;
     this.setState({layer: this._layer});
   }
   _enableEditMode() {
     if (this.state.layers.length === 0) {
-      this.setState({error: true});
+      this.setState({error: true, errorOpen: true});
     } else {
-      this.setState({error: false, enable: false});
+      this.setState({error: false, errorOpen: false, enable: false});
       this._activate();
     }
   }
   _addFeatureDialog(feature, attributes) {
     this._feature = feature;
     this.setState({
-      attributes: attributes
+      attributes: attributes,
+      attributeOpen: true
     });
-    this.refs.attributesModal.open();
   }
   _setAttributes() {
     var feature = this._feature;
@@ -231,7 +231,9 @@ class Edit extends MapTool {
       var value = ReactDOM.findDOMNode(this.refs[NEW_ATTR_PREFIX + name]).value;
       feature.set(name, value);
     }
-    this.refs.attributesModal.close();
+    this.setState({
+      attributeOpen: false
+    });
   }
   _activate() {
     var layerId = this._layer;
@@ -264,7 +266,12 @@ class Edit extends MapTool {
     this.activate([draw, modify]);
   }
   _showModal() {
-    this.refs.modal.open();
+    this.setState({open: true});
+  }
+  _handleRequestClose() {
+    this.setState({
+      errorOpen: false
+    });
   }
   render() {
     if (!this.state.enable) {
@@ -274,96 +281,56 @@ class Edit extends MapTool {
     var options = [], i, ii;
     for (i = 0, ii = this.state.layers.length; i < ii; ++i) {
       var lyr = this.state.layers[i], title = lyr.get('title'), id = lyr.get('id');
-      options.push(<option key={id} value={id}>{title}</option>);
-    }
-    if (options.length === 0) {
-      var val = '[' + formatMessage(messages.nolayer) + ']';
-      options.push(<option key={val} value={val}>{val}</option>);
+      options.push(<MenuItem key={id} value={id} primaryText={title} />);
     }
     var button;
     if (this.state.enable === true) {
-      button = (<UI.DefaultButton onClick={this._enableEditMode.bind(this)}>{formatMessage(messages.enable)}</UI.DefaultButton>);
+      button = (<RaisedButton label={formatMessage(messages.enable)} onTouchTap={this._enableEditMode.bind(this)} />);
     } else {
-      button = (<UI.DefaultButton onClick={this._disableEditMode.bind(this)}>{formatMessage(messages.disable)}</UI.DefaultButton>);
+      button = (<RaisedButton label={formatMessage(messages.disable)} onTouchTap={this._disableEditMode.bind(this)} />);
     }
     var attributeFormItems;
     if (this.state.attributes !== null) {
       attributeFormItems = [];
       for (i = 0, ii = this.state.attributes.length; i < ii; ++i) {
         var name = this.state.attributes[i], ref = NEW_ATTR_PREFIX + name;
-        attributeFormItems.push(<div key={ref} className="form-group"><Grids.Col md={12}><label htmlFor={ref}>{name}</label></Grids.Col><Grids.Col md={8}><input id={ref} className="form-control" type='text' ref={ref} /></Grids.Col></div>);
+        attributeFormItems.push(<TextField key={ref} floatingLabelText={name} ref={ref} /><br/>);
       }
     }
     var error;
     if (this.state.error === true) {
-      error = (<div className='error-alert'><Pui.ErrorAlert dismissable={true} withIcon={true}>{formatMessage(messages.nolayererror)}</Pui.ErrorAlert></div>);
+      error = (<Popover open={this.state.errorOpen} onRequestClose={this._handleRequestClose.bind(this)}><div className='error-alert'>{formatMessage(messages.nolayererror)}</div></Popover>);
     }
+    var attributeActions = [
+      <RaisedButton label={formatMessage(messages.okbuttontext)} onTouchTap={this._setAttributes.bind(this)} />
+    ];
+    var actions = [
+      <RaisedButton label={formatMessage(messages.createbuttontext)} onTouchTap={this._createLayer.bind(this)} />
+    ];
     return (
       <article>
-        <form onSubmit={this._onSubmit} className='form-inline'>
-          <Grids.Col md={6}>
-            <UI.DefaultButton onClick={this._showModal.bind(this)}>{formatMessage(messages.newlayer)}</UI.DefaultButton>
-          </Grids.Col>
-          <Grids.Col md={10}>
-            <Grids.Col md={8}>
-            <label>{formatMessage(messages.layerlabel)}:</label>
-            </Grids.Col>
-            <Grids.Col md={16}>
-            <select onChange={this._onLayerChange.bind(this)} value={this._layer} ref='layer' className='form-control'>{options}</select>
-            </Grids.Col>
-          </Grids.Col>
-          <Grids.Col md={8}>
-            {button}
-          </Grids.Col>
-          <Grids.Col md={8}>
-            {error}
-          </Grids.Col>
-        </form>
-        <Dialog.Modal title={formatMessage(messages.newfeaturemodaltitle)} ref="attributesModal">
-          <Dialog.ModalBody>
-            <form className='form-horizontal'>
-              {attributeFormItems}
-            </form>
-          </Dialog.ModalBody>
-         <Dialog.ModalFooter>
-             <UI.DefaultButton title={formatMessage(messages.okbuttontitle)} onClick={this._setAttributes.bind(this)}>{formatMessage(messages.okbuttontext)}</UI.DefaultButton>
-           </Dialog.ModalFooter>
-        </Dialog.Modal>
-        <Dialog.Modal title={formatMessage(messages.createlayermodaltitle)} ref="modal">
-          <Dialog.ModalBody>
-            <form className='form-horizontal'>
-              <div className="form-group">
-                <Grids.Col md={8}><label htmlFor='edit-layerName'>{formatMessage(messages.layernamelabel)}</label></Grids.Col>
-                <Grids.Col md={12}><input id='edit-layerName' className="form-control" type="text" ref="layerName"/></Grids.Col>
-              </div>
-              <div className="form-group">
-                <Grids.Col md={8}><label>{formatMessage(messages.geometrytypelabel)}</label></Grids.Col>
-                <Grids.Col md={12}>
-                  <select className='form-control' ref='geometryType'>
-                    <option value='Point'>{formatMessage(messages.pointgeomtype)}</option>
-                    <option value='LineString'>{formatMessage(messages.linegeomtype)}</option>
-                    <option value='Polygon'>{formatMessage(messages.polygeomtype)}</option>
-                  </select>
-                </Grids.Col>
-              </div>
-              <div className="form-group">
-                <Grids.Col md={8}><label htmlFor='edit-attributes'>{formatMessage(messages.attributeslabel)}</label></Grids.Col>
-                <Grids.Col md={12}><input id='edit-attributes' className="form-control" type="text" ref="attributes"/></Grids.Col>
-              </div>
-              <div className="form-group">
-                 <Grids.Col md={8}><label>{formatMessage(messages.strokecolorlabel)}</label></Grids.Col>
-                 <Grids.Col md={12}><ColorPicker type='compact' onChangeComplete={this._onChangeStroke.bind(this)} ref='strokeColor' color={this._strokeColor} /></Grids.Col>
-             </div>
-             <div className="form-group">
-               <Grids.Col md={8}><label>{formatMessage(messages.fillcolorlabel)}</label></Grids.Col>
-               <Grids.Col md={12}><ColorPicker type='compact' onChangeComplete={this._onChangeFill.bind(this)} ref='fillColor' color={this._fillColor} /></Grids.Col>
-             </div>
-           </form>
-         </Dialog.ModalBody>
-         <Dialog.ModalFooter>
-           <UI.DefaultButton title={formatMessage(messages.createbuttontitle)} onClick={this._createLayer.bind(this)}>{formatMessage(messages.createbuttontext)}</UI.DefaultButton>
-         </Dialog.ModalFooter>
-       </Dialog.Modal>
+        <RaisedButton label={formatMessage(messages.newlayer)} onTouchTap={this._showModal.bind(this)} />
+        <SelectField hintText={formatMessage(messages.nolayer)} onChange={this._onLayerChange.bind(this)} floatingLabelText={formatMessage(messages.layerlabel)} value={this._layer} ref='layer'>
+          {options}
+        </SelectField>
+        {button}
+        {error}
+        <Dialog open={this.state.attributeOpen} actions={attributeActions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.newfeaturemodaltitle)}>
+          {attributeFormItems}
+        </Dialog>
+        <Dialog actions={actions} modal={true} autoScrollBodyContent={true} title={formatMessage(messages.createlayermodaltitle)} open={this.state.open}>
+          <TextField floatingLabelText={formatMessage(messages.layernamelabel)} ref="layerName" /><br/>
+          <SelectField floatingLabelText={formatMessage(messages.geometrytypelabel)} ref='geometryType'>
+            <MenuItem key='Point' value='Point' primaryText={formatMessage(messages.pointgeomtype)} />
+            <MenuItem key='LineString' value='LineString' primaryText={formatMessage(messages.linegeomtype)} />
+            <MenuItem key='Polygon' value='Polygon' primaryText={formatMessage(messages.polygeomtype)} />
+          </SelectField><br/>
+          <TextField floatingLabelText={formatMessage(messages.attributeslabel)} ref="attributes" /><br/>
+          <label>{formatMessage(messages.strokecolorlabel)}</label>
+          <ColorPicker type='compact' onChangeComplete={this._onChangeStroke.bind(this)} ref='strokeColor' color={this._strokeColor} />
+          <label>{formatMessage(messages.fillcolorlabel)}</label>
+          <ColorPicker type='compact' onChangeComplete={this._onChangeFill.bind(this)} ref='fillColor' color={this._fillColor} />
+       </Dialog>
       </article>
     );
   }
