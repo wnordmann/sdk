@@ -38,7 +38,7 @@ class FillEditor extends React.Component {
   }
   render() {
     return (
-      <ColorPicker type='chrome' onChangeComplete={this._onChangeFill.bind(this)} color={this.state.fillColor} />
+      <ColorPicker type='chrome' onChangeComplete={this._onChangeFill.bind(this)} color={this.state.fillColor.rgb} />
     );
   }
 }

@@ -12,8 +12,8 @@
 
 import React from 'react';
 import ol from 'openlayers';
-import Dialog from 'pui-react-modals';
-import UI from 'pui-react-buttons';
+import Dialog from 'material-ui/lib/dialog';
+import RaisedButton from 'material-ui/lib/raised-button';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import {transformColor} from '../util.js';
@@ -34,6 +34,11 @@ const messages = defineMessages({
     id: 'labelmodal.clearbutton',
     description: 'Text for the clear button',
     defaultMessage: 'Clear'
+  },
+  closebutton: {
+    id: 'labelmodal.closebutton',
+    description: 'Text for close button',
+    defaultMessage: 'Close'
   }
 });
 
@@ -41,26 +46,36 @@ const messages = defineMessages({
  * A modal window for applying labels to a vector layer.
  */
 @pureRender
-class LabelModal extends Dialog.Modal {
+class LabelModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      attributes: []
+      attributes: [],
+      open: false
     };
+  }
+  componentDidMount() {
     var source = this.props.layer.getSource();
     if (source && !(source instanceof ol.source.Cluster)) {
-      source.on('change', function(evt) {
-        if (evt.target.getState() === 'ready' && this.state.attributes.length === 0) {
-          var feature = evt.target.getFeatures()[0];
-          if (feature) {
-            var geom = feature.getGeometryName();
-            var keys = feature.getKeys();
-            var idx = keys.indexOf(geom);
-            keys.splice(idx, 1);
-            this.state.attributes = keys;
-          }
-        }
-      }, this);
+      if (source.getState() === 'ready') {
+        this._getAttributes(source);
+      } else {
+        source.on('change', function(evt) {
+          this._getAttributes(source);
+        }, this);
+      }
+    }
+  }
+  _getAttributes(source) {
+    if (this.state.attributes.length === 0 && source.getState() === 'ready' && source.getFeatures().length > 0) {
+      var feature = source.getFeatures()[0];
+      if (feature) {
+        var geom = feature.getGeometryName();
+        var keys = feature.getKeys();
+        var idx = keys.indexOf(geom);
+        keys.splice(idx, 1);
+        this.setState({attributes: keys});
+      }
     }
   }
   _setStyleFunction() {
@@ -118,18 +133,23 @@ class LabelModal extends Dialog.Modal {
       this.props.layer.changed();
     }
   }
+  open() {
+    this.setState({open: true});
+  }
+  close() {
+    this.setState({open: false});
+  }
   render() {
     const {formatMessage} = this.props.intl;
+    var actions = [
+      <RaisedButton label={formatMessage(messages.applybutton)} onTouchTap={this._setLabel.bind(this)} />,
+      <RaisedButton label={formatMessage(messages.clearbutton)} onTouchTap={this._clearLabel.bind(this)} />,
+      <RaisedButton label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
+    ];
     return (
-      <Dialog.BaseModal title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} show={this.state.isVisible} onHide={this.close} {...this.props}>
-        <Dialog.ModalBody>
-          <LabelEditor {...this.props} initialState={this._labelState} onChange={this._onChangeLabel.bind(this)} attributes={this.state.attributes} />
-        </Dialog.ModalBody>
-        <Dialog.ModalFooter>
-          <UI.DefaultButton onClick={this._setLabel.bind(this)}>{formatMessage(messages.applybutton)}</UI.DefaultButton>
-          <UI.DefaultButton onClick={this._clearLabel.bind(this)}>{formatMessage(messages.clearbutton)}</UI.DefaultButton>
-        </Dialog.ModalFooter>
-      </Dialog.BaseModal>
+      <Dialog autoScrollBodyContent={true} modal={true} actions={actions} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} open={this.state.open} onRequestClose={this.close.bind(this)} >
+        <LabelEditor {...this.props} initialState={this._labelState} onChange={this._onChangeLabel.bind(this)} attributes={this.state.attributes} />
+      </Dialog>
     );
   }
 }

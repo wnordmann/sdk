@@ -48,6 +48,11 @@ const messages = defineMessages({
     id: 'filtermodal.errortext',
     description: 'Error text',
     defaultMessage: 'Invalid filter, should be for instance foo == "Bar"'
+  },
+  closebutton: {
+    id: 'filtermodal.closebutton',
+    description: 'Text for close button',
+    defaultMessage: 'Close'
   }
 });
 
@@ -175,8 +180,11 @@ class FilterModal extends React.Component {
       var filterName = f.title.replace(/\W+/g, '');
       return (<ListItem key={filterName} rightIcon={<DeleteIcon />} primaryText={f.title} ref={filterName} onTouchTap={this._removeFilter.bind(this, f)} />);
     }, this);
+    var actions = [
+      <RaisedButton label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
+    ];
     return (
-      <Dialog title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} modal={true} open={this.state.open} onRequestClose={this.close.bind(this)}>
+      <Dialog actions={actions} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} modal={true} open={this.state.open} onRequestClose={this.close.bind(this)}>
         <TextField errorText={errorText} ref='filterTextBox' />
         <RaisedButton label={formatMessage(messages.addfiltertext)} onTouchTap={this._addFilter.bind(this)} /> 
         <List>
