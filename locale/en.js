@@ -54,6 +54,7 @@ var enMessages = {
   "filtereditor.filterlabel": "Filter",
   "filtereditor.filterplaceholder": "Type expression ....",
   "filtermodal.addfiltertext": "Add",
+  "filtermodal.errortext": "Invalid filter, should be for instance foo == \"Bar\"",
   "filtermodal.inputlabel": "Text to filter features in layer by",
   "filtermodal.removefiltertext": "Remove",
   "filtermodal.title": "Filters for layer {layer}",

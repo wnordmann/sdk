@@ -11,12 +11,14 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ol from 'openlayers';
-import Dialog from 'pui-react-modals';
 import filtrex from 'filtrex';
-import Grids from 'pui-react-grids';
-import UI from 'pui-react-buttons';
+import Dialog from 'material-ui/lib/dialog';
+import RaisedButton from 'material-ui/lib/raised-button';
+import List from 'material-ui/lib/lists/list';
+import ListItem from 'material-ui/lib/lists/list-item';
+import DeleteIcon from 'material-ui/lib/svg-icons/action/delete';
+import TextField from 'material-ui/lib/text-field';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import './FilterModal.css';
@@ -41,6 +43,11 @@ const messages = defineMessages({
     id: 'filtermodal.title',
     description: 'Title for the filter button',
     defaultMessage: 'Filters for layer {layer}'
+  },
+  errortext: {
+    id: 'filtermodal.errortext',
+    description: 'Error text',
+    defaultMessage: 'Invalid filter, should be for instance foo == "Bar"'
   }
 });
 
@@ -48,13 +55,20 @@ const messages = defineMessages({
  * Modal for building filters to filter a vector layer.
  */
 @pureRender
-class FilterModal extends Dialog.Modal {
+class FilterModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      open: false,
       filters: [],
       hasError: false
     };
+  }
+  open() {
+    this.setState({open: true});
+  }
+  close() {
+    this.setState({open: false});
   }
   _setStyleFunction() {
     var layer = this.props.layer;
@@ -85,9 +99,6 @@ class FilterModal extends Dialog.Modal {
       });
     }
   }
-  _onSubmit(evt) {
-    evt.preventDefault();
-  }
   _addFilter() {
     var layer = this.props.layer;
     if (!this._styleSet) {
@@ -95,7 +106,7 @@ class FilterModal extends Dialog.Modal {
     }
     var filters = this.state.filters.slice();
     var filter;
-    var expression = ReactDOM.findDOMNode(this.refs.filterTextBox).value;
+    var expression = this.refs.filterTextBox.getValue();
     try {
       filter = filtrex(expression);
     } catch (e) {
@@ -156,41 +167,22 @@ class FilterModal extends Dialog.Modal {
   }
   render() {
     const {formatMessage} = this.props.intl;
-    var inputClassName = 'form-control';
+    var errorText;
     if (this.state.hasError) {
-      inputClassName += ' input-has-error';
+      errorText = formatMessage(messages.errortext);
     }
     var filters = this.state.filters.map(function(f) {
       var filterName = f.title.replace(/\W+/g, '');
-      return (
-        <div key={filterName} className='form-group' ref={filterName}>
-          <Grids.Col md={20}>
-            <label>{f.title}</label>
-          </Grids.Col>
-          <Grids.Col md={4}>
-            <UI.DefaultButton onClick={this._removeFilter.bind(this, f)}>{formatMessage(messages.removefiltertext)}</UI.DefaultButton>
-          </Grids.Col>
-        </div>
-      );
+      return (<ListItem key={filterName} rightIcon={<DeleteIcon />} primaryText={f.title} ref={filterName} onTouchTap={this._removeFilter.bind(this, f)} />);
     }, this);
     return (
-      <Dialog.BaseModal title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} show={this.state.isVisible} onHide={this.close} {...this.props}>
-        <Dialog.ModalBody>
-          <form onSubmit={this._onSubmit} className='form-horizontal filterform'>
-            <div className="form-group">
-              <Grids.Col md={20}>
-                <label htmlFor='filtermodal-filtertext' className='sr-only'>{formatMessage(messages.inputlabel)}</label>
-                <input id='filtermodal-filtertext' ref='filterTextBox' type='text' className={inputClassName}/>
-              </Grids.Col>
-              <Grids.Col md={4}>
-                <UI.DefaultButton onClick={this._addFilter.bind(this)}>{formatMessage(messages.addfiltertext)}</UI.DefaultButton>
-              </Grids.Col>
-            </div>
-            {filters}
-          </form>
-        </Dialog.ModalBody>
-        <Dialog.ModalFooter />
-      </Dialog.BaseModal>
+      <Dialog title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} modal={true} open={this.state.open} onRequestClose={this.close.bind(this)}>
+        <TextField errorText={errorText} ref='filterTextBox' />
+        <RaisedButton label={formatMessage(messages.addfiltertext)} onTouchTap={this._addFilter.bind(this)} /> 
+        <List>
+          {filters}
+        </List>
+      </Dialog>
     );
   }
 }
