@@ -11,9 +11,9 @@
  */
 
 import React from 'react';
-import Grids from 'pui-react-grids';
 import ColorPicker from 'react-color';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
+import TextField from 'material-ui/lib/text-field';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -48,38 +48,21 @@ class StrokeEditor extends React.Component {
       this.state[prop] = defaultVal;
     }
   }
-  _onSubmit(evt) {
-    evt.preventDefault();
-  }
-  _onChangeStrokeWidth(evt) {
-    this.state.strokeWidth = parseFloat(evt.target.value);
-    this.props.onChange(this.state);
+  _onChangeStrokeWidth(evt, idx, value) {
+    this.setState({strokeWidth: parseFloat(value)});
   }
   _onChangeStroke(color) {
-    this.state.strokeColor = color;
-    this.props.onChange(this.state);
+    this.setState({strokeColor: color});
   }
   render() {
+    this.props.onChange(this.state);
     const {formatMessage} = this.props.intl;
     return (
-      <form onSubmit={this._onSubmit} className='form-horizontal'>
-        <div className='form-group'>
-          <Grids.Col md={4}>
-            <label htmlFor='strokeWidth'>{formatMessage(messages.strokewidthlabel)}:</label>
-          </Grids.Col>
-          <Grids.Col md={12}>
-            <input ref='strokeWidth' id='strokeWidth' defaultValue={this.state.strokeWidth} onChange={this._onChangeStrokeWidth.bind(this)} />
-          </Grids.Col>
-        </div>
-        <div className='form-group'>
-          <Grids.Col md={4}>
-            <label>{formatMessage(messages.strokecolorlabel)}:</label>
-          </Grids.Col>
-          <Grids.Col md={12}>
-            <ColorPicker type='chrome' onChangeComplete={this._onChangeStroke.bind(this)} color={this.state.strokeColor.rgb} />
-          </Grids.Col>
-        </div>
-      </form>
+      <div>
+        <TextField defaultValue={this.state.strokeWidth} floatingLabelText={formatMessage(messages.strokewidthlabel)} onChange={this._onChangeStrokeWidth.bind(this)} /><br/>
+        <label>{formatMessage(messages.strokecolorlabel)}:</label>
+        <ColorPicker type='chrome' onChangeComplete={this._onChangeStroke.bind(this)} color={this.state.strokeColor.rgb} />
+      </div>
     );
   }
 }

@@ -11,8 +11,9 @@
  */
 
 import React from 'react';
+import Tabs from 'material-ui/lib/tabs/tabs';
+import Tab from 'material-ui/lib/tabs/tab';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
-import UI from 'pui-react-tabs';
 import LabelEditor from './LabelEditor.jsx';
 import StrokeEditor from './StrokeEditor.jsx';
 import FillEditor from './FillEditor.jsx';
@@ -49,25 +50,35 @@ const messages = defineMessages({
 class RuleEditor extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      value: 1
+    };
+  }
+  handleChange(value) {
+    if (value === parseInt(value, 10)) {
+      this.setState({
+        value: value,
+      });
+    }
   }
   render() {
     if (this.props.visible) {
       const {formatMessage} = this.props.intl;
       return (
-        <UI.SimpleTabs defaultActiveKey={1}>
-          <UI.Tab eventKey={1} title={formatMessage(messages.filltitle)}>
+        <Tabs value={this.state.value} onChange={this.handleChange.bind(this)}>
+          <Tab value={1} label={formatMessage(messages.filltitle)}>
             <FillEditor {...this.props} />
-          </UI.Tab>
-          <UI.Tab eventKey={2} title={formatMessage(messages.stroketitle)}>
+          </Tab>
+          <Tab value={2} label={formatMessage(messages.stroketitle)}>
             <StrokeEditor {...this.props} />
-          </UI.Tab>
-          <UI.Tab eventKey={3} title={formatMessage(messages.labeltitle)}>
+          </Tab>
+          <Tab value={3} label={formatMessage(messages.labeltitle)}>
             <LabelEditor {...this.props} />
-          </UI.Tab>
-          <UI.Tab eventKey={4} title={formatMessage(messages.filtertitle)}>
+          </Tab>
+          <Tab value={4} label={formatMessage(messages.filtertitle)}>
             <FilterEditor {...this.props} />
-          </UI.Tab>
-        </UI.SimpleTabs>
+          </Tab>
+        </Tabs>
       );
     } else {
       return (<article />);
