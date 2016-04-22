@@ -11,6 +11,7 @@
  */
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import Dialog from 'material-ui/lib/dialog';
 import Popover from 'material-ui/lib/popover/popover';
@@ -21,11 +22,16 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import TextField from 'material-ui/lib/text-field';
 import RaisedButton from 'material-ui/lib/raised-button';
+import GridList from 'material-ui/lib/grid-list/grid-list';
+import GridTile from 'material-ui/lib/grid-list/grid-tile';
+import List from 'material-ui/lib/lists/list';
+import ListItem from 'material-ui/lib/lists/list-item';
+import FolderIcon from 'material-ui/lib/svg-icons/file/folder-open';
+import LayerIcon from 'material-ui/lib/svg-icons/maps/layers';
 import URL from 'url-parse';
 import WMSService from '../services/WMSService.js';
 import WFSService from '../services/WFSService.js';
 import RESTService from '../services/RESTService.js';
-import './AddLayerModal.css';
 
 const messages = defineMessages({
   title: {
@@ -47,6 +53,11 @@ const messages = defineMessages({
     id: 'addwmslayermodal.connectbutton',
     description: 'Text for connect button',
     defaultMessage: 'Connect'
+  },
+  closebutton: {
+    id: 'addwmslayermodal.closebutton',
+    description: 'Text for close button',
+    defaultMessage: 'Close'
   }
 });
 
@@ -219,7 +230,7 @@ class AddLayerModal extends React.Component {
     return urlObj.toString();
   }
   _connect() {
-    var url = document.getElementById('url').value;
+    var url = ReactDOM.findDOMNode(this.refs.url).value;
     this._getCaps(this._getCapabilitiesUrl(url));
   }
   _getLayersMarkup(layer) {
@@ -228,29 +239,20 @@ class AddLayerModal extends React.Component {
       var children = layer.Layer.map(function(child) {
         return this._getLayersMarkup(child);
       }, this);
-      childList = (
-        <ul className='addlayer'>
-          {children}
-        </ul>
-      );
+      childList = children;
     }
-    var markup;
+    var onTouchTap;
     if (layer.Name) {
-      markup = (<a className='layername' title={layer.Abstract || layer.Title} href="#" onClick={this._onLayerClick.bind(this, layer)}>{layer.Title}</a>);
-    } else {
-      markup = (<span>{layer.Title}</span>);
+      onTouchTap = this._onLayerClick.bind(this, layer);
     }
-    var className;
+    var leftIcon;
     if (layer.Layer) {
-      className = 'fa fa-folder-open-o';
+      leftIcon = <FolderIcon />;
     } else if (layer.Name) {
-      className = 'fa-file-o';
+      leftIcon = <LayerIcon />;
     }
     return (
-      <li className={className} key={layer.Title}>
-        {markup}
-        {childList}
-      </li>
+      <ListItem onTouchTap={onTouchTap} leftIcon={leftIcon} initiallyOpen={true} key={layer.Title} primaryText={layer.Title} nestedItems={childList} />
     );
   }
   open() {
@@ -268,7 +270,8 @@ class AddLayerModal extends React.Component {
     const {formatMessage} = this.props.intl;
     var layers;
     if (this.state.layerInfo) {
-      layers = this._getLayersMarkup(this.state.layerInfo);
+      var layerInfo = this._getLayersMarkup(this.state.layerInfo);
+      layers = <List>{layerInfo}</List>;
     }
     var error;
     if (this.state.error === true) {
@@ -278,18 +281,19 @@ class AddLayerModal extends React.Component {
     if (this.props.allowUserInput) {
       var serviceType = this.props.asVector ? 'WFS' : 'WMS';
       input = (
-        <div className="clearfix">
-          <TextField floatingLabelText={formatMessage(messages.inputfieldlabel, {serviceType: serviceType})} defaultValue={this.props.url} id='url' />
-          <RaisedButton label={formatMessage(messages.connectbutton)} onTouchTap={this._connect.bind(this)} />
-        </div>
+        <GridList cellHeight={75}>
+          <GridTile><TextField floatingLabelText={formatMessage(messages.inputfieldlabel, {serviceType: serviceType})} defaultValue={this.props.url} ref='url' /></GridTile>
+          <GridTile><RaisedButton label={formatMessage(messages.connectbutton)} onTouchTap={this._connect.bind(this)} /></GridTile>
+        </GridList>
       );
     }
+    var actions = [
+      <RaisedButton label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
+    ];
     return (
-      <Dialog autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title)} open={this.state.open} onRequestClose={this.close.bind(this)}>
+      <Dialog actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title)} open={this.state.open} onRequestClose={this.close.bind(this)}>
         {input}
-        <ul className='addlayer'>
-          {layers}
-        </ul>
+        {layers}
         {error}
       </Dialog>
     );

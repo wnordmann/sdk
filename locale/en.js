@@ -8,6 +8,7 @@ var enMessages = {
   "addlayer.menutitle": "Add layer",
   "addlayer.modaltitle": "Upload layer",
   "addlayer.strokecolorlabel": "Stroke color",
+  "addwmslayermodal.closebutton": "Close",
   "addwmslayermodal.connectbutton": "Connect",
   "addwmslayermodal.errormsg": "Error retrieving GetCapabilities. {msg}",
   "addwmslayermodal.inputfieldlabel": "{serviceType} Endpoint",
