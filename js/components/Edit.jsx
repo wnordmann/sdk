@@ -294,7 +294,7 @@ class Edit extends MapTool {
       attributeFormItems = [];
       for (i = 0, ii = this.state.attributes.length; i < ii; ++i) {
         var name = this.state.attributes[i], ref = NEW_ATTR_PREFIX + name;
-        attributeFormItems.push(<TextField key={ref} floatingLabelText={name} ref={ref} /><br/>);
+        attributeFormItems.push(<TextField key={ref} floatingLabelText={name} ref={ref} />);
       }
     }
     var error;
