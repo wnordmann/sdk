@@ -16,6 +16,19 @@ import FilterModal from './FilterModal.jsx';
 import LabelModal from './LabelModal.jsx';
 import StyleModal from './StyleModal.jsx';
 import LayerActions from '../actions/LayerActions.js';
+import Slider from 'material-ui/lib/slider';
+import Checkbox from 'material-ui/lib/checkbox';
+import RadioButton from 'material-ui/lib/radio-button';
+import IconButton from 'material-ui/lib/icon-button';
+import DownloadIcon from 'material-ui/lib/svg-icons/file/file-download';
+import ZoomInIcon from 'material-ui/lib/svg-icons/action/zoom-in';
+import FilterIcon from 'material-ui/lib/svg-icons/content/filter-list';
+import LabelIcon from 'material-ui/lib/svg-icons/content/text-format';
+import StyleIcon from 'material-ui/lib/svg-icons/editor/border-style';
+import MoveUpIcon from 'material-ui/lib/svg-icons/hardware/keyboard-arrow-up';
+import MoveDownIcon from 'material-ui/lib/svg-icons/hardware/keyboard-arrow-down';
+import DeleteIcon from 'material-ui/lib/svg-icons/action/delete';
+import EditIcon from 'material-ui/lib/svg-icons/editor/mode-edit';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import './LayerListItem.css';
@@ -178,8 +191,12 @@ class LayerListItem extends React.Component {
   }
   _zoomTo() {
     var map = this.props.map;
+    var extent = this.props.layer.get('EX_GeographicBoundingBox');
+    if (!extent) {
+      extent = this.props.layer.getSource().getExtent();
+    }
     map.getView().fit(
-      this.props.layer.getSource().getExtent(),
+      extent,
       map.getSize()
     );
   }
@@ -195,8 +212,8 @@ class LayerListItem extends React.Component {
   _edit() {
     LayerActions.editLayer(this.props.layer);
   }
-  _changeOpacity(event) {
-    this.props.layer.setOpacity(parseFloat(event.target.value));
+  _changeOpacity(evt, value) {
+    this.props.layer.setOpacity(value);
   }
   render() {
     const {formatMessage} = this.props.intl;
@@ -205,60 +222,51 @@ class LayerListItem extends React.Component {
     var opacity;
     if (this.props.showOpacity && source && layer.get('type') !== 'base') {
       var val = layer.getOpacity();
-      var opacityInputId = 'layerlistitem-' + layer.get('id') + '-opacity';
-      opacity = (
-        <ul><div className='input-group'>
-          <input id={opacityInputId} onChange={this._changeOpacity.bind(this)} defaultValue={val} type="range" name="opacity" min="0" max="1" step="0.01" />
-        </div></ul>
-      );
+      opacity = (<Slider style={{width: '200px'}} defaultValue={val} onChange={this._changeOpacity.bind(this)} />);
     }
     var zoomTo;
-    if (layer.get('type') !== 'base' && layer.get('type') !== 'base-group' && (source && source.getExtent) && this.props.showZoomTo) {
-      zoomTo = <a title={formatMessage(messages.zoomtotitle)} href='#' onClick={this._zoomTo.bind(this)}><i className='layerlayeritem glyphicon glyphicon-zoom-in'></i></a>;
+    // TODO add titles back for icon buttons
+    if (layer.get('type') !== 'base' && layer.get('type') !== 'base-group' && ((source && source.getExtent) || layer.get('EX_GeographicBoundingBox')) && this.props.showZoomTo) {
+      zoomTo = <IconButton onTouchTap={this._zoomTo.bind(this)}><ZoomInIcon /></IconButton>; 
     }
     var download;
     if (layer instanceof ol.layer.Vector && this.props.showDownload) {
-      download = <a title={formatMessage(messages.downloadtitle)} href='#' onClick={this._download.bind(this)}><i className='layerlayeritem glyphicon glyphicon-download-alt'></i></a>;
+      download = (<IconButton onTouchTap={this._download.bind(this)}><DownloadIcon /></IconButton>);
     }
     var filter;
     if (layer instanceof ol.layer.Vector && this.props.allowFiltering) {
-      filter = <a title={formatMessage(messages.filtertitle)} href='#' onClick={this._filter.bind(this)}><i className='layerlayeritem glyphicon glyphicon-filter'></i></a>;
+      filter = (<IconButton onTouchTap={this._filter.bind(this)}><FilterIcon /></IconButton>);
     }
     var label;
     if (layer instanceof ol.layer.Vector && this.props.allowLabeling) {
-      label = <a title={formatMessage(messages.labeltitle)} href='#' onClick={this._label.bind(this)}><i className='layerlayeritem glyphicon glyphicon-font'></i></a>;
+      label = (<IconButton onTouchTap={this._label.bind(this)}><LabelIcon /></IconButton>);
     }
     var styling;
     if (layer.get('canStyle') && this.props.allowStyling) {
-      styling =  <a title={formatMessage(messages.stylingtitle)} href='#' onClick={this._style.bind(this)}><i className='layerlayeritem glyphicon glyphicon-list-alt'></i></a>;
+      styling = (<IconButton onTouchTap={this._style.bind(this)}><StyleIcon /></IconButton>);
     }
     var reorderUp, reorderDown;
     if (layer.get('type') !== 'base' && this.props.allowReordering && !this.props.children) {
-      reorderUp = <a title={formatMessage(messages.moveuptitle)} href='#' onClick={this._moveUp.bind(this)}><i className='layerlayeritem glyphicon glyphicon-triangle-top'></i></a>;
-      reorderDown = <a title={formatMessage(messages.movedowntitle)} href='#' onClick={this._moveDown.bind(this)}><i className='layerlayeritem glyphicon glyphicon-triangle-bottom'></i></a>;
+      reorderUp = (<IconButton onTouchTap={this._moveUp.bind(this)}><MoveUpIcon /></IconButton>);
+      reorderDown = (<IconButton onTouchTap={this._moveDown.bind(this)}><MoveDownIcon /></IconButton>);
     }
     var remove;
     if (layer.get('isRemovable') === true) {
-      remove = <a title={formatMessage(messages.removetitle)} href='#' onClick={this._remove.bind(this)}><i className='layerlayeritem glyphicon glyphicon-remove'></i></a>;
+      remove = (<IconButton onTouchTap={this._remove.bind(this)}><DeleteIcon /></IconButton>);
     }
     var edit;
     if (this.props.allowEditing && layer.get('isWFST') === true) {
-      edit = <a title={formatMessage(messages.edittitle)} href='#' onClick={this._edit.bind(this)}><i className='layerlayeritem glyphicon glyphicon-pencil'></i></a>;
+      edit = (<IconButton onTouchTap={this._edit.bind(this)}><EditIcon /></IconButton>);
     }
     var input, baselayerId, heading;
     if (layer.get('type') === 'base') {
       baselayerId = 'layerlistitem-' + layer.get('id') + '-baselayergroup';
-      if (this.state.checked) {
-        input = (<div className='input-group'><input id={baselayerId} type="radio" name="baselayergroup" value={this.props.title} checked onChange={this._handleChange.bind(this)} />{this.props.title}</div>);
-      } else {
-        input = (<div className='input-group'><input id={baselayerId} type="radio" name="baselayergroup" value={this.props.title} onChange={this._handleChange.bind(this)} />{this.props.title}</div>);
-      }
+      input = (<RadioButton checked={this.state.checked} value={this.props.title} label={this.props.title} onCheck={this._handleChange.bind(this)} />);
     } else if (layer.get('type') === 'base-group') {
       baselayerId = 'layerlistitem-' + layer.get('id') + '-baselayergroup';
       heading = (<h4><strong>{formatMessage(messages.layertitle)}</strong></h4>);
     } else {
-      var inputId = 'layerlistitem-' + layer.get('id') + '-visibility';
-      input = (<ul><div className='input-group'><input id={inputId} type="checkbox" checked={this.state.checked} onChange={this._handleChange.bind(this)} />{this.props.title}</div></ul>);
+      input = (<Checkbox label={this.props.title} checked={this.state.checked} onCheck={this._handleChange.bind(this)} />);
     }
     var labelModal, filterModal, styleModal;
     if (this.props.layer instanceof ol.layer.Vector) {
@@ -273,7 +281,7 @@ class LayerListItem extends React.Component {
         {heading}
         {input}
         {opacity}
-        <ul>{zoomTo}
+        {zoomTo}
         {download}
         {filter}
         {label}
@@ -281,7 +289,7 @@ class LayerListItem extends React.Component {
         {reorderUp}
         {reorderDown}
         {remove}
-        {edit}</ul>
+        {edit}
         {this.props.children}
         <span>
           {filterModal}

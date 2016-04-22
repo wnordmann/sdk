@@ -179,6 +179,7 @@ class AddLayerModal extends React.Component {
         isRemovable: true,
         isSelectable: true,
         isWFST: true,
+        EX_GeographicBoundingBox: extent,
         canStyle: true,
         wfsInfo: true,
         popupInfo: '#AllAttributes',
