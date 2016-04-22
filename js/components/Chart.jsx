@@ -14,7 +14,10 @@ import React from 'react';
 import FeatureStore from '../stores/FeatureStore.js';
 import c3 from 'c3-windows';
 import './c3.min.css';
-import UI from 'pui-react-dropdowns';
+import IconMenu from 'material-ui/lib/menus/icon-menu';
+import MenuItem from 'material-ui/lib/menus/menu-item';
+import RaisedButton from 'material-ui/lib/raised-button';
+import SelectField from 'material-ui/lib/select-field';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import './Chart.css';
@@ -28,6 +31,11 @@ const DISPLAY_MODE_CATEGORY = 1;
 const DISPLAY_MODE_COUNT = 2;
 
 const messages = defineMessages({
+  dropdowntext: {
+    id: 'chart.dropdowntext',
+    description: 'Text to use on the Chart drop down',
+    defaultMessage: 'Charts'
+  },
   count: {
     id: 'chart.count',
     description: 'Title of the column which will be used to show feature count',
@@ -175,10 +183,10 @@ class Chart extends React.Component {
     }
     return columns;
   }
-  _selectChart(evt) {
+  _selectChart(evt, idx, value) {
     for (var i = 0, ii = this.props.charts.length; i < ii; ++i) {
       var chart = this.props.charts[i];
-      if (chart.title === evt.target.value) {
+      if (chart.title === value) {
         this.setState({
           chart: chart,
           selected: this._storeConfig[chart.layer].selected
@@ -218,25 +226,25 @@ class Chart extends React.Component {
     if (this.props.combo === true) {
       var options = this.props.charts.map(function(chart, idx) {
         var title = chart.title;
-        return (<option key={idx} value={title}>{title}</option>);
+        return (<MenuItem key={idx} value={title} primaryText={title} />);
       });
       return (
         <div className='chart-panel' id='chart-panel'>
-          <select onChange={this._selectChart.bind(this)} className='form-control' id='chart-selector'>
+          <SelectField onChange={this._selectChart.bind(this)}>
             {options}
-          </select>
+          </SelectField>
           <div id='chart'></div>
         </div>
       );
     } else {
       var listitems = this.props.charts.map(function(chart, idx) {
         var key = chart.title;
-        return (<UI.DropdownItem key={idx} onSelect={this._onClick.bind(this, {target: {value: key}})}>{key}</UI.DropdownItem>);
-      }, this);
+        return (<MenuItem key={idx} value={key} primaryText={key} />);
+      });
       return (
-        <UI.Dropdown {...this.props} title='Charts'>
+        <IconMenu {...this.props} iconButtonElement={<RaisedButton label={formatMessage(messages.dropdowntext)} />} value={this.state.chart.title} onChange={this._onClick.bind(this)}>
           {listitems}
-        </UI.Dropdown>
+        </IconMenu>
       );
     }
   }

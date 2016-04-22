@@ -15,6 +15,7 @@ var enMessages = {
   "addwmslayermodal.title": "Add Layer",
   "bookmarks.dropdowntext": "Bookmarks",
   "chart.count": "Feature count",
+  "chart.dropdowntext": "Charts",
   "edit.attributeslabel": "Attributes (comma-separated names)",
   "edit.createbuttontext": "Create",
   "edit.createbuttontitle": "Create empty layer",
