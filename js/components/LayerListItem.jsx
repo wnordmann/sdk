@@ -24,7 +24,7 @@ import DownloadIcon from 'material-ui/lib/svg-icons/file/file-download';
 import ZoomInIcon from 'material-ui/lib/svg-icons/action/zoom-in';
 import FilterIcon from 'material-ui/lib/svg-icons/content/filter-list';
 import LabelIcon from 'material-ui/lib/svg-icons/content/text-format';
-import StyleIcon from 'material-ui/lib/svg-icons/editor/border-style';
+import StyleIcon from 'material-ui/lib/svg-icons/image/brush';
 import MoveUpIcon from 'material-ui/lib/svg-icons/hardware/keyboard-arrow-up';
 import MoveDownIcon from 'material-ui/lib/svg-icons/hardware/keyboard-arrow-down';
 import DeleteIcon from 'material-ui/lib/svg-icons/action/delete';
