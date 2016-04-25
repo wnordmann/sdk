@@ -57,7 +57,7 @@ const messages = defineMessages({
   newbuttontext: {
     id: 'querybuilder.newbuttontext',
     description: 'Text for the new selection button',
-    defaultMessage: 'New Selection'
+    defaultMessage: 'New'
   },
   addbuttontitle: {
     id: 'querybuilder.addbuttontitle',
@@ -67,7 +67,7 @@ const messages = defineMessages({
   addbuttontext: {
     id: 'querybuilder.addbuttontext',
     description: 'Text for the add to current selection button',
-    defaultMessage: 'Add to selection'
+    defaultMessage: 'Add'
   },
   selectintitle: {
     id: 'querybuilder.selectintitle',
@@ -77,7 +77,7 @@ const messages = defineMessages({
   selectintext: {
     id: 'querybuilder.selectintext',
     description: 'Text for the refine current selection button',
-    defaultMessage: 'Refine Selection'
+    defaultMessage: 'Refine'
   }
 });
 
