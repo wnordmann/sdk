@@ -14,7 +14,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
+import List from 'material-ui/lib/lists/list';
+import ListItem from 'material-ui/lib/lists/list-item';
 import GeocodingConstants from '../constants/GeocodingConstants.js';
+import GeocodingActions from '../actions/GeocodingActions.js';
 import pureRender from 'pure-render-decorator';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
@@ -95,6 +98,7 @@ class GeocodingResults extends React.Component {
       }));
     }
     source.addFeature(feature);
+    GeocodingActions.zoomToResult(result);
   }
   render() {
     const {formatMessage} = this.props.intl;
@@ -103,18 +107,21 @@ class GeocodingResults extends React.Component {
     if (this.state.searchResults !== null) {
       if (this.state.searchResults.length > 0) {
         resultNodes = this.state.searchResults.map(function(result) {
-          return (
-            <a href='#' target='_self' key={result.place_id}><li key={result.place_id} onClick={me._zoomTo.bind(me, result)}>{result.display_name}</li></a>
+          var icon;
+          if (result.icon) {
+            icon = (<img src={result.icon}/>);
+          }
+          return (<ListItem leftIcon={icon} primaryText={result.display_name} key={result.place_id} onTouchTap={this._zoomTo.bind(this, result)} />
           );
-        });
+        }, this);
       } else {
         resultNodes = <p>{formatMessage(messages.noresults)}</p>;
       }
     }
     return (
-      <ul>
+      <List>
        {resultNodes}
-      </ul>
+      </List>
     );
   }
 }

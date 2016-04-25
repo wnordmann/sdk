@@ -19,5 +19,11 @@ export default {
       type: GeocodingConstants.SHOW_SEARCH_RESULTS,
       searchResults: results
     });
+  },
+  zoomToResult: (result) => {
+    AppDispatcher.handleAction({
+      type: GeocodingConstants.ZOOM_TO_RESULT,
+      result: result
+    });
   }
 };

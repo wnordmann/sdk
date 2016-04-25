@@ -11,6 +11,8 @@
  */
 
 import React from 'react';
+import AppDispatcher from '../dispatchers/AppDispatcher.js';
+import GeocodingConstants from '../constants/GeocodingConstants.js';
 import GeocodingActions from '../actions/GeocodingActions.js';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import TextField from 'material-ui/lib/text-field';
@@ -33,12 +35,26 @@ const messages = defineMessages({
  */
 @pureRender
 class Geocoding extends React.Component {
-  _searchBoxKeyPressed(e) {
-    if (e.which === 13) {
-      this._searchAddress();
-    }
+  constructor(props) {
+    super(props);
+    var me = this;
+    this.state = {
+      value: null
+    };
+    AppDispatcher.register((payload) => {
+      let action = payload.action;
+      switch (action.type) {
+        case GeocodingConstants.ZOOM_TO_RESULT:
+          me.setState({value: ''});
+          break;
+        default:
+          break;
+      }
+    });
   }
-  _searchAddress(event, value) {
+  _searchAddress(event) {
+    var value = this.refs.query.getValue();
+    this.setState({value: value});
     if (value !== '') {
       var cbname = 'fn' + Date.now();
       var script = document.createElement('script');
@@ -53,7 +69,7 @@ class Geocoding extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <TextField hintText={formatMessage(messages.placeholder)} onChange={this._searchAddress.bind(this)}/>
+      <TextField ref='query' value={this.state.value} hintText={formatMessage(messages.placeholder)} onChange={this._searchAddress.bind(this)}/>
     );
   }
 }
