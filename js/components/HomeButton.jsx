@@ -13,6 +13,8 @@
 import React from 'react';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import IconButton from 'material-ui/lib/icon-button';
+import HomeIcon from 'material-ui/lib/svg-icons/action/home';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -60,7 +62,7 @@ class HomeButton extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <button title={formatMessage(messages.buttontitle)} onClick={this._goHome.bind(this)}><i className='fa fa-home'></i></button>
+      <IconButton onTouchTap={this._goHome.bind(this)}><HomeIcon /></IconButton>
     );
   }
 }
