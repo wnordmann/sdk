@@ -230,7 +230,7 @@ class AddLayerModal extends React.Component {
     return urlObj.toString();
   }
   _connect() {
-    var url = ReactDOM.findDOMNode(this.refs.url).value;
+    var url = this.refs.url.getValue();
     this._getCaps(this._getCapabilitiesUrl(url));
   }
   _getLayersMarkup(layer) {
@@ -252,7 +252,7 @@ class AddLayerModal extends React.Component {
       leftIcon = <LayerIcon />;
     }
     return (
-      <ListItem onTouchTap={onTouchTap} leftIcon={leftIcon} initiallyOpen={true} key={layer.Title} primaryText={layer.Title} nestedItems={childList} />
+      <ListItem onTouchTap={onTouchTap} leftIcon={leftIcon} initiallyOpen={true} key={layer.Name || layer.Title} primaryText={layer.Title} nestedItems={childList} />
     );
   }
   open() {
