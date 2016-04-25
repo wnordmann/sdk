@@ -48,7 +48,7 @@ var enMessages = {
   "featuretable.layerlabel": "Layer",
   "featuretable.movebuttontext": "Move",
   "featuretable.movebuttontitle": "Move selected to top",
-  "featuretable.onlyselected": "Show only selected features",
+  "featuretable.onlyselected": "Selected only",
   "featuretable.zoombuttontext": "Zoom",
   "featuretable.zoombuttontitle": "Zoom to selected",
   "filtereditor.errortext": "Invalid filter, use for instance ATTRIBUTE == \"Value\"",
