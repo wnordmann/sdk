@@ -20,6 +20,8 @@ import TableRow from 'material-ui/lib/table/table-row';
 import TableHeader from 'material-ui/lib/table/table-header';
 import TableRowColumn from 'material-ui/lib/table/table-row-column';
 import TableBody from 'material-ui/lib/table/table-body';
+import IconButton from 'material-ui/lib/icon-button';
+import CloserIcon from 'material-ui/lib/svg-icons/navigation/close';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 const messages = defineMessages({
@@ -234,10 +236,10 @@ class InfoPopup extends BasePopup {
       contentDiv = (<div className='popup-content' ref='content' dangerouslySetInnerHTML={{__html: content}}></div>);
     }
     return (
-      <article>
-        <a href="#" ref="popupCloser" className="popup-closer fa fa-times fa-pull-right"></a>
+      <div>
+        <IconButton style={{float: 'right'}} ref="popupCloser" onTouchTap={this.setVisible.bind(this, false)}><CloserIcon /></IconButton>
         {contentDiv}
-      </article>
+      </div>
     );
   }
 }
