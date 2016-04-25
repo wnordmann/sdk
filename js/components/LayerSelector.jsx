@@ -75,9 +75,11 @@ class LayerSelector extends React.Component {
         layers.push(lyr);
       }
     }
-    this.setState({layers: layers});
     if (layers.length > 0) {
+      this.setState({layers: layers, value: layers[0].get('id')});
       this.props.onChange.call(this, layers[0]);
+    } else {
+      this.setState({layers: layers});
     }
   }
   _onItemChange(evt, index, value) {
