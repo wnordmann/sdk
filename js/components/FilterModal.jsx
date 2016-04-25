@@ -186,7 +186,7 @@ class FilterModal extends React.Component {
     return (
       <Dialog actions={actions} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} modal={true} open={this.state.open} onRequestClose={this.close.bind(this)}>
         <TextField errorText={errorText} ref='filterTextBox' />
-        <RaisedButton label={formatMessage(messages.addfiltertext)} onTouchTap={this._addFilter.bind(this)} /> 
+        <RaisedButton label={formatMessage(messages.addfiltertext)} onTouchTap={this._addFilter.bind(this)} />
         <List>
           {filters}
         </List>

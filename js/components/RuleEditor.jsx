@@ -57,7 +57,7 @@ class RuleEditor extends React.Component {
   handleChange(value) {
     if (value === parseInt(value, 10)) {
       this.setState({
-        value: value,
+        value: value
       });
     }
   }

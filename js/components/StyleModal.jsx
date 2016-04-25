@@ -220,15 +220,15 @@ class StyleModal extends React.Component {
     }, this);
     var actions = [
       <RaisedButton label={formatMessage(messages.applybutton)} onTouchTap={this._setStyle.bind(this)} />,
-      <RaisedButton label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} /> 
+      <RaisedButton label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
     ];
     return (
       <Dialog actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} open={this.state.open} onRequestClose={this.close.bind(this)}>
         <SelectField floatingLabelText={formatMessage(messages.rulelabel)} value={this.state.rule} onChange={this._onRuleChange.bind(this)}>
           {ruleItems}
         </SelectField>
-        <RaisedButton label={formatMessage(messages.addrulebutton)} onTouchTap={this._addRule.bind(this)} /> 
-        <RaisedButton label={formatMessage(messages.removerulebutton)} onTouchTap={this._removeRule.bind(this)} /> 
+        <RaisedButton label={formatMessage(messages.addrulebutton)} onTouchTap={this._addRule.bind(this)} />
+        <RaisedButton label={formatMessage(messages.removerulebutton)} onTouchTap={this._removeRule.bind(this)} />
         {ruleEditors}
       </Dialog>
     );

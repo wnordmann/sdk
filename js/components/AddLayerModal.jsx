@@ -14,7 +14,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import Dialog from 'material-ui/lib/dialog';
-import Popover from 'material-ui/lib/popover/popover';
+import Snackbar from 'material-ui/lib/snackbar';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LoginConstants from '../constants/LoginConstants.js';
 import FeatureStore from '../stores/FeatureStore.js';
@@ -275,7 +275,12 @@ class AddLayerModal extends React.Component {
     }
     var error;
     if (this.state.error === true) {
-      error = (<Popover open={this.state.errorOpen} onRequestClose={this._handleRequestClose.bind(this)}><div className='error-alert'>{formatMessage(messages.errormsg, {msg: this.state.msg})}</div></Popover>);
+      error = (<Snackbar
+        open={this.state.errorOpen}
+        message={formatMessage(messages.errormsg, {msg: this.state.msg})}
+        autoHideDuration={2000}
+        onRequestClose={this._handleRequestClose.bind(this)}
+      />);
     }
     var input;
     if (this.props.allowUserInput) {

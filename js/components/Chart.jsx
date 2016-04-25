@@ -201,6 +201,7 @@ class Chart extends React.Component {
     }
   }
   render() {
+    const {formatMessage} = this.props.intl;
     var columns = this._getColumns();
     c3.generate({
       bindto: '#chart',

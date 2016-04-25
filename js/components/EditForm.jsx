@@ -13,7 +13,7 @@
 import React from 'react';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import Popover from 'material-ui/lib/popover/popover';
+import Snackbar from 'material-ui/lib/snackbar';
 import RaisedButton from 'material-ui/lib/raised-button';
 import TextField from 'material-ui/lib/text-field';
 import WFSService from '../services/WFSService.js';
@@ -54,16 +54,14 @@ class EditForm extends React.Component {
       this.setState({layer: newProps.layer, feature: newProps.feature, values: newProps.feature.getProperties()});
     }
   }
-  _setError(msg, anchorEl) {
+  _setError(msg) {
     this.setState({
       open: true,
       error: true,
-      anchorEl: anchorEl,
       msg: msg
     });
   }
   _save(evt) {
-    var anchorEl = evt.currentTarget;
     const {formatMessage} = this.props.intl;
     if (this.state.dirty) {
       var values = {}, key;
@@ -81,11 +79,11 @@ class EditForm extends React.Component {
           }
           me.setState({dirty: {}});
         } else {
-          me._setError(formatMessage(messages.updatemsg), anchorEl);
+          me._setError(formatMessage(messages.updatemsg));
         }
       };
       var onFailure = function(xmlhttp, msg) {
-        me._setError(msg || (xmlhttp.status + ' ' + xmlhttp.statusText), anchorEl);
+        me._setError(msg || (xmlhttp.status + ' ' + xmlhttp.statusText));
       };
       WFSService.updateFeature(this.state.layer, null, this.state.feature, values, onSuccess, onFailure);
     }
@@ -106,8 +104,12 @@ class EditForm extends React.Component {
     const {formatMessage} = this.props.intl;
     var error;
     if (this.state.error === true) {
-      // TODO fix issue with anchorEl on first show
-      error = (<Popover anchorEl={this.state.anchorEl} open={this.state.open} onRequestClose={this._handleRequestClose.bind(this)}><div className='error-alert'>{formatMessage(messages.errormsg, {msg: this.state.msg})}</div></Popover>);
+      error = (<Snackbar
+        open={this.state.open}
+        message={formatMessage(messages.errormsg, {msg: this.state.msg})}
+        autoHideDuration={2000}
+        onRequestClose={this._handleRequestClose.bind(this)}
+      />);
     }
     var inputs = [];
     var fid;

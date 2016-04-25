@@ -17,7 +17,7 @@ import TextField from 'material-ui/lib/text-field';
 import RaisedButton from 'material-ui/lib/raised-button';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import LoginActions from '../actions/LoginActions.js';
-import Popover from 'material-ui/lib/popover/popover';
+import Snackbar from 'material-ui/lib/snackbar';
 import pureRender from 'pure-render-decorator';
 import './LoginModal.css';
 
@@ -90,8 +90,12 @@ class LoginModal extends React.Component {
     const {formatMessage} = this.props.intl;
     var error;
     if (this.state.error === true) {
-      // TODO anchor error popover
-      error = (<Popover open={this.state.errorOpen} onRequestClose={this._handleRequestClose.bind(this)}><div className='error-alert'>{formatMessage(messages.errormsg)}</div></Popover>);
+      error = (<Snackbar
+        open={this.state.errorOpen}
+        message={formatMessage(messages.errormsg)}
+        autoHideDuration={2000}
+        onRequestClose={this._handleRequestClose.bind(this)}
+      />);
     }
     var actions = [
       <RaisedButton label={formatMessage(messages.loginbutton)} onTouchTap={this._doLogin.bind(this)} />,

@@ -227,7 +227,7 @@ class LayerListItem extends React.Component {
     var zoomTo;
     // TODO add titles back for icon buttons
     if (layer.get('type') !== 'base' && layer.get('type') !== 'base-group' && ((source && source.getExtent) || layer.get('EX_GeographicBoundingBox')) && this.props.showZoomTo) {
-      zoomTo = <IconButton onTouchTap={this._zoomTo.bind(this)}><ZoomInIcon /></IconButton>; 
+      zoomTo = <IconButton onTouchTap={this._zoomTo.bind(this)}><ZoomInIcon /></IconButton>;
     }
     var download;
     if (layer instanceof ol.layer.Vector && this.props.showDownload) {
@@ -258,12 +258,10 @@ class LayerListItem extends React.Component {
     if (this.props.allowEditing && layer.get('isWFST') === true) {
       edit = (<IconButton onTouchTap={this._edit.bind(this)}><EditIcon /></IconButton>);
     }
-    var input, baselayerId, heading;
+    var input, heading;
     if (layer.get('type') === 'base') {
-      baselayerId = 'layerlistitem-' + layer.get('id') + '-baselayergroup';
       input = (<RadioButton checked={this.state.checked} value={this.props.title} label={this.props.title} onCheck={this._handleChange.bind(this)} />);
     } else if (layer.get('type') === 'base-group') {
-      baselayerId = 'layerlistitem-' + layer.get('id') + '-baselayergroup';
       heading = (<h4><strong>{formatMessage(messages.layertitle)}</strong></h4>);
     } else {
       input = (<Checkbox label={this.props.title} checked={this.state.checked} onCheck={this._handleChange.bind(this)} />);

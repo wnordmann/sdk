@@ -14,10 +14,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Dialog from 'material-ui/lib/dialog';
-import Popover from 'material-ui/lib/popover/popover';
+import Snackbar from 'material-ui/lib/snackbar';
 import TextField from 'material-ui/lib/text-field';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import SelectField from 'material-ui/lib/select-field';
+import RaisedButton from 'material-ui/lib/raised-button';
 import ol from 'openlayers';
 import MapTool from './MapTool.js';
 import {transformColor} from '../util.js';
@@ -299,7 +300,12 @@ class Edit extends MapTool {
     }
     var error;
     if (this.state.error === true) {
-      error = (<Popover open={this.state.errorOpen} onRequestClose={this._handleRequestClose.bind(this)}><div className='error-alert'>{formatMessage(messages.nolayererror)}</div></Popover>);
+      error = (<Snackbar
+        open={this.state.errorOpen}
+        message={formatMessage(messages.nolayererror)}
+        autoHideDuration={2000}
+        onRequestClose={this._handleRequestClose.bind(this)}
+      />);
     }
     var attributeActions = [
       <RaisedButton label={formatMessage(messages.okbuttontext)} onTouchTap={this._setAttributes.bind(this)} />
