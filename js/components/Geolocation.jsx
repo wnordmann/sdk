@@ -13,9 +13,10 @@
 import React from 'react';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import './Geolocation.css';
 import pureRender from 'pure-render-decorator';
-import Pui from 'pui-react-alerts';
+import Snackbar from 'material-ui/lib/snackbar';
+import IconButton from 'material-ui/lib/icon-button';
+import MyLocation from 'material-ui/lib/svg-icons/maps/my-location';
 
 const messages = defineMessages({
   error: {
@@ -44,7 +45,8 @@ class Geolocation extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: false
+      error: false,
+      open: false
     };
   }
   _geolocate() {
@@ -75,7 +77,7 @@ class Geolocation extends React.Component {
         })
       }));
       this._geolocation.on('error', function(error) {
-        this.setState({error: true, msg: error.message});
+        this.setState({error: true, open: true, msg: error.message});
       }, this);
       this._geolocation.on('change:position', function() {
         var coordinates = this._geolocation.getPosition();
@@ -91,13 +93,23 @@ class Geolocation extends React.Component {
       });
     }
   }
+  _handleRequestClose() {
+    this.setState({
+      open: false
+    });
+  }
   render() {
     const {formatMessage} = this.props.intl;
     if (this.state.error) {
-      return (<Pui.ErrorAlert dismissable={true} withIcon={true}>{formatMessage(messages.error, {details: this.state.msg})}</Pui.ErrorAlert>);
+      return (<Snackbar
+        open={this.state.open}
+        message={formatMessage(messages.error, {details: this.state.msg})}
+          autoHideDuration={2000}
+          onRequestClose={this._handleRequestClose.bind(this)}
+        />);
     } else {
       return (
-        <button id='geolocation-button' title={formatMessage(messages.buttontitle)} onClick={this._geolocate.bind(this)}></button>
+        <IconButton onTouchTap={this._geolocate.bind(this)}><MyLocation /></IconButton>
       );
     }
   }

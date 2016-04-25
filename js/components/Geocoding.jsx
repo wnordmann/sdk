@@ -12,8 +12,8 @@
 
 import React from 'react';
 import GeocodingActions from '../actions/GeocodingActions.js';
-import UI from 'pui-react-search-input';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import TextField from 'material-ui/lib/text-field';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -38,8 +38,7 @@ class Geocoding extends React.Component {
       this._searchAddress();
     }
   }
-  _searchAddress(event) {
-    var value = event.target.value;
+  _searchAddress(event, value) {
     if (value !== '') {
       var cbname = 'fn' + Date.now();
       var script = document.createElement('script');
@@ -54,7 +53,7 @@ class Geocoding extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <UI.SearchInput placeholder={formatMessage(messages.placeholder)} onChange={this._searchAddress.bind(this)}/>
+      <TextField hintText={formatMessage(messages.placeholder)} onChange={this._searchAddress.bind(this)}/>
     );
   }
 }

@@ -11,8 +11,9 @@
  */
 
 import React from 'react';
-import UI from 'pui-react-buttons';
-import DD from 'pui-react-dropdowns';
+import IconMenu from 'material-ui/lib/menus/icon-menu';
+import MenuItem from 'material-ui/lib/menus/menu-item';
+import RaisedButton from 'material-ui/lib/raised-button';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import LoginModal from './LoginModal.jsx';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
@@ -45,7 +46,8 @@ class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: null
+      user: null,
+      value: null
     };
     var me = this;
     AppDispatcher.register((payload) => {
@@ -90,19 +92,25 @@ class Login extends React.Component {
     AuthService.logoff();
     this.setState({user: null});
   }
+  _handleChange(event, value) {
+    if (value === 1) {
+      this._doLogout();
+    }
+    this.setState({value: value});
+  }
   render() {
     const {formatMessage} = this.props.intl;
     if (this.state.user !== null) {
       return (
-        <DD.Dropdown pullRight {...this.props} title={this.state.user}>
-          <DD.DropdownItem onSelect={this._doLogout.bind(this)}>{formatMessage(messages.logouttext)}</DD.DropdownItem>
-        </DD.Dropdown>
+        <IconMenu {...this.props} iconButtonElement={<RaisedButton label={this.state.user} />} value={this.state.value} onChange={this._handleChange.bind(this)}>
+          <MenuItem value={1} primaryText={formatMessage(messages.logouttext)}/>
+        </IconMenu>
       );
     } else {
       return (
-        <UI.DefaultButton onClick={this._showLoginDialog.bind(this)}>{formatMessage(messages.buttontext)}
+        <RaisedButton {...this.props} label={formatMessage(messages.buttontext)} onTouchTap={this._showLoginDialog.bind(this)}>
           <LoginModal ref='loginmodal' {...this.props} />
-        </UI.DefaultButton>
+        </RaisedButton>
       );
     }
   }

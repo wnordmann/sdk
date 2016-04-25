@@ -16,20 +16,15 @@ import ol from 'openlayers';
 import SelectActions from '../actions/SelectActions.js';
 import MapTool from './MapTool.js';
 import FeatureStore from '../stores/FeatureStore.js';
-import UI from 'pui-react-dropdowns';
+import RaisedButton from 'material-ui/lib/raised-button';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   menubuttontext: {
     id: 'select.menubuttontext',
-    description: 'Menu button text for select menu',
-    defaultMessage: 'Selection'
-  },
-  rectangletext: {
-    id: 'select.rectangletext',
-    description: 'Text for select by rectangle menu option',
-    defaultMessage: 'Select by rectangle'
+    description: 'Menu button text for select function',
+    defaultMessage: 'Select'
   }
 });
 
@@ -107,9 +102,7 @@ class Select extends MapTool {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <UI.Dropdown {...this.props} title={formatMessage(messages.menubuttontext)}>
-        <UI.DropdownItem onSelect={this._selectByRectangle.bind(this)}>{formatMessage(messages.rectangletext)}</UI.DropdownItem>
-      </UI.Dropdown>
+     <RaisedButton {...this.props} label={formatMessage(messages.menubuttontext)} onTouchTap={this._selectByRectangle.bind(this)} />
     );
   }
 }

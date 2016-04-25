@@ -14,6 +14,8 @@
 import React from 'react';
 import ol from 'openlayers';
 global.ol = ol;
+import IconButton from 'material-ui/lib/icon-button';
+import GlobeIcon from 'material-ui/lib/svg-icons/action/three-d-rotation';
 import pureRender from 'pure-render-decorator';
 import olcs from 'ol3-cesium';
 
@@ -62,9 +64,9 @@ export default class Globe extends React.Component {
     this.setState({globe: !this.state.globe});
   }
   render() {
-    var text = this.state.globe ? '2D' : '3D';
+    var icon = this.state.globe ? <GlobeIcon color='white' /> : <GlobeIcon />;
     return (
-      <button title={text} onClick={this._toggle.bind(this)}>{text}</button>
+      <IconButton onTouchTap={this._toggle.bind(this)}>{icon}</IconButton>
     );
   }
 }

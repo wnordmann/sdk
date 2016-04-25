@@ -14,6 +14,14 @@ import React from 'react';
 import BasePopup from './BasePopup.jsx';
 import ol from 'openlayers';
 import WMSService from '../services/WMSService.js';
+import Table from 'material-ui/lib/table/table';
+import TableHeaderColumn from 'material-ui/lib/table/table-header-column';
+import TableRow from 'material-ui/lib/table/table-row';
+import TableHeader from 'material-ui/lib/table/table-header';
+import TableRowColumn from 'material-ui/lib/table/table-row-column';
+import TableBody from 'material-ui/lib/table/table-body';
+import IconButton from 'material-ui/lib/icon-button';
+import CloserIcon from 'material-ui/lib/svg-icons/navigation/close';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 const messages = defineMessages({
@@ -62,6 +70,7 @@ class InfoPopup extends BasePopup {
     this._formats['application/json'] = new ol.format.GeoJSON();
     this._formats['application/vnd.ogc.gml'] = new ol.format.WMSGetFeatureInfo();
     this.active = true;
+    this._count = 0;
     this.state = {
       popupTexts: []
     };
@@ -76,23 +85,34 @@ class InfoPopup extends BasePopup {
     }
   }
   _createSimpleTable(features) {
+    this._count++;
     const {formatMessage} = this.props.intl;
-    var result = '';
+    // TODO add back fid
+    var fid;
+    var rows = [];
     for (var i = 0, ii = features.length; i < ii; ++i) {
       var feature = features[i];
-      result += '<span class="infopopup-header">' + feature.getId() + '</span>';
-      result += '<table class="infopopup-table" border="1"><tr><th>' + formatMessage(messages.nametext) + '</th><th>' + formatMessage(messages.valuetext) + '</th></tr>';
+      fid = feature.getId();
       var keys = feature.getKeys();
       var geom = feature.getGeometryName();
       for (var j = 0, jj = keys.length; j < jj; ++j) {
         var key = keys[j];
         if (key !== geom && key !== 'boundedBy') {
-          result += '<tr><td>' + key + '</td><td>' + feature.get(key) + '</td></tr>';
+          rows.push(<TableRow key={key}><TableRowColumn>{key}</TableRowColumn><TableRowColumn>{feature.get(key)}</TableRowColumn></TableRow>);
         }
       }
-      result += '</table>';
     }
-    return result;
+    return (<Table key={this._count}>
+      <TableHeader displaySelectAll={false}>
+        <TableRow>
+          <TableHeaderColumn tooltip={fid}>{formatMessage(messages.nametext)}</TableHeaderColumn>
+          <TableHeaderColumn tooltip={fid}>{formatMessage(messages.valuetext)}</TableHeaderColumn>
+        </TableRow>
+      </TableHeader>
+      <TableBody displayRowCheckbox={false}>
+        {rows}
+      </TableBody>
+    </Table>);
   }
   _fetchData(evt, popupTexts, cb) {
     var map = this.props.map;
@@ -121,6 +141,7 @@ class InfoPopup extends BasePopup {
       if (features.length) {
         var popupContent;
         if (popupDef === ALL_ATTRS) {
+          me._contentAsObject = true;
           popupContent = me._createSimpleTable(features);
         } else {
           for (var j = 0, jj = features.length; j < jj; ++j) {
@@ -171,6 +192,7 @@ class InfoPopup extends BasePopup {
       var pixel = map.getEventPixel(evt.originalEvent);
       var coord = evt.coordinate;
       var popupTexts = [];
+      this._contentAsObject = false;
       var me = this;
       map.forEachFeatureAtPixel(pixel, function(feature, layer) {
         if (feature) {
@@ -194,7 +216,8 @@ class InfoPopup extends BasePopup {
           me.overlayPopup.setPosition(coord);
           if (popupTexts.length) {
             me.setState({
-              popupTexts: popupTexts
+              popupTexts: popupTexts,
+              contentAsObject: me._contentAsObject
             });
           }
           me.setVisible(true);
@@ -205,12 +228,18 @@ class InfoPopup extends BasePopup {
     }
   }
   render() {
-    var content = this.state.popupTexts.join('<hr>');
+    var contentDiv;
+    if (this.state.contentAsObject) {
+      contentDiv = (<div className='popup-content' ref='content'>{this.state.popupTexts}</div>);
+    } else {
+      var content = this.state.popupTexts.join('<hr>');
+      contentDiv = (<div className='popup-content' ref='content' dangerouslySetInnerHTML={{__html: content}}></div>);
+    }
     return (
-      <article>
-        <a href="#" ref="popupCloser" className="popup-closer fa fa-times fa-pull-right"></a>
-        <div className='popup-content' ref='content' dangerouslySetInnerHTML={{__html: content}}></div>
-      </article>
+      <div>
+        <IconButton style={{float: 'right'}} ref="popupCloser" onTouchTap={this.setVisible.bind(this, false)}><CloserIcon /></IconButton>
+        {contentDiv}
+      </div>
     );
   }
 }

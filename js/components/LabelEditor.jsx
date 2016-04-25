@@ -11,8 +11,10 @@
  */
 
 import React from 'react';
-import Grids from 'pui-react-grids';
 import ColorPicker from 'react-color';
+import MenuItem from 'material-ui/lib/menus/menu-item';
+import SelectField from 'material-ui/lib/select-field';
+import TextField from 'material-ui/lib/text-field';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 
@@ -31,10 +33,13 @@ const messages = defineMessages({
     id: 'labeleditor.sizelabel',
     description: 'Label for the font size input',
     defaultMessage: 'Font size'
+  },
+  emptytext: {
+    id: 'labeleditor.emptytext',
+    description: 'Empty text for the attribute combo',
+    defaultMessage: 'Select an attribute'
   }
 });
-
-const nullValue = 'NULL';
 
 /**
  * Editor for label properties. Can edit the label attribute, fontSize and fontColor.
@@ -56,57 +61,32 @@ class LabelEditor extends React.Component {
       this.state[prop] = defaultVal;
     }
   }
-  _onSubmit(evt) {
-    evt.preventDefault();
-  }
-  _onItemChange(evt) {
-    this.state.labelAttribute = evt.target.value === nullValue ? null : evt.target.value;
-    this.props.onChange(this.state);
+  _onItemChange(evt, idx, value) {
+    this.setState({labelAttribute: value});
   }
   _onChangeFontSize(evt) {
-    this.state.fontSize = evt.target.value;
-    this.props.onChange(this.state);
+    this.setState({fontSize: evt.currentTarget.value});
   }
   _onChangeFill(color) {
-    this.state.fontColor = color;
-    this.props.onChange(this.state);
+    this.setState({fontColor: color});
   }
   render() {
+    this.props.onChange(this.state);
     const {formatMessage} = this.props.intl;
-    var attributeItems = [(<option value={nullValue} key={0}>Select an attribute</option>)];
+    var attributeItems = [];
     for (var i = 0, ii = this.props.attributes.length; i < ii; ++i) {
       var attribute = this.props.attributes[i];
-      attributeItems.push(<option value={attribute} key={i + 1}>{attribute}</option>);
+      attributeItems.push(<MenuItem key={i} value={attribute} primaryText={attribute} />);
     }
     return (
-      <form onSubmit={this._onSubmit} className='form-horizontal'>
-        <div className="form-group">
-          <Grids.Col md={4}>
-            <label htmlFor='labelSelector'>{formatMessage(messages.attributelabel)}:</label>
-          </Grids.Col>
-          <Grids.Col md={12}>
-            <select id='labelSelector' defaultValue={this.state.labelAttribute} onChange={this._onItemChange.bind(this)}>
-              {attributeItems}
-            </select>
-          </Grids.Col>
-        </div>
-        <div className='form-group'>
-          <Grids.Col md={4}>
-            <label htmlFor='fontSize'>{formatMessage(messages.sizelabel)}:</label>
-          </Grids.Col>
-          <Grids.Col md={12}>
-            <input ref='fontSize' id='fontSize' defaultValue={this.state.fontSize} onChange={this._onChangeFontSize.bind(this)} />
-          </Grids.Col>
-        </div>
-        <div className='form-group'>
-          <Grids.Col md={4}>
-            <label>{formatMessage(messages.fillcolorlabel)}:</label>
-          </Grids.Col>
-          <Grids.Col md={14}>
-            <ColorPicker type='compact' onChangeComplete={this._onChangeFill.bind(this)} color={this.state.fontColor} />
-          </Grids.Col>
-        </div>
-      </form>
+      <div>
+        <SelectField floatingLabelText={formatMessage(messages.attributelabel)} hintText={formatMessage(messages.emptytext)} value={this.state.labelAttribute} onChange={this._onItemChange.bind(this)}>
+          {attributeItems}
+        </SelectField><br/>
+        <TextField defaultValue={this.state.fontSize} floatingLabelText={formatMessage(messages.sizelabel)} onChange={this._onChangeFontSize.bind(this)} /><br/>
+        <label>{formatMessage(messages.fillcolorlabel)}:</label>
+        <ColorPicker type='compact' onChangeComplete={this._onChangeFill.bind(this)} color={this.state.fontColor.rgb} />
+      </div>
     );
   }
 }

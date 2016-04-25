@@ -2,10 +2,6 @@
 New javascript SDK based on React and Flux
 For example usage see: https://github.com/boundlessgeo/sdk-template
 
-## Building css (Pivotal UI)
-
-    npm run css
-
 ## Generating docs
 
     npm run docs
@@ -26,9 +22,6 @@ In order to keep the full build (used by the free version of QGIS Web Applicatio
     npm test
     npm run build:full:debug
     git add dist/js
-    npm run css
-    npm run minify:css
-    git add dist/css
     npm run docs
     git add docs
     npm run i18n

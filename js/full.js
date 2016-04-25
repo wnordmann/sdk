@@ -22,18 +22,6 @@ global.ol = ol;
 import {IntlProvider} from 'react-intl';
 global.IntlProvider = IntlProvider;
 
-import UI from 'pui-react-tabs';
-global.UI = UI;
-
-import DD from 'pui-react-dropdowns';
-global.DD = DD;
-
-import BUTTON from 'pui-react-buttons';
-global.BUTTON = BUTTON;
-
-import ICON from 'pui-react-iconography';
-global.ICON = ICON;
-
 import AddLayer from './components/AddLayer.jsx';
 global.AddLayer = AddLayer;
 
@@ -108,9 +96,6 @@ global.Select = Select;
 
 import ToolActions from './actions/ToolActions.js';
 global.ToolActions = ToolActions;
-
-import Toolbar from './components/Toolbar.jsx';
-global.Toolbar = Toolbar;
 
 import WFST from './components/WFST.jsx';
 global.WFST = WFST;

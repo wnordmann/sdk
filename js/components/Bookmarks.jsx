@@ -13,7 +13,9 @@
 import React from 'react';
 import ol from 'openlayers';
 import Slider from 'react-slick';
-import UI from 'pui-react-dropdowns';
+import IconMenu from 'material-ui/lib/menus/icon-menu';
+import MenuItem from 'material-ui/lib/menus/menu-item';
+import RaisedButton from 'material-ui/lib/raised-button';
 import './Bookmarks.css';
 import './slick.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -76,6 +78,9 @@ class Bookmarks extends React.Component {
         this._resolution = evt.target.getResolution();
       }, this);
     }
+    this.state = {
+      value: null
+    }
   }
   componentDidMount() {
     if (this.props.showMarker) {
@@ -95,6 +100,10 @@ class Bookmarks extends React.Component {
       });
       this.props.map.addLayer(this._layer);
     }
+  }
+  _handleChange(event, value) {
+    this.setState({value: value});
+    this._selectBookmark(value);
   }
   _selectBookmark(bookmark) {
     var map = this.props.map, view = map.getView();
@@ -137,9 +146,13 @@ class Bookmarks extends React.Component {
     const {formatMessage} = this.props.intl;
     if (this.props.menu === true) {
       var menuChildren = this.props.bookmarks.map(function(bookmark) {
-        return (<UI.DropdownItem key={bookmark.name} onSelect={this._selectBookmark.bind(this, bookmark)}>{bookmark.name}</UI.DropdownItem>);
+        return (<MenuItem key={bookmark.name} value={bookmark.name} primaryText={bookmark.name}/>);
       }, this);
-      return (<UI.Dropdown {...this.props} title={formatMessage(messages.dropdowntext)}>{menuChildren}</UI.Dropdown>);
+      return (
+        <IconMenu {...this.props} iconButtonElement={<RaisedButton label={formatMessage(messages.dropdowntext)} />} value={this.state.value} onChange={this._handleChange.bind(this)}>
+          {menuChildren}
+        </IconMenu>
+      );
     } else {
       var getHTML = function(bookmark) {
         return {__html: bookmark.description};

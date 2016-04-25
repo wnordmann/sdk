@@ -11,22 +11,27 @@
  */
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ol from 'openlayers';
-import Dialog from 'pui-react-modals';
+import Dialog from 'material-ui/lib/dialog';
+import Snackbar from 'material-ui/lib/snackbar';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LoginConstants from '../constants/LoginConstants.js';
 import FeatureStore from '../stores/FeatureStore.js';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import Grids from 'pui-react-grids';
-import Pui from 'pui-react-alerts';
 import pureRender from 'pure-render-decorator';
-import {BasicInput} from 'pui-react-inputs';
-import UI from 'pui-react-buttons';
+import TextField from 'material-ui/lib/text-field';
+import RaisedButton from 'material-ui/lib/raised-button';
+import GridList from 'material-ui/lib/grid-list/grid-list';
+import GridTile from 'material-ui/lib/grid-list/grid-tile';
+import List from 'material-ui/lib/lists/list';
+import ListItem from 'material-ui/lib/lists/list-item';
+import FolderIcon from 'material-ui/lib/svg-icons/file/folder-open';
+import LayerIcon from 'material-ui/lib/svg-icons/maps/layers';
 import URL from 'url-parse';
 import WMSService from '../services/WMSService.js';
 import WFSService from '../services/WFSService.js';
 import RESTService from '../services/RESTService.js';
-import './AddLayerModal.css';
 
 const messages = defineMessages({
   title: {
@@ -48,6 +53,11 @@ const messages = defineMessages({
     id: 'addwmslayermodal.connectbutton',
     description: 'Text for connect button',
     defaultMessage: 'Connect'
+  },
+  closebutton: {
+    id: 'addwmslayermodal.closebutton',
+    description: 'Text for close button',
+    defaultMessage: 'Close'
   }
 });
 
@@ -57,11 +67,13 @@ const geojsonFormat = new ol.format.GeoJSON();
  * Modal window to add layers from a WMS or WFS service.
  */
 @pureRender
-class AddLayerModal extends Dialog.Modal {
+class AddLayerModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       error: false,
+      errorOpen: false,
+      open: false,
       layers: []
     };
     var me = this;
@@ -112,6 +124,7 @@ class AddLayerModal extends Dialog.Modal {
   }
   _setError(msg) {
     this.setState({
+      errorOpen: true,
       error: true,
       msg: msg
     });
@@ -177,6 +190,7 @@ class AddLayerModal extends Dialog.Modal {
         isRemovable: true,
         isSelectable: true,
         isWFST: true,
+        EX_GeographicBoundingBox: extent,
         canStyle: true,
         wfsInfo: true,
         popupInfo: '#AllAttributes',
@@ -216,7 +230,7 @@ class AddLayerModal extends Dialog.Modal {
     return urlObj.toString();
   }
   _connect() {
-    var url = document.getElementById('url').value;
+    var url = ReactDOM.findDOMNode(this.refs.url).value;
     this._getCaps(this._getCapabilitiesUrl(url));
   }
   _getLayersMarkup(layer) {
@@ -225,68 +239,77 @@ class AddLayerModal extends Dialog.Modal {
       var children = layer.Layer.map(function(child) {
         return this._getLayersMarkup(child);
       }, this);
-      childList = (
-        <ul className='addlayer'>
-          {children}
-        </ul>
-      );
+      childList = children;
     }
-    var markup;
+    var onTouchTap;
     if (layer.Name) {
-      markup = (<a className='layername' title={layer.Abstract || layer.Title} href="#" onClick={this._onLayerClick.bind(this, layer)}>{layer.Title}</a>);
-    } else {
-      markup = (<span>{layer.Title}</span>);
+      onTouchTap = this._onLayerClick.bind(this, layer);
     }
-    var className;
+    var leftIcon;
     if (layer.Layer) {
-      className = 'fa fa-folder-open-o';
+      leftIcon = <FolderIcon />;
     } else if (layer.Name) {
-      className = 'fa-file-o';
+      leftIcon = <LayerIcon />;
     }
     return (
-      <li className={className} key={layer.Title}>
-        {markup}
-        {childList}
-      </li>
+      <ListItem onTouchTap={onTouchTap} leftIcon={leftIcon} initiallyOpen={true} key={layer.Title} primaryText={layer.Title} nestedItems={childList} />
     );
+  }
+  open() {
+    this.setState({open: true});
+  }
+  close() {
+    this.setState({open: false});
+  }
+  _handleRequestClose() {
+    this.setState({
+      errorOpen: false
+    });
   }
   render() {
     const {formatMessage} = this.props.intl;
     var layers;
     if (this.state.layerInfo) {
-      layers = this._getLayersMarkup(this.state.layerInfo);
+      var layerInfo = this._getLayersMarkup(this.state.layerInfo);
+      layers = <List>{layerInfo}</List>;
     }
     var error;
     if (this.state.error === true) {
-      error = (<div className='error-alert'><Pui.ErrorAlert dismissable={false} withIcon={true}>{formatMessage(messages.errormsg, {msg: this.state.msg})}</Pui.ErrorAlert></div>);
+      error = (<Snackbar
+        open={this.state.errorOpen}
+        message={formatMessage(messages.errormsg, {msg: this.state.msg})}
+        autoHideDuration={2000}
+        onRequestClose={this._handleRequestClose.bind(this)}
+      />);
     }
     var input;
     if (this.props.allowUserInput) {
       var serviceType = this.props.asVector ? 'WFS' : 'WMS';
-      input = (<div className="clearfix">
-        <Grids.Col md={18}>
-          <BasicInput label={formatMessage(messages.inputfieldlabel, {serviceType: serviceType})}  id='url' defaultValue={this.props.url} />
-        </Grids.Col>
-        <Grids.Col md={6} className='connect-button'>
-          <UI.DefaultButton onClick={this._connect.bind(this)} ref="connectButton">{formatMessage(messages.connectbutton)}</UI.DefaultButton>
-        </Grids.Col>
-      </div>);
+      input = (
+        <GridList cellHeight={75}>
+          <GridTile><TextField floatingLabelText={formatMessage(messages.inputfieldlabel, {serviceType: serviceType})} defaultValue={this.props.url} ref='url' /></GridTile>
+          <GridTile><RaisedButton label={formatMessage(messages.connectbutton)} onTouchTap={this._connect.bind(this)} /></GridTile>
+        </GridList>
+      );
     }
+    var actions = [
+      <RaisedButton label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
+    ];
     return (
-      <Dialog.BaseModal title={formatMessage(messages.title)} show={this.state.isVisible} onHide={this.close} {...this.props}>
-        <Dialog.ModalBody>
-          {input}
-          <ul className='addlayer'>
-            {layers}
-          </ul>
-          {error}
-        </Dialog.ModalBody>
-      </Dialog.BaseModal>
+      <Dialog actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title)} open={this.state.open} onRequestClose={this.close.bind(this)}>
+        {input}
+        {layers}
+        {error}
+      </Dialog>
     );
   }
 }
 
 AddLayerModal.propTypes = {
+  /**
+   * The ol3 map to upload to.
+   */
+  map: React.PropTypes.instanceOf(ol.Map).isRequired,
   /**
    * url that will be used to retrieve layers from (WMS or WFS).
    */

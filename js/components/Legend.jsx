@@ -45,7 +45,7 @@ class Legend extends React.Component {
     var legends = this.state.flatLayers.map(function(layer) {
       return (<LegendItem key={layer.get('id')} layer={layer} />);
     });
-    return (<div>{legends}</div>);
+    return (<div style={{padding: '10px'}}>{legends}</div>);
   }
 }
 

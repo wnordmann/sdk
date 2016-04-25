@@ -20,6 +20,16 @@ configured on the layer with the following properties:
 Properties
 ----------
 
+### `buttonStyle`
+
+Style for the buttons in the toolbar.
+
+type: `object`
+defaultValue: `{
+  margin: '10px 12px'
+}`
+
+
 ### `intl`
 
 i18n message strings. Provided through the application through context.

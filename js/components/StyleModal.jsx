@@ -12,10 +12,11 @@
 
 import React from 'react';
 import ol from 'openlayers';
-import Dialog from 'pui-react-modals';
-import Grids from 'pui-react-grids';
-import UI from 'pui-react-buttons';
+import Dialog from 'material-ui/lib/dialog';
+import SelectField from 'material-ui/lib/select-field';
+import MenuItem from 'material-ui/lib/menus/menu-item';
 import LayerActions from '../actions/LayerActions.js';
+import RaisedButton from 'material-ui/lib/raised-button';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import {transformColor, doPOST} from '../util.js';
@@ -33,6 +34,11 @@ const messages = defineMessages({
     id: 'stylemodal.applybutton',
     description: 'Text for the apply button',
     defaultMessage: 'Apply'
+  },
+  closebutton: {
+    id: 'stylemodal.closebutton',
+    description: 'Text for the close button',
+    defaultMessage: 'Close'
   },
   addrulebutton: {
     id: 'stylemodal.addrulebutton',
@@ -65,12 +71,13 @@ const messages = defineMessages({
  * A modal for editing the style of a vector layer.
  */
 @pureRender
-class StyleModal extends Dialog.Modal {
+class StyleModal extends React.Component {
   constructor(props) {
     super(props);
     this._styleState = {};
     this._styleCache = {};
     this.state = {
+      open: false,
       attributes: [],
       rule: 'Rule 1',
       geometryType: null,
@@ -79,6 +86,12 @@ class StyleModal extends Dialog.Modal {
       }]
     };
     this.props.layer.on('change:wfsInfo', this._setGeomTypeAndAttributes, this);
+  }
+  open() {
+    this.setState({open: true});
+  }
+  close() {
+    this.setState({open: false});
   }
   _setGeomTypeAndAttributes() {
     var wfsInfo = this.props.layer.get('wfsInfo');
@@ -173,8 +186,8 @@ class StyleModal extends Dialog.Modal {
     }
     Object.assign(this._styleState[rule], state);
   }
-  _onRuleChange(evt) {
-    this.setState({rule: evt.target.value});
+  _onRuleChange(evt, idx, value) {
+    this.setState({rule: value});
   }
   _addRule() {
     var rules = this.state.rules.slice();
@@ -199,27 +212,25 @@ class StyleModal extends Dialog.Modal {
   render() {
     const {formatMessage} = this.props.intl;
     var ruleItems = this.state.rules.map(function(rule, key) {
-      return (<option key={key} value={rule.title}>{rule.title}</option>);
+      return (<MenuItem key={key} value={rule.title} primaryText={rule.title} />);
     });
     // TODO see if we can do with a single rule editor
     var ruleEditors = this.state.rules.map(function(rule, key) {
       return (<RuleEditor {...this.props} geometryType={this.state.geometryType} visible={rule.title === this.state.rule} key={key} initialState={this._styleState[rule.title]} onChange={this._onChange.bind(this)} attributes={this.state.attributes} />)
     }, this);
+    var actions = [
+      <RaisedButton label={formatMessage(messages.applybutton)} onTouchTap={this._setStyle.bind(this)} />,
+      <RaisedButton label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
+    ];
     return (
-      <Dialog.BaseModal className="edit-layer-modal" title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} show={this.state.isVisible} onHide={this.close} {...this.props}>
-        <Dialog.ModalBody>
-          <div className="clearfix form-group">
-            <Grids.Col md={2}><label className="rule-label" htmlFor='ruleSelector'>{formatMessage(messages.rulelabel)}</label></Grids.Col>
-            <Grids.Col md={6}><select ref='ruleSelector' value={this.state.rule} className='form-control' onChange={this._onRuleChange.bind(this)}>{ruleItems}</select></Grids.Col>
-            <Grids.Col md={3}><UI.DefaultButton onClick={this._addRule.bind(this)} title={formatMessage(messages.addrulebuttontitle)}>{formatMessage(messages.addrulebutton)}</UI.DefaultButton></Grids.Col>
-            <Grids.Col md={4}><UI.DefaultButton onClick={this._removeRule.bind(this)} title={formatMessage(messages.removerulebuttontitle)}>{formatMessage(messages.removerulebutton)}</UI.DefaultButton></Grids.Col>
-          </div>
-          {ruleEditors}
-        </Dialog.ModalBody>
-        <Dialog.ModalFooter>
-          <UI.DefaultButton onClick={this._setStyle.bind(this)}>{formatMessage(messages.applybutton)}</UI.DefaultButton>
-        </Dialog.ModalFooter>
-      </Dialog.BaseModal>
+      <Dialog actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} open={this.state.open} onRequestClose={this.close.bind(this)}>
+        <SelectField floatingLabelText={formatMessage(messages.rulelabel)} value={this.state.rule} onChange={this._onRuleChange.bind(this)}>
+          {ruleItems}
+        </SelectField>
+        <RaisedButton label={formatMessage(messages.addrulebutton)} onTouchTap={this._addRule.bind(this)} />
+        <RaisedButton label={formatMessage(messages.removerulebutton)} onTouchTap={this._removeRule.bind(this)} />
+        {ruleEditors}
+      </Dialog>
     );
   }
 }

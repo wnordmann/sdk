@@ -12,6 +12,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import TextField from 'material-ui/lib/text-field';
 import filtrex from 'filtrex';
 import pureRender from 'pure-render-decorator';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -28,10 +29,10 @@ const messages = defineMessages({
     description: 'Placeholder for the expression input field',
     defaultMessage: 'Type expression ....'
   },
-  filterhelptext: {
-    id: 'filtereditor.filterhelptext',
-    description: 'filter help text',
-    defaultMessage: 'ATTRIBUTE == "Value"'
+  errortext: {
+    id: 'filtereditor.errortext',
+    description: 'filter error text',
+    defaultMessage: 'Invalid filter, use for instance ATTRIBUTE == "Value"'
   }
 });
 
@@ -74,12 +75,12 @@ class FilterEditor extends React.Component {
   }
   render() {
     const {formatMessage} = this.props.intl;
-    var inputClassName = 'form-control';
+    var errorText;
     if (this.state.hasError) {
-      inputClassName += ' input-has-error';
+      errorText = formatMessage(messages.errortext);
     }
     return (
-      <input defaultValue={this.state.expression} onKeyUp={this._setQueryFilter.bind(this)} className={inputClassName} ref='queryExpression' placeholder={formatMessage(messages.filterplaceholder)} type='text' title={formatMessage(messages.filterhelptext)}/>
+      <TextField errorText={errorText} hintText={formatMessage(messages.filterplaceholder)} defaultValue={this.state.expression} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} />
     );
   }
 }

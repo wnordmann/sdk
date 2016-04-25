@@ -29,6 +29,13 @@ i18n message strings. Provided through the application through context.
 type: `custom`
 
 
+### `map` (required)
+
+The ol3 map to upload to.
+
+type: `instanceOf ol.Map`
+
+
 ### `srsName`
 
 The srs name that the map's view is in.

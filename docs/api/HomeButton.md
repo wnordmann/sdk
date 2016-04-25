@@ -4,7 +4,7 @@
 A button to go back to the initial extent of the map.
 
 ```html
-<div id='home-button' className='ol-unselectable ol-control'>
+<div id='home-button'>
   <HomeButton map={map} />
 </div>
 ```

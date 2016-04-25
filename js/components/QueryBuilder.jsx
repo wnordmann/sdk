@@ -11,16 +11,16 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import FeatureStore from '../stores/FeatureStore.js';
 import LayerSelector from './LayerSelector.jsx';
 import SelectActions from '../actions/SelectActions.js';
 import filtrex from 'filtrex';
-import UI from 'pui-react-buttons';
-import Grids from 'pui-react-grids';
-import './QueryBuilder.css';
+import Toolbar from 'material-ui/lib/toolbar/toolbar';
+import TextField from 'material-ui/lib/text-field';
+import RaisedButton from 'material-ui/lib/raised-button';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import './QueryBuilder.css';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -44,10 +44,10 @@ const messages = defineMessages({
     description: 'Placeholder for the expression input field',
     defaultMessage: 'Type expression ....'
   },
-  filterhelptext: {
-    id: 'querybuilder.filterhelptext',
-    description: 'filter help text',
-    defaultMessage: 'ATTRIBUTE == "Value"'
+  errortext: {
+    id: 'querybuilder.errortext',
+    description: 'error text to shown when filter does not validate',
+    defaultMessage: 'Error setting filter, should be for instance ATTRIBUTE == "Value"'
   },
   newbuttontitle: {
     id: 'querybuilder.newbuttontitle',
@@ -57,7 +57,7 @@ const messages = defineMessages({
   newbuttontext: {
     id: 'querybuilder.newbuttontext',
     description: 'Text for the new selection button',
-    defaultMessage: 'New Selection'
+    defaultMessage: 'New'
   },
   addbuttontitle: {
     id: 'querybuilder.addbuttontitle',
@@ -67,7 +67,7 @@ const messages = defineMessages({
   addbuttontext: {
     id: 'querybuilder.addbuttontext',
     description: 'Text for the add to current selection button',
-    defaultMessage: 'Add to Selection'
+    defaultMessage: 'Add'
   },
   selectintitle: {
     id: 'querybuilder.selectintitle',
@@ -77,7 +77,7 @@ const messages = defineMessages({
   selectintext: {
     id: 'querybuilder.selectintext',
     description: 'Text for the refine current selection button',
-    defaultMessage: 'Refine Selection'
+    defaultMessage: 'Refine'
   }
 });
 
@@ -93,11 +93,11 @@ class QueryBuilder extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hasError: false
+      errorText: null
     };
   }
   componentDidMount() {
-    this._layer = this.refs.layerSelector.getLayer();
+    this._layer = this.refs.layerSelector.getWrappedInstance().getLayer();
   }
   _onLayerSelectChange(layer) {
     this._layer = layer;
@@ -108,19 +108,24 @@ class QueryBuilder extends React.Component {
   _filterLayerList(lyr) {
     return lyr.get('isSelectable');
   }
-  _setQueryFilter() {
-    var input = ReactDOM.findDOMNode(this.refs.queryExpression);
-    var expression = input.value;
+  _setQueryFilter(evt) {
+    const {formatMessage} = this.props.intl;
+    var expression;
+    if (evt) {
+      expression = evt.target.value;
+    } else {
+      expression = this.refs.queryExpression.getValue();
+    }
     if (!expression) {
       this._queryFilter = null;
-      this.setState({hasError: false});
+      this.setState({errorText: null});
     } else {
       try {
         this._queryFilter = filtrex(expression);
-        this.setState({hasError: false});
+        this.setState({errorText: null});
       } catch (e) {
         this._queryFilter = null;
-        this.setState({hasError: true});
+        this.setState({errorText: formatMessage(messages.errortext)});
       }
     }
   }
@@ -155,32 +160,17 @@ class QueryBuilder extends React.Component {
   }
   render() {
     const {formatMessage} = this.props.intl;
-    var inputClassName = 'form-control';
-    if (this.state.hasError) {
-      inputClassName += ' input-has-error';
-    }
+    const buttonStyle = this.props.buttonStyle;
     return (
-      <form onSubmit={this._onSubmit} role="form" className='form-horizontal query-builder'>
-        <div className="form-group">
-          <Grids.Col md={6}><label htmlFor='layerSelector'>{formatMessage(messages.layerlabel)}</label></Grids.Col>
-          <Grids.Col md={18}><LayerSelector onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /></Grids.Col>
-        </div>
-        <div className='form-group'>
-          <Grids.Col md={6}><label htmlFor='query-expression' title={formatMessage(messages.filterbuttontext)}>{formatMessage(messages.filterlabel)}</label></Grids.Col>
-          <Grids.Col md={18}><input onKeyUp={this._setQueryFilter.bind(this)} className={inputClassName} ref='queryExpression' id='query-expression' placeholder={formatMessage(messages.filterplaceholder)} type='text' title={formatMessage(messages.filterhelptext)}/></Grids.Col>
-        </div>
-        <div className='form-group'>
-          <Grids.Col md={7}>
-            <UI.DefaultButton onClick={this._newSelection.bind(this)} title={formatMessage(messages.newbuttontitle)}> {formatMessage(messages.newbuttontext)}</UI.DefaultButton>
-          </Grids.Col>
-          <Grids.Col md={8}>
-            <UI.DefaultButton onClick={this._addSelection.bind(this)} title={formatMessage(messages.addbuttontitle)}> {formatMessage(messages.addbuttontext)}</UI.DefaultButton>
-          </Grids.Col>
-          <Grids.Col md={8}>
-            <UI.DefaultButton onClick={this._inSelection.bind(this)} title={formatMessage(messages.selectintitle)}> {formatMessage(messages.selectintext)}</UI.DefaultButton>
-          </Grids.Col>
+      <div className='querybuilder'>
+        <LayerSelector onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /><br/>
+        <TextField hintText={formatMessage(messages.filterplaceholder)} floatingLabelText={formatMessage(messages.filterlabel)} errorText={this.state.errorText} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} /><br/>
+        <Toolbar>
+          <RaisedButton style={buttonStyle} label={formatMessage(messages.newbuttontext)} onTouchTap={this._newSelection.bind(this)} />
+          <RaisedButton style={buttonStyle} label={formatMessage(messages.addbuttontext)} onTouchTap={this._addSelection.bind(this)} />
+          <RaisedButton style={buttonStyle} label={formatMessage(messages.selectintext)} onTouchTap={this._inSelection.bind(this)} />
+        </Toolbar>
       </div>
-      </form>
     );
   }
 }
@@ -193,7 +183,17 @@ QueryBuilder.propTypes = {
   /**
    * i18n message strings. Provided through the application through context.
    */
-  intl: intlShape.isRequired
+  intl: intlShape.isRequired,
+  /**
+   * Style for the buttons in the toolbar.
+   */
+  buttonStyle: React.PropTypes.object
+};
+
+QueryBuilder.defaultProps = {
+  buttonStyle: {
+    margin: '10px 12px'
+  }
 };
 
 export default injectIntl(QueryBuilder);

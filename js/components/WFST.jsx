@@ -18,12 +18,12 @@ import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LayerSelector from './LayerSelector.jsx';
 import FeatureStore from '../stores/FeatureStore.js';
 import MapTool from './MapTool.js';
-import Pui from 'pui-react-alerts';
-import UI from 'pui-react-buttons';
+import RaisedButton from 'material-ui/lib/raised-button';
+import Snackbar from 'material-ui/lib/snackbar';
+import Toolbar from 'material-ui/lib/toolbar/toolbar';
 import pureRender from 'pure-render-decorator';
 import EditForm from './EditForm.jsx';
 import WFSService from '../services/WFSService.js';
-import './WFST.css';
 
 var SelectFeature = function(handleEvent, scope) {
   this._scope = scope;
@@ -100,6 +100,7 @@ class WFST extends MapTool {
     });
     this.state = {
       error: false,
+      open: false,
       visible: this.props.visible
     };
     this._interactions = {};
@@ -137,6 +138,7 @@ class WFST extends MapTool {
   _setError(msg) {
     this.setState({
       error: true,
+      open: true,
       msg: msg
     });
   }
@@ -187,11 +189,13 @@ class WFST extends MapTool {
   _modifyFeature() {
     this.deactivate();
     var layer = this.state.layer;
-    var interactions = [this._select, this._modify];
-    if (!(layer.getSource() instanceof ol.source.Vector)) {
-      interactions.push(this._selectfeature);
+    if (layer) {
+      var interactions = [this._select, this._modify];
+      if (!(layer.getSource() instanceof ol.source.Vector)) {
+        interactions.push(this._selectfeature);
+      }
+      this.activate(interactions);
     }
-    this.activate(interactions);
   }
   _deleteFeature() {
     const {formatMessage} = this.props.intl;
@@ -214,9 +218,6 @@ class WFST extends MapTool {
         me._setError(msg);
       });
     }
-  }
-  _onSubmit(evt) {
-    evt.preventDefault();
   }
   _filterLayerList(lyr) {
     return lyr.get('isWFST');
@@ -292,6 +293,11 @@ class WFST extends MapTool {
     this.deactivate();
     this.activate([draw]);
   }
+  _handleRequestClose() {
+    this.setState({
+      open: false
+    });
+  }
   render() {
     if (!this.state.visible) {
       return (<article />);
@@ -299,15 +305,17 @@ class WFST extends MapTool {
       const {formatMessage} = this.props.intl;
       var error;
       if (this.state.error === true) {
-        error = (<div className='error-alert'><Pui.ErrorAlert dismissable={false} withIcon={true}>{formatMessage(messages.errormsg, {msg: this.state.msg})}</Pui.ErrorAlert></div>);
+        error = (<Snackbar
+          open={this.state.open}
+          message={formatMessage(messages.errormsg, {msg: this.state.msg})}
+          autoHideDuration={2000}
+          onRequestClose={this._handleRequestClose.bind(this)}
+        />);
       }
       var layerSelector;
       if (this.props.layerSelector) {
         layerSelector = (
-          <article>
-            <label htmlFor='layerSelector'>{formatMessage(messages.layerlabel)}</label>
-            <LayerSelector onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} />
-          </article>
+          <LayerSelector onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} />
         );
       } else if (this.state.layer) {
         var label = formatMessage(messages.layerlabel) + ': ' + this.state.layer.get('title');
@@ -317,15 +325,18 @@ class WFST extends MapTool {
       if (this.props.showEditForm && this.state.feature) {
         editForm = (<EditForm feature={this.state.feature} layer={this.state.layer} />);
       }
+      const buttonStyle = this.props.buttonStyle;
       return (
-        <form onSubmit={this._onSubmit} role='form'>
+        <div>
           {layerSelector}
-          <UI.DefaultButton onClick={this._drawFeature.bind(this)}>{formatMessage(messages.drawfeature)}</UI.DefaultButton>
-          <UI.DefaultButton onClick={this._modifyFeature.bind(this)}>{formatMessage(messages.modifyfeature)}</UI.DefaultButton>
-          <UI.DefaultButton onClick={this._deleteFeature.bind(this)}>{formatMessage(messages.deletefeature)}</UI.DefaultButton>
+          <Toolbar>
+            <RaisedButton style={buttonStyle} label={formatMessage(messages.drawfeature)} onTouchTap={this._drawFeature.bind(this)} />
+            <RaisedButton style={buttonStyle} label={formatMessage(messages.modifyfeature)} onTouchTap={this._modifyFeature.bind(this)} />
+            <RaisedButton style={buttonStyle} label={formatMessage(messages.deletefeature)} onTouchTap={this._deleteFeature.bind(this)} />
+          </Toolbar>
           {error}
           {editForm}
-        </form>
+        </div>
       );
     }
   }
@@ -353,12 +364,19 @@ WFST.propTypes = {
    */
   showEditForm: React.PropTypes.bool,
   /**
+   * Style for the buttons in the toolbar.
+   */
+  buttonStyle: React.PropTypes.object,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
 };
 
 WFST.defaultProps = {
+  buttonStyle: {
+    margin: '10px 12px'
+  },
   showEditForm: false,
   layerSelector: true,
   visible: true,

@@ -12,9 +12,9 @@
 
 import React from 'react';
 import ol from 'openlayers';
-import UI from 'pui-react-buttons';
-import Icon from 'pui-react-iconography';
 import LayerStore from '../stores/LayerStore.js';
+import IconButton from 'material-ui/lib/icon-button';
+import LegendIcon from 'material-ui/lib/svg-icons/image/image';
 import './QGISLegend.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
@@ -131,7 +131,7 @@ class QGISLegend extends React.Component {
     var onClick = !this.props.expandOnHover ? this._togglePanel.bind(this) : undefined;
     return (
       <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} className={className}>
-        <UI.DefaultButton title={formatMessage(messages.buttontitle)} onClick={onClick}><Icon.Icon name="file-picture-o" /></UI.DefaultButton>
+        <IconButton tooltip={formatMessage(messages.buttontitle)} onTouchTap={onClick}><LegendIcon /></IconButton>
         <div className='legend-panel' id='legend'>{items}</div>
       </div>
     );

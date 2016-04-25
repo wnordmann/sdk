@@ -16,6 +16,16 @@ var selectedLayer = map.getLayers().item(2);
 Properties
 ----------
 
+### `buttonStyle`
+
+Style for the buttons in the toolbar.
+
+type: `object`
+defaultValue: `{
+  margin: '10px 12px'
+}`
+
+
 ### `columnWidth`
 
 The width in pixels per column.

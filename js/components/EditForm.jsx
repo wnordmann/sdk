@@ -13,10 +13,11 @@
 import React from 'react';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import UI from 'pui-react-buttons';
-import Pui from 'pui-react-alerts';
+import Snackbar from 'material-ui/lib/snackbar';
+import RaisedButton from 'material-ui/lib/raised-button';
+import TextField from 'material-ui/lib/text-field';
 import WFSService from '../services/WFSService.js';
-import {BasicInput} from 'pui-react-inputs';
+import './EditForm.css';
 
 const messages = defineMessages({
   save: {
@@ -41,6 +42,7 @@ class EditForm extends React.Component {
     super(props);
     this.state = {
       error: false,
+      open: false,
       dirty: {},
       layer: props.layer,
       values: props.feature ? props.feature.getProperties() : {},
@@ -54,11 +56,12 @@ class EditForm extends React.Component {
   }
   _setError(msg) {
     this.setState({
+      open: true,
       error: true,
       msg: msg
     });
   }
-  _save() {
+  _save(evt) {
     const {formatMessage} = this.props.intl;
     if (this.state.dirty) {
       var values = {}, key;
@@ -85,6 +88,11 @@ class EditForm extends React.Component {
       WFSService.updateFeature(this.state.layer, null, this.state.feature, values, onSuccess, onFailure);
     }
   }
+  _handleRequestClose() {
+    this.setState({
+      open: false
+    });
+  }
   _onChangeField(evt) {
     var dirty = this.state.dirty;
     var values = this.state.values;
@@ -96,7 +104,12 @@ class EditForm extends React.Component {
     const {formatMessage} = this.props.intl;
     var error;
     if (this.state.error === true) {
-      error = (<div className='error-alert'><Pui.ErrorAlert dismissable={false} withIcon={true}>{formatMessage(messages.errormsg, {msg: this.state.msg})}</Pui.ErrorAlert></div>);
+      error = (<Snackbar
+        open={this.state.open}
+        message={formatMessage(messages.errormsg, {msg: this.state.msg})}
+        autoHideDuration={2000}
+        onRequestClose={this._handleRequestClose.bind(this)}
+      />);
     }
     var inputs = [];
     var fid;
@@ -106,15 +119,15 @@ class EditForm extends React.Component {
       var keys = layer.get('wfsInfo').attributes;
       for (var i = 0, ii = keys.length; i < ii; ++i) {
         var key = keys[i];
-        inputs.push(<BasicInput label={key} key={key} id={key} onChange={this._onChangeField.bind(this)} value={this.state.values[key]} />);
+        inputs.push(<TextField floatingLabelText={key} key={key} id={key} onChange={this._onChangeField.bind(this)} value={this.state.values[key]} />);
       }
     }
     return (
       <div className='edit-form'>
-        <span className='edit-form-fid'>{fid}</span>
-        {inputs}
+        <span className='edit-form-fid'>{fid}</span><br/>
+        {inputs}<br/>
         {error}
-        <UI.DefaultButton ref='saveButton' onClick={this._save.bind(this)}>{formatMessage(messages.save)}</UI.DefaultButton>
+        <RaisedButton ref='saveButton' label={formatMessage(messages.save)} onTouchTap={this._save.bind(this)} />
       </div>
     );
   }

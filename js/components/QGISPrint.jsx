@@ -13,22 +13,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
-import UI from 'pui-react-dropdowns';
-import Icon from 'pui-react-iconography';
-import Button from 'pui-react-buttons';
-import Dialog from 'pui-react-modals';
+import RaisedButton from 'material-ui/lib/raised-button';
+import Dialog from 'material-ui/lib/dialog';
+import SelectField from 'material-ui/lib/select-field';
+import IconMenu from 'material-ui/lib/menus/icon-menu';
+import MenuItem from 'material-ui/lib/menus/menu-item';
 import JSPDF from 'jspdf-browserify';
-import Pui from 'pui-react-alerts';
+import LinearProgress from 'material-ui/lib/linear-progress';
+import Snackbar from 'material-ui/lib/snackbar';
+import TextField from 'material-ui/lib/text-field';
 import './QGISPrint.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
-  waittext: {
-    id: 'qgisprint.waittext',
-    description: 'Wait text message to show when busy',
-    defaultMessage: 'Generating PDF ...'
-  },
   modaltitle: {
     id: 'qgisprint.modaltitle',
     description: 'Title for the modal print dialog',
@@ -110,16 +108,31 @@ class QGISPrint extends React.Component {
     super(props);
     this.state = {
       layout: null,
+      layoutName: null,
       loading: false,
-      error: false
+      error: false,
+      open: false,
+      errorOpen: false,
+      resolution: null
     };
   }
   componentDidUpdate() {
-    this.refs.modal.open();
+    this.setState({
+      open: true
+    });
   }
-  _onClick(idx) {
-    var layout = this.props.layouts[idx];
-    this.setState({layout: layout});
+  close() {
+    this.setState({
+      open: false
+    });
+  }
+  _onClick(event, value) {
+    for (var i = 0, ii = this.props.layouts.length; i < ii; ++i) {
+      if (this.props.layouts[i].name === value) {
+        this.setState({layoutName: value, layout: this.props.layouts[i]});
+        break;
+      }
+    }
   }
   _elementLoaded() {
     this._elementsLoaded++;
@@ -157,7 +170,7 @@ class QGISPrint extends React.Component {
       data = this._canvas.toDataURL('image/jpeg');
     } catch (e) {
       error = true;
-      this.setState({loading: false, error: true, msg: e});
+      this.setState({loading: false, errorOpen: true, error: true, msg: e});
     }
     var map = this.props.map;
     if (error !== true) {
@@ -170,6 +183,9 @@ class QGISPrint extends React.Component {
     map.getView().fit(this._origExtent, this._origSize);
     map.renderSync();
     this._elementLoaded();
+  }
+  _onResolutionChange(evt, idx, value) {
+    this.setState({resolution: value});
   }
   _attachLoadListeners(idx) {
     this._sources[idx] = this._tileLayers[idx].getSource();
@@ -204,7 +220,10 @@ class QGISPrint extends React.Component {
   }
   _createMap(labels) {
     var map = this.props.map;
-    var resolution = ReactDOM.findDOMNode(this.refs.resolution).value;
+    var resolution = this.state.resolution;
+    if (resolution === null) {
+      return;
+    }
     var layout = this.state.layout;
     this._layoutSafeName = layout.name.replace(/[^a-z0-9]/gi, '').toLowerCase();
     var elements = layout.elements;
@@ -265,12 +284,16 @@ class QGISPrint extends React.Component {
     }
     this._createMap(labels);
   }
+  _handleRequestClose() {
+    this.setState({
+      errorOpen: false
+    });
+  }
   render() {
     const {formatMessage} = this.props.intl;
     var listitems = this.props.layouts.map(function(lyt, idx) {
       var href = this.props.thumbnailPath + lyt.thumbnail;
-      return (<UI.DropdownItem key={idx} onSelect={this._onClick.bind(this, idx)}>
-        {lyt.name}<div><img src={href}/></div></UI.DropdownItem>);
+      return (<MenuItem key={idx} value={lyt.name} primaryText={lyt.name}><div><img src={href}/></div></MenuItem>);
     }, this);
     var dialog, layout = this.state.layout;
     if (layout !== null) {
@@ -281,49 +304,44 @@ class QGISPrint extends React.Component {
           if (elements === undefined) {
             elements = [];
           }
-          var htmlFor = 'layout-label-' + element.name;
-          elements.push(
-            <div key={element.name} className="form-group">
-              <label htmlFor={htmlFor}>{element.name}</label>
-              <input ref={element.name} id={htmlFor} name={htmlFor} type="text" className="form-control" />
-            </div>
-          );
+          elements.push(<TextField floatingLabelText={element.name} key={element.name} ref={element.name} />);
         }
       }
       var selectOptions = this.props.resolutions.map(function(resolution) {
-        return (<option key={resolution} value={resolution}>{resolution}</option>);
+        return (<MenuItem key={resolution} value={resolution} primaryText={resolution} />);
       });
       var loading, error;
       if (this.state.error) {
-        error = (<Pui.ErrorAlert dismissable={false} withIcon={true}>{formatMessage(messages.error, {details: this.state.msg})}</Pui.ErrorAlert>);
+        error = (<Snackbar
+          open={this.state.errorOpen}
+          message={formatMessage(messages.errormsg, {details: this.state.msg})}
+          autoHideDuration={2000}
+          onRequestClose={this._handleRequestClose.bind(this)}
+        />);
       }
       if (this.state.loading === true) {
-        loading = (<div className="spinner"><Icon.Icon spin size="h1" name="spinner" /><span> {formatMessage(messages.waittext)}</span></div>);
+        loading = (<LinearProgress mode="indeterminate"/>);
       }
+      var actions = [
+        <RaisedButton label={formatMessage(messages.printbuttontext)} onTouchTap={this.print.bind(this)} />,
+        <RaisedButton label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
+      ];
       dialog = (
-        <Dialog.Modal title={formatMessage(messages.modaltitle)} ref="modal">
-          <Dialog.ModalBody>
-            {elements}
-            <label htmlFor="resolution-dropdown">{formatMessage(messages.resolutionlabel)}</label>
-            <select ref='resolution' id='resolution-dropdown' className='form-control'>
-              {selectOptions}
-            </select>
-            {loading}
-            {error}
-          </Dialog.ModalBody>
-          <Dialog.ModalFooter>
-            <Button.DefaultButton title={formatMessage(messages.printbuttontitle)} onClick={this._print.bind(this)}>{formatMessage(messages.printbuttontext)}</Button.DefaultButton>
-          </Dialog.ModalFooter>
-        </Dialog.Modal>
+        <Dialog actions={actions} title={formatMessage(messages.modaltitle)} modal={true} open={this.state.open} onRequestClose={this.close.bind(this)}>
+          {elements}
+          <SelectField floatingLabelText={formatMessage(messages.resolutionslabel)} value={this.state.resolution} onChange={this._onResolutionChange.bind(this)}>
+            {selectOptions}
+          </SelectField>
+          {loading}
+          {error}
+        </Dialog>
       );
     }
     return (
-      <article>
-        <UI.Dropdown {...this.props} title={formatMessage(messages.printmenutext)}>
-          {listitems}
-        </UI.Dropdown>
+      <IconMenu {...this.props} iconButtonElement={<RaisedButton label={formatMessage(messages.printmenutext)} />} value={this.state.layoutName} onChange={this._onClick.bind(this)}>
+        {listitems}
         {dialog}
-      </article>
+      </IconMenu>
     );
   }
 }

@@ -13,6 +13,13 @@ A filter function to filter out some of the layers by returning false.
 type: `func`
 
 
+### `intl`
+
+i18n message strings. Provided through the application through context.
+
+type: `custom`
+
+
 ### `map` (required)
 
 The map from which to extract the layers.
