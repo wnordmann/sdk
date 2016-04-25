@@ -19,12 +19,11 @@ import LayerSelector from './LayerSelector.jsx';
 import FeatureStore from '../stores/FeatureStore.js';
 import MapTool from './MapTool.js';
 import RaisedButton from 'material-ui/lib/raised-button';
-import Popover from 'material-ui/lib/popover/popover';
+import Snackbar from 'material-ui/lib/snackbar';
 import Toolbar from 'material-ui/lib/toolbar/toolbar';
 import pureRender from 'pure-render-decorator';
 import EditForm from './EditForm.jsx';
 import WFSService from '../services/WFSService.js';
-import './WFST.css';
 
 var SelectFeature = function(handleEvent, scope) {
   this._scope = scope;
@@ -306,7 +305,12 @@ class WFST extends MapTool {
       const {formatMessage} = this.props.intl;
       var error;
       if (this.state.error === true) {
-        error = (<Popover open={this.state.open} onRequestClose={this._handleRequestClose.bind(this)}><div className='error-alert'>{formatMessage(messages.errormsg, {msg: this.state.msg})}</div></Popover>);
+        error = (<Snackbar
+          open={this.state.open}
+          message={formatMessage(messages.errormsg, {msg: this.state.msg})}
+          autoHideDuration={2000}
+          onRequestClose={this._handleRequestClose.bind(this)}
+        />);
       }
       var layerSelector;
       if (this.props.layerSelector) {
