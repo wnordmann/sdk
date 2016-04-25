@@ -13,9 +13,9 @@
 import React from 'react';
 import ol from 'openlayers';
 import 'blueimp-canvas-to-blob';
+import RaisedButton from 'material-ui/lib/raised-button';
+import CameraIcon from 'material-ui/lib/svg-icons/image/camera-alt';
 import FileSaver from 'browser-filesaver';
-import UI from 'pui-react-buttons';
-import Icon from 'pui-react-iconography';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 
@@ -57,9 +57,7 @@ class ImageExport extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <UI.DefaultButton title={formatMessage(messages.buttontitle)} onClick={this._handleClick.bind(this)}>
-        <Icon.Icon name="camera" /> {formatMessage(messages.buttontext)}
-      </UI.DefaultButton>
+      <RaisedButton {...this.props} icon={<CameraIcon />} label={formatMessage(messages.buttontext)} onTouchTap={this._handleClick.bind(this)} />
     );
   }
 }
