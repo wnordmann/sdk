@@ -102,8 +102,8 @@ class GeocodingResults extends React.Component {
   }
   render() {
     const {formatMessage} = this.props.intl;
-    var me = this;
     var resultNodes;
+    var subheader;
     if (this.state.searchResults !== null) {
       if (this.state.searchResults.length > 0) {
         resultNodes = this.state.searchResults.map(function(result) {
@@ -115,11 +115,11 @@ class GeocodingResults extends React.Component {
           );
         }, this);
       } else {
-        resultNodes = <p>{formatMessage(messages.noresults)}</p>;
+        subheader = formatMessage(messages.noresults);
       }
     }
     return (
-      <List>
+      <List subheader={subheader}>
        {resultNodes}
       </List>
     );

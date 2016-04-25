@@ -11,7 +11,6 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import Dialog from 'material-ui/lib/dialog';
 import Snackbar from 'material-ui/lib/snackbar';
