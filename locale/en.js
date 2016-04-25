@@ -121,7 +121,6 @@ var enMessages = {
   "qgisprint.printbuttontitle": "Print map",
   "qgisprint.printmenutext": "Print",
   "qgisprint.resolutionlabel": "Resolution",
-  "qgisprint.waittext": "Generating PDF ...",
   "querybuilder.addbuttontext": "Add",
   "querybuilder.addbuttontitle": "Add to current selection",
   "querybuilder.errortext": "Error setting filter, should be for instance ATTRIBUTE == \"Value\"",
