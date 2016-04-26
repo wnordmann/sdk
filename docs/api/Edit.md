@@ -10,6 +10,16 @@ A component that allows creating new features, so drawing their geometries and s
 Properties
 ----------
 
+### `buttonStyle`
+
+Style for the buttons in the toolbar.
+
+type: `object`
+defaultValue: `{
+  margin: '10px 12px'
+}`
+
+
 ### `intl`
 
 i18n message strings. Provided through the application through context.

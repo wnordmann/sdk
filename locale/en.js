@@ -17,6 +17,7 @@ var enMessages = {
   "chart.count": "Feature count",
   "chart.dropdowntext": "Charts",
   "edit.attributeslabel": "Attributes (comma-separated names)",
+  "edit.closebuttontext": "Close",
   "edit.createbuttontext": "Create",
   "edit.createbuttontitle": "Create empty layer",
   "edit.createlayermodaltitle": "Create empty layer",

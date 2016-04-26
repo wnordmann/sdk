@@ -18,6 +18,7 @@ import Snackbar from 'material-ui/lib/snackbar';
 import TextField from 'material-ui/lib/text-field';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import SelectField from 'material-ui/lib/select-field';
+import Toolbar from 'material-ui/lib/toolbar/toolbar';
 import RaisedButton from 'material-ui/lib/raised-button';
 import ol from 'openlayers';
 import MapTool from './MapTool.js';
@@ -130,6 +131,11 @@ const messages = defineMessages({
     id: 'edit.createbuttontext',
     description: 'Text for create button in new layer dialog',
     defaultMessage: 'Create'
+  },
+  closebuttontext: {
+    id: 'edit.closebuttontext',
+    description: 'Text for close button',
+    defaultMessage: 'Close'
   }
 });
 
@@ -168,7 +174,7 @@ class Edit extends MapTool {
   }
   _createLayer() {
     var layerName = this.refs.layerName.getValue();
-    var geometryType = this.refs.geometryType.getValue();
+    var geometryType = this.state.geometryType;
     var attributes = this.refs.attributes.getValue();
     if (layerName !== '') {
       var fill = this._fillColor ? new ol.style.Fill({color: this._fillColor}) : undefined;
@@ -192,7 +198,7 @@ class Edit extends MapTool {
       var layers = this.state.layers.slice();
       layers.push(layer);
       this._layer = layer.get('id');
-      this.setState({open: false, layers: layers});
+      this.setState({open: false, geometryType: null, layers: layers});
     }
   }
   _disableEditMode() {
@@ -274,7 +280,23 @@ class Edit extends MapTool {
       errorOpen: false
     });
   }
+  _changeGeometryType(evt, idx, value) {
+    this.setState({
+      geometryType: value
+    });
+  }
+  close() {
+    this.setState({
+      open: false
+    });
+  }
+  closeAttributes() {
+    this.setState({
+      attributeOpen: false
+    });
+  }
   render() {
+    const buttonStyle = this.props.buttonStyle;
     if (!this.state.enable) {
       this._activate();
     }
@@ -286,9 +308,9 @@ class Edit extends MapTool {
     }
     var button;
     if (this.state.enable === true) {
-      button = (<RaisedButton label={formatMessage(messages.enable)} onTouchTap={this._enableEditMode.bind(this)} />);
+      button = (<RaisedButton style={buttonStyle} label={formatMessage(messages.enable)} onTouchTap={this._enableEditMode.bind(this)} />);
     } else {
-      button = (<RaisedButton label={formatMessage(messages.disable)} onTouchTap={this._disableEditMode.bind(this)} />);
+      button = (<RaisedButton style={buttonStyle} label={formatMessage(messages.disable)} onTouchTap={this._disableEditMode.bind(this)} />);
     }
     var attributeFormItems;
     if (this.state.attributes !== null) {
@@ -308,25 +330,29 @@ class Edit extends MapTool {
       />);
     }
     var attributeActions = [
-      <RaisedButton label={formatMessage(messages.okbuttontext)} onTouchTap={this._setAttributes.bind(this)} />
+      <RaisedButton label={formatMessage(messages.okbuttontext)} onTouchTap={this._setAttributes.bind(this)} />,
+      <RaisedButton label={formatMessage(messages.closebuttontext)} onTouchTap={this.closeAttributes.bind(this)} />
     ];
     var actions = [
-      <RaisedButton label={formatMessage(messages.createbuttontext)} onTouchTap={this._createLayer.bind(this)} />
+      <RaisedButton label={formatMessage(messages.createbuttontext)} onTouchTap={this._createLayer.bind(this)} />,
+      <RaisedButton label={formatMessage(messages.closebuttontext)} onTouchTap={this.close.bind(this)} />
     ];
     return (
-      <article>
-        <RaisedButton label={formatMessage(messages.newlayer)} onTouchTap={this._showModal.bind(this)} />
+      <div>
         <SelectField hintText={formatMessage(messages.nolayer)} onChange={this._onLayerChange.bind(this)} floatingLabelText={formatMessage(messages.layerlabel)} value={this._layer} ref='layer'>
           {options}
         </SelectField>
-        {button}
+        <Toolbar>
+          <RaisedButton style={buttonStyle} label={formatMessage(messages.newlayer)} onTouchTap={this._showModal.bind(this)} />
+          {button}
+        </Toolbar>
         {error}
-        <Dialog open={this.state.attributeOpen} actions={attributeActions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.newfeaturemodaltitle)}>
+        <Dialog open={this.state.attributeOpen} actions={attributeActions} autoScrollBodyContent={true} onRequestClose={this.closeAttributes.bind(this)} modal={true} title={formatMessage(messages.newfeaturemodaltitle)}>
           {attributeFormItems}
         </Dialog>
-        <Dialog actions={actions} modal={true} autoScrollBodyContent={true} title={formatMessage(messages.createlayermodaltitle)} open={this.state.open}>
+        <Dialog actions={actions} onRequestClose={this.close.bind(this)} modal={true} autoScrollBodyContent={true} title={formatMessage(messages.createlayermodaltitle)} open={this.state.open}>
           <TextField floatingLabelText={formatMessage(messages.layernamelabel)} ref="layerName" /><br/>
-          <SelectField floatingLabelText={formatMessage(messages.geometrytypelabel)} ref='geometryType'>
+          <SelectField value={this.state.geometryType} onChange={this._changeGeometryType.bind(this)} floatingLabelText={formatMessage(messages.geometrytypelabel)} ref='geometryType'>
             <MenuItem key='Point' value='Point' primaryText={formatMessage(messages.pointgeomtype)} />
             <MenuItem key='LineString' value='LineString' primaryText={formatMessage(messages.linegeomtype)} />
             <MenuItem key='Polygon' value='Polygon' primaryText={formatMessage(messages.polygeomtype)} />
@@ -337,7 +363,7 @@ class Edit extends MapTool {
           <label>{formatMessage(messages.fillcolorlabel)}</label>
           <ColorPicker type='compact' onChangeComplete={this._onChangeFill.bind(this)} ref='fillColor' color={this._fillColor} />
        </Dialog>
-      </article>
+      </div>
     );
   }
 }
@@ -356,12 +382,19 @@ Edit.propTypes = {
    */
   pointRadius: React.PropTypes.number,
   /**
+   * Style for the buttons in the toolbar.
+   */
+  buttonStyle: React.PropTypes.object,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
 };
 
 Edit.defaultProps = {
+  buttonStyle: {
+    margin: '10px 12px'
+  },
   strokeWidth: 2,
   pointRadius: 7
 };
