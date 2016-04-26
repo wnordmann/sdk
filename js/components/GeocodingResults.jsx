@@ -50,6 +50,10 @@ class GeocodingResults extends React.Component {
           me.setState({searchResults: action.searchResults});
           me._setVisible(true);
           break;
+        case GeocodingConstants.CLEAR_SEARCH_RESULT:
+          me.setState({searchResults: null});
+          me._setVisible(false);
+          break;
         default:
           break;
       }

@@ -64,6 +64,8 @@ class Geocoding extends React.Component {
         delete window[cbname];
       };
       document.head.appendChild(script);
+    } else {
+      GeocodingActions.clearSearchResult();
     }
   }
   render() {

@@ -13,6 +13,7 @@
 import keymirror from 'keymirror';
 
 export default keymirror({
+  CLEAR_SEARCH_RESULT: null,
   SHOW_SEARCH_RESULTS: null,
   ZOOM_TO_RESULT: null
 });

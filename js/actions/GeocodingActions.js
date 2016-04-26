@@ -20,6 +20,11 @@ export default {
       searchResults: results
     });
   },
+  clearSearchResult: () => {
+    AppDispatcher.handleAction({
+      type: GeocodingConstants.CLEAR_SEARCH_RESULT
+    });
+  },
   zoomToResult: (result) => {
     AppDispatcher.handleAction({
       type: GeocodingConstants.ZOOM_TO_RESULT,
