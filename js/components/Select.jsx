@@ -72,7 +72,7 @@ class Select extends MapTool {
         if (lyr.getSource() instanceof ol.source.Vector) {
           lyr.getSource().forEachFeatureIntersectingExtent(box, function(feature) {
             this._handleSelection(feature, selected);
-          });
+          }, this);
         } else {
           var state = FeatureStore.getState(lyr);
           for (var i = 0, ii = state.originalFeatures.length; i < ii; ++i) {
