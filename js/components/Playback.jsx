@@ -12,25 +12,13 @@
 
 import React from 'react';
 import ol from 'openlayers';
-import Button from 'pui-react-buttons';
-import Icon from 'pui-react-iconography';
-import Grids from 'pui-react-grids';
-import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import IconButton from 'material-ui/lib/icon-button';
+import PlayIcon from 'material-ui/lib/svg-icons/av/play-arrow';
+import PauseIcon from 'material-ui/lib/svg-icons/av/pause';
+import Slider from 'material-ui/lib/slider';
+import DatePicker from 'material-ui/lib/date-picker/date-picker';
+import {injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
-import './Playback.css';
-
-const messages = defineMessages({
-  rangeinputlabel: {
-    id: 'playback.rangeinputlabel',
-    description: 'Label for the date range input, only used for screen readers',
-    defaultMessage: 'Slider control for changing the date'
-  },
-  dateinputlabel: {
-    id: 'playback.dateinputlabel',
-    description: 'Label for the date picker input, only used for screen readers',
-    defaultMessage: 'Date picker'
-  }
-});
 
 /**
  * Adds a slider to the map that can be used to select a given date, and modifies the visibility of layers and features depending on their timestamp and the current time.
@@ -126,34 +114,28 @@ class Playback extends React.Component {
   _refreshTimeLayers() {
     this._forEachLayer(this.props.map.getLayerGroup(), this._handleTimeLayer);
   }
-  _onRangeChange(evt) {
-    this.setState({date: evt.target.valueAsNumber});
+  _onRangeChange(evt, value) {
+    this.setState({date: value});
   }
-  _dateToString(ms) {
-    var date = new Date(ms);
-    var yyyy = date.getFullYear().toString();
-    var mm = (date.getMonth() + 1).toString();
-    var dd  = date.getDate().toString();
-    return yyyy + '-' + (mm[1] ? mm : '0' + mm[0]) + '-' + (dd[1] ? dd : '0' + dd[0]);
+  _onDateChange(evt, value) {
+    this.setState({date: value.getTime()});
   }
   render() {
     this._refreshTimeLayers();
-    const {formatMessage} = this.props.intl;
-    var dateString = this._dateToString(this.state.date);
     var buttonIcon;
     if (this.state.play === true) {
-      buttonIcon = 'play'
+      buttonIcon = <PlayIcon />;
     } else {
-      buttonIcon = 'pause';
+      buttonIcon = <PauseIcon />;
     }
+    var minDate = new Date(this.props.minDate);
+    var maxDate = new Date(this.props.maxDate);
     return (
-      <form role="form" onSubmit={this._onSubmit} className='form-horizontal playback'>
-        <div className="form-group">
-          <Grids.Col md={2}><Button.DefaultButton onClick={this._playPause.bind(this)}><Icon.Icon name={buttonIcon} /></Button.DefaultButton></Grids.Col>
-          <Grids.Col md={15}><label className='sr-only' htmlFor='rangeInput'>{formatMessage(messages.rangeinputlabel)}</label><input id='rangeInput' onChange={this._onRangeChange.bind(this)} ref='rangeInput' type='range' min={this.props.minDate} max={this.props.maxDate} value={this.state.date}/></Grids.Col>
-          <Grids.Col md={5}><label htmlFor='dateInput' className='sr-only'>{formatMessage(messages.dateinputlabel)}</label><input id='dateInput' ref='dateInput' type='text' readOnly={true} value={dateString} /></Grids.Col>
-        </div>
-      </form>
+      <div>
+        <IconButton style={{'float': 'left'}} onTouchTap={this._playPause.bind(this)}>{buttonIcon}</IconButton>
+        <Slider style={{'float': 'left', width: '200px', overflow: 'hidden'}} min={this.props.minDate} max={this.props.maxDate} value={this.state.date} onChange={this._onRangeChange.bind(this)} />
+        <DatePicker autoOk={true} minDate={minDate} maxDate={maxDate} style={{width: '200px', overflow: 'hidden'}} onChange={this._onDateChange.bind(this)} value={new Date(this.state.date)} />
+      </div>
     );
   }
 }
