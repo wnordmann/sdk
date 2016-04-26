@@ -20,7 +20,6 @@ import RaisedButton from 'material-ui/lib/raised-button';
 import SelectField from 'material-ui/lib/select-field';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
-import './Chart.css';
 
 const AGGREGATION_MIN = 0;
 const AGGREGATION_MAX = 1;
@@ -74,6 +73,7 @@ class Chart extends React.Component {
     super(props);
     this.state = {
       chart: this.props.charts[0],
+      value: this.props.charts[0].title,
       selected: null
     };
   }
@@ -189,6 +189,7 @@ class Chart extends React.Component {
       if (chart.title === value) {
         this.setState({
           chart: chart,
+          value: value,
           selected: this._storeConfig[chart.layer].selected
         });
         break;
@@ -231,7 +232,7 @@ class Chart extends React.Component {
       });
       return (
         <div className='chart-panel' id='chart-panel'>
-          <SelectField onChange={this._selectChart.bind(this)}>
+          <SelectField value={this.state.value} onChange={this._selectChart.bind(this)}>
             {options}
           </SelectField>
           <div id='chart'></div>
