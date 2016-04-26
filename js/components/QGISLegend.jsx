@@ -15,6 +15,8 @@ import ol from 'openlayers';
 import LayerStore from '../stores/LayerStore.js';
 import IconButton from 'material-ui/lib/icon-button';
 import LegendIcon from 'material-ui/lib/svg-icons/image/image';
+import List from 'material-ui/lib/lists/list';
+import ListItem from 'material-ui/lib/lists/list-item';
 import './QGISLegend.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
@@ -81,42 +83,21 @@ class QGISLegend extends React.Component {
     var legendNodes = [];
     var symbolFunc = function(symbol) {
       var src = legendBasePath + symbol.href;
-      return (<li key={symbol.title}><img src={src}></img> {symbol.title}</li>);
-    };
-    var symbolFuncB = function(symbol) {
-      var src = legendBasePath + symbol.href;
-      return (<img key={symbol.title} src={src}></img>);
+      return (<ListItem key={symbol.title} primaryText={symbol.title} leftIcon={<img src={src}></img>} />);
     };
     for (var id in legendData) {
       var title = LayerStore.findLayer(id).get('title');
       if (title !== null) {
-        var symbols;
-        if (legendData[id].length > 1) {
-          symbols = legendData[id].map(symbolFunc);
-          legendNodes.push(
-            <li key={id}>
-              <ul>
-                <h5><strong>{title}</strong></h5> {symbols}
-              </ul>
-            </li>
-          );
-        } else {
-          symbols = legendData[id].map(symbolFuncB);
-          legendNodes.push(
-            <li key={id}>
-              <ul>
-                {symbols} {title}
-              </ul>
-            </li>
-          );
-        }
-
+        var symbols = legendData[id].map(symbolFunc);
+        legendNodes.push(
+          <ListItem initiallyOpen={true} key={id} nestedItems={symbols} primaryText={title} />
+        );
       }
     }
     return (
-      <ul className='expandableList'>
+      <List>
         {legendNodes}
-      </ul>
+      </List>
     );
   }
   render() {
