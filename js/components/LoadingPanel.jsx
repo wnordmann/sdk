@@ -14,6 +14,7 @@ import React from 'react';
 import ol from 'openlayers';
 import LayerStore from '../stores/LayerStore.js';
 import pureRender from 'pure-render-decorator';
+import CircularProgress from 'material-ui/lib/circular-progress';
 import './LoadingPanel.css';
 
 /**
@@ -95,8 +96,8 @@ class LoadingPanel extends React.Component {
   render() {
     if (this.state.show) {
       return (
-        <div className="loading-panel spinner-lg bkg-default-5 out">
-          <i className="fa fa-spin fa-cog mtxl"></i>
+        <div className='loading-panel'>
+          <CircularProgress size={1.5} />
         </div>
       );
     } else {

@@ -116,6 +116,7 @@ var enMessages = {
   "playback.dateinputlabel": "Date picker",
   "playback.rangeinputlabel": "Slider control for changing the date",
   "qgislegend.buttontitle": "Legend",
+  "qgisprint.closebuttontext": "Close",
   "qgisprint.error": "Error while generating PDF, details: {details}",
   "qgisprint.modaltitle": "Print map",
   "qgisprint.printbuttontext": "Print",
