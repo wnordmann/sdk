@@ -11,7 +11,6 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import RaisedButton from 'material-ui/lib/raised-button';
 import Dialog from 'material-ui/lib/dialog';
@@ -27,6 +26,11 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
+  closebutton: {
+    id: 'qgisprint.closebuttontext',
+    description: 'Title of the close button',
+    defaultMessage: 'Close'
+  },
   modaltitle: {
     id: 'qgisprint.modaltitle',
     description: 'Title for the modal print dialog',
@@ -116,11 +120,6 @@ class QGISPrint extends React.Component {
       resolution: null
     };
   }
-  componentDidUpdate() {
-    this.setState({
-      open: true
-    });
-  }
   close() {
     this.setState({
       open: false
@@ -129,7 +128,7 @@ class QGISPrint extends React.Component {
   _onClick(event, value) {
     for (var i = 0, ii = this.props.layouts.length; i < ii; ++i) {
       if (this.props.layouts[i].name === value) {
-        this.setState({layoutName: value, layout: this.props.layouts[i]});
+        this.setState({open: true, layoutName: value, layout: this.props.layouts[i]});
         break;
       }
     }
@@ -279,7 +278,7 @@ class QGISPrint extends React.Component {
     for (var i = 0, ii = elements.length; i < ii; i++) {
       if (elements[i].type === 'label') {
         var name = elements[i].name;
-        labels[name] = ReactDOM.findDOMNode(this.refs[name]).value;
+        labels[name] = this.refs[name].getValue();
       }
     }
     this._createMap(labels);
@@ -314,7 +313,7 @@ class QGISPrint extends React.Component {
       if (this.state.error) {
         error = (<Snackbar
           open={this.state.errorOpen}
-          message={formatMessage(messages.errormsg, {details: this.state.msg})}
+          message={formatMessage(messages.error, {details: this.state.msg})}
           autoHideDuration={2000}
           onRequestClose={this._handleRequestClose.bind(this)}
         />);
@@ -323,13 +322,13 @@ class QGISPrint extends React.Component {
         loading = (<LinearProgress mode="indeterminate"/>);
       }
       var actions = [
-        <RaisedButton label={formatMessage(messages.printbuttontext)} onTouchTap={this.print.bind(this)} />,
+        <RaisedButton label={formatMessage(messages.printbuttontext)} onTouchTap={this._print.bind(this)} />,
         <RaisedButton label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
       ];
       dialog = (
         <Dialog actions={actions} title={formatMessage(messages.modaltitle)} modal={true} open={this.state.open} onRequestClose={this.close.bind(this)}>
           {elements}
-          <SelectField floatingLabelText={formatMessage(messages.resolutionslabel)} value={this.state.resolution} onChange={this._onResolutionChange.bind(this)}>
+          <SelectField floatingLabelText={formatMessage(messages.resolutionlabel)} value={this.state.resolution} onChange={this._onResolutionChange.bind(this)}>
             {selectOptions}
           </SelectField>
           {loading}
@@ -338,10 +337,12 @@ class QGISPrint extends React.Component {
       );
     }
     return (
-      <IconMenu {...this.props} iconButtonElement={<RaisedButton label={formatMessage(messages.printmenutext)} />} value={this.state.layoutName} onChange={this._onClick.bind(this)}>
-        {listitems}
+      <span>
+        <IconMenu {...this.props} iconButtonElement={<RaisedButton label={formatMessage(messages.printmenutext)} />} value={this.state.layoutName} onChange={this._onClick.bind(this)}>
+          {listitems}
+        </IconMenu>
         {dialog}
-      </IconMenu>
+      </span>
     );
   }
 }
