@@ -65,6 +65,8 @@ var enMessages = {
   "geocodingresults.noresults": "No results found",
   "geolocation.buttontitle": "Geolocation",
   "geolocation.error": "Error while retrieving geolocation, details: {details}",
+  "globe.globetext": "Switch to globe (3D)",
+  "globe.maptext": "Switch to map (2D)",
   "homebutton.buttontitle": "Home",
   "imageexport.buttontext": "Export",
   "imageexport.buttontitle": "Export as image",

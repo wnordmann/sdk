@@ -14,10 +14,24 @@
 import React from 'react';
 import ol from 'openlayers';
 global.ol = ol;
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import IconButton from 'material-ui/lib/icon-button';
 import GlobeIcon from 'material-ui/lib/svg-icons/action/three-d-rotation';
 import pureRender from 'pure-render-decorator';
 import olcs from 'ol3-cesium';
+
+const messages = defineMessages({
+  maptext: {
+    id: 'globe.maptext',
+    description: 'Tooltip to show to switch to map (2D) mode',
+    defaultMessage: 'Switch to map (2D)'
+  },
+  globetext: {
+    id: 'globe.globetext',
+    description: 'Tooltip to show to switch to globe (3D) mode',
+    defaultMessage: 'Switch to globe (3D)'
+  }
+});
 
 /**
  * Adds a button to toggle 3D mode.
@@ -36,7 +50,7 @@ import olcs from 'ol3-cesium';
  * ```
  */
 @pureRender
-export default class Globe extends React.Component {
+class Globe extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -64,9 +78,17 @@ export default class Globe extends React.Component {
     this.setState({globe: !this.state.globe});
   }
   render() {
-    var icon = this.state.globe ? <GlobeIcon color='white' /> : <GlobeIcon />;
+    const {formatMessage} = this.props.intl;
+    var icon, tooltip;
+    if (this.state.globe) {
+      icon = <GlobeIcon color='white' />;
+      tooltip = formatMessage(messages.maptext);
+    } else {
+      icon = <GlobeIcon />;
+      tooltip = formatMessage(messages.globetext);
+    }
     return (
-      <IconButton onTouchTap={this._toggle.bind(this)}>{icon}</IconButton>
+      <IconButton tooltip={tooltip} onTouchTap={this._toggle.bind(this)}>{icon}</IconButton>
     );
   }
 }
@@ -75,5 +97,11 @@ Globe.propTypes = {
   /**
    * The ol3 map instance to work on.
    */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired
+  map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * i18n message strings. Provided through the application through context.
+   */
+  intl: intlShape.isRequired
 };
+
+export default injectIntl(Globe);

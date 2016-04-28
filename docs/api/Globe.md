@@ -19,6 +19,13 @@ The HTML page of the application needs to include a script tag to cesium:
 Properties
 ----------
 
+### `intl`
+
+i18n message strings. Provided through the application through context.
+
+type: `custom`
+
+
 ### `map` (required)
 
 The ol3 map instance to work on.

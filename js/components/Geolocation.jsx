@@ -109,7 +109,7 @@ class Geolocation extends React.Component {
         />);
     } else {
       return (
-        <IconButton onTouchTap={this._geolocate.bind(this)}><MyLocation /></IconButton>
+        <IconButton tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._geolocate.bind(this)}><MyLocation /></IconButton>
       );
     }
   }
