@@ -22,6 +22,33 @@ global.ol = ol;
 import {IntlProvider} from 'react-intl';
 global.IntlProvider = IntlProvider;
 
+import injectTapEventPlugin from 'react-tap-event-plugin';
+global.injectTapEventPlugin = injectTapEventPlugin;
+
+import AppBar from 'material-ui/lib/app-bar';
+global.AppBar = AppBar;
+
+import Toolbar from 'material-ui/lib/toolbar/toolbar';
+global.Toolbar = Toolbar;
+
+import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group';
+global.ToolbarGroup = ToolbarGroup;
+
+import RaisedButton from 'material-ui/lib/raised-button';
+global.RaisedButton = RaisedButton;
+
+import IconMenu from 'material-ui/lib/menus/icon-menu';
+global.IconMenu = IconMenu;
+
+import MenuItem from 'material-ui/lib/menus/menu-item';
+global.MenuItem = MenuItem;
+
+import Tabs from 'material-ui/lib/tabs/tabs';
+global.Tabs = Tabs;
+
+import Tab from 'material-ui/lib/tabs/tab';
+global.Tab = Tab;
+
 import AddLayer from './components/AddLayer.jsx';
 global.AddLayer = AddLayer;
 
