@@ -12,10 +12,18 @@
 
 import React from 'react';
 import ol from 'openlayers';
-import {injectIntl, intlShape} from 'react-intl';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import IconButton from 'material-ui/lib/icon-button';
 import HomeIcon from 'material-ui/lib/svg-icons/action/home';
 import pureRender from 'pure-render-decorator';
+
+const messages = defineMessages({
+  buttontitle: {
+    id: 'homebutton.buttontitle',
+    description: 'Title for the home button',
+    defaultMessage: 'Home'
+  }
+});
 
 /**
  * A button to go back to the initial extent of the map.
@@ -52,8 +60,9 @@ class HomeButton extends React.Component {
     }
   }
   render() {
+    const {formatMessage} = this.props.intl;
     return (
-      <IconButton onTouchTap={this._goHome.bind(this)}><HomeIcon /></IconButton>
+      <IconButton tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._goHome.bind(this)}><HomeIcon /></IconButton>
     );
   }
 }
