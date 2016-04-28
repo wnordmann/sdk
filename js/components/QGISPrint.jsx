@@ -125,13 +125,8 @@ class QGISPrint extends React.Component {
       open: false
     });
   }
-  _onClick(event, value) {
-    for (var i = 0, ii = this.props.layouts.length; i < ii; ++i) {
-      if (this.props.layouts[i].name === value) {
-        this.setState({open: true, layoutName: value, layout: this.props.layouts[i]});
-        break;
-      }
-    }
+  _onClick(layout, event) {
+    this.setState({open: true, layoutName: layout.name, layout: layout});
   }
   _elementLoaded() {
     this._elementsLoaded++;
@@ -210,6 +205,9 @@ class QGISPrint extends React.Component {
     this._images[el.id] = new Image();
     this._images[el.id].crossOrigin = 'anonymous';
     var me = this;
+    this._images[el.id].addEventListener('error', function() {
+      me._elementLoaded();
+    });
     this._images[el.id].addEventListener('load', function() {
       me._pdf.addImage(me._images[el.id], 'png', el.x, el.y, el.width, el.height);
       me._elementLoaded();
@@ -292,7 +290,7 @@ class QGISPrint extends React.Component {
     const {formatMessage} = this.props.intl;
     var listitems = this.props.layouts.map(function(lyt, idx) {
       var href = this.props.thumbnailPath + lyt.thumbnail;
-      return (<MenuItem key={idx} value={lyt.name} primaryText={lyt.name}><div><img src={href}/></div></MenuItem>);
+      return (<MenuItem onTouchTap={this._onClick.bind(this, lyt)} key={idx} value={lyt.name} primaryText={lyt.name}><div><img src={href}/></div></MenuItem>);
     }, this);
     var dialog, layout = this.state.layout;
     if (layout !== null) {
@@ -338,7 +336,7 @@ class QGISPrint extends React.Component {
     }
     return (
       <span>
-        <IconMenu {...this.props} iconButtonElement={<RaisedButton label={formatMessage(messages.printmenutext)} />} value={this.state.layoutName} onChange={this._onClick.bind(this)}>
+        <IconMenu {...this.props} iconButtonElement={<RaisedButton label={formatMessage(messages.printmenutext)} />} value={this.state.layoutName}>
           {listitems}
         </IconMenu>
         {dialog}
