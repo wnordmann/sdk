@@ -15,6 +15,8 @@ import ReactDOM from 'react-dom';
 import BasePopup from './BasePopup.jsx';
 import ol from 'openlayers';
 import {injectIntl, intlShape} from 'react-intl';
+import IconButton from 'material-ui/lib/icon-button';
+import CloserIcon from 'material-ui/lib/svg-icons/navigation/close';
 import EditForm from './EditForm.jsx';
 
 /**
@@ -83,12 +85,12 @@ class EditPopup extends BasePopup {
       editForm = (<EditForm ref='editForm' feature={this.state.feature} layer={this.state.layer} onSuccess={this._onSuccess.bind(this)} />);
     }
     return (
-      <article>
-        <a href="#" ref="popupCloser" className="popup-closer fa fa-times fa-pull-right"></a>
+      <div>
+        <IconButton style={{float: 'right'}} ref="popupCloser" onTouchTap={this.setVisible.bind(this, false)}><CloserIcon /></IconButton>
         <div className='popup-content' ref='content'>
           {editForm}
         </div>
-      </article>
+      </div>
     );
   }
 }
