@@ -174,7 +174,7 @@ class QGISPrint extends React.Component {
       pdf.addImage(data, 'JPEG', mapElement.x, mapElement.y, mapElement.width, mapElement.height);
     }
     map.setSize(this._origSize);
-    map.getView().fit(this._origExtent, this._origSize);
+    map.getView().fit(this._origExtent, this._origSize, {constrainResolution: false});
     map.renderSync();
     this._elementLoaded();
   }
@@ -254,7 +254,7 @@ class QGISPrint extends React.Component {
         this._origSize = map.getSize();
         this._origExtent = map.getView().calculateExtent(this._origSize);
         map.setSize([width, height]);
-        map.getView().fit(extent, map.getSize());
+        map.getView().fit(extent, map.getSize(), {constrainResolution: false});
         map.renderSync();
         if (this._tileLayers.length === 0) {
           this._paintMapInPdf();
