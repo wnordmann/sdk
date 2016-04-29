@@ -68,8 +68,8 @@ class LoginModal extends React.Component {
     };
   }
   _doLogin() {
-    var username = ReactDOM.findDOMNode(this.refs.username).value;
-    var pwd = ReactDOM.findDOMNode(this.refs.password).value;
+    var username = this.refs.username.getValue();
+    var pwd = this.refs.password.getValue();
     LoginActions.login(username, pwd, this.failureCb, this);
   }
   failureCb() {

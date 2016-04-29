@@ -128,6 +128,9 @@ Login.propTypes = {
 };
 
 Login.defaultProps = {
+  style: {
+    margin: '10px 12px'
+  },
   url: '/geoserver/app/api/login'
 };
 
