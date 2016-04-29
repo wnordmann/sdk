@@ -1,5 +1,7 @@
 export default {
-  formatMessage: function() {},
+  formatMessage: function() {
+    return 'foo';
+  },
   formatDate: function() {},
   formatTime: function() {},
   formatRelative: function() {},

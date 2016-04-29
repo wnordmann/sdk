@@ -96,9 +96,6 @@ class QueryBuilder extends React.Component {
       errorText: null
     };
   }
-  componentDidMount() {
-    this._layer = this.refs.layerSelector.getWrappedInstance().getLayer();
-  }
   _onLayerSelectChange(layer) {
     this._layer = layer;
   }
@@ -163,7 +160,7 @@ class QueryBuilder extends React.Component {
     const buttonStyle = this.props.buttonStyle;
     return (
       <div className='querybuilder'>
-        <LayerSelector onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /><br/>
+        <LayerSelector {...this.props} onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /><br/>
         <TextField hintText={formatMessage(messages.filterplaceholder)} floatingLabelText={formatMessage(messages.filterlabel)} errorText={this.state.errorText} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} /><br/>
         <Toolbar>
           <RaisedButton style={buttonStyle} label={formatMessage(messages.newbuttontext)} onTouchTap={this._newSelection.bind(this)} />

@@ -61,11 +61,6 @@ class LayerSelector extends React.Component {
   componentWillUnmount() {
     LayerStore.removeChangeListener(this._onChangeCb);
   }
-  getLayer() {
-    if (this.state.value !== null) {
-      return LayerStore.findLayer(this.state.value);
-    }
-  }
   _onChange() {
     var flatLayers = LayerStore.getState().flatLayers;
     var layers = [];
@@ -126,4 +121,4 @@ LayerSelector.propTypes = {
   intl: intlShape.isRequired
 };
 
-export default injectIntl(LayerSelector, {withRef: true});
+export default injectIntl(LayerSelector);

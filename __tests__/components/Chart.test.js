@@ -59,9 +59,15 @@ describe('Chart', function() {
     ReactDOM.render((
       <Chart intl={intl} combo={true} charts={charts} />
     ), container);
-    var chartOptions = container.querySelectorAll('option');
-    assert.equal(chartOptions.length, 1);
-    assert.equal(chartOptions[0].text, charts[0].title);
+    var divs = container.querySelectorAll('div');
+    var found = false;
+    for (var i = 0, ii = divs.length; i < ii; ++i) {
+      if (divs[i].getAttribute('value') === charts[0].title) {
+        found = true;
+        break;
+      }
+    }
+    assert.equal(found, true);
     ReactDOM.unmountComponentAtNode(container);
   });
 
