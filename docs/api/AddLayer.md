@@ -40,3 +40,10 @@ The stroke width in pixels used in the style for the uploaded data.
 type: `number`
 defaultValue: `2`
 
+
+### `style`
+
+defaultValue: `{
+  margin: '10px 12px'
+}`
+

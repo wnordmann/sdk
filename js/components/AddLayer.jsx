@@ -234,6 +234,9 @@ AddLayer.propTypes = {
 };
 
 AddLayer.defaultProps = {
+  style: {
+    margin: '10px 12px'
+  },
   strokeWidth: 2,
   pointRadius: 7
 };
