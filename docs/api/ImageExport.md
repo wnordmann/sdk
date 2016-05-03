@@ -23,3 +23,10 @@ The ol3 map to export as PNG.
 
 type: `instanceOf ol.Map`
 
+
+### `style`
+
+defaultValue: `{
+  margin: '10px 12px'
+}`
+

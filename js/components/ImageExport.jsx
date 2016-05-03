@@ -73,4 +73,10 @@ ImageExport.propTypes = {
   intl: intlShape.isRequired
 };
 
+ImageExport.defaultProps = {
+  style: {
+    margin: '10px 12px'
+  }
+};
+
 export default injectIntl(ImageExport);
