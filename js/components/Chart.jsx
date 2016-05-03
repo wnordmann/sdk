@@ -290,7 +290,10 @@ Chart.propTypes = {
 };
 
 Chart.defaultProps = {
-  combo: false
+  combo: false,
+  style: {
+    margin: '10px 12px'
+  }
 };
 
 export default injectIntl(Chart);

@@ -395,6 +395,9 @@ QGISPrint.propTypes = {
 };
 
 QGISPrint.defaultProps = {
+  style: {
+    margin: '10px 12px'
+  },
   thumbnailPath: '../../resources/print/',
   resolutions: [72, 150, 300]
 };

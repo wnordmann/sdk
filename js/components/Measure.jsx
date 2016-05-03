@@ -264,6 +264,9 @@ Measure.propTypes = {
 };
 
 Measure.defaultProps = {
+  style: {
+    margin: '10px 12px'
+  },
   geodesic: true
 };
 

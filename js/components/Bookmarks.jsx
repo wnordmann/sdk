@@ -233,6 +233,9 @@ Bookmarks.propTypes = {
 };
 
 Bookmarks.defaultProps = {
+  style: {
+    margin: '10px 12px'
+  },
   dots: true,
   autoplay: false,
   animatePanZoom: true,

@@ -92,4 +92,10 @@ MapConfig.propTypes = {
   intl: intlShape.isRequired
 };
 
+MapConfig.defaultProps = {
+  style: {
+    margin: '10px 12px'
+  }
+};
+
 export default injectIntl(MapConfig);

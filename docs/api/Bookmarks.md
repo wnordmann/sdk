@@ -135,3 +135,10 @@ Should we display a marker for the bookmark? Default is true.
 type: `bool`
 defaultValue: `true`
 
+
+### `style`
+
+defaultValue: `{
+  margin: '10px 12px'
+}`
+
