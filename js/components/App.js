@@ -24,8 +24,8 @@ import ol from 'openlayers';
  * import ReactDOM from 'react-dom';
  * import ol from 'openlayers';
  * import {IntlProvider} from 'react-intl';
- * import App from './node_modules/boundless-sdk/js/components/App.js';
- * import enMessages from './node_modules/boundless-sdk/locale/en.js';
+ * import App from '.boundless-sdk/js/components/App.js';
+ * import enMessages from 'boundless-sdk/locale/en.js';
  *
  * class MyApp extends App {
  *   componentDidMount() {
