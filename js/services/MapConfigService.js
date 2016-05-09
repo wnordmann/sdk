@@ -11,6 +11,7 @@
  */
 
 import ol from 'openlayers';
+import LayerIdService from './LayerIdService.js';
 
 class MapConfigService {
   generateSourceFromConfig(config) {
@@ -26,7 +27,7 @@ class MapConfigService {
   generateLayerFromConfig(config) {
     var type = config.type;
     var layerConfig = config.properties || {};
-    layerConfig.id = 'sdk-layer-' + Math.random();
+    layerConfig.id = LayerIdService.generateId();
     if (type === 'Group') {
       layerConfig.layers = [];
       for (var i = 0, ii = config.children.length; i < ii; ++i) {

@@ -12,6 +12,7 @@
 
 import React from 'react';
 import ol from 'openlayers';
+import LayerIdService from '../services/LayerIdService.js';
 import LayerStore from '../stores/LayerStore.js';
 import LayerListItem from './LayerListItem.jsx';
 import AddLayerModal from './AddLayerModal.jsx';
@@ -109,7 +110,7 @@ class LayerList extends React.Component {
   }
   getLayerNode(lyr) {
     if (lyr.get('id') === undefined) {
-      lyr.set('id', 'sdk-layer-' + Math.floor(Math.random() * 1000));
+      lyr.set('id', LayerIdService.generateId());
     }
     if (lyr.get('title') !== null) {
       if (lyr instanceof ol.layer.Group) {
