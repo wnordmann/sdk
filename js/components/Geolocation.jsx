@@ -28,6 +28,11 @@ const messages = defineMessages({
     id: 'geolocation.buttontitle',
     description: 'Title for geolocation button',
     defaultMessage: 'Geolocation'
+  },
+  trackingtitle: {
+    id: 'geolocation.trackingtitle',
+    description: 'Title to add to the geolocation button when tracking is active',
+    defaultMessage: 'Tracking'
   }
 });
 
@@ -46,7 +51,8 @@ class Geolocation extends React.Component {
     super(props);
     this.state = {
       error: false,
-      open: false
+      open: false,
+      tracking: false
     };
   }
   _geolocate() {
@@ -92,6 +98,7 @@ class Geolocation extends React.Component {
         })
       });
     }
+    this.setState({tracking: this._geolocation.getTracking()});
   }
   _handleRequestClose() {
     this.setState({
@@ -108,8 +115,13 @@ class Geolocation extends React.Component {
           onRequestClose={this._handleRequestClose.bind(this)}
         />);
     } else {
+      var color, tooltip = formatMessage(messages.buttontitle);
+      if (this.state.tracking) {
+        color = 'red';
+        tooltip += ' (' + formatMessage(messages.trackingtitle) + ')';
+      }
       return (
-        <IconButton tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._geolocate.bind(this)}><MyLocation /></IconButton>
+        <IconButton tooltip={tooltip} onTouchTap={this._geolocate.bind(this)}><MyLocation color={color} /></IconButton>
       );
     }
   }
