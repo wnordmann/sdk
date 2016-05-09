@@ -1,6 +1,6 @@
 # SDK
 New javascript SDK based on React and Flux
-For example usage see: https://github.com/boundlessgeo/sdk-template
+For example usage see: https://github.com/boundlessgeo/sdk-apps
 
 ## Generating docs
 
@@ -16,7 +16,7 @@ The versions get installed at ~/.gitbook/versions/
     npm test
 
 ## Pre commit hook
-In order to keep the full build (used by the free version of QGIS Web Application Builder) up to date, install a pre commit hook in your local git repository (.git/hooks/pre-commit):
+In order to keep the full build (used by the QGIS Web Application Builder) up to date, install a pre commit hook in your local git repository (.git/hooks/pre-commit):
 
     #!/bin/sh
     npm test
