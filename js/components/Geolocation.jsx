@@ -58,6 +58,7 @@ class Geolocation extends React.Component {
   _geolocate() {
     if (this._geolocation) {
       this._geolocation.setTracking(!this._geolocation.getTracking());
+      this._featuresOverlay.getSource().clear();
       this._featuresOverlay.setMap(this._geolocation.getTracking() ? this.props.map : null);
     } else {
       var map = this.props.map;
@@ -68,6 +69,7 @@ class Geolocation extends React.Component {
       var accuracyFeature = new ol.Feature();
       this._geolocation.on('change:accuracyGeometry', function() {
         accuracyFeature.setGeometry(this._geolocation.getAccuracyGeometry());
+        this._featuresOverlay.getSource().addFeature(accuracyFeature);
       }, this);
       var positionFeature = new ol.Feature();
       positionFeature.setStyle(new ol.style.Style({
@@ -88,14 +90,13 @@ class Geolocation extends React.Component {
       this._geolocation.on('change:position', function() {
         var coordinates = this._geolocation.getPosition();
         positionFeature.setGeometry(coordinates ? new ol.geom.Point(coordinates) : null);
+        this._featuresOverlay.getSource().addFeature(positionFeature);
         map.getView().setCenter(coordinates);
       }, this);
       this._featuresOverlay = new ol.layer.Vector({
         map: map,
         useSpatialIndex: false,
-        source: new ol.source.Vector({
-          features: [accuracyFeature, positionFeature]
-        })
+        source: new ol.source.Vector()
       });
     }
     this.setState({tracking: this._geolocation.getTracking()});
