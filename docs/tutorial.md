@@ -79,7 +79,7 @@ var map = new ol.Map({
 In this step we'll learn how to add another component to the application, besides the LayerList component which is already in the application. First, we'll add an import statement at the top of ```app.jsx```:
 
 ```javascript
-import FeatureTable from './node_modules/boundless-sdk/js/components/FeatureTable.jsx';
+import FeatureTable from 'boundless-sdk/js/components/FeatureTable.jsx';
 ```
 
 In the render function of our application, we need to add the definition of our new component, FeatureTable:
@@ -122,11 +122,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import {addLocaleData, IntlProvider} from 'react-intl';
-import App from './node_modules/boundless-sdk/js/components/app.js';
-import LayerList from './node_modules/boundless-sdk/js/components/LayerList.jsx';
-import FeatureTable from './node_modules/boundless-sdk/js/components/FeatureTable.jsx';
-import enLocaleData from './node_modules/react-intl/locale-data/en.js';
-import enMessages from './node_modules/boundless-sdk/locale/en.js';
+import App from 'boundless-sdk/js/components/app.js';
+import LayerList from 'boundless-sdk/js/components/LayerList.jsx';
+import FeatureTable from 'boundless-sdk/js/components/FeatureTable.jsx';
+import enLocaleData from 'react-intl/locale-data/en.js';
+import enMessages from 'boundless-sdk/locale/en.js';
 
 addLocaleData(
   enLocaleData
@@ -208,7 +208,7 @@ In this step we'll be adding a button to the application that will open up a dia
 Again, we will start by adding an ```import``` statement to import our component:
 
 ```javascript
-import AddLayer from './node_modules/boundless-sdk/js/components/AddLayer.jsx';
+import AddLayer from 'boundless-sdk/js/components/AddLayer.jsx';
 ```
 
 In the ```render``` function of our application, we need to add a toolbar to accommodate for the button of the upload component:
@@ -255,12 +255,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import {addLocaleData, IntlProvider} from 'react-intl';
-import App from './node_modules/boundless-sdk/js/components/app.js';
-import LayerList from './node_modules/boundless-sdk/js/components/LayerList.jsx';
-import FeatureTable from './node_modules/boundless-sdk/js/components/FeatureTable.jsx';
-import AddLayer from './node_modules/boundless-sdk/js/components/AddLayer.jsx';
-import enLocaleData from './node_modules/react-intl/locale-data/en.js';
-import enMessages from './node_modules/boundless-sdk/locale/en.js';
+import App from 'boundless-sdk/js/components/app.js';
+import LayerList from 'boundless-sdk/js/components/LayerList.jsx';
+import FeatureTable from 'boundless-sdk/js/components/FeatureTable.jsx';
+import AddLayer from 'boundless-sdk/js/components/AddLayer.jsx';
+import enLocaleData from 'react-intl/locale-data/en.js';
+import enMessages from 'boundless-sdk/locale/en.js';
 
 addLocaleData(
   enLocaleData

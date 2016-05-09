@@ -8,11 +8,11 @@ Make sure g++ is installed on your system.
 
 ## Node version manager (nvm)
 Install the node version manager from https://github.com/creationix/nvm
-For the Web SDK, you should be using node 4.3.2 so:
+For the Web SDK, you should be using node 6.0.0 so:
 
 ```
-nvm install 4.3.2
-nvm use 4.3.2
+nvm install 6.0.0
+nvm use 6.0.0
 ```
 
 ## Using the web-sdk application generator

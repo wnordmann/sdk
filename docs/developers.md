@@ -4,7 +4,7 @@
 
 The Web SDK is based on EcmaScript 6 (ES6). It uses babelify to translate to ES5.
 It is based on OpenLayers 3, React 0.14 and Flux.
-For the user interface, currently the Pivotal UI (pui) React components are used. See http://styleguide.pivotal.io for more information.
+For the user interface, material-ui React components are used. See http://www.material-ui.com for more information.
 For internationalization, Yahoo's react-intl (v2) is used.
 Node and npm are used as the development environment.
 
@@ -90,8 +90,8 @@ At the application level:
 
 ```javascript
 import {addLocaleData, IntlProvider} from ‘react-intl';
-import enLocaleData from './node_modules/react-intl/dist/locale-data/en.js';
-import enMessages from ‘./node_modules/boundless-sdk/locale/en.js';
+import enLocaleData from 'react-intl/dist/locale-data/en.js';
+import enMessages from 'boundless-sdk/locale/en.js';
 
 addLocaleData(
   enLocaleData
