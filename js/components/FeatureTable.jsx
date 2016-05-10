@@ -170,6 +170,10 @@ class FeatureTable extends React.Component {
   _onChange() {
     if (this._layer) {
       var state = FeatureStore.getState(this._layer);
+      if (!state) {
+        delete this._layer;
+        return;
+      }
       this._defaultSortIndexes = [];
       var size = state.features.length;
       for (var index = 0; index < size; index++) {
