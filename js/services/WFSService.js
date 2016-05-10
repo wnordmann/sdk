@@ -162,8 +162,9 @@ class WFSService {
   readResponse(data, xmlhttp, onSuccess, onFailure) {
     if (global.Document && data instanceof global.Document && data.documentElement &&
       data.documentElement.localName == 'ExceptionReport') {
-      onFailure.call(this, xmlhttp, data.getElementsByTagNameNS('http://www.opengis.net/ows', 'ExceptionText').item(0).textContent);
-      return false;
+      if (onFailure) {
+        onFailure.call(this, xmlhttp, data.getElementsByTagNameNS('http://www.opengis.net/ows', 'ExceptionText').item(0).textContent);
+      }
     } else {
       onSuccess(data);
     }
