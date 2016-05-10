@@ -195,7 +195,15 @@ class FeatureStore extends EventEmitter {
         onSuccess.call(scope);
       }
     };
-    WFSService.loadFeatures(layer, startIndex, maxFeatures, srsName, success, onFailure);
+    var failure = function(xmlhttp, exception) {
+      if (startIndex === 0) {
+        me._setFeatures(layer, []);
+      }
+      if (onFailure) {
+        onFailure(xmlhttp, exception);
+      }
+    };
+    WFSService.loadFeatures(layer, startIndex, maxFeatures, srsName, success, failure);
     WFSService.getNumberOfFeatures(layer, function(count) {
       layer.set('numberOfFeatures', count);
     });
