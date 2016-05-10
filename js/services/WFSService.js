@@ -99,6 +99,45 @@ class WFSService {
       onFailure.call(this);
     }, this);
   }
+  loadFeatures(layer, startIndex, maxFeatures, srsName, onSuccess, onFailure) {
+    var wfsInfo = layer.get('wfsInfo');
+    var url = wfsInfo.url;
+    var payloadNode = wfsFormat.writeGetFeature({
+      maxFeatures: maxFeatures,
+      srsName: srsName,
+      featureNS: wfsInfo.featureNS,
+      startIndex: startIndex,
+      featurePrefix:  wfsInfo.featurePrefix,
+      featureTypes: [wfsInfo.featureType]
+    });
+    var payload = xmlSerializer.serializeToString(payloadNode);
+    doPOST(url, payload, function(xmlhttp) {
+      var data = xmlhttp.responseXML;
+      this.readResponse(data, xmlhttp, function(data) {
+        var features = wfsFormat.readFeatures(data);
+        onSuccess.call(this, features);
+      }, onFailure);
+    }, function(xmlhttp) {
+      onFailure.call(this);
+    }, this);
+  }
+  getNumberOfFeatures(layer, callback) {
+    if (layer.get('numberOfFeatures') === undefined) {
+      var wfsInfo = layer.get('wfsInfo');
+      var url = wfsInfo.url;
+      var hitsNode = wfsFormat.writeGetFeature({
+        resultType: 'hits',
+        featureNS: wfsInfo.featureNS,
+        featurePrefix:  wfsInfo.featurePrefix,
+        featureTypes: [wfsInfo.featureType]
+      });
+      var hits = xmlSerializer.serializeToString(hitsNode);
+      doPOST(url, hits, function(xmlhttp) {
+        var info = wfsFormat.readFeatureCollectionMetadata(xmlhttp.responseXML);
+        callback.call(this, info.numberOfFeatures);
+      });
+    }
+  }
   distanceWithin(layer, view, coord, onSuccess, onFailure) {
     var point = ol.proj.toLonLat(coord);
     var wfsInfo = layer.get('wfsInfo');
@@ -120,13 +159,13 @@ class WFSService {
       }
     }, onFailure);
   }
-  readResponse(data, xmlhttp, onFailure) {
+  readResponse(data, xmlhttp, onSuccess, onFailure) {
     if (global.Document && data instanceof global.Document && data.documentElement &&
       data.documentElement.localName == 'ExceptionReport') {
       onFailure.call(this, xmlhttp, data.getElementsByTagNameNS('http://www.opengis.net/ows', 'ExceptionText').item(0).textContent);
       return false;
     } else {
-      return wfsFormat.readTransactionResponse(data);
+      onSuccess(data);
     }
   }
   deleteFeature(layer, feature, onSuccess, onFailure) {
@@ -138,12 +177,14 @@ class WFSService {
     return doPOST(wfsInfo.url, xmlSerializer.serializeToString(node),
       function(xmlhttp) {
         var data = xmlhttp.responseXML;
-        var result = this.readResponse(data, xmlhttp, onFailure);
-        if (result && result.transactionSummary.totalDeleted === 1) {
-          onSuccess.call(this);
-        } else {
-          onFailure.call(this, xmlhttp);
-        }
+        this.readResponse(data, xmlhttp, function(data) {
+          var result = wfsFormat.readTransactionResponse(data);
+          if (result && result.transactionSummary.totalDeleted === 1) {
+            onSuccess.call(this);
+          } else {
+            onFailure.call(this, xmlhttp);
+          }
+        }, onFailure);
       },
       onFailure,
       this
@@ -182,10 +223,14 @@ class WFSService {
     return doPOST(wfsInfo.url, xmlSerializer.serializeToString(node),
       function(xmlhttp) {
         var data = xmlhttp.responseXML;
-        var result = this.readResponse(data, xmlhttp, onFailure);
-        if (result) {
-          onSuccess.call(this, result);
-        }
+        this.readResponse(data, xmlhttp, function(data) {
+          var result = wfsFormat.readTransactionResponse(data);
+          if (result) {
+            onSuccess.call(this, result);
+          } else {
+            onFailure.call(this, xmlhttp);
+          }
+        }, onFailure);
       },
       onFailure,
       this
@@ -203,11 +248,15 @@ class WFSService {
     return doPOST(wfsInfo.url, xmlSerializer.serializeToString(node),
       function(xmlhttp) {
         var data = xmlhttp.responseXML;
-        var result = this.readResponse(data, xmlhttp, onFailure);
-        if (result) {
-          var insertId = result.insertIds[0];
-          onSuccess.call(this, insertId);
-        }
+        this.readResponse(data, xmlhttp, function(data) {
+          var result = wfsFormat.readTransactionResponse(data);
+          if (result) {
+            var insertId = result.insertIds[0];
+            onSuccess.call(this, insertId);
+          } else {
+            onFailure.call(this, xmlhttp);
+          }
+        }, onFailure);
       },
       onFailure,
       this

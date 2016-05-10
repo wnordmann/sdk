@@ -136,13 +136,15 @@ class AddLayerModal extends React.Component {
       olLayer.set('canStyle', false);
     });
   }
-  _getWfsInfo(layer, olLayer) {
+  _getWfsInfo(layer, olLayer, success, scope) {
     var me = this;
     // do a WFS DescribeFeatureType request to get wfsInfo
     WFSService.describeFeatureType(me.props.url, layer, function(wfsInfo) {
       olLayer.set('wfsInfo', wfsInfo);
       if (olLayer instanceof ol.layer.Tile) {
-        FeatureStore.loadFeatures(olLayer, 0);
+        FeatureStore.loadFeatures(olLayer, 0, success, function(xmlhttp, exception) {
+          me.setState({error: true, errorOpen: true, msg: exception});
+        }, scope);
       }
     }, function() {});
     // TODO handle failure
@@ -204,12 +206,11 @@ class AddLayerModal extends React.Component {
       });
       this._getStyleName.call(this, olLayer);
     }
-    this._getWfsInfo.call(this, layer, olLayer);
+    this._getWfsInfo.call(this, layer, olLayer, this.close, this);
     map.addLayer(olLayer);
     if (!this.props.asVector) {
       view.fit(extent, map.getSize());
     }
-    this.close();
   }
   _getCapabilitiesUrl(url) {
     var urlObj = new URL(url);
@@ -275,9 +276,9 @@ class AddLayerModal extends React.Component {
     var error;
     if (this.state.error === true) {
       error = (<Snackbar
-        open={this.state.errorOpen}
+        autoHideDuration={5000}
+        bodyStyle={{height: 'auto', backgroundColor: 'rgba(255, 0, 0, 0.8)'}} open={this.state.errorOpen}
         message={formatMessage(messages.errormsg, {msg: this.state.msg})}
-        autoHideDuration={2000}
         onRequestClose={this._handleRequestClose.bind(this)}
       />);
     }
