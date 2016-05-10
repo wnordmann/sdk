@@ -242,7 +242,8 @@ class LayerListItem extends React.Component {
       label = (<IconButton onTouchTap={this._label.bind(this)}><LabelIcon /></IconButton>);
     }
     var styling;
-    if (layer.get('canStyle') && this.props.allowStyling) {
+    var canStyle = layer.get('styleName') && layer.get('wfsInfo') && this.props.allowStyling;
+    if (canStyle) {
       styling = (<IconButton onTouchTap={this._style.bind(this)}><StyleIcon /></IconButton>);
     }
     var reorderUp, reorderDown;
@@ -271,7 +272,7 @@ class LayerListItem extends React.Component {
       labelModal = (<LabelModal {...this.props} layer={this.props.layer} ref='labelmodal' />);
       filterModal = (<FilterModal {...this.props} layer={this.props.layer} onHide={this._onCloseModal.bind(this)} ref='filtermodal' />);
     }
-    if (this.props.layer.get('canStyle')) {
+    if (canStyle) {
       styleModal = (<StyleModal {...this.props} layer={this.props.layer} ref='stylemodal' />);
     }
     return (

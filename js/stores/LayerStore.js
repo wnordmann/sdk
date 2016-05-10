@@ -26,10 +26,30 @@ class LayerStore extends EventEmitter {
     if (map !== this._map) {
       this._map = map;
       config.layers = this._map.getLayers().getArray();
+      for (var i = 0, ii = config.layers.length; i < ii; ++i) {
+        this._bindLayer(config.layers[i]);
+      }
       this.emitChange();
-      this._map.getLayers().on('add', this.emitChange, this);
-      this._map.getLayers().on('remove', this.emitChange, this);
+      this._map.getLayers().on('add', this._onAdd, this);
+      this._map.getLayers().on('remove', this._onRemove, this);
     }
+  }
+  _bindLayer(layer) {
+    // TODO should we listen to more generic change event?
+    layer.on('change:wfsInfo', this.emitChange, this);
+    layer.on('change:styleName', this.emitChange, this);
+  }
+  _unbindLayer(layer) {
+    layer.un('change:wfsInfo', this.emitChange, this);
+    layer.un('change:styleName', this.emitChange, this);
+  }
+  _onAdd(evt) {
+    this._bindLayer(evt.element);
+    this.emitChange();
+  }
+  _onRemove(evt) {
+    this._unbindLayer(evt.element);
+    this.emitChange();
   }
   _flattenForEach(layer, layers) {
     if (layer instanceof ol.layer.Group) {

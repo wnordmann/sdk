@@ -133,7 +133,6 @@ class AddLayerModal extends React.Component {
     RESTService.getStyleName(url, olLayer, function(styleName) {
       olLayer.set('styleName', styleName);
     }, function() {
-      olLayer.set('canStyle', false);
     });
   }
   _getWfsInfo(layer, olLayer, success, scope) {
@@ -148,6 +147,7 @@ class AddLayerModal extends React.Component {
       }
     }, function() {
       olLayer.set('wfsInfo', undefined);
+      me.close();
     });
   }
   _onLayerClick(layer) {
@@ -168,7 +168,6 @@ class AddLayerModal extends React.Component {
         title: layer.Title || layer.Name,
         id: layer.Name,
         isWFST: true,
-        canStyle: true,
         isRemovable: true,
         isSelectable: true,
         popupInfo: '#AllAttributes',
@@ -193,8 +192,6 @@ class AddLayerModal extends React.Component {
         isSelectable: true,
         isWFST: true,
         EX_GeographicBoundingBox: extent,
-        canStyle: true,
-        wfsInfo: true,
         popupInfo: '#AllAttributes',
         source: new ol.source.TileWMS({
           url: this.props.url,
