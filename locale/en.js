@@ -10,7 +10,7 @@ var enMessages = {
   "addlayer.strokecolorlabel": "Stroke color",
   "addwmslayermodal.closebutton": "Close",
   "addwmslayermodal.connectbutton": "Connect",
-  "addwmslayermodal.errormsg": "Error retrieving GetCapabilities. {msg}",
+  "addwmslayermodal.errormsg": "Error. {msg}",
   "addwmslayermodal.inputfieldlabel": "{serviceType} Endpoint",
   "addwmslayermodal.title": "Add Layer",
   "bookmarks.dropdowntext": "Bookmarks",

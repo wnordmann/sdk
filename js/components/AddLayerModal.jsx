@@ -40,8 +40,8 @@ const messages = defineMessages({
   },
   errormsg: {
     id: 'addwmslayermodal.errormsg',
-    description: 'Error message to show the user when a GetCapabilities request fails',
-    defaultMessage: 'Error retrieving GetCapabilities. {msg}'
+    description: 'Error message to show the user when an XHR request fails',
+    defaultMessage: 'Error. {msg}'
   },
   inputfieldlabel: {
     id: 'addwmslayermodal.inputfieldlabel',

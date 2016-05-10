@@ -20,8 +20,6 @@ import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LayerStore from './LayerStore.js';
 import WFSService from '../services/WFSService.js';
 
-const wfsFormat = new ol.format.WFS();
-const xmlSerializer = new XMLSerializer();
 const maxFeatures = 50;
 
 class FeatureStore extends EventEmitter {
