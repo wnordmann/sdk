@@ -146,8 +146,9 @@ class AddLayerModal extends React.Component {
           me.setState({error: true, errorOpen: true, msg: exception});
         }, scope);
       }
-    }, function() {});
-    // TODO handle failure
+    }, function() {
+      olLayer.set('wfsInfo', undefined);
+    });
   }
   _onLayerClick(layer) {
     var map = this.props.map;

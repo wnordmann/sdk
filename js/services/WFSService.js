@@ -94,6 +94,8 @@ class WFSService {
           attributes: attributes,
           url: url.replace('wms', 'wfs')
         });
+      } else {
+        onFailure.call(this);
       }
     }, function(xmlhttp) {
       onFailure.call(this);
