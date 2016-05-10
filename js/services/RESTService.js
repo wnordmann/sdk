@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {doGET} from '../util.js';
+import {doGET, doPOST} from '../util.js';
 
 class RESTService {
   getStyleName(url, layer, onSuccess, onFailure) {
@@ -21,6 +21,14 @@ class RESTService {
     }, function(xmlhttp) {
       onFailure.call(this, xmlhttp);
     }, this);
+  }
+  updateStyle(url, layer, sld, onSuccess, onFailure) {
+    url = url.replace(/wms|ows|wfs/g, 'rest/styles/' + layer.get('styleName') + '.xml');
+    doPOST(url, sld, function(xmlhttp) {
+      onSuccess.call(this, xmlhttp);
+    }, function(xmlhttp) {
+      onFailure.call(this, xmlhttp);
+    }, this, 'application/vnd.ogc.sld+xml; charset=UTF-8', true);
   }
 }
 

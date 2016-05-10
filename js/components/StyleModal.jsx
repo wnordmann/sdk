@@ -19,9 +19,10 @@ import LayerActions from '../actions/LayerActions.js';
 import RaisedButton from 'material-ui/lib/raised-button';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
-import {transformColor, doPOST} from '../util.js';
+import {transformColor} from '../util.js';
 import RuleEditor from './RuleEditor.jsx';
 import SLDService from '../services/SLDService.js';
+import RESTService from '../services/RESTService.js';
 import './StyleModal.css';
 
 const messages = defineMessages({
@@ -148,15 +149,15 @@ class StyleModal extends React.Component {
     }
   }
   _generateSLD() {
+    var me = this;
     var sld = SLDService.createSLD(this.props.layer.get('id'), this.state.geometryType, this.state.rules, this._styleState);
     var url = this.props.layer.getSource().getUrls()[0];
-    url = url.replace(/wms|ows|wfs/g, 'rest/styles/' + this.props.layer.get('styleName') + '.xml');
-    doPOST(url, sld, function(xmlhttp) {
-      this.props.layer.getSource().updateParams({'_olSalt': Math.random()});
-      LayerActions.styleLayer(this.props.layer);
-      this.close();
+    RESTService.updateStyle(url, this.props.layer, sld, function(xmlhttp) {
+      me.props.layer.getSource().updateParams({'_olSalt': Math.random()});
+      LayerActions.styleLayer(me.props.layer);
+      me.close();
     }, function(xmlhttp) {
-    }, this, 'application/vnd.ogc.sld+xml; charset=UTF-8', true);
+    });
   }
   _setStyleVector() {
     var me = this;
