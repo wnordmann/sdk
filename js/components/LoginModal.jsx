@@ -66,6 +66,11 @@ class LoginModal extends React.Component {
       open: false
     };
   }
+  _onEnter(evt) {
+    if (evt.keyCode === 13) {
+      this._doLogin();
+    }
+  }
   _doLogin() {
     var username = this.refs.username.getValue();
     var pwd = this.refs.password.getValue();
@@ -104,7 +109,7 @@ class LoginModal extends React.Component {
       <Dialog actions={actions} title={formatMessage(messages.title)} open={this.state.open} onRequestClose={this.close.bind(this)}>
         {error}
         <TextField floatingLabelText={formatMessage(messages.usernamelabel)} ref='username' /><br/>
-        <TextField type="password" floatingLabelText={formatMessage(messages.passwordlabel)} ref='password' />
+        <TextField onKeyDown={this._onEnter.bind(this)} type="password" floatingLabelText={formatMessage(messages.passwordlabel)} ref='password' />
       </Dialog>
     );
   }
