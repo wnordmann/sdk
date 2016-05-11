@@ -117,7 +117,7 @@ AppDispatcher.register((payload) => {
       if (index < layers.getLength() - 1) {
         var next = layers.item(index + 1);
         layers.removeAt(index);
-        layers.setAt(index + 1, action.layer);
+        layers.insertAt(index + 1, action.layer);
         layers.setAt(index, next);
       }
       break;
@@ -127,7 +127,7 @@ AppDispatcher.register((payload) => {
       if (index > 1) {
         var prev = layers.item(index - 1);
         layers.removeAt(index);
-        layers.setAt(index - 1, action.layer);
+        layers.insertAt(index - 1, action.layer);
         layers.setAt(index, prev);
       }
       break;
