@@ -62,7 +62,7 @@ class HomeButton extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <IconButton tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._goHome.bind(this)}><HomeIcon /></IconButton>
+      <IconButton tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._goHome.bind(this)} ><HomeIcon color="#F58D50"/></IconButton>
     );
   }
 }

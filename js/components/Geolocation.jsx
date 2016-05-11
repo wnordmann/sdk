@@ -126,6 +126,8 @@ class Geolocation extends React.Component {
       if (this.state.tracking) {
         color = 'red';
         tooltip += ' (' + formatMessage(messages.trackingtitle) + ')';
+      } else {
+        color = '#F58D50';
       }
       return (
         <IconButton tooltip={tooltip} onTouchTap={this._geolocate.bind(this)}><MyLocation color={color} /></IconButton>

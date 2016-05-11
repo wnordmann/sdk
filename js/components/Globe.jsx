@@ -80,11 +80,10 @@ class Globe extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     var icon, tooltip;
+    icon = <GlobeIcon color='#F58D50' />;
     if (this.state.globe) {
-      icon = <GlobeIcon color='white' />;
       tooltip = formatMessage(messages.maptext);
     } else {
-      icon = <GlobeIcon />;
       tooltip = formatMessage(messages.globetext);
     }
     return (
