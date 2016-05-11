@@ -19,6 +19,7 @@ import AddLayerModal from './AddLayerModal.jsx';
 import RaisedButton from 'material-ui/lib/raised-button';
 import IconButton from 'material-ui/lib/icon-button';
 import NoteAdd from 'material-ui/lib/svg-icons/action/note-add';
+import List from 'material-ui/lib/lists/list';
 import LayersIcon from 'material-ui/lib/svg-icons/maps/layers';
 import Toolbar from 'material-ui/lib/toolbar/toolbar';
 import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group';
@@ -82,11 +83,7 @@ class LayerList extends React.Component {
     var layerNodes = layers.map(function(lyr) {
       return me.getLayerNode(lyr);
     });
-    return (
-        <ul>
-        {layerNodes}
-        </ul>
-    );
+    return layerNodes;
   }
   _showPanel() {
     this.setState({visible: true});
@@ -114,9 +111,9 @@ class LayerList extends React.Component {
     }
     if (lyr.get('title') !== null) {
       if (lyr instanceof ol.layer.Group) {
-        var children = this.props.showGroupContent ? this.renderLayerGroup(lyr) : undefined;
+        var children = this.props.showGroupContent ? this.renderLayerGroup(lyr) : [];
         return (
-          <LayerListItem {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('id')} layer={lyr} children={children} title={lyr.get('title')} />
+          <LayerListItem {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('id')} layer={lyr} nestedItems={children} title={lyr.get('title')} />
         );
       } else {
         return (
@@ -132,11 +129,7 @@ class LayerList extends React.Component {
     const {formatMessage} = this.props.intl;
     var layers = this.state.layers.slice(0).reverse();
     var className = 'layer-switcher';
-    var heading;
     var tipLabel = this.props.tipLabel || formatMessage(messages.layertitle);
-    if (this.state.layers.length > 0 && this.state.layers[this.state.layers.length - 1].get('type') !== 'base-group') {
-      heading = <ul><h4><strong>{tipLabel}</strong></h4></ul>;
-    }
     if (this.state.visible) {
       className += ' shown';
     }
@@ -156,8 +149,9 @@ class LayerList extends React.Component {
       <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} className={className}>
         <IconButton className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={onClick}><LayersIcon /></IconButton>
         <div className="layer-tree-panel clearfix">
-          {heading}
-          {this.renderLayers(layers)}
+          <List subheader={tipLabel}>
+            {this.renderLayers(layers)}
+          </List>
           {addLayer}
         </div>
       </div>

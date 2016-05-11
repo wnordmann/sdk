@@ -167,6 +167,7 @@ class AddLayerModal extends React.Component {
       olLayer = new ol.layer.Vector({
         title: layer.Title || layer.Name,
         id: layer.Name,
+        name: layer.Name,
         isWFST: true,
         isRemovable: true,
         isSelectable: true,
@@ -188,6 +189,7 @@ class AddLayerModal extends React.Component {
       olLayer = new ol.layer.Tile({
         title: layer.Title || layer.Name,
         id: layer.Name,
+        name: layer.Name,
         isRemovable: true,
         isSelectable: true,
         isWFST: true,
@@ -250,7 +252,7 @@ class AddLayerModal extends React.Component {
       leftIcon = <LayerIcon />;
     }
     return (
-      <ListItem onTouchTap={onTouchTap} leftIcon={leftIcon} initiallyOpen={true} key={layer.Name || layer.Title} primaryText={layer.Title || layer.Name} nestedItems={childList} />
+      <ListItem onTouchTap={onTouchTap} leftIcon={leftIcon} initiallyOpen={true} key={layer.Name} primaryText={layer.Title} secondaryText={layer.Name} nestedItems={childList} />
     );
   }
   open() {

@@ -18,6 +18,7 @@ import StyleModal from './StyleModal.jsx';
 import LayerActions from '../actions/LayerActions.js';
 import Slider from 'material-ui/lib/slider';
 import Checkbox from 'material-ui/lib/checkbox';
+import ListItem from 'material-ui/lib/lists/list-item';
 import RadioButton from 'material-ui/lib/radio-button';
 import IconButton from 'material-ui/lib/icon-button';
 import DownloadIcon from 'material-ui/lib/svg-icons/file/file-download';
@@ -29,77 +30,9 @@ import MoveUpIcon from 'material-ui/lib/svg-icons/hardware/keyboard-arrow-up';
 import MoveDownIcon from 'material-ui/lib/svg-icons/hardware/keyboard-arrow-down';
 import DeleteIcon from 'material-ui/lib/svg-icons/action/delete';
 import EditIcon from 'material-ui/lib/svg-icons/editor/mode-edit';
-import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import {injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import './LayerListItem.css';
-
-const messages = defineMessages({
-  opacitylabel: {
-    id: 'layerlistitem.opacitylabel',
-    description: 'Label for opacity inputs, only used for screen readers',
-    defaultMessage: 'Layer opacity'
-  },
-  baselayergrouplabel: {
-    id: 'layerlistitem.baselayergrouplabel',
-    description: 'Label for base layer group radio input, only used for screen readers',
-    defaultMessage: 'Select base layer'
-  },
-  layervisibilitylabel: {
-    id: 'layerlistitem.layervisibilitylabel',
-    description: 'Label for layer visibility checkbox, only used for screen readers',
-    defaultMessage: 'Layer visibility'
-  },
-  zoomtotitle: {
-    id: 'layerlistitem.zoomtotitle',
-    description: 'Title for the zoom to layer button',
-    defaultMessage: 'Zoom to layer'
-  },
-  downloadtitle: {
-    id: 'layerlistitem.downloadtitle',
-    description: 'Title for the download layer button',
-    defaultMessage: 'Download layer'
-  },
-  filtertitle: {
-    id: 'layerlistitem.filtertitle',
-    description: 'Title for the filter button',
-    defaultMessage: 'Filter layer'
-  },
-  labeltitle: {
-    id: 'layerlistitem.labeltitle',
-    description: 'Title for the label button',
-    defaultMessage: 'Label layer'
-  },
-  stylingtitle: {
-    id: 'layerlistitem.stylingtitle',
-    description: 'Title for the style button',
-    defaultMessage: 'Style layer'
-  },
-  movedowntitle: {
-    id: 'layerlistitem.movedowntitle',
-    description: 'Title for the move layer down button',
-    defaultMessage: 'Move down'
-  },
-  moveuptitle: {
-    id: 'layerlistitem.moveuptitle',
-    description: 'Title for the move layer up button',
-    defaultMessage: 'Move up'
-  },
-  removetitle: {
-    id: 'layerlistitem.removetitle',
-    description: 'Title for the remove button',
-    defaultMessage: 'Remove'
-  },
-  edittitle: {
-    id: 'layerlistitem.edittitle',
-    description: 'Title for the edit button',
-    defaultMessage: 'Toggle edit function'
-  },
-  layertitle: {
-    id: 'layerlistitem.basemapstitle',
-    description: 'List of base maps',
-    defaultMessage: 'Base Maps'
-  }
-});
 
 /**
  * An item in the LayerList component.
@@ -216,7 +149,6 @@ class LayerListItem extends React.Component {
     this.props.layer.setOpacity(value);
   }
   render() {
-    const {formatMessage} = this.props.intl;
     const layer = this.props.layer;
     const source = layer.getSource ? layer.getSource() : undefined;
     var opacity;
@@ -247,7 +179,7 @@ class LayerListItem extends React.Component {
       styling = (<IconButton onTouchTap={this._style.bind(this)}><StyleIcon /></IconButton>);
     }
     var reorderUp, reorderDown;
-    if (layer.get('type') !== 'base' && this.props.allowReordering && !this.props.children) {
+    if (layer.get('type') !== 'base' && this.props.allowReordering && !this.props.nestedItems) {
       reorderUp = (<IconButton onTouchTap={this._moveUp.bind(this)}><MoveUpIcon /></IconButton>);
       reorderDown = (<IconButton onTouchTap={this._moveDown.bind(this)}><MoveDownIcon /></IconButton>);
     }
@@ -259,13 +191,11 @@ class LayerListItem extends React.Component {
     if (this.props.allowEditing && layer.get('isWFST') === true) {
       edit = (<IconButton onTouchTap={this._edit.bind(this)}><EditIcon /></IconButton>);
     }
-    var input, heading;
+    var input;
     if (layer.get('type') === 'base') {
-      input = (<RadioButton checked={this.state.checked} value={this.props.title} label={this.props.title} onCheck={this._handleChange.bind(this)} />);
-    } else if (layer.get('type') === 'base-group') {
-      heading = (<h4><strong>{formatMessage(messages.layertitle)}</strong></h4>);
+      input = (<RadioButton checked={this.state.checked} label={this.props.title} value={this.props.title} onCheck={this._handleChange.bind(this)} />);
     } else {
-      input = (<Checkbox label={this.props.title} checked={this.state.checked} onCheck={this._handleChange.bind(this)} />);
+      input = (<Checkbox checked={this.state.checked} label={this.props.title} onCheck={this._handleChange.bind(this)} />);
     }
     var labelModal, filterModal, styleModal;
     if (this.props.layer instanceof ol.layer.Vector) {
@@ -276,8 +206,7 @@ class LayerListItem extends React.Component {
       styleModal = (<StyleModal {...this.props} layer={this.props.layer} ref='stylemodal' />);
     }
     return (
-      <li>
-        {heading}
+      <ListItem secondaryText={this.props.layer.get('name')} primaryText={input ? undefined : this.props.title} nestedItems={this.props.nestedItems} initiallyOpen={true}>
         {input}
         {opacity}
         {zoomTo}
@@ -289,13 +218,12 @@ class LayerListItem extends React.Component {
         {reorderDown}
         {remove}
         {edit}
-        {this.props.children}
         <span>
           {filterModal}
           {labelModal}
           {styleModal}
         </span>
-      </li>
+      </ListItem>
     );
   }
 }
@@ -346,9 +274,9 @@ LayerListItem.propTypes = {
    */
   showDownload: React.PropTypes.bool,
   /**
-   * The child items to show for this item.
+   * The nested items to show for this item.
    */
-  children: React.PropTypes.element,
+  nestedItems: React.PropTypes.array,
   /**
    * Should we show an opacity slider for the layer?
    */

@@ -41,13 +41,6 @@ Should we allow for styling of features in a vector layer?
 type: `bool`
 
 
-### `children`
-
-The child items to show for this item.
-
-type: `element`
-
-
 ### `downloadFormat`
 
 The feature format to serialize in for downloads.
@@ -74,6 +67,13 @@ type: `instanceOf ol.layer.Base`
 The map in which the layer of this item resides.
 
 type: `instanceOf ol.Map`
+
+
+### `nestedItems`
+
+The nested items to show for this item.
+
+type: `array`
 
 
 ### `onModalClose`
