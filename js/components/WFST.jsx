@@ -330,9 +330,9 @@ class WFST extends MapTool {
         <div>
           {layerSelector}
           <Toolbar>
-            <RaisedButton style={buttonStyle} label={formatMessage(messages.drawfeature)} onTouchTap={this._drawFeature.bind(this)} />
-            <RaisedButton style={buttonStyle} label={formatMessage(messages.modifyfeature)} onTouchTap={this._modifyFeature.bind(this)} />
-            <RaisedButton style={buttonStyle} label={formatMessage(messages.deletefeature)} onTouchTap={this._deleteFeature.bind(this)} />
+            <RaisedButton style={buttonStyle} label={formatMessage(messages.drawfeature)} disabled={!this.state.layer} onTouchTap={this._drawFeature.bind(this)} />
+            <RaisedButton style={buttonStyle} label={formatMessage(messages.modifyfeature)} disabled={!this.state.layer} onTouchTap={this._modifyFeature.bind(this)} />
+            <RaisedButton style={buttonStyle} label={formatMessage(messages.deletefeature)} disabled={!this.state.layer} onTouchTap={this._deleteFeature.bind(this)} />
           </Toolbar>
           {error}
           {editForm}
