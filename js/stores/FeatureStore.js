@@ -136,6 +136,40 @@ class FeatureStore extends EventEmitter {
   setSelectOnClick(active) {
     this.active = active;
   }
+  removeFeature(layer, feature) {
+    var id = layer.get('id');
+    var i, ii, idx = -1;
+    for (i = 0, ii = this._config[id].features.length; i < ii; ++i) {
+      if (this._config[id].features[i] === feature) {
+        idx = i;
+        break;
+      }
+    }
+    if (idx !== -1) {
+      this._config[id].features.splice(idx, 1);
+    }
+    idx = -1;
+    for (i = 0, ii = this._config[id].originalFeatures.length; i < ii; ++i) {
+      if (this._config[id].originalFeatures[i] === feature) {
+        idx = i;
+        break;
+      }
+    }
+    if (idx !== -1) {
+      this._config[id].originalFeatures.splice(idx, 1);
+    }
+    idx = -1;
+    for (i = 0, ii = this._config[id].selected.length; i < ii; ++i) {
+      if (this._config[id].selected[i] === feature) {
+        idx = i;
+        break;
+      }
+    }
+    if (idx !== -1) {
+      this._config[id].selected.splice(idx, 1);
+    }
+    this.emitChange();
+  }
   removeLayer(layer) {
     var id = layer.get('id');
     delete this._layers[id];

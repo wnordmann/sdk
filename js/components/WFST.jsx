@@ -210,8 +210,10 @@ class WFST extends MapTool {
         if (source instanceof ol.source.Vector) {
           source.removeFeature(feature);
         } else {
+          FeatureStore.removeFeature(me.state.layer, feature);
           me._redraw();
         }
+        me.setState({feature: null});
       }, function(xmlhttp, msg) {
         delete me._request;
         msg = msg || formatMessage(messages.deletemsg) + xmlhttp.status + ' ' + xmlhttp.statusText;
