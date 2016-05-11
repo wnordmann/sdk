@@ -62,7 +62,7 @@ class Geolocation extends React.Component {
         this._hasBeenCentered = false;
       }
       this._featuresOverlay.getSource().clear();
-      this._featuresOverlay.setMap(this._geolocation.getTracking() ? this.props.map : null);
+      this._featuresOverlay.setVisible(this._geolocation.getTracking());
     } else {
       var map = this.props.map;
       this._geolocation = new ol.Geolocation({
@@ -100,10 +100,10 @@ class Geolocation extends React.Component {
         }
       }, this);
       this._featuresOverlay = new ol.layer.Vector({
-        map: map,
-        useSpatialIndex: false,
+        title: null,
         source: new ol.source.Vector()
       });
+      map.addLayer(this._featuresOverlay);
     }
     this.setState({tracking: this._geolocation.getTracking()});
   }
