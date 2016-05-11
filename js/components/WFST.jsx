@@ -263,6 +263,7 @@ class WFST extends MapTool {
         }
       } else {
         evt.feature.setId(insertId);
+        FeatureStore.addFeature(this.state.layer, evt.feature);
       }
     }, function(xmlhttp, msg) {
       delete me._request;

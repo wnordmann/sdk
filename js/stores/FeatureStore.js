@@ -136,6 +136,12 @@ class FeatureStore extends EventEmitter {
   setSelectOnClick(active) {
     this.active = active;
   }
+  addFeature(layer, feature) {
+    var id = layer.get('id');
+    this._config[id].features.push(feature);
+    this._config[id].originalFeatures.push(feature);
+    this.emitChange();
+  }
   removeFeature(layer, feature) {
     var id = layer.get('id');
     var i, ii, idx = -1;
