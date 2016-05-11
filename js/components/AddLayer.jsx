@@ -137,7 +137,8 @@ class AddLayer extends React.Component {
               id: this._generateId(),
               style: style,
               source: new ol.source.Vector({
-                features: features
+                features: features,
+                wrapX: false
               }),
               title: filename,
               isRemovable: true,
