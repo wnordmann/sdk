@@ -128,6 +128,7 @@ var enMessages = {
   "qgisprint.resolutionlabel": "Resolution",
   "querybuilder.addbuttontext": "Add",
   "querybuilder.addbuttontitle": "Add to current selection",
+  "querybuilder.countmsg": "{count} features matched by filter.",
   "querybuilder.errortext": "Error setting filter, should be for instance ATTRIBUTE == \"Value\"",
   "querybuilder.filterbuttontext": "Selected items based on your criteria",
   "querybuilder.filterlabel": "Filter",

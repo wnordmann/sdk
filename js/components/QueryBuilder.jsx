@@ -12,6 +12,7 @@
 
 import React from 'react';
 import ol from 'openlayers';
+import Snackbar from 'material-ui/lib/snackbar';
 import FeatureStore from '../stores/FeatureStore.js';
 import LayerSelector from './LayerSelector.jsx';
 import SelectActions from '../actions/SelectActions.js';
@@ -48,6 +49,11 @@ const messages = defineMessages({
     id: 'querybuilder.errortext',
     description: 'error text to shown when filter does not validate',
     defaultMessage: 'Error setting filter, should be for instance ATTRIBUTE == "Value"'
+  },
+  countmsg: {
+    id: 'querybuilder.countmsg',
+    description: 'text to show for displaying the number of features matched',
+    defaultMessage: '{count} features matched by filter.'
   },
   newbuttontitle: {
     id: 'querybuilder.newbuttontitle',
@@ -93,6 +99,7 @@ class QueryBuilder extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      showCount: false,
       errorText: null
     };
   }
@@ -144,6 +151,11 @@ class QueryBuilder extends React.Component {
     } else {
       SelectActions.selectFeatures(this._layer, selection);
     }
+    this.setState({
+      showCount: true,
+      open: true,
+      count: selection.length
+    });
   }
   _addSelection() {
     this._doQuery();
@@ -155,9 +167,23 @@ class QueryBuilder extends React.Component {
   _inSelection() {
     this._doQuery(true);
   }
+  _handleRequestClose() {
+    this.setState({
+      open: false
+    });
+  }
   render() {
     const {formatMessage} = this.props.intl;
     const buttonStyle = this.props.buttonStyle;
+    var count;
+    if (this.state.showCount === true) {
+      count = (<Snackbar
+        open={this.state.open}
+        message={formatMessage(messages.countmsg, {count: this.state.count})}
+        autoHideDuration={2000}
+        onRequestClose={this._handleRequestClose.bind(this)}
+      />);
+    }
     return (
       <div className='querybuilder'>
         <LayerSelector {...this.props} onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /><br/>
@@ -167,6 +193,7 @@ class QueryBuilder extends React.Component {
           <RaisedButton style={buttonStyle} label={formatMessage(messages.addbuttontext)} onTouchTap={this._addSelection.bind(this)} />
           <RaisedButton style={buttonStyle} label={formatMessage(messages.selectintext)} onTouchTap={this._inSelection.bind(this)} />
         </Toolbar>
+        {count}
       </div>
     );
   }
