@@ -89,7 +89,7 @@ class AddLayer extends React.Component {
     this._formats = {
       'geojson': new ol.format.GeoJSON(),
       'json': new ol.format.GeoJSON(),
-      'kml': new ol.format.KML(),
+      'kml': new ol.format.KML({extractStyles: false}),
       'gpx': new ol.format.GPX()
     };
     this._counter = 0;
@@ -149,7 +149,7 @@ class AddLayer extends React.Component {
             var valid = true;
             for (var i = 0, ii = extent.length; i < ii; ++i) {
               var value = extent[i];
-              if (Math.abs(value) == Infinity || isNaN(value)) {
+              if (Math.abs(value) == Infinity || isNaN(value) || (value < -20037508.342789244 || value > 20037508.342789244)) {
                 valid = false;
                 break;
               }
