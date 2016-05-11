@@ -174,6 +174,7 @@ class AddLayerModal extends React.Component {
         isSelectable: true,
         popupInfo: '#AllAttributes',
         source: new ol.source.Vector({
+          wrapX: false,
           url: function(extent) {
             return me.props.url.replace('wms', 'wfs') + 'service=WFS' +
               '&version=1.1.0&request=GetFeature&typename=' + layer.Name +

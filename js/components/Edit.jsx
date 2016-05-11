@@ -192,7 +192,7 @@ class Edit extends MapTool {
         isSelectable: true,
         isRemovable: true,
         style: style,
-        source: new ol.source.Vector({useSpatialIndex: false})
+        source: new ol.source.Vector({wrapX: false, useSpatialIndex: false})
       });
       this.props.map.addLayer(layer);
       var layers = this.state.layers.slice();

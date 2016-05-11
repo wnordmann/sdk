@@ -96,7 +96,7 @@ class Bookmarks extends React.Component {
             src: this.props.markerUrl
           })
         }),
-        source: new ol.source.Vector()
+        source: new ol.source.Vector({wrapX: false})
       });
       this.props.map.addLayer(this._layer);
     }

@@ -82,7 +82,7 @@ class Measure extends MapTool {
           })
         })
       }),
-      source: new ol.source.Vector()
+      source: new ol.source.Vector({wrapX: false})
     });
     this.props.map.addLayer(this._layer);
     this._drawStyle = new ol.style.Style({
