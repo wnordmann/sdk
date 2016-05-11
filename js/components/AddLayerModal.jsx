@@ -146,6 +146,7 @@ class AddLayerModal extends React.Component {
         }, scope);
       }
     }, function() {
+      olLayer.set('isSelectable', false);
       olLayer.set('wfsInfo', undefined);
       me.close();
     });
