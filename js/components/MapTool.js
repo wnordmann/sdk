@@ -27,6 +27,12 @@ export default class MapTool extends React.Component {
     AppDispatcher.register((payload) => {
       let action = payload.action;
       switch (action.type) {
+        case ToolConstants.DISABLE_ALL_TOOLS:
+          me.disable();
+          break;
+        case ToolConstants.ENABLE_ALL_TOOLS:
+          me.enable();
+          break;
         case ToolConstants.ACTIVATE_TOOL:
           if (me.props.toggleGroup && me.props.toggleGroup === action.toggleGroup) {
             if (me !== action.tool) {
@@ -38,6 +44,12 @@ export default class MapTool extends React.Component {
           break;
       }
     });
+  }
+  disable() {
+    // subclasses need to implement this
+  }
+  enable() {
+    // subclasses need to implement this
   }
   deactivate() {
     if (this._currentInteractions) {

@@ -52,6 +52,9 @@ class Select extends MapTool {
       })
     };
     this._interactions.RECTANGLE.on('boxend', this._onBoxEnd, this);
+    this.state = {
+      disabled: false
+    };
   }
   _handleSelection(feature, selected) {
     if (feature.get('features')) {
@@ -100,10 +103,16 @@ class Select extends MapTool {
     this.deactivate();
     this.activate(this._interactions.RECTANGLE);
   }
+  disable() {
+    this.setState({disabled: true});
+  }
+  enable() {
+    this.setState({disabled: false});
+  }
   render() {
     const {formatMessage} = this.props.intl;
     return (
-     <RaisedButton {...this.props} label={formatMessage(messages.menubuttontext)} onTouchTap={this._selectByRectangle.bind(this)} />
+     <RaisedButton {...this.props} disabled={this.state.disabled} label={formatMessage(messages.menubuttontext)} onTouchTap={this._selectByRectangle.bind(this)} />
     );
   }
 }

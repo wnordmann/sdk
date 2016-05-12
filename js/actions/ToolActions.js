@@ -14,6 +14,16 @@ import ToolConstants from '../constants/ToolConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 
 export default {
+  disableAllTools: () => {
+    AppDispatcher.handleAction({
+      type: ToolConstants.DISABLE_ALL_TOOLS
+    });
+  },
+  enableAllTools: () => {
+    AppDispatcher.handleAction({
+      type: ToolConstants.ENABLE_ALL_TOOLS
+    });
+  },
   activateTool: (tool, toggleGroup) => {
     AppDispatcher.handleAction({
       type: ToolConstants.ACTIVATE_TOOL,

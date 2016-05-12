@@ -99,6 +99,7 @@ class WFST extends MapTool {
       }
     });
     this.state = {
+      disabled: false,
       error: false,
       open: false,
       visible: this.props.visible
@@ -301,6 +302,12 @@ class WFST extends MapTool {
       open: false
     });
   }
+  disable() {
+    this.setState({disabled: true});
+  }
+  enable() {
+    this.setState({disabled: false});
+  }
   render() {
     if (!this.state.visible) {
       return (<article />);
@@ -333,9 +340,9 @@ class WFST extends MapTool {
         <div>
           {layerSelector}
           <Toolbar>
-            <RaisedButton style={buttonStyle} label={formatMessage(messages.drawfeature)} disabled={!this.state.layer} onTouchTap={this._drawFeature.bind(this)} />
-            <RaisedButton style={buttonStyle} label={formatMessage(messages.modifyfeature)} disabled={!this.state.layer} onTouchTap={this._modifyFeature.bind(this)} />
-            <RaisedButton style={buttonStyle} label={formatMessage(messages.deletefeature)} disabled={!this.state.layer} onTouchTap={this._deleteFeature.bind(this)} />
+            <RaisedButton style={buttonStyle} label={formatMessage(messages.drawfeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._drawFeature.bind(this)} />
+            <RaisedButton style={buttonStyle} label={formatMessage(messages.modifyfeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._modifyFeature.bind(this)} />
+            <RaisedButton style={buttonStyle} label={formatMessage(messages.deletefeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._deleteFeature.bind(this)} />
           </Toolbar>
           {error}
           {editForm}

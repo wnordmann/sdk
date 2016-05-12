@@ -15,6 +15,7 @@ import React from 'react';
 import ol from 'openlayers';
 global.ol = ol;
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import ToolActions from '../actions/ToolActions.js';
 import IconButton from 'material-ui/lib/icon-button';
 import GlobeIcon from 'material-ui/lib/svg-icons/action/three-d-rotation';
 import pureRender from 'pure-render-decorator';
@@ -75,7 +76,13 @@ class Globe extends React.Component {
   }
   _toggle() {
     this._ol3d.setEnabled(!this.state.globe);
-    this.setState({globe: !this.state.globe});
+    var globe = !this.state.globe;
+    if (globe) {
+      ToolActions.disableAllTools();
+    } else {
+      ToolActions.enableAllTools();
+    }
+    this.setState({globe: globe});
   }
   render() {
     const {formatMessage} = this.props.intl;

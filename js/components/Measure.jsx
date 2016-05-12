@@ -59,7 +59,8 @@ class Measure extends MapTool {
     super(props);
     this._tooltips = [];
     this.state = {
-      value: null
+      value: null,
+      disabled: false
     };
   }
   componentDidMount() {
@@ -232,13 +233,19 @@ class Measure extends MapTool {
     }
     this.setState({value: value});
   }
+  disable() {
+    this.setState({disabled: true});
+  }
+  enable() {
+    this.setState({disabled: false});
+  }
   render() {
     const {formatMessage} = this.props.intl;
     return (
      <IconMenu {...this.props} iconButtonElement={<RaisedButton label={formatMessage(messages.dropdowntext)} />} value={this.state.value} onChange={this._handleChange.bind(this)}>
-        <MenuItem value={1} primaryText={formatMessage(messages.measuredistancetext)}/>
-        <MenuItem value={2} primaryText={formatMessage(messages.measureareatext)}/>
-        <MenuItem value={3} primaryText={formatMessage(messages.cleartext)}/>
+        <MenuItem disabled={this.state.disabled} value={1} primaryText={formatMessage(messages.measuredistancetext)}/>
+        <MenuItem disabled={this.state.disabled} value={2} primaryText={formatMessage(messages.measureareatext)}/>
+        <MenuItem disabled={this.state.disabled} value={3} primaryText={formatMessage(messages.cleartext)}/>
       </IconMenu>
     );
   }

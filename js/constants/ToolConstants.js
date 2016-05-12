@@ -13,5 +13,7 @@
 import keymirror from 'keymirror';
 
 export default keymirror({
+  DISABLE_ALL_TOOLS: null,
+  ENABLE_ALL_TOOLS: null,
   ACTIVATE_TOOL: null
 });
