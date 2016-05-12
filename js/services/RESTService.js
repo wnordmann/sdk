@@ -18,7 +18,13 @@ class RESTService {
     url = url.replace(/wms|ows|wfs/g, 'rest/layers/' + id + '.json');
     doGET(url, function(xmlhttp) {
       var styleInfo = JSON.parse(xmlhttp.responseText);
-      var styleName = styleInfo.layer.defaultStyle.workspace ? styleInfo.layer.defaultStyle.workspace + ':' + styleInfo.layer.defaultStyle.name : styleInfo.layer.defaultStyle.name;
+      var styleName = styleInfo.layer.defaultStyle.name;
+      if (styleName.indexOf(':') === -1) {
+        // look for workspace in JSON output
+        if (styleInfo.layer.defaultStyle.workspace) {
+          styleName = styleInfo.layer.defaultStyle.workspace + ':' + styleInfo.layer.defaultStyle.name;
+        }
+      }
       onSuccess.call(this, styleName);
     }, function(xmlhttp) {
       onFailure.call(this, xmlhttp);
