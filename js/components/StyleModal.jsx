@@ -23,6 +23,7 @@ import {transformColor} from '../util.js';
 import RuleEditor from './RuleEditor.jsx';
 import SLDService from '../services/SLDService.js';
 import RESTService from '../services/RESTService.js';
+import Snackbar from 'material-ui/lib/snackbar';
 import './StyleModal.css';
 
 const messages = defineMessages({
@@ -30,6 +31,11 @@ const messages = defineMessages({
     id: 'stylemodal.title',
     description: 'Title for the style modal dialog',
     defaultMessage: 'Edit layer style: {layer}'
+  },
+  errormsg: {
+    id: 'stylemodal.errormsg',
+    description: 'Error message to show the user when a request fails',
+    defaultMessage: 'Error saving style to GeoServer. {msg}'
   },
   applybutton: {
     id: 'stylemodal.applybutton',
@@ -79,6 +85,8 @@ class StyleModal extends React.Component {
     this._styleCache = {};
     this.state = {
       open: false,
+      error: false,
+      errorOpen: false,
       attributes: [],
       rule: 'Rule 1',
       geometryType: null,
@@ -163,6 +171,7 @@ class StyleModal extends React.Component {
       LayerActions.styleLayer(me.props.layer);
       me.close();
     }, function(xmlhttp) {
+      me.setState({error: true, errorOpen: true, msg: xmlhttp.status + ' ' + xmlhttp.statusText});
     });
   }
   _setStyleVector() {
@@ -216,7 +225,21 @@ class StyleModal extends React.Component {
     rules.splice(idx, 1);
     this.setState({rules: rules, rule: rules.length > 0 ? rules[0].title : null});
   }
+  _handleRequestClose() {
+    this.setState({
+      errorOpen: false
+    });
+  }
   render() {
+    var error;
+    if (this.state.error === true) {
+      error = (<Snackbar
+        open={this.state.errorOpen}
+        message={formatMessage(messages.errormsg, {msg: this.state.msg})}
+        autoHideDuration={2000}
+        onRequestClose={this._handleRequestClose.bind(this)}
+      />);
+    }
     const {formatMessage} = this.props.intl;
     var ruleItems = this.state.rules.map(function(rule, key) {
       return (<MenuItem key={key} value={rule.title} primaryText={rule.title} />);
@@ -237,6 +260,7 @@ class StyleModal extends React.Component {
         <RaisedButton label={formatMessage(messages.addrulebutton)} onTouchTap={this._addRule.bind(this)} />
         <RaisedButton label={formatMessage(messages.removerulebutton)} onTouchTap={this._removeRule.bind(this)} />
         {ruleEditors}
+        {error}
       </Dialog>
     );
   }

@@ -141,7 +141,6 @@ class AddLayer extends React.Component {
                 wrapX: false
               }),
               title: filename,
-              canStyle: true,
               isRemovable: true,
               isSelectable: true
             });

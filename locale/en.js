@@ -149,6 +149,7 @@ var enMessages = {
   "stylemodal.addrulebuttontitle": "Add New Rule",
   "stylemodal.applybutton": "Apply",
   "stylemodal.closebutton": "Close",
+  "stylemodal.errormsg": "Error saving style to GeoServer. {msg}",
   "stylemodal.removerulebutton": "Remove",
   "stylemodal.removerulebuttontitle": "Remove Selected Rule",
   "stylemodal.rulelabel": "Rule:",
