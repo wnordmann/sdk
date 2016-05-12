@@ -231,6 +231,7 @@ class StyleModal extends React.Component {
     });
   }
   render() {
+    const {formatMessage} = this.props.intl;
     var error;
     if (this.state.error === true) {
       error = (<Snackbar
@@ -240,7 +241,6 @@ class StyleModal extends React.Component {
         onRequestClose={this._handleRequestClose.bind(this)}
       />);
     }
-    const {formatMessage} = this.props.intl;
     var ruleItems = this.state.rules.map(function(rule, key) {
       return (<MenuItem key={key} value={rule.title} primaryText={rule.title} />);
     });
