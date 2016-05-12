@@ -90,9 +90,6 @@ class AddLayerModal extends React.Component {
       }
     });
   }
-  componentDidMount() {
-    this._getCaps(this._getCapabilitiesUrl(this.props.url));
-  }
   componentWillUnmount() {
     if (this._request) {
       this._request.abort();
@@ -258,6 +255,7 @@ class AddLayerModal extends React.Component {
     );
   }
   open() {
+    this._getCaps(this._getCapabilitiesUrl(this.props.url));
     this.setState({open: true});
   }
   close() {
