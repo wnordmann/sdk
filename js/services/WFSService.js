@@ -140,6 +140,23 @@ class WFSService {
       });
     }
   }
+  bboxFilter(layer, view, extent, onSuccess, onFailure) {
+    var wfsInfo = layer.get('wfsInfo');
+    var url = new URL(wfsInfo.url);
+    var srs = view.getProjection().getCode();
+    url.set('query', {
+      service: 'WFS',
+      request: 'GetFeature',
+      version : '1.1.0',
+      srsName: srs,
+      typename: wfsInfo.featureType,
+      bbox: extent.join(',') + ',' + srs
+    });
+    return doGET(url.toString(), function(xmlhttp) {
+      var features = wfsFormat.readFeatures(xmlhttp.responseXML);
+      onSuccess.call(this, features);
+    }, onFailure);
+  }
   distanceWithin(layer, view, coord, onSuccess, onFailure) {
     var point = ol.proj.toLonLat(coord);
     var wfsInfo = layer.get('wfsInfo');
