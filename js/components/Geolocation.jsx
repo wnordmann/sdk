@@ -101,6 +101,7 @@ class Geolocation extends React.Component {
       }, this);
       this._featuresOverlay = new ol.layer.Vector({
         title: null,
+        zIndex: 1000,
         source: new ol.source.Vector({wrapX: false})
       });
       map.addLayer(this._featuresOverlay);
