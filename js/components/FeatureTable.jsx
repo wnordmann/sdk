@@ -31,7 +31,6 @@ import {LinkCell} from './LinkCell.jsx';
 import {TextCell} from './TextCell.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import filtrex from 'filtrex';
-import pureRender from 'pure-render-decorator';
 import './FeatureTable.css';
 
 const {Table, Column} = FixedDataTable;
@@ -112,7 +111,6 @@ const messages = defineMessages({
  * </div>
  * ```
  */
-@pureRender
 class FeatureTable extends React.Component {
   constructor(props) {
     super(props);
