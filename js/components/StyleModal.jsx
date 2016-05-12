@@ -86,7 +86,13 @@ class StyleModal extends React.Component {
         title: 'Rule 1'
       }]
     };
-    this.props.layer.on('change:wfsInfo', this._setGeomTypeAndAttributes, this);
+  }
+  componentDidMount() {
+    if (this.props.layer.get('wfsInfo')) {
+      this._setGeomTypeAndAttributes();
+    } else {
+      this.props.layer.on('change:wfsInfo', this._setGeomTypeAndAttributes, this);
+    }
   }
   open() {
     this.setState({open: true});

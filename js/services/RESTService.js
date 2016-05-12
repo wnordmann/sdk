@@ -14,16 +14,27 @@ import {doGET, doPOST} from '../util.js';
 
 class RESTService {
   getStyleName(url, layer, onSuccess, onFailure) {
-    url = url.replace(/wms|ows|wfs/g, 'rest/layers/' + layer.get('id') + '.json');
+    var id = layer.get('id').split(':').pop();
+    url = url.replace(/wms|ows|wfs/g, 'rest/layers/' + id + '.json');
     doGET(url, function(xmlhttp) {
       var styleInfo = JSON.parse(xmlhttp.responseText);
-      onSuccess.call(this, styleInfo.layer.defaultStyle.name);
+      var styleName = styleInfo.layer.defaultStyle.workspace ? styleInfo.layer.defaultStyle.workspace + ':' + styleInfo.layer.defaultStyle.name : styleInfo.layer.defaultStyle.name;
+      onSuccess.call(this, styleName);
     }, function(xmlhttp) {
       onFailure.call(this, xmlhttp);
     }, this);
   }
   updateStyle(url, layer, sld, onSuccess, onFailure) {
-    url = url.replace(/wms|ows|wfs/g, 'rest/styles/' + layer.get('styleName') + '.xml');
+    var styleName = layer.get('styleName');
+    if (styleName.indexOf(':') !== -1) {
+      var styleInfo = styleName.split(':');
+      var workspace = styleInfo[0];
+      var name = styleInfo[1];
+      // workspaces styles
+      url = url.replace(/wms|ows|wfs/g, 'rest/workspaces/' + workspace + '/styles/' + name + '.xml');
+    } else {
+      url = url.replace(/wms|ows|wfs/g, 'rest/styles/' + layer.get('styleName') + '.xml');
+    }
     doPOST(url, sld, function(xmlhttp) {
       onSuccess.call(this, xmlhttp);
     }, function(xmlhttp) {

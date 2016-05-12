@@ -30,7 +30,7 @@ class WMSLegend extends React.Component {
   }
   componentDidMount() {
     var me = this;
-    AppDispatcher.register((payload) => {
+    this._dispatchToken = AppDispatcher.register((payload) => {
       let action = payload.action;
       switch (action.type) {
         case LayerConstants.STYLE_LAYER:
@@ -40,6 +40,9 @@ class WMSLegend extends React.Component {
           break;
       }
     });
+  }
+  componentWillUnmount() {
+    AppDispatcher.unregister(this._dispatchToken);
   }
   render() {
     var layer = this.props.layer;
