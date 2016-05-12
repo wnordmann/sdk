@@ -125,6 +125,7 @@ class Measure extends MapTool {
   }
   _onDrawStart(evt) {
     this._sketch = evt.feature;
+    this._createTooltip();
   }
   _onDrawEnd() {
     this._tooltipElement.className = 'tooltip tooltip-static';
@@ -204,14 +205,12 @@ class Measure extends MapTool {
     this.deactivate();
     map.on('pointermove', this._pointerMoveHandler, this);
     this.activate(this._interactions.LENGTH);
-    this._createTooltip();
   }
   _measureArea() {
     var map = this.props.map;
     this.deactivate();
     map.on('pointermove', this._pointerMoveHandler, this);
     this.activate(this._interactions.AREA);
-    this._createTooltip();
   }
   _clear() {
     var map = this.props.map;
