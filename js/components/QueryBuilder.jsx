@@ -53,7 +53,7 @@ const messages = defineMessages({
   countmsg: {
     id: 'querybuilder.countmsg',
     description: 'text to show for displaying the number of features matched',
-    defaultMessage: '{count} features matched by filter.'
+    defaultMessage: '{count, plural, =0 {No features} one {# feature} other {# features}} matched by filter.'
   },
   newbuttontitle: {
     id: 'querybuilder.newbuttontitle',
