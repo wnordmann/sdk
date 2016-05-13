@@ -115,7 +115,7 @@ class AddLayerModal extends React.Component {
     var me = this;
     // this needs a timeout for the cookie to be set apparently
     window.setTimeout(function() {
-      me._getCaps(me._getCapabilitiesUrl(me.props.url));
+      me._getCaps(me._getCapabilitiesUrl(me.refs.url.getValue()));
     }, 500);
   }
   _setError(msg) {
@@ -126,7 +126,7 @@ class AddLayerModal extends React.Component {
     });
   }
   _getStyleName(olLayer) {
-    var url = this.props.url;
+    var url = this.refs.url.getValue();
     RESTService.getStyleName(url, olLayer, function(styleName) {
       olLayer.set('styleName', styleName);
     }, function() {
@@ -135,7 +135,7 @@ class AddLayerModal extends React.Component {
   _getWfsInfo(layer, olLayer, success, scope) {
     var me = this;
     // do a WFS DescribeFeatureType request to get wfsInfo
-    WFSService.describeFeatureType(me.props.url, layer, function(wfsInfo) {
+    WFSService.describeFeatureType(me.refs.url.getValue(), layer, function(wfsInfo) {
       olLayer.set('wfsInfo', wfsInfo);
       if (olLayer instanceof ol.layer.Tile) {
         FeatureStore.loadFeatures(olLayer, 0, success, function(xmlhttp, exception) {
@@ -173,7 +173,7 @@ class AddLayerModal extends React.Component {
         source: new ol.source.Vector({
           wrapX: false,
           url: function(extent) {
-            return me.props.url.replace('wms', 'wfs') + 'service=WFS' +
+            return me.refs.url.getValue().replace('wms', 'wfs') + 'service=WFS' +
               '&version=1.1.0&request=GetFeature&typename=' + layer.Name +
               '&outputFormat=application/json&srsname=EPSG:3857' +
               '&bbox=' + extent.join(',') + ',EPSG:3857';
@@ -195,7 +195,7 @@ class AddLayerModal extends React.Component {
         EX_GeographicBoundingBox: extent,
         popupInfo: '#AllAttributes',
         source: new ol.source.TileWMS({
-          url: this.props.url,
+          url: this.refs.url.getValue(),
           wrapX: false,
           params: {
             LAYERS: layer.Name
