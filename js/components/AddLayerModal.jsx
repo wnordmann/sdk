@@ -14,8 +14,6 @@ import React from 'react';
 import ol from 'openlayers';
 import Dialog from 'material-ui/lib/dialog';
 import Snackbar from 'material-ui/lib/snackbar';
-import AppDispatcher from '../dispatchers/AppDispatcher.js';
-import LoginConstants from '../constants/LoginConstants.js';
 import FeatureStore from '../stores/FeatureStore.js';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
@@ -42,6 +40,11 @@ const messages = defineMessages({
     id: 'addwmslayermodal.errormsg',
     description: 'Error message to show the user when an XHR request fails',
     defaultMessage: 'Error. {msg}'
+  },
+  corserror: {
+    id: 'addwmslayermodal.corserror',
+    description: 'Error message to show the user when an XHR request fails because of CORS',
+    defaultMessage: 'Please verify that CORS (Cross-Origin Resource Sharing) is enabled on the server.'
   },
   inputfieldlabel: {
     id: 'addwmslayermodal.inputfieldlabel',
@@ -75,20 +78,6 @@ class AddLayerModal extends React.Component {
       open: false,
       layers: []
     };
-    var me = this;
-    AppDispatcher.register((payload) => {
-      let action = payload.action;
-      switch (action.type) {
-        case LoginConstants.LOGIN:
-          me._updateLayers();
-          break;
-        case LoginConstants.LOGOUT:
-          me._updateLayers();
-          break;
-        default:
-          break;
-      }
-    });
   }
   componentWillUnmount() {
     if (this._request) {
@@ -97,9 +86,14 @@ class AddLayerModal extends React.Component {
   }
   _getCaps(url) {
     var me = this;
+    const {formatMessage} = this.props.intl;
     var failureCb = function(xmlhttp) {
       delete me._request;
-      me._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
+      if (xmlhttp.status === 0) {
+        me._setError(formatMessage(messages.corserror));
+      } else {
+        me._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
+      }
     };
     var successCb = function(layerInfo) {
       delete me._request;
@@ -110,13 +104,6 @@ class AddLayerModal extends React.Component {
     } else {
       me._request = WMSService.getCapabilities(url, successCb, failureCb);
     }
-  }
-  _updateLayers() {
-    var me = this;
-    // this needs a timeout for the cookie to be set apparently
-    window.setTimeout(function() {
-      me._getCaps(me._getCapabilitiesUrl(me.refs.url.getValue()));
-    }, 500);
   }
   _setError(msg) {
     this.setState({
