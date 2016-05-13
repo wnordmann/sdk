@@ -23,7 +23,7 @@ class AuthService {
       onSuccess.call();
     };
     var failure = function(xmlhttp) {
-      onFailure.call();
+      onFailure.call(this, xmlhttp);
     };
     doPOST(url, data, success, failure, this, contentType);
   }

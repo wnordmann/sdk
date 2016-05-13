@@ -46,10 +46,15 @@ const messages = defineMessages({
     description: 'Text for the close button',
     defaultMessage: 'Close'
   },
-  errormsg: {
-    id: 'loginmodal.errormsg',
+  invalidcredentialsmsg: {
+    id: 'loginmodal.invalidcredentialsmsg',
     description: 'Error message to show the user when a login request fails',
     defaultMessage: 'Invalid credentials'
+  },
+  errormsg: {
+    id: 'loginmodal.errormsg',
+    description: 'Error message to show if communication with GeoServer fails',
+    defaultMessage: 'There was an error communicating with GeoServer, details: {details}'
   }
 });
 
@@ -76,8 +81,15 @@ class LoginModal extends React.Component {
     var pwd = this.refs.password.getValue();
     LoginActions.login(username, pwd, this.failureCb, this);
   }
-  failureCb() {
-    this.setState({errorOpen: true, error: true});
+  failureCb(xmlhttp) {
+    const {formatMessage} = this.props.intl;
+    var msg;
+    if (xmlhttp.status === 401) {
+      msg = formatMessage(messages.invalidcredentialsmsg);
+    } else {
+      msg = formatMessage(messages.errormsg, {details: xmlhttp.status + ' ' + xmlhttp.statusText});
+    }
+    this.setState({errorOpen: true, error: true, errorMsg: msg});
   }
   open() {
     this.setState({open: true});
@@ -96,7 +108,7 @@ class LoginModal extends React.Component {
     if (this.state.error === true) {
       error = (<Snackbar
         open={this.state.errorOpen}
-        message={formatMessage(messages.errormsg)}
+        message={this.state.errorMsg}
         autoHideDuration={2000}
         onRequestClose={this._handleRequestClose.bind(this)}
       />);

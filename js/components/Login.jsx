@@ -80,9 +80,9 @@ class Login extends React.Component {
     var me = this;
     AuthService.login(this.props.url, user, pwd, function() {
       me.setState({user: user});
-    }, function() {
+    }, function(xmlhttp) {
       me.setState({user: null});
-      failureCb.call(scope);
+      failureCb.call(scope, xmlhttp);
     });
   }
   _showLoginDialog() {
