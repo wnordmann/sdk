@@ -324,6 +324,7 @@ class Edit extends MapTool {
     if (this.state.error === true) {
       error = (<Snackbar
         open={this.state.errorOpen}
+        bodyStyle={{backgroundColor: 'rgba(255, 0, 0, 0.8)'}}
         message={formatMessage(messages.nolayererror)}
         autoHideDuration={2000}
         onRequestClose={this._handleRequestClose.bind(this)}

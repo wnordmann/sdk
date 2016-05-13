@@ -107,6 +107,8 @@ class LoginModal extends React.Component {
     var error;
     if (this.state.error === true) {
       error = (<Snackbar
+        style={{transitionProperty : 'none'}}
+        bodyStyle={{backgroundColor: 'rgba(255, 0, 0, 0.8)'}}
         open={this.state.errorOpen}
         message={this.state.errorMsg}
         autoHideDuration={2000}
