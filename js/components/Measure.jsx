@@ -233,6 +233,7 @@ class Measure extends MapTool {
     this.setState({value: value});
   }
   disable() {
+    this._clear();
     this.setState({disabled: true});
   }
   enable() {
