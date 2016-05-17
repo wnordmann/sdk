@@ -122,6 +122,7 @@ class WFST extends MapTool {
     this.deactivate();
   }
   _onLayerSelectChange(layer) {
+    this._select.getFeatures().clear();
     this._setLayer(layer);
   }
   _toggleLayer(layer) {
@@ -151,7 +152,7 @@ class WFST extends MapTool {
         this.props.map.getSize()
       );
     }
-    this.setState({layer: layer});
+    this.setState({feature: null, layer: layer});
   }
   _selectWMS(evt) {
     if (evt.type === 'singleclick') {
