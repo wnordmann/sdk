@@ -224,7 +224,7 @@ class WFST extends MapTool {
     }
   }
   _filterLayerList(lyr) {
-    return lyr.get('isWFST');
+    return lyr.get('isWFST') && lyr.get('wfsInfo') !== undefined;
   }
   _onSelectAdd(evt) {
     var feature = evt.element;
