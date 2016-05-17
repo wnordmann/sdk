@@ -13,6 +13,7 @@ var enMessages = {
   "addwmslayermodal.corserror": "Please verify that CORS (Cross-Origin Resource Sharing) is enabled on the server.",
   "addwmslayermodal.errormsg": "Error. {msg}",
   "addwmslayermodal.inputfieldlabel": "{serviceType} Endpoint",
+  "addwmslayermodal.nolayertitle": "No Title",
   "addwmslayermodal.title": "Add Layer",
   "bookmarks.dropdowntext": "Bookmarks",
   "chart.count": "Feature count",

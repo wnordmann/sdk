@@ -36,6 +36,11 @@ const messages = defineMessages({
     description: 'Title for the modal Add layer dialog',
     defaultMessage: 'Add Layer'
   },
+  nolayertitle: {
+    id: 'addwmslayermodal.nolayertitle',
+    description: 'Title to show if layer has no title',
+    defaultMessage: 'No Title'
+  },
   errormsg: {
     id: 'addwmslayermodal.errormsg',
     description: 'Error message to show the user when an XHR request fails',
@@ -135,6 +140,14 @@ class AddLayerModal extends React.Component {
       me.close();
     });
   }
+  _getLayerTitle(layer) {
+    const {formatMessage} = this.props.intl;
+    if (layer.Title === '') {
+      return formatMessage(messages.nolayertitle);
+    } else {
+      return layer.Title;
+    }
+  }
   _onLayerClick(layer) {
     var map = this.props.map;
     var view = map.getView();
@@ -150,7 +163,7 @@ class AddLayerModal extends React.Component {
     if (this.props.asVector) {
       var me = this;
       olLayer = new ol.layer.Vector({
-        title: layer.Title || layer.Name,
+        title: this._getLayerTitle(layer),
         id: layer.Name,
         name: layer.Name,
         isWFST: true,
@@ -173,7 +186,7 @@ class AddLayerModal extends React.Component {
       });
     } else {
       olLayer = new ol.layer.Tile({
-        title: layer.Title || layer.Name,
+        title: this._getLayerTitle(layer),
         id: layer.Name,
         name: layer.Name,
         isRemovable: true,
@@ -238,7 +251,7 @@ class AddLayerModal extends React.Component {
       leftIcon = <LayerIcon />;
     }
     return (
-      <ListItem onTouchTap={onTouchTap} leftIcon={leftIcon} initiallyOpen={true} key={layer.Name} primaryText={layer.Title} secondaryText={layer.Name} nestedItems={childList} />
+      <ListItem onTouchTap={onTouchTap} leftIcon={leftIcon} initiallyOpen={true} key={layer.Name} primaryText={this._getLayerTitle(layer)} secondaryText={layer.Name} nestedItems={childList} />
     );
   }
   open() {
