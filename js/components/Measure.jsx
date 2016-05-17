@@ -200,6 +200,10 @@ class Measure extends MapTool {
     this._tooltips.push(this._tooltip);
     this.props.map.addOverlay(this._tooltip);
   }
+  deactivate() {
+    super.deactivate();
+    this.setState({value: null});
+  }
   _measureDistance() {
     var map = this.props.map;
     this.deactivate();
@@ -227,7 +231,7 @@ class Measure extends MapTool {
       this._measureDistance();
     } else if (value === 2) {
       this._measureArea();
-    } else if (value === 3) {
+    } else {
       this._clear();
     }
     this.setState({value: value});
@@ -245,7 +249,7 @@ class Measure extends MapTool {
      <IconMenu {...this.props} iconButtonElement={<RaisedButton disabled={this.state.disabled} label={formatMessage(messages.dropdowntext)} />} value={this.state.value} onChange={this._handleChange.bind(this)}>
         <MenuItem disabled={this.state.disabled} value={1} primaryText={formatMessage(messages.measuredistancetext)}/>
         <MenuItem disabled={this.state.disabled} value={2} primaryText={formatMessage(messages.measureareatext)}/>
-        <MenuItem disabled={this.state.disabled} value={3} primaryText={formatMessage(messages.cleartext)}/>
+        <MenuItem disabled={this.state.disabled} primaryText={formatMessage(messages.cleartext)}/>
       </IconMenu>
     );
   }
