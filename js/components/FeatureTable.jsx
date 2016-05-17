@@ -206,7 +206,7 @@ class FeatureTable extends React.Component {
     var id = this._layer.get('id');
     var columnWidths = this.state.columnWidths;
     columnWidths[id] = columnWidths[id] || {};
-    columnWidths[id][label] = width;
+    columnWidths[id][label] = Math.max(this.props.minColumnWidth, width);
     this.setState({columnWidths: columnWidths});
     this._isResizing = false;
   }
@@ -437,6 +437,10 @@ FeatureTable.propTypes = {
    */
   columnWidth: React.PropTypes.number,
   /**
+   * The minimum width in pixels per column.
+   */
+  minColumnWidth: React.PropTypes.number,
+  /**
    * The zoom level to zoom the map to in case of a point geometry.
    */
   pointZoom: React.PropTypes.number,
@@ -468,6 +472,7 @@ FeatureTable.defaultProps = {
   rowHeight: 30,
   headerHeight: 50,
   columnWidth: 100,
+  minColumnWidth: 10,
   pointZoom: 16,
   buttonStyle: {
     margin: '10px 12px'

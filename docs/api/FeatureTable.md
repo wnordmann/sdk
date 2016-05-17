@@ -71,6 +71,14 @@ The ol3 map in which the source for the table resides.
 type: `instanceOf ol.Map`
 
 
+### `minColumnWidth`
+
+The minimum width in pixels per column.
+
+type: `number`
+defaultValue: `10`
+
+
 ### `offset`
 
 Array with offsetX and offsetY, the number of pixels to make the table smaller than the resizeTo container.
