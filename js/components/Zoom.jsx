@@ -69,7 +69,7 @@ class Zoom extends React.Component {
     return (
       <div>
         <IconButton tooltipPosition='top-right' style={this.props.style} tooltip={formatMessage(messages.zoomintitle)} onTouchTap={this._zoomIn.bind(this)}><ZoomIn color="white"/></IconButton><br/>
-        <IconButton tooltipPosition='top-right' style={this.props.style} tooltip={formatMessage(messages.zoomouttitle)} onTouchTap={this._zoomOut.bind(this)}><ZoomOut color="white"/></IconButton>
+        <IconButton tooltipPosition='top-right' style={Object.assign({marginTop: '25px'}, this.props.style)} tooltip={formatMessage(messages.zoomouttitle)} onTouchTap={this._zoomOut.bind(this)}><ZoomOut color="white"/></IconButton>
       </div>
     );
   }
