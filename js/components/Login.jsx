@@ -46,8 +46,7 @@ class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: null,
-      value: null
+      user: null
     };
     var me = this;
     AppDispatcher.register((payload) => {
@@ -92,18 +91,12 @@ class Login extends React.Component {
     AuthService.logoff();
     this.setState({user: null});
   }
-  _handleChange(event, value) {
-    if (value === 1) {
-      this._doLogout();
-    }
-    this.setState({value: value});
-  }
   render() {
     const {formatMessage} = this.props.intl;
     if (this.state.user !== null) {
       return (
-        <IconMenu {...this.props} iconButtonElement={<RaisedButton label={this.state.user} />} value={this.state.value} onChange={this._handleChange.bind(this)}>
-          <MenuItem value={1} primaryText={formatMessage(messages.logouttext)}/>
+        <IconMenu {...this.props} iconButtonElement={<RaisedButton label={this.state.user} />} onItemTouchTap={this._doLogout.bind(this)}>
+          <MenuItem primaryText={formatMessage(messages.logouttext)}/>
         </IconMenu>
       );
     } else {
