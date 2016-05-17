@@ -129,10 +129,10 @@ class Geolocation extends React.Component {
         color = 'red';
         tooltip += ' (' + formatMessage(messages.trackingtitle) + ')';
       } else {
-        color = '#F58D50';
+        color = 'white';
       }
       return (
-        <IconButton tooltip={tooltip} onTouchTap={this._geolocate.bind(this)}><MyLocation color={color} /></IconButton>
+        <IconButton tooltipPosition='top-right' style={this.props.style} tooltip={tooltip} onTouchTap={this._geolocate.bind(this)}><MyLocation color={color} /></IconButton>
       );
     }
   }
@@ -144,9 +144,23 @@ Geolocation.propTypes = {
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
   /**
+   * Style for the button.
+   */
+  style: React.PropTypes.object,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
+};
+
+Geolocation.defaultProps = {
+  style: {
+    background: 'rgba(0,60,136,.7)',
+    borderRadius: '2px',
+    width: '28px',
+    height: '28px',
+    padding: '2px'
+  }
 };
 
 export default injectIntl(Geolocation);

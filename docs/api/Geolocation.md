@@ -25,3 +25,17 @@ The ol3 map for which to change its view's center.
 
 type: `instanceOf ol.Map`
 
+
+### `style`
+
+Style for the button.
+
+type: `object`
+defaultValue: `{
+  background: 'rgba(0,60,136,.7)',
+  borderRadius: '2px',
+  width: '28px',
+  height: '28px',
+  padding: '2px'
+}`
+

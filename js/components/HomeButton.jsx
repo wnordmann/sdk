@@ -62,7 +62,7 @@ class HomeButton extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <IconButton tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._goHome.bind(this)} ><HomeIcon color="#F58D50"/></IconButton>
+      <IconButton tooltipPosition='top-right' style={this.props.style} tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._goHome.bind(this)} ><HomeIcon color='white' /></IconButton>
     );
   }
 }
@@ -73,9 +73,23 @@ HomeButton.propTypes = {
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
   /**
+   * Style for the button.
+   */
+  style: React.PropTypes.object,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
+};
+
+HomeButton.defaultProps = {
+  style: {
+    background: 'rgba(0,60,136,.7)',
+    borderRadius: '2px',
+    width: '28px',
+    height: '28px',
+    padding: '2px'
+  }
 };
 
 export default injectIntl(HomeButton);

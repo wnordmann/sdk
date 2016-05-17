@@ -87,14 +87,14 @@ class Globe extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     var icon, tooltip;
-    icon = <GlobeIcon color='#F58D50' />;
+    icon = <GlobeIcon color='white' />;
     if (this.state.globe) {
       tooltip = formatMessage(messages.maptext);
     } else {
       tooltip = formatMessage(messages.globetext);
     }
     return (
-      <IconButton tooltip={tooltip} onTouchTap={this._toggle.bind(this)}>{icon}</IconButton>
+      <IconButton tooltipPosition='top-right' style={this.props.style} tooltip={tooltip} onTouchTap={this._toggle.bind(this)}>{icon}</IconButton>
     );
   }
 }
@@ -105,9 +105,23 @@ Globe.propTypes = {
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
   /**
+   * Style for the button.
+   */
+  style: React.PropTypes.object,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
+};
+
+Globe.defaultProps = {
+  style: {
+    background: 'rgba(0,60,136,.7)',
+    borderRadius: '2px',
+    width: '28px',
+    height: '28px',
+    padding: '2px'
+  }
 };
 
 export default injectIntl(Globe);

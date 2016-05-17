@@ -68,8 +68,8 @@ class Zoom extends React.Component {
     const {formatMessage} = this.props.intl;
     return (
       <div>
-        <IconButton tooltip={formatMessage(messages.zoomintitle)} onTouchTap={this._zoomIn.bind(this)}><ZoomIn color="#F58D50"/></IconButton>
-        <IconButton tooltip={formatMessage(messages.zoomouttitle)} onTouchTap={this._zoomOut.bind(this)}><ZoomOut color="#F58D50"/></IconButton>
+        <IconButton tooltipPosition='top-right' style={this.props.style} tooltip={formatMessage(messages.zoomintitle)} onTouchTap={this._zoomIn.bind(this)}><ZoomIn color="white"/></IconButton><br/>
+        <IconButton tooltipPosition='top-right' style={this.props.style} tooltip={formatMessage(messages.zoomouttitle)} onTouchTap={this._zoomOut.bind(this)}><ZoomOut color="white"/></IconButton>
       </div>
     );
   }
@@ -85,6 +85,10 @@ Zoom.propTypes = {
    */
   delta: React.PropTypes.number,
   /**
+   * Style for the buttons.
+   */
+  style: React.PropTypes.object,
+  /**
    * The ol3 map to use for zooming.
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
@@ -96,7 +100,14 @@ Zoom.propTypes = {
 
 Zoom.defaultProps = {
   delta: 1,
-  duration: 250
+  duration: 250,
+  style: {
+    background: 'rgba(0,60,136,.7)',
+    borderRadius: '2px',
+    width: '28px',
+    height: '28px',
+    padding: '2px'
+  }
 };
 
 export default injectIntl(Zoom);
