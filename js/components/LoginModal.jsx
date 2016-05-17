@@ -116,14 +116,14 @@ class LoginModal extends React.Component {
       />);
     }
     var actions = [
-      <RaisedButton label={formatMessage(messages.loginbutton)} onTouchTap={this._doLogin.bind(this)} />,
-      <RaisedButton label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
+      <RaisedButton style={{margin: '10px 12px'}} secondary={true} label={formatMessage(messages.loginbutton)} onTouchTap={this._doLogin.bind(this)} />,
+      <RaisedButton style={{margin: '10px 12px'}} label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
     ];
     return (
       <Dialog actions={actions} title={formatMessage(messages.title)} open={this.state.open} onRequestClose={this.close.bind(this)}>
         {error}
-        <TextField floatingLabelText={formatMessage(messages.usernamelabel)} ref='username' /><br/>
-        <TextField onKeyDown={this._onEnter.bind(this)} type="password" floatingLabelText={formatMessage(messages.passwordlabel)} ref='password' />
+        <TextField style={{width: '512px'}} floatingLabelText={formatMessage(messages.usernamelabel)} ref='username' /><br/>
+        <TextField style={{width: '512px'}} onKeyDown={this._onEnter.bind(this)} type="password" floatingLabelText={formatMessage(messages.passwordlabel)} ref='password' />
       </Dialog>
     );
   }
