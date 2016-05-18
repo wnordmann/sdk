@@ -15,6 +15,16 @@ import ol from 'openlayers';
 import LayerStore from '../stores/LayerStore.js';
 import pureRender from 'pure-render-decorator';
 import LegendItem from './LegendItem.jsx';
+import List from 'material-ui/lib/lists/list';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
+
+const messages = defineMessages({
+  header: {
+    id: 'legend.header',
+    description: 'Header for the legend component',
+    defaultMessage: 'Legend'
+  }
+});
 
 /**
  * Legend component that can show legend graphic for multiple layer and source types dynamically.
@@ -42,10 +52,11 @@ class Legend extends React.Component {
     this.setState({flatLayers: flatLayers});
   }
   render() {
+    const {formatMessage} = this.props.intl;
     var legends = this.state.flatLayers.map(function(layer) {
       return (<LegendItem key={layer.get('id')} layer={layer} />);
     });
-    return (<div style={{padding: '10px'}}>{legends}</div>);
+    return <List subheader={formatMessage(messages.header)}>{legends}</List>;
   }
 }
 
@@ -56,4 +67,4 @@ Legend.propTypes = {
   map: React.PropTypes.instanceOf(ol.Map).isRequired
 };
 
-export default Legend;
+export default injectIntl(Legend);

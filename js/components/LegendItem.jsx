@@ -13,6 +13,7 @@
 import React from 'react';
 import ol from 'openlayers';
 import pureRender from 'pure-render-decorator';
+import ListItem from 'material-ui/lib/lists/list-item';
 import WMSLegend from './WMSLegend.jsx';
 
 /**
@@ -40,7 +41,7 @@ class LegendItem extends React.Component {
         legendBody = (<WMSLegend {...this.props} />);
       }
       if (legendBody) {
-        return (<span><div className='legend-title'>{layer.get('title')}</div>{legendBody}</span>);
+        return <ListItem primaryText={layer.get('title')} leftIcon={legendBody} />;
       } else {
         return (<article />);
       }
