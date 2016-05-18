@@ -57,24 +57,19 @@ class Globe extends React.Component {
     this.state = {
       globe: false
     };
+  }
+  init() {
     var providerUrl = '//assets.agi.com/stk-terrain/world';
-    if (this.props.map.getTarget()) {
-      this._ol3d = new olcs.OLCesium({map: this.props.map});
-      var scene = this._ol3d.getCesiumScene();
-      scene.terrainProvider = new Cesium.CesiumTerrainProvider({
-        url: providerUrl
-      });
-    } else {
-      this.props.map.once('change:target', function() {
-        this._ol3d = new olcs.OLCesium({map: this.props.map});
-        var scene = this._ol3d.getCesiumScene();
-        scene.terrainProvider = new Cesium.CesiumTerrainProvider({
-          url: providerUrl
-        });
-      }, this);
-    }
+    this._ol3d = new olcs.OLCesium({map: this.props.map});
+    var scene = this._ol3d.getCesiumScene();
+    scene.terrainProvider = new Cesium.CesiumTerrainProvider({
+      url: providerUrl
+    });
   }
   _toggle() {
+    if (!this._ol3d) {
+      this.init();
+    }
     this._ol3d.setEnabled(!this.state.globe);
     var globe = !this.state.globe;
     if (globe) {
