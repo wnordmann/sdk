@@ -12,6 +12,13 @@ A button to go back to the initial extent of the map.
 Properties
 ----------
 
+### `extent`
+
+Extent to fit on the map on pressing this button. If not set, the initial extent of the map will be used.
+
+type: `arrayOf number`
+
+
 ### `intl`
 
 i18n message strings. Provided through the application through context.

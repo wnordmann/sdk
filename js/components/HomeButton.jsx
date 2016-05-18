@@ -14,14 +14,14 @@ import React from 'react';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import IconButton from 'material-ui/lib/icon-button';
-import HomeIcon from 'material-ui/lib/svg-icons/action/home';
+import HomeIcon from 'material-ui/lib/svg-icons/maps/zoom-out-map';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   buttontitle: {
     id: 'homebutton.buttontitle',
     description: 'Title for the home button',
-    defaultMessage: 'Home'
+    defaultMessage: 'Zoom to the initial extent'
   }
 });
 
@@ -38,23 +38,27 @@ const messages = defineMessages({
 class HomeButton extends React.Component {
   constructor(props) {
     super(props);
-    var view = this.props.map.getView();
-    this._center = view.getCenter();
-    this._resolution = view.getResolution();
-    if (this._center === null) {
-      view.once('change:center', function(evt) {
-        this._center = evt.target.getCenter();
-      }, this);
-    }
-    if (this._resolution === undefined) {
-      view.once('change:resolution', function(evt) {
-        this._resolution = evt.target.getResolution();
-      }, this);
+    if (!this.props.extent) {
+      var view = this.props.map.getView();
+      this._center = view.getCenter();
+      this._resolution = view.getResolution();
+      if (this._center === null) {
+        view.once('change:center', function(evt) {
+          this._center = evt.target.getCenter();
+        }, this);
+      }
+      if (this._resolution === undefined) {
+        view.once('change:resolution', function(evt) {
+          this._resolution = evt.target.getResolution();
+        }, this);
+      }
     }
   }
   _goHome() {
-    if (this._center !== null && this._resolution !== undefined) {
-      var view = this.props.map.getView();
+    var view = this.props.map.getView();
+    if (this.props.extent) {
+      view.fit(this.props.extent, this.props.map.getSize(), {constrainResolution: false});
+    } else if (this._center !== null && this._resolution !== undefined) {
       view.setCenter(this._center);
       view.setResolution(this._resolution);
     }
@@ -72,6 +76,10 @@ HomeButton.propTypes = {
    * The ol3 map for whose view the initial center and zoom should be restored.
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * Extent to fit on the map on pressing this button. If not set, the initial extent of the map will be used.
+   */
+  extent: React.PropTypes.arrayOf(React.PropTypes.number),
   /**
    * Style for the button.
    */

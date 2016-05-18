@@ -70,7 +70,7 @@ var enMessages = {
   "geolocation.trackingtitle": "Tracking",
   "globe.globetext": "Switch to globe (3D)",
   "globe.maptext": "Switch to map (2D)",
-  "homebutton.buttontitle": "Home",
+  "homebutton.buttontitle": "Zoom to the initial extent",
   "imageexport.buttontext": "Export",
   "imageexport.buttontitle": "Export as image",
   "infopopup.nametext": "Name",

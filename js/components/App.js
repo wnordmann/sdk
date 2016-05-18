@@ -106,7 +106,7 @@ export default class App extends React.Component {
         view.setRotation(rotation);
       }
     } else if (this.props.extent) {
-      view.fit(this.props.extent, this.props.map.getSize());
+      view.fit(this.props.extent, this.props.map.getSize(), {constrainResolution: false});
     }
   }
 }
