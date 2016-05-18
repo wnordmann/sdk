@@ -12,9 +12,9 @@
 
 import React from 'react';
 import ol from 'openlayers';
-import IconMenu from 'material-ui/lib/menus/icon-menu';
 import RaisedButton from 'material-ui/lib/raised-button';
-import MenuItem from 'material-ui/lib/menus/menu-item';
+import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group';
+import Snackbar from 'material-ui/lib/snackbar';
 import MapConfigService from '../services/MapConfigService.js';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
@@ -34,6 +34,26 @@ const messages = defineMessages({
     id: 'mapconfig.loadtext',
     description: 'Text for the Load menu option',
     defaultMessage: 'Load'
+  },
+  savesuccess: {
+    id: 'mapconfig.savesuccess',
+    description: 'Info text to show if save is successfull',
+    defaultMessage: 'Map was saved successfully to the browser\'s local storage.'
+  },
+  savefailure: {
+    id: 'mapconfig.savefailure',
+    description: 'Info text to show if save is not successfull',
+    defaultMessage: 'There was an error saving the map to the browser\'s local storage.'
+  },
+  loadsuccess: {
+    id: 'mapconfig.loadsuccess',
+    description: 'Info text to show if load is successfull',
+    defaultMessage: 'Map was loaded successfully from the browser\'s local storage.'
+  },
+  loadfailure: {
+    id: 'mapconfig.loadfailure',
+    description: 'Info text to show if load is not successfull',
+    defaultMessage: 'There was an error loading the map from the browser\'s local storage'
   }
 });
 
@@ -50,31 +70,64 @@ const localStorageKey = 'web-sdk-map-config';
 class MapConfig extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      msg: null,
+      info: false,
+      disabled: global.localStorage.getItem(localStorageKey) === null
+    };
   }
   _load() {
-    var config = global.localStorage.getItem(localStorageKey);
-    var mapConfig = JSON.parse(config);
-    MapConfigService.load(mapConfig, this.props.map);
+    const {formatMessage} = this.props.intl;
+    var msg;
+    try {
+      var config = global.localStorage.getItem(localStorageKey);
+      var mapConfig = JSON.parse(config);
+      MapConfigService.load(mapConfig, this.props.map);
+      msg = formatMessage(messages.loadsuccess);
+    } catch(e) {
+      msg = formatMessage(messages.loadfailure);
+    }
+    this.setState({
+      info: true,
+      msg: msg
+    });
   }
   _save() {
-    var config = MapConfigService.save(this.props.map);
-    var output = JSON.stringify(config);
-    global.localStorage.setItem(localStorageKey, output);
-  }
-  _handleChange(event, value) {
-    if (value === 1) {
-      this._load();
-    } else if (value === 2) {
-      this._save();
+    const {formatMessage} = this.props.intl;
+    var msg, disabled;
+    try {
+      var config = MapConfigService.save(this.props.map);
+      var output = JSON.stringify(config);
+      global.localStorage.setItem(localStorageKey, output);
+      msg = formatMessage(messages.savesuccess);
+      disabled = false;
+    } catch(e) {
+      msg = formatMessage(messages.savefailure);
+      disabled = true;
     }
+    this.setState({
+      disabled: disabled,
+      info: true,
+      msg: msg
+    });
+  }
+  _onRequestClose() {
+    this.setState({
+      info: false
+    });
   }
   render() {
     const {formatMessage} = this.props.intl;
+    var info;
+    if (this.state.info) {
+      info = (<Snackbar autoHideDuration={2000} message={this.state.msg} open={this.state.info} onRequestClose={this._onRequestClose.bind(this)} />);
+    }
     return (
-      <IconMenu {...this.props} iconButtonElement={<RaisedButton label={formatMessage(messages.menubuttontext)} />} onChange={this._handleChange.bind(this)}>
-        <MenuItem value={1} primaryText={formatMessage(messages.loadtext)}/>
-        <MenuItem value={2} primaryText={formatMessage(messages.savetext)}/>
-      </IconMenu>
+      <ToolbarGroup>
+        {info}
+        <RaisedButton disabled={this.state.disabled} label={formatMessage(messages.loadtext)} onTouchTap={this._load.bind(this)} />
+        <RaisedButton label={formatMessage(messages.savetext)} onTouchTap={this._save.bind(this)} />
+      </ToolbarGroup>
     );
   }
 }
@@ -88,12 +141,6 @@ MapConfig.propTypes = {
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
-};
-
-MapConfig.defaultProps = {
-  style: {
-    margin: '10px 12px'
-  }
 };
 
 export default injectIntl(MapConfig);
