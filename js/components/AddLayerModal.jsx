@@ -19,8 +19,6 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import TextField from 'material-ui/lib/text-field';
 import RaisedButton from 'material-ui/lib/raised-button';
-import GridList from 'material-ui/lib/grid-list/grid-list';
-import GridTile from 'material-ui/lib/grid-list/grid-tile';
 import List from 'material-ui/lib/lists/list';
 import ListItem from 'material-ui/lib/lists/list-item';
 import FolderIcon from 'material-ui/lib/svg-icons/file/folder-open';
@@ -287,10 +285,10 @@ class AddLayerModal extends React.Component {
     if (this.props.allowUserInput) {
       var serviceType = this.props.asVector ? 'WFS' : 'WMS';
       input = (
-        <GridList cellHeight={75}>
-          <GridTile><TextField floatingLabelText={formatMessage(messages.inputfieldlabel, {serviceType: serviceType})} defaultValue={this.props.url} ref='url' /></GridTile>
-          <GridTile><RaisedButton label={formatMessage(messages.connectbutton)} onTouchTap={this._connect.bind(this)} /></GridTile>
-        </GridList>
+        <div>
+          <TextField style={{width: '512px'}} floatingLabelText={formatMessage(messages.inputfieldlabel, {serviceType: serviceType})} defaultValue={this.props.url} ref='url' />
+          <RaisedButton style={{float: 'right'}} label={formatMessage(messages.connectbutton)} onTouchTap={this._connect.bind(this)} />
+        </div>
       );
     }
     var actions = [
