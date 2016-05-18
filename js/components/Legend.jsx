@@ -64,7 +64,11 @@ Legend.propTypes = {
   /**
    * The map whose layers should show up in this legend component.
    */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired
+  map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * i18n message strings. Provided through the application through context.
+   */
+  intl: intlShape.isRequired
 };
 
 export default injectIntl(Legend);

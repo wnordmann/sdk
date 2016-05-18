@@ -11,8 +11,10 @@
  */
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import RaisedButton from 'material-ui/lib/raised-button';
+import Tooltip from 'material-ui/lib/tooltip';
 import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group';
 import Snackbar from 'material-ui/lib/snackbar';
 import MapConfigService from '../services/MapConfigService.js';
@@ -20,20 +22,25 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
-  menubuttontext: {
-    id: 'mapconfig.menubuttontext',
-    description: 'Title for the Map Config menu',
-    defaultMessage: 'Map'
-  },
   savetext: {
     id: 'mapconfig.savetext',
-    description: 'Text for the Save menu option',
+    description: 'Text for the Save button',
     defaultMessage: 'Save'
+  },
+  savetitle: {
+    id: 'mapconfig.savetitle',
+    description: 'Title for the Save button',
+    defaultMessage: 'Save map configuration to local storage'
   },
   loadtext: {
     id: 'mapconfig.loadtext',
-    description: 'Text for the Load menu option',
+    description: 'Text for the Load button',
     defaultMessage: 'Load'
+  },
+  loadtitle: {
+    id: 'mapconfig.loadtitle',
+    description: 'Title for the Load button',
+    defaultMessage: 'Load map configuration from local storage'
   },
   savesuccess: {
     id: 'mapconfig.savesuccess',
@@ -71,6 +78,7 @@ class MapConfig extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      tooltip: '',
       msg: null,
       info: false,
       disabled: global.localStorage.getItem(localStorageKey) === null
@@ -84,7 +92,7 @@ class MapConfig extends React.Component {
       var mapConfig = JSON.parse(config);
       MapConfigService.load(mapConfig, this.props.map);
       msg = formatMessage(messages.loadsuccess);
-    } catch(e) {
+    } catch (e) {
       msg = formatMessage(messages.loadfailure);
     }
     this.setState({
@@ -101,7 +109,7 @@ class MapConfig extends React.Component {
       global.localStorage.setItem(localStorageKey, output);
       msg = formatMessage(messages.savesuccess);
       disabled = false;
-    } catch(e) {
+    } catch (e) {
       msg = formatMessage(messages.savefailure);
       disabled = true;
     }
@@ -116,6 +124,14 @@ class MapConfig extends React.Component {
       info: false
     });
   }
+  showTooltip(key, evt) {
+    var left = ReactDOM.findDOMNode(evt.target).getBoundingClientRect().left;
+    const {formatMessage} = this.props.intl;
+    this.setState({left: left, showTooltip: true, tooltip: formatMessage(messages[key])});
+  }
+  hideTooltip() {
+    this.setState({showTooltip: false});
+  }
   render() {
     const {formatMessage} = this.props.intl;
     var info;
@@ -125,8 +141,9 @@ class MapConfig extends React.Component {
     return (
       <ToolbarGroup>
         {info}
-        <RaisedButton disabled={this.state.disabled} label={formatMessage(messages.loadtext)} onTouchTap={this._load.bind(this)} />
-        <RaisedButton label={formatMessage(messages.savetext)} onTouchTap={this._save.bind(this)} />
+        <RaisedButton disabled={this.state.disabled} label={formatMessage(messages.loadtext)} onTouchTap={this._load.bind(this)} onMouseEnter={this.showTooltip.bind(this, 'loadtitle')} onMouseLeave={this.hideTooltip.bind(this)}/>
+        <RaisedButton label={formatMessage(messages.savetext)} onMouseEnter={this.showTooltip.bind(this, 'savetitle')} onMouseLeave={this.hideTooltip.bind(this)} onTouchTap={this._save.bind(this)} />
+        <Tooltip verticalPosition='bottom' style={{left: this.state.left, boxSizing: 'border-box'}} show={this.state.showTooltip} label={this.state.tooltip} />
       </ToolbarGroup>
     );
   }

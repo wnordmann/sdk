@@ -6,6 +6,13 @@ Legend component that can show legend graphic for multiple layer and source type
 Properties
 ----------
 
+### `intl`
+
+i18n message strings. Provided through the application through context.
+
+type: `custom`
+
+
 ### `map` (required)
 
 The map whose layers should show up in this legend component.
