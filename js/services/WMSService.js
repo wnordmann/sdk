@@ -48,6 +48,7 @@ class WMSService {
       } else {
         result.features = wmsGetFeatureInfoFormats[infoFormat].readFeatures(response.responseText);
       }
+      result.layer = layer;
       onSuccess.call(this, result);
     });
   }

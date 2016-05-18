@@ -22,6 +22,7 @@ class BasePopup extends MapTool {
   }
   componentDidMount() {
     this.overlayPopup = new ol.Overlay({
+      autoPan: true,
       element: ReactDOM.findDOMNode(this).parentNode
     });
     this.props.map.addOverlay(this.overlayPopup);

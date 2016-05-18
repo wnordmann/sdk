@@ -84,10 +84,11 @@ class InfoPopup extends BasePopup {
       layers.push(layer);
     }
   }
-  _createSimpleTable(features) {
+  _createSimpleTable(response) {
+    var features = response.features;
+    var layer = response.layer;
     this._count++;
     const {formatMessage} = this.props.intl;
-    // TODO add back fid
     var fid;
     var rows = [];
     for (var i = 0, ii = features.length; i < ii; ++i) {
@@ -103,10 +104,15 @@ class InfoPopup extends BasePopup {
       }
     }
     return (<Table key={this._count}>
-      <TableHeader displaySelectAll={false}>
+      <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
         <TableRow>
-          <TableHeaderColumn tooltip={fid}>{formatMessage(messages.nametext)}</TableHeaderColumn>
-          <TableHeaderColumn tooltip={fid}>{formatMessage(messages.valuetext)}</TableHeaderColumn>
+          <TableHeaderColumn colSpan="2" tooltip={fid} style={{textAlign: 'center'}}>
+            {layer.get('title')}
+          </TableHeaderColumn>
+        </TableRow>
+        <TableRow>
+          <TableHeaderColumn>{formatMessage(messages.nametext)}</TableHeaderColumn>
+          <TableHeaderColumn>{formatMessage(messages.valuetext)}</TableHeaderColumn>
         </TableRow>
       </TableHeader>
       <TableBody displayRowCheckbox={false}>
@@ -136,13 +142,14 @@ class InfoPopup extends BasePopup {
     const {formatMessage} = this.props.intl;
     var popupDef;
     var me = this;
+    this._noFeaturesFound = false;
     var onReady = function(response) {
       var features = response.features;
       if (features.length) {
         var popupContent;
         if (popupDef === ALL_ATTRS) {
           me._contentAsObject = true;
-          popupContent = me._createSimpleTable(features);
+          popupContent = me._createSimpleTable(response);
         } else {
           for (var j = 0, jj = features.length; j < jj; ++j) {
             popupContent = popupDef;
@@ -160,7 +167,7 @@ class InfoPopup extends BasePopup {
         }
         popupTexts.push(popupContent);
       } else {
-        popupTexts.push(formatMessage(messages.nofeatures));
+        me._noFeaturesFound = true;
       }
       finishedQuery();
     };
@@ -212,14 +219,15 @@ class InfoPopup extends BasePopup {
         }
       });
       this._fetchData(evt, popupTexts, function() {
-        if (popupTexts.length) {
+        if (popupTexts.length || me._noFeaturesFound) {
           me.overlayPopup.setPosition(coord);
-          if (popupTexts.length) {
-            me.setState({
-              popupTexts: popupTexts,
-              contentAsObject: me._contentAsObject
-            });
+          if (popupTexts.length === 0) {
+            popupTexts.push(formatMessage(messages.nofeatures));
           }
+          me.setState({
+            popupTexts: popupTexts,
+            contentAsObject: me._contentAsObject
+          });
           me.setVisible(true);
         } else {
           me.setVisible(false);
