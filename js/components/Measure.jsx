@@ -64,6 +64,7 @@ class Measure extends MapTool {
     super(props);
     this._tooltips = [];
     this.state = {
+      secondary: false,
       value: null,
       disabled: false
     };
@@ -205,9 +206,13 @@ class Measure extends MapTool {
     this._tooltips.push(this._tooltip);
     this.props.map.addOverlay(this._tooltip);
   }
+  activate() {
+    super.activate.call(this, arguments);
+    this.setState({secondary: true});
+  }
   deactivate() {
     super.deactivate();
-    this.setState({value: null});
+    this.setState({value: null, secondary: false});
   }
   _measureDistance() {
     var map = this.props.map;
@@ -251,7 +256,7 @@ class Measure extends MapTool {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-     <IconMenu {...this.props} iconButtonElement={<RaisedButton tooltipStyle={{left: 0}} tooltip={formatMessage(messages.dropdowntitle)} disabled={this.state.disabled} label={formatMessage(messages.dropdowntext)} />} value={this.state.value} onChange={this._handleChange.bind(this)}>
+     <IconMenu {...this.props} iconButtonElement={<RaisedButton secondary={this.state.secondary} tooltipStyle={{left: 0}} tooltip={formatMessage(messages.dropdowntitle)} disabled={this.state.disabled} label={formatMessage(messages.dropdowntext)} />} value={this.state.value} onChange={this._handleChange.bind(this)}>
         <MenuItem disabled={this.state.disabled} value={1} primaryText={formatMessage(messages.measuredistancetext)}/>
         <MenuItem disabled={this.state.disabled} value={2} primaryText={formatMessage(messages.measureareatext)}/>
         <MenuItem disabled={this.state.disabled} primaryText={formatMessage(messages.cleartext)}/>
