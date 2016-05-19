@@ -10,8 +10,8 @@ class Button extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      left: 0,
-      showTooltip: false
+      showTooltip: false,
+      left: 0
     };
   }
   showTooltip(evt) {
@@ -25,7 +25,7 @@ class Button extends React.Component {
     return (
       <span>
         <RaisedButton {...this.props} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)}/>
-        <Tooltip verticalPosition='bottom' style={{left: this.state.left, boxSizing: 'border-box'}} show={this.state.showTooltip} label={this.props.tooltip} />
+        <Tooltip verticalPosition='bottom' style={Object.assign({left: this.state.left, boxSizing: 'border-box'}, this.props.tooltipStyle)} show={this.state.showTooltip} label={this.props.tooltip} />
       </span>
     );
   }
@@ -35,7 +35,11 @@ Button.propTypes = {
   /**
    * The tooltip to show for this button.
    */
-  tooltip: React.PropTypes.string.isRequired
+  tooltip: React.PropTypes.string.isRequired,
+  /**
+   * Style for tooltip element.
+   */
+  tooltipStyle: React.PropTypes.object
 };
 
 export default Button;

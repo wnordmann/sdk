@@ -17,7 +17,7 @@ import './Measure.css';
 import MapTool from './MapTool.js';
 import IconMenu from 'material-ui/lib/menus/icon-menu';
 import MenuItem from 'material-ui/lib/menus/menu-item';
-import RaisedButton from 'material-ui/lib/raised-button';
+import RaisedButton from './Button.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 
@@ -26,6 +26,11 @@ const messages = defineMessages({
     id: 'measure.dropdowntext',
     description: 'Text to use on the Measure drop down',
     defaultMessage: 'Measure'
+  },
+  dropdowntitle: {
+    id: 'measure.dropdowntitle',
+    description: 'Title to use on the Measure drop down',
+    defaultMessage: 'Measure distance and area on the map'
   },
   measuredistancetext: {
     id: 'measure.measuredistancetext',
@@ -246,7 +251,7 @@ class Measure extends MapTool {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-     <IconMenu {...this.props} iconButtonElement={<RaisedButton disabled={this.state.disabled} label={formatMessage(messages.dropdowntext)} />} value={this.state.value} onChange={this._handleChange.bind(this)}>
+     <IconMenu {...this.props} iconButtonElement={<RaisedButton tooltipStyle={{left: 0}} tooltip={formatMessage(messages.dropdowntitle)} disabled={this.state.disabled} label={formatMessage(messages.dropdowntext)} />} value={this.state.value} onChange={this._handleChange.bind(this)}>
         <MenuItem disabled={this.state.disabled} value={1} primaryText={formatMessage(messages.measuredistancetext)}/>
         <MenuItem disabled={this.state.disabled} value={2} primaryText={formatMessage(messages.measureareatext)}/>
         <MenuItem disabled={this.state.disabled} primaryText={formatMessage(messages.cleartext)}/>

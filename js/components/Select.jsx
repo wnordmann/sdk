@@ -17,7 +17,7 @@ import SelectActions from '../actions/SelectActions.js';
 import MapTool from './MapTool.js';
 import FeatureStore from '../stores/FeatureStore.js';
 import WFSService from '../services/WFSService.js';
-import RaisedButton from 'material-ui/lib/raised-button';
+import RaisedButton from './Button.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 
@@ -26,6 +26,11 @@ const messages = defineMessages({
     id: 'select.menubuttontext',
     description: 'Menu button text for select function',
     defaultMessage: 'Select'
+  },
+  menubuttontitle: {
+    id: 'select.menubuttontitle',
+    description: 'Menu button title for select function',
+    defaultMessage: 'Select features by rectangle'
   }
 });
 
@@ -112,7 +117,7 @@ class Select extends MapTool {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-     <RaisedButton {...this.props} disabled={this.state.disabled} label={formatMessage(messages.menubuttontext)} onTouchTap={this._selectByRectangle.bind(this)} />
+     <RaisedButton {...this.props} disabled={this.state.disabled} label={formatMessage(messages.menubuttontext)} tooltip={formatMessage(messages.menubuttontitle)} onTouchTap={this._selectByRectangle.bind(this)} />
     );
   }
 }
