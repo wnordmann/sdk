@@ -15,17 +15,21 @@ class Button extends React.Component {
     };
   }
   showTooltip(evt) {
-    var left = ReactDOM.findDOMNode(evt.target).getBoundingClientRect().left;
-    this.setState({left: left, showTooltip: true});
+    if (this.props.tooltip) {
+      var left = ReactDOM.findDOMNode(evt.target).getBoundingClientRect().left;
+      this.setState({left: left, showTooltip: true});
+    }
   }
   hideTooltip() {
-    this.setState({showTooltip: false});
+    if (this.props.tooltip) {
+      this.setState({showTooltip: false});
+    }
   }
   render() {
     return (
       <span>
         <RaisedButton {...this.props} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)}/>
-        <Tooltip verticalPosition='bottom' style={Object.assign({left: this.state.left, boxSizing: 'border-box'}, this.props.tooltipStyle)} show={this.state.showTooltip} label={this.props.tooltip} />
+        <Tooltip verticalPosition='bottom' style={Object.assign({left: this.state.left, boxSizing: 'border-box'}, this.props.tooltipStyle)} show={this.state.showTooltip} label={this.props.tooltip || ''} />
       </span>
     );
   }
@@ -35,7 +39,7 @@ Button.propTypes = {
   /**
    * The tooltip to show for this button.
    */
-  tooltip: React.PropTypes.string.isRequired,
+  tooltip: React.PropTypes.string,
   /**
    * Style for tooltip element.
    */

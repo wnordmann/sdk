@@ -6,7 +6,7 @@ Button with built-in tooltip.
 Properties
 ----------
 
-### `tooltip` (required)
+### `tooltip`
 
 The tooltip to show for this button.
 

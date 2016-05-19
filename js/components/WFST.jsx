@@ -18,9 +18,13 @@ import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LayerSelector from './LayerSelector.jsx';
 import FeatureStore from '../stores/FeatureStore.js';
 import MapTool from './MapTool.js';
-import RaisedButton from 'material-ui/lib/raised-button';
+import RaisedButton from './Button.jsx';
+import DeleteIcon from 'material-ui/lib/svg-icons/action/delete';
+import DrawIcon from 'material-ui/lib/svg-icons/image/brush';
+import EditIcon from 'material-ui/lib/svg-icons/editor/mode-edit';
 import Snackbar from 'material-ui/lib/snackbar';
 import Toolbar from 'material-ui/lib/toolbar/toolbar';
+import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group';
 import pureRender from 'pure-render-decorator';
 import EditForm from './EditForm.jsx';
 import WFSService from '../services/WFSService.js';
@@ -44,15 +48,30 @@ const messages = defineMessages({
     description: 'Button text for draw new feature',
     defaultMessage: 'Draw'
   },
+  drawfeaturetitle: {
+    id: 'wfst.drawfeaturetitle',
+    description: 'Button help text for draw new feature',
+    defaultMessage: 'Draw a new feature on the map'
+  },
   modifyfeature: {
     id: 'wfst.modifyfeature',
     description: 'Button text for modify / select existing feature',
     defaultMessage: 'Modify / Select'
   },
+  modifyfeaturetitle: {
+    id: 'wfst.modifyfeaturetitle',
+    description: 'Button title for modify / select existing feature',
+    defaultMessage: 'Modify an existing feature or select before Delete'
+  },
   deletefeature: {
     id: 'wfst.deletefeature',
     description: 'Button text for delete selected feature',
     defaultMessage: 'Delete'
+  },
+  deletefeaturetitle: {
+    id: 'wfst.deletefeaturetitle',
+    description: 'Button title for delete selected feature',
+    defaultMessage: 'Delete the selected feature'
   },
   errormsg: {
     id: 'wfst.errormsg',
@@ -342,9 +361,15 @@ class WFST extends MapTool {
         <div>
           {layerSelector}
           <Toolbar>
-            <RaisedButton style={buttonStyle} label={formatMessage(messages.drawfeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._drawFeature.bind(this)} />
-            <RaisedButton style={buttonStyle} label={formatMessage(messages.modifyfeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._modifyFeature.bind(this)} />
-            <RaisedButton style={buttonStyle} label={formatMessage(messages.deletefeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._deleteFeature.bind(this)} />
+            <ToolbarGroup>
+              <RaisedButton tooltipStyle={{left: 0}} tooltip={formatMessage(messages.drawfeaturetitle)} style={buttonStyle} label={formatMessage(messages.drawfeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._drawFeature.bind(this)} icon={<DrawIcon />} />
+            </ToolbarGroup>
+            <ToolbarGroup>
+              <RaisedButton tooltipStyle={{left: 0}} tooltip={formatMessage(messages.modifyfeaturetitle)} style={buttonStyle} label={formatMessage(messages.modifyfeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._modifyFeature.bind(this)} icon={<EditIcon />} />
+            </ToolbarGroup>
+            <ToolbarGroup>
+              <RaisedButton tooltipStyle={{left: 0}} tooltip={formatMessage(messages.deletefeaturetitle)} style={buttonStyle} label={formatMessage(messages.deletefeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._deleteFeature.bind(this)} icon={<DeleteIcon />} />
+            </ToolbarGroup>
           </Toolbar>
           {error}
           {editForm}

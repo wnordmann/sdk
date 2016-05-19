@@ -165,10 +165,13 @@ var enMessages = {
   "stylemodal.rulelabel": "Rule:",
   "stylemodal.title": "Edit layer style: {layer}",
   "wfst.deletefeature": "Delete",
+  "wfst.deletefeaturetitle": "Delete the selected feature",
   "wfst.deletemsg": "There was an issue deleting the feature.",
   "wfst.drawfeature": "Draw",
+  "wfst.drawfeaturetitle": "Draw a new feature on the map",
   "wfst.errormsg": "Error saving this feature to GeoServer. {msg}",
   "wfst.layerlabel": "Layer",
-  "wfst.modifyfeature": "Modify / Select"
+  "wfst.modifyfeature": "Modify / Select",
+  "wfst.modifyfeaturetitle": "Modify an existing feature or select before Delete"
 };
 export default enMessages;
