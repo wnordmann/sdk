@@ -118,6 +118,8 @@ class WFST extends MapTool {
       }
     });
     this.state = {
+      modifySecondary: false,
+      drawSecondary: false,
       disabled: false,
       error: false,
       open: false,
@@ -139,6 +141,26 @@ class WFST extends MapTool {
       this._request.abort();
     }
     this.deactivate();
+  }
+  activate(interactions) {
+    super.activate.call(this, interactions);
+    var hasSelect = false;
+    for (var i = 0, ii = interactions.length; i < ii; ++i) {
+      if (interactions[i] instanceof ol.interaction.Select) {
+        hasSelect = true;
+        break;
+      }
+    }
+    if (hasSelect) {
+      this.setState({modifySecondary: true, drawSecondary: false});
+    } else {
+      this.setState({modifySecondary: false, drawSecondary: true});
+    }
+  }
+  deactivate() {
+    super.deactivate();
+    this._select.getFeatures().clear();
+    this.setState({feature: null, modifySecondary: false, drawSecondary: false});
   }
   _onLayerSelectChange(layer) {
     this._select.getFeatures().clear();
@@ -362,10 +384,10 @@ class WFST extends MapTool {
           {layerSelector}
           <Toolbar>
             <ToolbarGroup>
-              <RaisedButton tooltipStyle={{left: 0}} tooltip={formatMessage(messages.drawfeaturetitle)} style={buttonStyle} label={formatMessage(messages.drawfeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._drawFeature.bind(this)} icon={<DrawIcon />} />
+              <RaisedButton secondary={this.state.drawSecondary} tooltipStyle={{left: 0}} tooltip={formatMessage(messages.drawfeaturetitle)} style={buttonStyle} label={formatMessage(messages.drawfeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._drawFeature.bind(this)} icon={<DrawIcon />} />
             </ToolbarGroup>
             <ToolbarGroup>
-              <RaisedButton tooltipStyle={{left: 0}} tooltip={formatMessage(messages.modifyfeaturetitle)} style={buttonStyle} label={formatMessage(messages.modifyfeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._modifyFeature.bind(this)} icon={<EditIcon />} />
+              <RaisedButton secondary={this.state.modifySecondary} tooltipStyle={{left: 0}} tooltip={formatMessage(messages.modifyfeaturetitle)} style={buttonStyle} label={formatMessage(messages.modifyfeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._modifyFeature.bind(this)} icon={<EditIcon />} />
             </ToolbarGroup>
             <ToolbarGroup>
               <RaisedButton tooltipStyle={{left: 0}} tooltip={formatMessage(messages.deletefeaturetitle)} style={buttonStyle} label={formatMessage(messages.deletefeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._deleteFeature.bind(this)} icon={<DeleteIcon />} />
