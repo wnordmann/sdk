@@ -11,10 +11,8 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ol from 'openlayers';
-import RaisedButton from 'material-ui/lib/raised-button';
-import Tooltip from 'material-ui/lib/tooltip';
+import RaisedButton from './Button.jsx';
 import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group';
 import Snackbar from 'material-ui/lib/snackbar';
 import MapConfigService from '../services/MapConfigService.js';
@@ -78,7 +76,6 @@ class MapConfig extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tooltip: '',
       msg: null,
       info: false,
       disabled: global.localStorage.getItem(localStorageKey) === null
@@ -124,14 +121,6 @@ class MapConfig extends React.Component {
       info: false
     });
   }
-  showTooltip(key, evt) {
-    var left = ReactDOM.findDOMNode(evt.target).getBoundingClientRect().left;
-    const {formatMessage} = this.props.intl;
-    this.setState({left: left, showTooltip: true, tooltip: formatMessage(messages[key])});
-  }
-  hideTooltip() {
-    this.setState({showTooltip: false});
-  }
   render() {
     const {formatMessage} = this.props.intl;
     var info;
@@ -141,9 +130,8 @@ class MapConfig extends React.Component {
     return (
       <ToolbarGroup>
         {info}
-        <RaisedButton disabled={this.state.disabled} label={formatMessage(messages.loadtext)} onTouchTap={this._load.bind(this)} onMouseEnter={this.showTooltip.bind(this, 'loadtitle')} onMouseLeave={this.hideTooltip.bind(this)}/>
-        <RaisedButton label={formatMessage(messages.savetext)} onMouseEnter={this.showTooltip.bind(this, 'savetitle')} onMouseLeave={this.hideTooltip.bind(this)} onTouchTap={this._save.bind(this)} />
-        <Tooltip verticalPosition='bottom' style={{left: this.state.left, boxSizing: 'border-box'}} show={this.state.showTooltip} label={this.state.tooltip} />
+        <RaisedButton style={this.props.buttonStyle} tooltip={formatMessage(messages.loadtitle)} disabled={this.state.disabled} label={formatMessage(messages.loadtext)} onTouchTap={this._load.bind(this)} />
+        <RaisedButton style={this.props.buttonStyle} label={formatMessage(messages.savetext)} tooltip={formatMessage(messages.savetitle)} onTouchTap={this._save.bind(this)} />
       </ToolbarGroup>
     );
   }
@@ -155,9 +143,19 @@ MapConfig.propTypes = {
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
   /**
+   * Style for the buttons.
+   */
+  buttonStyle: React.PropTypes.object,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
+};
+
+MapConfig.defaultProps = {
+  buttonStyle: {
+    margin: '10px 12px'
+  }
 };
 
 export default injectIntl(MapConfig);

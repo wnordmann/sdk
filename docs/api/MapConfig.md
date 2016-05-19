@@ -10,6 +10,16 @@ Export the map configuration and ability to reload it from local storage.
 Properties
 ----------
 
+### `buttonStyle`
+
+Style for the buttons.
+
+type: `object`
+defaultValue: `{
+  margin: '10px 12px'
+}`
+
+
 ### `intl`
 
 i18n message strings. Provided through the application through context.
