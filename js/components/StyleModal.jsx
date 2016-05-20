@@ -83,6 +83,7 @@ class StyleModal extends React.Component {
     super(props);
     this._styleState = {};
     this._styleCache = {};
+    this._ruleCounter = 1;
     this.state = {
       open: false,
       error: false,
@@ -206,8 +207,9 @@ class StyleModal extends React.Component {
     this.setState({rule: value});
   }
   _addRule() {
+    this._ruleCounter++;
     var rules = this.state.rules.slice();
-    var title = 'Rule ' + (this.state.rules.length + 1);
+    var title = 'Rule ' + this._ruleCounter;
     rules.push({
       title: title
     });
