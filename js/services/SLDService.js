@@ -198,7 +198,7 @@ class SLDService {
       };
     }
   }
-  createRule(geometryType, styleState) {
+  createRule(name, title, geometryType, styleState) {
     var filter;
     if (styleState.expression) {
       filter = this.expressionToFilter(styleState.expression);
@@ -215,6 +215,8 @@ class SLDService {
       symbolizer.push(this.createTextSymbolizer(styleState));
     }
     return {
+      name: name,
+      title: title,
       symbolizer: symbolizer,
       filter: filter
     };
@@ -241,9 +243,9 @@ class SLDService {
       }]
     };
     for (var i = rules.length - 1; i >= 0; --i) {
-      var rule = rules[i].title;
+      var rule = rules[i].name;
       var style = styleState[rule];
-      ruleContainer.push(this.createRule(geometryType, style));
+      ruleContainer.push(this.createRule(rule, style.title, geometryType, style));
     }
     return marshaller.marshalString(result);
   }

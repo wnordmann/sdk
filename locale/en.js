@@ -152,6 +152,7 @@ var enMessages = {
   "ruleeditor.filtertitle": "Filter",
   "ruleeditor.labeltitle": "Label",
   "ruleeditor.stroketitle": "Stroke",
+  "ruleeditor.titlelabel": "Title",
   "select.menubuttontext": "Select",
   "select.menubuttontitle": "Select features by rectangle",
   "strokeeditor.strokecolorlabel": "Stroke color",

@@ -15,12 +15,19 @@ import Tabs from 'material-ui/lib/tabs/tabs';
 import Tab from 'material-ui/lib/tabs/tab';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import LabelEditor from './LabelEditor.jsx';
+import Paper from 'material-ui/lib/paper';
 import StrokeEditor from './StrokeEditor.jsx';
 import FillEditor from './FillEditor.jsx';
 import FilterEditor from './FilterEditor.jsx';
+import TextField from 'material-ui/lib/text-field';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
+  titlelabel: {
+    id: 'ruleeditor.titlelabel',
+    description: 'Label for the title text field',
+    defaultMessage: 'Title'
+  },
   filltitle: {
     id: 'ruleeditor.filltitle',
     description: 'Title for the fill tab',
@@ -50,8 +57,10 @@ const messages = defineMessages({
 class RuleEditor extends React.Component {
   constructor(props) {
     super(props);
+    var title = this.props.initialState ? this.props.initialState.title : undefined;
     this.state = {
-      value: 1
+      value: 1,
+      title: title
     };
   }
   handleChange(value) {
@@ -61,24 +70,34 @@ class RuleEditor extends React.Component {
       });
     }
   }
+  _onTitleChange() {
+    var title = this.refs.title.getValue();
+    this.setState({title: title});
+    this.props.onChange({
+      title: title
+    });
+  }
   render() {
     if (this.props.visible) {
       const {formatMessage} = this.props.intl;
       return (
-        <Tabs value={this.state.value} onChange={this.handleChange.bind(this)}>
-          <Tab value={1} label={formatMessage(messages.filltitle)}>
-            <FillEditor {...this.props} />
-          </Tab>
-          <Tab value={2} label={formatMessage(messages.stroketitle)}>
-            <StrokeEditor {...this.props} />
-          </Tab>
-          <Tab value={3} label={formatMessage(messages.labeltitle)}>
-            <LabelEditor {...this.props} />
-          </Tab>
-          <Tab value={4} label={formatMessage(messages.filtertitle)}>
-            <FilterEditor {...this.props} />
-          </Tab>
-        </Tabs>
+        <Paper zIndex={2}>
+          <TextField value={this.state.title} ref='title' onChange={this._onTitleChange.bind(this)} floatingLabelText={formatMessage(messages.titlelabel)} />
+          <Tabs value={this.state.value} onChange={this.handleChange.bind(this)}>
+            <Tab value={1} label={formatMessage(messages.filltitle)}>
+              <FillEditor {...this.props} />
+            </Tab>
+            <Tab value={2} label={formatMessage(messages.stroketitle)}>
+              <StrokeEditor {...this.props} />
+            </Tab>
+            <Tab value={3} label={formatMessage(messages.labeltitle)}>
+              <LabelEditor {...this.props} />
+            </Tab>
+            <Tab value={4} label={formatMessage(messages.filtertitle)}>
+              <FilterEditor {...this.props} />
+            </Tab>
+          </Tabs>
+        </Paper>
       );
     } else {
       return (<article />);
@@ -95,6 +114,10 @@ RuleEditor.propTypes = {
    * List of attributes.
    */
   attributes: React.PropTypes.array,
+  /**
+   * Initial state.
+   */
+  initialState: React.PropTypes.object,
   /**
    * Callback that is called when a change is made.
    */

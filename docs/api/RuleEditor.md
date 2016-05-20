@@ -20,6 +20,13 @@ The geometry type.
 type: `enum ('Polygon'|'LineString'|'Point')`
 
 
+### `initialState`
+
+Initial state.
+
+type: `object`
+
+
 ### `intl`
 
 i18n message strings. Provided through the application through context.

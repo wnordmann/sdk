@@ -92,7 +92,7 @@ class StyleModal extends React.Component {
       rule: 'Rule 1',
       geometryType: null,
       rules: [{
-        title: 'Rule 1'
+        name: 'Rule 1'
       }]
     };
   }
@@ -209,23 +209,23 @@ class StyleModal extends React.Component {
   _addRule() {
     this._ruleCounter++;
     var rules = this.state.rules.slice();
-    var title = 'Rule ' + this._ruleCounter;
+    var name = 'Rule ' + this._ruleCounter;
     rules.push({
-      title: title
+      name: name
     });
-    this.setState({rule: title, rules: rules});
+    this.setState({rule: name, rules: rules});
   }
   _removeRule() {
     var rules = this.state.rules.slice();
     var idx;
     for (var i = 0, ii = rules.length; i < ii; ++i) {
-      if (rules[i].title === this.state.rule) {
+      if (rules[i].name === this.state.rule) {
         idx = i;
         break;
       }
     }
     rules.splice(idx, 1);
-    this.setState({rules: rules, rule: rules.length > 0 ? rules[0].title : null});
+    this.setState({rules: rules, rule: rules.length > 0 ? rules[0].name : null});
   }
   _handleRequestClose() {
     this.setState({
@@ -246,11 +246,11 @@ class StyleModal extends React.Component {
       />);
     }
     var ruleItems = this.state.rules.map(function(rule, key) {
-      return (<MenuItem key={key} value={rule.title} primaryText={rule.title} />);
+      return (<MenuItem key={key} value={rule.name} primaryText={rule.name} />);
     });
     // TODO see if we can do with a single rule editor
     var ruleEditors = this.state.rules.map(function(rule, key) {
-      return (<RuleEditor {...this.props} geometryType={this.state.geometryType} visible={rule.title === this.state.rule} key={key} initialState={this._styleState[rule.title]} onChange={this._onChange.bind(this)} attributes={this.state.attributes} />)
+      return (<RuleEditor {...this.props} geometryType={this.state.geometryType} visible={rule.name === this.state.rule} key={key} initialState={this._styleState[rule.name]} onChange={this._onChange.bind(this)} attributes={this.state.attributes} />)
     }, this);
     var actions = [
       <RaisedButton label={formatMessage(messages.applybutton)} onTouchTap={this._setStyle.bind(this)} />,
