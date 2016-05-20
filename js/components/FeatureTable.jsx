@@ -256,6 +256,9 @@ class FeatureTable extends React.Component {
       var idx = this.state.features.indexOf(selected[i]);
       sortIndexes.push(idx);
     }
+    sortIndexes.sort(function(a, b) {
+      return a - b;
+    });
     var size = this.state.features.length;
     for (var index = 0; index < size; index++) {
       if (selected.indexOf(this.state.features[index]) === -1) {
