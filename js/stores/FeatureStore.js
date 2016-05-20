@@ -184,6 +184,10 @@ class FeatureStore extends EventEmitter {
     this.emitChange();
   }
   addLayer(layer, filter) {
+    if (layer instanceof ol.layer.Tile) {
+      // TODO show failure to the user?
+      this.loadFeatures(layer, 0);
+    }
     var id = layer.get('id');
     if (!this._layers[id]) {
       this._layers[id] = layer;

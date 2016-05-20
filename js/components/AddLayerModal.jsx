@@ -14,7 +14,6 @@ import React from 'react';
 import ol from 'openlayers';
 import Dialog from 'material-ui/lib/dialog';
 import Snackbar from 'material-ui/lib/snackbar';
-import FeatureStore from '../stores/FeatureStore.js';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import TextField from 'material-ui/lib/text-field';
@@ -127,11 +126,7 @@ class AddLayerModal extends React.Component {
     // do a WFS DescribeFeatureType request to get wfsInfo
     WFSService.describeFeatureType(me.refs.url.getValue(), layer, function(wfsInfo) {
       olLayer.set('wfsInfo', wfsInfo);
-      if (olLayer instanceof ol.layer.Tile) {
-        FeatureStore.loadFeatures(olLayer, 0, success, function(xmlhttp, exception) {
-          me.setState({error: true, errorOpen: true, msg: exception});
-        }, scope);
-      }
+      success.call(scope);
     }, function() {
       olLayer.set('isSelectable', false);
       olLayer.set('wfsInfo', undefined);
