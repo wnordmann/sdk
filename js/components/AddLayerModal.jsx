@@ -115,7 +115,7 @@ class AddLayerModal extends React.Component {
     });
   }
   _getStyleName(olLayer) {
-    var url = this.refs.url.getValue();
+    var url = this._getUrl();
     RESTService.getStyleName(url, olLayer, function(styleName) {
       olLayer.set('styleName', styleName);
     }, function() {
@@ -124,7 +124,7 @@ class AddLayerModal extends React.Component {
   _getWfsInfo(layer, olLayer, success, scope) {
     var me = this;
     // do a WFS DescribeFeatureType request to get wfsInfo
-    WFSService.describeFeatureType(me.refs.url.getValue(), layer, function(wfsInfo) {
+    WFSService.describeFeatureType(me._getUrl(), layer, function(wfsInfo) {
       olLayer.set('wfsInfo', wfsInfo);
       success.call(scope);
     }, function() {
@@ -166,7 +166,7 @@ class AddLayerModal extends React.Component {
         source: new ol.source.Vector({
           wrapX: false,
           url: function(extent) {
-            return me.refs.url.getValue().replace('wms', 'wfs') + 'service=WFS' +
+            return me._getUrl().replace('wms', 'wfs') + 'service=WFS' +
               '&version=1.1.0&request=GetFeature&typename=' + layer.Name +
               '&outputFormat=application/json&srsname=EPSG:3857' +
               '&bbox=' + extent.join(',') + ',EPSG:3857';
@@ -188,7 +188,7 @@ class AddLayerModal extends React.Component {
         EX_GeographicBoundingBox: extent,
         popupInfo: '#AllAttributes',
         source: new ol.source.TileWMS({
-          url: this.refs.url.getValue(),
+          url: this._getUrl(),
           wrapX: false,
           params: {
             LAYERS: layer.Name
@@ -203,6 +203,11 @@ class AddLayerModal extends React.Component {
     if (!this.props.asVector) {
       view.fit(extent, map.getSize());
     }
+  }
+  _getUrl() {
+    var url = this.refs.url.getValue();
+    var urlObj = new URL(url);
+    return urlObj.toString();
   }
   _getCapabilitiesUrl(url) {
     var urlObj = new URL(url);
