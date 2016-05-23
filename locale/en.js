@@ -10,7 +10,7 @@ var enMessages = {
   "addlayer.strokecolorlabel": "Stroke color",
   "addwmslayermodal.closebutton": "Close",
   "addwmslayermodal.connectbutton": "Connect",
-  "addwmslayermodal.corserror": "Please verify that CORS (Cross-Origin Resource Sharing) is enabled on the server.",
+  "addwmslayermodal.corserror": "Could not connect to GeoServer. Please verify that the server is online and CORS is enabled.",
   "addwmslayermodal.errormsg": "Error. {msg}",
   "addwmslayermodal.inputfieldlabel": "{serviceType} Endpoint",
   "addwmslayermodal.nolayertitle": "No Title",

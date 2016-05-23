@@ -45,8 +45,8 @@ const messages = defineMessages({
   },
   corserror: {
     id: 'addwmslayermodal.corserror',
-    description: 'Error message to show the user when an XHR request fails because of CORS',
-    defaultMessage: 'Please verify that CORS (Cross-Origin Resource Sharing) is enabled on the server.'
+    description: 'Error message to show the user when an XHR request fails because of CORS or offline',
+    defaultMessage: 'Could not connect to GeoServer. Please verify that the server is online and CORS is enabled.'
   },
   inputfieldlabel: {
     id: 'addwmslayermodal.inputfieldlabel',
