@@ -117,8 +117,17 @@ class MapConfigService {
   load(mapConfig, map) {
     var viewConfig = mapConfig.view;
     var layerConfig = mapConfig.layers;
-    map.getLayers().clear();
-    for (var i = 0, ii = layerConfig.length; i < ii; ++i) {
+    var remove = [];
+    map.getLayers().forEach(function(lyr) {
+      if (lyr.get('title') !== null) {
+        remove.push(lyr);
+      }
+    });
+    var i, ii;
+    for (i = 0, ii = remove.length; i < ii; ++i) {
+      map.removeLayer(remove[i]);
+    }
+    for (i = 0, ii = layerConfig.length; i < ii; ++i) {
       var layer = this.generateLayerFromConfig(layerConfig[i]);
       map.addLayer(layer);
     }
