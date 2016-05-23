@@ -54,7 +54,7 @@ class Legend extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     var legends = this.state.flatLayers.map(function(layer) {
-      return (<LegendItem key={layer.get('id')} layer={layer} />);
+      return (<LegendItem key={'legend-' + layer.get('id')} layer={layer} />);
     });
     return <List subheader={formatMessage(messages.header)}>{legends}</List>;
   }
