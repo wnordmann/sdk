@@ -75,6 +75,7 @@ class LayerSelector extends React.Component {
       this.props.onChange.call(this, layers[0]);
     } else {
       this.setState({layers: layers});
+      this.props.onChange.call(this, null);
     }
   }
   _onItemChange(evt, index, value) {

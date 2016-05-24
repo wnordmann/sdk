@@ -15,13 +15,13 @@ class Button extends React.Component {
     };
   }
   showTooltip(evt) {
-    if (this.props.tooltip) {
+    if (this.props.tooltip && !this.props.disabled) {
       var left = ReactDOM.findDOMNode(evt.target).getBoundingClientRect().left;
       this.setState({left: left, showTooltip: true});
     }
   }
   hideTooltip() {
-    if (this.props.tooltip) {
+    if (this.props.tooltip && !this.props.disabled) {
       this.setState({showTooltip: false});
     }
   }

@@ -164,7 +164,11 @@ class WFST extends MapTool {
   }
   _onLayerSelectChange(layer) {
     this._select.getFeatures().clear();
-    this._setLayer(layer);
+    if (layer !== null) {
+      this._setLayer(layer);
+    } else {
+      this.setState({feature: null, layer: null});
+    }
   }
   _toggleLayer(layer) {
     if (layer === this.state.layer) {

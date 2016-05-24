@@ -145,7 +145,9 @@ class FeatureTable extends React.Component {
   }
   _setLayer(layer) {
     this._layer = layer;
-    FeatureStore.addLayer(layer, this._selectedOnly);
+    if (layer !== null) {
+      FeatureStore.addLayer(layer, this._selectedOnly);
+    }
   }
   _onLayerSelectChange(layer) {
     // TODO add clearing filter back
