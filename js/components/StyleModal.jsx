@@ -167,13 +167,23 @@ class StyleModal extends React.Component {
     var me = this;
     var sld = SLDService.createSLD(this.props.layer.get('id'), this.state.geometryType, this.state.rules, this._styleState);
     var url = this.props.layer.getSource().getUrls()[0];
-    RESTService.updateStyle(url, this.props.layer, sld, function(xmlhttp) {
-      me.props.layer.getSource().updateParams({'_olSalt': Math.random()});
-      LayerActions.styleLayer(me.props.layer);
-      me.close();
-    }, function(xmlhttp) {
-      me.setState({error: true, errorOpen: true, msg: xmlhttp.status + ' ' + xmlhttp.statusText});
-    });
+    if (this.props.layer.get('styleName')) {
+      RESTService.updateStyle(url, this.props.layer, sld, function(xmlhttp) {
+        me.props.layer.getSource().updateParams({'_olSalt': Math.random()});
+        LayerActions.styleLayer(me.props.layer);
+        me.close();
+      }, function(xmlhttp) {
+        me.setState({error: true, errorOpen: true, msg: xmlhttp.status + ' ' + xmlhttp.statusText});
+      });
+    } else {
+      RESTService.createStyle(url, this.props.layer, sld, function(xmlhttp) {
+        me.props.layer.getSource().updateParams({'STYLES': me.props.layer.get('styleName'), '_olSalt': Math.random()});
+        LayerActions.styleLayer(me.props.layer);
+        me.close();
+      }, function(xmlhttp) {
+        me.setState({error: true, errorOpen: true, msg: xmlhttp.status + ' ' + xmlhttp.statusText});
+      });
+    }
   }
   _setStyleVector() {
     var me = this;

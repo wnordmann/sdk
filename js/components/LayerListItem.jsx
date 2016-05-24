@@ -174,7 +174,7 @@ class LayerListItem extends React.Component {
       label = (<IconButton onTouchTap={this._label.bind(this)}><LabelIcon /></IconButton>);
     }
     var styling;
-    var canStyle = layer.get('styleName') && layer.get('wfsInfo') && this.props.allowStyling;
+    var canStyle = layer.get('wfsInfo') && this.props.allowStyling;
     if (canStyle) {
       styling = (<IconButton onTouchTap={this._style.bind(this)}><StyleIcon /></IconButton>);
     }

@@ -38,7 +38,7 @@ export default {
     xmlhttp.setRequestHeader('Content-Type', contentType ? contentType : 'text/xml');
     xmlhttp.onreadystatechange = function() {
       if (xmlhttp.readyState === 4) {
-        if (xmlhttp.status === 200) {
+        if (xmlhttp.status === 200 || xmlhttp.status === 201) {
           success.call(scope, xmlhttp);
         } else {
           failure.call(scope, xmlhttp);

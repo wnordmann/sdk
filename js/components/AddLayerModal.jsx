@@ -25,7 +25,6 @@ import LayerIcon from 'material-ui/lib/svg-icons/maps/layers';
 import URL from 'url-parse';
 import WMSService from '../services/WMSService.js';
 import WFSService from '../services/WFSService.js';
-import RESTService from '../services/RESTService.js';
 
 const messages = defineMessages({
   title: {
@@ -114,13 +113,6 @@ class AddLayerModal extends React.Component {
       msg: msg
     });
   }
-  _getStyleName(olLayer) {
-    var url = this._getUrl();
-    RESTService.getStyleName(url, olLayer, function(styleName) {
-      olLayer.set('styleName', styleName);
-    }, function() {
-    });
-  }
   _getWfsInfo(layer, olLayer, success, scope) {
     var me = this;
     // do a WFS DescribeFeatureType request to get wfsInfo
@@ -196,7 +188,6 @@ class AddLayerModal extends React.Component {
           serverType: 'geoserver'
         })
       });
-      this._getStyleName.call(this, olLayer);
     }
     this._getWfsInfo.call(this, layer, olLayer, this.close, this);
     map.addLayer(olLayer);
