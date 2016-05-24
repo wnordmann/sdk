@@ -38,10 +38,12 @@ class LayerStore extends EventEmitter {
     // TODO should we listen to more generic change event?
     layer.on('change:wfsInfo', this.emitChange, this);
     layer.on('change:styleName', this.emitChange, this);
+    layer.on('change:visible', this.emitChange, this);
   }
   _unbindLayer(layer) {
     layer.un('change:wfsInfo', this.emitChange, this);
     layer.un('change:styleName', this.emitChange, this);
+    layer.un('change:visible', this.emitChange, this);
   }
   _onAdd(evt) {
     this._bindLayer(evt.element);

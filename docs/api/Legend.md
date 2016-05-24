@@ -19,3 +19,10 @@ The map whose layers should show up in this legend component.
 
 type: `instanceOf ol.Map`
 
+
+### `wmsOptions`
+
+Options to send to the WMS legend. See WMSLegend component.
+
+type: `object`
+

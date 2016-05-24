@@ -14,8 +14,9 @@ import React from 'react';
 import ol from 'openlayers';
 import LayerStore from '../stores/LayerStore.js';
 import pureRender from 'pure-render-decorator';
-import LegendItem from './LegendItem.jsx';
 import List from 'material-ui/lib/lists/list';
+import ListItem from 'material-ui/lib/lists/list-item';
+import WMSLegend from './WMSLegend.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 const messages = defineMessages({
@@ -23,6 +24,11 @@ const messages = defineMessages({
     id: 'legend.header',
     description: 'Header for the legend component',
     defaultMessage: 'Legend'
+  },
+  emptyheader: {
+    id: 'legend.emptyheader',
+    description: 'Header for the legend component if no entries',
+    defaultMessage: 'No legend available'
   }
 });
 
@@ -53,14 +59,26 @@ class Legend extends React.Component {
   }
   render() {
     const {formatMessage} = this.props.intl;
-    var legends = this.state.flatLayers.map(function(layer) {
-      return (<LegendItem key={'legend-' + layer.get('id')} layer={layer} />);
-    });
-    return <List subheader={formatMessage(messages.header)}>{legends}</List>;
+    var legends = [];
+    for (var i = 0, ii = this.state.flatLayers.length; i < ii; ++i) {
+      var layer = this.state.flatLayers[i];
+      if (layer.getVisible()) {
+        if ((layer instanceof ol.layer.Tile && layer.getSource() instanceof ol.source.TileWMS) ||
+          (layer instanceof ol.layer.Image && layer.getSource() instanceof ol.source.ImageWMS)) {
+          legends.push(<ListItem key={'legend-' + layer.get('id')} primaryText={layer.get('title')} leftIcon={<WMSLegend {...this.props.wmsOptions} layer={layer} />} />);
+        }
+      }
+    }
+    var subHeader = legends.length === 0 ? formatMessage(messages.emptyheader) : formatMessage(messages.header);
+    return <List subheader={subHeader}>{legends}</List>;
   }
 }
 
 Legend.propTypes = {
+  /**
+   * Options to send to the WMS legend. See WMSLegend component.
+   */
+  wmsOptions: React.PropTypes.object,
   /**
    * The map whose layers should show up in this legend component.
    */

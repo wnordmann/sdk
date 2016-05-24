@@ -37,6 +37,10 @@ class Button extends React.Component {
 
 Button.propTypes = {
   /**
+   * Should this button be disabled?
+   */
+  disabled: React.PropTypes.bool,
+  /**
    * The tooltip to show for this button.
    */
   tooltip: React.PropTypes.string,
