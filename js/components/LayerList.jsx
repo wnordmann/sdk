@@ -136,7 +136,7 @@ class LayerList extends React.Component {
     var addLayer;
     if (this.props.addLayer) {
       addLayer = (
-          <article>
+          <article className="layer-list-add">
           <Toolbar><ToolbarGroup firstChild={true} float="right"><RaisedButton icon={<NoteAdd />} label={formatMessage(messages.addlayertext)} onTouchTap={this._showAddLayer.bind(this)} /></ToolbarGroup></Toolbar>
           <AddLayerModal srsName={this.props.map.getView().getProjection().getCode()} allowUserInput={this.props.addLayer.allowUserInput} asVector={this.props.addLayer.asVector} map={this.props.map} url={this.props.addLayer.url} ref='addlayermodal'/>
           </article>
