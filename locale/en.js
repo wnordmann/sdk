@@ -103,6 +103,7 @@ var enMessages = {
   "layerlistitem.zoomtotitle": "Zoom to layer",
   "layerselector.emptytext": "Select a layer",
   "layerselector.labeltext": "Layer",
+  "legend.emptyheader": "No legend available",
   "legend.header": "Legend",
   "login.buttontext": "Login",
   "login.logouttext": "Logout",
