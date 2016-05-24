@@ -231,7 +231,7 @@ class Chart extends React.Component {
         return (<MenuItem key={idx} value={title} primaryText={title} />);
       });
       return (
-        <div className='chart-panel' id='chart-panel'>
+        <div className='sdk-component chart' id='chart-panel'>
           <SelectField value={this.state.value} onChange={this._selectChart.bind(this)}>
             {options}
           </SelectField>
@@ -244,7 +244,7 @@ class Chart extends React.Component {
         return (<MenuItem key={idx} value={key} primaryText={key} />);
       });
       return (
-        <IconMenu {...this.props} iconButtonElement={<RaisedButton label={formatMessage(messages.dropdowntext)} />} value={this.state.chart.title} onChange={this._onClick.bind(this)}>
+        <IconMenu className='sdk-component chart' {...this.props} iconButtonElement={<RaisedButton label={formatMessage(messages.dropdowntext)} />} value={this.state.chart.title} onChange={this._onClick.bind(this)}>
           {listitems}
         </IconMenu>
       );

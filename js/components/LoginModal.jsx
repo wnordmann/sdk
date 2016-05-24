@@ -120,7 +120,7 @@ class LoginModal extends React.Component {
       <RaisedButton style={{margin: '10px 12px'}} label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
     ];
     return (
-      <Dialog actions={actions} title={formatMessage(messages.title)} open={this.state.open} onRequestClose={this.close.bind(this)}>
+      <Dialog className='sdk-component login-modal' actions={actions} title={formatMessage(messages.title)} open={this.state.open} onRequestClose={this.close.bind(this)}>
         {error}
         <TextField style={{width: '512px'}} floatingLabelText={formatMessage(messages.usernamelabel)} ref='username' /><br/>
         <TextField style={{width: '512px'}} onKeyDown={this._onEnter.bind(this)} type="password" floatingLabelText={formatMessage(messages.passwordlabel)} ref='password' />

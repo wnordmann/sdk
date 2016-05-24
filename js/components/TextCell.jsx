@@ -15,7 +15,7 @@ import FeatureStore from '../stores/FeatureStore.js';
 import {Cell} from 'fixed-data-table';
 
 export const TextCell = ({rowIndex,col, layer, sortIndexes, ...props}) => (
-  <Cell {...props}>
+  <Cell className='sdk-component text-cell' {...props}>
     {FeatureStore.getFieldValue(layer, sortIndexes ? sortIndexes[rowIndex] : rowIndex, col)}
   </Cell>
 );

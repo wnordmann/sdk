@@ -149,7 +149,7 @@ class Bookmarks extends React.Component {
         return (<MenuItem key={bookmark.name} value={bookmark.name} primaryText={bookmark.name}/>);
       }, this);
       return (
-        <IconMenu {...this.props} iconButtonElement={<RaisedButton label={formatMessage(messages.dropdowntext)} />} value={this.state.value} onChange={this._handleChange.bind(this)}>
+        <IconMenu className='sdk-component story-panel' {...this.props} iconButtonElement={<RaisedButton label={formatMessage(messages.dropdowntext)} />} value={this.state.value} onChange={this._handleChange.bind(this)}>
           {menuChildren}
         </IconMenu>
       );
@@ -162,7 +162,7 @@ class Bookmarks extends React.Component {
       });
       carouselChildren.unshift(<div key='intro'><h2>{this.props.introTitle}</h2><p>{this.props.introDescription}</p></div>);
       return (
-        <div className='story-panel'>
+        <div className='sdk-component story-panel'>
           <Slider {...this.props} arrows={true} afterChange={this._afterChange.bind(this)}>
             {carouselChildren}
           </Slider>

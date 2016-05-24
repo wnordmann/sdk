@@ -123,7 +123,7 @@ class GeocodingResults extends React.Component {
       }
     }
     return (
-      <List subheader={subheader}>
+      <List className='sdk-component geocoding-results' subheader={subheader}>
        {resultNodes}
       </List>
     );

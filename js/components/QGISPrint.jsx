@@ -337,7 +337,7 @@ class QGISPrint extends React.Component {
       );
     }
     return (
-      <span>
+      <span className='sdk-component qgis-print'>
         <IconMenu {...this.props} iconButtonElement={<RaisedButton label={formatMessage(messages.printmenutext)} />} value={this.state.layoutName}>
           {listitems}
         </IconMenu>

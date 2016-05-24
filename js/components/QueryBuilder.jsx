@@ -185,7 +185,7 @@ class QueryBuilder extends React.Component {
       />);
     }
     return (
-      <div className='querybuilder'>
+      <div className='sdk-component query-builder'>
         <LayerSelector {...this.props} onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /><br/>
         <TextField hintText={formatMessage(messages.filterplaceholder)} floatingLabelText={formatMessage(messages.filterlabel)} errorText={this.state.errorText} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} /><br/>
         <Toolbar>

@@ -244,7 +244,7 @@ class InfoPopup extends BasePopup {
       contentDiv = (<div className='popup-content' ref='content' dangerouslySetInnerHTML={{__html: content}}></div>);
     }
     return (
-      <div>
+      <div className='sdk-component info-popup'>
         <IconButton style={{float: 'right'}} ref="popupCloser" onTouchTap={this.setVisible.bind(this, false)}><CloserIcon /></IconButton>
         {contentDiv}
       </div>

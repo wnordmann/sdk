@@ -128,7 +128,7 @@ class MapConfig extends React.Component {
       info = (<Snackbar autoHideDuration={2000} message={this.state.msg} open={this.state.info} onRequestClose={this._onRequestClose.bind(this)} />);
     }
     return (
-      <ToolbarGroup>
+      <ToolbarGroup className='sdk-component map-config'>
         {info}
         <RaisedButton style={this.props.buttonStyle} tooltip={formatMessage(messages.loadtitle)} disabled={this.state.disabled} label={formatMessage(messages.loadtext)} onTouchTap={this._load.bind(this)} />
         <RaisedButton style={this.props.buttonStyle} label={formatMessage(messages.savetext)} tooltip={formatMessage(messages.savetitle)} onTouchTap={this._save.bind(this)} />

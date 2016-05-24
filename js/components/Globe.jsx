@@ -89,7 +89,7 @@ class Globe extends React.Component {
       tooltip = formatMessage(messages.globetext);
     }
     return (
-      <IconButton tooltipPosition='top-right' style={this.props.style} tooltip={tooltip} onTouchTap={this._toggle.bind(this)}>{icon}</IconButton>
+      <IconButton className='sdk-component globe' tooltipPosition='top-right' style={this.props.style} tooltip={tooltip} onTouchTap={this._toggle.bind(this)}>{icon}</IconButton>
     );
   }
 }

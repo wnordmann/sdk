@@ -8,7 +8,7 @@ var selectedLayer = map.getLayers().item(2);
 ```
 
 ```xml
-<div ref='tablePanel' id='table-panel' className='attributes-table'>
+<div ref='tablePanel' id='table-panel' className='feature-table'>
   <FeatureTable ref='table' resizeTo='table-panel' offset={[30, 30]} layer={selectedLayer} map={map} />
 </div>
 ```

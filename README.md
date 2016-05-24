@@ -29,3 +29,7 @@ In order to keep the full build (used by the QGIS Web Application Builder) up to
 
 ## npm run build
 If you run into this error: Error: EMFILE, open 'sdk/node_modules/react/package.json' run the solution from here: https://github.com/andreypopp/react-app-express/issues/1#issuecomment-34113065
+
+## Code Style
+
+All components (js/components) should have the top level class `sdk-component`, as well as a class matching their name (in all lowercase, dash-delimited).

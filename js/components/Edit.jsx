@@ -339,7 +339,7 @@ class Edit extends MapTool {
       <RaisedButton label={formatMessage(messages.closebuttontext)} onTouchTap={this.close.bind(this)} />
     ];
     return (
-      <div>
+      <div className='sdk-component edit'>
         <SelectField hintText={formatMessage(messages.nolayer)} onChange={this._onLayerChange.bind(this)} floatingLabelText={formatMessage(messages.layerlabel)} value={this._layer} ref='layer'>
           {options}
         </SelectField>

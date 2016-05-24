@@ -124,7 +124,7 @@ class Select extends MapTool {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-     <RaisedButton {...this.props} secondary={this.state.secondary} disabled={this.state.disabled} label={formatMessage(messages.menubuttontext)} tooltip={formatMessage(messages.menubuttontitle)} onTouchTap={this._selectByRectangle.bind(this)} />
+     <RaisedButton className='sdk-component select' {...this.props} secondary={this.state.secondary} disabled={this.state.disabled} label={formatMessage(messages.menubuttontext)} tooltip={formatMessage(messages.menubuttontitle)} onTouchTap={this._selectByRectangle.bind(this)} />
     );
   }
 }

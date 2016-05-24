@@ -27,7 +27,7 @@ class Button extends React.Component {
   }
   render() {
     return (
-      <span>
+      <span className='sdk-component sdk-button'>
         <RaisedButton {...this.props} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)}/>
         <Tooltip verticalPosition='bottom' style={Object.assign({left: this.state.left, boxSizing: 'border-box'}, this.props.tooltipStyle)} show={this.state.showTooltip} label={this.props.tooltip || ''} />
       </span>

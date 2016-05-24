@@ -131,7 +131,7 @@ class Playback extends React.Component {
     var minDate = new Date(this.props.minDate);
     var maxDate = new Date(this.props.maxDate);
     return (
-      <div>
+      <div className='sdk-component playback'>
         <IconButton style={{'float': 'left'}} onTouchTap={this._playPause.bind(this)}>{buttonIcon}</IconButton>
         <Slider style={{'float': 'left', width: '200px', overflow: 'hidden'}} min={this.props.minDate} max={this.props.maxDate} value={this.state.date} onChange={this._onRangeChange.bind(this)} />
         <DatePicker autoOk={true} minDate={minDate} maxDate={maxDate} style={{width: '200px', overflow: 'hidden'}} onChange={this._onDateChange.bind(this)} value={new Date(this.state.date)} />

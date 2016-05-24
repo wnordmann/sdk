@@ -132,7 +132,7 @@ class Geolocation extends React.Component {
         color = 'white';
       }
       return (
-        <IconButton tooltipPosition='top-right' style={this.props.style} tooltip={tooltip} onTouchTap={this._geolocate.bind(this)}><MyLocation color={color} /></IconButton>
+        <IconButton className='sdk-component geolocation' tooltipPosition='top-right' style={this.props.style} tooltip={tooltip} onTouchTap={this._geolocate.bind(this)}><MyLocation color={color} /></IconButton>
       );
     }
   }

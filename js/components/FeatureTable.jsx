@@ -106,7 +106,7 @@ const messages = defineMessages({
  * ```
  *
  * ```xml
- * <div ref='tablePanel' id='table-panel' className='attributes-table'>
+ * <div ref='tablePanel' id='table-panel' className='feature-table'>
  *   <FeatureTable ref='table' resizeTo='table-panel' offset={[30, 30]} layer={selectedLayer} map={map} />
  * </div>
  * ```
@@ -385,7 +385,7 @@ class FeatureTable extends React.Component {
     }
     const buttonStyle = this.props.buttonStyle;
     return (
-      <div id='attributes-table'>
+      <div id='sdk-component feature-table'>
         <div ref='form'>
           <LayerSelector {...this.props} id='table-layerSelector' ref='layerSelector' onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList} map={this.props.map} value={id} />
           <TextField floatingLabelText={formatMessage(messages.filterlabel)} id='featuretable-filter' ref='filter' onChange={this._filterByText.bind(this)} hintText={formatMessage(messages.filterplaceholder)} />

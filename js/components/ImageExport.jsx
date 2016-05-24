@@ -57,7 +57,7 @@ class ImageExport extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <RaisedButton {...this.props} icon={<CameraIcon />} label={formatMessage(messages.buttontext)} onTouchTap={this._handleClick.bind(this)} />
+      <RaisedButton className='sdk-component image-export' {...this.props} icon={<CameraIcon />} label={formatMessage(messages.buttontext)} onTouchTap={this._handleClick.bind(this)} />
     );
   }
 }

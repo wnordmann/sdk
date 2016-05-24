@@ -191,7 +191,7 @@ class AddLayer extends React.Component {
       (<RaisedButton label={formatMessage(messages.closebuttontext)} onTouchTap={this._closeDialog.bind(this)} />)
     ];
     return (
-      <RaisedButton {...this.props} icon={<UploadIcon />} label={formatMessage(messages.menutext)} onTouchTap={this._showDialog.bind(this)}>
+      <RaisedButton className='sdk-component add-layer' {...this.props} icon={<UploadIcon />} label={formatMessage(messages.menutext)} onTouchTap={this._showDialog.bind(this)}>
         <Dialog autoScrollBodyContent={true} actions={actions} open={this.state.open} onRequestClose={this._closeDialog.bind(this)} modal={true} title={formatMessage(messages.modaltitle)}>
           <GridList cols={3} cellHeight={350}>
             <GridTile>

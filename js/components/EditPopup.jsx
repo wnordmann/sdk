@@ -85,7 +85,7 @@ class EditPopup extends BasePopup {
       editForm = (<EditForm ref='editForm' feature={this.state.feature} layer={this.state.layer} onSuccess={this._onSuccess.bind(this)} />);
     }
     return (
-      <div>
+      <div className='sdk-component edit-popup'>
         <IconButton style={{float: 'right'}} ref="popupCloser" onTouchTap={this.setVisible.bind(this, false)}><CloserIcon /></IconButton>
         <div className='popup-content' ref='content'>
           {editForm}

@@ -71,7 +71,7 @@ class Geocoding extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <TextField {...this.props} ref='query' value={this.state.value} hintText={formatMessage(messages.placeholder)} onChange={this._searchAddress.bind(this)}/>
+      <TextField className='sdk-component geocoding' {...this.props} ref='query' value={this.state.value} hintText={formatMessage(messages.placeholder)} onChange={this._searchAddress.bind(this)}/>
     );
   }
 }

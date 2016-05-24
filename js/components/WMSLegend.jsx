@@ -69,7 +69,7 @@ class WMSLegend extends React.Component {
       style: params.STYLES ? params.STYLES : ''
     });
     var legendUrl = url.toString();
-    return (<img src={legendUrl} />);
+    return (<img  className='sdk-component wms-legend' src={legendUrl} />);
   }
 }
 

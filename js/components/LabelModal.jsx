@@ -147,7 +147,7 @@ class LabelModal extends React.Component {
       <RaisedButton label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
     ];
     return (
-      <Dialog autoScrollBodyContent={true} modal={true} actions={actions} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} open={this.state.open} onRequestClose={this.close.bind(this)} >
+      <Dialog className='sdk-component label-modal' autoScrollBodyContent={true} modal={true} actions={actions} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} open={this.state.open} onRequestClose={this.close.bind(this)} >
         <LabelEditor {...this.props} initialState={this._labelState} onChange={this._onChangeLabel.bind(this)} attributes={this.state.attributes} />
       </Dialog>
     );

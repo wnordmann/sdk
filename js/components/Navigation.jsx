@@ -44,7 +44,7 @@ class Navigation extends MapTool {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <RaisedButton secondary={this.state.secondary} onTouchTap={this._onClick.bind(this)} label={formatMessage(messages.buttontext)} tooltip={formatMessage(messages.buttontitle)} />
+      <RaisedButton className='sdk-component navigation' secondary={this.state.secondary} onTouchTap={this._onClick.bind(this)} label={formatMessage(messages.buttontext)} tooltip={formatMessage(messages.buttontitle)} />
     );
   }
 }

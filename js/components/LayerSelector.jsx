@@ -92,7 +92,7 @@ class LayerSelector extends React.Component {
       );
     });
     return (
-      <SelectField {...this.props} floatingLabelText={formatMessage(messages.labeltext)} hintText={formatMessage(messages.emptytext)} value={this.state.value} onChange={this._onItemChange.bind(this)}>
+      <SelectField className='layer-selector' {...this.props} floatingLabelText={formatMessage(messages.labeltext)} hintText={formatMessage(messages.emptytext)} value={this.state.value} onChange={this._onItemChange.bind(this)}>
         {selectItems}
       </SelectField>
     );

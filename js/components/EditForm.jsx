@@ -124,11 +124,13 @@ class EditForm extends React.Component {
       }
     }
     return (
-      <div className='edit-form'>
+      <div className='sdk-component edit-form'>
         <span className='edit-form-fid'>{fid}</span><br/>
         {inputs}<br/>
         {error}
-        <RaisedButton ref='saveButton' label={formatMessage(messages.save)} onTouchTap={this._save.bind(this)} />
+        <div className='edit-form-submit'>
+          <RaisedButton ref='saveButton' label={formatMessage(messages.save)} onTouchTap={this._save.bind(this)} />
+        </div>
       </div>
     );
   }

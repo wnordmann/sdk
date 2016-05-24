@@ -286,7 +286,7 @@ class AddLayerModal extends React.Component {
       <RaisedButton label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
     ];
     return (
-      <Dialog actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title)} open={this.state.open} onRequestClose={this.close.bind(this)}>
+      <Dialog className='sdk-component add-layer-modal' actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title)} open={this.state.open} onRequestClose={this.close.bind(this)}>
         {input}
         {layers}
         {error}
