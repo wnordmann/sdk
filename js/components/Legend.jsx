@@ -70,7 +70,12 @@ class Legend extends React.Component {
       }
     }
     var subHeader = legends.length === 0 ? formatMessage(messages.emptyheader) : formatMessage(messages.header);
-    return <List className='sdk-component legend' subheader={subHeader}>{legends}</List>;
+    return (
+      <div className='sdk-component legend'>
+        <div className='legend-header'>{subHeader}</div>
+        <List className='legend-list'>{legends}</List>
+      </div>
+    );
   }
 }
 

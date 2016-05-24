@@ -148,8 +148,9 @@ class LayerList extends React.Component {
     return (
       <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} className={'sdk-component layer-list ' + className}>
         <IconButton className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={onClick}><LayersIcon /></IconButton>
-        <div className="layer-tree-panel clearfix">
-          <List subheader={tipLabel}>
+        <div className='layer-tree-panel clearfix'>
+          <div className='layer-list-header'>{tipLabel}</div>
+          <List className='layer-list-list'>
             {this.renderLayers(layers)}
           </List>
           {addLayer}
