@@ -267,7 +267,7 @@ class AddLayerModal extends React.Component {
       error = (<Snackbar
         autoHideDuration={5000}
         style={{transitionProperty : 'none'}}
-        bodyStyle={{height: 'auto', backgroundColor: 'rgba(255, 0, 0, 0.8)'}} open={this.state.errorOpen}
+        bodyStyle={{lineHeight: '24px', height: 'auto', backgroundColor: 'rgba(255, 0, 0, 0.8)'}} open={this.state.errorOpen}
         message={formatMessage(messages.errormsg, {msg: this.state.msg})}
         onRequestClose={this._handleRequestClose.bind(this)}
       />);
