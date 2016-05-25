@@ -20,7 +20,7 @@ import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LayerStore from './LayerStore.js';
 import WFSService from '../services/WFSService.js';
 
-const maxFeatures = 50;
+const maxFeatures = 100;
 
 class FeatureStore extends EventEmitter {
   constructor() {
@@ -243,6 +243,8 @@ class FeatureStore extends EventEmitter {
     var failure = function(xmlhttp, exception) {
       if (startIndex === 0) {
         me._setFeatures(layer, []);
+      } else {
+        me._appendFeatures(layer, new Array(maxFeatures));
       }
       if (onFailure) {
         onFailure(xmlhttp, exception);
@@ -461,7 +463,9 @@ AppDispatcher.register((payload) => {
       _FeatureStore.setSelection(action.layer, action.features, action.clear);
       break;
     case SelectConstants.TOGGLE_FEATURE:
-      _FeatureStore.toggleFeature(action.layer, action.feature);
+      if (action.feature) {
+        _FeatureStore.toggleFeature(action.layer, action.feature);
+      }
       break;
     case LayerConstants.REMOVE_LAYER:
       _FeatureStore.removeLayer(action.layer);
