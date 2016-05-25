@@ -220,7 +220,6 @@ class InfoPopup extends BasePopup {
       });
       this._fetchData(evt, popupTexts, function() {
         if (popupTexts.length || me._noFeaturesFound) {
-          me.overlayPopup.setPosition(coord);
           if (popupTexts.length === 0) {
             popupTexts.push(formatMessage(messages.nofeatures));
           }
@@ -229,6 +228,7 @@ class InfoPopup extends BasePopup {
             contentAsObject: me._contentAsObject
           });
           me.setVisible(true);
+          me.overlayPopup.setPosition(coord);
         } else {
           me.setVisible(false);
         }
