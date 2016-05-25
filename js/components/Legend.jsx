@@ -18,6 +18,7 @@ import List from 'material-ui/lib/lists/list';
 import ListItem from 'material-ui/lib/lists/list-item';
 import WMSLegend from './WMSLegend.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import './Legend.css';
 
 const messages = defineMessages({
   header: {

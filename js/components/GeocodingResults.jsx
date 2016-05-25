@@ -20,6 +20,7 @@ import GeocodingConstants from '../constants/GeocodingConstants.js';
 import GeocodingActions from '../actions/GeocodingActions.js';
 import pureRender from 'pure-render-decorator';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import './GeocodingResults.css';
 
 const messages = defineMessages({
   noresults: {

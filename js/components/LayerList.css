@@ -23,6 +23,11 @@
 .layerlistbutton button:focus, .layerlistbutton button:hover {
   background-color: white;
 }
+.layer-list-header {
+  color: rgba(0,0,0,0.54);
+  background-color: white;
+  padding: 16px;
+}
 .layer-tree-panel {
   padding-right: 30px;
   border: 1px solid #cccccc;
