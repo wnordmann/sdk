@@ -55,6 +55,14 @@ class LayerStore extends EventEmitter {
     layer.un('change:wfsInfo', this.emitChange, this);
     layer.un('change:styleName', this.emitChange, this);
     layer.un('change:visible', this.emitChange, this);
+    if (!(layer instanceof ol.layer.Group)) {
+      var source = layer.getSource();
+      if (source instanceof ol.source.Tile) {
+        source.un('tileloaderror', this._onError, this);
+      } else if (source instanceof ol.source.Image) {
+        source.un('imageloaderror', this._onError, this);
+      }
+    }
   }
   _onAdd(evt) {
     this._bindLayer(evt.element);
