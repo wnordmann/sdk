@@ -73,11 +73,36 @@ class Globe extends React.Component {
     this._ol3d.setEnabled(!this.state.globe);
     var globe = !this.state.globe;
     if (globe) {
+      this._hideOrShowScaleBar.call(this, {target: this.props.map.getView()});
+      this.props.map.getView().on('change:resolution', this._hideOrShowScaleBar, this);
       ToolActions.disableAllTools();
     } else {
+      this.props.map.getView().un('change:resolution', this._hideOrShowScaleBar, this);
+      this._showScaleBar();
       ToolActions.enableAllTools();
     }
     this.setState({globe: globe});
+  }
+  _hideOrShowScaleBar(evt) {
+    if (evt.target.getProjection().getCode() === 'EPSG:3857') {
+      if (evt.target.getResolution() > this.props.hideScalebar) {
+        this._hideScaleBar();
+      } else {
+        this._showScaleBar();
+      }
+    }
+  }
+  _hideScaleBar() {
+    var scaleLine = document.getElementsByClassName('ol-scale-line');
+    if (scaleLine.length === 1) {
+      scaleLine[0].style.visibility = 'hidden';
+    }
+  }
+  _showScaleBar() {
+    var scaleLine = document.getElementsByClassName('ol-scale-line');
+    if (scaleLine.length === 1) {
+      scaleLine[0].style.visibility = 'inherit';
+    }
   }
   render() {
     const {formatMessage} = this.props.intl;
@@ -96,6 +121,10 @@ class Globe extends React.Component {
 
 Globe.propTypes = {
   /**
+   * Resolution at which to hide the scalebar in 3D mode
+   */
+  hideScalebar: React.PropTypes.number,
+  /**
    * The ol3 map instance to work on.
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
@@ -110,6 +139,7 @@ Globe.propTypes = {
 };
 
 Globe.defaultProps = {
+  hideScalebar: 78271,
   style: {
     background: 'rgba(0,60,136,.7)',
     borderRadius: '2px',

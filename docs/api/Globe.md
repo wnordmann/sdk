@@ -19,6 +19,14 @@ The HTML page of the application needs to include a script tag to cesium:
 Properties
 ----------
 
+### `hideScalebar`
+
+Resolution at which to hide the scalebar in 3D mode
+
+type: `number`
+defaultValue: `78271`
+
+
 ### `intl`
 
 i18n message strings. Provided through the application through context.
