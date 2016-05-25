@@ -21,7 +21,6 @@ import DeleteIcon from 'material-ui/lib/svg-icons/action/delete';
 import TextField from 'material-ui/lib/text-field';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
-import './FilterModal.css';
 
 const messages = defineMessages({
   inputlabel: {

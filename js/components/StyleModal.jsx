@@ -24,7 +24,6 @@ import RuleEditor from './RuleEditor.jsx';
 import SLDService from '../services/SLDService.js';
 import RESTService from '../services/RESTService.js';
 import Snackbar from 'material-ui/lib/snackbar';
-import './StyleModal.css';
 
 const messages = defineMessages({
   title: {

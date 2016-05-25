@@ -17,7 +17,6 @@ import Snackbar from 'material-ui/lib/snackbar';
 import RaisedButton from 'material-ui/lib/raised-button';
 import TextField from 'material-ui/lib/text-field';
 import WFSService from '../services/WFSService.js';
-import './EditForm.css';
 
 const messages = defineMessages({
   save: {

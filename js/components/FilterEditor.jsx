@@ -16,7 +16,6 @@ import TextField from 'material-ui/lib/text-field';
 import filtrex from 'filtrex';
 import pureRender from 'pure-render-decorator';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import './FilterEditor.css';
 
 const messages = defineMessages({
   filterlabel: {

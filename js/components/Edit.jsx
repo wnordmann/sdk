@@ -26,7 +26,6 @@ import {transformColor} from '../util.js';
 import ColorPicker from 'react-color';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
-import './Edit.css';
 
 const NEW_ATTR_PREFIX = 'new-attr-';
 const ID_PREFIX = 'sdk-edit-';

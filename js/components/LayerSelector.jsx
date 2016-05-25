@@ -17,7 +17,6 @@ import pureRender from 'pure-render-decorator';
 import SelectField from 'material-ui/lib/select-field';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import './LayerSelector.css';
 
 const messages = defineMessages({
   emptytext: {

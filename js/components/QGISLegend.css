@@ -19,12 +19,3 @@
 .legend.shown .legend-panel {
   display: block;
 }
-.legend button {
-  color: white;
-  float: right;
-  width: 38px;
-  height: 38px;
-  background-color: #7b98bc;
-  border: 3px solid rgba(225, 225, 220, 0.8);
-  padding: 2px;
-}

@@ -32,7 +32,6 @@ import DeleteIcon from 'material-ui/lib/svg-icons/action/delete';
 import EditIcon from 'material-ui/lib/svg-icons/editor/mode-edit';
 import {injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
-import './LayerListItem.css';
 
 /**
  * An item in the LayerList component.

@@ -21,7 +21,6 @@ import JSPDF from 'jspdf-browserify';
 import LinearProgress from 'material-ui/lib/linear-progress';
 import Snackbar from 'material-ui/lib/snackbar';
 import TextField from 'material-ui/lib/text-field';
-import './QGISPrint.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 
