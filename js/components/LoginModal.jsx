@@ -18,7 +18,6 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import LoginActions from '../actions/LoginActions.js';
 import Snackbar from 'material-ui/lib/snackbar';
 import pureRender from 'pure-render-decorator';
-import './LoginModal.css';
 
 const messages = defineMessages({
   title: {
