@@ -9,3 +9,21 @@
 .row-selected .public_fixedDataTableCell_main {
   background-color: yellow;
 }
+.feature-table-options {
+  padding-left: 36px;
+  padding-bottom: 12px;
+}
+.feature-table-selector {
+  display: inline-block;
+  position: relative;
+  top: 0px;
+  padding-right: 12px;
+  padding-bottom: 12px;
+}
+.feature-table-filter {
+  display: inline-block;
+  position: relative;
+  top: 8px;
+  
+  padding-bottom: 12px;
+}

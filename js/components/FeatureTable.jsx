@@ -387,10 +387,16 @@ class FeatureTable extends React.Component {
     return (
       <div id='sdk-component feature-table'>
         <div ref='form'>
-          <LayerSelector {...this.props} id='table-layerSelector' ref='layerSelector' onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList} map={this.props.map} value={id} />
-          <TextField floatingLabelText={formatMessage(messages.filterlabel)} id='featuretable-filter' ref='filter' onChange={this._filterByText.bind(this)} hintText={formatMessage(messages.filterplaceholder)} />
-          <Checkbox label={formatMessage(messages.onlyselected)} id='featuretable-onlyselected' checked={this._selectedOnly} onCheck={this._filter.bind(this)} />
-          <Toolbar>
+          <div className='feature-table-options'>
+            <div className='feature-table-selector'>
+              <LayerSelector {...this.props} id='table-layerSelector' ref='layerSelector' onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList} map={this.props.map} value={id} />
+            </div>
+            <div className='feature-table-filter'>
+              <TextField floatingLabelText={formatMessage(messages.filterlabel)} id='featuretable-filter' ref='filter' onChange={this._filterByText.bind(this)} hintText={formatMessage(messages.filterplaceholder)} />
+            </div>
+            <Checkbox label={formatMessage(messages.onlyselected)} id='featuretable-onlyselected' checked={this._selectedOnly} onCheck={this._filter.bind(this)} />
+          </div>
+          <Toolbar className='feature-table-toolbar'>
             <RaisedButton style={buttonStyle} icon={<ActionSearch />} label={formatMessage(messages.zoombuttontext)} onTouchTap={this._zoomSelected.bind(this)} />
             <RaisedButton style={buttonStyle} icon={<ActionDelete />} label={formatMessage(messages.clearbuttontext)} onTouchTap={this._clearSelected.bind(this)} />
             <RaisedButton style={buttonStyle} icon={<ArrowUp />} label={formatMessage(messages.movebuttontext)} onTouchTap={this._moveSelectedToTop.bind(this)} />
@@ -405,7 +411,8 @@ class FeatureTable extends React.Component {
           onRowClick={this._onRowClick.bind(this)}
           rowsCount={this.state.rowCount}
           width={this.state.gridWidth}
-          height={this.state.gridHeight}>
+          height={this.state.gridHeight}
+          className='feature-table-table'>
           {columnNodes}
         </Table>
       </div>);
