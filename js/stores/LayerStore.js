@@ -39,6 +39,17 @@ class LayerStore extends EventEmitter {
     layer.on('change:wfsInfo', this.emitChange, this);
     layer.on('change:styleName', this.emitChange, this);
     layer.on('change:visible', this.emitChange, this);
+    if (!(layer instanceof ol.layer.Group)) {
+      var source = layer.getSource();
+      if (source instanceof ol.source.Tile) {
+        source.on('tileloaderror', this._onError, this);
+      } else if (source instanceof ol.source.Image) {
+        source.on('imageloaderror', this._onError, this);
+      }
+    }
+  }
+  _onError() {
+    this.emit('ERROR');
   }
   _unbindLayer(layer) {
     layer.un('change:wfsInfo', this.emitChange, this);
@@ -96,8 +107,14 @@ class LayerStore extends EventEmitter {
   addChangeListener(cb) {
     this.on('CHANGE', cb);
   }
+  addErrorListener(cb) {
+    this.on('ERROR', cb);
+  }
   removeChangeListener(cb) {
     this.removeListener('CHANGE', cb);
+  }
+  removeErrorListener(cb) {
+    this.removeListener('ERROR', cb);
   }
 }
 
