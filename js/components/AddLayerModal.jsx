@@ -25,6 +25,7 @@ import LayerIcon from 'material-ui/lib/svg-icons/maps/layers';
 import URL from 'url-parse';
 import WMSService from '../services/WMSService.js';
 import WFSService from '../services/WFSService.js';
+import './AddLayerModal.css';
 
 const messages = defineMessages({
   title: {
@@ -128,9 +129,9 @@ class AddLayerModal extends React.Component {
   _getLayerTitle(layer) {
     const {formatMessage} = this.props.intl;
     if (layer.Title === '') {
-      return formatMessage(messages.nolayertitle);
+      return {empty: true, title: formatMessage(messages.nolayertitle)};
     } else {
-      return layer.Title;
+      return {empty: false, title: layer.Title};
     }
   }
   _onLayerClick(layer) {
@@ -148,7 +149,7 @@ class AddLayerModal extends React.Component {
     if (this.props.asVector) {
       var me = this;
       olLayer = new ol.layer.Vector({
-        title: this._getLayerTitle(layer),
+        title: this._getLayerTitle(layer).title,
         id: layer.Name,
         name: layer.Name,
         isWFST: true,
@@ -171,7 +172,7 @@ class AddLayerModal extends React.Component {
       });
     } else {
       olLayer = new ol.layer.Tile({
-        title: this._getLayerTitle(layer),
+        title: this._getLayerTitle(layer).title,
         id: layer.Name,
         name: layer.Name,
         isRemovable: true,
@@ -239,8 +240,15 @@ class AddLayerModal extends React.Component {
     } else if (layer.Name) {
       leftIcon = <LayerIcon />;
     }
+    var layerTitle = this._getLayerTitle(layer);
+    var primaryText;
+    if (layerTitle.empty) {
+      primaryText = (<div className='layer-title-empty'>{layerTitle.title}</div>);
+    } else {
+      primaryText = layerTitle.title;
+    }
     return (
-      <ListItem onTouchTap={onTouchTap} leftIcon={leftIcon} initiallyOpen={true} key={layer.Name} primaryText={this._getLayerTitle(layer)} secondaryText={layer.Name} nestedItems={childList} />
+      <ListItem onTouchTap={onTouchTap} leftIcon={leftIcon} initiallyOpen={true} key={layer.Name} primaryText={primaryText} secondaryText={layer.Name} nestedItems={childList} />
     );
   }
   open() {
