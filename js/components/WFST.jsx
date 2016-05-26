@@ -129,7 +129,8 @@ class WFST extends MapTool {
     this._select = new ol.interaction.Select();
     var features = this._select.getFeatures();
     this._modify = new ol.interaction.Modify({
-      features: features
+      features: features,
+      wrapX: false
     });
     features.on('add', this._onSelectAdd, this);
     features.on('remove', this._onSelectRemove, this);
