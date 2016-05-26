@@ -145,11 +145,12 @@ class AddLayerModal extends React.Component {
       EX_GeographicBoundingBox[3] = Math.min(85, EX_GeographicBoundingBox[3]);
     }
     var extent = ol.proj.transformExtent(layer.EX_GeographicBoundingBox, 'EPSG:4326', view.getProjection());
-    var olLayer;
+    var olLayer, titleObj = this._getLayerTitle(layer);
     if (this.props.asVector) {
       var me = this;
       olLayer = new ol.layer.Vector({
-        title: this._getLayerTitle(layer).title,
+        title: titleObj.title,
+        emptyTitle: titleObj.empty,
         id: layer.Name,
         name: layer.Name,
         isWFST: true,
@@ -172,7 +173,8 @@ class AddLayerModal extends React.Component {
       });
     } else {
       olLayer = new ol.layer.Tile({
-        title: this._getLayerTitle(layer).title,
+        title: titleObj.title,
+        emptyTitle: titleObj.empty,
         id: layer.Name,
         name: layer.Name,
         isRemovable: true,

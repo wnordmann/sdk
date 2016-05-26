@@ -194,7 +194,7 @@ class LayerListItem extends React.Component {
     if (layer.get('type') === 'base') {
       input = (<RadioButton checked={this.state.checked} label={this.props.title} value={this.props.title} onCheck={this._handleChange.bind(this)} />);
     } else {
-      input = (<Checkbox checked={this.state.checked} label={this.props.title} onCheck={this._handleChange.bind(this)} />);
+      input = (<Checkbox checked={this.state.checked} label={this.props.title} labelStyle={this.props.layer.get('emptyTitle') ? {fontStyle: 'italic'} : undefined} onCheck={this._handleChange.bind(this)} />);
     }
     var labelModal, filterModal, styleModal;
     if (this.props.layer instanceof ol.layer.Vector) {
