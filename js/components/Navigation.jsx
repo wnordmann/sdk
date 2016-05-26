@@ -44,7 +44,7 @@ class Navigation extends MapTool {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <RaisedButton className='sdk-component navigation' secondary={this.state.secondary} onTouchTap={this._onClick.bind(this)} label={formatMessage(messages.buttontext)} tooltip={formatMessage(messages.buttontitle)} />
+      <RaisedButton className='sdk-component navigation' {...this.props} secondary={this.state.secondary} onTouchTap={this._onClick.bind(this)} label={formatMessage(messages.buttontext)} tooltip={formatMessage(messages.buttontitle)} />
     );
   }
 }
@@ -58,6 +58,12 @@ Navigation.propTypes = {
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
+};
+
+Navigation.defaultProps = {
+  style: {
+    margin: '10px 12px'
+  }
 };
 
 export default injectIntl(Navigation);

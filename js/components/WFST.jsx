@@ -389,13 +389,13 @@ class WFST extends MapTool {
           {layerSelector}
           <Toolbar>
             <ToolbarGroup>
-              <RaisedButton secondary={this.state.drawSecondary} tooltipStyle={{left: 0}} tooltip={formatMessage(messages.drawfeaturetitle)} style={buttonStyle} label={formatMessage(messages.drawfeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._drawFeature.bind(this)} icon={<DrawIcon />} />
+              <RaisedButton secondary={this.state.drawSecondary} tooltip={formatMessage(messages.drawfeaturetitle)} style={buttonStyle} label={formatMessage(messages.drawfeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._drawFeature.bind(this)} icon={<DrawIcon />} />
             </ToolbarGroup>
             <ToolbarGroup>
-              <RaisedButton secondary={this.state.modifySecondary} tooltipStyle={{left: 0}} tooltip={formatMessage(messages.modifyfeaturetitle)} style={buttonStyle} label={formatMessage(messages.modifyfeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._modifyFeature.bind(this)} icon={<EditIcon />} />
+              <RaisedButton secondary={this.state.modifySecondary} tooltip={formatMessage(messages.modifyfeaturetitle)} style={buttonStyle} label={formatMessage(messages.modifyfeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._modifyFeature.bind(this)} icon={<EditIcon />} />
             </ToolbarGroup>
             <ToolbarGroup>
-              <RaisedButton tooltipStyle={{left: 0}} tooltip={formatMessage(messages.deletefeaturetitle)} style={buttonStyle} label={formatMessage(messages.deletefeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._deleteFeature.bind(this)} icon={<DeleteIcon />} />
+              <RaisedButton tooltip={formatMessage(messages.deletefeaturetitle)} style={buttonStyle} label={formatMessage(messages.deletefeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._deleteFeature.bind(this)} icon={<DeleteIcon />} />
             </ToolbarGroup>
           </Toolbar>
           {error}

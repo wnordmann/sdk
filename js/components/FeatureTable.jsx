@@ -384,7 +384,6 @@ class FeatureTable extends React.Component {
         );
     }
     const buttonStyle = this.props.buttonStyle;
-    var tooltipStyle = {top: 100};
     return (
       <div id='sdk-component feature-table'>
         <div ref='form'>
@@ -398,9 +397,9 @@ class FeatureTable extends React.Component {
             <Checkbox label={formatMessage(messages.onlyselected)} id='featuretable-onlyselected' disabled={!this._layer} checked={this._selectedOnly} onCheck={this._filter.bind(this)} />
           </div>
           <Toolbar className='feature-table-toolbar'>
-            <RaisedButton disabled={!this._layer} style={buttonStyle} icon={<ActionSearch />} label={formatMessage(messages.zoombuttontext)} tooltipStyle={tooltipStyle} tooltip={formatMessage(messages.zoombuttontitle)} onTouchTap={this._zoomSelected.bind(this)} />
-            <RaisedButton disabled={!this._layer} style={buttonStyle} icon={<ActionDelete />} label={formatMessage(messages.clearbuttontext)} tooltipStyle={tooltipStyle} tooltip={formatMessage(messages.clearbuttontitle)} onTouchTap={this._clearSelected.bind(this)} />
-            <RaisedButton disabled={!this._layer} style={buttonStyle} icon={<ArrowUp />} label={formatMessage(messages.movebuttontext)} tooltipStyle={tooltipStyle} tooltip={formatMessage(messages.movebuttontitle)} onTouchTap={this._moveSelectedToTop.bind(this)} />
+            <RaisedButton disabled={!this._layer} style={buttonStyle} icon={<ActionSearch />} label={formatMessage(messages.zoombuttontext)} tooltip={formatMessage(messages.zoombuttontitle)} onTouchTap={this._zoomSelected.bind(this)} />
+            <RaisedButton disabled={!this._layer} style={buttonStyle} icon={<ActionDelete />} label={formatMessage(messages.clearbuttontext)} tooltip={formatMessage(messages.clearbuttontitle)} onTouchTap={this._clearSelected.bind(this)} />
+            <RaisedButton disabled={!this._layer} style={buttonStyle} icon={<ArrowUp />} label={formatMessage(messages.movebuttontext)} tooltip={formatMessage(messages.movebuttontitle)} onTouchTap={this._moveSelectedToTop.bind(this)} />
           </Toolbar>
         </div>
         <Table

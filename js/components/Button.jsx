@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import RaisedButton from 'material-ui/lib/raised-button';
 import Tooltip from 'material-ui/lib/tooltip';
+import './Button.css';
 
 /**
  * Button with built-in tooltip.
@@ -11,13 +12,11 @@ class Button extends React.Component {
     super(props);
     this.state = {
       showTooltip: false,
-      left: 0
     };
   }
   showTooltip(evt) {
     if (this.props.tooltip && !this.props.disabled) {
-      var left = ReactDOM.findDOMNode(evt.target).getBoundingClientRect().left;
-      this.setState({left: left, showTooltip: true});
+      this.setState({showTooltip: true});
     }
   }
   hideTooltip() {
@@ -27,9 +26,9 @@ class Button extends React.Component {
   }
   render() {
     return (
-      <span className='sdk-component sdk-button'>
-        <RaisedButton {...this.props} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)}/>
-        <Tooltip verticalPosition='bottom' style={Object.assign({left: this.state.left, boxSizing: 'border-box'}, this.props.tooltipStyle)} show={this.state.showTooltip} label={this.props.tooltip || ''} />
+      <span className='sdk-component sdk-button' >
+        <RaisedButton ref='button' {...this.props} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)}/>
+        <Tooltip verticalPosition='bottom' style={Object.assign({left: 12, top: 20, boxSizing: 'border-box'}, this.props.tooltipStyle)} show={this.state.showTooltip} label={this.props.tooltip || ''} />
       </span>
     );
   }
