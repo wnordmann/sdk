@@ -6,6 +6,13 @@ A div that can render the OpenLayers map object. It will also take care of notif
 Properties
 ----------
 
+### `className`
+
+Css class name to apply on the map div.
+
+type: `string`
+
+
 ### `extent`
 
 Extent to fit on the map initially.

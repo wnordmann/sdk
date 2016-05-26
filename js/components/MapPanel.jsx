@@ -15,6 +15,7 @@ import ReactDOM from 'react-dom';
 import LayerStore from '../stores/LayerStore.js';
 import Snackbar from 'material-ui/lib/snackbar';
 import ol from 'openlayers';
+import classNames from 'classnames';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 const messages = defineMessages({
@@ -127,7 +128,7 @@ class MapPanel extends React.Component {
       />);
     }
     return (
-      <div ref='map' className='sdk-component map-panel' {...this.props}>{error}</div>
+      <div ref='map' {...this.props} className={classNames('sdk-component map-panel', this.props.className)}>{error}</div>
     );
   }
 }
@@ -137,6 +138,10 @@ MapPanel.propTypes = {
    * The map to use for this map panel.
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * Css class name to apply on the map div.
+   */
+  className: React.PropTypes.string,
   /**
    * Extent to fit on the map initially.
    */

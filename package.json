@@ -36,6 +36,7 @@
     "blueimp-canvas-to-blob": "2.2.2",
     "browser-filesaver": "^1.1.0",
     "c3-windows": "^0.4.11-rc4",
+    "classnames": "^2.2.5",
     "debounce": "^1.0.0",
     "filtrex": "^0.5.4",
     "fixed-data-table": "0.6.0",
