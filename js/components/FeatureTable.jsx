@@ -16,7 +16,7 @@ import ol from 'openlayers';
 import debounce from  'debounce';
 import FixedDataTable from 'fixed-data-table';
 import './fixed-data-table.css';
-import RaisedButton from 'material-ui/lib/raised-button';
+import RaisedButton from './Button.jsx';
 import ActionSearch from 'material-ui/lib/svg-icons/action/search';
 import ActionDelete from 'material-ui/lib/svg-icons/action/delete';
 import ArrowUp from 'material-ui/lib/svg-icons/hardware/keyboard-arrow-up';
@@ -384,6 +384,7 @@ class FeatureTable extends React.Component {
         );
     }
     const buttonStyle = this.props.buttonStyle;
+    var tooltipStyle = {top: 100};
     return (
       <div id='sdk-component feature-table'>
         <div ref='form'>
@@ -397,9 +398,9 @@ class FeatureTable extends React.Component {
             <Checkbox label={formatMessage(messages.onlyselected)} id='featuretable-onlyselected' checked={this._selectedOnly} onCheck={this._filter.bind(this)} />
           </div>
           <Toolbar className='feature-table-toolbar'>
-            <RaisedButton style={buttonStyle} icon={<ActionSearch />} label={formatMessage(messages.zoombuttontext)} onTouchTap={this._zoomSelected.bind(this)} />
-            <RaisedButton style={buttonStyle} icon={<ActionDelete />} label={formatMessage(messages.clearbuttontext)} onTouchTap={this._clearSelected.bind(this)} />
-            <RaisedButton style={buttonStyle} icon={<ArrowUp />} label={formatMessage(messages.movebuttontext)} onTouchTap={this._moveSelectedToTop.bind(this)} />
+            <RaisedButton style={buttonStyle} icon={<ActionSearch />} label={formatMessage(messages.zoombuttontext)} tooltipStyle={tooltipStyle} tooltip={formatMessage(messages.zoombuttontitle)} onTouchTap={this._zoomSelected.bind(this)} />
+            <RaisedButton style={buttonStyle} icon={<ActionDelete />} label={formatMessage(messages.clearbuttontext)} tooltipStyle={tooltipStyle} tooltip={formatMessage(messages.clearbuttontitle)} onTouchTap={this._clearSelected.bind(this)} />
+            <RaisedButton style={buttonStyle} icon={<ArrowUp />} label={formatMessage(messages.movebuttontext)} tooltipStyle={tooltipStyle} tooltip={formatMessage(messages.movebuttontitle)} onTouchTap={this._moveSelectedToTop.bind(this)} />
           </Toolbar>
         </div>
         <Table
