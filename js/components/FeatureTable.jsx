@@ -393,14 +393,14 @@ class FeatureTable extends React.Component {
               <LayerSelector {...this.props} id='table-layerSelector' ref='layerSelector' onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList} map={this.props.map} value={id} />
             </div>
             <div className='feature-table-filter'>
-              <TextField floatingLabelText={formatMessage(messages.filterlabel)} id='featuretable-filter' ref='filter' onChange={this._filterByText.bind(this)} hintText={formatMessage(messages.filterplaceholder)} />
+              <TextField floatingLabelText={formatMessage(messages.filterlabel)} id='featuretable-filter' disabled={!this._layer} ref='filter' onChange={this._filterByText.bind(this)} hintText={formatMessage(messages.filterplaceholder)} />
             </div>
-            <Checkbox label={formatMessage(messages.onlyselected)} id='featuretable-onlyselected' checked={this._selectedOnly} onCheck={this._filter.bind(this)} />
+            <Checkbox label={formatMessage(messages.onlyselected)} id='featuretable-onlyselected' disabled={!this._layer} checked={this._selectedOnly} onCheck={this._filter.bind(this)} />
           </div>
           <Toolbar className='feature-table-toolbar'>
-            <RaisedButton style={buttonStyle} icon={<ActionSearch />} label={formatMessage(messages.zoombuttontext)} tooltipStyle={tooltipStyle} tooltip={formatMessage(messages.zoombuttontitle)} onTouchTap={this._zoomSelected.bind(this)} />
-            <RaisedButton style={buttonStyle} icon={<ActionDelete />} label={formatMessage(messages.clearbuttontext)} tooltipStyle={tooltipStyle} tooltip={formatMessage(messages.clearbuttontitle)} onTouchTap={this._clearSelected.bind(this)} />
-            <RaisedButton style={buttonStyle} icon={<ArrowUp />} label={formatMessage(messages.movebuttontext)} tooltipStyle={tooltipStyle} tooltip={formatMessage(messages.movebuttontitle)} onTouchTap={this._moveSelectedToTop.bind(this)} />
+            <RaisedButton disabled={!this._layer} style={buttonStyle} icon={<ActionSearch />} label={formatMessage(messages.zoombuttontext)} tooltipStyle={tooltipStyle} tooltip={formatMessage(messages.zoombuttontitle)} onTouchTap={this._zoomSelected.bind(this)} />
+            <RaisedButton disabled={!this._layer} style={buttonStyle} icon={<ActionDelete />} label={formatMessage(messages.clearbuttontext)} tooltipStyle={tooltipStyle} tooltip={formatMessage(messages.clearbuttontitle)} onTouchTap={this._clearSelected.bind(this)} />
+            <RaisedButton disabled={!this._layer} style={buttonStyle} icon={<ArrowUp />} label={formatMessage(messages.movebuttontext)} tooltipStyle={tooltipStyle} tooltip={formatMessage(messages.movebuttontitle)} onTouchTap={this._moveSelectedToTop.bind(this)} />
           </Toolbar>
         </div>
         <Table
