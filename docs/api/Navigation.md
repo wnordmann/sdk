@@ -13,6 +13,13 @@ i18n message strings. Provided through the application through context.
 type: `custom`
 
 
+### `style`
+
+defaultValue: `{
+  margin: '10px 12px'
+}`
+
+
 ### `toggleGroup`
 
 The toggleGroup to use. When this tool is activated, all other tools in the same toggleGroup will be deactivated.
