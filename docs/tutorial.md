@@ -87,31 +87,26 @@ In the render function of our application, we need to add the definition of our 
 The feature table needs to get configured with at least a layer and a map:
 
 ```html
-  <MapPanel id='map' map={map} />
+  <MapPanel id='map' className='row' map={map} />
   <div><LayerList map={map} /></div>
-  <div id='table'><FeatureTable map={map} layer={map.getLayers().item(1)} /></div>
+  <div id='zoom-buttons'><Zoom map={map} /></div>
+  <div id='table' className='row'><FeatureTable resizeTo='table' map={map} layer={map.getLayers().item(1)} /></div>
 ```
 
 Our div with id ```table``` does not yet have a size, so open up ```app.css``` and give it some space on the page:
 
 ```css
 #map {
-  width: 100%;
-  height: 60%;
+  height: 50%;
 }
 #table {
-  width: 100%;
-  height: 40%;
+  height: 50%;
 }
 ```
 
-We have reduced the map div to 60% height and allocated the other 40% for the table.
+We have reduced the map div to 50% height and allocated the other 50% for the table.
 
-If you reload the debug server at http://localhost:3000/ you'll see that we now have a feature table at the bottom of the page. The width of the feature table however is not optimal. Let's define that we want our feature table to resize to the table div, for this we use the ```resizeTo``` property to point to the id of the table div:
-
-```html
-<FeatureTable resizeTo='table' map={map} layer={map.getLayers().item(1)} />
-```
+If you reload the debug server at http://localhost:3000/ you'll see that we now have a feature table at the bottom of the page. With the ```resizeTo``` property we have told the FeatureTable to resize itself to the div with id ```table```.
 
 When you click a row in the feature table, it will select the corresponding geometry in the map.
 
@@ -122,9 +117,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import {addLocaleData, IntlProvider} from 'react-intl';
+import Zoom from 'boundless-sdk/js/components/Zoom.jsx';
 import MapPanel from 'boundless-sdk/js/components/MapPanel.jsx';
-import LayerList from 'boundless-sdk/js/components/LayerList.jsx';
 import FeatureTable from 'boundless-sdk/js/components/FeatureTable.jsx';
+import LayerList from 'boundless-sdk/js/components/LayerList.jsx';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import enLocaleData from 'react-intl/locale-data/en.js';
 import enMessages from 'boundless-sdk/locale/en.js';
@@ -140,6 +136,7 @@ addLocaleData(
 );
 
 var map = new ol.Map({
+  controls: [new ol.control.Attribution({collapsible: false})],
   layers: [
     new ol.layer.Group({
       type: 'base-group',
@@ -176,11 +173,12 @@ var map = new ol.Map({
 class MyApp extends React.Component {
   render() {
     return (
-      <article>
-        <MapPanel id='map' map={map} />
+       <div id='content'>
+        <MapPanel id='map' className='row' map={map} />
         <div><LayerList map={map} /></div>
-        <div id='table'><FeatureTable resizeTo='table' map={map} layer={map.getLayers().item(1)} /></div>
-      </article>
+        <div id='zoom-buttons'><Zoom map={map} /></div>
+        <div id='table' className='row'><FeatureTable resizeTo='table' map={map} layer={map.getLayers().item(1)} /></div>
+      </div>
     );
   }
 }
@@ -191,67 +189,72 @@ ReactDOM.render(<IntlProvider locale='en' messages={enMessages}><MyApp /></IntlP
 Our app.css will look like:
 
 ```css
-html, body, article {
-  width: 100%;
+html, body {
   height: 100%;
+  padding: 0;
+  margin: 0;
 }
-#main {
-  width: 100%;
-  height: 100%;
+/* Dead Simple Grid (c) 2015 Vladimir Agafonkin */
+.row .row { margin:  0 -1.5em; }
+.col      { padding: 0  0em; }
+
+.row:after {
+    content: "";
+    clear: both;
+    display: table;
 }
+
+@media only screen { .col {
+    float: left;
+    width: 100%;
+    box-sizing: border-box;
+}}
+/* end Dead Simple Grid */
 #map {
-  width: 100%;
-  height: 60%;
+  height: 50%;
 }
 #table {
+  height: 50%;
+}
+#content, #main {
   width: 100%;
-  height: 40%;
+  height: 100%;
+}
+#zoom-buttons {
+  margin-left: 20px;
+  position: absolute;
+  top: 20px;
 }
 ```
 
 ## 4. Adding an upload component
 In this step we'll be adding a button to the application that will open up a dialog where the user can upload a vector file, such as a KML, GPX or GeoJSON file.
 
-Again, we will start by adding an ```import``` statement to import our component:
+Again, we will start by adding an ```import``` statement to import our component (and the Toolbar to put the button into):
 
 ```javascript
 import AddLayer from 'boundless-sdk/js/components/AddLayer.jsx';
+import Toolbar from 'material-ui/lib/toolbar/toolbar';
 ```
 
 In the ```render``` function of our application, we need to add a toolbar to accommodate for the button of the upload component:
 
 ```html
-  <nav role='navigation'>
-    <div className='toolbar'>
-      <ul><AddLayer map={map} /></ul>
-    </div>
-  </nav>
+ <div id='content'>
+   <Toolbar><AddLayer map={map} /></Toolbar>
+   <MapPanel id='map' className='row' map={map} />
 ```
 
-Add the ```nav``` just after the ```<article>``` opening tag.
-
-Also add a div to group the map and featuretable divs, with id ```content```:
-
-```html
-  <div id='content'>
-    <MapPanel id='map' map={map} />
-    <div><LayerList map={map} /></div>
-    <div id='table'><FeatureTable resizeTo='table' map={map} layer={map.getLayers().item(1)} /></div>
-  </div>
-```
-
-Open up app.css to give a bit of space to the button in the toolbar with ```padding-top```, also give the toolbar a fixed height and adjust the ```content``` div's height accordingly:
+Open up app.css and take the 56px of the toolbar from the map's height, and move the zoom buttons 56px down.
 
 ```css
-.toolbar {
-  height: 50px;
+#map {
+  height: calc(50% - 56px);
 }
-#content {
-  width: 100%;
-  height:  calc(100% - 50px);
-}
-.toolbar ul {
-  padding-top: 4px;
+#zoom-buttons {
+  margin-left: 20px;
+  position: absolute;
+  top: 76px;
 }
 ```
 
@@ -262,10 +265,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import {addLocaleData, IntlProvider} from 'react-intl';
+import Zoom from 'boundless-sdk/js/components/Zoom.jsx';
 import MapPanel from 'boundless-sdk/js/components/MapPanel.jsx';
-import LayerList from 'boundless-sdk/js/components/LayerList.jsx';
 import FeatureTable from 'boundless-sdk/js/components/FeatureTable.jsx';
+import LayerList from 'boundless-sdk/js/components/LayerList.jsx';
 import AddLayer from 'boundless-sdk/js/components/AddLayer.jsx';
+import Toolbar from 'material-ui/lib/toolbar/toolbar';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import enLocaleData from 'react-intl/locale-data/en.js';
 import enMessages from 'boundless-sdk/locale/en.js';
@@ -281,6 +286,7 @@ addLocaleData(
 );
 
 var map = new ol.Map({
+  controls: [new ol.control.Attribution({collapsible: false})],
   layers: [
     new ol.layer.Group({
       type: 'base-group',
@@ -317,18 +323,13 @@ var map = new ol.Map({
 class MyApp extends React.Component {
   render() {
     return (
-      <article>
-        <nav role='navigation'>
-          <div className='toolbar'>
-            <ul><AddLayer map={map} /></ul>
-          </div>
-        </nav>
-        <div id='content'>
-          <MapPanel id='map' map={map} />
-          <div><LayerList map={map} /></div>
-          <div id='table'><FeatureTable resizeTo='table' map={map} layer={map.getLayers().item(1)} /></div>
-        </div>
-      </article>
+       <div id='content'>
+        <Toolbar><AddLayer map={map} /></Toolbar>
+        <MapPanel id='map' className='row' map={map} />
+        <div><LayerList map={map} /></div>
+        <div id='zoom-buttons'><Zoom map={map} /></div>
+        <div id='table' className='row'><FeatureTable resizeTo='table' map={map} layer={map.getLayers().item(1)} /></div>
+      </div>
     );
   }
 }
@@ -339,31 +340,41 @@ ReactDOM.render(<IntlProvider locale='en' messages={enMessages}><MyApp /></IntlP
 The final app.css will look like:
 
 ```css
-html, body, article {
-  width: 100%;
+html, body {
   height: 100%;
+  padding: 0;
+  margin: 0;
 }
-#main {
-  width: 100%;
-  height: 100%;
+/* Dead Simple Grid (c) 2015 Vladimir Agafonkin */
+.row .row { margin:  0 -1.5em; }
+.col      { padding: 0  0em; }
+
+.row:after {
+    content: "";
+    clear: both;
+    display: table;
 }
+
+@media only screen { .col {
+    float: left;
+    width: 100%;
+    box-sizing: border-box;
+}}
+/* end Dead Simple Grid */
 #map {
-  width: 100%;
-  height: 60%;
+  height: calc(50% - 56px);
 }
 #table {
+  height: 50%;
+}
+#content, #main {
   width: 100%;
-  height: 40%;
+  height: 100%;
 }
-.toolbar {
-  height: 50px;
-}
-#content {
-  width: 100%;
-  height:  calc(100% - 50px);
-}
-.toolbar ul {
-  padding-top: 4px;
+#zoom-buttons {
+  margin-left: 20px;
+  position: absolute;
+  top: 76px;
 }
 ```
 
