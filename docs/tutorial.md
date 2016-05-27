@@ -245,7 +245,7 @@ In the ```render``` function of our application, we need to add a toolbar to acc
    <MapPanel id='map' className='row' map={map} />
 ```
 
-Open up app.css and take the 56px of the toolbar from the map's height, and move the zoom buttons 56px down.
+Open up app.css and take the 56px of the toolbar from the map's height, and move the zoom buttons 56px down. Also move the layer list button down.
 
 ```css
 #map {
@@ -255,6 +255,9 @@ Open up app.css and take the 56px of the toolbar from the map's height, and move
   margin-left: 20px;
   position: absolute;
   top: 76px;
+}
+div.layer-switcher {
+  top: 4em;
 }
 ```
 
@@ -375,6 +378,9 @@ html, body {
   margin-left: 20px;
   position: absolute;
   top: 76px;
+}
+div.layer-switcher {
+  top: 4em;
 }
 ```
 
