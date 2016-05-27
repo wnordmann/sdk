@@ -87,7 +87,7 @@ In the render function of our application, we need to add the definition of our 
 The feature table needs to get configured with at least a layer and a map:
 
 ```html
-  <div ref='map' id='map'></div>
+  <MapPanel id='map' map={map} />
   <div><LayerList map={map} /></div>
   <div id='table'><FeatureTable map={map} layer={map.getLayers().item(1)} /></div>
 ```
@@ -122,11 +122,18 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import {addLocaleData, IntlProvider} from 'react-intl';
-import App from 'boundless-sdk/js/components/app.js';
+import MapPanel from 'boundless-sdk/js/components/MapPanel.jsx';
 import LayerList from 'boundless-sdk/js/components/LayerList.jsx';
 import FeatureTable from 'boundless-sdk/js/components/FeatureTable.jsx';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 import enLocaleData from 'react-intl/locale-data/en.js';
 import enMessages from 'boundless-sdk/locale/en.js';
+
+// Needed for onTouchTap
+// Can go away when react 1.0 release
+// Check this repo:
+// https://github.com/zilverline/react-tap-event-plugin
+injectTapEventPlugin();
 
 addLocaleData(
   enLocaleData
@@ -166,11 +173,11 @@ var map = new ol.Map({
   })
 });
 
-class MyApp extends App {
+class MyApp extends React.Component {
   render() {
     return (
       <article>
-        <div ref='map' id='map'></div>
+        <MapPanel id='map' map={map} />
         <div><LayerList map={map} /></div>
         <div id='table'><FeatureTable resizeTo='table' map={map} layer={map.getLayers().item(1)} /></div>
       </article>
@@ -178,7 +185,7 @@ class MyApp extends App {
   }
 }
 
-ReactDOM.render(<IntlProvider locale='en' messages={enMessages}><MyApp map={map} /></IntlProvider>, document.getElementById('main'));
+ReactDOM.render(<IntlProvider locale='en' messages={enMessages}><MyApp /></IntlProvider>, document.getElementById('main'));
 ```
 
 Our app.css will look like:
@@ -227,7 +234,7 @@ Also add a div to group the map and featuretable divs, with id ```content```:
 
 ```html
   <div id='content'>
-    <div ref='map' id='map'></div>
+    <MapPanel id='map' map={map} />
     <div><LayerList map={map} /></div>
     <div id='table'><FeatureTable resizeTo='table' map={map} layer={map.getLayers().item(1)} /></div>
   </div>
@@ -255,12 +262,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import {addLocaleData, IntlProvider} from 'react-intl';
-import App from 'boundless-sdk/js/components/app.js';
+import MapPanel from 'boundless-sdk/js/components/MapPanel.jsx';
 import LayerList from 'boundless-sdk/js/components/LayerList.jsx';
 import FeatureTable from 'boundless-sdk/js/components/FeatureTable.jsx';
 import AddLayer from 'boundless-sdk/js/components/AddLayer.jsx';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 import enLocaleData from 'react-intl/locale-data/en.js';
 import enMessages from 'boundless-sdk/locale/en.js';
+
+// Needed for onTouchTap
+// Can go away when react 1.0 release
+// Check this repo:
+// https://github.com/zilverline/react-tap-event-plugin
+injectTapEventPlugin();
 
 addLocaleData(
   enLocaleData
@@ -300,7 +314,7 @@ var map = new ol.Map({
   })
 });
 
-class MyApp extends App {
+class MyApp extends React.Component {
   render() {
     return (
       <article>
@@ -310,7 +324,7 @@ class MyApp extends App {
           </div>
         </nav>
         <div id='content'>
-          <div ref='map' id='map'></div>
+          <MapPanel id='map' map={map} />
           <div><LayerList map={map} /></div>
           <div id='table'><FeatureTable resizeTo='table' map={map} layer={map.getLayers().item(1)} /></div>
         </div>
@@ -319,7 +333,7 @@ class MyApp extends App {
   }
 }
 
-ReactDOM.render(<IntlProvider locale='en' messages={enMessages}><MyApp map={map} /></IntlProvider>, document.getElementById('main'));
+ReactDOM.render(<IntlProvider locale='en' messages={enMessages}><MyApp /></IntlProvider>, document.getElementById('main'));
 ```
 
 The final app.css will look like:
