@@ -18,7 +18,7 @@ import FixedDataTable from 'fixed-data-table';
 import './fixed-data-table.css';
 import RaisedButton from './Button.jsx';
 import ActionSearch from 'material-ui/lib/svg-icons/action/search';
-import ActionDelete from 'material-ui/lib/svg-icons/action/delete';
+import ClearIcon from 'material-ui/lib/svg-icons/content/clear';
 import ArrowUp from 'material-ui/lib/svg-icons/hardware/keyboard-arrow-up';
 import TextField from 'material-ui/lib/text-field';
 import Checkbox from 'material-ui/lib/checkbox';
@@ -398,7 +398,7 @@ class FeatureTable extends React.Component {
           </div>
           <Toolbar className='feature-table-toolbar'>
             <RaisedButton disabled={!this._layer} style={buttonStyle} icon={<ActionSearch />} label={formatMessage(messages.zoombuttontext)} tooltip={formatMessage(messages.zoombuttontitle)} onTouchTap={this._zoomSelected.bind(this)} />
-            <RaisedButton disabled={!this._layer} style={buttonStyle} icon={<ActionDelete />} label={formatMessage(messages.clearbuttontext)} tooltip={formatMessage(messages.clearbuttontitle)} onTouchTap={this._clearSelected.bind(this)} />
+            <RaisedButton disabled={!this._layer} style={buttonStyle} icon={<ClearIcon />} label={formatMessage(messages.clearbuttontext)} tooltip={formatMessage(messages.clearbuttontitle)} onTouchTap={this._clearSelected.bind(this)} />
             <RaisedButton disabled={!this._layer} style={buttonStyle} icon={<ArrowUp />} label={formatMessage(messages.movebuttontext)} tooltip={formatMessage(messages.movebuttontitle)} onTouchTap={this._moveSelectedToTop.bind(this)} />
           </Toolbar>
         </div>
