@@ -13,7 +13,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TextField from 'material-ui/lib/text-field';
-import filtrex from 'filtrex';
+import FilterService from '../services/FilterService.js';
 import pureRender from 'pure-render-decorator';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
@@ -36,7 +36,7 @@ const messages = defineMessages({
 });
 
 /**
- * Editor for a single filter using filtrex. Can for instance be used in a style dialog.
+ * Editor for a single filter using FilterService. Can for instance be used in a style dialog.
  */
 @pureRender
 class FilterEditor extends React.Component {
@@ -63,7 +63,7 @@ class FilterEditor extends React.Component {
       this.setState({hasError: false});
     } else {
       try {
-        var filter = filtrex(expression);
+        var filter = FilterService.filter(expression);
         this.props.onChange({expression: expression, filter: filter});
         this.setState({hasError: false});
       } catch (e) {

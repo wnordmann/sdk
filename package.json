@@ -38,7 +38,7 @@
     "c3-windows": "^0.4.11-rc4",
     "classnames": "^2.2.5",
     "debounce": "^1.0.0",
-    "filtrex": "^0.5.4",
+    "jison": "^0.4.17",
     "fixed-data-table": "0.6.0",
     "flux": "^2.0.1",
     "jsonix": "^2.4.1",

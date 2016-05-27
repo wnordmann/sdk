@@ -151,7 +151,7 @@ class SLDService {
     };
   }
   expressionToFilter(expression) {
-    // TODO support more (complex) filters, but filtrex does not export its parser
+    // TODO support more (complex) filters, maybe using jison
     var comparisonOps = {
       '==': 'PropertyIsEqualTo',
       '>=': 'PropertyIsGreaterThanOrEqualTo',

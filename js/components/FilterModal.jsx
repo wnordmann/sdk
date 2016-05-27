@@ -12,7 +12,7 @@
 
 import React from 'react';
 import ol from 'openlayers';
-import filtrex from 'filtrex';
+import FilterService from '../services/FilterService.js';
 import Dialog from 'material-ui/lib/dialog';
 import RaisedButton from 'material-ui/lib/raised-button';
 import List from 'material-ui/lib/lists/list';
@@ -112,7 +112,7 @@ class FilterModal extends React.Component {
     var filter;
     var expression = this.refs.filterTextBox.getValue();
     try {
-      filter = filtrex(expression);
+      filter = FilterService.filter(expression);
     } catch (e) {
       this.setState({hasError: true});
       return;

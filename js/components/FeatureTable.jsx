@@ -30,7 +30,7 @@ import {SortHeaderCell, SortTypes} from './SortHeaderCell.jsx';
 import {LinkCell} from './LinkCell.jsx';
 import {TextCell} from './TextCell.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import filtrex from 'filtrex';
+import FilterService from '../services/FilterService.js';
 import './FeatureTable.css';
 
 const {Table, Column} = FixedDataTable;
@@ -295,7 +295,7 @@ class FeatureTable extends React.Component {
     var filteredRows = [];
     var queryFilter;
     try {
-      queryFilter = filtrex(filterBy);
+      queryFilter = FilterService.filter(filterBy);
     } catch (e) {
       queryFilter = null;
     }

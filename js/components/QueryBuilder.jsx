@@ -16,7 +16,7 @@ import Snackbar from 'material-ui/lib/snackbar';
 import FeatureStore from '../stores/FeatureStore.js';
 import LayerSelector from './LayerSelector.jsx';
 import SelectActions from '../actions/SelectActions.js';
-import filtrex from 'filtrex';
+import FilterService from '../services/FilterService.js';
 import Toolbar from 'material-ui/lib/toolbar/toolbar';
 import TextField from 'material-ui/lib/text-field';
 import RaisedButton from 'material-ui/lib/raised-button';
@@ -125,7 +125,7 @@ class QueryBuilder extends React.Component {
       this.setState({errorText: null});
     } else {
       try {
-        this._queryFilter = filtrex(expression);
+        this._queryFilter = FilterService.filter(expression);
         this.setState({errorText: null});
       } catch (e) {
         this._queryFilter = null;
