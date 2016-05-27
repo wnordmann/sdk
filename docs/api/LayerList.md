@@ -133,6 +133,20 @@ type: `bool`
 defaultValue: `false`
 
 
+### `style`
+
+Style for the button.
+
+type: `object`
+defaultValue: `{
+  background: 'rgba(0,60,136,.7)',
+  borderRadius: '2px',
+  width: '28px',
+  height: '28px',
+  padding: '2px'
+}`
+
+
 ### `tipLabel`
 
 Text to show on top of layers.

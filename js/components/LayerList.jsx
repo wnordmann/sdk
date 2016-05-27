@@ -147,7 +147,7 @@ class LayerList extends React.Component {
     var onClick = !this.props.expandOnHover ? this._togglePanel.bind(this) : undefined;
     return (
       <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} className={'sdk-component layer-list ' + className}>
-        <IconButton className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={onClick}><LayersIcon /></IconButton>
+        <IconButton style={this.props.style} className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={onClick}><LayersIcon color='white' /></IconButton>
         <div className='layer-tree-panel clearfix'>
           <div className='layer-list-header'>{tipLabel}</div>
           <List className='layer-list-list'>
@@ -165,6 +165,10 @@ LayerList.propTypes = {
    * The map whose layers should show up in this layer list.
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * Style for the button.
+   */
+  style: React.PropTypes.object,
   /**
    * Should we show a button that allows the user to zoom to the layer's extent?
    */
@@ -247,7 +251,14 @@ LayerList.defaultProps = {
   downloadFormat: 'GeoJSON',
   showOpacity: false,
   expandOnHover: true,
-  showOnStart: false
+  showOnStart: false,
+  style: {
+    background: 'rgba(0,60,136,.7)',
+    borderRadius: '2px',
+    width: '28px',
+    height: '28px',
+    padding: '2px'
+  }
 };
 
 export default injectIntl(LayerList);
