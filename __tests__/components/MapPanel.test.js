@@ -1,4 +1,4 @@
-/* global afterEach, beforeEach, describe, it */
+/* global beforeEach, describe, it */
 
 var React = require('react');
 var ReactDOM = require('react-dom');
@@ -7,15 +7,15 @@ var raf = require('raf');
 raf.polyfill();
 var ol = require('openlayers');
 
-var App = require('../../js/components/App.js');
+var MapPanel = require('../../js/components/MapPanel.jsx');
 
-class MyApp extends App {
+class MyApp extends React.Component {
   render() {
-    return (<div id='map' ref='map'></div>);
+    return (<MapPanel id='map' map={this.props.map} />);
   }
 }
 
-describe('App', function() {
+describe('MapPanel', function() {
   var map, layer;
 
   beforeEach(function(done) {
@@ -32,9 +32,6 @@ describe('App', function() {
     map.once('postrender', function() {
       done();
     });
-  });
-
-  afterEach(function() {
   });
 
   it('sets the target for the map', function() {
