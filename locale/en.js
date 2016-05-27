@@ -87,6 +87,7 @@ var enMessages = {
   "labelmodal.title": "Label for layer {layer}",
   "layerlist.addlayertext": "Add Layer",
   "layerlist.addlayertitle": "Add layers",
+  "layerlist.errormsg": "There was an error loading tiles.",
   "layerlist.layertitle": "Layers",
   "layerlistitem.baselayergrouplabel": "Select base layer",
   "layerlistitem.basemapstitle": "Base Maps",

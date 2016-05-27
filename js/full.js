@@ -52,11 +52,11 @@ global.Tab = Tab;
 import AddLayer from './components/AddLayer.jsx';
 global.AddLayer = AddLayer;
 
-import App from './components/App.js';
-global.App = App;
-
 import Bookmarks from './components/Bookmarks.jsx';
 global.Bookmarks = Bookmarks;
+
+import Button from './components/Button.jsx';
+global.Button = Button;
 
 import Chart from './components/Chart.jsx';
 global.Chart = Chart;
@@ -102,6 +102,9 @@ global.Login = Login;
 
 import MapConfig from './components/MapConfig.jsx';
 global.MapConfig = MapConfig;
+
+import MapPanel from './components/MapPanel.jsx';
+global.MapPanel = MapPanel;
 
 import Measure from './components/Measure.jsx';
 global.Measure = Measure;
