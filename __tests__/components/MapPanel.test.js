@@ -15,6 +15,10 @@ class MyApp extends React.Component {
   }
 }
 
+MyApp.propTypes = {
+  map: React.PropTypes.instanceOf(ol.Map).isRequired
+};
+
 describe('MapPanel', function() {
   var map, layer;
 

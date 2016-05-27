@@ -1,4 +1,4 @@
-/* global describe, it */
+/* global beforeEach, afterEach, describe, it */
 
 var React = require('react');
 var ReactDOM = require('react-dom');

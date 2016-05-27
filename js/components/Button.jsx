@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import RaisedButton from 'material-ui/lib/raised-button';
 import Tooltip from 'material-ui/lib/tooltip';
 import './Button.css';
@@ -11,7 +10,7 @@ class Button extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showTooltip: false,
+      showTooltip: false
     };
   }
   showTooltip(evt) {
