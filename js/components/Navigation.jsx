@@ -25,7 +25,7 @@ class Navigation extends MapTool {
   constructor(props) {
     super(props);
     this.state = {
-      secondary: false
+      secondary: props.secondary !== undefined ? props.secondary : false
     };
   }
   activate() {
