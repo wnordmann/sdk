@@ -20,7 +20,7 @@ import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LayerStore from './LayerStore.js';
 import WFSService from '../services/WFSService.js';
 
-const maxFeatures = 100;
+const maxFeatures = 500;
 
 class FeatureStore extends EventEmitter {
   constructor() {
@@ -184,11 +184,15 @@ class FeatureStore extends EventEmitter {
     this.emitChange();
   }
   addLayer(layer, filter) {
+    var id = layer.get('id');
+    var me = this;
     if (layer instanceof ol.layer.Tile) {
       // TODO show failure to the user?
-      this.loadFeatures(layer, 0);
+      var loadNext = function() {
+        me.loadNextPage(layer, loadNext, loadNext);
+      };
+      this.loadFeatures(layer, 0, loadNext, loadNext);
     }
-    var id = layer.get('id');
     if (!this._layers[id]) {
       this._layers[id] = layer;
       this.bindLayer(layer);
@@ -215,7 +219,7 @@ class FeatureStore extends EventEmitter {
     this._config[id].features = features;
     this._config[id].originalFeatures = features.slice();
   }
-  loadNextPage(layer) {
+  loadNextPage(layer, onSuccess, onFailure) {
     var id = layer.get('id');
     if (!this._pageInfo[id]) {
       this._pageInfo[id] = {};
@@ -223,7 +227,7 @@ class FeatureStore extends EventEmitter {
     var startIndex = this._config[id].originalFeatures.length;
     if (startIndex < layer.get('numberOfFeatures') && !this._pageInfo[id][startIndex]) {
       this._pageInfo[id][startIndex] = true;
-      this.loadFeatures(layer, startIndex);
+      this.loadFeatures(layer, startIndex, onSuccess, onFailure);
     }
   }
   loadFeatures(layer, startIndex, onSuccess, onFailure, scope) {
@@ -242,12 +246,13 @@ class FeatureStore extends EventEmitter {
     };
     var failure = function(xmlhttp, exception) {
       if (startIndex === 0) {
-        me._setFeatures(layer, []);
+        me._setFeatures(layer, new Array(maxFeatures));
       } else {
         me._appendFeatures(layer, new Array(maxFeatures));
       }
+      me.emitChange();
       if (onFailure) {
-        onFailure(xmlhttp, exception);
+        onFailure.call(scope, xmlhttp, exception);
       }
     };
     WFSService.loadFeatures(layer, startIndex, maxFeatures, srsName, success, failure);
@@ -404,11 +409,18 @@ class FeatureStore extends EventEmitter {
     if (!this._schema[id] && this._config[id] && this._config[id].originalFeatures.length > 0) {
       var schema = {};
       var feature = this._config[id].originalFeatures[0];
-      var geom = feature.getGeometryName();
-      var values = feature.getProperties();
-      for (var key in values) {
-        if (key !== geom && key !== 'boundedBy') {
-          schema[key] = this._determineType(values[key]);
+      if (!feature) {
+        var wfsInfo = layer.get('wfsInfo');
+        for (var i = 0, ii = wfsInfo.attributes.length; i < ii; ++i) {
+          schema[wfsInfo.attributes[i]] = 'string';
+        }
+      } else {
+        var geom = feature.getGeometryName();
+        var values = feature.getProperties();
+        for (var key in values) {
+          if (key !== geom && key !== 'boundedBy') {
+            schema[key] = this._determineType(values[key]);
+          }
         }
       }
       this._schema[id] = schema;

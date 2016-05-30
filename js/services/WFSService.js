@@ -115,10 +115,14 @@ class WFSService {
     var payload = xmlSerializer.serializeToString(payloadNode);
     doPOST(url, payload, function(xmlhttp) {
       var data = xmlhttp.responseXML;
-      this.readResponse(data, xmlhttp, function(data) {
-        var features = wfsFormat.readFeatures(data);
-        onSuccess.call(this, features);
-      }, onFailure);
+      if (data !== null) {
+        this.readResponse(data, xmlhttp, function(data) {
+          var features = wfsFormat.readFeatures(data);
+          onSuccess.call(this, features);
+        }, onFailure);
+      } else {
+        onFailure.call(this);
+      }
     }, function(xmlhttp) {
       onFailure.call(this);
     }, this);

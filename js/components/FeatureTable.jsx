@@ -301,9 +301,12 @@ class FeatureTable extends React.Component {
     }
     if (queryFilter !== null) {
       for (var i = 0, ii = rows.length; i < ii; ++i) {
-        var properties = rows[i].getProperties();
-        if (queryFilter(properties)) {
-          filteredRows.push(rows[i]);
+        var row = rows[i];
+        if (row) {
+          var properties = rows[i].getProperties();
+          if (queryFilter(properties)) {
+            filteredRows.push(rows[i]);
+          }
         }
       }
     }
