@@ -204,9 +204,11 @@ class FeatureStore extends EventEmitter {
     }
   }
   _appendFeatures(layer, features) {
-    var id = layer.get('id');
-    this._config[id].features = this._config[id].features.concat(features);
-    this._config[id].originalFeatures = this._config[id].originalFeatures.concat(features);
+    if (features.length > 0) {
+      var id = layer.get('id');
+      this._config[id].features = this._config[id].features.concat(features);
+      this._config[id].originalFeatures = this._config[id].originalFeatures.concat(features);
+    }
   }
   _setFeatures(layer, features) {
     var id = layer.get('id');
@@ -222,11 +224,14 @@ class FeatureStore extends EventEmitter {
   loadNextPage(layer, onSuccess, onFailure) {
     var id = layer.get('id');
     if (!this._pageInfo[id]) {
-      this._pageInfo[id] = {};
+      this._pageInfo[id] = {
+        startIndex: maxFeatures
+      };
     }
-    var startIndex = this._config[id].originalFeatures.length;
+    var startIndex = this._pageInfo[id].startIndex;
     if (startIndex < layer.get('numberOfFeatures') && !this._pageInfo[id][startIndex]) {
       this._pageInfo[id][startIndex] = true;
+      this._pageInfo[id].startIndex += maxFeatures;
       this.loadFeatures(layer, startIndex, onSuccess, onFailure);
     }
   }
@@ -246,9 +251,9 @@ class FeatureStore extends EventEmitter {
     };
     var failure = function(xmlhttp, exception) {
       if (startIndex === 0) {
-        me._setFeatures(layer, new Array(maxFeatures));
+        me._setFeatures(layer, []);
       } else {
-        me._appendFeatures(layer, new Array(maxFeatures));
+        me._appendFeatures(layer, []);
       }
       me.emitChange();
       if (onFailure) {

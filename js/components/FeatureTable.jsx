@@ -181,17 +181,7 @@ class FeatureTable extends React.Component {
       }
       var newState = {};
       newState.features = state.features.slice();
-      var rowCount;
-      if (this._filtered) {
-        rowCount = newState.features.length;
-      } else {
-        if (this._selectedOnly) {
-          rowCount = newState.features.length;
-        } else {
-          rowCount = this._layer.get('numberOfFeatures') || newState.features.length;
-        }
-      }
-      newState.rowCount = rowCount;
+      newState.rowCount = newState.features.length;
       newState.originalFeatures = state.originalFeatures.slice();
       newState.selected = state.selected.slice();
       this.setState(newState);
