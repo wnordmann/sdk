@@ -16,7 +16,6 @@ import ol from 'openlayers';
 import SelectActions from '../actions/SelectActions.js';
 import MapTool from './MapTool.js';
 import FeatureStore from '../stores/FeatureStore.js';
-import WFSService from '../services/WFSService.js';
 import RaisedButton from './Button.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
@@ -85,15 +84,18 @@ class Select extends MapTool {
           }, this);
           SelectActions.selectFeatures(lyr, selected, true);
         } else {
-          var me = this;
-          WFSService.bboxFilter(lyr, this.props.map.getView(), box, function(features) {
-            for (var i = 0, ii = features.length; i < ii; ++i) {
-              me._handleSelection(features[i], selected);
+          var state = FeatureStore.getState(lyr);
+          if (state) {
+            for (var i = 0, ii = state.originalFeatures.length; i < ii; ++i) {
+              var f = state.originalFeatures[i];
+              var geom = f.getGeometry();
+              if (geom && geom.intersectsExtent(box)) {
+                this._handleSelection(f, selected);
+              }
             }
-            SelectActions.selectFeatures(lyr, selected, true);
-          }, function() {
-          });
+          }
         }
+        SelectActions.selectFeatures(lyr, selected, true);
       }
     }, this);
   }
