@@ -103,16 +103,18 @@ class QGISLegend extends React.Component {
   }
   render() {
     const {formatMessage} = this.props.intl;
-    var className = 'legend';
-    if (this.state.visible) {
-      className += ' shown';
-    }
+    var divClass = {
+      'legend': true,
+      'shown': this.state.visible,
+      'sdk-component': true,
+      'qgis-legend': true
+    };
     var items = this._renderItems(this.props.legendData, this.props.legendBasePath);
     var onMouseOut = this.props.expandOnHover ? this._hidePanel.bind(this) : undefined;
     var onMouseOver = this.props.expandOnHover ? this._showPanel.bind(this) : undefined;
     var onClick = !this.props.expandOnHover ? this._togglePanel.bind(this) : undefined;
     return (
-      <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} className={classNames('sdk-component qgis-legend ' + className, this.props.className)}>
+      <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} className={classNames(divClass, this.props.className)}>
         <IconButton tooltip={formatMessage(messages.buttontitle)} onTouchTap={onClick}><LegendIcon /></IconButton>
         <div className='legend-panel' id='legend'>{items}</div>
       </div>
