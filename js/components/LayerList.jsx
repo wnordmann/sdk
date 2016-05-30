@@ -129,11 +129,13 @@ class LayerList extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     var layers = this.state.layers.slice(0).reverse();
-    var className = 'layer-switcher';
+    var divClass = {
+      'layer-switcher': true,
+      'shown': this.state.visible,
+      'sdk-component': true,
+      'layer-list': true
+    };
     var tipLabel = this.props.tipLabel || formatMessage(messages.layertitle);
-    if (this.state.visible) {
-      className += ' shown';
-    }
     var addLayer;
     if (this.props.addLayer) {
       addLayer = (
@@ -147,7 +149,7 @@ class LayerList extends React.Component {
     var onMouseOver = this.props.expandOnHover ? this._showPanel.bind(this) : undefined;
     var onClick = !this.props.expandOnHover ? this._togglePanel.bind(this) : undefined;
     return (
-      <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} className={classNames('sdk-component layer-list ' + className, this.props.className)}>
+      <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} className={classNames(divClass, this.props.className)}>
         <IconButton style={this.props.style} className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={onClick}><LayersIcon color='white' /></IconButton>
         <div className='layer-tree-panel clearfix'>
           <div className='layer-list-header'>{tipLabel}</div>

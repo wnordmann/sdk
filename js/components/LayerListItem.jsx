@@ -206,7 +206,7 @@ class LayerListItem extends React.Component {
       styleModal = (<StyleModal {...this.props} layer={this.props.layer} ref='stylemodal' />);
     }
     return (
-      <ListItem {...this.props} className={classNames('sdk-component layer-list-item', this.props.className)} autoGenerateNestedIndicator={false} secondaryText={layer.get('type') !== 'base' ? this.props.layer.get('name') : undefined} primaryText={input ? undefined : this.props.title} nestedItems={this.props.nestedItems} initiallyOpen={true}>
+      <ListItem className={classNames({'sdk-component': true, 'layer-list-item': true}, this.props.className)} autoGenerateNestedIndicator={false} secondaryText={layer.get('type') !== 'base' ? this.props.layer.get('name') : undefined} primaryText={input ? undefined : this.props.title} nestedItems={this.props.nestedItems} initiallyOpen={true}>
         {input}
         {opacity}
         {zoomTo}
