@@ -68,7 +68,7 @@ class Zoom extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <div {...this.props} className={classNames('sdk-component zoom', this.props.className)}>
+      <div className={classNames('sdk-component zoom', this.props.className)}>
         <IconButton tooltipPosition='top-right' style={this.props.style} tooltip={formatMessage(messages.zoomintitle)} onTouchTap={this._zoomIn.bind(this)}><ZoomIn color="white"/></IconButton><br/>
         <IconButton tooltipPosition='top-right' style={Object.assign({marginTop: '25px'}, this.props.style)} tooltip={formatMessage(messages.zoomouttitle)} onTouchTap={this._zoomOut.bind(this)}><ZoomOut color="white"/></IconButton>
       </div>

@@ -11,12 +11,11 @@
  */
 
 import React from 'react';
-import classNames from 'classnames';
 import FeatureStore from '../stores/FeatureStore.js';
 import {Cell} from 'fixed-data-table';
 
 export const LinkCell = ({rowIndex, col, layer, sortIndexes, ...props}) => (
-  <Cell {...props} className={classNames('sdk-component link-cell', props.className)} >
+  <Cell className='sdk-component link-cell' {...props} >
     <a href={FeatureStore.getFieldValue(layer, sortIndexes ? sortIndexes[rowIndex] : rowIndex, col)}>{FeatureStore.getFieldValue(layer, sortIndexes ? sortIndexes[rowIndex] : rowIndex, col)}</a>
   </Cell>
 );

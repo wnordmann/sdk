@@ -11,12 +11,11 @@
  */
 
 import React from 'react';
-import classNames from 'classnames';
 import FeatureStore from '../stores/FeatureStore.js';
 import {Cell} from 'fixed-data-table';
 
 export const TextCell = ({rowIndex,col, layer, sortIndexes, ...props}) => (
-  <Cell {...props} className={classNames('sdk-component text-cell', props.className)} >
+  <Cell className='sdk-component text-cell' {...props}>
     {FeatureStore.getFieldValue(layer, sortIndexes ? sortIndexes[rowIndex] : rowIndex, col)}
   </Cell>
 );

@@ -97,12 +97,12 @@ class LoadingPanel extends React.Component {
   render() {
     if (this.state.show) {
       return (
-        <div {...this.props} className={classNames('sdk-component loading-panel', this.props.className)}>
+        <div className={classNames('sdk-component loading-panel', this.props.className)}>
           <CircularProgress size={1.5} />
         </div>
       );
     } else {
-      return (<article {...this.props} className={classNames('sdk-component loading-panel hidden', this.props.className)}/>);
+      return (<article className={classNames('sdk-component loading-panel hidden', this.props.className)}/>);
     }
   }
 }

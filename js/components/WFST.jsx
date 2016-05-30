@@ -386,7 +386,7 @@ class WFST extends MapTool {
       }
       const buttonStyle = this.props.buttonStyle;
       return (
-        <div {...this.props} className={classNames('sdk-component wfst', this.props.className)}>
+        <div className={classNames('sdk-component wfst', this.props.className)}>
           {layerSelector}
           <Toolbar>
             <ToolbarGroup>

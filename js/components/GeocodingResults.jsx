@@ -125,7 +125,7 @@ class GeocodingResults extends React.Component {
       }
     }
     return (
-      <div {...this.props} className={classNames('sdk-component geocoding-results', this.props.className)}>
+      <div className={classNames('sdk-component geocoding-results', this.props.className)}>
         <div className='geocoding-results-header'>{subheader}</div>
         <List className='geocoding-results-list'>
          {resultNodes}

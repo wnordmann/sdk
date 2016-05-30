@@ -74,7 +74,7 @@ class Legend extends React.Component {
     }
     var subHeader = legends.length === 0 ? formatMessage(messages.emptyheader) : formatMessage(messages.header);
     return (
-      <div {...this.props} className={classNames('sdk-component legend', this.props.className)}>
+      <div className={classNames('sdk-component legend', this.props.className)}>
         <div className='legend-header'>{subHeader}</div>
         <List className='legend-list'>{legends}</List>
       </div>

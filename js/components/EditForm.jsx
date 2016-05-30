@@ -124,7 +124,7 @@ class EditForm extends React.Component {
       }
     }
     return (
-      <div {...this.props} className={classNames('sdk-component edit-form', this.props.className)}>
+      <div className={classNames('sdk-component edit-form', this.props.className)}>
         <span className='edit-form-fid'>{fid}</span><br/>
         {inputs}<br/>
         {error}

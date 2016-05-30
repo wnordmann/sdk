@@ -147,7 +147,7 @@ class LayerList extends React.Component {
     var onMouseOver = this.props.expandOnHover ? this._showPanel.bind(this) : undefined;
     var onClick = !this.props.expandOnHover ? this._togglePanel.bind(this) : undefined;
     return (
-      <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} {...this.props} className={classNames('sdk-component layer-list ' + className, this.props.className)}>
+      <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} className={classNames('sdk-component layer-list ' + className, this.props.className)}>
         <IconButton style={this.props.style} className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={onClick}><LayersIcon color='white' /></IconButton>
         <div className='layer-tree-panel clearfix'>
           <div className='layer-list-header'>{tipLabel}</div>

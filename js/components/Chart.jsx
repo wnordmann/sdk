@@ -232,7 +232,7 @@ class Chart extends React.Component {
         return (<MenuItem key={idx} value={title} primaryText={title} />);
       });
       return (
-        <div {...this.props} className={classNames('sdk-component chart', this.props.className)} id='chart-panel'>
+        <div className={classNames('sdk-component chart', this.props.className)} id='chart-panel'>
           <SelectField value={this.state.value} onChange={this._selectChart.bind(this)}>
             {options}
           </SelectField>

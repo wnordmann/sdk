@@ -80,7 +80,7 @@ class LabelEditor extends React.Component {
       attributeItems.push(<MenuItem key={i} value={attribute} primaryText={attribute} />);
     }
     return (
-      <div {...this.props} className={classNames('sdk-component label-editor', this.props.className)}>
+      <div className={classNames('sdk-component label-editor', this.props.className)}>
         <SelectField floatingLabelText={formatMessage(messages.attributelabel)} hintText={formatMessage(messages.emptytext)} value={this.state.labelAttribute} onChange={this._onItemChange.bind(this)}>
           {attributeItems}
         </SelectField><br/>

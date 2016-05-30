@@ -163,7 +163,7 @@ class Bookmarks extends React.Component {
       });
       carouselChildren.unshift(<div key='intro'><h2>{this.props.introTitle}</h2><p>{this.props.introDescription}</p></div>);
       return (
-        <div {...this.props} className={classNames('sdk-component story-panel', this.props.className)}>
+        <div className={classNames('sdk-component story-panel', this.props.className)}>
           <Slider {...this.props} arrows={true} afterChange={this._afterChange.bind(this)}>
             {carouselChildren}
           </Slider>

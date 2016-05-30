@@ -379,7 +379,7 @@ class FeatureTable extends React.Component {
     }
     const buttonStyle = this.props.buttonStyle;
     return (
-      <div {...this.props} className={classNames('sdk-component feature-table', this.props.className)}>
+      <div className={classNames('sdk-component feature-table', this.props.className)}>
         <div ref='form'>
           <div className='feature-table-options'>
             <div className='feature-table-selector'>
