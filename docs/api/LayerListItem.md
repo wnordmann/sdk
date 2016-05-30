@@ -41,6 +41,13 @@ Should we allow for styling of features in a vector layer?
 type: `bool`
 
 
+### `className`
+
+Css class name to apply on the root element of this component.
+
+type: `string`
+
+
 ### `downloadFormat`
 
 The feature format to serialize in for downloads.

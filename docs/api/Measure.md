@@ -10,6 +10,13 @@ Adds area and length measure tools as a menu button.
 Properties
 ----------
 
+### `className`
+
+Css class name to apply on the root element of this component.
+
+type: `string`
+
+
 ### `geodesic`
 
 Should measurements be geodesic?

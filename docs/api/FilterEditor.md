@@ -6,6 +6,13 @@ Editor for a single filter using FilterService. Can for instance be used in a st
 Properties
 ----------
 
+### `className`
+
+Css class name to apply on the root element of this component.
+
+type: `string`
+
+
 ### `initialState`
 
 Initial state.

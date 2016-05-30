@@ -13,6 +13,7 @@
 import React from 'react';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import classNames from 'classnames';
 import LayerConstants from '../constants/LayerConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LayerSelector from './LayerSelector.jsx';
@@ -385,7 +386,7 @@ class WFST extends MapTool {
       }
       const buttonStyle = this.props.buttonStyle;
       return (
-        <div className='sdk-component wfst'>
+        <div {...this.props} className={classNames('sdk-component wfst', this.props.className)}>
           {layerSelector}
           <Toolbar>
             <ToolbarGroup>
@@ -431,6 +432,10 @@ WFST.propTypes = {
    * Style for the buttons in the toolbar.
    */
   buttonStyle: React.PropTypes.object,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * i18n message strings. Provided through the application through context.
    */

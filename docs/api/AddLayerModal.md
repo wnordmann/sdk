@@ -22,6 +22,13 @@ type: `bool`
 defaultValue: `false`
 
 
+### `className`
+
+Css class name to apply on the dialog.
+
+type: `string`
+
+
 ### `intl`
 
 i18n message strings. Provided through the application through context.

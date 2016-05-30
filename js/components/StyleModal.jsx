@@ -12,6 +12,7 @@
 
 import React from 'react';
 import ol from 'openlayers';
+import classNames from 'classnames';
 import Dialog from 'material-ui/lib/dialog';
 import SelectField from 'material-ui/lib/select-field';
 import MenuItem from 'material-ui/lib/menus/menu-item';
@@ -266,7 +267,7 @@ class StyleModal extends React.Component {
       <RaisedButton label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
     ];
     return (
-      <Dialog className='sdk-component style-modal' actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} open={this.state.open} onRequestClose={this.close.bind(this)}>
+      <Dialog {...this.props} className={classNames('sdk-component style-modal', this.props.className)} actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} open={this.state.open} onRequestClose={this.close.bind(this)}>
         <SelectField floatingLabelText={formatMessage(messages.rulelabel)} value={this.state.rule} onChange={this._onRuleChange.bind(this)}>
           {ruleItems}
         </SelectField>
@@ -284,6 +285,10 @@ StyleModal.propTypes = {
    * The layer associated with the style modal.
    */
   layer: React.PropTypes.instanceOf(ol.layer.Base).isRequired,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * i18n message strings. Provided through the application through context.
    */

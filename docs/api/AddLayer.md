@@ -11,6 +11,13 @@ Only vector layers can be added. Supported formats for layers are GeoJSON, GPX a
 Properties
 ----------
 
+### `className`
+
+Css class name to apply on the button.
+
+type: `string`
+
+
 ### `intl`
 
 i18n message strings. Provided through the application through context.

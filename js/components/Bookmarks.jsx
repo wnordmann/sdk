@@ -19,6 +19,7 @@ import RaisedButton from 'material-ui/lib/raised-button';
 import './Bookmarks.css';
 import './slick.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import classNames from 'classnames';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -149,7 +150,7 @@ class Bookmarks extends React.Component {
         return (<MenuItem key={bookmark.name} value={bookmark.name} primaryText={bookmark.name}/>);
       }, this);
       return (
-        <IconMenu className='sdk-component story-panel' {...this.props} iconButtonElement={<RaisedButton label={formatMessage(messages.dropdowntext)} />} value={this.state.value} onChange={this._handleChange.bind(this)}>
+        <IconMenu {...this.props} className={classNames('sdk-component story-panel', this.props.className)} iconButtonElement={<RaisedButton label={formatMessage(messages.dropdowntext)} />} value={this.state.value} onChange={this._handleChange.bind(this)}>
           {menuChildren}
         </IconMenu>
       );
@@ -158,11 +159,11 @@ class Bookmarks extends React.Component {
         return {__html: bookmark.description};
       };
       var carouselChildren = this.props.bookmarks.map(function(bookmark) {
-        return (<div key={bookmark.name} className="col-md-12 text-center"><h2>{bookmark.name}</h2><p dangerouslySetInnerHTML={getHTML(bookmark)}></p></div>);
+        return (<div key={bookmark.name}><h2>{bookmark.name}</h2><p dangerouslySetInnerHTML={getHTML(bookmark)}></p></div>);
       });
       carouselChildren.unshift(<div key='intro'><h2>{this.props.introTitle}</h2><p>{this.props.introDescription}</p></div>);
       return (
-        <div className='sdk-component story-panel'>
+        <div {...this.props} className={classNames('sdk-component story-panel', this.props.className)}>
           <Slider {...this.props} arrows={true} afterChange={this._afterChange.bind(this)}>
             {carouselChildren}
           </Slider>
@@ -177,6 +178,10 @@ Bookmarks.propTypes = {
    * The ol3 map instance on whose view we should navigate.
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * Css class name to apply on the menu or the div.
+   */
+  className: React.PropTypes.string,
   /**
    * The bookmark data. An array of objects with name (string, required), description (string, required) and extent (array of number, required) keys.
    * The extent should be in the view projection.

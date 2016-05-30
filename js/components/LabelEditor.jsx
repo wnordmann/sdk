@@ -13,6 +13,7 @@
 import React from 'react';
 import ColorPicker from 'react-color';
 import MenuItem from 'material-ui/lib/menus/menu-item';
+import classNames from 'classnames';
 import SelectField from 'material-ui/lib/select-field';
 import TextField from 'material-ui/lib/text-field';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
@@ -79,7 +80,7 @@ class LabelEditor extends React.Component {
       attributeItems.push(<MenuItem key={i} value={attribute} primaryText={attribute} />);
     }
     return (
-      <div className='sdk-component label-editor'>
+      <div {...this.props} className={classNames('sdk-component label-editor', this.props.className)}>
         <SelectField floatingLabelText={formatMessage(messages.attributelabel)} hintText={formatMessage(messages.emptytext)} value={this.state.labelAttribute} onChange={this._onItemChange.bind(this)}>
           {attributeItems}
         </SelectField><br/>
@@ -104,6 +105,10 @@ LabelEditor.propTypes = {
    * Initial state.
    */
   initialState: React.PropTypes.object,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
   * i18n message strings. Provided through the application through context.
   */

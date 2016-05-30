@@ -28,6 +28,13 @@ type: `bool`
 defaultValue: `false`
 
 
+### `className`
+
+Css class name to apply on the root element of this component.
+
+type: `string`
+
+
 ### `interval`
 
 The time, in milliseconds, to wait in each position of the slider. Positions are defined by dividing the slider range by the number of intervals defined in the numIntervals parameter.

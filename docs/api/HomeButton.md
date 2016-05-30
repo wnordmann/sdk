@@ -12,6 +12,13 @@ A button to go back to the initial extent of the map.
 Properties
 ----------
 
+### `className`
+
+Css class name to apply on the root element of this component.
+
+type: `string`
+
+
 ### `extent`
 
 Extent to fit on the map on pressing this button. If not set, the initial extent of the map will be used.

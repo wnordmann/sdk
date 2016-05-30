@@ -19,6 +19,13 @@ The HTML page of the application needs to include a script tag to cesium:
 Properties
 ----------
 
+### `className`
+
+Css class name to apply on the root element of this component.
+
+type: `string`
+
+
 ### `hideScalebar`
 
 Resolution at which to hide the scalebar in 3D mode

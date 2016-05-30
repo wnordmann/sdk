@@ -12,6 +12,7 @@
 
 import React from 'react';
 import ol from 'openlayers';
+import classNames from 'classnames';
 import LayerStore from '../stores/LayerStore.js';
 import pureRender from 'pure-render-decorator';
 import CircularProgress from 'material-ui/lib/circular-progress';
@@ -96,17 +97,24 @@ class LoadingPanel extends React.Component {
   render() {
     if (this.state.show) {
       return (
-        <div className='sdk-component loading-panel'>
+        <div {...this.props} className={classNames('sdk-component loading-panel', this.props.className)}>
           <CircularProgress size={1.5} />
         </div>
       );
     } else {
-      return (<article className='sdk-component loading-panel hidden'/>);
+      return (<article {...this.props} className={classNames('sdk-component loading-panel hidden', this.props.className)}/>);
     }
   }
 }
 
 LoadingPanel.propTypes = {
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
+  /**
+   * Map for whose layers to listen to load events.
+   */
   map: React.PropTypes.instanceOf(ol.Map).isRequired
 }
 

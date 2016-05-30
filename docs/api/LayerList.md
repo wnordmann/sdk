@@ -63,6 +63,13 @@ type: `bool`
 defaultValue: `false`
 
 
+### `className`
+
+Css class name to apply on the root element of this component.
+
+type: `string`
+
+
 ### `downloadFormat`
 
 The feature format to serialize in for downloads.

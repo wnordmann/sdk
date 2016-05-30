@@ -6,6 +6,13 @@ Style editor for stroke properties (color and width).
 Properties
 ----------
 
+### `className`
+
+Css class name to apply on the root element of this component.
+
+type: `string`
+
+
 ### `initialState`
 
 Initial state.

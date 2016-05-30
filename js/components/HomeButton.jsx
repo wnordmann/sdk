@@ -13,6 +13,7 @@
 import React from 'react';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import classNames from 'classnames';
 import IconButton from 'material-ui/lib/icon-button';
 import HomeIcon from 'material-ui/lib/svg-icons/maps/zoom-out-map';
 import pureRender from 'pure-render-decorator';
@@ -66,7 +67,7 @@ class HomeButton extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <IconButton className='sdk-component home-button' tooltipPosition='top-right' style={this.props.style} tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._goHome.bind(this)} ><HomeIcon color='white' /></IconButton>
+      <IconButton {...this.props} className={classNames('sdk-component home-button', this.props.className)} tooltipPosition='top-right' style={this.props.style} tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._goHome.bind(this)} ><HomeIcon color='white' /></IconButton>
     );
   }
 }
@@ -84,6 +85,10 @@ HomeButton.propTypes = {
    * Style for the button.
    */
   style: React.PropTypes.object,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * i18n message strings. Provided through the application through context.
    */

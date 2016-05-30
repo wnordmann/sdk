@@ -17,6 +17,7 @@ import ol from 'openlayers';
 import {injectIntl, intlShape} from 'react-intl';
 import IconButton from 'material-ui/lib/icon-button';
 import CloserIcon from 'material-ui/lib/svg-icons/navigation/close';
+import classNames from 'classnames';
 import EditForm from './EditForm.jsx';
 
 /**
@@ -85,7 +86,7 @@ class EditPopup extends BasePopup {
       editForm = (<EditForm ref='editForm' feature={this.state.feature} layer={this.state.layer} onSuccess={this._onSuccess.bind(this)} />);
     }
     return (
-      <div className='sdk-component edit-popup'>
+      <div {...this.props} className={classNames('sdk-component edit-popup', this.props.className)}>
         <IconButton style={{float: 'right'}} ref="popupCloser" onTouchTap={this.setVisible.bind(this, false)}><CloserIcon /></IconButton>
         <div className='popup-content' ref='content'>
           {editForm}
@@ -100,6 +101,10 @@ EditPopup.propTypes = {
    * The ol3 map to register for singleClick.
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * i18n message strings. Provided through the application through context.
    */

@@ -12,6 +12,13 @@ This component displays the results of geocoding search. The geocoding search is
 Properties
 ----------
 
+### `className`
+
+Css class name to apply on the root element of this component.
+
+type: `string`
+
+
 ### `intl`
 
 i18n message strings. Provided through the application through context.

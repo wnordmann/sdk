@@ -13,6 +13,7 @@
 /* eslint react/prop-types: 0 */
 import React from 'react';
 import ol from 'openlayers';
+import classNames from 'classnames';
 import SelectActions from '../actions/SelectActions.js';
 import MapTool from './MapTool.js';
 import FeatureStore from '../stores/FeatureStore.js';
@@ -126,12 +127,16 @@ class Select extends MapTool {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-     <RaisedButton className='sdk-component select' {...this.props} secondary={this.state.secondary} disabled={this.state.disabled} label={formatMessage(messages.menubuttontext)} tooltip={formatMessage(messages.menubuttontitle)} onTouchTap={this._selectByRectangle.bind(this)} />
+     <RaisedButton {...this.props} className={classNames('sdk-component select', this.props.className)} secondary={this.state.secondary} disabled={this.state.disabled} label={formatMessage(messages.menubuttontext)} tooltip={formatMessage(messages.menubuttontitle)} onTouchTap={this._selectByRectangle.bind(this)} />
     );
   }
 }
 
 Select.propTypes = {
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * i18n message strings. Provided through the application through context.
    */

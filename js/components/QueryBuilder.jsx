@@ -14,6 +14,7 @@ import React from 'react';
 import ol from 'openlayers';
 import Snackbar from 'material-ui/lib/snackbar';
 import FeatureStore from '../stores/FeatureStore.js';
+import classNames from 'classnames';
 import LayerSelector from './LayerSelector.jsx';
 import SelectActions from '../actions/SelectActions.js';
 import FilterService from '../services/FilterService.js';
@@ -185,7 +186,7 @@ class QueryBuilder extends React.Component {
       />);
     }
     return (
-      <div className='sdk-component query-builder'>
+      <div {...this.props} className={classNames('sdk-component query-builder', this.props.className)}>
         <LayerSelector {...this.props} onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /><br/>
         <TextField hintText={formatMessage(messages.filterplaceholder)} floatingLabelText={formatMessage(messages.filterlabel)} errorText={this.state.errorText} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} /><br/>
         <Toolbar>
@@ -208,6 +209,10 @@ QueryBuilder.propTypes = {
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * Style for the buttons in the toolbar.
    */

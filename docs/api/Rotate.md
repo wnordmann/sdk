@@ -12,6 +12,13 @@ Two buttons to zoom in and out.
 Properties
 ----------
 
+### `className`
+
+Css class name to apply on the root element of this component.
+
+type: `string`
+
+
 ### `duration`
 
 Animation duration in milliseconds.

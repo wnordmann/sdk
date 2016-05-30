@@ -24,6 +24,7 @@ import ol from 'openlayers';
 import MapTool from './MapTool.js';
 import {transformColor} from '../util.js';
 import ColorPicker from 'react-color';
+import classNames from 'classnames';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 
@@ -338,7 +339,7 @@ class Edit extends MapTool {
       <RaisedButton label={formatMessage(messages.closebuttontext)} onTouchTap={this.close.bind(this)} />
     ];
     return (
-      <div className='sdk-component edit'>
+      <div {...this.props} className={classNames('sdk-component edit', this.props.className)}>
         <SelectField hintText={formatMessage(messages.nolayer)} onChange={this._onLayerChange.bind(this)} floatingLabelText={formatMessage(messages.layerlabel)} value={this._layer} ref='layer'>
           {options}
         </SelectField>
@@ -385,6 +386,10 @@ Edit.propTypes = {
    * Style for the buttons in the toolbar.
    */
   buttonStyle: React.PropTypes.object,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * i18n message strings. Provided through the application through context.
    */

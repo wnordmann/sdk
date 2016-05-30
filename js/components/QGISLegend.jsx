@@ -12,6 +12,7 @@
 
 import React from 'react';
 import ol from 'openlayers';
+import classNames from 'classnames';
 import LayerStore from '../stores/LayerStore.js';
 import IconButton from 'material-ui/lib/icon-button';
 import LegendIcon from 'material-ui/lib/svg-icons/image/image';
@@ -111,7 +112,7 @@ class QGISLegend extends React.Component {
     var onMouseOver = this.props.expandOnHover ? this._showPanel.bind(this) : undefined;
     var onClick = !this.props.expandOnHover ? this._togglePanel.bind(this) : undefined;
     return (
-      <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} className={'sdk-component qgis-legend ' + className}>
+      <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} {...this.props} className={classNames('sdk-component qgis-legend ' + className, this.props.className)}>
         <IconButton tooltip={formatMessage(messages.buttontitle)} onTouchTap={onClick}><LegendIcon /></IconButton>
         <div className='legend-panel' id='legend'>{items}</div>
       </div>
@@ -140,6 +141,10 @@ QGISLegend.propTypes = {
    * Should we expand when hovering over the legend button?
    */
   expandOnHover: React.PropTypes.bool,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * i18n message strings. Provided through the application through context.
    */

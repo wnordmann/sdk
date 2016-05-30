@@ -18,6 +18,7 @@ import IconMenu from 'material-ui/lib/menus/icon-menu';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import RaisedButton from 'material-ui/lib/raised-button';
 import SelectField from 'material-ui/lib/select-field';
+import classNames from 'classnames';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 
@@ -231,7 +232,7 @@ class Chart extends React.Component {
         return (<MenuItem key={idx} value={title} primaryText={title} />);
       });
       return (
-        <div className='sdk-component chart' id='chart-panel'>
+        <div {...this.props} className={classNames('sdk-component chart', this.props.className)} id='chart-panel'>
           <SelectField value={this.state.value} onChange={this._selectChart.bind(this)}>
             {options}
           </SelectField>
@@ -244,7 +245,7 @@ class Chart extends React.Component {
         return (<MenuItem key={idx} value={key} primaryText={key} />);
       });
       return (
-        <IconMenu className='sdk-component chart' {...this.props} iconButtonElement={<RaisedButton label={formatMessage(messages.dropdowntext)} />} value={this.state.chart.title} onChange={this._onClick.bind(this)}>
+        <IconMenu {...this.props} className={classNames('sdk-component chart', this.props.className)} iconButtonElement={<RaisedButton label={formatMessage(messages.dropdowntext)} />} value={this.state.chart.title} onChange={this._onClick.bind(this)}>
           {listitems}
         </IconMenu>
       );
@@ -279,6 +280,10 @@ Chart.propTypes = {
    * If true, show a combo box to select charts instead of dropdown button.
    */
   combo: React.PropTypes.bool,
+  /**
+   * Css class name to apply on the menu or div.
+   */
+  className: React.PropTypes.string,
   /**
    * The id of the container to show when a chart is selected.
    */

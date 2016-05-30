@@ -12,6 +12,7 @@
 
 import React from 'react';
 import ol from 'openlayers';
+import classNames from 'classnames';
 import LayerStore from '../stores/LayerStore.js';
 import pureRender from 'pure-render-decorator';
 import SelectField from 'material-ui/lib/select-field';
@@ -91,7 +92,7 @@ class LayerSelector extends React.Component {
       );
     });
     return (
-      <SelectField className='sdk-component layer-selector' {...this.props} floatingLabelText={formatMessage(messages.labeltext)} hintText={formatMessage(messages.emptytext)} value={this.state.value} onChange={this._onItemChange.bind(this)}>
+      <SelectField {...this.props} className={classNames('sdk-component layer-selector', this.props.className)} floatingLabelText={formatMessage(messages.labeltext)} hintText={formatMessage(messages.emptytext)} value={this.state.value} onChange={this._onItemChange.bind(this)}>
         {selectItems}
       </SelectField>
     );
@@ -115,6 +116,10 @@ LayerSelector.propTypes = {
    * Change callback function.
    */
   onChange: React.PropTypes.func.isRequired,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * i18n message strings. Provided through the application through context.
    */

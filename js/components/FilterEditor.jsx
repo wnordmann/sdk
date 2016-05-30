@@ -12,6 +12,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import classNames from 'classnames';
 import TextField from 'material-ui/lib/text-field';
 import FilterService from '../services/FilterService.js';
 import pureRender from 'pure-render-decorator';
@@ -79,7 +80,7 @@ class FilterEditor extends React.Component {
       errorText = formatMessage(messages.errortext);
     }
     return (
-      <TextField className='sdk-component filter-editor' errorText={errorText} hintText={formatMessage(messages.filterplaceholder)} defaultValue={this.state.expression} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} />
+      <TextField {...this.props} className={classNames('sdk-component filter-editor', this.props.className)} errorText={errorText} hintText={formatMessage(messages.filterplaceholder)} defaultValue={this.state.expression} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} />
     );
   }
 }
@@ -93,6 +94,10 @@ FilterEditor.propTypes = {
    * Initial state.
    */
   initialState: React.PropTypes.object,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * i18n message strings. Provided through the application through context.
    */

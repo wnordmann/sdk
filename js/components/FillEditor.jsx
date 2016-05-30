@@ -11,6 +11,7 @@
  */
 
 import React from 'react';
+import classNames from 'classnames';
 import ColorPicker from 'react-color';
 import pureRender from 'pure-render-decorator';
 
@@ -38,7 +39,7 @@ class FillEditor extends React.Component {
   }
   render() {
     return (
-      <ColorPicker className='sdk-component fill-editor' type='chrome' onChangeComplete={this._onChangeFill.bind(this)} color={this.state.fillColor.rgb} />
+      <ColorPicker {...this.props} className={classNames('sdk-component fill-editor', this.props.className)} type='chrome' onChangeComplete={this._onChangeFill.bind(this)} color={this.state.fillColor.rgb} />
     );
   }
 }
@@ -48,6 +49,10 @@ FillEditor.propTypes = {
    * Callback that is called when a change is made.
    */
   onChange: React.PropTypes.func.isRequired,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * Initial state.
    */

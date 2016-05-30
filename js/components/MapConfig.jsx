@@ -12,6 +12,7 @@
 
 import React from 'react';
 import ol from 'openlayers';
+import classNames from 'classnames';
 import RaisedButton from './Button.jsx';
 import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group';
 import Snackbar from 'material-ui/lib/snackbar';
@@ -128,7 +129,7 @@ class MapConfig extends React.Component {
       info = (<Snackbar autoHideDuration={2000} message={this.state.msg} open={this.state.info} onRequestClose={this._onRequestClose.bind(this)} />);
     }
     return (
-      <ToolbarGroup className='sdk-component map-config'>
+      <ToolbarGroup {...this.props} className={classNames('sdk-component map-config', this.props.className)}>
         {info}
         <RaisedButton style={this.props.buttonStyle} tooltip={formatMessage(messages.loadtitle)} disabled={this.state.disabled} label={formatMessage(messages.loadtext)} onTouchTap={this._load.bind(this)} />
         <RaisedButton style={this.props.buttonStyle} label={formatMessage(messages.savetext)} tooltip={formatMessage(messages.savetitle)} onTouchTap={this._save.bind(this)} />
@@ -146,6 +147,10 @@ MapConfig.propTypes = {
    * Style for the buttons.
    */
   buttonStyle: React.PropTypes.object,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * i18n message strings. Provided through the application through context.
    */

@@ -13,6 +13,7 @@
 import React from 'react';
 import ol from 'openlayers';
 import LayerStore from '../stores/LayerStore.js';
+import classNames from 'classnames';
 import pureRender from 'pure-render-decorator';
 import List from 'material-ui/lib/lists/list';
 import ListItem from 'material-ui/lib/lists/list-item';
@@ -73,7 +74,7 @@ class Legend extends React.Component {
     }
     var subHeader = legends.length === 0 ? formatMessage(messages.emptyheader) : formatMessage(messages.header);
     return (
-      <div className='sdk-component legend'>
+      <div {...this.props} className={classNames('sdk-component legend', this.props.className)}>
         <div className='legend-header'>{subHeader}</div>
         <List className='legend-list'>{legends}</List>
       </div>
@@ -90,6 +91,10 @@ Legend.propTypes = {
    * The map whose layers should show up in this legend component.
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * i18n message strings. Provided through the application through context.
    */

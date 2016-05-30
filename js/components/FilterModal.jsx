@@ -12,6 +12,7 @@
 
 import React from 'react';
 import ol from 'openlayers';
+import classNames from 'classnames';
 import FilterService from '../services/FilterService.js';
 import Dialog from 'material-ui/lib/dialog';
 import RaisedButton from 'material-ui/lib/raised-button';
@@ -183,7 +184,7 @@ class FilterModal extends React.Component {
       <RaisedButton label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
     ];
     return (
-      <Dialog className='sdk-component filter-modal' actions={actions} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} modal={true} open={this.state.open} onRequestClose={this.close.bind(this)}>
+      <Dialog {...this.props} className={classNames('sdk-component filter-modal', this.props.className)} actions={actions} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} modal={true} open={this.state.open} onRequestClose={this.close.bind(this)}>
         <TextField errorText={errorText} ref='filterTextBox' />
         <RaisedButton label={formatMessage(messages.addfiltertext)} onTouchTap={this._addFilter.bind(this)} />
         <List>
@@ -199,6 +200,10 @@ FilterModal.propTypes = {
    * vector layer to filter features on.
    */
   layer: React.PropTypes.instanceOf(ol.layer.Vector).isRequired,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * i18n message strings. Provided through the application through context.
    */

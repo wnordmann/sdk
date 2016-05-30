@@ -46,6 +46,13 @@ A value of 0 means MIN, a value of 1 means MAX, a value of 2 means SUM and a val
 type: `arrayOf shape`
 
 
+### `className`
+
+Css class name to apply on the menu or div.
+
+type: `string`
+
+
 ### `combo`
 
 If true, show a combo box to select charts instead of dropdown button.

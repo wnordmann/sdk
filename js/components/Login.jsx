@@ -12,6 +12,7 @@
 
 import React from 'react';
 import IconMenu from 'material-ui/lib/menus/icon-menu';
+import classNames from 'classnames';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import RaisedButton from 'material-ui/lib/raised-button';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -95,13 +96,13 @@ class Login extends React.Component {
     const {formatMessage} = this.props.intl;
     if (this.state.user !== null) {
       return (
-        <IconMenu className='sdk-component login' {...this.props} iconButtonElement={<RaisedButton label={this.state.user} />} onItemTouchTap={this._doLogout.bind(this)}>
+        <IconMenu {...this.props} className={classNames('sdk-component login', this.props.className)} iconButtonElement={<RaisedButton label={this.state.user} />} onItemTouchTap={this._doLogout.bind(this)}>
           <MenuItem primaryText={formatMessage(messages.logouttext)}/>
         </IconMenu>
       );
     } else {
       return (
-        <RaisedButton className='sdk-component login' {...this.props} label={formatMessage(messages.buttontext)} onTouchTap={this._showLoginDialog.bind(this)}>
+        <RaisedButton {...this.props} className={classNames('sdk-component login', this.props.className)} label={formatMessage(messages.buttontext)} onTouchTap={this._showLoginDialog.bind(this)}>
           <LoginModal ref='loginmodal' {...this.props} />
         </RaisedButton>
       );
@@ -114,6 +115,10 @@ Login.propTypes = {
    * Url to geoserver login endpoint.
    */
   url: React.PropTypes.string,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * i18n message strings. Provided through the application through context.
    */

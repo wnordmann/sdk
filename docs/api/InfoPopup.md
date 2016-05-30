@@ -12,6 +12,13 @@ Popup to show feature info. This can be through WMS GetFeatureInfo or local vect
 Properties
 ----------
 
+### `className`
+
+Css class name to apply on the root element of this component.
+
+type: `string`
+
+
 ### `hover`
 
 Should we show feature info on hover instead of on click?

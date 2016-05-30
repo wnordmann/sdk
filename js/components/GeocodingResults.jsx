@@ -13,6 +13,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
+import classNames from 'classnames';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import List from 'material-ui/lib/lists/list';
 import ListItem from 'material-ui/lib/lists/list-item';
@@ -124,7 +125,7 @@ class GeocodingResults extends React.Component {
       }
     }
     return (
-      <div className='sdk-component geocoding-results'>
+      <div {...this.props} className={classNames('sdk-component geocoding-results', this.props.className)}>
         <div className='geocoding-results-header'>{subheader}</div>
         <List className='geocoding-results-list'>
          {resultNodes}
@@ -147,6 +148,10 @@ GeocodingResults.propTypes = {
    * Url to the marker image to use for bookmark position.
    */
   markerUrl: React.PropTypes.string,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * i18n message strings. Provided through the application through context.
    */

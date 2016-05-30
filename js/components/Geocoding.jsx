@@ -15,6 +15,7 @@ import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import GeocodingConstants from '../constants/GeocodingConstants.js';
 import GeocodingActions from '../actions/GeocodingActions.js';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import classNames from 'classnames';
 import TextField from 'material-ui/lib/text-field';
 import pureRender from 'pure-render-decorator';
 
@@ -71,7 +72,7 @@ class Geocoding extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <TextField className='sdk-component geocoding' {...this.props} ref='query' value={this.state.value} hintText={formatMessage(messages.placeholder)} onChange={this._searchAddress.bind(this)}/>
+      <TextField {...this.props} className={classNames('sdk-component geocoding', this.props.className)} ref='query' value={this.state.value} hintText={formatMessage(messages.placeholder)} onChange={this._searchAddress.bind(this)}/>
     );
   }
 }
@@ -81,6 +82,10 @@ Geocoding.propTypes = {
    * The maximum number of results to return on a search.
    */
   maxResults: React.PropTypes.number,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * i18n message strings. Provided through the application through context.
    */

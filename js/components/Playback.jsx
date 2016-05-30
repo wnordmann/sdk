@@ -12,6 +12,7 @@
 
 import React from 'react';
 import ol from 'openlayers';
+import classNames from 'classnames';
 import IconButton from 'material-ui/lib/icon-button';
 import PlayIcon from 'material-ui/lib/svg-icons/av/play-arrow';
 import PauseIcon from 'material-ui/lib/svg-icons/av/pause';
@@ -131,7 +132,7 @@ class Playback extends React.Component {
     var minDate = new Date(this.props.minDate);
     var maxDate = new Date(this.props.maxDate);
     return (
-      <div className='sdk-component playback'>
+      <div {...this.props} className={classNames('sdk-component playback', this.props.className)}>
         <IconButton style={{'float': 'left'}} onTouchTap={this._playPause.bind(this)}>{buttonIcon}</IconButton>
         <Slider style={{'float': 'left', width: '200px', overflow: 'hidden'}} min={this.props.minDate} max={this.props.maxDate} value={this.state.date} onChange={this._onRangeChange.bind(this)} />
         <DatePicker autoOk={true} minDate={minDate} maxDate={maxDate} style={{width: '200px', overflow: 'hidden'}} onChange={this._onDateChange.bind(this)} value={new Date(this.state.date)} />
@@ -165,6 +166,10 @@ Playback.propTypes = {
    * Should the playback tool start playing automatically?
    */
   autoPlay: React.PropTypes.bool,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * i18n message strings. Provided through the application through context.
    */

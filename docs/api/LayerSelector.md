@@ -6,6 +6,13 @@ A combobox to select a layer.
 Properties
 ----------
 
+### `className`
+
+Css class name to apply on the root element of this component.
+
+type: `string`
+
+
 ### `filter`
 
 A filter function to filter out some of the layers by returning false.

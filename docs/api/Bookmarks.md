@@ -74,6 +74,13 @@ The extent should be in the view projection.
 type: `arrayOf shape`
 
 
+### `className`
+
+Css class name to apply on the menu or the div.
+
+type: `string`
+
+
 ### `dots`
 
 Should we show indicators? These are dots to navigate the bookmark pages.

@@ -12,6 +12,7 @@
 
 import React from 'react';
 import ol from 'openlayers';
+import classNames from 'classnames';
 import URL from 'url-parse';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LayerConstants from '../constants/LayerConstants.js'
@@ -69,7 +70,7 @@ class WMSLegend extends React.Component {
       style: params.STYLES ? params.STYLES : ''
     });
     var legendUrl = url.toString();
-    return (<img  className='sdk-component wms-legend' src={legendUrl} />);
+    return (<img {...this.props} className={classNames('sdk-component wms-legend', this.props.className)} src={legendUrl} />);
   }
 }
 
@@ -90,6 +91,10 @@ WMSLegend.propTypes = {
    * Options to send as LEGEND_OPTIONS parameter.
    */
   options: React.PropTypes.object,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * The format to use for the WMS GetLegendGraphic call.
    */

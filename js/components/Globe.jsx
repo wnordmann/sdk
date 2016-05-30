@@ -16,6 +16,7 @@ import ol from 'openlayers';
 global.ol = ol;
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import ToolActions from '../actions/ToolActions.js';
+import classNames from 'classnames';
 import IconButton from 'material-ui/lib/icon-button';
 import GlobeIcon from 'material-ui/lib/svg-icons/action/three-d-rotation';
 import pureRender from 'pure-render-decorator';
@@ -114,7 +115,7 @@ class Globe extends React.Component {
       tooltip = formatMessage(messages.globetext);
     }
     return (
-      <IconButton className='sdk-component globe' tooltipPosition='top-right' style={this.props.style} tooltip={tooltip} onTouchTap={this._toggle.bind(this)}>{icon}</IconButton>
+      <IconButton {...this.props} className={classNames('sdk-component globe', this.props.className)} tooltipPosition='top-right' style={this.props.style} tooltip={tooltip} onTouchTap={this._toggle.bind(this)}>{icon}</IconButton>
     );
   }
 }
@@ -132,6 +133,10 @@ Globe.propTypes = {
    * Style for the button.
    */
   style: React.PropTypes.object,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * i18n message strings. Provided through the application through context.
    */

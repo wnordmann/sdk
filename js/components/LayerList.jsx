@@ -12,6 +12,7 @@
 
 import React from 'react';
 import ol from 'openlayers';
+import classNames from 'classnames';
 import LayerIdService from '../services/LayerIdService.js';
 import LayerStore from '../stores/LayerStore.js';
 import LayerListItem from './LayerListItem.jsx';
@@ -146,7 +147,7 @@ class LayerList extends React.Component {
     var onMouseOver = this.props.expandOnHover ? this._showPanel.bind(this) : undefined;
     var onClick = !this.props.expandOnHover ? this._togglePanel.bind(this) : undefined;
     return (
-      <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} className={'sdk-component layer-list ' + className}>
+      <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} {...this.props} className={classNames('sdk-component layer-list ' + className, this.props.className)}>
         <IconButton style={this.props.style} className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={onClick}><LayersIcon color='white' /></IconButton>
         <div className='layer-tree-panel clearfix'>
           <div className='layer-list-header'>{tipLabel}</div>
@@ -233,6 +234,10 @@ LayerList.propTypes = {
     allowUserInput: React.PropTypes.bool,
     asVector: React.PropTypes.bool
   }),
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
   * i18n message strings. Provided through the application through context.
   */

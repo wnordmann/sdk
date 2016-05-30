@@ -13,6 +13,7 @@
 import React from 'react';
 import ol from 'openlayers';
 import FilterModal from './FilterModal.jsx';
+import classNames from 'classnames';
 import LabelModal from './LabelModal.jsx';
 import StyleModal from './StyleModal.jsx';
 import LayerActions from '../actions/LayerActions.js';
@@ -205,7 +206,7 @@ class LayerListItem extends React.Component {
       styleModal = (<StyleModal {...this.props} layer={this.props.layer} ref='stylemodal' />);
     }
     return (
-      <ListItem className='sdk-component layer-list-item' autoGenerateNestedIndicator={false} secondaryText={layer.get('type') !== 'base' ? this.props.layer.get('name') : undefined} primaryText={input ? undefined : this.props.title} nestedItems={this.props.nestedItems} initiallyOpen={true}>
+      <ListItem {...this.props} className={classNames('sdk-component layer-list-item', this.props.className)} autoGenerateNestedIndicator={false} secondaryText={layer.get('type') !== 'base' ? this.props.layer.get('name') : undefined} primaryText={input ? undefined : this.props.title} nestedItems={this.props.nestedItems} initiallyOpen={true}>
         {input}
         {opacity}
         {zoomTo}
@@ -288,6 +289,10 @@ LayerListItem.propTypes = {
    * Called when a modal is closed by this layer list item.
    */
   onModalClose: React.PropTypes.func,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * i18n message strings. Provided through the application through context.
    */

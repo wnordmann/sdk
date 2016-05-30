@@ -13,6 +13,7 @@
 import React from 'react';
 import BasePopup from './BasePopup.jsx';
 import ol from 'openlayers';
+import classNames from 'classnames';
 import WMSService from '../services/WMSService.js';
 import Table from 'material-ui/lib/table/table';
 import TableHeaderColumn from 'material-ui/lib/table/table-header-column';
@@ -244,7 +245,7 @@ class InfoPopup extends BasePopup {
       contentDiv = (<div className='popup-content' ref='content' dangerouslySetInnerHTML={{__html: content}}></div>);
     }
     return (
-      <div className='sdk-component info-popup'>
+      <div {...this.props} className={classNames('sdk-component info-popup', this.props.className)}>
         <IconButton style={{float: 'right'}} ref="popupCloser" onTouchTap={this.setVisible.bind(this, false)}><CloserIcon /></IconButton>
         {contentDiv}
       </div>
@@ -265,6 +266,10 @@ InfoPopup.propTypes = {
    * Format to use for WMS GetFeatureInfo requests.
    */
   infoFormat: React.PropTypes.string,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * i18n message strings. Provided through the application through context.
    */

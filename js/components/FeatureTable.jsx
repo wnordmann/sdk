@@ -13,6 +13,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
+import classNames from 'classnames';
 import debounce from  'debounce';
 import FixedDataTable from 'fixed-data-table';
 import './fixed-data-table.css';
@@ -378,7 +379,7 @@ class FeatureTable extends React.Component {
     }
     const buttonStyle = this.props.buttonStyle;
     return (
-      <div id='sdk-component feature-table'>
+      <div {...this.props} className={classNames('sdk-component feature-table', this.props.className)}>
         <div ref='form'>
           <div className='feature-table-options'>
             <div className='feature-table-selector'>
@@ -465,6 +466,10 @@ FeatureTable.propTypes = {
    * Style for the buttons in the toolbar.
    */
   buttonStyle: React.PropTypes.object,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * i18n message strings. Provided through the application through context.
    */

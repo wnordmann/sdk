@@ -12,6 +12,7 @@
 
 import React from 'react';
 import ColorPicker from 'react-color';
+import classNames from 'classnames';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import TextField from 'material-ui/lib/text-field';
 import pureRender from 'pure-render-decorator';
@@ -58,7 +59,7 @@ class StrokeEditor extends React.Component {
     this.props.onChange(this.state);
     const {formatMessage} = this.props.intl;
     return (
-      <div className='sdk-component stroke-editor'>
+      <div {...this.props} className={classNames('sdk-component stroke-editor', this.props.className)}>
         <TextField defaultValue={this.state.strokeWidth} floatingLabelText={formatMessage(messages.strokewidthlabel)} onChange={this._onChangeStrokeWidth.bind(this)} /><br/>
         <label>{formatMessage(messages.strokecolorlabel)}:</label>
         <ColorPicker type='chrome' onChangeComplete={this._onChangeStroke.bind(this)} color={this.state.strokeColor.rgb} />
@@ -72,6 +73,10 @@ StrokeEditor.propTypes = {
    * Callback that is called when a change is made.
    */
   onChange: React.PropTypes.func.isRequired,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * Initial state.
    */

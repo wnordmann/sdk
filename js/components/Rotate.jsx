@@ -13,6 +13,7 @@
 import React from 'react';
 import ol from 'openlayers';
 import IconButton from 'material-ui/lib/icon-button';
+import classNames from 'classnames';
 import NorthIcon from 'material-ui/lib/svg-icons/maps/navigation';
 import pureRender from 'pure-render-decorator';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -82,7 +83,7 @@ class Rotate extends React.Component {
         transform: 'rotate(' + this.state.rotation + 'rad)'
       };
       return (
-        <IconButton className='sdk-component rotate' tooltipPosition='top-left' iconStyle={iconStyle} style={this.props.style} tooltip={formatMessage(messages.rotatetitle)} onTouchTap={this._resetNorth.bind(this)}><NorthIcon color="white"/></IconButton>
+        <IconButton {...this.props} className={classNames('sdk-component rotate', this.props.className)} tooltipPosition='top-left' iconStyle={iconStyle} style={this.props.style} tooltip={formatMessage(messages.rotatetitle)} onTouchTap={this._resetNorth.bind(this)}><NorthIcon color="white"/></IconButton>
       );
     }
   }
@@ -101,6 +102,10 @@ Rotate.propTypes = {
    * The ol3 map to use.
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * i18n message strings. Provided through the application through context.
    */

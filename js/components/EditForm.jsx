@@ -14,6 +14,7 @@ import React from 'react';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Snackbar from 'material-ui/lib/snackbar';
+import classNames from 'classnames';
 import RaisedButton from 'material-ui/lib/raised-button';
 import TextField from 'material-ui/lib/text-field';
 import WFSService from '../services/WFSService.js';
@@ -123,7 +124,7 @@ class EditForm extends React.Component {
       }
     }
     return (
-      <div className='sdk-component edit-form'>
+      <div {...this.props} className={classNames('sdk-component edit-form', this.props.className)}>
         <span className='edit-form-fid'>{fid}</span><br/>
         {inputs}<br/>
         {error}
@@ -144,6 +145,10 @@ EditForm.propTypes = {
    * The layer from which the feature comes.
    */
   layer: React.PropTypes.instanceOf(ol.layer.Base).isRequired,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * Callback function for successfull update
    */

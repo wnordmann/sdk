@@ -14,6 +14,7 @@ import React from 'react';
 import ol from 'openlayers';
 import Dialog from 'material-ui/lib/dialog';
 import RaisedButton from 'material-ui/lib/raised-button';
+import classNames from 'classnames';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import {transformColor} from '../util.js';
@@ -147,7 +148,7 @@ class LabelModal extends React.Component {
       <RaisedButton label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
     ];
     return (
-      <Dialog className='sdk-component label-modal' autoScrollBodyContent={true} modal={true} actions={actions} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} open={this.state.open} onRequestClose={this.close.bind(this)} >
+      <Dialog {...this.props} className={classNames('sdk-component label-modal', this.props.className)} autoScrollBodyContent={true} modal={true} actions={actions} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} open={this.state.open} onRequestClose={this.close.bind(this)} >
         <LabelEditor {...this.props} initialState={this._labelState} onChange={this._onChangeLabel.bind(this)} attributes={this.state.attributes} />
       </Dialog>
     );
@@ -155,6 +156,10 @@ class LabelModal extends React.Component {
 }
 
 LabelModal.propTypes = {
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * The layer associated with the style modal.
    */

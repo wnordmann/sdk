@@ -12,10 +12,10 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import classNames from 'classnames';
 import LayerStore from '../stores/LayerStore.js';
 import Snackbar from 'material-ui/lib/snackbar';
 import ol from 'openlayers';
-import classNames from 'classnames';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 const messages = defineMessages({

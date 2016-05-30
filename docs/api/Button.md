@@ -6,6 +6,13 @@ Button with built-in tooltip.
 Properties
 ----------
 
+### `className`
+
+Css class name to apply on the span.
+
+type: `string`
+
+
 ### `disabled`
 
 Should this button be disabled?

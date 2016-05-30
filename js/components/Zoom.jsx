@@ -12,6 +12,7 @@
 
 import React from 'react';
 import ol from 'openlayers';
+import classNames from 'classnames';
 import IconButton from 'material-ui/lib/icon-button';
 import ZoomIn from 'material-ui/lib/svg-icons/action/zoom-in';
 import ZoomOut from 'material-ui/lib/svg-icons/action/zoom-out';
@@ -67,7 +68,7 @@ class Zoom extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <div className='sdk-component zoom'>
+      <div {...this.props} className={classNames('sdk-component zoom', this.props.className)}>
         <IconButton tooltipPosition='top-right' style={this.props.style} tooltip={formatMessage(messages.zoomintitle)} onTouchTap={this._zoomIn.bind(this)}><ZoomIn color="white"/></IconButton><br/>
         <IconButton tooltipPosition='top-right' style={Object.assign({marginTop: '25px'}, this.props.style)} tooltip={formatMessage(messages.zoomouttitle)} onTouchTap={this._zoomOut.bind(this)}><ZoomOut color="white"/></IconButton>
       </div>
@@ -84,6 +85,10 @@ Zoom.propTypes = {
    * The zoom delta applied on each click.
    */
   delta: React.PropTypes.number,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * Style for the buttons.
    */

@@ -16,6 +16,7 @@ import ol from 'openlayers';
 import './Measure.css';
 import MapTool from './MapTool.js';
 import IconMenu from 'material-ui/lib/menus/icon-menu';
+import classNames from 'classnames';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import RaisedButton from './Button.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -256,7 +257,7 @@ class Measure extends MapTool {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-     <IconMenu className='sdk-component measure' {...this.props} iconButtonElement={<RaisedButton secondary={this.state.secondary} tooltip={formatMessage(messages.dropdowntitle)} disabled={this.state.disabled} label={formatMessage(messages.dropdowntext)} />} value={this.state.value} onChange={this._handleChange.bind(this)}>
+      <IconMenu {...this.props} className={classNames('sdk-component measure', this.props.className)} iconButtonElement={<RaisedButton secondary={this.state.secondary} tooltip={formatMessage(messages.dropdowntitle)} disabled={this.state.disabled} label={formatMessage(messages.dropdowntext)} />} value={this.state.value} onChange={this._handleChange.bind(this)}>
         <MenuItem disabled={this.state.disabled} value={1} primaryText={formatMessage(messages.measuredistancetext)}/>
         <MenuItem disabled={this.state.disabled} value={2} primaryText={formatMessage(messages.measureareatext)}/>
         <MenuItem disabled={this.state.disabled} primaryText={formatMessage(messages.cleartext)}/>
@@ -278,6 +279,10 @@ Measure.propTypes = {
    * Should measurements be geodesic?
    */
   geodesic: React.PropTypes.bool,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * i18n message strings. Provided through the application through context.
    */

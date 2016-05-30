@@ -20,6 +20,7 @@ import GridList from 'material-ui/lib/grid-list/grid-list';
 import GridTile from 'material-ui/lib/grid-list/grid-tile';
 import {transformColor} from '../util.js';
 import ColorPicker from 'react-color';
+import classNames from 'classnames';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import './AddLayer.css';
@@ -191,7 +192,7 @@ class AddLayer extends React.Component {
       (<RaisedButton label={formatMessage(messages.closebuttontext)} onTouchTap={this._closeDialog.bind(this)} />)
     ];
     return (
-      <RaisedButton className='sdk-component add-layer' {...this.props} icon={<UploadIcon />} label={formatMessage(messages.menutext)} onTouchTap={this._showDialog.bind(this)}>
+      <RaisedButton {...this.props} className={classNames('sdk-component add-layer', this.props.className)} icon={<UploadIcon />} label={formatMessage(messages.menutext)} onTouchTap={this._showDialog.bind(this)}>
         <Dialog autoScrollBodyContent={true} actions={actions} open={this.state.open} onRequestClose={this._closeDialog.bind(this)} modal={true} title={formatMessage(messages.modaltitle)}>
           <GridList cols={3} cellHeight={350}>
             <GridTile>
@@ -220,6 +221,10 @@ AddLayer.propTypes = {
    * The ol3 map instance to add to.
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * Css class name to apply on the button.
+   */
+  className: React.PropTypes.string,
   /**
    * The stroke width in pixels used in the style for the uploaded data.
    */

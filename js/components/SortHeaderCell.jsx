@@ -11,6 +11,7 @@
  */
 
 import React from 'react';
+import classNames from 'classnames';
 import {Cell} from 'fixed-data-table';
 import pureRender from 'pure-render-decorator';
 
@@ -43,7 +44,7 @@ export class SortHeaderCell extends React.Component {
   render() {
     var {sortDir, children, ...props} = this.props;
     return (
-      <Cell className='sdk-component sort-header-cell' {...props}>
+      <Cell {...props} className={classNames('sdk-component sort-header-cell', props.className)}>
         <a onClick={this._onSortChange}>
           {children} {sortDir ? (sortDir === SortTypes.DESC ? '↓' : '↑') : ''}
         </a>

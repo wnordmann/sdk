@@ -13,6 +13,7 @@
 import React from 'react';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import classNames from 'classnames';
 import pureRender from 'pure-render-decorator';
 import Snackbar from 'material-ui/lib/snackbar';
 import IconButton from 'material-ui/lib/icon-button';
@@ -132,7 +133,7 @@ class Geolocation extends React.Component {
         color = 'white';
       }
       return (
-        <IconButton className='sdk-component geolocation' tooltipPosition='top-right' style={this.props.style} tooltip={tooltip} onTouchTap={this._geolocate.bind(this)}><MyLocation color={color} /></IconButton>
+        <IconButton {...this.props} className={classNames('sdk-component geolocation', this.props.className)} tooltipPosition='top-right' style={this.props.style} tooltip={tooltip} onTouchTap={this._geolocate.bind(this)}><MyLocation color={color} /></IconButton>
       );
     }
   }
@@ -147,6 +148,10 @@ Geolocation.propTypes = {
    * Style for the button.
    */
   style: React.PropTypes.object,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * i18n message strings. Provided through the application through context.
    */

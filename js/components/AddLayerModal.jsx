@@ -25,6 +25,7 @@ import LayerIcon from 'material-ui/lib/svg-icons/maps/layers';
 import URL from 'url-parse';
 import WMSService from '../services/WMSService.js';
 import WFSService from '../services/WFSService.js';
+import classNames from 'classnames';
 import './AddLayerModal.css';
 
 const messages = defineMessages({
@@ -314,7 +315,7 @@ class AddLayerModal extends React.Component {
       <RaisedButton label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
     ];
     return (
-      <Dialog className='sdk-component add-layer-modal' actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title)} open={this.state.open} onRequestClose={this.close.bind(this)}>
+      <Dialog {...this.props} className={classNames('sdk-component add-layer-modal', this.props.className)}  actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title)} open={this.state.open} onRequestClose={this.close.bind(this)}>
         {input}
         {layers}
         {error}
@@ -328,6 +329,10 @@ AddLayerModal.propTypes = {
    * The ol3 map to upload to.
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * Css class name to apply on the dialog.
+   */
+  className: React.PropTypes.string,
   /**
    * url that will be used to retrieve layers from (WMS or WFS).
    */

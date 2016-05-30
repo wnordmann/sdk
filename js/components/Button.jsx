@@ -1,6 +1,7 @@
 import React from 'react';
 import RaisedButton from 'material-ui/lib/raised-button';
 import Tooltip from 'material-ui/lib/tooltip';
+import classNames from 'classnames';
 import './Button.css';
 
 /**
@@ -27,7 +28,7 @@ class Button extends React.Component {
     var styleConfig = {left: 12, top: 20, boxSizing: 'border-box'};
     var style = this.props.tooltipStyle ? Object.assign(styleConfig, this.props.tooltipStyle) : styleConfig;
     return (
-      <span className='sdk-component sdk-button' >
+      <span {...this.props} className={classNames('sdk-component sdk-button', this.props.className)} >
         <RaisedButton ref='button' {...this.props} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)}/>
         <Tooltip verticalPosition='bottom' style={style} show={this.state.showTooltip} label={this.props.tooltip || ''} />
       </span>
@@ -40,6 +41,10 @@ Button.propTypes = {
    * Should this button be disabled?
    */
   disabled: React.PropTypes.bool,
+  /**
+   * Css class name to apply on the span.
+   */
+  className: React.PropTypes.string,
   /**
    * The tooltip to show for this button.
    */

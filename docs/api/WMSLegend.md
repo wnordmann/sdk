@@ -6,6 +6,13 @@ Legend component for layers with a WMS source (tiled or untiled).
 Properties
 ----------
 
+### `className`
+
+Css class name to apply on the root element of this component.
+
+type: `string`
+
+
 ### `format`
 
 The format to use for the WMS GetLegendGraphic call.

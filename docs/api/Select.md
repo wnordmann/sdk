@@ -10,6 +10,13 @@ The select tool allows users to select features in multiple layers at a time by 
 Properties
 ----------
 
+### `className`
+
+Css class name to apply on the root element of this component.
+
+type: `string`
+
+
 ### `intl`
 
 i18n message strings. Provided through the application through context.

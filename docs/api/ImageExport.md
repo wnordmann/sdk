@@ -10,6 +10,13 @@ Export the map as a PNG file. This will only work if the canvas is not tainted.
 Properties
 ----------
 
+### `className`
+
+Css class name to apply on the root element of this component.
+
+type: `string`
+
+
 ### `intl`
 
 i18n message strings. Provided through the application through context.

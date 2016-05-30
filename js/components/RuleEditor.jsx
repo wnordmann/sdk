@@ -12,6 +12,7 @@
 
 import React from 'react';
 import Tabs from 'material-ui/lib/tabs/tabs';
+import classNames from 'classnames';
 import Tab from 'material-ui/lib/tabs/tab';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import LabelEditor from './LabelEditor.jsx';
@@ -81,7 +82,7 @@ class RuleEditor extends React.Component {
     if (this.props.visible) {
       const {formatMessage} = this.props.intl;
       return (
-        <Paper className='sdk-component rule-editor' zIndex={2}>
+        <Paper {...this.props} className={classNames('sdk-component rule-editor', this.props.className)} zIndex={2}>
           <TextField value={this.state.title} ref='title' onChange={this._onTitleChange.bind(this)} floatingLabelText={formatMessage(messages.titlelabel)} />
           <Tabs value={this.state.value} onChange={this.handleChange.bind(this)}>
             <Tab value={1} label={formatMessage(messages.filltitle)}>
@@ -118,6 +119,10 @@ RuleEditor.propTypes = {
    * Initial state.
    */
   initialState: React.PropTypes.object,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * Callback that is called when a change is made.
    */

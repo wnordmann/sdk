@@ -14,6 +14,7 @@ import React from 'react';
 import ol from 'openlayers';
 import 'blueimp-canvas-to-blob';
 import RaisedButton from 'material-ui/lib/raised-button';
+import classNames from 'classnames';
 import CameraIcon from 'material-ui/lib/svg-icons/image/camera-alt';
 import FileSaver from 'browser-filesaver';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -57,7 +58,7 @@ class ImageExport extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <RaisedButton className='sdk-component image-export' {...this.props} icon={<CameraIcon />} label={formatMessage(messages.buttontext)} onTouchTap={this._handleClick.bind(this)} />
+      <RaisedButton {...this.props} className={classNames('sdk-component image-export', this.props.className)} icon={<CameraIcon />} label={formatMessage(messages.buttontext)} onTouchTap={this._handleClick.bind(this)} />
     );
   }
 }
@@ -67,6 +68,10 @@ ImageExport.propTypes = {
    * The ol3 map to export as PNG.
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * Css class name to apply on the root element of this component.
+   */
+  className: React.PropTypes.string,
   /**
    * i18n message strings. Provided through the application through context.
    */
