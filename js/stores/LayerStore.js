@@ -46,6 +46,9 @@ class LayerStore extends EventEmitter {
       } else if (source instanceof ol.source.Image) {
         source.on('imageloaderror', this._onError, this);
       }
+    } else {
+      // change:layers on layer does not seem to work
+      layer.getLayers().on('change:length', this.emitChange, this);
     }
   }
   _onError() {
@@ -62,6 +65,8 @@ class LayerStore extends EventEmitter {
       } else if (source instanceof ol.source.Image) {
         source.un('imageloaderror', this._onError, this);
       }
+    } else {
+      layer.getLayers().un('change:length', this.emitChange, this);
     }
   }
   _onAdd(evt) {

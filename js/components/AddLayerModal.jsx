@@ -180,11 +180,12 @@ class AddLayerModal extends React.Component {
         isRemovable: true,
         isSelectable: true,
         isWFST: true,
+        type: layer.Layer ? 'base' : undefined,
         EX_GeographicBoundingBox: extent,
         popupInfo: '#AllAttributes',
         source: new ol.source.TileWMS({
           url: this._getUrl(),
-          wrapX: false,
+          wrapX: layer.Layer ? true : false,
           params: {
             LAYERS: layer.Name
           },
@@ -193,7 +194,23 @@ class AddLayerModal extends React.Component {
       });
     }
     this._getWfsInfo.call(this, layer, olLayer, this.close, this);
-    map.addLayer(olLayer);
+    if (olLayer.get('type') === 'base') {
+      var foundGroup = false;
+      map.getLayers().forEach(function(lyr) {
+        if (foundGroup === false && lyr.get('type') === 'base-group') {
+          foundGroup = true;
+          lyr.getLayers().forEach(function(child) {
+            child.setVisible(false);
+          });
+          lyr.getLayers().push(olLayer);
+        }
+      });
+      if (foundGroup === false) {
+        map.addLayer(olLayer);
+      }
+    } else {
+      map.addLayer(olLayer);
+    }
     if (!this.props.asVector) {
       view.fit(extent, map.getSize());
     }

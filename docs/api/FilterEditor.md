@@ -1,7 +1,7 @@
 `FilterEditor` (component)
 ==========================
 
-Editor for a single filter using filtrex. Can for instance be used in a style dialog.
+Editor for a single filter using FilterService. Can for instance be used in a style dialog.
 
 Properties
 ----------

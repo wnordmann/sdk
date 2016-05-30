@@ -183,7 +183,7 @@ class LayerListItem extends React.Component {
       reorderDown = (<IconButton onTouchTap={this._moveDown.bind(this)}><MoveDownIcon /></IconButton>);
     }
     var remove;
-    if (layer.get('isRemovable') === true) {
+    if (layer.get('type') !== 'base' && layer.get('isRemovable') === true) {
       remove = (<IconButton onTouchTap={this._remove.bind(this)}><DeleteIcon /></IconButton>);
     }
     var edit;
@@ -205,7 +205,7 @@ class LayerListItem extends React.Component {
       styleModal = (<StyleModal {...this.props} layer={this.props.layer} ref='stylemodal' />);
     }
     return (
-      <ListItem className='sdk-component layer-list-item' autoGenerateNestedIndicator={false} secondaryText={this.props.layer.get('name')} primaryText={input ? undefined : this.props.title} nestedItems={this.props.nestedItems} initiallyOpen={true}>
+      <ListItem className='sdk-component layer-list-item' autoGenerateNestedIndicator={false} secondaryText={layer.get('type') !== 'base' ? this.props.layer.get('name') : undefined} primaryText={input ? undefined : this.props.title} nestedItems={this.props.nestedItems} initiallyOpen={true}>
         {input}
         {opacity}
         {zoomTo}

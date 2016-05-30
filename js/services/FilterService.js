@@ -16,7 +16,7 @@ class FilterService {
   constructor() {
     function code(args) {
       var argsJs = args.map(function(a) {
-          return typeof(a) == 'number' ? ('$' + a) : JSON.stringify(a);
+        return typeof (a) == 'number' ? ('$' + a) : JSON.stringify(a);
       }).join(',');
 
       return '$$ = [' + argsJs + '];'
@@ -49,7 +49,7 @@ class FilterService {
           /* Remove whitespace */
           ['\\s+',  ''],
           /* End */
-          ['$', 'return "EOF";'],
+          ['$', 'return "EOF";']
         ]
       },
       operators: [
@@ -60,7 +60,7 @@ class FilterService {
         ['left', '==', '!='],
         ['left', '<', '<=', '>', '>='],
         ['left', 'not'],
-        ['left', 'UMINUS'],
+        ['left', 'UMINUS']
       ],
       bnf: {
         expressions: [
@@ -87,8 +87,8 @@ class FilterService {
         ],
         inSet: [
           ['e', code(['o[', 1, '] = true; '], true)],
-          ['inSet , e', code([1, 'o[', 3, '] = true; '], true)],
-        ],
+          ['inSet , e', code([1, 'o[', 3, '] = true; '], true)]
+        ]
       }
     };
     this.parser = Jison.Parser(grammar);
@@ -102,9 +102,9 @@ class FilterService {
     js.push('return ');
     function toJs(node) {
       if (Array.isArray(node)) {
-          node.forEach(toJs);
+        node.forEach(toJs);
       } else {
-          js.push(node);
+        js.push(node);
       }
     }
     tree.forEach(toJs);
@@ -113,7 +113,7 @@ class FilterService {
     //Return function representing the expression that can be applied to a dataset
     var func = new Function('data', js.join(''));
     return function(data) {
-        return func(data);
+      return func(data);
     };
   }
 }
