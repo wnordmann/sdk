@@ -78,7 +78,7 @@ class AddLayerModal extends React.Component {
       error: false,
       errorOpen: false,
       open: false,
-      layers: []
+      layerInfo: null
     };
   }
   componentWillUnmount() {
@@ -111,6 +111,7 @@ class AddLayerModal extends React.Component {
     this.setState({
       errorOpen: true,
       error: true,
+      layerInfo: null,
       msg: msg
     });
   }
