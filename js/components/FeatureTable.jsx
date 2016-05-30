@@ -32,6 +32,7 @@ import {LinkCell} from './LinkCell.jsx';
 import {TextCell} from './TextCell.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import FilterService from '../services/FilterService.js';
+import FilterHelp from './FilterHelp.jsx';
 import './FeatureTable.css';
 
 const {Table, Column} = FixedDataTable;
@@ -128,7 +129,8 @@ class FeatureTable extends React.Component {
       features: [],
       columnWidths: {},
       selected: [],
-      colSortDirs: {}
+      colSortDirs: {},
+      help: false
     };
   }
   componentWillMount() {
@@ -387,6 +389,7 @@ class FeatureTable extends React.Component {
             </div>
             <div className='feature-table-filter'>
               <TextField floatingLabelText={formatMessage(messages.filterlabel)} id='featuretable-filter' disabled={!this._layer} ref='filter' onChange={this._filterByText.bind(this)} hintText={formatMessage(messages.filterplaceholder)} />
+              <FilterHelp />
             </div>
             <Checkbox label={formatMessage(messages.onlyselected)} id='featuretable-onlyselected' disabled={!this._layer} checked={this._selectedOnly} onCheck={this._filter.bind(this)} />
           </div>
