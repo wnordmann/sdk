@@ -151,45 +151,50 @@ class LayerListItem extends React.Component {
   render() {
     const layer = this.props.layer;
     const source = layer.getSource ? layer.getSource() : undefined;
+    const iconStyle = {'paddingTop':'0px', 'paddingBottom':'0px'};
     var opacity;
     if (this.props.showOpacity && source && layer.get('type') !== 'base') {
       var val = layer.getOpacity();
-      opacity = (<Slider style={{width: '200px'}} defaultValue={val} onChange={this._changeOpacity.bind(this)} />);
+      opacity = (<Slider style={{width: '200px', 'marginLeft':'21px', 'marginTop':'4px', 'marginBottom':'0px'}} defaultValue={val} onChange={this._changeOpacity.bind(this)} />);
     }
     var zoomTo;
     // TODO add titles back for icon buttons
     if (layer.get('type') !== 'base' && layer.get('type') !== 'base-group' && ((source && source.getExtent) || layer.get('EX_GeographicBoundingBox')) && this.props.showZoomTo) {
-      zoomTo = <IconButton onTouchTap={this._zoomTo.bind(this)}><ZoomInIcon /></IconButton>;
+      zoomTo = <IconButton style={iconStyle} onTouchTap={this._zoomTo.bind(this)}><ZoomInIcon /></IconButton>;
     }
     var download;
     if (layer instanceof ol.layer.Vector && this.props.showDownload) {
-      download = (<IconButton onTouchTap={this._download.bind(this)}><DownloadIcon /></IconButton>);
+      download = (<IconButton style={iconStyle} onTouchTap={this._download.bind(this)}><DownloadIcon /></IconButton>);
     }
     var filter;
     if (layer instanceof ol.layer.Vector && this.props.allowFiltering) {
-      filter = (<IconButton onTouchTap={this._filter.bind(this)}><FilterIcon /></IconButton>);
+      filter = (<IconButton style={iconStyle} onTouchTap={this._filter.bind(this)}><FilterIcon /></IconButton>);
     }
     var label;
     if (layer instanceof ol.layer.Vector && this.props.allowLabeling) {
-      label = (<IconButton onTouchTap={this._label.bind(this)}><LabelIcon /></IconButton>);
+      label = (<IconButton style={iconStyle} onTouchTap={this._label.bind(this)}><LabelIcon /></IconButton>);
     }
     var styling;
     var canStyle = layer.get('wfsInfo') && this.props.allowStyling;
     if (canStyle) {
-      styling = (<IconButton onTouchTap={this._style.bind(this)}><StyleIcon /></IconButton>);
+      styling = (<IconButton style={iconStyle} onTouchTap={this._style.bind(this)}><StyleIcon /></IconButton>);
     }
     var reorderUp, reorderDown;
     if (layer.get('type') !== 'base' && this.props.allowReordering && !this.props.nestedItems) {
-      reorderUp = (<IconButton onTouchTap={this._moveUp.bind(this)}><MoveUpIcon /></IconButton>);
-      reorderDown = (<IconButton onTouchTap={this._moveDown.bind(this)}><MoveDownIcon /></IconButton>);
+      reorderUp = (<IconButton style={iconStyle} onTouchTap={this._moveUp.bind(this)}><MoveUpIcon /></IconButton>);
+      reorderDown = (<IconButton style={iconStyle} onTouchTap={this._moveDown.bind(this)}><MoveDownIcon /></IconButton>);
     }
     var remove;
     if (layer.get('type') !== 'base' && layer.get('isRemovable') === true) {
-      remove = (<IconButton onTouchTap={this._remove.bind(this)}><DeleteIcon /></IconButton>);
+      remove = (<IconButton style={iconStyle} onTouchTap={this._remove.bind(this)}><DeleteIcon /></IconButton>);
     }
     var edit;
     if (this.props.allowEditing && layer.get('isWFST') === true) {
-      edit = (<IconButton onTouchTap={this._edit.bind(this)}><EditIcon /></IconButton>);
+      edit = (<IconButton style={iconStyle} onTouchTap={this._edit.bind(this)}><EditIcon /></IconButton>);
+    }
+    var buttonPadding
+    if (zoomTo || download || filter || label || styling || reorderUp || reorderDown || remove || edit) {
+      buttonPadding = (<div style={{'display':'inline-block','width':'26px'}} />);
     }
     var input;
     if (layer.get('type') === 'base') {
@@ -206,9 +211,10 @@ class LayerListItem extends React.Component {
       styleModal = (<StyleModal {...this.props} layer={this.props.layer} ref='stylemodal' />);
     }
     return (
-      <ListItem className={classNames({'sdk-component': true, 'layer-list-item': true}, this.props.className)} autoGenerateNestedIndicator={false} secondaryText={layer.get('type') !== 'base' ? this.props.layer.get('name') : undefined} primaryText={input ? undefined : this.props.title} nestedItems={this.props.nestedItems} initiallyOpen={true}>
+      <ListItem className={classNames({'sdk-component': true, 'layer-list-item': true}, this.props.className)} innerDivStyle={{'paddingTop':'8px','paddingBottom':'8px'}} autoGenerateNestedIndicator={false} primaryText={input ? undefined : this.props.title} nestedItems={this.props.nestedItems} nestedListStyle={{'marginLeft':'40px'}} initiallyOpen={true}>
         {input}
         {opacity}
+        {buttonPadding}
         {zoomTo}
         {download}
         {filter}
