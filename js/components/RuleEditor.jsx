@@ -82,7 +82,7 @@ class RuleEditor extends React.Component {
     if (this.props.visible) {
       const {formatMessage} = this.props.intl;
       return (
-        <Paper {...this.props} className={classNames('sdk-component rule-editor', this.props.className)} zIndex={2}>
+        <Paper className={classNames('sdk-component rule-editor', this.props.className)} zIndex={2}>
           <TextField value={this.state.title} ref='title' onChange={this._onTitleChange.bind(this)} floatingLabelText={formatMessage(messages.titlelabel)} />
           <Tabs value={this.state.value} onChange={this.handleChange.bind(this)}>
             <Tab value={1} label={formatMessage(messages.filltitle)}>

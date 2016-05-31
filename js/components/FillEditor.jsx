@@ -39,7 +39,7 @@ class FillEditor extends React.Component {
   }
   render() {
     return (
-      <ColorPicker {...this.props} className={classNames('sdk-component fill-editor', this.props.className)} type='chrome' onChangeComplete={this._onChangeFill.bind(this)} color={this.state.fillColor.rgb} />
+      <ColorPicker className={classNames('sdk-component fill-editor', this.props.className)} type='chrome' onChangeComplete={this._onChangeFill.bind(this)} color={this.state.fillColor.rgb} />
     );
   }
 }

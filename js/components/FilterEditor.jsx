@@ -80,7 +80,7 @@ class FilterEditor extends React.Component {
       errorText = formatMessage(messages.errortext);
     }
     return (
-      <TextField {...this.props} className={classNames('sdk-component filter-editor', this.props.className)} errorText={errorText} hintText={formatMessage(messages.filterplaceholder)} defaultValue={this.state.expression} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} />
+      <TextField className={classNames('sdk-component filter-editor', this.props.className)} errorText={errorText} hintText={formatMessage(messages.filterplaceholder)} defaultValue={this.state.expression} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} />
     );
   }
 }
