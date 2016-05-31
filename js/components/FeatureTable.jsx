@@ -380,16 +380,17 @@ class FeatureTable extends React.Component {
         );
     }
     const buttonStyle = this.props.buttonStyle;
+    var filterHelp = this._layer ? <FilterHelp /> : undefined;
     return (
       <div className={classNames('sdk-component feature-table', this.props.className)}>
         <div ref='form'>
           <div className='feature-table-options'>
             <div className='feature-table-selector'>
-              <LayerSelector {...this.props} id='table-layerSelector' ref='layerSelector' onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList} map={this.props.map} value={id} />
+              <LayerSelector {...this.props} id='table-layerSelector' disabled={!this._layer} ref='layerSelector' onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList} map={this.props.map} value={id} />
             </div>
             <div className='feature-table-filter'>
               <TextField floatingLabelText={formatMessage(messages.filterlabel)} id='featuretable-filter' disabled={!this._layer} ref='filter' onChange={this._filterByText.bind(this)} hintText={formatMessage(messages.filterplaceholder)} />
-              <FilterHelp />
+              {filterHelp}
             </div>
             <Checkbox label={formatMessage(messages.onlyselected)} id='featuretable-onlyselected' disabled={!this._layer} checked={this._selectedOnly} onCheck={this._filter.bind(this)} />
           </div>
