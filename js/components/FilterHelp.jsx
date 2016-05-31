@@ -33,7 +33,7 @@ class FilterHelp extends React.Component {
     return (
       <span className='filter-help'>
         <HelpOutline ref='help' onClick={this._onToggleHelp.bind(this)}/>
-        <Popover open={this.state.help} onRequestClose={this._onToggleHelp.bind(this)} style={popStyle} anchorEl={this.helpElement} anchorOrigin={{'vertical':'center','horizontal':'left'}}>
+        <Popover open={this.state.help} onRequestClose={this._onToggleHelp.bind(this)} style={popStyle} anchorEl={this.helpElement} anchorOrigin={{'horizontal':'left'}}>
           <p>
             Type in a string to search all feature attributes, or a filter expression to narrow your search to one or more attributes.
           </p>
