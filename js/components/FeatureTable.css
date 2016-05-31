@@ -27,4 +27,9 @@
   
   padding-bottom: 12px;
 }
-
+.feature-table-filter > div {
+  margin-right: 24px;
+}
+.feature-table .filter-help {
+  right: 0;
+}
