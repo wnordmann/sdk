@@ -127,7 +127,7 @@ class WFST extends MapTool {
       visible: this.props.visible
     };
     this._interactions = {};
-    this._select = new ol.interaction.Select();
+    this._select = new ol.interaction.Select({wrapX: false});
     var features = this._select.getFeatures();
     this._modify = new ol.interaction.Modify({
       features: features,
