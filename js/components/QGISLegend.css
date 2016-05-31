@@ -1,7 +1,7 @@
 .legend {
   position: absolute;
-  top: 7.5em;
-  right: 0.5em;
+  top: 9em;
+  right: 1.2em;
   text-align: left;
 }
 .legend-panel {
@@ -18,4 +18,7 @@
 }
 .legend.shown .legend-panel {
   display: block;
+}
+.legendbutton {
+  float: right;
 }

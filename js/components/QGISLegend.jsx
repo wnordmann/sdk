@@ -115,7 +115,7 @@ class QGISLegend extends React.Component {
     var onClick = !this.props.expandOnHover ? this._togglePanel.bind(this) : undefined;
     return (
       <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} className={classNames(divClass, this.props.className)}>
-        <IconButton tooltip={formatMessage(messages.buttontitle)} onTouchTap={onClick}><LegendIcon /></IconButton>
+        <IconButton style={this.props.style} className='legendbutton' tooltip={formatMessage(messages.buttontitle)} onTouchTap={onClick}><LegendIcon color='white' /></IconButton>
         <div className='legend-panel' id='legend'>{items}</div>
       </div>
     );
@@ -135,6 +135,10 @@ QGISLegend.propTypes = {
    * The label and image to use per layer. The object is keyed by layer name currently. For example: {'swamp': [['', '4_0.png']]}.
    */
   legendData: React.PropTypes.object.isRequired,
+  /**
+   * Style for the button.
+   */
+  style: React.PropTypes.object,
   /**
    * Should we expand on startup of the application?
    */
@@ -156,7 +160,14 @@ QGISLegend.propTypes = {
 QGISLegend.defaultProps = {
   legendBasePath: './legend/',
   showExpandedOnStartup: false,
-  expandOnHover: true
+  expandOnHover: true,
+  style: {
+    background: 'rgba(0,60,136,.7)',
+    borderRadius: '2px',
+    width: '28px',
+    height: '28px',
+    padding: '2px'
+  }
 };
 
 export default injectIntl(QGISLegend);
