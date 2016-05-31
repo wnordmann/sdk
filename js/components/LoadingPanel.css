@@ -1,8 +1,5 @@
 .loading-panel {
-  top: 50%;
-  left: 50%;
-  margin-top: auto;
-  margin-left: auto;
+  top: calc(50% - 52px);
+  left: calc(50% - 52px);
   position: absolute;
-
 }
