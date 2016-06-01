@@ -269,7 +269,7 @@ class AddLayerModal extends React.Component {
       primaryText = layerTitle.title;
     }
     return (
-      <ListItem onTouchTap={onTouchTap} leftIcon={leftIcon} initiallyOpen={true} key={layer.Name} primaryText={primaryText} secondaryText={layer.Name} nestedItems={childList} />
+      <ListItem onTouchTap={onTouchTap} leftIcon={leftIcon} initiallyOpen={true} key={layer.Name} primaryText={primaryText} secondaryText={layer.Name} nestedItems={childList} disableTouchRipple={true}/>
     );
   }
   open() {
@@ -307,7 +307,7 @@ class AddLayerModal extends React.Component {
       input = (
         <div>
           <TextField style={{width: '512px'}} floatingLabelText={formatMessage(messages.inputfieldlabel, {serviceType: serviceType})} defaultValue={this.props.url} ref='url' />
-          <RaisedButton style={{float: 'right'}} label={formatMessage(messages.connectbutton)} onTouchTap={this._connect.bind(this)} />
+          <RaisedButton style={{float: 'right'}} label={formatMessage(messages.connectbutton)} onTouchTap={this._connect.bind(this)} disableTouchRipple={true}/>
         </div>
       );
     }
