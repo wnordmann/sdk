@@ -77,12 +77,12 @@ class LayerList extends React.Component {
     this.setState(LayerStore.getState());
   }
   renderLayerGroup(group) {
-    return this.renderLayers(group.getLayers().getArray().slice(0).reverse());
+    return this.renderLayers(group.getLayers().getArray().slice(0).reverse(), group);
   }
-  renderLayers(layers) {
+  renderLayers(layers, group) {
     var me = this;
     var layerNodes = layers.map(function(lyr) {
-      return me.getLayerNode(lyr);
+      return me.getLayerNode(lyr, group);
     });
     return layerNodes;
   }
@@ -106,7 +106,7 @@ class LayerList extends React.Component {
   _onModalClose() {
     this._modalOpen = false;
   }
-  getLayerNode(lyr) {
+  getLayerNode(lyr, group) {
     if (lyr.get('id') === undefined) {
       lyr.set('id', LayerIdService.generateId());
     }
@@ -118,7 +118,7 @@ class LayerList extends React.Component {
         );
       } else {
         return (
-          <LayerListItem {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('id')} layer={lyr} title={lyr.get('title')} />
+          <LayerListItem {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('id')} layer={lyr} group={group} title={lyr.get('title')} />
         );
       }
     }

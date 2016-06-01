@@ -20,16 +20,18 @@ export default {
       layer: layer
     });
   },
-  moveLayerDown: (layer) => {
+  moveLayerDown: (layer, group) => {
     AppDispatcher.handleAction({
       type: LayerConstants.MOVE_LAYER_DOWN,
-      layer: layer
+      layer: layer,
+      group: group
     });
   },
-  moveLayerUp: (layer) => {
+  moveLayerUp: (layer, group) => {
     AppDispatcher.handleAction({
       type: LayerConstants.MOVE_LAYER_UP,
-      layer: layer
+      layer: layer,
+      group: group
     });
   },
   editLayer: (layer) => {

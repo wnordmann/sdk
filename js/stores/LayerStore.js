@@ -144,7 +144,11 @@ AppDispatcher.register((payload) => {
       layers.remove(action.layer);
       break;
     case LayerConstants.MOVE_LAYER_UP:
-      layers = _LayerStore.getMap().getLayers();
+      if (action.group) {
+        layers = action.group.getLayers();
+      } else {
+        layers = _LayerStore.getMap().getLayers();
+      }
       index = layers.getArray().indexOf(action.layer);
       if (index < layers.getLength() - 1) {
         var next = layers.item(index + 1);
@@ -154,9 +158,13 @@ AppDispatcher.register((payload) => {
       }
       break;
     case LayerConstants.MOVE_LAYER_DOWN:
-      layers = _LayerStore.getMap().getLayers();
+      if (action.group) {
+        layers = action.group.getLayers();
+      } else {
+        layers = _LayerStore.getMap().getLayers();
+      }
       index = layers.getArray().indexOf(action.layer);
-      if (index > 1) {
+      if ((action.group && index > 0) || index > 1) {
         var prev = layers.item(index - 1);
         layers.removeAt(index);
         layers.insertAt(index - 1, action.layer);

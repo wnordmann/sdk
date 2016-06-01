@@ -182,10 +182,10 @@ class LayerListItem extends React.Component {
     );
   }
   _moveUp() {
-    LayerActions.moveLayerUp(this.props.layer);
+    LayerActions.moveLayerUp(this.props.layer, this.props.group);
   }
   _moveDown() {
-    LayerActions.moveLayerDown(this.props.layer);
+    LayerActions.moveLayerDown(this.props.layer, this.props.group);
   }
   _remove() {
     LayerActions.removeLayer(this.props.layer);
@@ -230,7 +230,7 @@ class LayerListItem extends React.Component {
       styling = (<IconButton style={iconStyle} onTouchTap={this._style.bind(this)} tooltip={formatMessage(messages.stylingbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle}><StyleIcon /></IconButton>);
     }
     var reorderUp, reorderDown;
-    if (layer.get('type') !== 'base' && this.props.allowReordering && !this.props.nestedItems) {
+    if (layer.get('type') !== 'base' && layer.get('type') !== 'base-group' && this.props.allowReordering) {
       reorderUp = (<IconButton style={iconStyle} onTouchTap={this._moveUp.bind(this)} tooltip={formatMessage(messages.reorderupbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle}><MoveUpIcon /></IconButton>);
       reorderDown = (<IconButton style={iconStyle} onTouchTap={this._moveDown.bind(this)} tooltip={formatMessage(messages.reorderdownbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle}><MoveDownIcon /></IconButton>);
     }
@@ -293,6 +293,10 @@ LayerListItem.propTypes = {
    * The layer associated with this item.
    */
   layer: React.PropTypes.instanceOf(ol.layer.Base).isRequired,
+  /**
+   * The group layer to which this item might belong.
+   */
+  group: React.PropTypes.instanceOf(ol.layer.Group),
   /**
    * The feature format to serialize in for downloads.
    */

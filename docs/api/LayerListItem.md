@@ -55,6 +55,13 @@ The feature format to serialize in for downloads.
 type: `enum ('GeoJSON'|'KML'|'GPX')`
 
 
+### `group`
+
+The group layer to which this item might belong.
+
+type: `instanceOf ol.layer.Group`
+
+
 ### `intl`
 
 i18n message strings. Provided through the application through context.
