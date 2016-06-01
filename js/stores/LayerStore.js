@@ -137,7 +137,7 @@ export default _LayerStore;
 
 AppDispatcher.register((payload) => {
   let action = payload.action;
-  let layers, index;
+  let layers, index, layerArray, i;
   switch (action.type) {
     case LayerConstants.REMOVE_LAYER:
       layers = _LayerStore.getMap().getLayers();
@@ -149,8 +149,16 @@ AppDispatcher.register((payload) => {
       } else {
         layers = _LayerStore.getMap().getLayers();
       }
-      index = layers.getArray().indexOf(action.layer);
-      if (index < layers.getLength() - 1) {
+      layerArray = layers.getArray();
+      index = layerArray.indexOf(action.layer);
+      var topMost = true;
+      for (i = layerArray.length - 1; i > index; i--) {
+        if (layerArray[i].get('title') !== null) {
+          topMost = false;
+          break;
+        }
+      }
+      if (!topMost) {
         var next = layers.item(index + 1);
         layers.removeAt(index);
         layers.insertAt(index + 1, action.layer);
@@ -163,8 +171,15 @@ AppDispatcher.register((payload) => {
       } else {
         layers = _LayerStore.getMap().getLayers();
       }
-      index = layers.getArray().indexOf(action.layer);
-      if ((action.group && index > 0) || index > 1) {
+      layerArray = layers.getArray();
+      index = layerArray.indexOf(action.layer);
+      var bottomMost = true;
+      for (i = index - 1; i >= 0 ; i--) {
+        if (layerArray[i].get('title') !== null && layerArray[i].get('type') !== 'base-group') {
+          bottomMost = false;
+        }
+      }
+      if (!bottomMost) {
         var prev = layers.item(index - 1);
         layers.removeAt(index);
         layers.insertAt(index - 1, action.layer);
