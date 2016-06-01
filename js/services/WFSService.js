@@ -30,6 +30,12 @@ const wfsUnmarshaller = wfsContext.createUnmarshaller();
 const xsdContext = new Jsonix.Context([XSD_1_0]);
 const xsdUnmarshaller = xsdContext.createUnmarshaller();
 
+const proj4326 = new ol.proj.Projection({
+  code: 'http://www.opengis.net/gml/srs/epsg.xml#4326',
+  axis: 'enu'
+});
+ol.proj.addEquivalentProjections([ol.proj.get('EPSG:4326'), proj4326]);
+
 class WFSService {
   getCapabilities(url, onSuccess, onFailure) {
     var layers = [];
@@ -106,7 +112,7 @@ class WFSService {
     var url = wfsInfo.url;
     var payloadNode = wfsFormat.writeGetFeature({
       maxFeatures: maxFeatures,
-      srsName: srsName,
+      srsName: 'EPSG:4326',
       featureNS: wfsInfo.featureNS,
       startIndex: startIndex,
       featurePrefix:  wfsInfo.featurePrefix,
@@ -117,7 +123,7 @@ class WFSService {
       var data = xmlhttp.responseXML;
       if (data !== null) {
         this.readResponse(data, xmlhttp, function(data) {
-          var features = wfsFormat.readFeatures(data);
+          var features = wfsFormat.readFeatures(data, {dataProjection: proj4326, featureProjection: srsName});
           onSuccess.call(this, features);
         }, onFailure);
       } else {
