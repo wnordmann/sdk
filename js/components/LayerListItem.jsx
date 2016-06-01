@@ -31,8 +31,56 @@ import MoveUpIcon from 'material-ui/lib/svg-icons/hardware/keyboard-arrow-up';
 import MoveDownIcon from 'material-ui/lib/svg-icons/hardware/keyboard-arrow-down';
 import DeleteIcon from 'material-ui/lib/svg-icons/action/delete';
 import EditIcon from 'material-ui/lib/svg-icons/editor/mode-edit';
-import {injectIntl, intlShape} from 'react-intl';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
+
+const messages = defineMessages({
+  zoombuttonlabel: {
+    id: 'layerlist.zoombuttonlabel',
+    description: 'Tooltip for the zoom to layer button',
+    defaultMessage: 'Zoom to layer'
+  },
+  downloadbuttonlabel: {
+    id: 'layerlist.downloadbuttonlabel',
+    description: 'Tooltip for the download layer button',
+    defaultMessage: 'Download layer'
+  },
+  filterbuttonlabel: {
+    id: 'layerlist.filterbuttonlabel',
+    description: 'Tooltip for the zoom button',
+    defaultMessage: 'Filter layer'
+  },
+  labelbuttonlabel: {
+    id: 'layerlist.labelbuttonlabel',
+    description: 'Tooltip for the label button',
+    defaultMessage: 'Edit layer label'
+  },
+  stylingbuttonlabel: {
+    id: 'layerlist.stylingbuttonlabel',
+    description: 'Tooltip for the style layer button',
+    defaultMessage: 'Edit layer style'
+  },
+  reorderupbuttonlabel: {
+    id: 'layerlist.reorderupbuttonlabel',
+    description: 'Tooltip for the reorder up button',
+    defaultMessage: 'Move layer up'
+  },
+  reorderdownbuttonlabel: {
+    id: 'layerlist.reorderdownbuttonlabel',
+    description: 'Tooltip for the reorder down button',
+    defaultMessage: 'Move layer down'
+  },
+  removebuttonlabel: {
+    id: 'layerlist.removebuttonlabel',
+    description: 'Tooltip for the remove layer button',
+    defaultMessage: 'Remove layer'
+  },
+  editbuttonlabel: {
+    id: 'layerlist.editbuttonlabel',
+    description: 'Tooltip for the edit layer button',
+    defaultMessage: 'Edit layer'
+  }
+});
 
 /**
  * An item in the LayerList component.
@@ -152,6 +200,8 @@ class LayerListItem extends React.Component {
     const layer = this.props.layer;
     const source = layer.getSource ? layer.getSource() : undefined;
     const iconStyle = {'paddingTop':'0px', 'paddingBottom':'0px'};
+    const tooltipStyle = {'top':'22px'};
+    const {formatMessage} = this.props.intl;
     var opacity;
     if (this.props.showOpacity && source && layer.get('type') !== 'base') {
       var val = layer.getOpacity();
@@ -160,37 +210,37 @@ class LayerListItem extends React.Component {
     var zoomTo;
     // TODO add titles back for icon buttons
     if (layer.get('type') !== 'base' && layer.get('type') !== 'base-group' && ((source && source.getExtent) || layer.get('EX_GeographicBoundingBox')) && this.props.showZoomTo) {
-      zoomTo = <IconButton style={iconStyle} onTouchTap={this._zoomTo.bind(this)}><ZoomInIcon /></IconButton>;
+      zoomTo = <IconButton style={iconStyle} onTouchTap={this._zoomTo.bind(this)} tooltip={formatMessage(messages.zoombuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle}><ZoomInIcon /></IconButton>;
     }
     var download;
     if (layer instanceof ol.layer.Vector && this.props.showDownload) {
-      download = (<IconButton style={iconStyle} onTouchTap={this._download.bind(this)}><DownloadIcon /></IconButton>);
+      download = (<IconButton style={iconStyle} onTouchTap={this._download.bind(this)} tooltip={formatMessage(messages.downloadbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle}><DownloadIcon /></IconButton>);
     }
     var filter;
     if (layer instanceof ol.layer.Vector && this.props.allowFiltering) {
-      filter = (<IconButton style={iconStyle} onTouchTap={this._filter.bind(this)}><FilterIcon /></IconButton>);
+      filter = (<IconButton style={iconStyle} onTouchTap={this._filter.bind(this)} tooltip={formatMessage(messages.filterbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle}><FilterIcon /></IconButton>);
     }
     var label;
     if (layer instanceof ol.layer.Vector && this.props.allowLabeling) {
-      label = (<IconButton style={iconStyle} onTouchTap={this._label.bind(this)}><LabelIcon /></IconButton>);
+      label = (<IconButton style={iconStyle} onTouchTap={this._label.bind(this)} tooltip={formatMessage(messages.labelbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle}><LabelIcon /></IconButton>);
     }
     var styling;
     var canStyle = layer.get('wfsInfo') && this.props.allowStyling;
     if (canStyle) {
-      styling = (<IconButton style={iconStyle} onTouchTap={this._style.bind(this)}><StyleIcon /></IconButton>);
+      styling = (<IconButton style={iconStyle} onTouchTap={this._style.bind(this)} tooltip={formatMessage(messages.stylingbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle}><StyleIcon /></IconButton>);
     }
     var reorderUp, reorderDown;
     if (layer.get('type') !== 'base' && this.props.allowReordering && !this.props.nestedItems) {
-      reorderUp = (<IconButton style={iconStyle} onTouchTap={this._moveUp.bind(this)}><MoveUpIcon /></IconButton>);
-      reorderDown = (<IconButton style={iconStyle} onTouchTap={this._moveDown.bind(this)}><MoveDownIcon /></IconButton>);
+      reorderUp = (<IconButton style={iconStyle} onTouchTap={this._moveUp.bind(this)} tooltip={formatMessage(messages.reorderupbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle}><MoveUpIcon /></IconButton>);
+      reorderDown = (<IconButton style={iconStyle} onTouchTap={this._moveDown.bind(this)} tooltip={formatMessage(messages.reorderdownbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle}><MoveDownIcon /></IconButton>);
     }
     var remove;
     if (layer.get('type') !== 'base' && layer.get('isRemovable') === true) {
-      remove = (<IconButton style={iconStyle} onTouchTap={this._remove.bind(this)}><DeleteIcon /></IconButton>);
+      remove = (<IconButton style={iconStyle} onTouchTap={this._remove.bind(this)} tooltip={formatMessage(messages.removebuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle}><DeleteIcon /></IconButton>);
     }
     var edit;
     if (this.props.allowEditing && layer.get('isWFST') === true) {
-      edit = (<IconButton style={iconStyle} onTouchTap={this._edit.bind(this)}><EditIcon /></IconButton>);
+      edit = (<IconButton style={iconStyle} onTouchTap={this._edit.bind(this)} tooltip={formatMessage(messages.editbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle}><EditIcon /></IconButton>);
     }
     var buttonPadding
     if (zoomTo || download || filter || label || styling || reorderUp || reorderDown || remove || edit) {
