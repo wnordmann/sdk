@@ -18,6 +18,7 @@ import pureRender from 'pure-render-decorator';
 import List from 'material-ui/lib/lists/list';
 import ListItem from 'material-ui/lib/lists/list-item';
 import WMSLegend from './WMSLegend.jsx';
+import Label from './Label.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import './Legend.css';
 
@@ -68,14 +69,14 @@ class Legend extends React.Component {
         if ((layer instanceof ol.layer.Tile && layer.getSource() instanceof ol.source.TileWMS) ||
           (layer instanceof ol.layer.Image && layer.getSource() instanceof ol.source.ImageWMS)) {
           var primaryText = layer.get('emptyTitle') ? (<div className='layer-title-empty'>{layer.get('title')}</div>) : layer.get('title');
-          legends.push(<ListItem key={'legend-' + layer.get('id')} primaryText={primaryText} leftIcon={<WMSLegend {...this.props.wmsOptions} layer={layer} />} disableTouchRipple={true}/>);
+          legends.push(<ListItem key={'legend-' + layer.get('id')} disableTouchRipple={true}><div>{primaryText}</div><WMSLegend  className='legend-list-img' {...this.props.wmsOptions} layer={layer} /></ListItem>);
         }
       }
     }
-    var subHeader = legends.length === 0 ? formatMessage(messages.emptyheader) : formatMessage(messages.header);
+    var subHeader = legends.length === 0 ? (<div className='legend-header'><Label>{formatMessage(messages.emptyheader)}</Label></div>) : undefined;
     return (
       <div className={classNames('sdk-component legend', this.props.className)}>
-        <div className='legend-header'>{subHeader}</div>
+        {subHeader}
         <List className='legend-list'>{legends}</List>
       </div>
     );
