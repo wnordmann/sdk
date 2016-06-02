@@ -16,6 +16,7 @@ import classNames from 'classnames';
 import LayerIdService from '../services/LayerIdService.js';
 import LayerStore from '../stores/LayerStore.js';
 import LayerListItem from './LayerListItem.jsx';
+import Label from './Label.jsx';
 import AddLayerModal from './AddLayerModal.jsx';
 import RaisedButton from 'material-ui/lib/raised-button';
 import IconButton from 'material-ui/lib/icon-button';
@@ -135,7 +136,7 @@ class LayerList extends React.Component {
       'sdk-component': true,
       'layer-list': true
     };
-    var tipLabel = this.props.tipLabel || formatMessage(messages.layertitle);
+    var tipLabel = this.props.tipLabel ? (<div className='layer-list-header'><Label>this.props.tipLabel</Label></div>) : undefined;
     var addLayer;
     if (this.props.addLayer) {
       addLayer = (
@@ -152,7 +153,7 @@ class LayerList extends React.Component {
       <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} className={classNames(divClass, this.props.className)}>
         <IconButton style={this.props.style} className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={onClick}><LayersIcon color='white' /></IconButton>
         <div className='layer-tree-panel clearfix'>
-          <div className='layer-list-header'>{tipLabel}</div>
+          {tipLabel}
           <List className='layer-list-list'>
             {this.renderLayers(layers)}
           </List>
