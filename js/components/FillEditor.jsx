@@ -70,7 +70,11 @@ FillEditor.propTypes = {
   /**
    * Initial state.
    */
-  initialState: React.PropTypes.object
+  initialState: React.PropTypes.object,
+  /**
+   * i18n message strings. Provided through the application through context.
+   */
+  intl: intlShape.isRequired
 };
 
-export default FillEditor;
+export default injectIntl(FillEditor);

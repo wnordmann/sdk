@@ -5,6 +5,7 @@ var ReactDOM = require('react-dom');
 var assert = require('chai').assert;
 var raf = require('raf');
 raf.polyfill();
+var intl = require('../mock-i18n.js');
 
 var FillEditor = require('../../js/components/FillEditor.jsx');
 
@@ -21,7 +22,7 @@ describe('FillEditor', function() {
       assert.equal(state.fillColor.rgb.a, initialState.fillColor.rgb.a);
     };
     ReactDOM.render((
-      <FillEditor onChange={onChange} initialState={initialState} />
+      <FillEditor intl={intl} onChange={onChange} initialState={initialState} />
     ), container);
     ReactDOM.unmountComponentAtNode(container);
   });

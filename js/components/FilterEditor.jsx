@@ -11,7 +11,6 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import TextField from 'material-ui/lib/text-field';
 import FilterService from '../services/FilterService.js';

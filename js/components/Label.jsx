@@ -22,11 +22,10 @@ class Label extends React.Component {
   render() {
     const {
       style,
-      ...other,
+      ...other
     } = this.props;
 
     const baseStyle = {
-      
       'color':Typography.textLightBlack,
       'paddingTop':'4px',
       'paddingBottom':'4px',
@@ -41,6 +40,10 @@ Label.propTypes = {
    * Custom style
    */
   style: React.PropTypes.object,
+  /**
+   * Child nodes
+   */
+  children: React.PropTypes.node
 };
 
 export default Label;
