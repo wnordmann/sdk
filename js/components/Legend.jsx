@@ -68,7 +68,7 @@ class Legend extends React.Component {
         if ((layer instanceof ol.layer.Tile && layer.getSource() instanceof ol.source.TileWMS) ||
           (layer instanceof ol.layer.Image && layer.getSource() instanceof ol.source.ImageWMS)) {
           var primaryText = layer.get('emptyTitle') ? (<div className='layer-title-empty'>{layer.get('title')}</div>) : layer.get('title');
-          legends.push(<ListItem key={'legend-' + layer.get('id')} primaryText={primaryText} leftIcon={<WMSLegend {...this.props.wmsOptions} layer={layer} />} />);
+          legends.push(<ListItem key={'legend-' + layer.get('id')} primaryText={primaryText} leftIcon={<WMSLegend {...this.props.wmsOptions} layer={layer} />} disableTouchRipple={true}/>);
         }
       }
     }
