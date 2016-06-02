@@ -97,23 +97,24 @@ class InfoPopup extends BasePopup {
       fid = feature.getId();
       var keys = feature.getKeys();
       var geom = feature.getGeometryName();
+      var style = {wordWrap: 'break-word', whiteSpace: 'normal'};
       for (var j = 0, jj = keys.length; j < jj; ++j) {
         var key = keys[j];
         if (key !== geom && key !== 'boundedBy') {
-          rows.push(<TableRow key={key}><TableRowColumn>{key}</TableRowColumn><TableRowColumn>{feature.get(key)}</TableRowColumn></TableRow>);
+          rows.push(<TableRow key={key}><TableRowColumn style={style}>{key}</TableRowColumn><TableRowColumn style={style}>{feature.get(key)}</TableRowColumn></TableRow>);
         }
       }
     }
     return (<Table key={this._count}>
       <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
         <TableRow>
-          <TableHeaderColumn colSpan="2" tooltip={fid} style={{textAlign: 'center'}}>
+          <TableHeaderColumn colSpan="2" tooltip={fid} style={{fontSize: 14, color: 'rgba(0, 0, 0, 0.87)', textAlign: 'center'}}>
             {layer.get('title')}
           </TableHeaderColumn>
         </TableRow>
         <TableRow>
-          <TableHeaderColumn>{formatMessage(messages.nametext)}</TableHeaderColumn>
-          <TableHeaderColumn>{formatMessage(messages.valuetext)}</TableHeaderColumn>
+          <TableHeaderColumn style={{fontWeight: 'bold', color: 'rgba(0, 0, 0, 0.87)'}}>{formatMessage(messages.nametext)}</TableHeaderColumn>
+          <TableHeaderColumn style={{fontWeight: 'bold', color: 'rgba(0, 0, 0, 0.87)'}}>{formatMessage(messages.valuetext)}</TableHeaderColumn>
         </TableRow>
       </TableHeader>
       <TableBody displayRowCheckbox={false}>
