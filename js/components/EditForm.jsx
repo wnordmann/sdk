@@ -171,8 +171,10 @@ class EditForm extends React.Component {
         {inputs}<br/>
         {error}
         <div className='edit-form-submit'>
-          <RaisedButton style={{float: 'right', margin: '0px 12px'}} tooltip={formatMessage(messages.savetitle)} label={formatMessage(messages.save)} onTouchTap={this._save.bind(this)} icon={<SaveIcon />} />
-          <RaisedButton style={{float: 'right', margin: '0px 12px'}} tooltip={formatMessage(messages.deletefeaturetitle)} label={formatMessage(messages.deletefeature)} onTouchTap={this._deleteFeature  .bind(this)} icon={<DeleteIcon />} />
+          <span style={{'float':'right'}}>
+            <RaisedButton style={{margin: '0px 12px'}} tooltip={formatMessage(messages.savetitle)} tooltipStyle={{'top':'-50px'}} label={formatMessage(messages.save)} onTouchTap={this._save.bind(this)} icon={<SaveIcon />} />
+            <RaisedButton style={{margin: '0px 12px'}} tooltip={formatMessage(messages.deletefeaturetitle)} tooltipStyle={{'top':'-50px'}} label={formatMessage(messages.deletefeature)} onTouchTap={this._deleteFeature  .bind(this)} icon={<DeleteIcon />} />
+          </span>
         </div>
       </div>
     );
