@@ -1,0 +1,30 @@
+.popup-table-header {
+  position: relative;
+}
+.popup-table-header.popup-header-fixed {
+  position: absolute;
+  width: calc(100% - 10px);
+  top: 0px;
+  left: 0px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding: 5px;
+  border-bottom-width: 0px !important;
+}
+.popup-table-header.popup-header-fixed tr {
+  width: 100%;
+  display: table;
+}
+
+.popup-table-header.popup-header-fixed th {
+  width: auto;
+}
+.popup-table-headerpadding {
+  height: 0px !important;
+}
+.popup-table-headerpadding.popup-body-noheader {
+  height: 119px !important;
+}
+.popup table {
+  border-collapse: collapse;
+}

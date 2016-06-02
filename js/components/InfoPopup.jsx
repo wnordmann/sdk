@@ -24,6 +24,8 @@ import TableBody from 'material-ui/lib/table/table-body';
 import IconButton from 'material-ui/lib/icon-button';
 import CloserIcon from 'material-ui/lib/svg-icons/navigation/close';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import $ from 'jquery';
+import './InfoPopup.css';
 
 const messages = defineMessages({
   nofeatures: {
@@ -106,18 +108,19 @@ class InfoPopup extends BasePopup {
       }
     }
     return (<Table key={this._count}>
-      <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-        <TableRow>
+      <TableHeader className='popup-table-header' style={{'backgroundColor':'white'}} displaySelectAll={false} adjustForCheckbox={false}>
+        <TableRow style={{'backgroundColor':'white'}}>
           <TableHeaderColumn colSpan="2" tooltip={fid} style={{fontSize: 14, color: 'rgba(0, 0, 0, 0.87)', textAlign: 'center'}}>
             {layer.get('title')}
           </TableHeaderColumn>
         </TableRow>
-        <TableRow>
+        <TableRow style={{'backgroundColor':'white'}}>
           <TableHeaderColumn style={{fontWeight: 'bold', color: 'rgba(0, 0, 0, 0.87)'}}>{formatMessage(messages.nametext)}</TableHeaderColumn>
           <TableHeaderColumn style={{fontWeight: 'bold', color: 'rgba(0, 0, 0, 0.87)'}}>{formatMessage(messages.valuetext)}</TableHeaderColumn>
         </TableRow>
       </TableHeader>
-      <TableBody displayRowCheckbox={false}>
+      <TableBody className='popup-table-body' displayRowCheckbox={false}>
+        <TableRow className='popup-table-headerpadding' />
         {rows}
       </TableBody>
     </Table>);
@@ -237,17 +240,34 @@ class InfoPopup extends BasePopup {
       });
     }
   }
+  _updateScroll(evt) {
+    var el = evt.target;
+    var scrollPosition = el.getBoundingClientRect().top;
+
+    var headers = $(el).find('.popup-table-header').toArray();
+    var bodys = $(el).find('.popup-table-headerpadding').toArray();
+    for (var i = 0; i < headers.length; i++) {
+      var position = bodys[i].getBoundingClientRect().bottom;
+      if (position - 120 < scrollPosition) {
+        $(headers[i]).addClass("popup-header-fixed");
+        $(bodys[i]).addClass("popup-body-noheader");
+      } else {
+        $(headers[i]).removeClass("popup-header-fixed");
+        $(bodys[i]).removeClass("popup-body-noheader");
+      }
+    }
+  }
   render() {
     var contentDiv;
     if (this.state.contentAsObject) {
-      contentDiv = (<div className='popup-content' ref='content'>{this.state.popupTexts}</div>);
+      contentDiv = (<div className='popup-content' ref='content' onScroll={this._updateScroll.bind(this)}>{this.state.popupTexts}</div>);
     } else {
       var content = this.state.popupTexts.join('<hr>');
       contentDiv = (<div className='popup-content' ref='content' dangerouslySetInnerHTML={{__html: content}}></div>);
     }
     return (
       <div className={classNames('sdk-component info-popup', this.props.className)}>
-        <IconButton style={{float: 'right'}} ref="popupCloser" onTouchTap={this.setVisible.bind(this, false)}><CloserIcon /></IconButton>
+        <IconButton style={{'position':'absolute', 'right':'10px', 'top':'10px', 'zIndex':'1000'}} ref="popupCloser" onTouchTap={this.setVisible.bind(this, false)}><CloserIcon /></IconButton>
         {contentDiv}
       </div>
     );
