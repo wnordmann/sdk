@@ -20,7 +20,6 @@ import LayerSelector from './LayerSelector.jsx';
 import FeatureStore from '../stores/FeatureStore.js';
 import MapTool from './MapTool.js';
 import RaisedButton from './Button.jsx';
-import DeleteIcon from 'material-ui/lib/svg-icons/action/delete';
 import DrawIcon from 'material-ui/lib/svg-icons/image/brush';
 import EditIcon from 'material-ui/lib/svg-icons/editor/mode-edit';
 import Snackbar from 'material-ui/lib/snackbar';
@@ -57,22 +56,12 @@ const messages = defineMessages({
   modifyfeature: {
     id: 'wfst.modifyfeature',
     description: 'Button text for modify / select existing feature',
-    defaultMessage: 'Modify / Select'
+    defaultMessage: 'Select'
   },
   modifyfeaturetitle: {
     id: 'wfst.modifyfeaturetitle',
     description: 'Button title for modify / select existing feature',
     defaultMessage: 'Modify an existing feature or select before Delete'
-  },
-  deletefeature: {
-    id: 'wfst.deletefeature',
-    description: 'Button text for delete selected feature',
-    defaultMessage: 'Delete'
-  },
-  deletefeaturetitle: {
-    id: 'wfst.deletefeaturetitle',
-    description: 'Button title for delete selected feature',
-    defaultMessage: 'Delete the selected feature'
   },
   errormsg: {
     id: 'wfst.errormsg',
@@ -246,30 +235,6 @@ class WFST extends MapTool {
       this.activate(interactions);
     }
   }
-  _deleteFeature() {
-    const {formatMessage} = this.props.intl;
-    var me = this;
-    var features = this._select.getFeatures();
-    if (features.getLength() === 1) {
-      var feature = features.item(0);
-      this._request = WFSService.deleteFeature(this.state.layer, feature, function() {
-        delete me._request;
-        me._select.getFeatures().clear();
-        var source = me.state.layer.getSource();
-        if (source instanceof ol.source.Vector) {
-          source.removeFeature(feature);
-        } else {
-          FeatureStore.removeFeature(me.state.layer, feature);
-          me._redraw();
-        }
-        me.setState({feature: null});
-      }, function(xmlhttp, msg) {
-        delete me._request;
-        msg = msg || formatMessage(messages.deletemsg) + xmlhttp.status + ' ' + xmlhttp.statusText;
-        me._setError(msg);
-      });
-    }
-  }
   _filterLayerList(lyr) {
     return lyr.get('isWFST') && lyr.get('wfsInfo') !== undefined;
   }
@@ -356,6 +321,17 @@ class WFST extends MapTool {
   enable() {
     this.setState({disabled: false});
   }
+  _onDeleteSuccess() {
+    this._select.getFeatures().clear();
+    var source = this.state.layer.getSource();
+    if (source instanceof ol.source.Vector) {
+      source.removeFeature(this.state.feature);
+    } else {
+      FeatureStore.removeFeature(this.state.layer, this.state.feature);
+      this._redraw();
+    }
+    this.setState({feature: null});
+  }
   render() {
     if (!this.state.visible) {
       return (<article />);
@@ -382,7 +358,7 @@ class WFST extends MapTool {
       }
       var editForm;
       if (this.props.showEditForm && this.state.feature) {
-        editForm = (<EditForm feature={this.state.feature} layer={this.state.layer} />);
+        editForm = (<EditForm onDeleteSuccess={this._onDeleteSuccess.bind(this)} feature={this.state.feature} layer={this.state.layer} />);
       }
       const buttonStyle = this.props.buttonStyle;
       return (
@@ -394,9 +370,6 @@ class WFST extends MapTool {
             </ToolbarGroup>
             <ToolbarGroup>
               <RaisedButton secondary={this.state.modifySecondary} tooltip={formatMessage(messages.modifyfeaturetitle)} style={buttonStyle} label={formatMessage(messages.modifyfeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._modifyFeature.bind(this)} icon={<EditIcon />} />
-            </ToolbarGroup>
-            <ToolbarGroup>
-              <RaisedButton tooltip={formatMessage(messages.deletefeaturetitle)} style={buttonStyle} label={formatMessage(messages.deletefeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._deleteFeature.bind(this)} icon={<DeleteIcon />} />
             </ToolbarGroup>
           </Toolbar>
           {error}

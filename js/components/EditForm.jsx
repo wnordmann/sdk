@@ -15,15 +15,32 @@ import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Snackbar from 'material-ui/lib/snackbar';
 import classNames from 'classnames';
-import RaisedButton from 'material-ui/lib/raised-button';
+import RaisedButton from './Button.jsx';
+import DeleteIcon from 'material-ui/lib/svg-icons/action/delete';
+import SaveIcon from 'material-ui/lib/svg-icons/content/save';
 import TextField from 'material-ui/lib/text-field';
 import WFSService from '../services/WFSService.js';
 
 const messages = defineMessages({
+  deletefeature: {
+    id: 'editpopup.deletefeature',
+    description: 'Button text for delete selected feature',
+    defaultMessage: 'Delete'
+  },
+  deletefeaturetitle: {
+    id: 'editpopup.deletefeaturetitle',
+    description: 'Button title for delete selected feature',
+    defaultMessage: 'Delete the selected feature'
+  },
   save: {
     id: 'editpopup.save',
     description: 'Text to show on the save button',
     defaultMessage: 'Save'
+  },
+  savetitle: {
+    id: 'editpopup.savetitle',
+    description: 'Button title for the save button',
+    defaultMessage: 'Save modified attributes'
   },
   errormsg: {
     id: 'editpopup.errormsg',
@@ -34,6 +51,11 @@ const messages = defineMessages({
     id: 'editpopup.updatemsg',
     description: 'Text to show if the transaction fails',
     defaultMessage: 'Error updating the feature\'s attributes using WFS-T.'
+  },
+  deletemsg: {
+    id: 'editpopup.deletemsg',
+    description: 'Error message to show when delete fails',
+    defaultMessage: 'There was an issue deleting the feature.'
   }
 });
 
@@ -52,6 +74,11 @@ class EditForm extends React.Component {
   componentWillReceiveProps(newProps) {
     if (newProps.feature !== this.state.feature) {
       this.setState({layer: newProps.layer, feature: newProps.feature, values: newProps.feature.getProperties()});
+    }
+  }
+  componentWillUnmount() {
+    if (this._request) {
+      this._request.abort();
     }
   }
   _setError(msg) {
@@ -100,6 +127,21 @@ class EditForm extends React.Component {
     dirty[evt.target.id] = true;
     this.setState({values: values, dirty: dirty});
   }
+  _deleteFeature() {
+    const {formatMessage} = this.props.intl;
+    var me = this;
+    var feature = this.state.feature;
+    this._request = WFSService.deleteFeature(this.state.layer, feature, function() {
+      delete me._request;
+      if (me.props.onDeleteSuccess) {
+        me.props.onDeleteSuccess();
+      }
+    }, function(xmlhttp, msg) {
+      delete me._request;
+      msg = msg || formatMessage(messages.deletemsg) + xmlhttp.status + ' ' + xmlhttp.statusText;
+      me._setError(msg);
+    });
+  }
   render() {
     const {formatMessage} = this.props.intl;
     var error;
@@ -129,7 +171,8 @@ class EditForm extends React.Component {
         {inputs}<br/>
         {error}
         <div className='edit-form-submit'>
-          <RaisedButton ref='saveButton' label={formatMessage(messages.save)} onTouchTap={this._save.bind(this)} />
+          <RaisedButton style={{float: 'right', margin: '0px 12px'}} tooltip={formatMessage(messages.savetitle)} label={formatMessage(messages.save)} onTouchTap={this._save.bind(this)} icon={<SaveIcon />} />
+          <RaisedButton style={{float: 'right', margin: '0px 12px'}} tooltip={formatMessage(messages.deletefeaturetitle)} label={formatMessage(messages.deletefeature)} onTouchTap={this._deleteFeature  .bind(this)} icon={<DeleteIcon />} />
         </div>
       </div>
     );
@@ -149,6 +192,10 @@ EditForm.propTypes = {
    * Css class name to apply on the root element of this component.
    */
   className: React.PropTypes.string,
+  /**
+   * Callback function for successfull delete
+   */
+  onDeleteSuccess: React.PropTypes.func,
   /**
    * Callback function for successfull update
    */

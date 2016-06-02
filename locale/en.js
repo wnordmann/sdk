@@ -39,8 +39,12 @@ var enMessages = {
   "edit.pointgeomtype": "Point",
   "edit.polygeomtype": "Polygon",
   "edit.strokecolorlabel": "Stroke color",
+  "editpopup.deletefeature": "Delete",
+  "editpopup.deletefeaturetitle": "Delete the selected feature",
+  "editpopup.deletemsg": "There was an issue deleting the feature.",
   "editpopup.errormsg": "Error saving this feature to GeoServer. {msg}",
   "editpopup.save": "Save",
+  "editpopup.savetitle": "Save modified attributes",
   "editpopup.updatemsg": "Error updating the feature's attributes using WFS-T.",
   "featuretable.clearbuttontext": "Clear",
   "featuretable.clearbuttontitle": "Clear selected",
@@ -164,14 +168,12 @@ var enMessages = {
   "stylemodal.removerulebuttontitle": "Remove Selected Rule",
   "stylemodal.rulelabel": "Rule:",
   "stylemodal.title": "Edit layer style: {layer}",
-  "wfst.deletefeature": "Delete",
-  "wfst.deletefeaturetitle": "Delete the selected feature",
   "wfst.deletemsg": "There was an issue deleting the feature.",
   "wfst.drawfeature": "Draw",
   "wfst.drawfeaturetitle": "Draw a new feature on the map",
   "wfst.errormsg": "Error saving this feature to GeoServer. {msg}",
   "wfst.layerlabel": "Layer",
-  "wfst.modifyfeature": "Modify / Select",
+  "wfst.modifyfeature": "Select",
   "wfst.modifyfeaturetitle": "Modify an existing feature or select before Delete"
 };
 export default enMessages;
