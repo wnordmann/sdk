@@ -4,7 +4,7 @@
   "description": "SDK for OpenLayers 3 and React plus Flux",
   "main": "index.js",
   "publishConfig": {
-    "registry": "https://repo.boundlessgeo.com/api/npm/npmjs"
+    "registry": " npm.boundlessgeo.com"
   },
   "repository": {
     "type": "git",
