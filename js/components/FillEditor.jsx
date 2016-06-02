@@ -13,7 +13,17 @@
 import React from 'react';
 import classNames from 'classnames';
 import ColorPicker from 'react-color';
+import {intlShape, defineMessages, injectIntl} from 'react-intl';
+import Label from './Label.jsx';
 import pureRender from 'pure-render-decorator';
+
+const messages = defineMessages({
+  fillcolorlabel: {
+    id: 'filleditor.fillcolorlabel',
+    description: 'Label for fill color picker',
+    defaultMessage: 'Fill color'
+  }
+});
 
 /**
  * Style editor for fill color.
@@ -38,8 +48,12 @@ class FillEditor extends React.Component {
     this.props.onChange(this.state);
   }
   render() {
+    const {formatMessage} = this.props.intl;
     return (
-      <ColorPicker className={classNames('sdk-component fill-editor', this.props.className)} type='chrome' onChangeComplete={this._onChangeFill.bind(this)} color={this.state.fillColor.rgb} />
+      <div className={classNames('sdk-component stroke-editor', this.props.className)}>
+        <Label>{formatMessage(messages.fillcolorlabel)}:</Label>
+        <ColorPicker type='chrome' onChangeComplete={this._onChangeFill.bind(this)} color={this.state.fillColor.rgb} />
+      </div>
     );
   }
 }

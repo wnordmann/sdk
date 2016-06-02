@@ -56,9 +56,8 @@ class FilterEditor extends React.Component {
       this.state[prop] = defaultVal;
     }
   }
-  _setQueryFilter() {
-    var input = ReactDOM.findDOMNode(this.refs.queryExpression);
-    var expression = input.value;
+  _setQueryFilter(evt) {
+    var expression = evt.target.value;
     if (!expression) {
       this.props.onChange({expression: null, filter: null});
       this.setState({hasError: false});

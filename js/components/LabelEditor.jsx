@@ -16,6 +16,7 @@ import MenuItem from 'material-ui/lib/menus/menu-item';
 import classNames from 'classnames';
 import SelectField from 'material-ui/lib/select-field';
 import TextField from 'material-ui/lib/text-field';
+import Label from './Label.jsx';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 
@@ -75,18 +76,25 @@ class LabelEditor extends React.Component {
     this.props.onChange(this.state);
     const {formatMessage} = this.props.intl;
     var attributeItems = [];
+    attributeItems.push(<MenuItem key={0} style={{'minHeight':'32px'}} value={null} primaryText={' '} />);
     for (var i = 0, ii = this.props.attributes.length; i < ii; ++i) {
       var attribute = this.props.attributes[i];
-      attributeItems.push(<MenuItem key={i} value={attribute} primaryText={attribute} />);
+      attributeItems.push(<MenuItem key={i+1} value={attribute} primaryText={attribute} />);
     }
     return (
       <div className={classNames('sdk-component label-editor', this.props.className)}>
-        <SelectField floatingLabelText={formatMessage(messages.attributelabel)} hintText={formatMessage(messages.emptytext)} value={this.state.labelAttribute} onChange={this._onItemChange.bind(this)}>
-          {attributeItems}
-        </SelectField><br/>
-        <TextField defaultValue={this.state.fontSize} floatingLabelText={formatMessage(messages.sizelabel)} onChange={this._onChangeFontSize.bind(this)} /><br/>
-        <label>{formatMessage(messages.fillcolorlabel)}:</label>
-        <ColorPicker type='compact' onChangeComplete={this._onChangeFill.bind(this)} color={this.state.fontColor.rgb} />
+        <div className='label-value'>
+          <SelectField floatingLabelText={formatMessage(messages.attributelabel)} hintText={formatMessage(messages.emptytext)} value={this.state.labelAttribute} onChange={this._onItemChange.bind(this)}>
+            {attributeItems}
+          </SelectField>
+        </div>
+        <div className='label-size'>
+          <TextField defaultValue={this.state.fontSize} floatingLabelText={formatMessage(messages.sizelabel)} onChange={this._onChangeFontSize.bind(this)} />
+        </div>
+        <div className='label-color'>
+          <Label>{formatMessage(messages.fillcolorlabel)}:</Label>
+          <ColorPicker type='chrome' onChangeComplete={this._onChangeFill.bind(this)} color={this.state.fontColor.rgb} />
+        </div>
       </div>
     );
   }

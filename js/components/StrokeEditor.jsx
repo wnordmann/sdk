@@ -15,6 +15,7 @@ import ColorPicker from 'react-color';
 import classNames from 'classnames';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import TextField from 'material-ui/lib/text-field';
+import Label from './Label.jsx';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -25,7 +26,7 @@ const messages = defineMessages({
   },
   strokecolorlabel: {
     id: 'strokeeditor.strokecolorlabel',
-    description: 'Label for fill color picker',
+    description: 'Label for stroke color picker',
     defaultMessage: 'Stroke color'
   }
 });
@@ -49,8 +50,8 @@ class StrokeEditor extends React.Component {
       this.state[prop] = defaultVal;
     }
   }
-  _onChangeStrokeWidth(evt, idx, value) {
-    this.setState({strokeWidth: parseFloat(value)});
+  _onChangeStrokeWidth(evt) {
+    this.setState({strokeWidth: parseFloat(evt.target.value)});
   }
   _onChangeStroke(color) {
     this.setState({strokeColor: color});
@@ -60,9 +61,11 @@ class StrokeEditor extends React.Component {
     const {formatMessage} = this.props.intl;
     return (
       <div className={classNames('sdk-component stroke-editor', this.props.className)}>
-        <TextField defaultValue={this.state.strokeWidth} floatingLabelText={formatMessage(messages.strokewidthlabel)} onChange={this._onChangeStrokeWidth.bind(this)} /><br/>
-        <label>{formatMessage(messages.strokecolorlabel)}:</label>
-        <ColorPicker type='chrome' onChangeComplete={this._onChangeStroke.bind(this)} color={this.state.strokeColor.rgb} />
+        <TextField className="stroke-width" defaultValue={this.state.strokeWidth} floatingLabelText={formatMessage(messages.strokewidthlabel)} onChange={this._onChangeStrokeWidth.bind(this)} /><br/>
+        <div className="stroke-color">
+          <Label>{formatMessage(messages.strokecolorlabel)}:</Label>
+          <ColorPicker type='chrome' onChangeComplete={this._onChangeStroke.bind(this)} color={this.state.strokeColor.rgb} />
+        </div>
       </div>
     );
   }

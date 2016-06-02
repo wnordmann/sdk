@@ -85,16 +85,16 @@ class RuleEditor extends React.Component {
         <Paper className={classNames('sdk-component rule-editor', this.props.className)} zIndex={2}>
           <TextField value={this.state.title} ref='title' onChange={this._onTitleChange.bind(this)} floatingLabelText={formatMessage(messages.titlelabel)} />
           <Tabs value={this.state.value} onChange={this.handleChange.bind(this)}>
-            <Tab value={1} label={formatMessage(messages.filltitle)}>
+            <Tab value={1} label={formatMessage(messages.filltitle)} disableTouchRipple={true}>
               <FillEditor {...this.props} />
             </Tab>
-            <Tab value={2} label={formatMessage(messages.stroketitle)}>
+            <Tab value={2} label={formatMessage(messages.stroketitle)} disableTouchRipple={true}>
               <StrokeEditor {...this.props} />
             </Tab>
-            <Tab value={3} label={formatMessage(messages.labeltitle)}>
+            <Tab value={3} label={formatMessage(messages.labeltitle)} disableTouchRipple={true}>
               <LabelEditor {...this.props} />
             </Tab>
-            <Tab value={4} label={formatMessage(messages.filtertitle)}>
+            <Tab value={4} label={formatMessage(messages.filtertitle)} disableTouchRipple={true}>
               <FilterEditor {...this.props} />
             </Tab>
           </Tabs>
