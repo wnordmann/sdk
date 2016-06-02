@@ -58,6 +58,7 @@ var enMessages = {
   "featuretable.onlyselected": "Selected only",
   "featuretable.zoombuttontext": "Zoom",
   "featuretable.zoombuttontitle": "Zoom to selected",
+  "filleditor.fillcolorlabel": "Fill color",
   "filtereditor.errortext": "Invalid filter, use for instance ATTRIBUTE == \"Value\"",
   "filtereditor.filterlabel": "Filter",
   "filtereditor.filterplaceholder": "Type expression ....",

@@ -16,6 +16,7 @@ import LayerIdService from './LayerIdService.js';
 class MapConfigService {
   generateSourceFromConfig(config) {
     var props = config.properties || {};
+    props.wrapX = false;
     if (config.type === 'Cluster') {
       props.source = this.generateSourceFromConfig(config.source);
     }
