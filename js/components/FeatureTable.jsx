@@ -346,13 +346,20 @@ class FeatureTable extends React.Component {
       }
     });
   }
+  _getTextWidth(text, font) {
+    let element = document.createElement('canvas');
+    let context = element.getContext('2d');
+    context.font = font;
+    return context.measureText(text).width + 24;
+  }
   render() {
     var {sortIndexes, colSortDirs} = this.state;
     const {formatMessage} = this.props.intl;
-    var schema, id;
+    var schema, id, row;
     if (this._layer) {
       schema = FeatureStore.getSchema(this._layer);
       id = this._layer.get('id');
+      row = FeatureStore.getObjectAt(this._layer, 0);
     }
     var columnNodes = [];
     var defaultWidth;
@@ -361,8 +368,17 @@ class FeatureTable extends React.Component {
     } else {
       defaultWidth = this.props.columnWidth;
     }
+    if (!this.defaultColWidths) {
+      this.defaultColWidths = {};
+    }
+    if (!this.defaultColWidths[id]) {
+      this.defaultColWidths[id] = {};
+    }
     for (var key in schema) {
-      var width = this.state.columnWidths[id] && this.state.columnWidths[id][key] ? this.state.columnWidths[id][key] : defaultWidth;
+      if (!this.defaultColWidths[id][key] && row) {
+        this.defaultColWidths[id][key] = this._getTextWidth(row[key], '13px Helvetica Neue');
+      }
+      var width = this.state.columnWidths[id] && this.state.columnWidths[id][key] ? this.state.columnWidths[id][key] : this.defaultColWidths[id][key] ? this.defaultColWidths[id][key] : defaultWidth;
       columnNodes.push(
         <Column
           header={
