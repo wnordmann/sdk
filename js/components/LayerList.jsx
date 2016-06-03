@@ -63,6 +63,7 @@ class LayerList extends React.Component {
   constructor(props) {
     super(props);
     LayerStore.bindMap(this.props.map);
+    this.state = {};
   }
   componentWillMount() {
     this._onChangeCb = this._onChange.bind(this);
