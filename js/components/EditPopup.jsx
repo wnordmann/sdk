@@ -40,9 +40,6 @@ class EditPopup extends BasePopup {
   _onMapClick(evt) {
     if (this.active) {
       var map = this.props.map;
-      if (super.hasActiveDrawModify()) {
-        return;
-      }
       var pixel = map.getEventPixel(evt.originalEvent);
       var coord = evt.coordinate;
       var me = this;

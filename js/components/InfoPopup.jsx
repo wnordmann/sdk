@@ -198,9 +198,6 @@ class InfoPopup extends BasePopup {
     if (this.active) {
       const {formatMessage} = this.props.intl;
       var map = this.props.map;
-      if (super.hasActiveDrawModify()) {
-        return;
-      }
       var pixel = map.getEventPixel(evt.originalEvent);
       var coord = evt.coordinate;
       var popupTexts = [];
@@ -249,11 +246,11 @@ class InfoPopup extends BasePopup {
     for (var i = 0; i < headers.length; i++) {
       var position = bodys[i].getBoundingClientRect().bottom;
       if (position - 120 < scrollPosition) {
-        $(headers[i]).addClass("popup-header-fixed");
-        $(bodys[i]).addClass("popup-body-noheader");
+        $(headers[i]).addClass('popup-header-fixed');
+        $(bodys[i]).addClass('popup-body-noheader');
       } else {
-        $(headers[i]).removeClass("popup-header-fixed");
-        $(bodys[i]).removeClass("popup-body-noheader");
+        $(headers[i]).removeClass('popup-header-fixed');
+        $(bodys[i]).removeClass('popup-body-noheader');
       }
     }
   }

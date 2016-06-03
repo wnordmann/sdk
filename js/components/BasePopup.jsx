@@ -29,21 +29,9 @@ class BasePopup extends MapTool {
   }
   activate(interactions) {
     this.active = true;
-    super.activate(interactions);
   }
   deactivate() {
     this.active = false;
-    super.deactivate();
-  }
-  hasActiveDrawModify() {
-    var map = this.props.map;
-    var hasActiveDrawModify = false;
-    map.getInteractions().forEach(function(interaction) {
-      if (interaction.getActive() && (interaction instanceof ol.interaction.Draw || interaction instanceof ol.interaction.Modify)) {
-        hasActiveDrawModify = true;
-      }
-    });
-    return hasActiveDrawModify;
   }
   setVisible(visible) {
     ReactDOM.findDOMNode(this).parentNode.style.display = visible ? 'block' : 'none';

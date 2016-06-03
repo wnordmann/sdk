@@ -24,11 +24,12 @@ export default {
       type: ToolConstants.ENABLE_ALL_TOOLS
     });
   },
-  activateTool: (tool, toggleGroup) => {
+  activateTool: (tool, toggleGroup, toolId) => {
     AppDispatcher.handleAction({
       type: ToolConstants.ACTIVATE_TOOL,
       tool: tool,
-      toggleGroup: toggleGroup
+      toggleGroup: toggleGroup,
+      toolId: toolId
     });
   }
 };

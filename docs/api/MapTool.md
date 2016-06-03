@@ -20,3 +20,10 @@ The toggleGroup to use. When this tool is activated, all other tools in the same
 
 type: `string`
 
+
+### `toolId`
+
+Identifier to use for this tool. Can be used to group tools together.
+
+type: `string`
+

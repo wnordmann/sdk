@@ -36,7 +36,15 @@ export default class MapTool extends React.Component {
         case ToolConstants.ACTIVATE_TOOL:
           if (me.props.toggleGroup && me.props.toggleGroup === action.toggleGroup) {
             if (me !== action.tool) {
-              me.deactivate();
+              if (me.props.toolId) {
+                if (me.props.toolId !== action.toolId) {
+                  me.deactivate();
+                } else {
+                  me.activate();
+                }
+              } else {
+                me.deactivate();
+              }
             }
           }
           break;
@@ -70,7 +78,7 @@ export default class MapTool extends React.Component {
     for (var i = 0, ii = this._currentInteractions.length; i < ii; ++i) {
       map.addInteraction(this._currentInteractions[i]);
     }
-    ToolActions.activateTool(this, this.props.toggleGroup);
+    ToolActions.activateTool(this, this.props.toggleGroup, this.props.toolId);
   }
 }
 
@@ -82,5 +90,9 @@ MapTool.propTypes = {
   /**
    * The toggleGroup to use. When this tool is activated, all other tools in the same toggleGroup will be deactivated.
    */
-  toggleGroup: React.PropTypes.string
+  toggleGroup: React.PropTypes.string,
+  /**
+   * Identifier to use for this tool. Can be used to group tools together.
+   */
+  toolId: React.PropTypes.string
 };
