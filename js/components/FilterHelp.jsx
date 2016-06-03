@@ -31,7 +31,7 @@ class FilterHelp extends React.Component {
     const monoStyle = {'fontWeight':'bold', 'color':'#424242', 'display':'inline-block', 'minWidth':'80px'};
     const popStyle = {'padding':'12px','margin':'36px','maxWidth':'600px'};
     return (
-      <span className='filter-help'>
+      <span className='filter-help' style={this.props.style}>
         <HelpOutline ref='help' onClick={this._onToggleHelp.bind(this)}/>
         <Popover open={this.state.help} onRequestClose={this._onToggleHelp.bind(this)} style={popStyle} anchorEl={this.helpElement} anchorOrigin={{'horizontal':'left'}}>
           <p>
@@ -74,5 +74,12 @@ class FilterHelp extends React.Component {
     );
   }
 }
+
+FilterHelp.propTypes = {
+  /**
+   * Style for the root span.
+   */
+  style: React.PropTypes.object
+};
 
 export default FilterHelp;

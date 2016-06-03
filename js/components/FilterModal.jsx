@@ -21,6 +21,7 @@ import ListItem from 'material-ui/lib/lists/list-item';
 import DeleteIcon from 'material-ui/lib/svg-icons/action/delete';
 import TextField from 'material-ui/lib/text-field';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import FilterHelp from './FilterHelp.jsx';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -185,8 +186,9 @@ class FilterModal extends React.Component {
     ];
     return (
       <Dialog className={classNames('sdk-component filter-modal', this.props.className)} actions={actions} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} modal={true} open={this.state.open} onRequestClose={this.close.bind(this)}>
-        <TextField errorText={errorText} ref='filterTextBox' />
-        <RaisedButton label={formatMessage(messages.addfiltertext)} onTouchTap={this._addFilter.bind(this)} />
+        <TextField errorText={errorText} style={{width: 512}} ref='filterTextBox' />
+        <FilterHelp style={{bottom: 'auto'}} />
+        <RaisedButton style={{float: 'right'}} label={formatMessage(messages.addfiltertext)} onTouchTap={this._addFilter.bind(this)} />
         <List>
           {filters}
         </List>
