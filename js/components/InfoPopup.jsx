@@ -11,6 +11,7 @@
  */
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import BasePopup from './BasePopup.jsx';
 import ol from 'openlayers';
 import classNames from 'classnames';
@@ -222,9 +223,6 @@ class InfoPopup extends BasePopup {
       });
       this._fetchData(evt, popupTexts, function() {
         if (popupTexts.length || me._noFeaturesFound) {
-          if (popupTexts.length === 0) {
-            popupTexts.push(formatMessage(messages.nofeatures));
-          }
           me.setState({
             popupTexts: popupTexts,
             contentAsObject: me._contentAsObject
@@ -243,9 +241,9 @@ class InfoPopup extends BasePopup {
 
     var headers = $(el).find('.popup-table-header').toArray();
     var bodys = $(el).find('.popup-table-headerpadding').toArray();
-    for (var i = 0; i < headers.length; i++) {
+    for (var i = 1; i < headers.length; i++) {
       var position = bodys[i].getBoundingClientRect().bottom;
-      if (position - 120 < scrollPosition) {
+      if (position < scrollPosition) {
         $(headers[i]).addClass('popup-header-fixed');
         $(bodys[i]).addClass('popup-body-noheader');
       } else {
@@ -256,11 +254,15 @@ class InfoPopup extends BasePopup {
   }
   render() {
     var contentDiv;
-    if (this.state.contentAsObject) {
-      contentDiv = (<div className='popup-content' ref='content' onScroll={this._updateScroll.bind(this)}>{this.state.popupTexts}</div>);
+    const {formatMessage} = this.props.intl;
+    if (this.state.popupTexts.length == 0) {
+      var nofeatures = formatMessage(messages.nofeatures);
+      contentDiv = (<div className='popup-content auto' ref='content'><div style={{'lineHeight': '58px'}}>{nofeatures}</div></div>)
+    } else if (this.state.contentAsObject) {
+      contentDiv = (<div className='popup-content' ref='content'><div className='popup-header'/><div className='popup-body' onScroll={this._updateScroll.bind(this)}>{this.state.popupTexts}</div></div>);
     } else {
       var content = this.state.popupTexts.join('<hr>');
-      contentDiv = (<div className='popup-content' ref='content' dangerouslySetInnerHTML={{__html: content}}></div>);
+      contentDiv = (<div className='popup-content auto' ref='content' dangerouslySetInnerHTML={{__html: content}}></div>);
     }
     return (
       <div className={classNames('sdk-component info-popup', this.props.className)}>
