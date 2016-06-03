@@ -7,6 +7,7 @@ var intl = require('../mock-i18n.js');
 var raf = require('raf');
 raf.polyfill();
 var ol = require('openlayers');
+require('phantomjs-polyfill-object-assign');
 
 var EditForm = require('../../js/components/EditForm.jsx');
 
