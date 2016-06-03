@@ -373,4 +373,4 @@ Edit.defaultProps = {
   pointRadius: 7
 };
 
-export default injectIntl(Edit);
+export default injectIntl(Edit, {withRef: true});
