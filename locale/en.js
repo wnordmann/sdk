@@ -33,7 +33,6 @@ var enMessages = {
   "edit.newfeaturemodaltitle": "New feature attributes",
   "edit.newlayer": "New layer",
   "edit.nolayer": "None",
-  "edit.nolayererror": "No editable layer is available. Create one to start editing.",
   "edit.okbuttontext": "Ok",
   "edit.okbuttontitle": "Set feature attributes",
   "edit.pointgeomtype": "Point",

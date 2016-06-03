@@ -14,7 +14,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Dialog from 'material-ui/lib/dialog';
-import Snackbar from 'material-ui/lib/snackbar';
 import TextField from 'material-ui/lib/text-field';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import SelectField from 'material-ui/lib/select-field';
@@ -51,11 +50,6 @@ const messages = defineMessages({
     id: 'edit.disable',
     description: 'Button text to disable edit mode',
     defaultMessage: 'Disable edit mode'
-  },
-  nolayererror: {
-    id: 'edit.nolayererror',
-    description: 'Error text for when no layer is available',
-    defaultMessage: 'No editable layer is available. Create one to start editing.'
   },
   layerlabel: {
     id: 'edit.layerlabel',
@@ -154,8 +148,6 @@ class Edit extends MapTool {
     this.state = {
       layers: [],
       enable: true,
-      error: false,
-      errorOpen: false,
       attributes: null,
       attributeOpen: false,
       open: false
@@ -217,12 +209,8 @@ class Edit extends MapTool {
     this.setState({layer: this._layer});
   }
   _enableEditMode() {
-    if (this.state.layers.length === 0) {
-      this.setState({error: true, errorOpen: true});
-    } else {
-      this.setState({error: false, errorOpen: false, enable: false});
-      this._activate();
-    }
+    this._activate();
+    this.setState({enable: false});
   }
   _addFeatureDialog(feature, attributes) {
     this._feature = feature;
@@ -275,11 +263,6 @@ class Edit extends MapTool {
   _showModal() {
     this.setState({open: true});
   }
-  _handleRequestClose() {
-    this.setState({
-      errorOpen: false
-    });
-  }
   _changeGeometryType(evt, idx, value) {
     this.setState({
       geometryType: value
@@ -297,9 +280,6 @@ class Edit extends MapTool {
   }
   render() {
     const buttonStyle = this.props.buttonStyle;
-    if (!this.state.enable) {
-      this._activate();
-    }
     const {formatMessage} = this.props.intl;
     var options = [], i, ii;
     for (i = 0, ii = this.state.layers.length; i < ii; ++i) {
@@ -308,9 +288,9 @@ class Edit extends MapTool {
     }
     var button;
     if (this.state.enable === true) {
-      button = (<RaisedButton style={buttonStyle} label={formatMessage(messages.enable)} onTouchTap={this._enableEditMode.bind(this)} />);
+      button = (<RaisedButton style={buttonStyle} disabled={this.state.layers.length === 0} label={formatMessage(messages.enable)} onTouchTap={this._enableEditMode.bind(this)} />);
     } else {
-      button = (<RaisedButton style={buttonStyle} label={formatMessage(messages.disable)} onTouchTap={this._disableEditMode.bind(this)} />);
+      button = (<RaisedButton style={buttonStyle} disabled={this.state.layers.length === 0} label={formatMessage(messages.disable)} onTouchTap={this._disableEditMode.bind(this)} />);
     }
     var attributeFormItems;
     if (this.state.attributes !== null) {
@@ -319,16 +299,6 @@ class Edit extends MapTool {
         var name = this.state.attributes[i], ref = NEW_ATTR_PREFIX + name;
         attributeFormItems.push(<TextField key={ref} floatingLabelText={name} ref={ref} />);
       }
-    }
-    var error;
-    if (this.state.error === true) {
-      error = (<Snackbar
-        open={this.state.errorOpen}
-        bodyStyle={{backgroundColor: 'rgba(255, 0, 0, 0.8)'}}
-        message={formatMessage(messages.nolayererror)}
-        autoHideDuration={2000}
-        onRequestClose={this._handleRequestClose.bind(this)}
-      />);
     }
     var attributeActions = [
       <RaisedButton label={formatMessage(messages.okbuttontext)} onTouchTap={this._setAttributes.bind(this)} />,
@@ -347,7 +317,6 @@ class Edit extends MapTool {
           <RaisedButton style={buttonStyle} label={formatMessage(messages.newlayer)} onTouchTap={this._showModal.bind(this)} />
           {button}
         </Toolbar>
-        {error}
         <Dialog open={this.state.attributeOpen} actions={attributeActions} autoScrollBodyContent={true} onRequestClose={this.closeAttributes.bind(this)} modal={true} title={formatMessage(messages.newfeaturemodaltitle)}>
           {attributeFormItems}
         </Dialog>
