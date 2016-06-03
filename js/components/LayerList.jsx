@@ -11,6 +11,7 @@
  */
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import classNames from 'classnames';
 import LayerIdService from '../services/LayerIdService.js';
@@ -87,11 +88,25 @@ class LayerList extends React.Component {
     });
     return layerNodes;
   }
-  _showPanel() {
-    this.setState({visible: true});
+  _showPanel(evt) {
+    if (!this.state.visible) {
+      this.setState({visible: true});
+    }
+    
   }
-  _hidePanel() {
-    if (this._modalOpen !== true) {
+  _isDescendant(el) {
+    var parent = ReactDOM.findDOMNode(this.refs.parent);
+    var node = el;
+    while (node != null) {
+      if (node == parent) {
+        return true;
+      }
+      node = node.parentNode;
+    }
+    return false;
+  }
+  _hidePanel(evt) {
+    if (this._modalOpen !== true && !this._isDescendant(evt.relatedTarget)) {
       this.setState({visible: false});
     }
   }
@@ -150,7 +165,7 @@ class LayerList extends React.Component {
     var onMouseOver = this.props.expandOnHover ? this._showPanel.bind(this) : undefined;
     var onClick = !this.props.expandOnHover ? this._togglePanel.bind(this) : undefined;
     return (
-      <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} className={classNames(divClass, this.props.className)}>
+      <div ref='parent' onMouseOut={onMouseOut} onMouseOver={onMouseOver} className={classNames(divClass, this.props.className)}>
         <IconButton style={this.props.style} className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={onClick}><LayersIcon color='white' /></IconButton>
         <div className='layer-tree-panel clearfix'>
           {tipLabel}
