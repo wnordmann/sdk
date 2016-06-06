@@ -151,7 +151,7 @@ class LayerList extends React.Component {
       'sdk-component': true,
       'layer-list': true
     };
-    var tipLabel = this.props.tipLabel ? (<div className='layer-list-header'><Label>this.props.tipLabel</Label></div>) : undefined;
+    var tipLabel = this.props.tipLabel ? (<div className='layer-list-header'><Label>{this.props.tipLabel}</Label></div>) : undefined;
     var addLayer;
     if (this.props.addLayer) {
       addLayer = (
