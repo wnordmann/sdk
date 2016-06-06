@@ -6,6 +6,13 @@ A div that can render the OpenLayers map object. It will also take care of notif
 Properties
 ----------
 
+### `children`
+
+Any children the MapPanel might have.
+
+type: `node`
+
+
 ### `className`
 
 Css class name to apply on the map div.

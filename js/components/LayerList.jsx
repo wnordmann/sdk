@@ -93,12 +93,11 @@ class LayerList extends React.Component {
     if (!this.state.visible) {
       this.setState({visible: true});
     }
-    
   }
   _isDescendant(el) {
     var parent = ReactDOM.findDOMNode(this.refs.parent);
     var node = el;
-    while (node != null) {
+    while (node !== null) {
       if (node == parent) {
         return true;
       }

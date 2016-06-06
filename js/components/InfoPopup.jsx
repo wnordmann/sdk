@@ -11,7 +11,6 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import BasePopup from './BasePopup.jsx';
 import ol from 'openlayers';
 import classNames from 'classnames';

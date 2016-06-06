@@ -128,7 +128,7 @@ class MapPanel extends React.Component {
       />);
     }
     return (
-      <div ref='map' {...this.props} className={classNames('sdk-component map-panel', this.props.className)}>{error}</div>
+      <div ref='map' {...this.props} className={classNames('sdk-component map-panel', this.props.className)}>{error}{this.props.children}</div>
     );
   }
 }
@@ -150,6 +150,10 @@ MapPanel.propTypes = {
    * Use the back and forward buttons of the browser for navigation history.
    */
   useHistory: React.PropTypes.bool,
+  /**
+   * Any children the MapPanel might have.
+   */
+  children: React.PropTypes.node,
   /**
   * i18n message strings. Provided through the application through context.
   */
