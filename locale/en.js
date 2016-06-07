@@ -176,6 +176,8 @@ var enMessages = {
   "wfst.errormsg": "Error saving this feature to GeoServer. {msg}",
   "wfst.layerlabel": "Layer",
   "wfst.modifyfeature": "Select",
-  "wfst.modifyfeaturetitle": "Modify an existing feature or select before Delete"
+  "wfst.modifyfeaturetitle": "Modify an existing feature or select before Delete",
+  "zoom.zoomintitle": "Zoom in",
+  "zoom.zoomouttitle": "Zoom out"
 };
 export default enMessages;

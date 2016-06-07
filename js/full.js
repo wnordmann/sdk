@@ -132,3 +132,6 @@ global.ToolActions = ToolActions;
 
 import WFST from './components/WFST.jsx';
 global.WFST = WFST;
+
+import Zoom from './components/Zoom.jsx';
+global.Zoom = Zoom;
