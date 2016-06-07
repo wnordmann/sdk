@@ -6,11 +6,13 @@ For example usage see: https://github.com/boundlessgeo/sdk-apps
 
     npm run docs
 
-This depends on gitbook. Make sure the 3.0.0 pre release (3.0.0-pre.5) is installed, verify with:
+This depends on gitbook. The 3.0.0 pre release (3.0.0-pre.5) should be installed automatically, verify with:
 
     node_modules/.bin/gitbook ls
 
 The versions get installed at ~/.gitbook/versions/
+
+The doc build also requires that [ebook-convert](https://calibre-ebook.com) from Calibre is installed and on the path.
 
 ## Testing
     npm test
