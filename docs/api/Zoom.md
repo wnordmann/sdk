@@ -62,3 +62,17 @@ defaultValue: `{
   padding: '2px'
 }`
 
+
+### `zoomInTipLabel`
+
+Tooltip to show for zoom in button.
+
+type: `string`
+
+
+### `zoomOutTipLabel`
+
+Tooltip to show for zoom out button.
+
+type: `string`
+

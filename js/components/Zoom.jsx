@@ -69,8 +69,8 @@ class Zoom extends React.Component {
     const {formatMessage} = this.props.intl;
     return (
       <div className={classNames('sdk-component zoom', this.props.className)}>
-        <IconButton tooltipPosition='top-right' style={this.props.style} tooltip={formatMessage(messages.zoomintitle)} onTouchTap={this._zoomIn.bind(this)}><ZoomIn color="white"/></IconButton><br/>
-        <IconButton tooltipPosition='top-right' style={Object.assign({marginTop: '25px'}, this.props.style)} tooltip={formatMessage(messages.zoomouttitle)} onTouchTap={this._zoomOut.bind(this)}><ZoomOut color="white"/></IconButton>
+        <IconButton tooltipPosition='top-right' style={this.props.style} tooltip={this.props.zoomInTipLabel ? this.props.zoomInTipLabel : formatMessage(messages.zoomintitle)} onTouchTap={this._zoomIn.bind(this)}><ZoomIn color="white"/></IconButton><br/>
+        <IconButton tooltipPosition='top-right' style={Object.assign({marginTop: '25px'}, this.props.style)} tooltip={this.props.zoomOutTipLabel ? this.props.zoomOutTipLabel : formatMessage(messages.zoomouttitle)} onTouchTap={this._zoomOut.bind(this)}><ZoomOut color="white"/></IconButton>
       </div>
     );
   }
@@ -97,6 +97,14 @@ Zoom.propTypes = {
    * The ol3 map to use for zooming.
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * Tooltip to show for zoom in button.
+   */
+  zoomInTipLabel: React.PropTypes.string,
+  /**
+   * Tooltip to show for zoom out button.
+   */
+  zoomOutTipLabel: React.PropTypes.string,
   /**
    * i18n message strings. Provided through the application through context.
    */
