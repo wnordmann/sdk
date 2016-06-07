@@ -109,6 +109,9 @@ global.MapPanel = MapPanel;
 import Measure from './components/Measure.jsx';
 global.Measure = Measure;
 
+import Navigation from './components/Navigation.jsx';
+global.Navigation = Navigation;
+
 import Playback from './components/Playback.jsx';
 global.Playback = Playback;
 

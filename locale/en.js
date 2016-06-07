@@ -128,6 +128,8 @@ var enMessages = {
   "measure.dropdowntitle": "Measure distance and area on the map",
   "measure.measureareatext": "Area",
   "measure.measuredistancetext": "Distance",
+  "navigation.buttontext": "Navigation",
+  "navigation.buttontitle": "Switch to map navigation (pan and zoom)",
   "playback.dateinputlabel": "Date picker",
   "playback.rangeinputlabel": "Slider control for changing the date",
   "qgislegend.buttontitle": "Legend",
