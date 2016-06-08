@@ -22,7 +22,7 @@ In order to keep the full build (used by the QGIS Web Application Builder) up to
 
     #!/bin/sh
     npm test
-    npm run build:full:debug
+    npm run build
     git add dist/js
     npm run docs
     git add docs
