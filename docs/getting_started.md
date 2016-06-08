@@ -1,7 +1,7 @@
 # Getting Started
 
 ## JSFiddle
-Check out the following [JSFiddle example](https://jsfiddle.net/bartvde/69z2wepo/30192/).
+Check out the following [JSFiddle example](https://jsfiddle.net/bartvde/4uwjvcej/).
 
 ## Requirements for development environment
 Make sure g++ is installed on your system.
