@@ -75,7 +75,7 @@ class Rotate extends React.Component {
     }
   }
   render() {
-    if (this.state.rotation === 0) {
+    if (this.state.rotation === 0 && this.props.autoHide) {
       return (<article/>);
     } else {
       const {formatMessage} = this.props.intl;
@@ -103,6 +103,10 @@ Rotate.propTypes = {
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
   /**
+   * Should we hide the button if not rotated?
+   */
+  autoHide: React.PropTypes.bool,
+  /**
    * Css class name to apply on the root element of this component.
    */
   className: React.PropTypes.string,
@@ -113,6 +117,7 @@ Rotate.propTypes = {
 };
 
 Rotate.defaultProps = {
+  autoHide: true,
   duration: 250,
   style: {
     background: 'rgba(0,60,136,.7)',
