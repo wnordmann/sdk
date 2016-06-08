@@ -152,6 +152,7 @@ var enMessages = {
   "querybuilder.newbuttontitle": "New selection",
   "querybuilder.selectintext": "Refine",
   "querybuilder.selectintitle": "Refine current selection",
+  "rotate.rotatetitle": "Reset rotation",
   "ruleeditor.filltitle": "Fill",
   "ruleeditor.filtertitle": "Filter",
   "ruleeditor.labeltitle": "Label",

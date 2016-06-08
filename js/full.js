@@ -124,6 +124,9 @@ global.QGISPrint = QGISPrint;
 import QueryBuilder from './components/QueryBuilder.jsx';
 global.QueryBuilder = QueryBuilder;
 
+import Rotate from './components/Rotate.jsx';
+global.Rotate = Rotate;
+
 import Select from './components/Select.jsx';
 global.Select = Select;
 
