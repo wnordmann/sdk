@@ -46,7 +46,7 @@ describe('FilterModal', function() {
   });
 
 
-  it('sets the style function on the layer when a filter is added', function() {
+  it('sets the style function on the layer when a filter is added', function(done) {
     var container = document.createElement('div');
     var filter = ReactDOM.render((
       <FilterModal layer={layer} intl={intl} />
@@ -54,7 +54,10 @@ describe('FilterModal', function() {
     filter.open();
     filter._addFilter();
     assert.equal(filter._styleSet, true);
-    ReactDOM.unmountComponentAtNode(container);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
   });
 
 });

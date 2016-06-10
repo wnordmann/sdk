@@ -40,7 +40,7 @@ export default class MapTool extends React.Component {
                 if (me.props.toolId !== action.toolId) {
                   me.deactivate();
                 } else {
-                  me.activate();
+                  me._active !== true && me.activate();
                 }
               } else {
                 me.deactivate();
@@ -67,18 +67,22 @@ export default class MapTool extends React.Component {
       }
     }
     delete this._currentInteractions;
+    this._active = false;
   }
   activate(interactions) {
     if (interactions instanceof ol.interaction.Interaction) {
       this._currentInteractions = [interactions];
-    } else {
+    } else if (Array.isArray(interactions)) {
       this._currentInteractions = interactions;
+    } else {
+      this._currentInteractions = [];
     }
     var map = this.props.map;
     for (var i = 0, ii = this._currentInteractions.length; i < ii; ++i) {
       map.addInteraction(this._currentInteractions[i]);
     }
     ToolActions.activateTool(this, this.props.toggleGroup, this.props.toolId);
+    this._active = true;
   }
 }
 
