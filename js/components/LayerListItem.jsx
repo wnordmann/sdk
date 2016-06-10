@@ -210,37 +210,37 @@ class LayerListItem extends React.Component {
     var zoomTo;
     // TODO add titles back for icon buttons
     if (layer.get('type') !== 'base' && layer.get('type') !== 'base-group' && ((source && source.getExtent) || layer.get('EX_GeographicBoundingBox')) && this.props.showZoomTo) {
-      zoomTo = <IconButton style={iconStyle} onTouchTap={this._zoomTo.bind(this)} tooltip={formatMessage(messages.zoombuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><ZoomInIcon /></IconButton>;
+      zoomTo = <IconButton className='layer-list-item-zoom' style={iconStyle} onTouchTap={this._zoomTo.bind(this)} tooltip={formatMessage(messages.zoombuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><ZoomInIcon /></IconButton>;
     }
     var download;
     if (layer instanceof ol.layer.Vector && this.props.showDownload) {
-      download = (<IconButton style={iconStyle} onTouchTap={this._download.bind(this)} tooltip={formatMessage(messages.downloadbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><DownloadIcon /></IconButton>);
+      download = (<IconButton className='layer-list-item-download' style={iconStyle} onTouchTap={this._download.bind(this)} tooltip={formatMessage(messages.downloadbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><DownloadIcon /></IconButton>);
     }
     var filter;
     if (layer instanceof ol.layer.Vector && this.props.allowFiltering) {
-      filter = (<IconButton style={iconStyle} onTouchTap={this._filter.bind(this)} tooltip={formatMessage(messages.filterbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><FilterIcon /></IconButton>);
+      filter = (<IconButton style={iconStyle} className='layer-list-item-filter' onTouchTap={this._filter.bind(this)} tooltip={formatMessage(messages.filterbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><FilterIcon /></IconButton>);
     }
     var label;
     if (layer instanceof ol.layer.Vector && this.props.allowLabeling) {
-      label = (<IconButton style={iconStyle} onTouchTap={this._label.bind(this)} tooltip={formatMessage(messages.labelbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><LabelIcon /></IconButton>);
+      label = (<IconButton style={iconStyle} className='layer-list-item-label' onTouchTap={this._label.bind(this)} tooltip={formatMessage(messages.labelbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><LabelIcon /></IconButton>);
     }
     var styling;
     var canStyle = layer.get('wfsInfo') && this.props.allowStyling;
     if (canStyle) {
-      styling = (<IconButton style={iconStyle} onTouchTap={this._style.bind(this)} tooltip={formatMessage(messages.stylingbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><StyleIcon /></IconButton>);
+      styling = (<IconButton style={iconStyle} className='layer-list-item-style' onTouchTap={this._style.bind(this)} tooltip={formatMessage(messages.stylingbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><StyleIcon /></IconButton>);
     }
     var reorderUp, reorderDown;
     if (layer.get('type') !== 'base' && layer.get('type') !== 'base-group' && this.props.allowReordering) {
-      reorderUp = (<IconButton style={iconStyle} onTouchTap={this._moveUp.bind(this)} tooltip={formatMessage(messages.reorderupbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><MoveUpIcon /></IconButton>);
-      reorderDown = (<IconButton style={iconStyle} onTouchTap={this._moveDown.bind(this)} tooltip={formatMessage(messages.reorderdownbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><MoveDownIcon /></IconButton>);
+      reorderUp = (<IconButton style={iconStyle} className='layer-list-item-moveup' onTouchTap={this._moveUp.bind(this)} tooltip={formatMessage(messages.reorderupbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><MoveUpIcon /></IconButton>);
+      reorderDown = (<IconButton className='layer-list-item-movedown' style={iconStyle} onTouchTap={this._moveDown.bind(this)} tooltip={formatMessage(messages.reorderdownbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><MoveDownIcon /></IconButton>);
     }
     var remove;
     if (layer.get('type') !== 'base' && layer.get('isRemovable') === true) {
-      remove = (<IconButton style={iconStyle} onTouchTap={this._remove.bind(this)} tooltip={formatMessage(messages.removebuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><DeleteIcon /></IconButton>);
+      remove = (<IconButton style={iconStyle} className='layer-list-item-remove' onTouchTap={this._remove.bind(this)} tooltip={formatMessage(messages.removebuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><DeleteIcon /></IconButton>);
     }
     var edit;
     if (this.props.allowEditing && layer.get('isWFST') === true) {
-      edit = (<IconButton style={iconStyle} onTouchTap={this._edit.bind(this)} tooltip={formatMessage(messages.editbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><EditIcon /></IconButton>);
+      edit = (<IconButton style={iconStyle} onTouchTap={this._edit.bind(this)} className='layer-list-item-edit' tooltip={formatMessage(messages.editbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><EditIcon /></IconButton>);
     }
     var buttonPadding
     if (zoomTo || download || filter || label || styling || reorderUp || reorderDown || remove || edit) {
