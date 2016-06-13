@@ -6,9 +6,13 @@ For example usage see: https://github.com/boundlessgeo/sdk-apps
 
     npm run docs
 
-This depends on gitbook. The 3.0.0 pre release (3.0.0-pre.5) should be installed automatically, verify with:
+This depends on gitbook. The 3.1.0 release should be installed, verify with:
 
     node_modules/.bin/gitbook ls
+
+If not install it manually:
+
+    node_modules/.bin/gitbook fetch 3.1.0
 
 The versions get installed at ~/.gitbook/versions/
 
