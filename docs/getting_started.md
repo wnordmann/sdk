@@ -23,7 +23,7 @@ The easiest way to get started is to use the web-sdk application generator. We w
 Run the following command:
 
 ```
-npm install -g web-sdk-generator --registry https://repo.boundlessgeo.com/api/npm/npmall
+npm install -g web-sdk-generator --registry https://npm.boundlessgeo.com
 ```
 
 To install the package globally might need ```sudo``` rights.
@@ -37,7 +37,7 @@ web-sdk --help
 If you have insufficient rights to install globally, install the package like this:
 
 ```
-npm install web-sdk-generator --registry https://repo.boundlessgeo.com/api/npm/npmall
+npm install web-sdk-generator --registry https://npm.boundlessgeo.com
 ```
 
 And run:
@@ -76,7 +76,7 @@ $ node_modules/.bin/web-sdk /tmp/myapp
    create : /tmp/myapp/package.json
 
    install dependencies:
-     $ cd /tmp/myapp && npm install --registry https://repo.boundlessgeo.com/api/npm/npmall
+     $ cd /tmp/myapp && npm install --registry https://npm.boundlessgeo.com
 
    run the app:
      $ npm start
@@ -85,7 +85,7 @@ $ node_modules/.bin/web-sdk /tmp/myapp
 The application is generated and instructions are outputted on the next steps to undertake. Change to this directory and run:
 
 ```
-npm install --registry https://repo.boundlessgeo.com/api/npm/npmall
+npm install --registry https://npm.boundlessgeo.com
 ```
 
 This will install all the needed dependencies for the application.
@@ -131,12 +131,12 @@ The following packages are relevant for the Boundless Web SDK:
 * ```sdk-tools```, package containing debug server
 * ```web-sdk-generator```, package containing CLI for creating apps
 
-The packages are stored in our repo server at: https://repo.boundlessgeo.com/api/npm/npmall
+The packages are stored in our repo server at: https://npm.boundlessgeo.com
 
 So to install them you will need to use:
 
 ```
-npm install boundless-sdk --registry https://repo.boundlessgeo.com/api/npm/npmall
-npm install sdk-tools --registry https://repo.boundlessgeo.com/api/npm/npmall
-npm install web-sdk-generator --registry https://repo.boundlessgeo.com/api/npm/npmall
+npm install boundless-sdk --registry https://npm.boundlessgeo.com
+npm install sdk-tools --registry https://npm.boundlessgeo.com
+npm install web-sdk-generator --registry https://npm.boundlessgeo.com
 ```
