@@ -24,7 +24,6 @@ import TableBody from 'material-ui/lib/table/table-body';
 import IconButton from 'material-ui/lib/icon-button';
 import CloserIcon from 'material-ui/lib/svg-icons/navigation/close';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import $ from 'jquery';
 import './InfoPopup.css';
 
 const messages = defineMessages({
@@ -238,16 +237,16 @@ class InfoPopup extends BasePopup {
     var el = evt.target;
     var scrollPosition = el.getBoundingClientRect().top;
 
-    var headers = $(el).find('.popup-table-header').toArray();
-    var bodys = $(el).find('.popup-table-headerpadding').toArray();
+    var headers = el.querySelectorAll('.popup-table-header');
+    var bodys = el.querySelectorAll('.popup-table-headerpadding');
     for (var i = 1; i < headers.length; i++) {
       var position = bodys[i].getBoundingClientRect().bottom;
       if (position < scrollPosition) {
-        $(headers[i]).addClass('popup-header-fixed');
-        $(bodys[i]).addClass('popup-body-noheader');
+        headers[i].classList.add('popup-header-fixed');
+        bodys[i].classList.add('popup-body-noheader');
       } else {
-        $(headers[i]).removeClass('popup-header-fixed');
-        $(bodys[i]).removeClass('popup-body-noheader');
+        headers[i].classList.remove('popup-header-fixed');
+        bodys[i].classList.remove('popup-body-noheader');
       }
     }
   }
