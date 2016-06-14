@@ -21,7 +21,7 @@ import FilterService from '../services/FilterService.js';
 import FilterHelp from './FilterHelp.jsx';
 import Toolbar from 'material-ui/lib/toolbar/toolbar';
 import TextField from 'material-ui/lib/text-field';
-import RaisedButton from 'material-ui/lib/raised-button';
+import RaisedButton from './Button.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import './QueryBuilder.css';
 import pureRender from 'pure-render-decorator';
@@ -186,9 +186,9 @@ class QueryBuilder extends React.Component {
         <LayerSelector {...this.props} onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /><br/>
         <TextField floatingLabelText={formatMessage(messages.filterlabel)} errorText={this.state.errorText} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} /><FilterHelp intl={this.props.intl} style={{bottom: 70}} /><br/>
         <Toolbar>
-          <RaisedButton style={buttonStyle} label={formatMessage(messages.newbuttontext)} onTouchTap={this._newSelection.bind(this)} />
-          <RaisedButton style={buttonStyle} label={formatMessage(messages.addbuttontext)} onTouchTap={this._addSelection.bind(this)} />
-          <RaisedButton style={buttonStyle} label={formatMessage(messages.selectintext)} onTouchTap={this._inSelection.bind(this)} />
+          <RaisedButton style={buttonStyle} label={formatMessage(messages.newbuttontext)} tooltip={formatMessage(messages.newbuttontitle)} onTouchTap={this._newSelection.bind(this)} />
+          <RaisedButton style={buttonStyle} label={formatMessage(messages.addbuttontext)} tooltip={formatMessage(messages.addbuttontitle)}onTouchTap={this._addSelection.bind(this)} />
+          <RaisedButton style={buttonStyle} label={formatMessage(messages.selectintext)} tooltip={formatMessage(messages.selectintitle)} onTouchTap={this._inSelection.bind(this)} />
         </Toolbar>
         {count}
       </div>
