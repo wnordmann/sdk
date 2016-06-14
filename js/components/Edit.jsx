@@ -235,7 +235,7 @@ class Edit extends MapTool {
       this.setState({open: false, geometryType: null, layers: layers});
     }
   }
-  _disableEditMode() {
+  disableEditMode() {
     this.setState({enable: true});
     this.deactivate();
   }
@@ -332,7 +332,7 @@ class Edit extends MapTool {
     if (this.state.enable === true) {
       button = (<RaisedButton tooltip={formatMessage(messages.enabletitle)} style={buttonStyle} disabled={this.state.layers.length === 0} label={formatMessage(messages.enable)} onTouchTap={this._enableEditMode.bind(this)} />);
     } else {
-      button = (<RaisedButton tooltip={formatMessage(messages.disabletitle)}style={buttonStyle} disabled={this.state.layers.length === 0} label={formatMessage(messages.disable)} onTouchTap={this._disableEditMode.bind(this)} />);
+      button = (<RaisedButton tooltip={formatMessage(messages.disabletitle)}style={buttonStyle} disabled={this.state.layers.length === 0} label={formatMessage(messages.disable)} onTouchTap={this.disableEditMode.bind(this)} />);
     }
     var attributeFormItems;
     if (this.state.attributes !== null) {
