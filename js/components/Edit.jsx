@@ -15,6 +15,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Dialog from 'material-ui/lib/dialog';
 import TextField from 'material-ui/lib/text-field';
+import AppDispatcher from '../dispatchers/AppDispatcher.js';
+import LayerConstants from '../constants/LayerConstants.js';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import SelectField from 'material-ui/lib/select-field';
 import Toolbar from 'material-ui/lib/toolbar/toolbar';
@@ -169,6 +171,31 @@ class Edit extends MapTool {
     };
     this._strokeColor = '#452135';
     this._fillColor = '#452135';
+    var me = this;
+    AppDispatcher.register((payload) => {
+      let action = payload.action;
+      switch (action.type) {
+        case LayerConstants.REMOVE_LAYER:
+          me.removeLayer(action.layer);
+          break;
+        default:
+          break;
+      }
+    });
+  }
+  removeLayer(layer) {
+    var idx = -1;
+    for (var i = 0, ii = this.state.layers.length; i < ii; ++i) {
+      if (this.state.layers[i] === layer) {
+        idx = i;
+        break;
+      }
+    }
+    if (idx !== -1) {
+      var layers = this.state.layers.slice();
+      layers.splice(idx, 1);
+      this.setState({layers: layers});
+    }
   }
   _onChangeStroke(color) {
     this._strokeColor = transformColor(color);
