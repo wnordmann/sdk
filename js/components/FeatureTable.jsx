@@ -396,7 +396,7 @@ class FeatureTable extends React.Component {
         );
     }
     const buttonStyle = this.props.buttonStyle;
-    var filterHelp = this._layer ? <FilterHelp /> : undefined;
+    var filterHelp = this._layer ? <FilterHelp textSearch={true} intl={this.props.intl} /> : undefined;
     return (
       <div className={classNames('sdk-component feature-table', this.props.className)}>
         <div ref='form'>

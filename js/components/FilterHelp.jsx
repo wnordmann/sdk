@@ -18,10 +18,20 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import './FilterHelp.css';
 
 const messages = defineMessages({
-  introtext: {
-    id: 'filterhelp.introtext',
+  introtextprefix: {
+    id: 'filterhelp.introtextprefix',
     description: 'Intro text for the filter help dialog',
-    defaultMessage: 'Type in a string to search all feature attributes, or a filter expression to narrow your search to one or more attributes.'
+    defaultMessage: 'Type in'
+  },
+  introtextstringsearch: {
+    id: 'filterhelp.introtextstringsearch',
+    description: 'Text to show if string text is available',
+    defaultMessage: 'a string to search all feature attributes, or'
+  },
+  introtextsuffix: {
+    id: 'filterhelp.introtextsuffix',
+    description: 'Last part of the intro text',
+    defaultMessage: 'a filter expression to narrow your search to one or more attributes.'
   },
   exampletext: {
     id: 'filterhelp.exampletext',
@@ -193,12 +203,17 @@ class FilterHelp extends React.Component {
     const {formatMessage} = this.props.intl;
     const monoStyle = this.props.monoStyle;
     const popStyle = this.props.popStyle;
+    var introText = formatMessage(messages.introtextprefix) + ' ';
+    if (this.props.textSearch) {
+      introText += formatMessage(messages.introtextstringsearch) + ' ';
+    }
+    introText += formatMessage(messages.introtextsuffix);
     return (
       <span className='filter-help' style={this.props.style}>
         <HelpOutline ref='help' onClick={this._onToggleHelp.bind(this)}/>
         <Popover open={this.state.help} onRequestClose={this._onToggleHelp.bind(this)} style={popStyle} anchorEl={this.helpElement} anchorOrigin={{'horizontal':'left'}}>
           <p>
-            {formatMessage(messages.introtext)}
+            {introText}
           </p>
           <p>
             {formatMessage(messages.exampletext)}
@@ -237,6 +252,10 @@ class FilterHelp extends React.Component {
 
 FilterHelp.propTypes = {
   /**
+   * Can we search through all attributes or not?
+   */
+  textSearch: React.PropTypes.bool,
+  /**
    * Style config for all divs that are part of a list item.
    */
   monoStyle: React.PropTypes.object,
@@ -255,6 +274,7 @@ FilterHelp.propTypes = {
 };
 
 FilterHelp.defaultProps = {
+  textSearch: false,
   monoStyle: {
     fontWeight: 'bold',
     color: '#424242',

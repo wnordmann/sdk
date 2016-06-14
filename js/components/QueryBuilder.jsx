@@ -18,6 +18,7 @@ import classNames from 'classnames';
 import LayerSelector from './LayerSelector.jsx';
 import SelectActions from '../actions/SelectActions.js';
 import FilterService from '../services/FilterService.js';
+import FilterHelp from './FilterHelp.jsx';
 import Toolbar from 'material-ui/lib/toolbar/toolbar';
 import TextField from 'material-ui/lib/text-field';
 import RaisedButton from 'material-ui/lib/raised-button';
@@ -41,15 +42,10 @@ const messages = defineMessages({
     description: 'Text for the filter button',
     defaultMessage: 'Selected items based on your criteria'
   },
-  filterplaceholder: {
-    id: 'querybuilder.filterplaceholder',
-    description: 'Placeholder for the expression input field',
-    defaultMessage: 'Type expression ....'
-  },
   errortext: {
     id: 'querybuilder.errortext',
     description: 'error text to shown when filter does not validate',
-    defaultMessage: 'Error setting filter, should be for instance ATTRIBUTE == "Value"'
+    defaultMessage: 'Invalid filter, should be for instance foo == "Bar"'
   },
   countmsg: {
     id: 'querybuilder.countmsg',
@@ -188,7 +184,7 @@ class QueryBuilder extends React.Component {
     return (
       <div className={classNames('sdk-component query-builder', this.props.className)}>
         <LayerSelector {...this.props} onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /><br/>
-        <TextField hintText={formatMessage(messages.filterplaceholder)} floatingLabelText={formatMessage(messages.filterlabel)} errorText={this.state.errorText} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} /><br/>
+        <TextField floatingLabelText={formatMessage(messages.filterlabel)} errorText={this.state.errorText} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} /><FilterHelp intl={this.props.intl} style={{bottom: 70}} /><br/>
         <Toolbar>
           <RaisedButton style={buttonStyle} label={formatMessage(messages.newbuttontext)} onTouchTap={this._newSelection.bind(this)} />
           <RaisedButton style={buttonStyle} label={formatMessage(messages.addbuttontext)} onTouchTap={this._addSelection.bind(this)} />

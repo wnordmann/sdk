@@ -44,3 +44,11 @@ Style for the root span.
 
 type: `object`
 
+
+### `textSearch`
+
+Can we search through all attributes or not?
+
+type: `bool`
+defaultValue: `false`
+
