@@ -18,7 +18,7 @@ import TextField from 'material-ui/lib/text-field';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import SelectField from 'material-ui/lib/select-field';
 import Toolbar from 'material-ui/lib/toolbar/toolbar';
-import RaisedButton from 'material-ui/lib/raised-button';
+import RaisedButton from './Button.jsx';
 import ol from 'openlayers';
 import MapTool from './MapTool.js';
 import {transformColor} from '../util.js';
@@ -31,24 +31,34 @@ const NEW_ATTR_PREFIX = 'new-attr-';
 const ID_PREFIX = 'sdk-edit-';
 
 const messages = defineMessages({
-  nolayer: {
-    id: 'edit.nolayer',
-    description: 'Text to show in the combo box when no layer has been created',
-    defaultMessage: 'None'
-  },
   enable: {
     id: 'edit.enable',
     description: 'Button text to enable edit mode',
+    defaultMessage: 'Enable'
+  },
+  enabletitle: {
+    id: 'edit.enabletitle',
+    description: 'Button tooltip to enable edit mode',
     defaultMessage: 'Enable edit mode'
   },
   newlayer:{
     id: 'edit.newlayer',
     description: 'Button text to create a new layer',
-    defaultMessage: 'New layer'
+    defaultMessage: 'New'
+  },
+  newlayertitle:{
+    id: 'edit.newlayertitle',
+    description: 'Button tooltip to create a new layer',
+    defaultMessage: 'Create new layer'
   },
   disable: {
     id: 'edit.disable',
     description: 'Button text to disable edit mode',
+    defaultMessage: 'Disable'
+  },
+  disabletitle: {
+    id: 'edit.disabletitle',
+    description: 'Button tooltip to disable edit mode',
     defaultMessage: 'Disable edit mode'
   },
   layerlabel: {
@@ -74,12 +84,12 @@ const messages = defineMessages({
   createlayermodaltitle: {
     id: 'edit.createlayermodaltitle',
     description: 'Title for the modal dialog to create a new layer',
-    defaultMessage: 'Create empty layer'
+    defaultMessage: 'Create new layer'
   },
   layernamelabel: {
     id: 'edit.layernamelabel',
     description: 'Label for the layer name input field in the create layer modal',
-    defaultMessage: 'Layer name'
+    defaultMessage: 'Layer title'
   },
   geometrytypelabel: {
     id: 'edit.geometrytypelabel',
@@ -130,6 +140,11 @@ const messages = defineMessages({
     id: 'edit.closebuttontext',
     description: 'Text for close button',
     defaultMessage: 'Close'
+  },
+  closebuttontitle: {
+    id: 'edit.closebuttontitle',
+    description: 'Tooltip for close button',
+    defaultMessage: 'Close dialog'
   }
 });
 
@@ -288,9 +303,9 @@ class Edit extends MapTool {
     }
     var button;
     if (this.state.enable === true) {
-      button = (<RaisedButton style={buttonStyle} disabled={this.state.layers.length === 0} label={formatMessage(messages.enable)} onTouchTap={this._enableEditMode.bind(this)} />);
+      button = (<RaisedButton tooltip={formatMessage(messages.enabletitle)} style={buttonStyle} disabled={this.state.layers.length === 0} label={formatMessage(messages.enable)} onTouchTap={this._enableEditMode.bind(this)} />);
     } else {
-      button = (<RaisedButton style={buttonStyle} disabled={this.state.layers.length === 0} label={formatMessage(messages.disable)} onTouchTap={this._disableEditMode.bind(this)} />);
+      button = (<RaisedButton tooltip={formatMessage(messages.disabletitle)}style={buttonStyle} disabled={this.state.layers.length === 0} label={formatMessage(messages.disable)} onTouchTap={this._disableEditMode.bind(this)} />);
     }
     var attributeFormItems;
     if (this.state.attributes !== null) {
@@ -301,33 +316,33 @@ class Edit extends MapTool {
       }
     }
     var attributeActions = [
-      <RaisedButton label={formatMessage(messages.okbuttontext)} onTouchTap={this._setAttributes.bind(this)} />,
-      <RaisedButton label={formatMessage(messages.closebuttontext)} onTouchTap={this.closeAttributes.bind(this)} />
+      <RaisedButton tooltip={formatMessage(messages.okbuttontitle)} label={formatMessage(messages.okbuttontext)} onTouchTap={this._setAttributes.bind(this)} />,
+      <RaisedButton tooltip={formatMessage(messages.closebuttontitle)} label={formatMessage(messages.closebuttontext)} onTouchTap={this.closeAttributes.bind(this)} />
     ];
     var actions = [
-      <RaisedButton label={formatMessage(messages.createbuttontext)} onTouchTap={this._createLayer.bind(this)} />,
-      <RaisedButton label={formatMessage(messages.closebuttontext)} onTouchTap={this.close.bind(this)} />
+      <RaisedButton tooltip={formatMessage(messages.createbuttontitle)} label={formatMessage(messages.createbuttontext)} onTouchTap={this._createLayer.bind(this)} />,
+      <RaisedButton tooltip={formatMessage(messages.closebuttontitle)} label={formatMessage(messages.closebuttontext)} onTouchTap={this.close.bind(this)} />
     ];
     return (
       <div className={classNames('sdk-component edit', this.props.className)}>
-        <SelectField hintText={formatMessage(messages.nolayer)} onChange={this._onLayerChange.bind(this)} floatingLabelText={formatMessage(messages.layerlabel)} value={this._layer} ref='layer'>
+        <SelectField disabled={this.state.layers.length === 0} onChange={this._onLayerChange.bind(this)} floatingLabelText={formatMessage(messages.layerlabel)} value={this._layer} ref='layer'>
           {options}
         </SelectField>
         <Toolbar>
-          <RaisedButton style={buttonStyle} label={formatMessage(messages.newlayer)} onTouchTap={this._showModal.bind(this)} />
+          <RaisedButton tooltip={formatMessage(messages.newlayertitle)} style={buttonStyle} label={formatMessage(messages.newlayer)} onTouchTap={this._showModal.bind(this)} />
           {button}
         </Toolbar>
         <Dialog open={this.state.attributeOpen} actions={attributeActions} autoScrollBodyContent={true} onRequestClose={this.closeAttributes.bind(this)} modal={true} title={formatMessage(messages.newfeaturemodaltitle)}>
           {attributeFormItems}
         </Dialog>
         <Dialog actions={actions} onRequestClose={this.close.bind(this)} modal={true} autoScrollBodyContent={true} title={formatMessage(messages.createlayermodaltitle)} open={this.state.open}>
-          <TextField floatingLabelText={formatMessage(messages.layernamelabel)} ref="layerName" /><br/>
-          <SelectField value={this.state.geometryType} onChange={this._changeGeometryType.bind(this)} floatingLabelText={formatMessage(messages.geometrytypelabel)} ref='geometryType'>
+          <TextField style={{width: 512}} floatingLabelText={formatMessage(messages.layernamelabel)} ref="layerName" /><br/>
+          <SelectField style={{width: 512}} value={this.state.geometryType} onChange={this._changeGeometryType.bind(this)} floatingLabelText={formatMessage(messages.geometrytypelabel)} ref='geometryType'>
             <MenuItem key='Point' value='Point' primaryText={formatMessage(messages.pointgeomtype)} />
             <MenuItem key='LineString' value='LineString' primaryText={formatMessage(messages.linegeomtype)} />
             <MenuItem key='Polygon' value='Polygon' primaryText={formatMessage(messages.polygeomtype)} />
           </SelectField><br/>
-          <TextField floatingLabelText={formatMessage(messages.attributeslabel)} ref="attributes" /><br/>
+          <TextField style={{width: 512}} floatingLabelText={formatMessage(messages.attributeslabel)} ref="attributes" /><br/>
           <label>{formatMessage(messages.strokecolorlabel)}</label>
           <ColorPicker type='compact' onChangeComplete={this._onChangeStroke.bind(this)} ref='strokeColor' color={this._strokeColor} />
           <label>{formatMessage(messages.fillcolorlabel)}</label>
