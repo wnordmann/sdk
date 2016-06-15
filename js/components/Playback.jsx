@@ -47,6 +47,8 @@ class Playback extends React.Component {
       date: this.props.minDate
     };
     this._interval = (this.props.maxDate - this.props.minDate) / this.props.numIntervals;
+    this._loading = 0;
+    this._loaded = 0;
   }
   componentDidMount() {
     this._setStyleFunctions();
@@ -58,11 +60,13 @@ class Playback extends React.Component {
     evt.preventDefault();
   }
   _play() {
-    var newTime = this.state.date + this._interval;
-    if (newTime > this.props.maxDate) {
-      newTime = this.props.minDate;
+    if (this._loading === this._loaded) {
+      var newTime = this.state.date + this._interval;
+      if (newTime > this.props.maxDate) {
+        newTime = this.props.minDate;
+      }
+      this.setState({date: newTime});
     }
-    this.setState({date: newTime});
   }
   _playPause() {
     var play = !this.state.play;
@@ -78,29 +82,52 @@ class Playback extends React.Component {
   }
   _setStyleFunc(lyr) {
     if (lyr.get('timeInfo')) {
-      var style = lyr.getStyle();
-      var timeInfo = lyr.get('timeInfo');
-      var me = this;
-      lyr.setStyle(function(feature, resolution) {
-        var start = (timeInfo.start === parseInt(timeInfo.start, 10)) ? timeInfo.start : Date.parse(feature.get(timeInfo.start));
-        if (isNaN(start) || start > me.state.date) {
-          return null;
-        }
-        var end = (timeInfo.end === parseInt(timeInfo.end, 10)) ? timeInfo.end : Date.parse(feature.get(timeInfo.end));
-        if (isNaN(end) || end < me.state.date) {
-          return null;
-        }
-        if (style instanceof ol.style.Style || Array.isArray(style)) {
-          return style;
-        } else {
-          return style.call(this, feature, resolution);
-        }
-      });
+      var source;
+      if (lyr instanceof ol.layer.Vector) {
+        var style = lyr.getStyle();
+        var timeInfo = lyr.get('timeInfo');
+        var me = this;
+        lyr.setStyle(function(feature, resolution) {
+          var start = (timeInfo.start === parseInt(timeInfo.start, 10)) ? timeInfo.start : Date.parse(feature.get(timeInfo.start));
+          if (isNaN(start) || start > me.state.date) {
+            return null;
+          }
+          var end = (timeInfo.end === parseInt(timeInfo.end, 10)) ? timeInfo.end : Date.parse(feature.get(timeInfo.end));
+          if (isNaN(end) || end < me.state.date) {
+            return null;
+          }
+          if (style instanceof ol.style.Style || Array.isArray(style)) {
+            return style;
+          } else {
+            return style.call(this, feature, resolution);
+          }
+        });
+      } else if (lyr instanceof ol.layer.Tile) {
+        source = lyr.getSource();
+        source.on('tileloadstart', this._addLoading, this);
+        source.on('tileloadend', this._addLoaded, this);
+        source.on('tileloaderror', this._addLoaded, this);
+      } else if (lyr instanceof ol.layer.Image) {
+        source = lyr.getSource();
+        source.on('imageloadstart', this._addLoading, this);
+        source.on('imageloadend', this._addLoaded, this);
+        source.on('imageloaderror', this._addLoaded, this);
+      }
     }
+  }
+  _addLoading() {
+    this._loading++;
+  }
+  _addLoaded() {
+    this._loaded++;
   }
   _handleTimeLayer(lyr) {
     if (lyr.get('timeInfo')) {
-      lyr.getSource().changed();
+      if (lyr instanceof ol.layer.Vector) {
+        lyr.getSource().changed();
+      } else {
+        lyr.getSource().updateParams({'TIME': new Date(this.state.date).toISOString()});
+      }
     }
   }
   _forEachLayer(lyr, func) {
