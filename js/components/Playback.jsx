@@ -134,8 +134,8 @@ class Playback extends React.Component {
     return (
       <div className={classNames('sdk-component playback', this.props.className)}>
         <IconButton style={{'float': 'left'}} onTouchTap={this._playPause.bind(this)}>{buttonIcon}</IconButton>
-        <Slider style={{'float': 'left', width: '200px', overflow: 'hidden'}} min={this.props.minDate} max={this.props.maxDate} value={this.state.date} onChange={this._onRangeChange.bind(this)} />
-        <DatePicker autoOk={true} minDate={minDate} maxDate={maxDate} style={{width: '200px', overflow: 'hidden'}} onChange={this._onDateChange.bind(this)} value={new Date(this.state.date)} />
+        <Slider style={{width: 200, 'float': 'left'}} min={this.props.minDate} max={this.props.maxDate} value={this.state.date} onChange={this._onRangeChange.bind(this)} />
+        <DatePicker autoOk={true} minDate={minDate} maxDate={maxDate} style={{width: 200, paddingLeft: 15, overflow: 'hidden'}} onChange={this._onDateChange.bind(this)} value={new Date(this.state.date)} />
       </div>
     );
   }
