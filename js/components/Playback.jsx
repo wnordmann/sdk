@@ -13,6 +13,7 @@
 import React from 'react';
 import ol from 'openlayers';
 import classNames from 'classnames';
+import TimeService from '../services/TimeService.js';
 import IconButton from 'material-ui/lib/icon-button';
 import PlayIcon from 'material-ui/lib/svg-icons/av/play-arrow';
 import PauseIcon from 'material-ui/lib/svg-icons/av/pause';
@@ -103,9 +104,10 @@ class Playback extends React.Component {
     }
   }
   _registerTime(lyr) {
+    var timeInfo;
     if (lyr instanceof ol.layer.Vector) {
       var style = lyr.getStyle();
-      var timeInfo = lyr.get('timeInfo');
+      timeInfo = lyr.get('timeInfo');
       var me = this;
       lyr.setStyle(function(feature, resolution) {
         var start = (timeInfo.start === parseInt(timeInfo.start, 10)) ? timeInfo.start : Date.parse(feature.get(timeInfo.start));
@@ -124,11 +126,12 @@ class Playback extends React.Component {
       });
     } else if (lyr instanceof ol.layer.Tile || lyr instanceof ol.layer.Image) {
       var source = lyr.getSource();
+      timeInfo = TimeService.parse(lyr.get('timeInfo'));
       this.setState({
-        minDate: lyr.get('timeInfo').start,
-        maxDate: lyr.get('timeInfo').end,
-        date: lyr.get('timeInfo').start,
-        interval: lyr.get('timeInfo').duration
+        minDate: timeInfo.start,
+        maxDate: timeInfo.end,
+        date: timeInfo.start,
+        interval: timeInfo.duration
       });
       if (lyr instanceof ol.layer.Tile) {
         source.on('tileloadstart', this._addLoading, this);
