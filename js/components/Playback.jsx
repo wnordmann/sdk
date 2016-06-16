@@ -18,6 +18,7 @@ import PlayIcon from 'material-ui/lib/svg-icons/av/play-arrow';
 import PauseIcon from 'material-ui/lib/svg-icons/av/pause';
 import Slider from 'material-ui/lib/slider';
 import DatePicker from 'material-ui/lib/date-picker/date-picker';
+import LayerStore from '../stores/LayerStore.js';
 import {injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 
@@ -42,18 +43,42 @@ import pureRender from 'pure-render-decorator';
 class Playback extends React.Component {
   constructor(props) {
     super(props);
+    LayerStore.bindMap(this.props.map);
+    var interval;
+    if (this.props.maxDate !== undefined && this.props.minDate !== undefined) {
+      interval = (this.props.maxDate - this.props.minDate) / this.props.numIntervals;
+    }
     this.state = {
       play: true,
-      date: this.props.minDate
+      minDate: this.props.minDate,
+      date: this.props.minDate,
+      maxDate: this.props.maxDate,
+      interval: interval
     };
-    this._interval = (this.props.maxDate - this.props.minDate) / this.props.numIntervals;
+    this._layers = [];
+    // TODO
     this._loading = 0;
     this._loaded = 0;
   }
   componentDidMount() {
-    this._setStyleFunctions();
+    this._onChangeCb = this._onChange.bind(this);
+    LayerStore.addChangeListener(this._onChangeCb);
+    this._onChange();
     if (this.props.autoPlay === true) {
       this._playPause();
+    }
+  }
+  componentWillUnmount() {
+    LayerStore.removeChangeListener(this._onChangeCb);
+  }
+  _onChange() {
+    var state = LayerStore.getState();
+    for (var i = 0, ii = state.flatLayers.length; i < ii; ++i) {
+      var lyr = state.flatLayers[i];
+      if (lyr.get('timeInfo') && this._layers.indexOf(lyr) === -1) {
+        this._registerTime(lyr);
+        this._layers.push(lyr);
+      }
     }
   }
   _onSubmit(evt) {
@@ -61,9 +86,9 @@ class Playback extends React.Component {
   }
   _play() {
     if (this._loading === this._loaded) {
-      var newTime = this.state.date + this._interval;
-      if (newTime > this.props.maxDate) {
-        newTime = this.props.minDate;
+      var newTime = this.state.date + this.state.interval;
+      if (newTime > this.state.maxDate) {
+        newTime = this.state.minDate;
       }
       this.setState({date: newTime});
     }
@@ -77,38 +102,39 @@ class Playback extends React.Component {
       this._timer = window.setInterval(this._play.bind(this), this.props.interval);
     }
   }
-  _setStyleFunctions() {
-    this._forEachLayer(this.props.map.getLayerGroup(), this._setStyleFunc);
-  }
-  _setStyleFunc(lyr) {
-    if (lyr.get('timeInfo')) {
-      var source;
-      if (lyr instanceof ol.layer.Vector) {
-        var style = lyr.getStyle();
-        var timeInfo = lyr.get('timeInfo');
-        var me = this;
-        lyr.setStyle(function(feature, resolution) {
-          var start = (timeInfo.start === parseInt(timeInfo.start, 10)) ? timeInfo.start : Date.parse(feature.get(timeInfo.start));
-          if (isNaN(start) || start > me.state.date) {
-            return null;
-          }
-          var end = (timeInfo.end === parseInt(timeInfo.end, 10)) ? timeInfo.end : Date.parse(feature.get(timeInfo.end));
-          if (isNaN(end) || end < me.state.date) {
-            return null;
-          }
-          if (style instanceof ol.style.Style || Array.isArray(style)) {
-            return style;
-          } else {
-            return style.call(this, feature, resolution);
-          }
-        });
-      } else if (lyr instanceof ol.layer.Tile) {
-        source = lyr.getSource();
+  _registerTime(lyr) {
+    if (lyr instanceof ol.layer.Vector) {
+      var style = lyr.getStyle();
+      var timeInfo = lyr.get('timeInfo');
+      var me = this;
+      lyr.setStyle(function(feature, resolution) {
+        var start = (timeInfo.start === parseInt(timeInfo.start, 10)) ? timeInfo.start : Date.parse(feature.get(timeInfo.start));
+        if (isNaN(start) || start > me.state.date) {
+          return null;
+        }
+        var end = (timeInfo.end === parseInt(timeInfo.end, 10)) ? timeInfo.end : Date.parse(feature.get(timeInfo.end));
+        if (isNaN(end) || end < me.state.date) {
+          return null;
+        }
+        if (style instanceof ol.style.Style || Array.isArray(style)) {
+          return style;
+        } else {
+          return style.call(this, feature, resolution);
+        }
+      });
+    } else if (lyr instanceof ol.layer.Tile || lyr instanceof ol.layer.Image) {
+      var source = lyr.getSource();
+      this.setState({
+        minDate: lyr.get('timeInfo').start,
+        maxDate: lyr.get('timeInfo').end,
+        date: lyr.get('timeInfo').start,
+        interval: lyr.get('timeInfo').duration
+      });
+      if (lyr instanceof ol.layer.Tile) {
         source.on('tileloadstart', this._addLoading, this);
         source.on('tileloadend', this._addLoaded, this);
         source.on('tileloaderror', this._addLoaded, this);
       } else if (lyr instanceof ol.layer.Image) {
-        source = lyr.getSource();
         source.on('imageloadstart', this._addLoading, this);
         source.on('imageloadend', this._addLoaded, this);
         source.on('imageloaderror', this._addLoaded, this);
@@ -149,20 +175,26 @@ class Playback extends React.Component {
     this.setState({date: value.getTime()});
   }
   render() {
-    this._refreshTimeLayers();
     var buttonIcon;
     if (this.state.play === true) {
       buttonIcon = <PlayIcon />;
     } else {
       buttonIcon = <PauseIcon />;
     }
-    var minDate = new Date(this.props.minDate);
-    var maxDate = new Date(this.props.maxDate);
+    var controls;
+    if (this.state.minDate !== undefined && this.state.maxDate !== undefined && this.state.date !== undefined) {
+      this._refreshTimeLayers();
+      var minDate = new Date(this.state.minDate);
+      var maxDate = new Date(this.state.maxDate);
+      controls = [
+        (<IconButton key='play' style={{'float': 'left'}} onTouchTap={this._playPause.bind(this)}>{buttonIcon}</IconButton>),
+        (<Slider step={this.state.interval} key='slider' style={{width: 200, 'float': 'left'}} min={this.state.minDate} max={this.state.maxDate} value={this.state.date} onChange={this._onRangeChange.bind(this)} />),
+        (<DatePicker key='date' autoOk={true} minDate={minDate} maxDate={maxDate} style={{width: 200, paddingLeft: 15, overflow: 'hidden'}} onChange={this._onDateChange.bind(this)} value={new Date(this.state.date)} />)
+      ];
+    }
     return (
       <div className={classNames('sdk-component playback', this.props.className)}>
-        <IconButton style={{'float': 'left'}} onTouchTap={this._playPause.bind(this)}>{buttonIcon}</IconButton>
-        <Slider style={{width: 200, 'float': 'left'}} min={this.props.minDate} max={this.props.maxDate} value={this.state.date} onChange={this._onRangeChange.bind(this)} />
-        <DatePicker autoOk={true} minDate={minDate} maxDate={maxDate} style={{width: 200, paddingLeft: 15, overflow: 'hidden'}} onChange={this._onDateChange.bind(this)} value={new Date(this.state.date)} />
+        {controls}
       </div>
     );
   }
@@ -176,11 +208,11 @@ Playback.propTypes = {
   /**
    * The minimum date to use for the slider field and the date picker.
    */
-  minDate: React.PropTypes.number.isRequired,
+  minDate: React.PropTypes.number,
   /**
    * The maximum date to use for the slider field and the date picker.
    */
-  maxDate: React.PropTypes.number.isRequired,
+  maxDate: React.PropTypes.number,
   /**
    * The time, in milliseconds, to wait in each position of the slider. Positions are defined by dividing the slider range by the number of intervals defined in the numIntervals parameter.
    */

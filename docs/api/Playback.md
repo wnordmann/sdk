@@ -57,14 +57,14 @@ The map whose time-enabled layers should be filtered. Time-enabled layers are la
 type: `instanceOf ol.Map`
 
 
-### `maxDate` (required)
+### `maxDate`
 
 The maximum date to use for the slider field and the date picker.
 
 type: `number`
 
 
-### `minDate` (required)
+### `minDate`
 
 The minimum date to use for the slider field and the date picker.
 

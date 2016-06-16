@@ -12,6 +12,7 @@
 
 import React from 'react';
 import ol from 'openlayers';
+import moment from 'moment';
 import Dialog from 'material-ui/lib/dialog';
 import Snackbar from 'material-ui/lib/snackbar';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -136,6 +137,48 @@ class AddLayerModal extends React.Component {
       return {empty: false, title: layer.Title};
     }
   }
+  _readRange(subparts) {
+    if (subparts.length < 2) {
+      throw new Error('expected 2 parts for range : ' + subparts);
+    }
+    var start = subparts[0];
+    var end = subparts[1];
+    var duration;
+    if (subparts.length == 3) {
+      duration = subparts[2];
+    }
+    return {
+      start: Date.parse(start),
+      end: Date.parse(end),
+      duration: moment.duration(duration).asMilliseconds()
+    };
+  }
+  _readPart(part) {
+    var subparts = part.split('/');
+    if (subparts.length == 1) {
+      return Date.parse(subparts[0]);
+    } else {
+      return this._readRange(subparts);
+    }
+  }
+  _parse(dimension) {
+    var dims = dimension.split(',');
+    if (dims.length == 1) {
+      var read = this._readPart(dims[0]);
+      return typeof read === 'number' ? [read] : read;
+    }
+    return dims.map(this._readPart);
+  }
+  _getDimensionInfo(layer) {
+    if (layer.Dimension) {
+      for (var i = 0, ii = layer.Dimension.length; i < ii; ++i) {
+        var dimension = layer.Dimension[i];
+        if (dimension.name === 'time') {
+          return this._parse(dimension.values);
+        }
+      }
+    }
+  }
   _onLayerClick(layer) {
     var map = this.props.map;
     var view = map.getView();
@@ -148,6 +191,7 @@ class AddLayerModal extends React.Component {
     }
     var extent = ol.proj.transformExtent(layer.EX_GeographicBoundingBox, 'EPSG:4326', view.getProjection());
     var olLayer, titleObj = this._getLayerTitle(layer);
+    var timeInfo = this._getDimensionInfo(layer);
     if (this.props.asVector) {
       var me = this;
       olLayer = new ol.layer.Vector({
@@ -156,6 +200,7 @@ class AddLayerModal extends React.Component {
         id: layer.Name,
         name: layer.Name,
         isWFST: true,
+        timeInfo: timeInfo,
         isRemovable: true,
         isSelectable: true,
         popupInfo: '#AllAttributes',
@@ -182,6 +227,7 @@ class AddLayerModal extends React.Component {
         isRemovable: true,
         isSelectable: true,
         isWFST: true,
+        timeInfo: timeInfo,
         type: layer.Layer ? 'base' : undefined,
         EX_GeographicBoundingBox: extent,
         popupInfo: '#AllAttributes',
