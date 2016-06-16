@@ -13,6 +13,7 @@
 import React from 'react';
 import ol from 'openlayers';
 import classNames from 'classnames';
+import ToolActions from '../actions/ToolActions.js';
 import TimeService from '../services/TimeService.js';
 import IconButton from 'material-ui/lib/icon-button';
 import PlayIcon from 'material-ui/lib/svg-icons/av/play-arrow';
@@ -96,6 +97,11 @@ class Playback extends React.Component {
   }
   _playPause() {
     var play = !this.state.play;
+    if (!play) {
+      ToolActions.startPlayback();
+    } else {
+      ToolActions.stopPlayback();
+    }
     this.setState({play: play});
     if (play) {
       window.clearInterval(this._timer);

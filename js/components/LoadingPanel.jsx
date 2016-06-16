@@ -13,6 +13,8 @@
 import React from 'react';
 import ol from 'openlayers';
 import classNames from 'classnames';
+import AppDispatcher from '../dispatchers/AppDispatcher.js';
+import ToolConstants from '../constants/ToolConstants.js';
 import LayerStore from '../stores/LayerStore.js';
 import pureRender from 'pure-render-decorator';
 import CircularProgress from 'material-ui/lib/circular-progress';
@@ -30,7 +32,8 @@ class LoadingPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      show: null
+      show: null,
+      forceHide: false
     };
     this._loading = 0;
     this._loaded = 0;
@@ -40,6 +43,20 @@ class LoadingPanel extends React.Component {
     this._onChangeCb = this._onChange.bind(this);
     LayerStore.addChangeListener(this._onChangeCb);
     this._onChange();
+    var me = this;
+    AppDispatcher.register((payload) => {
+      let action = payload.action;
+      switch (action.type) {
+        case ToolConstants.START_PLAYBACK:
+          me.setState({forceHide: true});
+          break;
+        case ToolConstants.STOP_PLAYBACK:
+          me.setState({forceHide: false});
+          break;
+        default:
+          break;
+      }
+    });
   }
   componentWillUnmount() {
     LayerStore.removeChangeListener(this._onChangeCb);
@@ -95,7 +112,7 @@ class LoadingPanel extends React.Component {
     });
   }
   render() {
-    if (this.state.show) {
+    if (this.state.show && !this.state.forceHide) {
       return (
         <div className={classNames('sdk-component loading-panel', this.props.className)}>
           <CircularProgress size={1.5} />

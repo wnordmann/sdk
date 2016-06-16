@@ -14,6 +14,16 @@ import ToolConstants from '../constants/ToolConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 
 export default {
+  startPlayback: () => {
+    AppDispatcher.handleAction({
+      type: ToolConstants.START_PLAYBACK
+    });
+  },
+  stopPlayback: () => {
+    AppDispatcher.handleAction({
+      type: ToolConstants.STOP_PLAYBACK
+    });
+  },
   disableAllTools: () => {
     AppDispatcher.handleAction({
       type: ToolConstants.DISABLE_ALL_TOOLS
