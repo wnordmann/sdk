@@ -266,8 +266,7 @@ class WFSService {
       this
     );
   }
-  insertFeature(layer, view, feature, onSuccess, onFailure) {
-    var wfsInfo = layer.get('wfsInfo');
+  getInsertPayload(wfsInfo, view, feature) {
     var node = wfsFormat.writeTransaction([feature], null, null, {
       gmlOptions: {
         srsName: view.getProjection().getCode()
@@ -275,18 +274,25 @@ class WFSService {
       featureNS: wfsInfo.featureNS,
       featureType: wfsInfo.featureType
     });
-    return doPOST(wfsInfo.url, xmlSerializer.serializeToString(node),
+    return xmlSerializer.serializeToString(node);
+  }
+  handleInsertResponse(xmlhttp, onSuccess, onFailure) {
+    var data = xmlhttp.responseXML;
+    this.readResponse(data, xmlhttp, function(data) {
+      var result = wfsFormat.readTransactionResponse(data);
+      if (result) {
+        var insertId = result.insertIds[0];
+        onSuccess.call(this, insertId);
+      } else {
+        onFailure.call(this, xmlhttp);
+      }
+    }, onFailure);
+  }
+  insertFeature(layer, view, feature, onSuccess, onFailure) {
+    var wfsInfo = layer.get('wfsInfo');
+    return doPOST(wfsInfo.url, this.getInsertPayload(wfsInfo, view, feature),
       function(xmlhttp) {
-        var data = xmlhttp.responseXML;
-        this.readResponse(data, xmlhttp, function(data) {
-          var result = wfsFormat.readTransactionResponse(data);
-          if (result) {
-            var insertId = result.insertIds[0];
-            onSuccess.call(this, insertId);
-          } else {
-            onFailure.call(this, xmlhttp);
-          }
-        }, onFailure);
+        this.handleInsertResponse(xmlhttp, onSuccess, onFailure);
       },
       onFailure,
       this
