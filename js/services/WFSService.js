@@ -167,7 +167,7 @@ class WFSService {
       onSuccess.call(this, features);
     }, onFailure);
   }
-  distanceWithin(layer, view, coord, onSuccess, onFailure) {
+  generateDistanceWithinUrl(layer, view, coord) {
     var point = ol.proj.toLonLat(coord);
     var wfsInfo = layer.get('wfsInfo');
     var url = new URL(wfsInfo.url);
@@ -179,7 +179,10 @@ class WFSService {
       typename: wfsInfo.featureType,
       cql_filter: 'DWITHIN(' + wfsInfo.geometryName + ', Point(' + point[1] + ' ' + point[0] + '), 0.1, meters)'
     });
-    return doGET(url.toString(), function(xmlhttp) {
+    return url.toString();
+  }
+  distanceWithin(layer, view, coord, onSuccess, onFailure) {
+    return doGET(this.generateDistanceWithinUrl(layer, view, coord), function(xmlhttp) {
       var features = wfsFormat.readFeatures(xmlhttp.responseXML);
       if (features.length > 0) {
         onSuccess.call(this, features[0]);
@@ -198,30 +201,35 @@ class WFSService {
       onSuccess(data);
     }
   }
-  deleteFeature(layer, feature, onSuccess, onFailure) {
-    var wfsInfo = layer.get('wfsInfo');
+  getDeletePayload(wfsInfo, feature) {
     var node = wfsFormat.writeTransaction(null, null, [feature], {
       featureNS: wfsInfo.featureNS,
       featureType: wfsInfo.featureType
     });
-    return doPOST(wfsInfo.url, xmlSerializer.serializeToString(node),
+    return xmlSerializer.serializeToString(node);
+  }
+  deleteFeature(layer, feature, onSuccess, onFailure) {
+    var wfsInfo = layer.get('wfsInfo');
+    return doPOST(wfsInfo.url, this.getDeletePayload(wfsInfo, feature),
       function(xmlhttp) {
-        var data = xmlhttp.responseXML;
-        this.readResponse(data, xmlhttp, function(data) {
-          var result = wfsFormat.readTransactionResponse(data);
-          if (result && result.transactionSummary.totalDeleted === 1) {
-            onSuccess.call(this);
-          } else {
-            onFailure.call(this, xmlhttp);
-          }
-        }, onFailure);
+        this.handleDeleteResponse(xmlhttp, onSuccess, onFailure);
       },
       onFailure,
       this
     );
   }
-  updateFeature(layer, view, feature, values, onSuccess, onFailure) {
-    var wfsInfo = layer.get('wfsInfo');
+  handleDeleteResponse(xmlhttp, onSuccess, onFailure) {
+    var data = xmlhttp.responseXML;
+    this.readResponse(data, xmlhttp, function(data) {
+      var result = wfsFormat.readTransactionResponse(data);
+      if (result && result.transactionSummary.totalDeleted === 1) {
+        onSuccess.call(this);
+      } else {
+        onFailure.call(this, xmlhttp);
+      }
+    }, onFailure);
+  }
+  getUpdatePayload(wfsInfo, view, feature, values) {
     var fid = feature.getId();
     var clone;
     var featureGeometryName = feature.getGeometryName();
@@ -250,17 +258,24 @@ class WFSService {
       featureNS: wfsInfo.featureNS,
       featureType: wfsInfo.featureType
     });
-    return doPOST(wfsInfo.url, xmlSerializer.serializeToString(node),
+    return xmlSerializer.serializeToString(node);
+  }
+  handleUpdateResponse(xmlhttp, onSuccess, onFailure) {
+    var data = xmlhttp.responseXML;
+    this.readResponse(data, xmlhttp, function(data) {
+      var result = wfsFormat.readTransactionResponse(data);
+      if (result) {
+        onSuccess.call(this, result);
+      } else {
+        onFailure.call(this, xmlhttp);
+      }
+    }, onFailure);
+  }
+  updateFeature(layer, view, feature, values, onSuccess, onFailure) {
+    var wfsInfo = layer.get('wfsInfo');
+    return doPOST(wfsInfo.url, this.getUpdatePayload(wfsInfo, view, feature, values),
       function(xmlhttp) {
-        var data = xmlhttp.responseXML;
-        this.readResponse(data, xmlhttp, function(data) {
-          var result = wfsFormat.readTransactionResponse(data);
-          if (result) {
-            onSuccess.call(this, result);
-          } else {
-            onFailure.call(this, xmlhttp);
-          }
-        }, onFailure);
+        this.handleUpdateResponse(xmlhttp, onSuccess, onFailure);
       },
       onFailure,
       this
