@@ -235,26 +235,9 @@ class AddLayerModal extends React.Component {
     var urlObj = new URL(url);
     return urlObj.toString();
   }
-  _getCapabilitiesUrl(url) {
-    var urlObj = new URL(url);
-    if (this.props.asVector) {
-      urlObj.set('query', {
-        service: 'WFS',
-        version: '1.1.0',
-        request: 'GetCapabilities'
-      });
-    } else {
-      urlObj.set('query', {
-        service: 'WMS',
-        request: 'GetCapabilities',
-        version: '1.3.0'
-      });
-    }
-    return urlObj.toString();
-  }
   _connect() {
     var url = this.refs.url.getValue();
-    this._getCaps(this._getCapabilitiesUrl(url));
+    this._getCaps(url);
   }
   _getLayersMarkup(layer) {
     var childList;
@@ -286,7 +269,7 @@ class AddLayerModal extends React.Component {
     );
   }
   open() {
-    this._getCaps(this._getCapabilitiesUrl(this.props.url));
+    this._getCaps(this.props.url);
     this.setState({open: true});
   }
   close() {

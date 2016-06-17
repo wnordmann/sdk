@@ -21,6 +21,12 @@ const wmsGetFeatureInfoFormats = {
 
 class WMSService {
   getCapabilities(url, onSuccess, onFailure) {
+    var urlObj = new URL(url);
+    urlObj.set('query', {
+      service: 'WMS',
+      request: 'GetCapabilities',
+      version: '1.3.0'
+    });
     return doGET(url, function(xmlhttp) {
       var info = wmsCapsFormat.read(xmlhttp.responseText);
       onSuccess.call(this, info.Capability.Layer);

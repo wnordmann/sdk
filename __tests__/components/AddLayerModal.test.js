@@ -42,14 +42,14 @@ describe('AddLayerModal', function() {
     document.body.removeChild(target);
   });
 
-  it('generates the correct GetCapabilities url', function(done) {
+  it('clears layerInfo on error', function(done) {
     var container = document.createElement('div');
     var url = 'http://localhost:8080/geoserver/wms';
     var modal = ReactDOM.render((
       <AddLayerModal map={map} allowUserInput={true} url={url} intl={intl} />
     ), container);
-    var caps = modal._getCapabilitiesUrl(url);
-    assert.equal(caps, url + '?service=WMS&request=GetCapabilities&version=1.3.0');
+    modal._setError('Error');
+    assert.equal(modal.state.layerInfo, null);
     window.setTimeout(function() {
       ReactDOM.unmountComponentAtNode(container);
       done();

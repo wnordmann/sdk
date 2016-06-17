@@ -37,27 +37,43 @@ const proj4326 = new ol.proj.Projection({
 ol.proj.addEquivalentProjections([ol.proj.get('EPSG:4326'), proj4326]);
 
 class WFSService {
-  getCapabilities(url, onSuccess, onFailure) {
+  parseCapabilities(xmlhttp) {
     var layers = [];
-    return doGET(url, function(xmlhttp) {
-      var info = wfsUnmarshaller.unmarshalDocument(xmlhttp.responseXML).value;
-      if (info && info.featureTypeList && info.featureTypeList.featureType) {
-        for (var i = 0, ii = info.featureTypeList.featureType.length; i < ii; ++i) {
-          var ft = info.featureTypeList.featureType[i];
-          var layer = {};
-          layer.Name = ft.name.prefix + ':' + ft.name.localPart;
-          layer.Title = ft.title;
-          layer.Abstract = ft._abstract;
-          layer.EX_GeographicBoundingBox = [
-            ft.wgs84BoundingBox[0].lowerCorner[0],
-            ft.wgs84BoundingBox[0].lowerCorner[1],
-            ft.wgs84BoundingBox[0].upperCorner[0],
-            ft.wgs84BoundingBox[0].upperCorner[1]
-          ];
-          layers.push(layer);
-        }
+    var info = wfsUnmarshaller.unmarshalDocument(xmlhttp.responseXML).value;
+    if (info && info.featureTypeList && info.featureTypeList.featureType) {
+      for (var i = 0, ii = info.featureTypeList.featureType.length; i < ii; ++i) {
+        var ft = info.featureTypeList.featureType[i];
+        var layer = {};
+        layer.Name = ft.name.prefix + ':' + ft.name.localPart;
+        layer.Title = ft.title;
+        layer.Abstract = ft._abstract;
+        layer.EX_GeographicBoundingBox = [
+          ft.wgs84BoundingBox[0].lowerCorner[0],
+          ft.wgs84BoundingBox[0].lowerCorner[1],
+          ft.wgs84BoundingBox[0].upperCorner[0],
+          ft.wgs84BoundingBox[0].upperCorner[1]
+        ];
+        layers.push(layer);
       }
-      onSuccess.call(this, {Title: info.serviceIdentification.title, Layer: layers});
+    }
+    return {
+      layers: layers,
+      title: info.serviceIdentification.title
+    };
+  }
+  getCapabilitiesUrl(url) {
+    var urlObj = new URL(url);
+    urlObj.set('query', {
+      service: 'WFS',
+      version: '1.1.0',
+      request: 'GetCapabilities'
+    });
+    return urlObj.toString();
+  }
+  getCapabilities(url, onSuccess, onFailure) {
+    return doGET(this.getCapabilitiesUrl(url), function(xmlhttp) {
+      var info = this.parseCapabilities(xmlhttp);
+      onSuccess.call(this, {Title: info.title, Layer: info.layers});
     }, function(xmlhttp) {
       onFailure.call(this, xmlhttp);
     }, this);
