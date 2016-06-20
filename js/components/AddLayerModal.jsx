@@ -146,15 +146,19 @@ class AddLayerModal extends React.Component {
       }
     }
   }
+  _modifyLatLonBBOX(bbox) {
+    bbox[0] = Math.max(-180, bbox[0]);
+    bbox[1] = Math.max(-85, bbox[1]);
+    bbox[2] = Math.min(180, bbox[2]);
+    bbox[3] = Math.min(85, bbox[3]);
+    return bbox;
+  }
   _onLayerClick(layer) {
     var map = this.props.map;
     var view = map.getView();
     var EX_GeographicBoundingBox = layer.EX_GeographicBoundingBox;
     if (view.getProjection().getCode() === 'EPSG:3857') {
-      EX_GeographicBoundingBox[0] = Math.max(-180, EX_GeographicBoundingBox[0]);
-      EX_GeographicBoundingBox[1] = Math.max(-85, EX_GeographicBoundingBox[1]);
-      EX_GeographicBoundingBox[2] = Math.min(180, EX_GeographicBoundingBox[2]);
-      EX_GeographicBoundingBox[3] = Math.min(85, EX_GeographicBoundingBox[3]);
+      this._modifyLatLonBBOX(EX_GeographicBoundingBox);
     }
     var extent = ol.proj.transformExtent(layer.EX_GeographicBoundingBox, 'EPSG:4326', view.getProjection());
     var olLayer, titleObj = this._getLayerTitle(layer);

@@ -56,4 +56,55 @@ describe('AddLayerModal', function() {
     }, 500);
   });
 
+  it('generates correct layer title info', function(done) {
+    var container = document.createElement('div');
+    var url = 'http://localhost:8080/geoserver/wms';
+    var modal = ReactDOM.render((
+      <AddLayerModal map={map} allowUserInput={true} url={url} intl={intl} />
+    ), container);
+    var title = modal._getLayerTitle({Title: ''});
+    assert.equal(title.empty, true);
+    title = modal._getLayerTitle({Title: 'My Layer'});
+    assert.equal(title.empty, false);
+    assert.equal(title.title, 'My Layer');
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('gives back correct dimension info', function(done) {
+    var container = document.createElement('div');
+    var url = 'http://localhost:8080/geoserver/wms';
+    var modal = ReactDOM.render((
+      <AddLayerModal map={map} allowUserInput={true} url={url} intl={intl} />
+    ), container);
+    var dim = modal._getDimensionInfo({Dimension: [{name: 'time', values: '1995-01-01/2016-12-31/PT5M'}]});
+    assert.equal(dim, '1995-01-01/2016-12-31/PT5M');
+    dim = modal._getDimensionInfo({Dimension: [{name: 'altitude', values: '2010'}]});
+    assert.equal(dim, undefined);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('modifies lat lon extent for EPSG:3857', function(done) {
+    var container = document.createElement('div');
+    var url = 'http://localhost:8080/geoserver/wms';
+    var modal = ReactDOM.render((
+      <AddLayerModal map={map} allowUserInput={true} url={url} intl={intl} />
+    ), container);
+    var bbox = [-170, -90, 170, 90];
+    modal._modifyLatLonBBOX(bbox);
+    assert.equal(bbox[0], -170);
+    assert.equal(bbox[1], -85);
+    assert.equal(bbox[2], 170);
+    assert.equal(bbox[3], 85);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
 });
