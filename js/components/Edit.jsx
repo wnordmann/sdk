@@ -326,7 +326,7 @@ class Edit extends MapTool {
     var options = [], i, ii;
     for (i = 0, ii = this.state.layers.length; i < ii; ++i) {
       var lyr = this.state.layers[i], title = lyr.get('title'), id = lyr.get('id');
-      options.push(<MenuItem key={id} value={id} primaryText={title} />);
+      options.push(<MenuItem className='edit-layer-selector-option' key={id} value={id} primaryText={title} />);
     }
     var button;
     if (this.state.enable === true) {
@@ -352,7 +352,7 @@ class Edit extends MapTool {
     ];
     return (
       <div className={classNames('sdk-component edit', this.props.className)}>
-        <SelectField disabled={this.state.layers.length === 0} onChange={this._onLayerChange.bind(this)} floatingLabelText={formatMessage(messages.layerlabel)} value={this._layer} ref='layer'>
+        <SelectField className='edit-layer-selector' disabled={this.state.layers.length === 0} onChange={this._onLayerChange.bind(this)} floatingLabelText={formatMessage(messages.layerlabel)} value={this._layer} ref='layer'>
           {options}
         </SelectField>
         <Toolbar>
