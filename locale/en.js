@@ -214,6 +214,25 @@ var enMessages = {
   "wfst.modifyfeature": "Select",
   "wfst.modifyfeaturetitle": "Modify an existing feature or select before Delete",
   "zoom.zoomintitle": "Zoom in",
-  "zoom.zoomouttitle": "Zoom out"
+  "zoom.zoomouttitle": "Zoom out",
+  "zoomtolatlon.buttontext": "Lat/Lon",
+  "zoomtolatlon.buttontitle": "Zoom to latitude / longitude coordinates",
+  "zoomtolatlon.closebuttontext": "Close",
+  "zoomtolatlon.closebuttontitle": "Close dialog",
+  "zoomtolatlon.ddtitle": "Decimal degrees (DD)",
+  "zoomtolatlon.degreeslabel": "D",
+  "zoomtolatlon.directionlabel": "Direction",
+  "zoomtolatlon.dmstitle": "Degrees minutes seconds (DMS)",
+  "zoomtolatlon.east": "East",
+  "zoomtolatlon.latitudelabel": "Latitude",
+  "zoomtolatlon.longitudelabel": "Longitude",
+  "zoomtolatlon.minuteslabel": "M",
+  "zoomtolatlon.modaltitle": "Zoom to latitude longitude",
+  "zoomtolatlon.north": "North",
+  "zoomtolatlon.secondslabel": "S",
+  "zoomtolatlon.south": "South",
+  "zoomtolatlon.west": "West",
+  "zoomtolatlon.zoombuttontext": "Zoom",
+  "zoomtolatlon.zoombuttontitle": "Zoom to latitude / longitude"
 };
 export default enMessages;
