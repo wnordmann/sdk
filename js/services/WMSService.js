@@ -11,6 +11,7 @@
  */
 
 import {doGET} from '../util.js';
+import URL from 'url-parse';
 import ol from 'openlayers';
 
 const wmsCapsFormat = new ol.format.WMSCapabilities();
@@ -27,7 +28,7 @@ class WMSService {
       request: 'GetCapabilities',
       version: '1.3.0'
     });
-    return doGET(url, function(xmlhttp) {
+    return doGET(urlObj.toString(), function(xmlhttp) {
       var info = wmsCapsFormat.read(xmlhttp.responseText);
       onSuccess.call(this, info.Capability.Layer);
     }, function(xmlhttp) {
