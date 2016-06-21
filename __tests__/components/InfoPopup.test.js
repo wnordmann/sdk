@@ -76,13 +76,11 @@ describe('InfoPopup', function() {
     var popup = ReactDOM.render((
       <InfoPopup intl={intl} map={map} />
     ), container);
-    var infoLayers = [];
-    popup._forEachLayer(infoLayers, map.getLayerGroup());
+    var infoLayers = popup._getLayers();
     assert.equal(infoLayers.length, 1);
     layers[1].setVisible(true);
     layers[1].set('popupInfo', '[foo]');
-    infoLayers = [];
-    popup._forEachLayer(infoLayers, map.getLayerGroup());
+    infoLayers = popup._getLayers();
     assert.equal(infoLayers.length, 2);
     ReactDOM.unmountComponentAtNode(container);
   });

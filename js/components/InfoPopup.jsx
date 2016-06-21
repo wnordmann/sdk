@@ -12,6 +12,7 @@
 
 import React from 'react';
 import BasePopup from './BasePopup.jsx';
+import LayerStore from '../stores/LayerStore.js';
 import ol from 'openlayers';
 import classNames from 'classnames';
 import WMSService from '../services/WMSService.js';
@@ -63,6 +64,7 @@ const ALL_ATTRS = '#AllAttributes';
 class InfoPopup extends BasePopup {
   constructor(props) {
     super(props);
+    LayerStore.bindMap(this.props.map);
     if (this.props.hover === true) {
       this.props.map.on('pointermove', this._onMapClick, this);
     } else {
@@ -77,14 +79,16 @@ class InfoPopup extends BasePopup {
       popupTexts: []
     };
   }
-  _forEachLayer(layers, layer) {
-    if (layer instanceof ol.layer.Group) {
-      layer.getLayers().forEach(function(groupLayer) {
-        this._forEachLayer(layers, groupLayer);
-      }, this);
-    } else if (layer instanceof ol.layer.Tile && layer.getVisible() && layer.getSource() instanceof ol.source.TileWMS && layer.get('popupInfo') && layer.get('popupInfo') !== '') {
-      layers.push(layer);
+  _getLayers() {
+    var state = LayerStore.getState();
+    var layers = [];
+    for (var i = 0, ii = state.flatLayers.length; i < ii; ++i) {
+      var layer = state.flatLayers[i];
+      if (layer instanceof ol.layer.Tile && layer.getVisible() && layer.getSource() instanceof ol.source.TileWMS && layer.get('popupInfo') && layer.get('popupInfo') !== '') {
+        layers.push(layer);
+      }
     }
+    return layers;
   }
   _createSimpleTable(response) {
     var features = response.features;
@@ -126,8 +130,7 @@ class InfoPopup extends BasePopup {
   }
   _fetchData(evt, popupTexts, cb) {
     var map = this.props.map;
-    var allLayers = [];
-    this._forEachLayer(allLayers, map.getLayerGroup());
+    var allLayers = this._getLayers();
     var len = allLayers.length;
     var finishedQueries = 0;
     var finishedQuery = function() {
