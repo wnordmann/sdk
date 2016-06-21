@@ -12,6 +12,7 @@
 
 import React from 'react';
 import ol from 'openlayers';
+import LayerStore from '../stores/LayerStore.js';
 import RaisedButton from 'material-ui/lib/raised-button';
 import classNames from 'classnames';
 import Dialog from 'material-ui/lib/dialog';
@@ -110,6 +111,7 @@ const MM_PER_POINT = 0.352777778;
 class QGISPrint extends React.Component {
   constructor(props) {
     super(props);
+    LayerStore.bindMap(this.props.map);
     this.state = {
       layout: null,
       layoutName: null,
@@ -135,18 +137,15 @@ class QGISPrint extends React.Component {
       this.setState({loading: false});
     }
   }
-  _forEachLayer(tileLayers, layer) {
-    if (layer instanceof ol.layer.Group) {
-      layer.getLayers().forEach(function(groupLayer) {
-        this._forEachLayer(tileLayers, groupLayer);
-      }, this);
-    } else if (layer instanceof ol.layer.Tile && layer.getVisible()) {
-      tileLayers.push(layer);
-    }
-  }
   _getTileLayers() {
+    var state = LayerStore.getState();
     var tileLayers = [];
-    this._forEachLayer(tileLayers, this.props.map.getLayerGroup());
+    for (var i = 0, ii = state.flatLayers.length; i < ii; ++i) {
+      var layer = state.flatLayers[i];
+      if (layer instanceof ol.layer.Tile && layer.getVisible()) {
+        tileLayers.push(layer);
+      }
+    }
     return tileLayers;
   }
   _tileLayerLoaded() {

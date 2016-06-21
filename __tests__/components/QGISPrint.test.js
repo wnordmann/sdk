@@ -77,13 +77,35 @@ describe('QGISPrint', function() {
     document.body.removeChild(target);
   });
 
-
   it('layoutName not set before user makes a selection', function() {
     var container = document.createElement('div');
     var print = ReactDOM.render((
       <QGISPrint intl={intl} layouts={printLayouts} map={map}/>
     ), container);
     assert.equal(print.state.layoutName, null);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('loading state gets set on print', function(done) {
+    var container = document.createElement('div');
+    var print = ReactDOM.render((
+      <QGISPrint intl={intl} layouts={printLayouts} map={map}/>
+    ), container);
+    print._onClick(printLayouts[0]);
+    print._print();
+    assert.equal(print.state.loading, true);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done()
+    }, 500);
+  });
+
+  it('getTileLayers returns correct number of layers', function() {
+    var container = document.createElement('div');
+    var print = ReactDOM.render((
+      <QGISPrint intl={intl} layouts={printLayouts} map={map}/>
+    ), container);
+    assert.equal(print._getTileLayers().length, 1);
     ReactDOM.unmountComponentAtNode(container);
   });
 
