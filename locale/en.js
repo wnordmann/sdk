@@ -8,6 +8,7 @@ var enMessages = {
   "addlayer.menutitle": "Add layer",
   "addlayer.modaltitle": "Upload layer",
   "addlayer.strokecolorlabel": "Stroke color",
+  "addlayer.waitmsg": "Please wait while your dataset is processed ...",
   "addwmslayermodal.closebutton": "Close",
   "addwmslayermodal.connectbutton": "Connect",
   "addwmslayermodal.corserror": "Could not connect to GeoServer. Please verify that the server is online and CORS is enabled.",

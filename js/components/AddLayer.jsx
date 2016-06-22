@@ -28,6 +28,11 @@ import './AddLayer.css';
 const ID_PREFIX = 'sdk-addlayer-';
 
 const messages = defineMessages({
+  waitmsg: {
+    id: 'addlayer.waitmsg',
+    description: 'Wait message to show when reading features',
+    defaultMessage: 'Please wait while your dataset is processed ...'
+  },
   menutitle: {
     id: 'addlayer.menutitle',
     description: 'Title of the menu button',
@@ -95,7 +100,8 @@ class AddLayer extends React.Component {
     };
     this._counter = 0;
     this.state = {
-      open: false
+      open: false,
+      showProgress: false
     };
   }
   _showDialog() {
@@ -111,62 +117,68 @@ class AddLayer extends React.Component {
     return ID_PREFIX + this._counter;
   }
   _readVectorFile() {
-    var text = this._text;
-    var filename = this._fileName;
-    if (text && filename) {
-      var ext = filename.split('.').pop().toLowerCase();
-      var format = this._formats[ext];
-      var map = this.props.map;
-      if (format) {
-        try {
-          var crs = format.readProjection(text);
-          var features = format.readFeatures(text, {dataProjection: crs,
-            featureProjection: map.getView().getProjection()});
-          if (features && features.length > 0) {
-            var style;
-            if (this._strokeColor || this._fillColor) {
-              var fill = this._fillColor ? new ol.style.Fill({color: this._fillColor}) : undefined;
-              var stroke = this._strokeColor ? new ol.style.Stroke({color: this._strokeColor, width: this.props.strokeWidth}) : undefined;
-              style = new ol.style.Style({
-                fill: fill,
-                stroke: stroke,
-                image: (fill || stroke) ? new ol.style.Circle({stroke: stroke, fill: fill, radius: this.props.pointRadius}) : undefined
-              });
-            }
-            this._counter++;
-            var lyr = new ol.layer.Vector({
-              id: this._generateId(),
-              style: style,
-              source: new ol.source.Vector({
-                features: features,
-                wrapX: false
-              }),
-              title: filename,
-              isRemovable: true,
-              isSelectable: true
-            });
-            map.addLayer(lyr);
-            var extent = lyr.getSource().getExtent();
-            var valid = true;
-            for (var i = 0, ii = extent.length; i < ii; ++i) {
-              var value = extent[i];
-              if (Math.abs(value) == Infinity || isNaN(value) || (value < -20037508.342789244 || value > 20037508.342789244)) {
-                valid = false;
-                break;
+    this.setState({
+      showProgress: true
+    });
+    var me = this;
+    window.setTimeout(function() {
+      var text = me._text;
+      var filename = me._fileName;
+      if (text && filename) {
+        var ext = filename.split('.').pop().toLowerCase();
+        var format = me._formats[ext];
+        var map = me.props.map;
+        if (format) {
+          try {
+            var crs = format.readProjection(text);
+            var features = format.readFeatures(text, {dataProjection: crs,
+              featureProjection: map.getView().getProjection()});
+            if (features && features.length > 0) {
+              var style;
+              if (me._strokeColor || me._fillColor) {
+                var fill = me._fillColor ? new ol.style.Fill({color: me._fillColor}) : undefined;
+                var stroke = me._strokeColor ? new ol.style.Stroke({color: me._strokeColor, width: me.props.strokeWidth}) : undefined;
+                style = new ol.style.Style({
+                  fill: fill,
+                  stroke: stroke,
+                  image: (fill || stroke) ? new ol.style.Circle({stroke: stroke, fill: fill, radius: me.props.pointRadius}) : undefined
+                });
               }
+              me._counter++;
+              var lyr = new ol.layer.Vector({
+                id: me._generateId(),
+                style: style,
+                source: new ol.source.Vector({
+                  features: features,
+                  wrapX: false
+                }),
+                title: filename,
+                isRemovable: true,
+                isSelectable: true
+              });
+              map.addLayer(lyr);
+              var extent = lyr.getSource().getExtent();
+              var valid = true;
+              for (var i = 0, ii = extent.length; i < ii; ++i) {
+                var value = extent[i];
+                if (Math.abs(value) == Infinity || isNaN(value) || (value < -20037508.342789244 || value > 20037508.342789244)) {
+                  valid = false;
+                  break;
+                }
+              }
+              if (valid) {
+                map.getView().fit(extent, map.getSize());
+              }
+              me._closeDialog();
             }
-            if (valid) {
-              map.getView().fit(extent, map.getSize());
+          } catch (e) {
+            if (window && window.console) {
+              window.console.log(e);
             }
-            this._closeDialog();
-          }
-        } catch (e) {
-          if (window && window.console) {
-            window.console.log(e);
           }
         }
       }
-    }
+    }, 0);
   }
   _onDrop(files) {
     if (files.length === 1) {
@@ -187,29 +199,37 @@ class AddLayer extends React.Component {
   }
   render() {
     const {formatMessage} = this.props.intl;
+    var body;
+    if (this.state.showProgress) {
+      body =  (<p className='add-layer-wait-msg'>{formatMessage(messages.waitmsg)}</p>);
+    } else {
+      body = (
+        <GridList cols={3} cellHeight={350}>
+          <GridTile>
+            <label>{formatMessage(messages.dropzonelabel)}</label>
+            <Dropzone className='dropzone' multiple={false} onDrop={this._onDrop.bind(this)}>
+              <div>{formatMessage(messages.dropzonehelp)}</div>
+            </Dropzone>
+          </GridTile>
+          <GridTile>
+            <label>{formatMessage(messages.strokecolorlabel)}</label>
+            <ColorPicker onChangeComplete={this._onChangeStroke.bind(this)} color='#452135' />
+          </GridTile>
+          <GridTile>
+            <label>{formatMessage(messages.fillcolorlabel)}</label>
+            <ColorPicker onChangeComplete={this._onChangeFill.bind(this)} color='#452135' />
+          </GridTile>
+        </GridList>
+      );
+    }
     var actions = [
-      (<RaisedButton label={formatMessage(messages.applybuttontext)} onTouchTap={this._readVectorFile.bind(this)} />),
-      (<RaisedButton label={formatMessage(messages.closebuttontext)} onTouchTap={this._closeDialog.bind(this)} />)
+      (<RaisedButton disabled={this.state.showProgress} label={formatMessage(messages.applybuttontext)} onTouchTap={this._readVectorFile.bind(this)} />),
+      (<RaisedButton disabled={this.state.showProgress} label={formatMessage(messages.closebuttontext)} onTouchTap={this._closeDialog.bind(this)} />)
     ];
     return (
       <RaisedButton {...this.props} className={classNames('sdk-component add-layer', this.props.className)} icon={<UploadIcon />} label={formatMessage(messages.menutext)} onTouchTap={this._showDialog.bind(this)}>
         <Dialog autoScrollBodyContent={true} actions={actions} open={this.state.open} onRequestClose={this._closeDialog.bind(this)} modal={true} title={formatMessage(messages.modaltitle)}>
-          <GridList cols={3} cellHeight={350}>
-            <GridTile>
-              <label>{formatMessage(messages.dropzonelabel)}</label>
-              <Dropzone className='dropzone' multiple={false} onDrop={this._onDrop.bind(this)}>
-                <div>{formatMessage(messages.dropzonehelp)}</div>
-              </Dropzone>
-            </GridTile>
-            <GridTile>
-              <label>{formatMessage(messages.strokecolorlabel)}</label>
-              <ColorPicker onChangeComplete={this._onChangeStroke.bind(this)} color='#452135' />
-            </GridTile>
-            <GridTile>
-              <label>{formatMessage(messages.fillcolorlabel)}</label>
-              <ColorPicker onChangeComplete={this._onChangeFill.bind(this)} color='#452135' />
-            </GridTile>
-          </GridList>
+          {body}
         </Dialog>
       </RaisedButton>
     );
