@@ -12,6 +12,7 @@
 
 import React from 'react';
 import ol from 'openlayers';
+import Snackbar from 'material-ui/lib/snackbar';
 import RaisedButton from 'material-ui/lib/raised-button';
 import UploadIcon from 'material-ui/lib/svg-icons/file/file-upload';
 import Dialog from 'material-ui/lib/dialog';
@@ -28,6 +29,11 @@ import './AddLayer.css';
 const ID_PREFIX = 'sdk-addlayer-';
 
 const messages = defineMessages({
+  errormsg: {
+    id: 'addlayer.errormsg',
+    description: 'Error message to show when reading features fails',
+    defaultMessage: 'There was an error reading your file. ({msg})'
+  },
   waitmsg: {
     id: 'addlayer.waitmsg',
     description: 'Wait message to show when reading features',
@@ -101,6 +107,8 @@ class AddLayer extends React.Component {
     this._counter = 0;
     this.state = {
       open: false,
+      error: false,
+      errorOpen: false,
       showProgress: false
     };
   }
@@ -173,7 +181,7 @@ class AddLayer extends React.Component {
             }
           } catch (e) {
             if (window && window.console) {
-              window.console.log(e);
+              me.setState({showProgress: false, error: true, errorOpen: true, msg: e.message});
             }
           }
         }
@@ -197,8 +205,23 @@ class AddLayer extends React.Component {
   _onChangeFill(color) {
     this._fillColor = transformColor(color);
   }
+  _handleRequestClose() {
+    this.setState({
+      errorOpen: false
+    });
+  }
   render() {
     const {formatMessage} = this.props.intl;
+    var error;
+    if (this.state.error === true) {
+      error = (<Snackbar
+        autoHideDuration={5000}
+        style={{transitionProperty : 'none'}}
+        bodyStyle={{lineHeight: '24px', height: 'auto', backgroundColor: 'rgba(255, 0, 0, 0.8)'}} open={this.state.errorOpen}
+        message={formatMessage(messages.errormsg, {msg: this.state.msg})}
+        onRequestClose={this._handleRequestClose.bind(this)}
+      />);
+    }
     var body;
     if (this.state.showProgress) {
       body =  (<p className='add-layer-wait-msg'>{formatMessage(messages.waitmsg)}</p>);
@@ -229,6 +252,7 @@ class AddLayer extends React.Component {
     return (
       <RaisedButton {...this.props} className={classNames('sdk-component add-layer', this.props.className)} icon={<UploadIcon />} label={formatMessage(messages.menutext)} onTouchTap={this._showDialog.bind(this)}>
         <Dialog autoScrollBodyContent={true} actions={actions} open={this.state.open} onRequestClose={this._closeDialog.bind(this)} modal={true} title={formatMessage(messages.modaltitle)}>
+          {error}
           {body}
         </Dialog>
       </RaisedButton>

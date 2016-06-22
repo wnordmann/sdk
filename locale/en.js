@@ -3,6 +3,7 @@ var enMessages = {
   "addlayer.closebuttontext": "Close",
   "addlayer.dropzonehelp": "Drop a KML, GPX or GeoJSON file here, or click to select it.",
   "addlayer.dropzonelabel": "File",
+  "addlayer.errormsg": "There was an error reading your file. ({msg})",
   "addlayer.fillcolorlabel": "Fill color",
   "addlayer.menutext": "Upload",
   "addlayer.menutitle": "Add layer",
