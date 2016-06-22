@@ -207,8 +207,8 @@ class Measure extends MapTool {
     this._tooltips.push(this._tooltip);
     this.props.map.addOverlay(this._tooltip);
   }
-  activate() {
-    super.activate.call(this, arguments);
+  activate(interactions) {
+    super.activate.call(this, interactions);
     this.setState({secondary: true});
   }
   deactivate() {
