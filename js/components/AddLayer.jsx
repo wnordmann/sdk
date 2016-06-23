@@ -106,6 +106,8 @@ class AddLayer extends React.Component {
     };
     this._counter = 0;
     this.state = {
+      fillColor: '#452135',
+      strokeColor: '#000',
       open: false,
       error: false,
       errorOpen: false,
@@ -116,7 +118,7 @@ class AddLayer extends React.Component {
     this.setState({open: true});
   }
   _closeDialog() {
-    this.setState({open: false});
+    this.setState({fileName: null, showProgress: false, open: false});
   }
   _readFile(text) {
     this._text = text;
@@ -131,7 +133,7 @@ class AddLayer extends React.Component {
     var me = this;
     window.setTimeout(function() {
       var text = me._text;
-      var filename = me._fileName;
+      var filename = me.state.fileName;
       if (text && filename) {
         var ext = filename.split('.').pop().toLowerCase();
         var format = me._formats[ext];
@@ -142,16 +144,13 @@ class AddLayer extends React.Component {
             var features = format.readFeatures(text, {dataProjection: crs,
               featureProjection: map.getView().getProjection()});
             if (features && features.length > 0) {
-              var style;
-              if (me._strokeColor || me._fillColor) {
-                var fill = me._fillColor ? new ol.style.Fill({color: me._fillColor}) : undefined;
-                var stroke = me._strokeColor ? new ol.style.Stroke({color: me._strokeColor, width: me.props.strokeWidth}) : undefined;
-                style = new ol.style.Style({
-                  fill: fill,
-                  stroke: stroke,
-                  image: (fill || stroke) ? new ol.style.Circle({stroke: stroke, fill: fill, radius: me.props.pointRadius}) : undefined
-                });
-              }
+              var fill = new ol.style.Fill({color: transformColor(me.state.fillColor)});
+              var stroke = new ol.style.Stroke({color: transformColor(me.state.strokeColor), width: me.props.strokeWidth});
+              var style = new ol.style.Style({
+                ill: fill,
+                stroke: stroke,
+                image: new ol.style.Circle({stroke: stroke, fill: fill, radius: me.props.pointRadius})
+              });
               me._counter++;
               var lyr = new ol.layer.Vector({
                 id: me._generateId(),
@@ -192,7 +191,7 @@ class AddLayer extends React.Component {
     if (files.length === 1) {
       var r = new FileReader(), file = files[0];
       var me = this;
-      this._fileName = file.name;
+      this.setState({fileName: file.name});
       r.onload = function(e) {
         me._readFile(e.target.result);
       };
@@ -200,10 +199,10 @@ class AddLayer extends React.Component {
     }
   }
   _onChangeStroke(color) {
-    this._strokeColor = transformColor(color);
+    this.setState({strokeColor: color.rgb});
   }
   _onChangeFill(color) {
-    this._fillColor = transformColor(color);
+    this.setState({fillColor: color.rgb});
   }
   _handleRequestClose() {
     this.setState({
@@ -231,16 +230,17 @@ class AddLayer extends React.Component {
           <GridTile>
             <label>{formatMessage(messages.dropzonelabel)}</label>
             <Dropzone className='dropzone' multiple={false} onDrop={this._onDrop.bind(this)}>
+              <div className='add-layer-filename'>{this.state.fileName}</div>
               <div>{formatMessage(messages.dropzonehelp)}</div>
             </Dropzone>
           </GridTile>
           <GridTile>
             <label>{formatMessage(messages.strokecolorlabel)}</label>
-            <ColorPicker onChangeComplete={this._onChangeStroke.bind(this)} color='#452135' />
+            <ColorPicker onChangeComplete={this._onChangeStroke.bind(this)} color={this.state.strokeColor} />
           </GridTile>
           <GridTile>
             <label>{formatMessage(messages.fillcolorlabel)}</label>
-            <ColorPicker onChangeComplete={this._onChangeFill.bind(this)} color='#452135' />
+            <ColorPicker onChangeComplete={this._onChangeFill.bind(this)} color={this.state.fillColor} />
           </GridTile>
         </GridList>
       );
