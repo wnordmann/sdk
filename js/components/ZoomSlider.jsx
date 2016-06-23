@@ -27,38 +27,19 @@ export default class ZoomSlider extends React.Component {
     });
   }
   _getValue(resolution) {
-    var fn = this._getValueForResolutionFunction();
-    return 1 - fn(resolution);
-  }
-  _getValueForResolutionFunction() {
     var view = this.props.map.getView();
     var maxResolution = view.getMaxResolution();
     var minResolution = view.getMinResolution();
     var max = Math.log(maxResolution / minResolution) / Math.log(2);
-    return (
-      function(resolution) {
-        var value = (Math.log(maxResolution / resolution) / Math.log(2)) / max;
-        return value;
-      }
-    );
-  }
-  _getResolutionForValueFunction() {
-    var view = this.props.map.getView();
-    var maxResolution = view.getMaxResolution();
-    var minResolution = view.getMinResolution();
-    var max = Math.log(maxResolution / minResolution) / Math.log(2);
-    return (
-      function(value) {
-        var resolution = maxResolution / Math.pow(2, value * max);
-        return resolution;
-      }
-    );
+    return 1 - ((Math.log(maxResolution / resolution) / Math.log(2)) / max);
   }
   _onChange(evt, value) {
     var map = this.props.map;
     var view = map.getView();
-    var fn = this._getResolutionForValueFunction();
-    var resolution = fn(1 - value);
+    var maxResolution = view.getMaxResolution();
+    var minResolution = view.getMinResolution();
+    var max = Math.log(maxResolution / minResolution) / Math.log(2);
+    var resolution = maxResolution / Math.pow(2, (1 - value) * max);
     view.setResolution(view.constrainResolution(resolution));
   }
   render() {
