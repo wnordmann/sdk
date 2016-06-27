@@ -13,7 +13,7 @@
 import React from 'react';
 import ol from 'openlayers';
 import Snackbar from 'material-ui/lib/snackbar';
-import RaisedButton from 'material-ui/lib/raised-button';
+import RaisedButton from './Button.jsx';
 import UploadIcon from 'material-ui/lib/svg-icons/file/file-upload';
 import Dialog from 'material-ui/lib/dialog';
 import Dropzone from 'react-dropzone';
@@ -39,15 +39,15 @@ const messages = defineMessages({
     description: 'Wait message to show when reading features',
     defaultMessage: 'Please wait while your dataset is processed ...'
   },
-  menutitle: {
-    id: 'addlayer.menutitle',
-    description: 'Title of the menu button',
-    defaultMessage: 'Add layer'
-  },
   menutext: {
     id: 'addlayer.menutext',
     description: 'Text of the menu button',
     defaultMessage: 'Upload'
+  },
+  menutitle: {
+    id: 'addlayer.menutitle',
+    description: 'Title of the menu button',
+    defaultMessage: 'Upload local vector file to application'
   },
   modaltitle: {
     id: 'addlayer.modaltitle',
@@ -79,10 +79,20 @@ const messages = defineMessages({
     description: 'Title of the close button',
     defaultMessage: 'Close'
   },
+  closebuttontitle: {
+    id: 'addlayer.closebuttontitle',
+    description: 'Tooltip for close button',
+    defaultMessage: 'Close dialog'
+  },
   applybuttontext: {
     id: 'addlayer.applybuttontext',
     description: 'Text of the apply button',
     defaultMessage: 'Apply'
+  },
+  applybuttontitle: {
+    id: 'addlayer.applybuttontitle',
+    description: 'Title of the apply button',
+    defaultMessage: 'Upload local vector layer'
   }
 });
 
@@ -216,6 +226,7 @@ class AddLayer extends React.Component {
   }
   render() {
     const {formatMessage} = this.props.intl;
+    const buttonStyle = this.props.buttonStyle;
     var error;
     if (this.state.error === true) {
       error = (<Snackbar
@@ -236,7 +247,7 @@ class AddLayer extends React.Component {
             <label>{formatMessage(messages.dropzonelabel)}</label>
             <Dropzone className='dropzone' multiple={false} onDrop={this._onDrop.bind(this)}>
               <div className='add-layer-filename'>{this.state.fileName}</div>
-              <div>{formatMessage(messages.dropzonehelp)}</div>
+              <div className='add-layer-dropzonehelp'>{formatMessage(messages.dropzonehelp)}</div>
             </Dropzone>
           </GridTile>
           <GridTile>
@@ -251,11 +262,11 @@ class AddLayer extends React.Component {
       );
     }
     var actions = [
-      (<RaisedButton disabled={this.state.showProgress || this.state.fileName === null} label={formatMessage(messages.applybuttontext)} onTouchTap={this._readVectorFile.bind(this)} />),
-      (<RaisedButton disabled={this.state.showProgress} label={formatMessage(messages.closebuttontext)} onTouchTap={this._closeDialog.bind(this)} />)
+      (<RaisedButton tooltip={formatMessage(messages.applybuttontitle)} style={buttonStyle} disabled={this.state.showProgress || this.state.fileName === null} label={formatMessage(messages.applybuttontext)} onTouchTap={this._readVectorFile.bind(this)} />),
+      (<RaisedButton style={buttonStyle} disabled={this.state.showProgress} label={formatMessage(messages.closebuttontext)} tooltip={formatMessage(messages.closebuttontitle)} onTouchTap={this._closeDialog.bind(this)} />)
     ];
     return (
-      <RaisedButton {...this.props} className={classNames('sdk-component add-layer', this.props.className)} icon={<UploadIcon />} label={formatMessage(messages.menutext)} onTouchTap={this._showDialog.bind(this)}>
+      <RaisedButton {...this.props} className={classNames('sdk-component add-layer', this.props.className)} icon={<UploadIcon />} tooltip={formatMessage(messages.menutitle)} label={formatMessage(messages.menutext)} onTouchTap={this._showDialog.bind(this)}>
         <Dialog autoScrollBodyContent={true} actions={actions} open={this.state.open} onRequestClose={this._closeDialog.bind(this)} modal={true} title={formatMessage(messages.modaltitle)}>
           {error}
           {body}
@@ -283,6 +294,10 @@ AddLayer.propTypes = {
    */
   pointRadius: React.PropTypes.number,
   /**
+   * Style for the buttons in the toolbar of the dialog.
+   */
+  buttonStyle: React.PropTypes.object,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
@@ -290,6 +305,9 @@ AddLayer.propTypes = {
 
 AddLayer.defaultProps = {
   style: {
+    margin: '10px 12px'
+  },
+  buttonStyle: {
     margin: '10px 12px'
   },
   strokeWidth: 2,

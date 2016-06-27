@@ -11,6 +11,16 @@ Only vector layers can be added. Supported formats for layers are GeoJSON, GPX a
 Properties
 ----------
 
+### `buttonStyle`
+
+Style for the buttons in the toolbar of the dialog.
+
+type: `object`
+defaultValue: `{
+  margin: '10px 12px'
+}`
+
+
 ### `className`
 
 Css class name to apply on the button.
