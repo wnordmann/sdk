@@ -21,6 +21,7 @@ import SelectField from 'material-ui/lib/select-field';
 import classNames from 'classnames';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
+import './Chart.css';
 
 const AGGREGATION_MIN = 0;
 const AGGREGATION_MAX = 1;
@@ -232,8 +233,8 @@ class Chart extends React.Component {
         return (<MenuItem key={idx} value={title} primaryText={title} />);
       });
       return (
-        <div className={classNames('sdk-component chart', this.props.className)} id='chart-panel'>
-          <SelectField value={this.state.value} onChange={this._selectChart.bind(this)}>
+        <div className={classNames('sdk-component chart', this.props.className)}>
+          <SelectField fullWidth={true} value={this.state.value} onChange={this._selectChart.bind(this)}>
             {options}
           </SelectField>
           <div id='chart'></div>
