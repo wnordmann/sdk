@@ -111,6 +111,7 @@ class AddLayer extends React.Component {
       open: false,
       error: false,
       errorOpen: false,
+      fileName: null,
       showProgress: false
     };
   }
@@ -141,6 +142,10 @@ class AddLayer extends React.Component {
         if (format) {
           try {
             var crs = format.readProjection(text);
+            if (crs === undefined) {
+              me.setState({showProgress: false, error: true, fileName: null, errorOpen: true, msg: 'Unsupported projection'});
+              return;
+            }
             var features = format.readFeatures(text, {dataProjection: crs,
               featureProjection: map.getView().getProjection()});
             if (features && features.length > 0) {
@@ -180,7 +185,7 @@ class AddLayer extends React.Component {
             }
           } catch (e) {
             if (window && window.console) {
-              me.setState({showProgress: false, error: true, errorOpen: true, msg: e.message});
+              me.setState({showProgress: false, error: true, fileName: null, errorOpen: true, msg: e.message});
             }
           }
         }
@@ -246,7 +251,7 @@ class AddLayer extends React.Component {
       );
     }
     var actions = [
-      (<RaisedButton disabled={this.state.showProgress} label={formatMessage(messages.applybuttontext)} onTouchTap={this._readVectorFile.bind(this)} />),
+      (<RaisedButton disabled={this.state.showProgress || this.state.fileName === null} label={formatMessage(messages.applybuttontext)} onTouchTap={this._readVectorFile.bind(this)} />),
       (<RaisedButton disabled={this.state.showProgress} label={formatMessage(messages.closebuttontext)} onTouchTap={this._closeDialog.bind(this)} />)
     ];
     return (
