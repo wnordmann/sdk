@@ -37,7 +37,7 @@ const messages = defineMessages({
  */
 @pureRender
 class HomeButton extends React.Component {
-  constructor(props) {
+  constructor(props, context) {
     super(props);
     if (!this.props.extent) {
       var view = this.props.map.getView();
@@ -54,6 +54,9 @@ class HomeButton extends React.Component {
         }, this);
       }
     }
+    this.state = {
+      muiTheme: context.muiTheme
+    };
   }
   _goHome() {
     var view = this.props.map.getView();
@@ -64,10 +67,27 @@ class HomeButton extends React.Component {
       view.setResolution(this._resolution);
     }
   }
+  getStyles() {
+    const muiTheme = this.state.muiTheme;
+    if (muiTheme) {
+      const rawTheme = muiTheme.rawTheme;
+      return {
+        root: Object.assign(this.props.style.root, {
+          background: rawTheme.palette.primary1Color
+        }),
+        icon: {
+          color: rawTheme.palette.textColor
+        }
+      };
+    } else {
+      return this.props.style;
+    }
+  }
   render() {
     const {formatMessage} = this.props.intl;
+    const styles = this.getStyles();
     return (
-      <IconButton className={classNames('sdk-component home-button', this.props.className)} tooltipPosition='top-right' style={this.props.style} tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._goHome.bind(this)} ><HomeIcon color='white' /></IconButton>
+      <IconButton className={classNames('sdk-component home-button', this.props.className)} tooltipPosition='top-right' style={styles.root} tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._goHome.bind(this)} ><HomeIcon color={styles.icon.color} /></IconButton>
     );
   }
 }
@@ -97,12 +117,21 @@ HomeButton.propTypes = {
 
 HomeButton.defaultProps = {
   style: {
-    background: 'rgba(0,60,136,.7)',
-    borderRadius: '2px',
-    width: '28px',
-    height: '28px',
-    padding: '2px'
+    root: {
+      background: 'rgba(0,60,136,.7)',
+      borderRadius: '2px',
+      width: '28px',
+      height: '28px',
+      padding: '2px'
+    },
+    icon: {
+      color: 'white'
+    }
   }
+};
+
+HomeButton.contextTypes = {
+  muiTheme: React.PropTypes.object
 };
 
 export default injectIntl(HomeButton);

@@ -48,9 +48,10 @@ const messages = defineMessages({
  */
 @pureRender
 class Geolocation extends React.Component {
-  constructor(props) {
+  constructor(props, context) {
     super(props);
     this.state = {
+      muiTheme: context.muiTheme,
       error: false,
       open: false,
       tracking: false
@@ -114,7 +115,27 @@ class Geolocation extends React.Component {
       open: false
     });
   }
+  getStyles() {
+    const muiTheme = this.state.muiTheme;
+    if (muiTheme) {
+      const rawTheme = muiTheme.rawTheme;
+      return {
+        root: Object.assign(this.props.style.root, {
+          background: rawTheme.palette.primary1Color
+        }),
+        icon: {
+          color: rawTheme.palette.textColor
+        },
+        iconactive: {
+          color: rawTheme.palette.accent1Color
+        }
+      };
+    } else {
+      return this.props.style;
+    }
+  }
   render() {
+    const styles = this.getStyles();
     const {formatMessage} = this.props.intl;
     if (this.state.error) {
       return (<Snackbar
@@ -127,13 +148,13 @@ class Geolocation extends React.Component {
     } else {
       var color, tooltip = formatMessage(messages.buttontitle);
       if (this.state.tracking) {
-        color = 'red';
+        color = styles.iconactive.color;
         tooltip += ' (' + formatMessage(messages.trackingtitle) + ')';
       } else {
-        color = 'white';
+        color = styles.icon.color;
       }
       return (
-        <IconButton className={classNames('sdk-component geolocation', this.props.className)} tooltipPosition='top-right' style={this.props.style} tooltip={tooltip} onTouchTap={this._geolocate.bind(this)}><MyLocation color={color} /></IconButton>
+        <IconButton style={styles.root} className={classNames('sdk-component geolocation', this.props.className)} tooltipPosition='top-right' tooltip={tooltip} onTouchTap={this._geolocate.bind(this)}><MyLocation color={color} /></IconButton>
       );
     }
   }
@@ -160,12 +181,24 @@ Geolocation.propTypes = {
 
 Geolocation.defaultProps = {
   style: {
-    background: 'rgba(0,60,136,.7)',
-    borderRadius: '2px',
-    width: '28px',
-    height: '28px',
-    padding: '2px'
+    root: {
+      background: 'rgba(0,60,136,.7)',
+      borderRadius: '2px',
+      width: '28px',
+      height: '28px',
+      padding: '2px'
+    },
+    icon: {
+      color: 'white'
+    },
+    iconactive: {
+      color: 'red'
+    }
   }
+};
+
+Geolocation.contextTypes = {
+  muiTheme: React.PropTypes.object
 };
 
 export default injectIntl(Geolocation);
