@@ -42,7 +42,7 @@ const messages = defineMessages({
  */
 @pureRender
 class GeocodingResults extends React.Component {
-  constructor(props) {
+  constructor(props, context) {
     super(props);
     var me = this;
     AppDispatcher.register((payload) => {
@@ -61,7 +61,8 @@ class GeocodingResults extends React.Component {
       }
     });
     this.state = {
-      searchResults: null
+      searchResults: null,
+      muiTheme: context.muiTheme
     };
   }
   componentDidMount() {
@@ -106,7 +107,20 @@ class GeocodingResults extends React.Component {
     source.addFeature(feature);
     GeocodingActions.zoomToResult(result);
   }
+  getStyles() {
+    const muiTheme = this.state.muiTheme;
+    if (muiTheme) {
+      const rawTheme = muiTheme.rawTheme;
+      return {
+        root: {
+          background: rawTheme.palette.canvasColor,
+          color: rawTheme.palette.textColor
+        }
+      };
+    }
+  }
   render() {
+    const styles = this.getStyles();
     const {formatMessage} = this.props.intl;
     var resultNodes;
     var subheader;
@@ -126,7 +140,7 @@ class GeocodingResults extends React.Component {
     }
     return (
       <div className={classNames('sdk-component geocoding-results', this.props.className)}>
-        <div className='geocoding-results-header'>{subheader}</div>
+        <div style={styles ? styles.root : undefined} className='geocoding-results-header'>{subheader}</div>
         <List className='geocoding-results-list'>
          {resultNodes}
         </List>
@@ -161,6 +175,10 @@ GeocodingResults.propTypes = {
 GeocodingResults.defaultProps = {
   zoom: 10,
   markerUrl: './resources/marker.png'
+};
+
+GeocodingResults.contextTypes = {
+  muiTheme: React.PropTypes.object
 };
 
 export default injectIntl(GeocodingResults);
