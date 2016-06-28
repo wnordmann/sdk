@@ -114,7 +114,7 @@ const messages = defineMessages({
  * ```
  */
 class FeatureTable extends React.Component {
-  constructor(props) {
+  constructor(props, context) {
     super(props);
     this._onSortChange = this._onSortChange.bind(this);
     this._onChange = this._onChange.bind(this);
@@ -124,6 +124,7 @@ class FeatureTable extends React.Component {
       this._setLayer(this.props.layer);
     }
     this.state = {
+      muiTheme: context.muiTheme,
       gridWidth: this.props.width,
       gridHeight: this.props.height,
       features: [],
@@ -352,6 +353,17 @@ class FeatureTable extends React.Component {
     context.font = font;
     return context.measureText(text).width + 24;
   }
+  getStyles() {
+    const muiTheme = this.state.muiTheme;
+    if (muiTheme) {
+      const rawTheme = muiTheme.rawTheme;
+      return {
+        root: {
+          background: rawTheme.palette.canvasColor
+        }
+      };
+    }
+  }
   render() {
     var {sortIndexes, colSortDirs} = this.state;
     const {formatMessage} = this.props.intl;
@@ -396,9 +408,10 @@ class FeatureTable extends React.Component {
         );
     }
     const buttonStyle = this.props.buttonStyle;
+    const styles = this.getStyles();
     var filterHelp = this._layer ? <FilterHelp textSearch={true} intl={this.props.intl} /> : undefined;
     return (
-      <div className={classNames('sdk-component feature-table', this.props.className)}>
+      <div style={styles ? styles.root : undefined} className={classNames('sdk-component feature-table', this.props.className)}>
         <div ref='form'>
           <div className='feature-table-options'>
             <div className='feature-table-selector'>
@@ -509,6 +522,10 @@ FeatureTable.defaultProps = {
   },
   offset: [0, 0],
   refreshRate: 250
+};
+
+FeatureTable.contextTypes = {
+  muiTheme: React.PropTypes.object
 };
 
 export default injectIntl(FeatureTable, {withRef: true}); // withRef needed so apps can call setDimensionsOnState
