@@ -43,6 +43,12 @@ const messages = defineMessages({
  */
 @pureRender
 class Zoom extends React.Component {
+  constructor(props, context) {
+    super(props);
+    this.state = {
+      muiTheme: context.muiTheme
+    };
+  }
   _zoomIn() {
     this._zoomByDelta(this.props.delta);
   }
@@ -65,12 +71,29 @@ class Zoom extends React.Component {
       view.setResolution(newResolution);
     }
   }
+  getStyles() {
+    const muiTheme = this.state.muiTheme;
+    if (muiTheme) {
+      const rawTheme = muiTheme.rawTheme;
+      return {
+        root: Object.assign(this.props.style.root, {
+          background: rawTheme.palette.primary1Color
+        }),
+        icon: {
+          color: rawTheme.palette.textColor
+        }
+      };
+    } else {
+      return this.props.style;
+    }
+  }
   render() {
+    const styles = this.getStyles();
     const {formatMessage} = this.props.intl;
     return (
       <div className={classNames('sdk-component zoom', this.props.className)}>
-        <IconButton tooltipPosition='top-right' style={this.props.style} tooltip={this.props.zoomInTipLabel ? this.props.zoomInTipLabel : formatMessage(messages.zoomintitle)} onTouchTap={this._zoomIn.bind(this)}><ZoomIn color="white"/></IconButton><br/>
-        <IconButton tooltipPosition='top-right' style={Object.assign({marginTop: '25px'}, this.props.style)} tooltip={this.props.zoomOutTipLabel ? this.props.zoomOutTipLabel : formatMessage(messages.zoomouttitle)} onTouchTap={this._zoomOut.bind(this)}><ZoomOut color="white"/></IconButton>
+        <IconButton tooltipPosition='top-right' style={styles.root} tooltip={this.props.zoomInTipLabel ? this.props.zoomInTipLabel : formatMessage(messages.zoomintitle)} onTouchTap={this._zoomIn.bind(this)}><ZoomIn color={styles.icon.color} /></IconButton><br/>
+        <IconButton tooltipPosition='top-right' style={Object.assign({marginTop: '25px'}, styles.root)} tooltip={this.props.zoomOutTipLabel ? this.props.zoomOutTipLabel : formatMessage(messages.zoomouttitle)} onTouchTap={this._zoomOut.bind(this)}><ZoomOut color={styles.icon.color}/></IconButton>
       </div>
     );
   }
@@ -115,12 +138,21 @@ Zoom.defaultProps = {
   delta: 1,
   duration: 250,
   style: {
-    background: 'rgba(0,60,136,.7)',
-    borderRadius: '2px',
-    width: '28px',
-    height: '28px',
-    padding: '2px'
+    root: {
+      background: 'rgba(0,60,136,.7)',
+      borderRadius: '2px',
+      width: '28px',
+      height: '28px',
+      padding: '2px'
+    },
+    icon: {
+      color: 'white'
+    }
   }
+};
+
+Zoom.contextTypes = {
+  muiTheme: React.PropTypes.object
 };
 
 export default injectIntl(Zoom);
