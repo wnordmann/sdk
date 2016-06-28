@@ -71,12 +71,13 @@ const messages = defineMessages({
  */
 @pureRender
 class Chart extends React.Component {
-  constructor(props) {
+  constructor(props, context) {
     super(props);
     this.state = {
       chart: this.props.charts[0],
       value: this.props.charts[0].title,
-      selected: null
+      selected: null,
+      muiTheme: context.muiTheme
     };
   }
   componentDidMount() {
@@ -203,7 +204,19 @@ class Chart extends React.Component {
       document.getElementById(this.props.container).style.display = 'block';
     }
   }
+  getStyles() {
+    const muiTheme = this.state.muiTheme;
+    if (muiTheme) {
+      const rawTheme = muiTheme.rawTheme;
+      return {
+        root: {
+          background: rawTheme.palette.canvasColor
+        }
+      };
+    }
+  }
   render() {
+    const styles = this.getStyles();
     const {formatMessage} = this.props.intl;
     var columns = this._getColumns();
     c3.generate({
@@ -233,7 +246,7 @@ class Chart extends React.Component {
         return (<MenuItem key={idx} value={title} primaryText={title} />);
       });
       return (
-        <div className={classNames('sdk-component chart', this.props.className)}>
+        <div style={styles ? styles.root : undefined} className={classNames('sdk-component chart', this.props.className)}>
           <SelectField fullWidth={true} value={this.state.value} onChange={this._selectChart.bind(this)}>
             {options}
           </SelectField>
@@ -300,6 +313,10 @@ Chart.defaultProps = {
   style: {
     margin: '10px 12px'
   }
+};
+
+Chart.contextTypes = {
+  muiTheme: React.PropTypes.object
 };
 
 export default injectIntl(Chart);
