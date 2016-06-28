@@ -64,10 +64,11 @@ const messages = defineMessages({
  */
 @pureRender
 class QGISLegend extends React.Component {
-  constructor(props) {
+  constructor(props, context) {
     super(props);
     LayerStore.bindMap(this.props.map);
     this.state = {
+      muiTheme: context.muiTheme,
       visible: this.props.showExpandedOnStartup
     };
   }
@@ -101,8 +102,25 @@ class QGISLegend extends React.Component {
       </List>
     );
   }
+  getStyles() {
+    const muiTheme = this.state.muiTheme;
+    if (muiTheme) {
+      const rawTheme = muiTheme.rawTheme;
+      return {
+        root: Object.assign(this.props.style.root, {
+          background: rawTheme.palette.primary1Color
+        }),
+        icon: {
+          color: rawTheme.palette.textColor
+        }
+      };
+    } else {
+      return this.props.style;
+    }
+  }
   render() {
     const {formatMessage} = this.props.intl;
+    const styles = this.getStyles();
     var divClass = {
       'legend': true,
       'shown': this.state.visible,
@@ -115,7 +133,7 @@ class QGISLegend extends React.Component {
     var onClick = !this.props.expandOnHover ? this._togglePanel.bind(this) : undefined;
     return (
       <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} className={classNames(divClass, this.props.className)}>
-        <IconButton style={this.props.style} className='legendbutton' tooltip={formatMessage(messages.buttontitle)} onTouchTap={onClick}><LegendIcon color='white' /></IconButton>
+        <IconButton style={styles.root} className='legendbutton' tooltip={formatMessage(messages.buttontitle)} onTouchTap={onClick}><LegendIcon color={styles.icon.color} /></IconButton>
         <div className='legend-panel' id='legend'>{items}</div>
       </div>
     );
@@ -162,12 +180,21 @@ QGISLegend.defaultProps = {
   showExpandedOnStartup: false,
   expandOnHover: true,
   style: {
-    background: 'rgba(0,60,136,.7)',
-    borderRadius: '2px',
-    width: '28px',
-    height: '28px',
-    padding: '2px'
+    root: {
+      background: 'rgba(0,60,136,.7)',
+      borderRadius: '2px',
+      width: '28px',
+      height: '28px',
+      padding: '2px'
+    },
+    icon: {
+      color: 'white'
+    }
   }
+};
+
+QGISLegend.contextTypes = {
+  muiTheme: React.PropTypes.object
 };
 
 export default injectIntl(QGISLegend);
