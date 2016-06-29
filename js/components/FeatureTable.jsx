@@ -359,6 +359,7 @@ class FeatureTable extends React.Component {
     const rawTheme = muiTheme.rawTheme;
     return {
       root: {
+        fontFamily: rawTheme.fontFamily,
         background: rawTheme.palette.canvasColor
       }
     };
