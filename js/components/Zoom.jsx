@@ -17,6 +17,7 @@ import IconButton from 'material-ui/lib/icon-button';
 import ZoomIn from 'material-ui/lib/svg-icons/action/zoom-in';
 import ZoomOut from 'material-ui/lib/svg-icons/action/zoom-out';
 import pureRender from 'pure-render-decorator';
+import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 const messages = defineMessages({
@@ -46,7 +47,7 @@ class Zoom extends React.Component {
   constructor(props, context) {
     super(props);
     this.state = {
-      muiTheme: context.muiTheme
+      muiTheme: context.muiTheme || ThemeManager.getMuiTheme()
     };
   }
   _zoomIn() {
@@ -73,19 +74,15 @@ class Zoom extends React.Component {
   }
   getStyles() {
     const muiTheme = this.state.muiTheme;
-    if (muiTheme) {
-      const rawTheme = muiTheme.rawTheme;
-      return {
-        root: Object.assign(this.props.style.root, {
-          background: rawTheme.palette.primary1Color
-        }),
-        icon: {
-          color: rawTheme.palette.textColor
-        }
-      };
-    } else {
-      return this.props.style;
-    }
+    const rawTheme = muiTheme.rawTheme;
+    return {
+      root: Object.assign(this.props.style.root, {
+        background: rawTheme.palette.primary1Color
+      }),
+      icon: {
+        color: rawTheme.palette.textColor
+      }
+    };
   }
   render() {
     const styles = this.getStyles();
@@ -139,14 +136,10 @@ Zoom.defaultProps = {
   duration: 250,
   style: {
     root: {
-      background: 'rgba(0,60,136,.7)',
       borderRadius: '2px',
       width: '28px',
       height: '28px',
       padding: '2px'
-    },
-    icon: {
-      color: 'white'
     }
   }
 };
