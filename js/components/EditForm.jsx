@@ -147,7 +147,6 @@ class EditForm extends React.Component {
     var error;
     if (this.state.error === true) {
       error = (<Snackbar
-        bodyStyle={{backgroundColor: 'rgba(255, 0, 0, 0.8)'}}
         open={this.state.open}
         message={formatMessage(messages.errormsg, {msg: this.state.msg})}
         autoHideDuration={2000}

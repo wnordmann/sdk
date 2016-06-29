@@ -137,7 +137,6 @@ class Geolocation extends React.Component {
     if (this.state.error) {
       return (<Snackbar
         open={this.state.open}
-        bodyStyle={{backgroundColor: 'rgba(255, 0, 0, 0.8)'}}
         message={formatMessage(messages.error, {details: this.state.msg})}
         autoHideDuration={2000}
         onRequestClose={this._handleRequestClose.bind(this)}

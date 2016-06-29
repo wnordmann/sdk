@@ -310,7 +310,6 @@ class QGISPrint extends React.Component {
       if (this.state.error) {
         error = (<Snackbar
           open={this.state.errorOpen}
-          bodyStyle={{backgroundColor: 'rgba(255, 0, 0, 0.8)'}}
           style={{transitionProperty : 'none'}}
           message={formatMessage(messages.error, {details: this.state.msg})}
           autoHideDuration={2000}
