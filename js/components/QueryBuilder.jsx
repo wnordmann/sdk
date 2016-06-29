@@ -196,7 +196,7 @@ class QueryBuilder extends React.Component {
     return (
       <div style={styles.root} className={classNames('sdk-component query-builder', this.props.className)}>
         <LayerSelector {...this.props} onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /><br/>
-        <TextField floatingLabelText={formatMessage(messages.filterlabel)} errorText={this.state.errorText} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} /><FilterHelp intl={this.props.intl} style={{bottom: 70}} /><br/>
+        <TextField floatingLabelText={formatMessage(messages.filterlabel)} errorText={this.state.errorText} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} /><FilterHelp intl={this.props.intl} /><br/>
         <Toolbar>
           <RaisedButton style={buttonStyle} label={formatMessage(messages.newbuttontext)} tooltip={formatMessage(messages.newbuttontitle)} onTouchTap={this._newSelection.bind(this)} />
           <RaisedButton style={buttonStyle} label={formatMessage(messages.addbuttontext)} tooltip={formatMessage(messages.addbuttontitle)}onTouchTap={this._addSelection.bind(this)} />
