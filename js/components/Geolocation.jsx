@@ -13,6 +13,7 @@
 import React from 'react';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import classNames from 'classnames';
 import pureRender from 'pure-render-decorator';
 import Snackbar from 'material-ui/lib/snackbar';
@@ -51,7 +52,7 @@ class Geolocation extends React.Component {
   constructor(props, context) {
     super(props);
     this.state = {
-      muiTheme: context.muiTheme,
+      muiTheme: context.muiTheme || ThemeManager.getMuiTheme(),
       error: false,
       open: false,
       tracking: false
@@ -117,22 +118,18 @@ class Geolocation extends React.Component {
   }
   getStyles() {
     const muiTheme = this.state.muiTheme;
-    if (muiTheme) {
-      const rawTheme = muiTheme.rawTheme;
-      return {
-        root: Object.assign(this.props.style.root, {
-          background: rawTheme.palette.primary1Color
-        }),
-        icon: {
-          color: rawTheme.palette.textColor
-        },
-        iconactive: {
-          color: rawTheme.palette.accent1Color
-        }
-      };
-    } else {
-      return this.props.style;
-    }
+    const rawTheme = muiTheme.rawTheme;
+    return {
+      root: Object.assign(this.props.style.root, {
+        background: rawTheme.palette.primary1Color
+      }),
+      icon: {
+        color: rawTheme.palette.textColor
+      },
+      iconactive: {
+        color: rawTheme.palette.accent1Color
+      }
+    };
   }
   render() {
     const styles = this.getStyles();
@@ -182,17 +179,10 @@ Geolocation.propTypes = {
 Geolocation.defaultProps = {
   style: {
     root: {
-      background: 'rgba(0,60,136,.7)',
       borderRadius: '2px',
       width: '28px',
       height: '28px',
       padding: '2px'
-    },
-    icon: {
-      color: 'white'
-    },
-    iconactive: {
-      color: 'red'
     }
   }
 };

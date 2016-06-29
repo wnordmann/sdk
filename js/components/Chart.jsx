@@ -14,6 +14,7 @@ import React from 'react';
 import FeatureStore from '../stores/FeatureStore.js';
 import c3 from 'c3-windows';
 import './c3.min.css';
+import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import IconMenu from 'material-ui/lib/menus/icon-menu';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import RaisedButton from 'material-ui/lib/raised-button';
@@ -77,7 +78,7 @@ class Chart extends React.Component {
       chart: this.props.charts[0],
       value: this.props.charts[0].title,
       selected: null,
-      muiTheme: context.muiTheme
+      muiTheme: context.muiTheme || ThemeManager.getMuiTheme()
     };
   }
   componentDidMount() {
@@ -206,14 +207,12 @@ class Chart extends React.Component {
   }
   getStyles() {
     const muiTheme = this.state.muiTheme;
-    if (muiTheme) {
-      const rawTheme = muiTheme.rawTheme;
-      return {
-        root: {
-          background: rawTheme.palette.canvasColor
-        }
-      };
-    }
+    const rawTheme = muiTheme.rawTheme;
+    return {
+      root: {
+        background: rawTheme.palette.canvasColor
+      }
+    };
   }
   render() {
     const styles = this.getStyles();
@@ -246,7 +245,7 @@ class Chart extends React.Component {
         return (<MenuItem key={idx} value={title} primaryText={title} />);
       });
       return (
-        <div style={styles ? styles.root : undefined} className={classNames('sdk-component chart', this.props.className)}>
+        <div style={styles.root} className={classNames('sdk-component chart', this.props.className)}>
           <SelectField fullWidth={true} value={this.state.value} onChange={this._selectChart.bind(this)}>
             {options}
           </SelectField>

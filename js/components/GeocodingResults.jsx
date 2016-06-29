@@ -12,6 +12,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import ol from 'openlayers';
 import classNames from 'classnames';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
@@ -62,7 +63,7 @@ class GeocodingResults extends React.Component {
     });
     this.state = {
       searchResults: null,
-      muiTheme: context.muiTheme
+      muiTheme: context.muiTheme || ThemeManager.getMuiTheme()
     };
   }
   componentDidMount() {
@@ -109,15 +110,13 @@ class GeocodingResults extends React.Component {
   }
   getStyles() {
     const muiTheme = this.state.muiTheme;
-    if (muiTheme) {
-      const rawTheme = muiTheme.rawTheme;
-      return {
-        root: {
-          background: rawTheme.palette.canvasColor,
-          color: rawTheme.palette.textColor
-        }
-      };
-    }
+    const rawTheme = muiTheme.rawTheme;
+    return {
+      root: {
+        background: rawTheme.palette.canvasColor,
+        color: rawTheme.palette.textColor
+      }
+    };
   }
   render() {
     const styles = this.getStyles();
@@ -140,7 +139,7 @@ class GeocodingResults extends React.Component {
     }
     return (
       <div className={classNames('sdk-component geocoding-results', this.props.className)}>
-        <div style={styles ? styles.root : undefined} className='geocoding-results-header'>{subheader}</div>
+        <div style={styles.root} className='geocoding-results-header'>{subheader}</div>
         <List className='geocoding-results-list'>
          {resultNodes}
         </List>

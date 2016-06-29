@@ -147,14 +147,10 @@ Style for the button.
 type: `object`
 defaultValue: `{
   root: {
-    background: 'rgba(0,60,136,.7)',
     borderRadius: '2px',
     width: '28px',
     height: '28px',
     padding: '2px'
-  },
-  icon: {
-    color: 'white'
   }
 }`
 

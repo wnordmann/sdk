@@ -14,6 +14,7 @@ import React from 'react';
 import ol from 'openlayers';
 import Snackbar from 'material-ui/lib/snackbar';
 import FeatureStore from '../stores/FeatureStore.js';
+import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import classNames from 'classnames';
 import LayerSelector from './LayerSelector.jsx';
 import SelectActions from '../actions/SelectActions.js';
@@ -96,7 +97,7 @@ class QueryBuilder extends React.Component {
   constructor(props, context) {
     super(props);
     this.state = {
-      muiTheme: context.muiTheme,
+      muiTheme: context.muiTheme || ThemeManager.getMuiTheme(),
       showCount: false,
       errorText: null
     };
@@ -172,14 +173,12 @@ class QueryBuilder extends React.Component {
   }
   getStyles() {
     const muiTheme = this.state.muiTheme;
-    if (muiTheme) {
-      const rawTheme = muiTheme.rawTheme;
-      return {
-        root: {
-          background: rawTheme.palette.canvasColor
-        }
-      };
-    }
+    const rawTheme = muiTheme.rawTheme;
+    return {
+      root: {
+        background: rawTheme.palette.canvasColor
+      }
+    };
   }
   render() {
     const styles = this.getStyles();
@@ -195,7 +194,7 @@ class QueryBuilder extends React.Component {
       />);
     }
     return (
-      <div style={styles ? styles.root : undefined} className={classNames('sdk-component query-builder', this.props.className)}>
+      <div style={styles.root} className={classNames('sdk-component query-builder', this.props.className)}>
         <LayerSelector {...this.props} onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /><br/>
         <TextField floatingLabelText={formatMessage(messages.filterlabel)} errorText={this.state.errorText} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} /><FilterHelp intl={this.props.intl} style={{bottom: 70}} /><br/>
         <Toolbar>

@@ -13,6 +13,7 @@
 import React from 'react';
 import ol from 'openlayers';
 import classNames from 'classnames';
+import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import LayerStore from '../stores/LayerStore.js';
 import IconButton from 'material-ui/lib/icon-button';
 import LegendIcon from 'material-ui/lib/svg-icons/image/image';
@@ -68,7 +69,7 @@ class QGISLegend extends React.Component {
     super(props);
     LayerStore.bindMap(this.props.map);
     this.state = {
-      muiTheme: context.muiTheme,
+      muiTheme: context.muiTheme || ThemeManager.getMuiTheme(),
       visible: this.props.showExpandedOnStartup
     };
   }
@@ -104,19 +105,15 @@ class QGISLegend extends React.Component {
   }
   getStyles() {
     const muiTheme = this.state.muiTheme;
-    if (muiTheme) {
-      const rawTheme = muiTheme.rawTheme;
-      return {
-        root: Object.assign(this.props.style.root, {
-          background: rawTheme.palette.primary1Color
-        }),
-        icon: {
-          color: rawTheme.palette.textColor
-        }
-      };
-    } else {
-      return this.props.style;
-    }
+    const rawTheme = muiTheme.rawTheme;
+    return {
+      root: Object.assign(this.props.style.root, {
+        background: rawTheme.palette.primary1Color
+      }),
+      icon: {
+        color: rawTheme.palette.textColor
+      }
+    };
   }
   render() {
     const {formatMessage} = this.props.intl;
@@ -181,14 +178,10 @@ QGISLegend.defaultProps = {
   expandOnHover: true,
   style: {
     root: {
-      background: 'rgba(0,60,136,.7)',
       borderRadius: '2px',
       width: '28px',
       height: '28px',
       padding: '2px'
-    },
-    icon: {
-      color: 'white'
     }
   }
 };

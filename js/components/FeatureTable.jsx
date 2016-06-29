@@ -13,6 +13,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
+import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import classNames from 'classnames';
 import debounce from  'debounce';
 import FixedDataTable from 'fixed-data-table';
@@ -124,7 +125,7 @@ class FeatureTable extends React.Component {
       this._setLayer(this.props.layer);
     }
     this.state = {
-      muiTheme: context.muiTheme,
+      muiTheme: context.muiTheme || ThemeManager.getMuiTheme(),
       gridWidth: this.props.width,
       gridHeight: this.props.height,
       features: [],
@@ -355,14 +356,12 @@ class FeatureTable extends React.Component {
   }
   getStyles() {
     const muiTheme = this.state.muiTheme;
-    if (muiTheme) {
-      const rawTheme = muiTheme.rawTheme;
-      return {
-        root: {
-          background: rawTheme.palette.canvasColor
-        }
-      };
-    }
+    const rawTheme = muiTheme.rawTheme;
+    return {
+      root: {
+        background: rawTheme.palette.canvasColor
+      }
+    };
   }
   render() {
     var {sortIndexes, colSortDirs} = this.state;
@@ -411,7 +410,7 @@ class FeatureTable extends React.Component {
     const styles = this.getStyles();
     var filterHelp = this._layer ? <FilterHelp textSearch={true} intl={this.props.intl} /> : undefined;
     return (
-      <div style={styles ? styles.root : undefined} className={classNames('sdk-component feature-table', this.props.className)}>
+      <div style={styles.root} className={classNames('sdk-component feature-table', this.props.className)}>
         <div ref='form'>
           <div className='feature-table-options'>
             <div className='feature-table-selector'>
