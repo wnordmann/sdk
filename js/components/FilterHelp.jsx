@@ -12,6 +12,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import Popover from 'material-ui/lib/popover/popover';
 import HelpOutline from 'material-ui/lib/svg-icons/action/help-outline';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -189,9 +190,12 @@ const messages = defineMessages({
  * Help dialog for filter fields.
  */
 class FilterHelp extends React.Component {
-  constructor(props) {
+  constructor(props, context) {
     super(props);
-    this.state = {help: false};
+    this.state = {
+      help: false,
+      muiTheme: context.muiTheme || ThemeManager.getMuiTheme()
+    };
   }
   componentDidMount() {
     this.helpElement = ReactDOM.findDOMNode(this.refs.help);
@@ -199,10 +203,21 @@ class FilterHelp extends React.Component {
   _onToggleHelp() {
     this.setState({help: !this.state.help});
   }
+  getStyles() {
+    const muiTheme = this.state.muiTheme;
+    const rawTheme = muiTheme.rawTheme;
+    return {
+      root: Object.assign(this.props.style.root, {
+        color: rawTheme.palette.textColor
+      }),
+      mono: Object.assign(this.props.style.mono, {
+        color: rawTheme.palette.textColor
+      })
+    };
+  }
   render() {
     const {formatMessage} = this.props.intl;
-    const monoStyle = this.props.monoStyle;
-    const popStyle = this.props.popStyle;
+    const styles = this.getStyles();
     var introText = formatMessage(messages.introtextprefix) + ' ';
     if (this.props.textSearch) {
       introText += formatMessage(messages.introtextstringsearch) + ' ';
@@ -211,7 +226,7 @@ class FilterHelp extends React.Component {
     return (
       <span className='filter-help' style={this.props.style}>
         <HelpOutline ref='help' onClick={this._onToggleHelp.bind(this)}/>
-        <Popover open={this.state.help} onRequestClose={this._onToggleHelp.bind(this)} style={popStyle} anchorEl={this.helpElement} anchorOrigin={{'horizontal':'left'}}>
+        <Popover open={this.state.help} onRequestClose={this._onToggleHelp.bind(this)} style={styles.root} anchorEl={this.helpElement} anchorOrigin={{'horizontal':'left'}}>
           <p>
             {introText}
           </p>
@@ -219,8 +234,8 @@ class FilterHelp extends React.Component {
             {formatMessage(messages.exampletext)}
           </p>
           <ul>
-            <li><div style={monoStyle}>{formatMessage(messages.example1filter)}</div><br/>{formatMessage(messages.example1description)}</li>
-            <li><div style={monoStyle}>{formatMessage(messages.example2filter)}</div><br/>{formatMessage(messages.example2description)}</li>
+            <li><div style={styles.mono}>{formatMessage(messages.example1filter)}</div><br/>{formatMessage(messages.example1description)}</li>
+            <li><div style={styles.mono}>{formatMessage(messages.example2filter)}</div><br/>{formatMessage(messages.example2description)}</li>
           </ul>
           <p>
             {formatMessage(messages.generalsection)}
@@ -229,17 +244,17 @@ class FilterHelp extends React.Component {
             {formatMessage(messages.operatortext)}
           </p>
           <ul>
-            <li><div style={monoStyle}>{formatMessage(messages.operator1)}</div>{formatMessage(messages.operator1description)}</li>
-            <li><div style={monoStyle}>{formatMessage(messages.operator2)}</div>{formatMessage(messages.operator2description)}</li>
-            <li><div style={monoStyle}>{formatMessage(messages.operator3)}</div>{formatMessage(messages.operator3description)}</li>
-            <li><div style={monoStyle}>{formatMessage(messages.operator4)}</div>{formatMessage(messages.operator4description)}</li>
-            <li><div style={monoStyle}>{formatMessage(messages.operator5)}</div>{formatMessage(messages.operator5description)}</li>
-            <li><div style={monoStyle}>{formatMessage(messages.operator6)}</div>{formatMessage(messages.operator6description)}</li>
-            <li><div style={monoStyle}>{formatMessage(messages.operator7)}</div>{formatMessage(messages.operator7description)}</li>
-            <li><div style={monoStyle}>{formatMessage(messages.operator8)}</div>{formatMessage(messages.operator8description)}</li>
-            <li><div style={monoStyle}>{formatMessage(messages.operator9)}</div>{formatMessage(messages.operator9description)}</li>
-            <li><div style={monoStyle}>{formatMessage(messages.operator10)}</div>{formatMessage(messages.operator10description)}</li>
-            <li><div style={monoStyle}>{formatMessage(messages.operator11)}</div>{formatMessage(messages.operator11description)}</li>
+            <li><div style={styles.mono}>{formatMessage(messages.operator1)}</div>{formatMessage(messages.operator1description)}</li>
+            <li><div style={styles.mono}>{formatMessage(messages.operator2)}</div>{formatMessage(messages.operator2description)}</li>
+            <li><div style={styles.mono}>{formatMessage(messages.operator3)}</div>{formatMessage(messages.operator3description)}</li>
+            <li><div style={styles.mono}>{formatMessage(messages.operator4)}</div>{formatMessage(messages.operator4description)}</li>
+            <li><div style={styles.mono}>{formatMessage(messages.operator5)}</div>{formatMessage(messages.operator5description)}</li>
+            <li><div style={styles.mono}>{formatMessage(messages.operator6)}</div>{formatMessage(messages.operator6description)}</li>
+            <li><div style={styles.mono}>{formatMessage(messages.operator7)}</div>{formatMessage(messages.operator7description)}</li>
+            <li><div style={styles.mono}>{formatMessage(messages.operator8)}</div>{formatMessage(messages.operator8description)}</li>
+            <li><div style={styles.mono}>{formatMessage(messages.operator9)}</div>{formatMessage(messages.operator9description)}</li>
+            <li><div style={styles.mono}>{formatMessage(messages.operator10)}</div>{formatMessage(messages.operator10description)}</li>
+            <li><div style={styles.mono}>{formatMessage(messages.operator11)}</div>{formatMessage(messages.operator11description)}</li>
           </ul>
           <p>
             {formatMessage(messages.parantheses)}
@@ -256,15 +271,7 @@ FilterHelp.propTypes = {
    */
   textSearch: React.PropTypes.bool,
   /**
-   * Style config for all divs that are part of a list item.
-   */
-  monoStyle: React.PropTypes.object,
-  /**
-   * Style config for the PopOver.
-   */
-  popStyle: React.PropTypes.object,
-  /**
-   * Style for the root span.
+   * Style config.
    */
   style: React.PropTypes.object,
   /**
@@ -275,17 +282,22 @@ FilterHelp.propTypes = {
 
 FilterHelp.defaultProps = {
   textSearch: false,
-  monoStyle: {
-    fontWeight: 'bold',
-    color: '#424242',
-    display: 'inline-block',
-    minWidth: '80px'
-  },
-  popStyle: {
-    padding: '12px',
-    margin: '36px',
-    maxWidth: '600px'
+  style: {
+    root: {
+      padding: '12px',
+      margin: '36px',
+      maxWidth: '600px'
+    },
+    mono: {
+      fontWeight: 'bold',
+      display: 'inline-block',
+      minWidth: '80px'
+    }
   }
+};
+
+FilterHelp.contextTypes = {
+  muiTheme: React.PropTypes.object
 };
 
 export default injectIntl(FilterHelp);

@@ -13,36 +13,23 @@ i18n message strings. Provided through the application through context.
 type: `custom`
 
 
-### `monoStyle`
-
-Style config for all divs that are part of a list item.
-
-type: `object`
-defaultValue: `{
-  fontWeight: 'bold',
-  color: '#424242',
-  display: 'inline-block',
-  minWidth: '80px'
-}`
-
-
-### `popStyle`
-
-Style config for the PopOver.
-
-type: `object`
-defaultValue: `{
-  padding: '12px',
-  margin: '36px',
-  maxWidth: '600px'
-}`
-
-
 ### `style`
 
-Style for the root span.
+Style config.
 
 type: `object`
+defaultValue: `{
+  root: {
+    padding: '12px',
+    margin: '36px',
+    maxWidth: '600px'
+  },
+  mono: {
+    fontWeight: 'bold',
+    display: 'inline-block',
+    minWidth: '80px'
+  }
+}`
 
 
 ### `textSearch`
