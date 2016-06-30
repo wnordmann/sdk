@@ -12,6 +12,7 @@
 
 import React from 'react';
 import ol from 'openlayers';
+import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import IconButton from 'material-ui/lib/icon-button';
 import classNames from 'classnames';
 import NorthIcon from 'material-ui/lib/svg-icons/maps/navigation';
@@ -37,10 +38,11 @@ const messages = defineMessages({
  */
 @pureRender
 class Rotate extends React.Component {
-  constructor(props) {
+  constructor(props, context) {
     super(props);
     this.state = {
-      rotation: 0
+      rotation: 0,
+      muiTheme: context.muiTheme || ThemeManager.getMuiTheme()
     };
   }
   componentDidMount() {
@@ -74,7 +76,20 @@ class Rotate extends React.Component {
       view.setRotation(0);
     }
   }
+  getStyles() {
+    const muiTheme = this.state.muiTheme;
+    const rawTheme = muiTheme.rawTheme;
+    return {
+      root: Object.assign(this.props.style, {
+        background: rawTheme.palette.primary1Color
+      }),
+      icon: {
+        color: rawTheme.palette.textColor
+      }
+    };
+  }
   render() {
+    const styles = this.getStyles();
     if (this.state.rotation === 0 && this.props.autoHide) {
       return (<article/>);
     } else {
@@ -83,7 +98,7 @@ class Rotate extends React.Component {
         transform: 'rotate(' + this.state.rotation + 'rad)'
       };
       return (
-        <IconButton className={classNames('sdk-component rotate', this.props.className)} tooltipPosition='top-left' iconStyle={iconStyle} style={this.props.style} tooltip={formatMessage(messages.rotatetitle)} onTouchTap={this._resetNorth.bind(this)}><NorthIcon color="white"/></IconButton>
+        <IconButton className={classNames('sdk-component rotate', this.props.className)} tooltipPosition='top-left' iconStyle={iconStyle} style={styles.root} tooltip={formatMessage(messages.rotatetitle)} onTouchTap={this._resetNorth.bind(this)}><NorthIcon color={styles.icon.color}/></IconButton>
       );
     }
   }
@@ -126,6 +141,10 @@ Rotate.defaultProps = {
     height: '28px',
     padding: '2px'
   }
+};
+
+Rotate.contextTypes = {
+  muiTheme: React.PropTypes.object
 };
 
 export default injectIntl(Rotate);

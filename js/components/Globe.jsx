@@ -15,6 +15,7 @@ import React from 'react';
 import ol from 'openlayers';
 global.ol = ol;
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import ToolActions from '../actions/ToolActions.js';
 import classNames from 'classnames';
 import IconButton from 'material-ui/lib/icon-button';
@@ -53,10 +54,11 @@ const messages = defineMessages({
  */
 @pureRender
 class Globe extends React.Component {
-  constructor(props) {
+  constructor(props, context) {
     super(props);
     this.state = {
-      globe: false
+      globe: false,
+      muiTheme: context.muiTheme || ThemeManager.getMuiTheme()
     };
   }
   init() {
@@ -105,17 +107,30 @@ class Globe extends React.Component {
       scaleLine[0].style.visibility = 'inherit';
     }
   }
+  getStyles() {
+    const muiTheme = this.state.muiTheme;
+    const rawTheme = muiTheme.rawTheme;
+    return {
+      root: Object.assign(this.props.style, {
+        background: rawTheme.palette.primary1Color
+      }),
+      icon: {
+        color: rawTheme.palette.textColor
+      }
+    };
+  }
   render() {
     const {formatMessage} = this.props.intl;
+    const styles = this.getStyles();
     var icon, tooltip;
-    icon = <GlobeIcon color='white' />;
+    icon = <GlobeIcon color={styles.icon.color} />;
     if (this.state.globe) {
       tooltip = formatMessage(messages.maptext);
     } else {
       tooltip = formatMessage(messages.globetext);
     }
     return (
-      <IconButton className={classNames('sdk-component globe', this.props.className)} tooltipPosition='top-right' style={this.props.style} tooltip={tooltip} onTouchTap={this._toggle.bind(this)}>{icon}</IconButton>
+      <IconButton className={classNames('sdk-component globe', this.props.className)} tooltipPosition='top-right' style={styles.root} tooltip={tooltip} onTouchTap={this._toggle.bind(this)}>{icon}</IconButton>
     );
   }
 }
@@ -152,6 +167,10 @@ Globe.defaultProps = {
     height: '28px',
     padding: '2px'
   }
+};
+
+Globe.contextTypes = {
+  muiTheme: React.PropTypes.object
 };
 
 export default injectIntl(Globe);
