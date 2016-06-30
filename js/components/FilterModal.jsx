@@ -187,7 +187,7 @@ class FilterModal extends React.Component {
     return (
       <Dialog className={classNames('sdk-component filter-modal', this.props.className)} actions={actions} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} modal={true} open={this.state.open} onRequestClose={this.close.bind(this)}>
         <TextField errorText={errorText} style={{width: 512}} ref='filterTextBox' />
-        <FilterHelp intl={this.props.intl} style={{bottom: 'auto'}} />
+        <FilterHelp intl={this.props.intl} />
         <RaisedButton style={{float: 'right'}} label={formatMessage(messages.addfiltertext)} onTouchTap={this._addFilter.bind(this)} />
         <List>
           {filters}
