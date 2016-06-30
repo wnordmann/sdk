@@ -15,6 +15,7 @@ import ol from 'openlayers';
 import Snackbar from 'material-ui/lib/snackbar';
 import RaisedButton from './Button.jsx';
 import UploadIcon from 'material-ui/lib/svg-icons/file/file-upload';
+import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import Dialog from 'material-ui/lib/dialog';
 import Dropzone from 'react-dropzone';
 import GridList from 'material-ui/lib/grid-list/grid-list';
@@ -106,7 +107,7 @@ const messages = defineMessages({
  */
 @pureRender
 class AddLayer extends React.Component {
-  constructor(props) {
+  constructor(props, context) {
     super(props);
     this._formats = {
       'geojson': new ol.format.GeoJSON(),
@@ -122,7 +123,8 @@ class AddLayer extends React.Component {
       error: false,
       errorOpen: false,
       fileName: null,
-      showProgress: false
+      showProgress: false,
+      muiTheme: context.muiTheme || ThemeManager.getMuiTheme()
     };
   }
   _showDialog() {
@@ -224,9 +226,19 @@ class AddLayer extends React.Component {
       errorOpen: false
     });
   }
+  getStyles() {
+    const muiTheme = this.state.muiTheme;
+    const rawTheme = muiTheme.rawTheme;
+    return {
+      dialog: {
+        color: rawTheme.palette.textColor
+      }
+    };
+  }
   render() {
     const {formatMessage} = this.props.intl;
     const buttonStyle = this.props.buttonStyle;
+    const styles = this.getStyles();
     var error;
     if (this.state.error === true) {
       error = (<Snackbar
@@ -268,7 +280,7 @@ class AddLayer extends React.Component {
     ];
     return (
       <RaisedButton {...this.props} className={classNames('sdk-component add-layer', this.props.className)} icon={<UploadIcon />} tooltip={formatMessage(messages.menutitle)} label={formatMessage(messages.menutext)} onTouchTap={this._showDialog.bind(this)}>
-        <Dialog autoScrollBodyContent={true} actions={actions} open={this.state.open} onRequestClose={this._closeDialog.bind(this)} modal={true} title={formatMessage(messages.modaltitle)}>
+        <Dialog style={styles.dialog} autoScrollBodyContent={true} actions={actions} open={this.state.open} onRequestClose={this._closeDialog.bind(this)} modal={true} title={formatMessage(messages.modaltitle)}>
           {error}
           {body}
         </Dialog>
@@ -313,6 +325,10 @@ AddLayer.defaultProps = {
   },
   strokeWidth: 2,
   pointRadius: 7
+};
+
+AddLayer.contextTypes = {
+  muiTheme: React.PropTypes.object
 };
 
 export default injectIntl(AddLayer);
