@@ -56,3 +56,13 @@ The stroke width in pixels used in the style for the created features.
 type: `number`
 defaultValue: `2`
 
+
+### `style`
+
+Style config for root div.
+
+type: `object`
+defaultValue: `{
+  padding: 10
+}`
+

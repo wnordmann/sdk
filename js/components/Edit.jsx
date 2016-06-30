@@ -14,6 +14,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Dialog from 'material-ui/lib/dialog';
+import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import TextField from 'material-ui/lib/text-field';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LayerConstants from '../constants/LayerConstants.js';
@@ -159,11 +160,12 @@ const messages = defineMessages({
  */
 @pureRender
 class Edit extends MapTool {
-  constructor(props) {
+  constructor(props, context) {
     super(props);
     this._interactions = {};
     this.state = {
       layers: [],
+      muiTheme: context.muiTheme || ThemeManager.getMuiTheme(),
       enable: true,
       attributes: null,
       attributeOpen: false,
@@ -320,9 +322,19 @@ class Edit extends MapTool {
       attributeOpen: false
     });
   }
+  getStyles() {
+    const muiTheme = this.state.muiTheme;
+    const rawTheme = muiTheme.rawTheme;
+    return {
+      root: Object.assign(this.props.style, {
+        background: rawTheme.palette.canvasColor
+      })
+    };
+  }
   render() {
     const buttonStyle = this.props.buttonStyle;
     const {formatMessage} = this.props.intl;
+    const styles = this.getStyles();
     var options = [], i, ii;
     for (i = 0, ii = this.state.layers.length; i < ii; ++i) {
       var lyr = this.state.layers[i], title = lyr.get('title'), id = lyr.get('id');
@@ -351,7 +363,7 @@ class Edit extends MapTool {
       <RaisedButton tooltip={formatMessage(messages.closebuttontitle)} label={formatMessage(messages.closebuttontext)} onTouchTap={this.close.bind(this)} />
     ];
     return (
-      <div className={classNames('sdk-component edit', this.props.className)}>
+      <div style={styles.root} className={classNames('sdk-component edit', this.props.className)}>
         <SelectField className='edit-layer-selector' disabled={this.state.layers.length === 0} onChange={this._onLayerChange.bind(this)} floatingLabelText={formatMessage(messages.layerlabel)} value={this._layer} ref='layer'>
           {options}
         </SelectField>
@@ -398,6 +410,10 @@ Edit.propTypes = {
    */
   buttonStyle: React.PropTypes.object,
   /**
+   * Style config for root div.
+   */
+  style: React.PropTypes.object,
+  /**
    * Css class name to apply on the root element of this component.
    */
   className: React.PropTypes.string,
@@ -411,8 +427,15 @@ Edit.defaultProps = {
   buttonStyle: {
     margin: '10px 12px'
   },
+  style: {
+    padding: 10
+  },
   strokeWidth: 2,
   pointRadius: 7
+};
+
+Edit.contextTypes = {
+  muiTheme: React.PropTypes.object
 };
 
 export default injectIntl(Edit, {withRef: true});
