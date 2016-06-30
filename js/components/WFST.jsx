@@ -14,6 +14,7 @@ import React from 'react';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import classNames from 'classnames';
+import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import LayerConstants from '../constants/LayerConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LayerSelector from './LayerSelector.jsx';
@@ -94,7 +95,7 @@ const messages = defineMessages({
  */
 @pureRender
 class WFST extends MapTool {
-  constructor(props) {
+  constructor(props, context) {
     super(props);
     var me = this;
     AppDispatcher.register((payload) => {
@@ -108,6 +109,7 @@ class WFST extends MapTool {
       }
     });
     this.state = {
+      muiTheme: context.muiTheme || ThemeManager.getMuiTheme(),
       modifySecondary: false,
       drawSecondary: false,
       disabled: false,
@@ -332,10 +334,20 @@ class WFST extends MapTool {
     }
     this.setState({feature: null});
   }
+  getStyles() {
+    const muiTheme = this.state.muiTheme;
+    const rawTheme = muiTheme.rawTheme;
+    return {
+      root: {
+        background: rawTheme.palette.canvasColor
+      }
+    };
+  }
   render() {
     if (!this.state.visible) {
       return (<article />);
     } else {
+      const styles = this.getStyles();
       const {formatMessage} = this.props.intl;
       var error;
       if (this.state.error === true) {
@@ -361,7 +373,7 @@ class WFST extends MapTool {
       }
       const buttonStyle = this.props.buttonStyle;
       return (
-        <div className={classNames('sdk-component wfst', this.props.className)}>
+        <div style={styles.root} className={classNames('sdk-component wfst', this.props.className)}>
           {layerSelector}
           <Toolbar>
             <ToolbarGroup>
@@ -422,6 +434,10 @@ WFST.defaultProps = {
   layerSelector: true,
   visible: true,
   pointBuffer: 0.5
+};
+
+WFST.contextTypes = {
+  muiTheme: React.PropTypes.object
 };
 
 export default injectIntl(WFST);

@@ -14,6 +14,7 @@ import React from 'react';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Snackbar from 'material-ui/lib/snackbar';
+import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import classNames from 'classnames';
 import RaisedButton from './Button.jsx';
 import DeleteIcon from 'material-ui/lib/svg-icons/action/delete';
@@ -60,9 +61,10 @@ const messages = defineMessages({
 });
 
 class EditForm extends React.Component {
-  constructor(props) {
+  constructor(props, context) {
     super(props);
     this.state = {
+      muiTheme: context.muiTheme || ThemeManager.getMuiTheme(),
       error: false,
       open: false,
       dirty: {},
@@ -142,7 +144,17 @@ class EditForm extends React.Component {
       me._setError(msg);
     });
   }
+  getStyles() {
+    const muiTheme = this.state.muiTheme;
+    const rawTheme = muiTheme.rawTheme;
+    return {
+      root: {
+        color: rawTheme.palette.textColor
+      }
+    };
+  }
   render() {
+    const styles = this.getStyles();
     const {formatMessage} = this.props.intl;
     var error;
     if (this.state.error === true) {
@@ -166,7 +178,7 @@ class EditForm extends React.Component {
     }
     return (
       <div className={classNames('sdk-component edit-form', this.props.className)}>
-        <span className='edit-form-fid'>{fid}</span><br/>
+        <span style={styles.root} className='edit-form-fid'>{fid}</span><br/>
         {inputs}<br/>
         {error}
         <div className='edit-form-submit'>
@@ -205,6 +217,10 @@ EditForm.propTypes = {
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
+};
+
+EditForm.contextTypes = {
+  muiTheme: React.PropTypes.object
 };
 
 export default injectIntl(EditForm, {withRef: true});
