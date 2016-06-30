@@ -207,10 +207,10 @@ class FilterHelp extends React.Component {
     const muiTheme = this.state.muiTheme;
     const rawTheme = muiTheme.rawTheme;
     return {
-      root: Object.assign(this.props.style.root, {
+      root: Object.assign(this.props.style, {
         color: rawTheme.palette.textColor
       }),
-      mono: Object.assign(this.props.style.mono, {
+      mono: Object.assign(this.props.monoStyle, {
         color: rawTheme.palette.textColor
       })
     };
@@ -275,6 +275,10 @@ FilterHelp.propTypes = {
    */
   style: React.PropTypes.object,
   /**
+   * Mono style config.
+   */
+  monoStyle: React.PropTypes.object,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
@@ -283,16 +287,14 @@ FilterHelp.propTypes = {
 FilterHelp.defaultProps = {
   textSearch: false,
   style: {
-    root: {
-      padding: '12px',
-      margin: '36px',
-      maxWidth: '600px'
-    },
-    mono: {
-      fontWeight: 'bold',
-      display: 'inline-block',
-      minWidth: '80px'
-    }
+    padding: '12px',
+    margin: '36px',
+    maxWidth: '600px'
+  },
+  monoStyle: {
+    fontWeight: 'bold',
+    display: 'inline-block',
+    minWidth: '80px'
   }
 };
 

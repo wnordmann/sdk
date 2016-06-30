@@ -146,12 +146,10 @@ Style for the button.
 
 type: `object`
 defaultValue: `{
-  root: {
-    borderRadius: '2px',
-    width: '28px',
-    height: '28px',
-    padding: '2px'
-  }
+  borderRadius: '2px',
+  width: '28px',
+  height: '28px',
+  padding: '2px'
 }`
 
 

@@ -72,7 +72,7 @@ class HomeButton extends React.Component {
     const muiTheme = this.state.muiTheme;
     const rawTheme = muiTheme.rawTheme;
     return {
-      root: Object.assign(this.props.style.root, {
+      root: Object.assign(this.props.style, {
         background: rawTheme.palette.primary1Color
       }),
       icon: {
@@ -114,12 +114,10 @@ HomeButton.propTypes = {
 
 HomeButton.defaultProps = {
   style: {
-    root: {
-      borderRadius: '2px',
-      width: '28px',
-      height: '28px',
-      padding: '2px'
-    }
+    borderRadius: '2px',
+    width: '28px',
+    height: '28px',
+    padding: '2px'
   }
 };
 

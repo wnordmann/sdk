@@ -76,7 +76,7 @@ class Zoom extends React.Component {
     const muiTheme = this.state.muiTheme;
     const rawTheme = muiTheme.rawTheme;
     return {
-      root: Object.assign(this.props.style.root, {
+      root: Object.assign(this.props.style, {
         background: rawTheme.palette.primary1Color
       }),
       icon: {
@@ -135,12 +135,10 @@ Zoom.defaultProps = {
   delta: 1,
   duration: 250,
   style: {
-    root: {
-      borderRadius: '2px',
-      width: '28px',
-      height: '28px',
-      padding: '2px'
-    }
+    borderRadius: '2px',
+    width: '28px',
+    height: '28px',
+    padding: '2px'
   }
 };
 
