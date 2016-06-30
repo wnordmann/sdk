@@ -12,6 +12,7 @@
 
 import React from 'react';
 import ol from 'openlayers';
+import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import LayerStore from '../stores/LayerStore.js';
 import classNames from 'classnames';
 import pureRender from 'pure-render-decorator';
@@ -40,10 +41,11 @@ const messages = defineMessages({
  */
 @pureRender
 class Legend extends React.Component {
-  constructor(props) {
+  constructor(props, context) {
     super(props);
     this.state = {
-      flatLayers: []
+      flatLayers: [],
+      muiTheme: context.muiTheme || ThemeManager.getMuiTheme()
     };
     LayerStore.bindMap(this.props.map);
   }
@@ -60,8 +62,19 @@ class Legend extends React.Component {
     var flatLayers = LayerStore.getState().flatLayers.slice();
     this.setState({flatLayers: flatLayers});
   }
+  getStyles() {
+    const muiTheme = this.state.muiTheme;
+    const rawTheme = muiTheme.rawTheme;
+    return {
+      root: {
+        background: rawTheme.palette.canvasColor,
+        color: rawTheme.palette.textColor
+      }
+    };
+  }
   render() {
     const {formatMessage} = this.props.intl;
+    const styles = this.getStyles();
     var legends = [];
     for (var i = 0, ii = this.state.flatLayers.length; i < ii; ++i) {
       var layer = this.state.flatLayers[i];
@@ -73,7 +86,7 @@ class Legend extends React.Component {
         }
       }
     }
-    var subHeader = legends.length === 0 ? (<div className='legend-header'><Label>{formatMessage(messages.emptyheader)}</Label></div>) : undefined;
+    var subHeader = legends.length === 0 ? (<div style={styles.root} className='legend-header'><Label style={styles.root}>{formatMessage(messages.emptyheader)}</Label></div>) : undefined;
     return (
       <div className={classNames('sdk-component legend', this.props.className)}>
         {subHeader}
@@ -100,6 +113,10 @@ Legend.propTypes = {
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
+};
+
+Legend.contextTypes = {
+  muiTheme: React.PropTypes.object
 };
 
 export default injectIntl(Legend);
