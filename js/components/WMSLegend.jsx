@@ -13,9 +13,11 @@
 import React from 'react';
 import ol from 'openlayers';
 import classNames from 'classnames';
+import {rgbToHex} from '../util.js';
+import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import URL from 'url-parse';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
-import LayerConstants from '../constants/LayerConstants.js'
+import LayerConstants from '../constants/LayerConstants.js';
 import pureRender from 'pure-render-decorator';
 
 /**
@@ -23,10 +25,11 @@ import pureRender from 'pure-render-decorator';
  */
 @pureRender
 class WMSLegend extends React.Component {
-  constructor(props) {
+  constructor(props, context) {
     super(props);
     this.state = {
-      salt: Math.random()
+      salt: Math.random(),
+      muiTheme: context.muiTheme || ThemeManager.getMuiTheme()
     };
   }
   componentDidMount() {
@@ -51,7 +54,8 @@ class WMSLegend extends React.Component {
     var params = source.getParams();
     var wmsUrl = source.getUrls()[0];
     var url = new URL(wmsUrl);
-    var options = '';
+    var textColor = this.state.muiTheme.rawTheme.palette.textColor;
+    var options = 'fontColor:' + rgbToHex(textColor).replace('#', '0x') + ';';
     for (var key in this.props.options) {
       options += key + ':' + this.props.options[key] + ';';
     }
@@ -110,6 +114,10 @@ WMSLegend.defaultProps = {
     fontName: 'Arial'
   },
   format: 'image/png'
+};
+
+WMSLegend.contextTypes = {
+  muiTheme: React.PropTypes.object
 };
 
 export default WMSLegend;
