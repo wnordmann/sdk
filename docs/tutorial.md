@@ -3,9 +3,9 @@
 ## 1. Using the generator
 In the getting started section we have learned how to create a skeleton application with the ```web-sdk``` command.
 
-The skeleton application contains two base map layers, MapQuest streets and aerial, and a single widget, the ```LayerList``` widget.
+The skeleton application contains two base map layers, OSM streets and ESRI world imagery, and a single widget, the ```LayerList``` widget.
 
-The main file of the application is ```app.jsx```. Open up this file in your favorite text editor. Look for the definition of ```ol.Map```. The map gets defined with a layer group, that combines the MapQuest streets and aerial layers. The view is defined with an initial  center and zoom level. If you are not familiar with OpenLayers 3, the recommendation is to use the workshop at http://openlayers.org/workshop/ to get up to speed with OpenLayers 3.
+The main file of the application is ```app.jsx```. Open up this file in your favorite text editor. Look for the definition of ```ol.Map```. The map gets defined with a layer group, that combines the OSM streets and ESRI world imagery layers. The view is defined with an initial  center and zoom level. If you are not familiar with OpenLayers 3, the recommendation is to use the workshop at http://openlayers.org/workshop/ to get up to speed with OpenLayers 3.
 
 ## 2. Adding a vector layer from a GeoJSON file
 Create a subdirectory called ```data``` in the root of the application directory, download USA states data as GeoJSON from: http://data.okfn.org/data/datasets/geo-boundaries-us-110m and save it to the ```data``` subdirectory.
@@ -48,14 +48,21 @@ var map = new ol.Map({
       layers: [
         new ol.layer.Tile({
           type: 'base',
-          title: 'Streets',
-          source: new ol.source.MapQuest({layer: 'osm'})
+          title: 'OSM Streets',
+          source: new ol.source.OSM()
         }),
         new ol.layer.Tile({
           type: 'base',
+          title: 'ESRI world imagery',
           visible: false,
-          title: 'Aerial',
-          source: new ol.source.MapQuest({layer: 'sat'})
+          source: new ol.source.XYZ({
+            attributions: [
+              new ol.Attribution({
+                html:['Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community']
+              })
+            ],
+            url: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+          })
         })
       ]
     }),
@@ -144,14 +151,21 @@ var map = new ol.Map({
       layers: [
         new ol.layer.Tile({
           type: 'base',
-          title: 'Streets',
-          source: new ol.source.MapQuest({layer: 'osm'})
+          title: 'OSM Streets',
+          source: new ol.source.OSM()
         }),
         new ol.layer.Tile({
           type: 'base',
+          title: 'ESRI world imagery',
           visible: false,
-          title: 'Aerial',
-          source: new ol.source.MapQuest({layer: 'sat'})
+          source: new ol.source.XYZ({
+            attributions: [
+              new ol.Attribution({
+                html:['Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community']
+              })
+            ],
+            url: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+          })
         })
       ]
     }),
@@ -297,14 +311,21 @@ var map = new ol.Map({
       layers: [
         new ol.layer.Tile({
           type: 'base',
-          title: 'Streets',
-          source: new ol.source.MapQuest({layer: 'osm'})
+          title: 'OSM Streets',
+          source: new ol.source.OSM()
         }),
         new ol.layer.Tile({
           type: 'base',
+          title: 'ESRI world imagery',
           visible: false,
-          title: 'Aerial',
-          source: new ol.source.MapQuest({layer: 'sat'})
+          source: new ol.source.XYZ({
+            attributions: [
+              new ol.Attribution({
+                html:['Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community']
+              })
+            ],
+            url: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+          })
         })
       ]
     }),
