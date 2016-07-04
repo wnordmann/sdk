@@ -23,8 +23,8 @@ describe('MapConfigService', function() {
     style.height = height + 'px';
     layers = [
       new ol.layer.Tile({
-        title: 'MapQuest',
-        source: new ol.source.MapQuest({layer: 'sat'})
+        title: 'OSM',
+        source: new ol.source.OSM()
       }),
       new ol.layer.Vector({
         title: 'Vector',
@@ -112,13 +112,10 @@ describe('MapConfigService', function() {
     assert.equal(config.properties.url, '/geoserver/wms');
   });
 
-  it('returns the correct source config for MapQuest', function() {
-    var source = new ol.source.MapQuest({
-      layer: 'sat'
-    });
+  it('returns the correct source config for OSM', function() {
+    var source = new ol.source.OSM();
     var config = MapConfigService.getSourceConfig(source);
-    assert.equal(config.type, 'MapQuest');
-    assert.equal(config.properties.layer, 'sat');
+    assert.equal(config.type, 'OSM');
   });
 
   it('returns the correct layer config for vector / cluster layer (and vice versa)', function() {
@@ -145,9 +142,7 @@ describe('MapConfigService', function() {
     var layer = new ol.layer.Tile({
       visible: false,
       title: 'My Layer',
-      source: new ol.source.MapQuest({
-        layer: 'sat'
-      })
+      source: new ol.source.OSM()
     });
     var config = {};
     config = MapConfigService.getLayerConfig(config, layer);
@@ -158,22 +153,17 @@ describe('MapConfigService', function() {
     assert.equal(result instanceof ol.layer.Tile, true);
     assert.equal(result.get('title'), 'My Layer');
     assert.equal(result.getVisible(), false);
-    assert.equal(result.getSource() instanceof ol.source.MapQuest, true);
-    assert.equal(result.getSource().getLayer(), 'sat');
+    assert.equal(result.getSource() instanceof ol.source.OSM, true);
   });
 
   it('returns the correct layer config for group layer (and vice versa)', function() {
     var layer = new ol.layer.Group({
       layers: [
         new ol.layer.Tile({
-          source: new ol.source.MapQuest({
-            layer: 'sat'
-          })
+          source: new ol.source.OSM()
         }),
         new ol.layer.Tile({
-          source: new ol.source.MapQuest({
-            layer: 'osm'
-          })
+          source: new ol.source.TileWMS()
         })
       ]
     });
@@ -181,16 +171,14 @@ describe('MapConfigService', function() {
     config = MapConfigService.getLayerConfig(config, layer);
     assert.equal(config.type, 'Group');
     assert.equal(config.children[0].type, 'Tile');
-    assert.equal(config.children[0].source.type, 'MapQuest');
+    assert.equal(config.children[0].source.type, 'OSM');
     assert.equal(config.children[1].type, 'Tile');
     var result = MapConfigService.generateLayerFromConfig(config);
     assert.equal(result instanceof ol.layer.Group, true);
     assert.equal(result.getLayers().item(0) instanceof ol.layer.Tile, true);
-    assert.equal(result.getLayers().item(0).getSource() instanceof ol.source.MapQuest, true);
-    assert.equal(result.getLayers().item(0).getSource().getLayer(), 'sat');
+    assert.equal(result.getLayers().item(0).getSource() instanceof ol.source.OSM, true);
     assert.equal(result.getLayers().item(1) instanceof ol.layer.Tile, true);
-    assert.equal(result.getLayers().item(1).getSource() instanceof ol.source.MapQuest, true);
-    assert.equal(result.getLayers().item(1).getSource().getLayer(), 'osm');
+    assert.equal(result.getLayers().item(1).getSource() instanceof ol.source.TileWMS, true);
   });
 
   it('performs save correctly', function() {
@@ -209,10 +197,7 @@ describe('MapConfigService', function() {
       layers: [{
         type: 'Tile',
         source: {
-          type: 'MapQuest',
-          properties: {
-            layer: 'osm'
-          }
+          type: 'OSM'
         }
       }]
     };
@@ -220,8 +205,7 @@ describe('MapConfigService', function() {
     MapConfigService.load(config, map);
     assert.equal(map.getLayers().getLength(), 1);
     assert.equal(map.getLayers().item(0) instanceof ol.layer.Tile, true);
-    assert.equal(map.getLayers().item(0).getSource() instanceof ol.source.MapQuest, true);
-    assert.equal(map.getLayers().item(0).getSource().getLayer(), 'osm');
+    assert.equal(map.getLayers().item(0).getSource() instanceof ol.source.OSM, true);
     assert.equal(map.getView().getResolution(), 200);
     assert.equal(map.getView().getCenter()[0], 0);
     assert.equal(map.getView().getCenter()[1], 0);

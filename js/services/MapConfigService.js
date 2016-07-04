@@ -84,11 +84,8 @@ class MapConfigService {
         url: source.getUrl(),
         params: source.getParams()
       };
-    } else if (source instanceof ol.source.MapQuest) {
-      config.properties = {
-        layer:  source.getLayer()
-      };
-      config.type = 'MapQuest';
+    } else if (source instanceof ol.source.OSM) {
+      config.type = 'OSM';
     }
     return config;
   }

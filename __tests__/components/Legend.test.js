@@ -25,11 +25,9 @@ describe('Legend', function() {
     style.height = height + 'px';
     layers = [
       new ol.layer.Tile({
-        id: 'mapquest',
-        title: 'MapQuest',
-        source: new ol.source.MapQuest({
-          layer: 'sat'
-        })
+        id: 'osm',
+        title: 'OSM',
+        source: new ol.source.OSM()
       }),
       new ol.layer.Tile({
         id: 'wms',

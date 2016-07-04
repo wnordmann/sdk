@@ -26,7 +26,7 @@ describe('InfoPopup', function() {
     document.body.appendChild(target);
     layers = [
       new ol.layer.Tile({
-        source: new ol.source.MapQuest({layer: 'sat'})
+        source: new ol.source.OSM()
       }),
       new ol.layer.Tile({
         visible: false,

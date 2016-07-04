@@ -24,10 +24,10 @@ describe('LayerListItem', function() {
     style.width = width + 'px';
     style.height = height + 'px';
     layer = new ol.layer.Tile({
-      id: 'mapquest',
+      id: 'osm',
       type: 'base',
-      title: 'Satellite',
-      source: new ol.source.MapQuest({layer: 'sat'})
+      title: 'Streets',
+      source: new ol.source.OSM()
     });
     overlay = new ol.layer.Vector({
       id: 'vector',

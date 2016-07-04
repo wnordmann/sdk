@@ -40,7 +40,7 @@ describe('AddLayer', function() {
       id: 'foo',
       isWFST: true,
       title: 'My Layer',
-      source: new ol.source.MapQuest({layer: 'sat'})
+      source: new ol.source.OSM()
     });
     map = new ol.Map({
       target: target,
