@@ -72,7 +72,14 @@ class EditPopup extends BasePopup {
     var saveButton = ReactDOM.findDOMNode(formInstance.refs.saveButton);
     if (saveButton && saveButton.onclick === null) {
       saveButton.onclick = function() {
-        formInstance._save();
+        formInstance.save();
+        return false;
+      };
+    }
+    var deleteButton = ReactDOM.findDOMNode(formInstance.refs.deleteButton);
+    if (deleteButton && deleteButton.onclick === null) {
+      deleteButton.onclick = function() {
+        formInstance.deleteFeature();
         return false;
       };
     }
@@ -80,7 +87,7 @@ class EditPopup extends BasePopup {
   render() {
     var editForm;
     if (this.state.feature) {
-      editForm = (<EditForm ref='editForm' feature={this.state.feature} layer={this.state.layer} onSuccess={this._onSuccess.bind(this)} />);
+      editForm = (<EditForm ref='editForm' intl={this.props.intl} feature={this.state.feature} layer={this.state.layer} onSuccess={this._onSuccess.bind(this)} />);
     }
     return (
       <div className={classNames('sdk-component edit-popup', this.props.className)}>

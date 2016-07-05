@@ -52,4 +52,16 @@ describe('EditPopup', function() {
     ReactDOM.unmountComponentAtNode(container);
   });
 
+  it('save button should be available', function() {
+    var container = document.createElement('div');
+    var popup = ReactDOM.render((
+      <EditPopup intl={intl} map={map} />
+    ), container);
+    popup.setState({layer: new ol.layer.Vector({wfsInfo: {attributes: ['foo']}}), feature: new ol.Feature({foo: 'bar'})});
+    var formInstance = popup.refs.editForm;
+    var saveButton = ReactDOM.findDOMNode(formInstance.refs.saveButton);
+    assert.equal(saveButton !== null, true);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
 });

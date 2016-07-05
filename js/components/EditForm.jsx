@@ -90,7 +90,7 @@ class EditForm extends React.Component {
       msg: msg
     });
   }
-  _save(evt) {
+  save(evt) {
     const {formatMessage} = this.props.intl;
     if (this.state.dirty) {
       var values = {}, key;
@@ -129,7 +129,7 @@ class EditForm extends React.Component {
     dirty[evt.target.id] = true;
     this.setState({values: values, dirty: dirty});
   }
-  _deleteFeature() {
+  deleteFeature() {
     const {formatMessage} = this.props.intl;
     var me = this;
     var feature = this.state.feature;
@@ -176,6 +176,7 @@ class EditForm extends React.Component {
         inputs.push(<TextField floatingLabelText={key} key={key} id={key} onChange={this._onChangeField.bind(this)} value={this.state.values[key]} />);
       }
     }
+    // saveButton and deleteButton refs are needed for EditPopup code
     return (
       <div className={classNames('sdk-component edit-form', this.props.className)}>
         <span style={styles.root} className='edit-form-fid'>{fid}</span><br/>
@@ -183,8 +184,8 @@ class EditForm extends React.Component {
         {error}
         <div className='edit-form-submit'>
           <span style={{'float':'right'}}>
-            <RaisedButton style={{margin: '0px 12px'}} tooltip={formatMessage(messages.savetitle)} tooltipStyle={{'top':'-50px'}} label={formatMessage(messages.save)} onTouchTap={this._save.bind(this)} icon={<SaveIcon />} />
-            <RaisedButton style={{margin: '0px 12px'}} tooltip={formatMessage(messages.deletefeaturetitle)} tooltipStyle={{'top':'-50px'}} label={formatMessage(messages.deletefeature)} onTouchTap={this._deleteFeature  .bind(this)} icon={<DeleteIcon />} />
+            <RaisedButton style={{margin: '0px 12px'}} ref='saveButton' tooltip={formatMessage(messages.savetitle)} tooltipStyle={{'top':'-50px'}} label={formatMessage(messages.save)} onTouchTap={this.save.bind(this)} icon={<SaveIcon />} />
+            <RaisedButton style={{margin: '0px 12px'}} ref='deleteButton' tooltip={formatMessage(messages.deletefeaturetitle)} tooltipStyle={{'top':'-50px'}} label={formatMessage(messages.deletefeature)} onTouchTap={this.deleteFeature.bind(this)} icon={<DeleteIcon />} />
           </span>
         </div>
       </div>
