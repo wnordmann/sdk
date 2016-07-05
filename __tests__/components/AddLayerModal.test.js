@@ -107,4 +107,18 @@ describe('AddLayerModal', function() {
     }, 500);
   });
 
+  it('returns the correct url if no url input field', function(done) {
+    var container = document.createElement('div');
+    var url = 'http://localhost:8080/geoserver/wms';
+    var modal = ReactDOM.render((
+      <AddLayerModal map={map} allowUserInput={false} url={url} intl={intl} />
+    ), container);
+    var result = modal._getUrl();
+    assert.equal(result, url);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
 });

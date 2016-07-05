@@ -235,7 +235,12 @@ class AddLayerModal extends React.Component {
     }
   }
   _getUrl() {
-    var url = this.refs.url.getValue();
+    var url;
+    if (this.refs.url) {
+      url = this.refs.url.getValue();
+    } else {
+      url = this.props.url;
+    }
     var urlObj = new URL(url);
     return urlObj.toString();
   }
