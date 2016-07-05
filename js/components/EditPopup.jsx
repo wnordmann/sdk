@@ -68,20 +68,23 @@ class EditPopup extends BasePopup {
   }
   setVisible(visible) {
     super.setVisible(visible);
-    var formInstance = this.refs.editForm.getWrappedInstance();
-    var saveButton = ReactDOM.findDOMNode(formInstance.refs.saveButton);
-    if (saveButton && saveButton.onclick === null) {
-      saveButton.onclick = function() {
-        formInstance.save();
-        return false;
-      };
-    }
-    var deleteButton = ReactDOM.findDOMNode(formInstance.refs.deleteButton);
-    if (deleteButton && deleteButton.onclick === null) {
-      deleteButton.onclick = function() {
-        formInstance.deleteFeature();
-        return false;
-      };
+    var editForm = this.refs.editForm;
+    if (editForm) {
+      var formInstance = editForm.getWrappedInstance();
+      var saveButton = ReactDOM.findDOMNode(formInstance.refs.saveButton);
+      if (saveButton && saveButton.onclick === null) {
+        saveButton.onclick = function() {
+          formInstance.save();
+          return false;
+        };
+      }
+      var deleteButton = ReactDOM.findDOMNode(formInstance.refs.deleteButton);
+      if (deleteButton && deleteButton.onclick === null) {
+        deleteButton.onclick = function() {
+          formInstance.deleteFeature();
+          return false;
+        };
+      }
     }
   }
   render() {
