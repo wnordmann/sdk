@@ -96,6 +96,7 @@ const messages = defineMessages({
 class QueryBuilder extends React.Component {
   constructor(props, context) {
     super(props);
+    FeatureStore.bindMap(this.props.map);
     this.state = {
       muiTheme: context.muiTheme || ThemeManager.getMuiTheme(),
       showCount: false,

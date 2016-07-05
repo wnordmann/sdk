@@ -98,6 +98,7 @@ class WFST extends MapTool {
   constructor(props, context) {
     super(props);
     var me = this;
+    FeatureStore.bindMap(this.props.map);
     AppDispatcher.register((payload) => {
       let action = payload.action;
       switch (action.type) {
