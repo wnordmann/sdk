@@ -206,7 +206,7 @@ class InfoPopup extends BasePopup {
       this._contentAsObject = false;
       var me = this;
       map.forEachFeatureAtPixel(pixel, function(feature, layer) {
-        if (feature) {
+        if (feature && layer !== null) {
           var popupDef = layer.get('popupInfo');
           if (popupDef) {
             var featureKeys = feature.getKeys();

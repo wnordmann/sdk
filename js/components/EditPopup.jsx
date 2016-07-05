@@ -46,7 +46,7 @@ class EditPopup extends BasePopup {
       var cont = false;
       map.forEachFeatureAtPixel(pixel, function(feature, layer) {
         if (feature) {
-          if (layer.get('isWFST')) {
+          if (layer !== null && layer.get('isWFST')) {
             cont = true;
             me.setState({
               feature: feature,
