@@ -24,7 +24,7 @@ export default class MapTool extends React.Component {
   constructor(props) {
     super(props);
     var me = this;
-    AppDispatcher.register((payload) => {
+    this._dispatchToken = AppDispatcher.register((payload) => {
       let action = payload.action;
       switch (action.type) {
         case ToolConstants.DISABLE_ALL_TOOLS:
@@ -52,6 +52,9 @@ export default class MapTool extends React.Component {
           break;
       }
     });
+  }
+  componentWillUnmount() {
+    AppDispatcher.unregister(this._dispatchToken);
   }
   disable() {
     // subclasses need to implement this

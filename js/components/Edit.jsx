@@ -174,7 +174,7 @@ class Edit extends MapTool {
     this._strokeColor = '#452135';
     this._fillColor = '#452135';
     var me = this;
-    AppDispatcher.register((payload) => {
+    this._dispatchToken = AppDispatcher.register((payload) => {
       let action = payload.action;
       switch (action.type) {
         case LayerConstants.REMOVE_LAYER:
@@ -184,6 +184,9 @@ class Edit extends MapTool {
           break;
       }
     });
+  }
+  componentWillUnmount() {
+    AppDispatcher.unregister(this._dispatchToken);
   }
   removeLayer(layer) {
     var idx = -1;

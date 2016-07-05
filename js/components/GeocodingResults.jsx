@@ -46,7 +46,7 @@ class GeocodingResults extends React.Component {
   constructor(props, context) {
     super(props);
     var me = this;
-    AppDispatcher.register((payload) => {
+    this._dispatchToken = AppDispatcher.register((payload) => {
       let action = payload.action;
       switch (action.type) {
         case GeocodingConstants.SHOW_SEARCH_RESULTS:
@@ -82,6 +82,9 @@ class GeocodingResults extends React.Component {
       source: new ol.source.Vector({wrapX: false})
     });
     this.props.map.addLayer(this._layer);
+  }
+  componentWillUnmount() {
+    AppDispatcher.unregister(this._dispatchToken);
   }
   _setVisible(visible) {
     ReactDOM.findDOMNode(this).parentNode.style.display = visible ? 'block' : 'none';

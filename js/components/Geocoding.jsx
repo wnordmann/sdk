@@ -42,7 +42,7 @@ class Geocoding extends React.Component {
     this.state = {
       value: null
     };
-    AppDispatcher.register((payload) => {
+    this._dispatchToken = AppDispatcher.register((payload) => {
       let action = payload.action;
       switch (action.type) {
         case GeocodingConstants.ZOOM_TO_RESULT:
@@ -52,6 +52,9 @@ class Geocoding extends React.Component {
           break;
       }
     });
+  }
+  componentWillUnmount() {
+    AppDispatcher.unregister(this._dispatchToken);
   }
   _searchAddress(event) {
     var value = this.refs.query.getValue();

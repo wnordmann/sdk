@@ -44,7 +44,7 @@ class LoadingPanel extends React.Component {
     LayerStore.addChangeListener(this._onChangeCb);
     this._onChange();
     var me = this;
-    AppDispatcher.register((payload) => {
+    this._dispatchToken = AppDispatcher.register((payload) => {
       let action = payload.action;
       switch (action.type) {
         case ToolConstants.START_PLAYBACK:
@@ -59,6 +59,7 @@ class LoadingPanel extends React.Component {
     });
   }
   componentWillUnmount() {
+    AppDispatcher.unregister(this._dispatchToken);
     LayerStore.removeChangeListener(this._onChangeCb);
   }
   _addLoading() {

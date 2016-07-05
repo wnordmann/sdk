@@ -99,9 +99,12 @@ class WFST extends MapTool {
     super(props);
     var me = this;
     FeatureStore.bindMap(this.props.map);
-    AppDispatcher.register((payload) => {
+    this._dispatchToken = AppDispatcher.register((payload) => {
       let action = payload.action;
       switch (action.type) {
+        case LayerConstants.REMOVE_LAYER:
+          me._onLayerSelectChange(null);
+          break;
         case LayerConstants.EDIT_LAYER:
           me._toggleLayer(action.layer);
           break;
@@ -131,6 +134,7 @@ class WFST extends MapTool {
     this._dirty = {};
   }
   componentWillUnmount() {
+    AppDispatcher.unregister(this._dispatchToken);
     if (this._request) {
       this._request.abort();
     }

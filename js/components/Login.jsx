@@ -50,7 +50,7 @@ class Login extends React.Component {
       user: null
     };
     var me = this;
-    AppDispatcher.register((payload) => {
+    this._dispatchToken = AppDispatcher.register((payload) => {
       let action = payload.action;
       switch (action.type) {
         case LoginConstants.LOGIN:
@@ -72,6 +72,7 @@ class Login extends React.Component {
     });
   }
   componentWillUnmount() {
+    AppDispatcher.unregister(this._dispatchToken);
     if (this._request) {
       this._request.abort();
     }
