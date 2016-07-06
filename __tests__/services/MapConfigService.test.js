@@ -118,6 +118,28 @@ describe('MapConfigService', function() {
     assert.equal(config.type, 'OSM');
   });
 
+  it('returns the correct source config for XYZ', function() {
+    var source = new ol.source.XYZ({url: 'http://s.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'});
+    var config = MapConfigService.getSourceConfig(source);
+    assert.equal(config.type, 'XYZ');
+    assert.equal(config.properties.urls.length, 1);
+    assert.equal(config.properties.urls[0], 'http://s.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png');
+  });
+
+  it('uses attribution', function() {
+    var source = new ol.source.XYZ({
+      url: 'http://s.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+      attributions: [
+        new ol.Attribution({
+          html: ['foo']
+        })
+      ]
+    });
+    var config = MapConfigService.getSourceConfig(source);
+    assert(config.properties.attributions.length, 1);
+    assert(config.properties.attributions[0], 'foo');
+  });
+
   it('returns the correct layer config for vector / cluster layer (and vice versa)', function() {
     var layer = new ol.layer.Vector({
       source: new ol.source.Cluster({

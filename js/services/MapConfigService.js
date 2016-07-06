@@ -16,6 +16,15 @@ import LayerIdService from './LayerIdService.js';
 class MapConfigService {
   generateSourceFromConfig(config) {
     var props = config.properties || {};
+    if (props.attributions) {
+      var attributions = [];
+      for (var i = 0, ii = props.attributions.length; i < ii; ++i) {
+        attributions.push(new ol.Attribution({
+          html: props.attributions[i]
+        }));
+      }
+      props.attributions = attributions;
+    }
     props.wrapX = false;
     if (config.type === 'Cluster') {
       props.source = this.generateSourceFromConfig(config.source);
@@ -61,6 +70,14 @@ class MapConfigService {
   }
   getSourceConfig(source) {
     var config = {};
+    var attributions;
+    var attr = source.getAttributions();
+    if (attr !== null) {
+      attributions = [];
+      for (var i = 0, ii = attr.length; i < ii; ++i) {
+        attributions.push(attr[i].getHTML());
+      }
+    }
     if (source instanceof ol.source.TileWMS) {
       config.type = 'TileWMS';
       config.properties = {
@@ -73,6 +90,7 @@ class MapConfigService {
     } else if (source instanceof ol.source.Vector) {
       config.type = 'Vector';
       config.properties = {
+        attributions: attributions,
         format: {
           type: this.getFormatType(source.getFormat())
         },
@@ -82,10 +100,20 @@ class MapConfigService {
       config.type = 'ImageWMS';
       config.properties = {
         url: source.getUrl(),
-        params: source.getParams()
+        params: source.getParams(),
+        attributions: attributions
       };
     } else if (source instanceof ol.source.OSM) {
       config.type = 'OSM';
+      config.properties = {
+        attributions: attributions
+      };
+    } else if (source instanceof ol.source.XYZ) {
+      config.type = 'XYZ';
+      config.properties = {
+        attributions: attributions,
+        urls: source.getUrls()
+      };
     }
     return config;
   }
