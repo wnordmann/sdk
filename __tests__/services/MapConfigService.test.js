@@ -131,7 +131,7 @@ describe('MapConfigService', function() {
       url: 'http://s.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
       attributions: [
         new ol.Attribution({
-          html: ['foo']
+          html: 'foo'
         })
       ]
     });
