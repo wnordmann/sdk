@@ -45,7 +45,6 @@ const messages = defineMessages({
 class Select extends MapTool {
   constructor(props) {
     super(props);
-    FeatureStore.bindMap(this.props.map);
     this._interactions = {
       'RECTANGLE': new ol.interaction.DragBox({
         condition: ol.events.condition.noModifierKeys,
@@ -61,6 +60,9 @@ class Select extends MapTool {
       disabled: false,
       secondary: false
     };
+  }
+  componentDidMount() {
+    FeatureStore.bindMap(this.props.map);
   }
   _handleSelection(feature, selected) {
     if (feature.get('features')) {
