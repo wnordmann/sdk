@@ -185,6 +185,13 @@ class FeatureStore extends EventEmitter {
   }
   addLayer(layer, filter) {
     var id = layer.get('id');
+    if (!this._config[id]) {
+      this._config[id] = {
+        features: [],
+        originalFeatures: [],
+        selected: []
+      };
+    }
     var me = this;
     if (layer instanceof ol.layer.Tile) {
       // TODO show failure to the user?
