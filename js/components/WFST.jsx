@@ -165,6 +165,7 @@ class WFST extends MapTool {
     if (layer !== null) {
       this._setLayer(layer);
     } else {
+      this.deactivate();
       this.setState({feature: null, layer: null});
     }
   }
