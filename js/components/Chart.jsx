@@ -308,10 +308,7 @@ Chart.propTypes = {
 };
 
 Chart.defaultProps = {
-  combo: false,
-  style: {
-    margin: '10px 12px'
-  }
+  combo: false
 };
 
 Chart.contextTypes = {
