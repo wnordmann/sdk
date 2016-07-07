@@ -21,7 +21,6 @@ import RaisedButton from 'material-ui/lib/raised-button';
 import SelectField from 'material-ui/lib/select-field';
 import classNames from 'classnames';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import pureRender from 'pure-render-decorator';
 import './Chart.css';
 
 const AGGREGATION_MIN = 0;
@@ -70,7 +69,6 @@ const messages = defineMessages({
  * <div  id='chart-panel'><Chart ref='chartPanel' combo={true} charts={charts}/></div>
  * ```
  */
-@pureRender
 class Chart extends React.Component {
   constructor(props, context) {
     super(props);
@@ -110,7 +108,7 @@ class Chart extends React.Component {
     }
     switch (chart.displayMode) {
       case DISPLAY_MODE_FEATURE:
-        for (i = 0, ii = selectedFeatures; i < ii; ++i) {
+        for (i = 0, ii = selectedFeatures.length; i < ii; ++i) {
           columns[0].push(selectedFeatures[i].get(categoryField));
           for (j = 0, jj = valueFields.length; j < jj; ++j) {
             columns[j + 1].push(selectedFeatures[i].get(valueFields[j]));
