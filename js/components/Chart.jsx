@@ -200,10 +200,11 @@ class Chart extends React.Component {
       }
     }
   }
-  _onClick() {
+  _onClick(evt, value) {
     if (this.props.container) {
       document.getElementById(this.props.container).style.display = 'block';
     }
+    this._selectChart(undefined, undefined, value);
   }
   getStyles() {
     const muiTheme = this.state.muiTheme;
@@ -258,7 +259,7 @@ class Chart extends React.Component {
         return (<MenuItem key={idx} value={key} primaryText={key} />);
       });
       return (
-        <IconMenu {...this.props} className={classNames('sdk-component chart', this.props.className)} iconButtonElement={<RaisedButton label={formatMessage(messages.dropdowntext)} />} value={this.state.chart.title} onChange={this._onClick.bind(this)}>
+        <IconMenu {...this.props} className={classNames('sdk-component chart', this.props.className)} iconButtonElement={<RaisedButton label={formatMessage(messages.dropdowntext)} />} onChange={this._onClick.bind(this)}>
           {listitems}
         </IconMenu>
       );
