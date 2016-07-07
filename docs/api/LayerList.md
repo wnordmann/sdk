@@ -78,14 +78,6 @@ type: `enum ('GeoJSON'|'KML'|'GPX')`
 defaultValue: `'GeoJSON'`
 
 
-### `expandOnHover`
-
-Should we expand when hovering over the layers button?
-
-type: `bool`
-defaultValue: `true`
-
-
 ### `intl`
 
 i18n message strings. Provided through the application through context.

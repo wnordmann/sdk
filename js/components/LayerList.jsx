@@ -177,12 +177,9 @@ class LayerList extends React.Component {
           </article>
       );
     }
-    var onMouseOut = this.props.expandOnHover ? this._hidePanel.bind(this) : undefined;
-    var onMouseOver = this.props.expandOnHover ? this._showPanel.bind(this) : undefined;
-    var onClick = !this.props.expandOnHover ? this._togglePanel.bind(this) : undefined;
     return (
-      <div ref='parent' onMouseOut={onMouseOut} onMouseOver={onMouseOver} className={classNames(divClass, this.props.className)}>
-        <IconButton style={styles.root} className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={onClick}><LayersIcon color={styles.icon.color} /></IconButton>
+      <div ref='parent' className={classNames(divClass, this.props.className)}>
+        <IconButton style={styles.root} className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={this._togglePanel.bind(this)}><LayersIcon color={styles.icon.color} /></IconButton>
         <div className='layer-tree-panel clearfix'>
           {tipLabel}
           <List className='layer-list-list'>
@@ -250,10 +247,6 @@ LayerList.propTypes = {
    */
   tipLabel: React.PropTypes.string,
   /**
-   * Should we expand when hovering over the layers button?
-   */
-  expandOnHover: React.PropTypes.bool,
-  /**
    * Should we show this component on start of the application?
    */
   showOnStart: React.PropTypes.bool,
@@ -289,7 +282,6 @@ LayerList.defaultProps = {
   showDownload: false,
   downloadFormat: 'GeoJSON',
   showOpacity: false,
-  expandOnHover: true,
   showOnStart: false,
   style: {
     borderRadius: '2px',

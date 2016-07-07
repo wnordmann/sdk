@@ -42,14 +42,6 @@ Css class name to apply on the root element of this component.
 type: `string`
 
 
-### `expandOnHover`
-
-Should we expand when hovering over the legend button?
-
-type: `bool`
-defaultValue: `true`
-
-
 ### `intl`
 
 i18n message strings. Provided through the application through context.

@@ -125,12 +125,9 @@ class QGISLegend extends React.Component {
       'qgis-legend': true
     };
     var items = this._renderItems(this.props.legendData, this.props.legendBasePath);
-    var onMouseOut = this.props.expandOnHover ? this._hidePanel.bind(this) : undefined;
-    var onMouseOver = this.props.expandOnHover ? this._showPanel.bind(this) : undefined;
-    var onClick = !this.props.expandOnHover ? this._togglePanel.bind(this) : undefined;
     return (
-      <div onMouseOut={onMouseOut} onMouseOver={onMouseOver} className={classNames(divClass, this.props.className)}>
-        <IconButton style={styles.root} className='legendbutton' tooltip={formatMessage(messages.buttontitle)} onTouchTap={onClick}><LegendIcon color={styles.icon.color} /></IconButton>
+      <div className={classNames(divClass, this.props.className)}>
+        <IconButton style={styles.root} className='legendbutton' tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._togglePanel.bind(this)}><LegendIcon color={styles.icon.color} /></IconButton>
         <div className='legend-panel' id='legend'>{items}</div>
       </div>
     );
@@ -159,10 +156,6 @@ QGISLegend.propTypes = {
    */
   showExpandedOnStartup: React.PropTypes.bool,
   /**
-   * Should we expand when hovering over the legend button?
-   */
-  expandOnHover: React.PropTypes.bool,
-  /**
    * Css class name to apply on the root element of this component.
    */
   className: React.PropTypes.string,
@@ -175,7 +168,6 @@ QGISLegend.propTypes = {
 QGISLegend.defaultProps = {
   legendBasePath: './legend/',
   showExpandedOnStartup: false,
-  expandOnHover: true,
   style: {
     borderRadius: '2px',
     width: '28px',
