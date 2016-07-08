@@ -1,5 +1,6 @@
 .legend {
   position: absolute;
+  z-index: 1100;
   top: 100px;
   right: 20px;
   text-align: left;
@@ -8,6 +9,7 @@
   border: 1px solid #cccccc;
   background-color: white;
   height: auto;
+  margin-right: 38px;
   min-width: 250px;
   max-height: 500px;
   overflow-y: auto;
