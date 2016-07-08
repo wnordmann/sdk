@@ -191,7 +191,7 @@ class StyleModal extends React.Component {
     this.props.layer.setStyle(function(feature) {
       // loop over the rules and see which one we match
       for (var i = me.state.rules.length - 1; i >= 0; --i) {
-        var rule = me.state.rules[i].title;
+        var rule = me.state.rules[i].name;
         var styleState = me._styleState[rule];
         if (!styleState.filter || styleState.filter(feature.getProperties())) {
           var style = me._createStyle(styleState);
