@@ -25,10 +25,10 @@ class Button extends React.Component {
     }
   }
   render() {
-    var styleConfig = {left: 12, top: 20, boxSizing: 'border-box'};
+    var styleConfig = {left: 12, boxSizing: 'border-box'};
     var style = this.props.tooltipStyle ? Object.assign(styleConfig, this.props.tooltipStyle) : styleConfig;
     return (
-      <span className={classNames('sdk-component sdk-button', this.props.className)} >
+      <span style={{margin: '10px 12px'}} className={classNames('sdk-component sdk-button', this.props.className)} >
         <RaisedButton ref='button' {...this.props} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)} disableTouchRipple={true}/>
         <Tooltip verticalPosition='bottom' style={style} show={this.state.showTooltip} label={this.props.tooltip || ''} />
       </span>

@@ -23,10 +23,3 @@ i18n message strings. Provided through the application through context.
 
 type: `custom`
 
-
-### `style`
-
-defaultValue: `{
-  margin: '10px 12px'
-}`
-

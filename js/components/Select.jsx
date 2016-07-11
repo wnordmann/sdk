@@ -143,10 +143,4 @@ Select.propTypes = {
   intl: intlShape.isRequired
 };
 
-Select.defaultProps = {
-  style: {
-    margin: '10px 12px'
-  }
-};
-
 export default injectIntl(Select);
