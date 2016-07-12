@@ -15,7 +15,8 @@ import React from 'react';
 import ol from 'openlayers';
 import classNames from 'classnames';
 import SelectActions from '../actions/SelectActions.js';
-import MapTool from './MapTool.js';
+import AppDispatcher from '../dispatchers/AppDispatcher.js';
+import ToolUtil from '../toolutil.js';
 import FeatureStore from '../stores/FeatureStore.js';
 import RaisedButton from './Button.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -42,9 +43,10 @@ const messages = defineMessages({
  * ```
  */
 @pureRender
-class Select extends MapTool {
+class Select extends React.Component {
   constructor(props) {
     super(props);
+    this._dispatchToken = ToolUtil.register(this);
     FeatureStore.bindMap(this.props.map);
     this._interactions = {
       'RECTANGLE': new ol.interaction.DragBox({
@@ -61,6 +63,9 @@ class Select extends MapTool {
       disabled: false,
       secondary: false
     };
+  }
+  componentWillUnmount() {
+    AppDispatcher.unregister(this._dispatchToken);
   }
   _handleSelection(feature, selected) {
     if (feature.get('features')) {
@@ -101,12 +106,12 @@ class Select extends MapTool {
     }, this);
   }
   activate(interactions) {
-    super.activate(interactions);
+    ToolUtil.activate(this, interactions);
     FeatureStore.setSelectOnClick(true);
     this.setState({secondary: true});
   }
   deactivate() {
-    super.deactivate();
+    ToolUtil.deactivate(this);
     FeatureStore.setSelectOnClick(false);
     this.setState({secondary: false});
   }
@@ -133,6 +138,18 @@ class Select extends MapTool {
 }
 
 Select.propTypes = {
+  /**
+   * The map onto which to activate and deactivate the interactions.
+   */
+  map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * The toggleGroup to use. When this tool is activated, all other tools in the same toggleGroup will be deactivated.
+   */
+  toggleGroup: React.PropTypes.string,
+  /**
+   * Identifier to use for this tool. Can be used to group tools together.
+   */
+  toolId: React.PropTypes.string,
   /**
    * Css class name to apply on the root element of this component.
    */

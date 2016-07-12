@@ -67,8 +67,8 @@ describe('Measure', function() {
       <Measure intl={intl} map={map} />
     ), container);
     measure._measureArea();
-    assert.equal(measure._currentInteractions.length, 1);
-    assert.equal(measure._currentInteractions[0] instanceof ol.interaction.Draw, true);
+    assert.equal(measure.currentInteractions.length, 1);
+    assert.equal(measure.currentInteractions[0] instanceof ol.interaction.Draw, true);
     ReactDOM.unmountComponentAtNode(container);
   });
 

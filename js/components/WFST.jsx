@@ -19,7 +19,7 @@ import LayerConstants from '../constants/LayerConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LayerSelector from './LayerSelector.jsx';
 import FeatureStore from '../stores/FeatureStore.js';
-import MapTool from './MapTool.js';
+import ToolUtil from '../toolutil.js';
 import RaisedButton from './Button.jsx';
 import DrawIcon from 'material-ui/lib/svg-icons/image/brush';
 import EditIcon from 'material-ui/lib/svg-icons/editor/mode-edit';
@@ -94,9 +94,10 @@ const messages = defineMessages({
  * ```
  */
 @pureRender
-class WFST extends MapTool {
+class WFST extends React.Component {
   constructor(props, context) {
     super(props);
+    this._dispatchToken2 = ToolUtil.register(this);
     var me = this;
     FeatureStore.bindMap(this.props.map);
     this._dispatchToken = AppDispatcher.register((payload) => {
@@ -135,13 +136,14 @@ class WFST extends MapTool {
   }
   componentWillUnmount() {
     AppDispatcher.unregister(this._dispatchToken);
+    AppDispatcher.unregister(this._dispatchToken2);
     if (this._request) {
       this._request.abort();
     }
     this.deactivate();
   }
   activate(interactions) {
-    super.activate.call(this, interactions);
+    ToolUtil.activate(this, interactions);
     var hasSelect = false;
     for (var i = 0, ii = interactions.length; i < ii; ++i) {
       if (interactions[i] instanceof ol.interaction.Select) {
@@ -156,7 +158,7 @@ class WFST extends MapTool {
     }
   }
   deactivate() {
-    super.deactivate();
+    ToolUtil.deactivate(this);
     this._select.getFeatures().clear();
     this.setState({feature: null, modifySecondary: false, drawSecondary: false});
   }
@@ -402,6 +404,14 @@ WFST.propTypes = {
    * The ol3 map whose layers can be used for the WFS-T tool.
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * The toggleGroup to use. When this tool is activated, all other tools in the same toggleGroup will be deactivated.
+   */
+  toggleGroup: React.PropTypes.string,
+  /**
+   * Identifier to use for this tool. Can be used to group tools together.
+   */
+  toolId: React.PropTypes.string,
   /**
    * Show a layer selector for the user to choose from?
    */

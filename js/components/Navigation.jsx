@@ -11,7 +11,8 @@
  */
 
 import React from 'react';
-import MapTool from './MapTool.js';
+import AppDispatcher from '../dispatchers/AppDispatcher.js';
+import ToolUtil from '../toolutil.js';
 import RaisedButton from './Button.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import classNames from 'classnames';
@@ -34,19 +35,23 @@ const messages = defineMessages({
  * Navigation button that allows to get the map back into navigation (zoom, pan) mode.
  */
 @pureRender
-class Navigation extends MapTool {
+class Navigation extends React.Component {
   constructor(props) {
     super(props);
+    this._dispatchToken = ToolUtil.register(this);
     this.state = {
       secondary: props.secondary !== undefined ? props.secondary : false
     };
   }
+  componentWillUnmount() {
+    AppDispatcher.unregister(this._dispatchToken);
+  }
   activate() {
-    super.activate([]);
+    ToolUtil.activate(this, []);
     this.setState({secondary: true});
   }
   deactivate() {
-    super.deactivate();
+    ToolUtil.deactivate(this);
     this.setState({secondary: false});
   }
   _onClick() {
@@ -64,9 +69,17 @@ class Navigation extends MapTool {
 
 Navigation.propTypes = {
   /**
+   * Should the button have the secondary state initially (pressed)?
+   */
+  secondary: React.PropTypes.bool,
+  /**
    * The toggleGroup to use. When this tool is activated, all other tools in the same toggleGroup will be deactivated.
    */
   toggleGroup: React.PropTypes.string,
+  /**
+   * Identifier to use for this tool. Can be used to group tools together.
+   */
+  toolId: React.PropTypes.string,
   /**
    * Css class name to apply on the root element of this component.
    */

@@ -14,12 +14,13 @@
 import React from 'react';
 import ol from 'openlayers';
 import './Measure.css';
-import MapTool from './MapTool.js';
 import IconMenu from 'material-ui/lib/menus/icon-menu';
 import classNames from 'classnames';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import RaisedButton from './Button.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import AppDispatcher from '../dispatchers/AppDispatcher.js';
+import ToolUtil from '../toolutil.js';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -60,9 +61,10 @@ const wgs84Sphere = new ol.Sphere(6378137);
  * ```
  */
 @pureRender
-class Measure extends MapTool {
+class Measure extends React.Component {
   constructor(props) {
     super(props);
+    this._dispatchToken = ToolUtil.register(this);
     this._tooltips = [];
     this.state = {
       secondary: false,
@@ -129,6 +131,9 @@ class Measure extends MapTool {
       this._interactions[key].on('drawstart', this._onDrawStart, this);
       this._interactions[key].on('drawend', this._onDrawEnd, this);
     }
+  }
+  componentWillUnmount() {
+    AppDispatcher.unregister(this._dispatchToken);
   }
   _onDrawStart(evt) {
     this._sketch = evt.feature;
@@ -208,11 +213,11 @@ class Measure extends MapTool {
     this.props.map.addOverlay(this._tooltip);
   }
   activate(interactions) {
-    super.activate.call(this, interactions);
+    ToolUtil.activate(this, interactions);
     this.setState({secondary: true});
   }
   deactivate() {
-    super.deactivate();
+    ToolUtil.deactivate(this);
     this.setState({value: null, secondary: false});
   }
   _measureDistance() {
@@ -275,6 +280,10 @@ Measure.propTypes = {
    * The toggleGroup to use. When this tool is activated, all other tools in the same toggleGroup will be deactivated.
    */
   toggleGroup: React.PropTypes.string,
+  /**
+   * Identifier to use for this tool. Can be used to group tools together.
+   */
+  toolId: React.PropTypes.string,
   /**
    * Should measurements be geodesic?
    */

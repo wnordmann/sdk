@@ -12,13 +12,15 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import MapTool from './MapTool.js';
 import ol from 'openlayers';
+import ToolUtil from '../toolutil.js';
+import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import './BasePopup.css';
 
-class BasePopup extends MapTool {
+class BasePopup extends React.Component {
   constructor(props) {
     super(props);
+    this._dispatchToken = ToolUtil.register(this);
   }
   componentDidMount() {
     this.overlayPopup = new ol.Overlay({
@@ -27,11 +29,16 @@ class BasePopup extends MapTool {
     });
     this.props.map.addOverlay(this.overlayPopup);
   }
+  componentWillUnmount() {
+    AppDispatcher.unregister(this._dispatchToken);
+  }
   activate(interactions) {
     this.active = true;
+    // it is intentional not to call activate on ToolUtil here
   }
   deactivate() {
     this.active = false;
+    // it is intentional not to call deactivate on ToolUtil here
   }
   setVisible(visible) {
     ReactDOM.findDOMNode(this).parentNode.style.display = visible ? 'block' : 'none';

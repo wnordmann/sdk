@@ -23,3 +23,24 @@ i18n message strings. Provided through the application through context.
 
 type: `custom`
 
+
+### `map` (required)
+
+The map onto which to activate and deactivate the interactions.
+
+type: `instanceOf ol.Map`
+
+
+### `toggleGroup`
+
+The toggleGroup to use. When this tool is activated, all other tools in the same toggleGroup will be deactivated.
+
+type: `string`
+
+
+### `toolId`
+
+Identifier to use for this tool. Can be used to group tools together.
+
+type: `string`
+

@@ -66,3 +66,17 @@ defaultValue: `{
   padding: 10
 }`
 
+
+### `toggleGroup`
+
+The toggleGroup to use. When this tool is activated, all other tools in the same toggleGroup will be deactivated.
+
+type: `string`
+
+
+### `toolId`
+
+Identifier to use for this tool. Can be used to group tools together.
+
+type: `string`
+

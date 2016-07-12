@@ -17,13 +17,13 @@ import Dialog from 'material-ui/lib/dialog';
 import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import TextField from 'material-ui/lib/text-field';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
+import ToolUtil from '../toolutil.js';
 import LayerConstants from '../constants/LayerConstants.js';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import SelectField from 'material-ui/lib/select-field';
 import Toolbar from 'material-ui/lib/toolbar/toolbar';
 import RaisedButton from './Button.jsx';
 import ol from 'openlayers';
-import MapTool from './MapTool.js';
 import {transformColor} from '../util.js';
 import ColorPicker from 'react-color';
 import classNames from 'classnames';
@@ -159,9 +159,10 @@ const messages = defineMessages({
  * ```
  */
 @pureRender
-class Edit extends MapTool {
+class Edit extends React.Component {
   constructor(props, context) {
     super(props);
+    this._dispatchToken = ToolUtil.register(this);
     this._interactions = {};
     this.state = {
       layers: [],
@@ -242,7 +243,7 @@ class Edit extends MapTool {
   }
   disableEditMode() {
     this.setState({enable: true});
-    this.deactivate();
+    ToolUtil.deactivate(this);
   }
   _findLayerById(layerId) {
     for (var i = 0, ii = this.state.layers.length; i < ii; ++i) {
@@ -304,8 +305,8 @@ class Edit extends MapTool {
     }
     var draw = this._interactions[layerId].draw;
     var modify = this._interactions[layerId].modify;
-    this.deactivate();
-    this.activate([draw, modify]);
+    ToolUtil.deactivate(this);
+    ToolUtil.activate(this, [draw, modify]);
   }
   _showModal() {
     this.setState({open: true});
@@ -400,6 +401,14 @@ Edit.propTypes = {
    * The map onto which to activate and deactivate the interactions.
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * The toggleGroup to use. When this tool is activated, all other tools in the same toggleGroup will be deactivated.
+   */
+  toggleGroup: React.PropTypes.string,
+  /**
+   * Identifier to use for this tool. Can be used to group tools together.
+   */
+  toolId: React.PropTypes.string,
   /**
    * The stroke width in pixels used in the style for the created features.
    */
