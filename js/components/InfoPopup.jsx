@@ -11,10 +11,12 @@
  */
 
 import React from 'react';
-import BasePopup from './BasePopup.jsx';
+import ReactDOM from 'react-dom';
 import LayerStore from '../stores/LayerStore.js';
 import ol from 'openlayers';
 import classNames from 'classnames';
+import AppDispatcher from '../dispatchers/AppDispatcher.js';
+import ToolUtil from '../toolutil.js';
 import WMSService from '../services/WMSService.js';
 import Table from 'material-ui/lib/table/table';
 import TableHeaderColumn from 'material-ui/lib/table/table-header-column';
@@ -25,6 +27,7 @@ import TableBody from 'material-ui/lib/table/table-body';
 import IconButton from 'material-ui/lib/icon-button';
 import CloserIcon from 'material-ui/lib/svg-icons/navigation/close';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import './BasePopup.css';
 import './InfoPopup.css';
 
 const messages = defineMessages({
@@ -61,9 +64,10 @@ const ALL_ATTRS = '#AllAttributes';
  * </div>
  * ```
  */
-class InfoPopup extends BasePopup {
+class InfoPopup extends React.Component {
   constructor(props) {
     super(props);
+    this._dispatchToken = ToolUtil.register(this);
     LayerStore.bindMap(this.props.map);
     if (this.props.hover === true) {
       this.props.map.on('pointermove', this._onMapClick, this);
@@ -78,6 +82,24 @@ class InfoPopup extends BasePopup {
     this.state = {
       popupTexts: []
     };
+  }
+  componentDidMount() {
+    this.overlayPopup = new ol.Overlay({
+      autoPan: true,
+      element: ReactDOM.findDOMNode(this).parentNode
+    });
+    this.props.map.addOverlay(this.overlayPopup);
+  }
+  componentWillUnmount() {
+    AppDispatcher.unregister(this._dispatchToken);
+  }
+  activate(interactions) {
+    this.active = true;
+    // it is intentional not to call activate on ToolUtil here
+  }
+  deactivate() {
+    this.active = false;
+    // it is intentional not to call deactivate on ToolUtil here
   }
   _getLayers() {
     var state = LayerStore.getState();
@@ -251,6 +273,18 @@ class InfoPopup extends BasePopup {
         headers[i].classList.remove('popup-header-fixed');
         bodys[i].classList.remove('popup-body-noheader');
       }
+    }
+  }
+  setVisible(visible) {
+    ReactDOM.findDOMNode(this).parentNode.style.display = visible ? 'block' : 'none';
+    var me = this;
+    // regular jsx onClick does not work when stopEvent is true
+    var closer = ReactDOM.findDOMNode(this.refs.popupCloser);
+    if (closer.onclick === null) {
+      closer.onclick = function() {
+        me.setVisible(false);
+        return false;
+      };
     }
   }
   render() {

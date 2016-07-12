@@ -12,13 +12,15 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import BasePopup from './BasePopup.jsx';
 import ol from 'openlayers';
+import AppDispatcher from '../dispatchers/AppDispatcher.js';
+import ToolUtil from '../toolutil.js';
 import {injectIntl, intlShape} from 'react-intl';
 import IconButton from 'material-ui/lib/icon-button';
 import CloserIcon from 'material-ui/lib/svg-icons/navigation/close';
 import classNames from 'classnames';
 import EditForm from './EditForm.jsx';
+import './BasePopup.css';
 
 /**
  * Popup that can be used for feature editing (attribute form).
@@ -27,15 +29,34 @@ import EditForm from './EditForm.jsx';
  * <div id='popup' className='ol-popup'><EditPopup map={map} /></div>
  * ```
  */
-class EditPopup extends BasePopup {
+class EditPopup extends React.Component {
   constructor(props) {
     super(props);
+    this._dispatchToken = ToolUtil.register(this);
     this.state = {
       feature: null,
       layer: null
     };
     this.props.map.on('singleclick', this._onMapClick, this);
     this.active = true;
+  }
+  componentDidMount() {
+    this.overlayPopup = new ol.Overlay({
+      autoPan: true,
+      element: ReactDOM.findDOMNode(this).parentNode
+    });
+    this.props.map.addOverlay(this.overlayPopup);
+  }
+  componentWillUnmount() {
+    AppDispatcher.unregister(this._dispatchToken);
+  }
+  activate(interactions) {
+    this.active = true;
+    // it is intentional not to call activate on ToolUtil here
+  }
+  deactivate() {
+    this.active = false;
+    // it is intentional not to call deactivate on ToolUtil here
   }
   _onMapClick(evt) {
     if (this.active) {
@@ -67,7 +88,16 @@ class EditPopup extends BasePopup {
     this.setVisible(false);
   }
   setVisible(visible) {
-    super.setVisible(visible);
+    ReactDOM.findDOMNode(this).parentNode.style.display = visible ? 'block' : 'none';
+    var me = this;
+    // regular jsx onClick does not work when stopEvent is true
+    var closer = ReactDOM.findDOMNode(this.refs.popupCloser);
+    if (closer.onclick === null) {
+      closer.onclick = function() {
+        me.setVisible(false);
+        return false;
+      };
+    }
     var editForm = this.refs.editForm;
     if (editForm) {
       var formInstance = editForm.getWrappedInstance();
