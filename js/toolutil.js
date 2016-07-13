@@ -46,10 +46,14 @@ export default {
       let action = payload.action;
       switch (action.type) {
         case ToolConstants.DISABLE_ALL_TOOLS:
-          tool.disable();
+          if (tool.disable) {
+            tool.disable();
+          }
           break;
         case ToolConstants.ENABLE_ALL_TOOLS:
-          tool.enable();
+          if (tool.enable) {
+            tool.enable();
+          }
           break;
         case ToolConstants.ACTIVATE_TOOL:
           if (tool.props.toggleGroup && tool.props.toggleGroup === action.toggleGroup) {
