@@ -180,24 +180,39 @@ class QGISPrint extends React.Component {
   _onResolutionChange(evt, idx, value) {
     this.setState({resolution: value});
   }
+  _loadStart(evt) {
+    var idx = this._sources.indexOf(evt.target);
+    this._loading[idx]++;
+  }
+  _loadEndError(evt) {
+    var idx = this._sources.indexOf(evt.target);
+    ++this._loaded[idx];
+    if (this._loading[idx] === this._loaded[idx]) {
+      this._tileLayerLoaded();
+      this._removeLoadListeners(idx);
+    }
+  }
   _attachLoadListeners(idx) {
     this._sources[idx] = this._tileLayers[idx].getSource();
     this._loading[idx] = 0;
     this._loaded[idx] = 0;
     var source = this._sources[idx];
-    var loaded = this._loaded[idx];
-    var loading = this._loading[idx];
-    source.on('tileloadstart', function() {
-      loading++;
-    });
-    var loadEndError = function() {
-      ++loaded;
-      if (loading === loaded) {
-        this._tileLayerLoaded();
+    source.on('tileloadstart', this._loadStart, this);
+    source.on('tileloadend', this._loadEndError, this);
+    source.on('tileloaderror', this._loadEndError, this);
+    var me = this;
+    window.setTimeout(function() {
+      if (me._loading[idx] === me._loaded[idx]) {
+        me._tileLayerLoaded();
+        me._removeLoadListeners(idx);
       }
-    };
-    source.on('tileloadend', loadEndError, this);
-    source.on('tileloaderror', loadEndError, this);
+    }, 1000);
+  }
+  _removeLoadListeners(idx) {
+    var source = this._sources[idx];
+    source.un('tileloadstart', this._loadStart, this);
+    source.un('tileloadend', this._loadEndError, this);
+    source.un('tileloaderror', this._loadEndError, this);
   }
   _addImage(el, resolution) {
     var type = el.type;
