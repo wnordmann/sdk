@@ -73,7 +73,7 @@ class WMSLegend extends React.Component {
       '_olSalt': this.state.salt,
       style: params.STYLES ? params.STYLES : ''
     });
-    var legendUrl = url.toString();
+    var legendUrl = (params.STYLES === undefined && layer.get('legendUrl')) ? layer.get('legendUrl') : url.toString();
     return (<img className={classNames('sdk-component wms-legend', this.props.className)} src={legendUrl} />);
   }
 }

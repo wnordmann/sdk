@@ -153,6 +153,13 @@ class AddLayerModal extends React.Component {
     bbox[3] = Math.min(85, bbox[3]);
     return bbox;
   }
+  _getLegendUrl(layer) {
+    if (layer.Style && layer.Style.length === 1) {
+      if (layer.Style[0].LegendURL && layer.Style[0].LegendURL.length >= 1) {
+        return layer.Style[0].LegendURL[0].OnlineResource;
+      }
+    }
+  }
   _onLayerClick(layer) {
     var map = this.props.map;
     var view = map.getView();
@@ -195,6 +202,7 @@ class AddLayerModal extends React.Component {
         emptyTitle: titleObj.empty,
         id: layer.Name,
         name: layer.Name,
+        legendUrl: this._getLegendUrl(layer),
         isRemovable: true,
         isSelectable: true,
         isWFST: true,
