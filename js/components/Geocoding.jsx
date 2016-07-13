@@ -63,9 +63,9 @@ class Geocoding extends React.Component {
       var cbname = 'fn' + Date.now();
       var script = document.createElement('script');
       script.src = 'http://nominatim.openstreetmap.org/search?format=json&limit=' + this.props.maxResults + '&q=' + value + '&json_callback=' + cbname;
-      window[cbname] = function(jsonData) {
+      global[cbname] = function(jsonData) {
         GeocodingActions.showSearchResult(jsonData);
-        delete window[cbname];
+        delete global[cbname];
       };
       document.head.appendChild(script);
     } else {

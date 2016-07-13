@@ -152,7 +152,7 @@ class QGISPrint extends React.Component {
     this._tiledLayersLoaded++;
     if (this._tiledLayersLoaded === this._tileLayers.length) {
       var me = this;
-      window.setTimeout(function() {
+      global.setTimeout(function() {
         me._paintMapInPdf();
       }, 1000);
     }
@@ -201,7 +201,7 @@ class QGISPrint extends React.Component {
     source.on('tileloadend', this._loadEndError, this);
     source.on('tileloaderror', this._loadEndError, this);
     var me = this;
-    window.setTimeout(function() {
+    global.setTimeout(function() {
       if (me._loading[idx] === me._loaded[idx]) {
         me._tileLayerLoaded();
         me._removeLoadListeners(idx);

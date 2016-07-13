@@ -144,7 +144,7 @@ class AddLayer extends React.Component {
       showProgress: true
     });
     var me = this;
-    window.setTimeout(function() {
+    global.setTimeout(function() {
       var text = me._text;
       var filename = me.state.fileName;
       if (text && filename) {
@@ -196,7 +196,7 @@ class AddLayer extends React.Component {
               me._closeDialog();
             }
           } catch (e) {
-            if (window && window.console) {
+            if (global && global.console) {
               me.setState({showProgress: false, error: true, fileName: null, errorOpen: true, msg: e.message});
             }
           }

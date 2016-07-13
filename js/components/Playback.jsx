@@ -113,9 +113,9 @@ class Playback extends React.Component {
     }
     this.setState({play: play});
     if (play) {
-      window.clearInterval(this._timer);
+      global.clearInterval(this._timer);
     } else {
-      this._timer = window.setInterval(this._play.bind(this), this.props.interval);
+      this._timer = global.setInterval(this._play.bind(this), this.props.interval);
     }
   }
   _registerTime(lyr) {
