@@ -17,6 +17,7 @@ import ol from 'openlayers';
 import classNames from 'classnames';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import ToolUtil from '../toolutil.js';
+import ToolConstants from '../constants/ToolConstants.js';
 import WMSService from '../services/WMSService.js';
 import Table from 'material-ui/lib/table/table';
 import TableHeaderColumn from 'material-ui/lib/table/table-header-column';
@@ -89,9 +90,26 @@ class InfoPopup extends React.Component {
       element: ReactDOM.findDOMNode(this).parentNode
     });
     this.props.map.addOverlay(this.overlayPopup);
+    var me = this;
+    this._dispatchToken2 = AppDispatcher.register((payload) => {
+      let action = payload.action;
+      switch (action.type) {
+        case ToolConstants.SHOW_POPUP:
+          me.setState({
+            popupTexts: me._createSimpleTable({features: [action.feature], layer: action.layer}),
+            contentAsObject: true
+          });
+          me.setVisible(true);
+          me.overlayPopup.setPosition(action.feature.getGeometry().getInteriorPoint().getCoordinates());
+          break;
+        default:
+          break;
+      }
+    });
   }
   componentWillUnmount() {
     AppDispatcher.unregister(this._dispatchToken);
+    AppDispatcher.unregister(this._dispatchToken2);
   }
   activate(interactions) {
     this.active = true;

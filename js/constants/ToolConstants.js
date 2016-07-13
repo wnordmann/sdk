@@ -17,5 +17,6 @@ export default keymirror({
   ENABLE_ALL_TOOLS: null,
   ACTIVATE_TOOL: null,
   START_PLAYBACK: null,
-  STOP_PLAYBACK: null
+  STOP_PLAYBACK: null,
+  SHOW_POPUP: null
 });

@@ -14,6 +14,13 @@ import ToolConstants from '../constants/ToolConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 
 export default {
+  showPopup: (feature, layer) => {
+    AppDispatcher.handleAction({
+      type: ToolConstants.SHOW_POPUP,
+      feature: feature,
+      layer: layer
+    });
+  },
   startPlayback: () => {
     AppDispatcher.handleAction({
       type: ToolConstants.START_PLAYBACK
