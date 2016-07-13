@@ -89,6 +89,11 @@ const messages = defineMessages({
 class LayerListItem extends React.Component {
   constructor(props) {
     super(props);
+    if (this.props.group) {
+      this.props.group.on('change:visible', function(evt) {
+        this.setState({disabled: !evt.target.getVisible()});
+      }, this);
+    }
     this.formats_ = {
       GeoJSON: {
         format: new ol.format.GeoJSON(),
@@ -115,6 +120,7 @@ class LayerListItem extends React.Component {
   }
   _handleChange(event) {
     var visible = event.target.checked;
+    var i, ii;
     if (event.target.type === 'radio') {
       var forEachLayer = function(layers, layer) {
         if (layer instanceof ol.layer.Group) {
@@ -127,12 +133,26 @@ class LayerListItem extends React.Component {
       };
       var baseLayers = [];
       forEachLayer(baseLayers, this.props.map.getLayerGroup());
-      for (var i = 0, ii = baseLayers.length; i < ii; ++i) {
+      for (i = 0, ii = baseLayers.length; i < ii; ++i) {
         baseLayers[i].setVisible(false);
       }
       this.props.layer.setVisible(true);
     } else {
       this.props.layer.setVisible(visible);
+      if (this.props.layer instanceof ol.layer.Group) {
+        if (visible === false) {
+          this.props.layer.getLayers().forEach(function(child) {
+            if (child.getVisible() === true) {
+              this._child = child;
+            }
+            child.setVisible(visible);
+          }, this);
+        } else {
+          // restore the last visible child of the group
+          this._child.setVisible(visible);
+          delete this._child;
+        }
+      }
     }
     this.setState({checked: visible});
   }
@@ -248,7 +268,7 @@ class LayerListItem extends React.Component {
     }
     var input;
     if (layer.get('type') === 'base') {
-      input = (<RadioButton checked={this.state.checked} label={this.props.title} value={this.props.title} onCheck={this._handleChange.bind(this)} disableTouchRipple={true}/>);
+      input = (<RadioButton disabled={this.state.disabled} checked={this.state.checked} label={this.props.title} value={this.props.title} onCheck={this._handleChange.bind(this)} disableTouchRipple={true}/>);
     } else {
       input = (<Checkbox checked={this.state.checked} label={this.props.title} labelStyle={this.props.layer.get('emptyTitle') ? {fontStyle: 'italic'} : undefined} onCheck={this._handleChange.bind(this)} disableTouchRipple={true}/>);
     }
