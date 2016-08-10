@@ -209,12 +209,12 @@ class Playback extends React.Component {
       controls = [(<IconButton key='play' style={{'float': 'left'}} onTouchTap={this._playPause.bind(this)}>{buttonIcon}</IconButton>)];
       this._refreshTimeLayers();
       if (this.state.dates) {
-        controls.push(<Slider step={1} key='slider' style={{width: 200, 'float': 'left', 'margin-top': '8px'}} min={0} max={this.state.dates.length - 1} value={this.state.dateStep} onChange={this._onRangeChangeValues.bind(this)} />,
+        controls.push(<Slider step={1} key='slider' style={{width: 200, 'float': 'left', marginTop: 8}} min={0} max={this.state.dates.length - 1} value={this.state.dateStep} onChange={this._onRangeChangeValues.bind(this)} />,
         <DatePicker key='date' disabled={true} autoOk={true} style={{width: 200, paddingLeft: 15, overflow: 'hidden'}} value={new Date(this.state.date)} />);
       } else if (this.state.minDate !== undefined && this.state.maxDate !== undefined) {
         var minDate = new Date(this.state.minDate);
         var maxDate = new Date(this.state.maxDate);
-        controls.push(<Slider step={this.state.interval} key='slider' style={{width: 200, 'float': 'left', 'margin-top': '8px'}} min={this.state.minDate} max={this.state.maxDate} value={this.state.date} onChange={this._onRangeChange.bind(this)} />,
+        controls.push(<Slider step={this.state.interval} key='slider' style={{width: 200, 'float': 'left', marginTop: 8}} min={this.state.minDate} max={this.state.maxDate} value={this.state.date} onChange={this._onRangeChange.bind(this)} />,
       <DatePicker key='date' autoOk={true} minDate={minDate} maxDate={maxDate} style={{width: 85, paddingLeft: 18, overflow: 'hidden'}} onChange={this._onDateChange.bind(this)} value={new Date(this.state.date)} />);
       }
     }

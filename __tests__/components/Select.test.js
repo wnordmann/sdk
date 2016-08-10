@@ -40,7 +40,7 @@ describe('SelectTool', function() {
   });
 
 
-  it('adds a select interaction to the map', function() {
+  it('adds a drag box interaction to the map', function() {
     var container = document.createElement('div');
     ReactDOM.render((
       <Select intl={intl} map={map} />
@@ -48,7 +48,7 @@ describe('SelectTool', function() {
 
     var count = 0;
     map.getInteractions().forEach(function(interaction) {
-      if (interaction instanceof ol.interaction.Select) {
+      if (interaction instanceof ol.interaction.DragBox) {
         ++count;
       }
     });
