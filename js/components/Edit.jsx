@@ -241,9 +241,15 @@ class Edit extends React.Component {
       this.setState({open: false, geometryType: null, layers: layers});
     }
   }
+  activate(interactions) {
+    ToolUtil.activate(this, interactions);
+  }
+  deactivate() {
+    ToolUtil.deactivate(this);
+  }
   disableEditMode() {
     this.setState({enable: true});
-    ToolUtil.deactivate(this);
+    this.deactivate();
   }
   _findLayerById(layerId) {
     for (var i = 0, ii = this.state.layers.length; i < ii; ++i) {
@@ -305,8 +311,8 @@ class Edit extends React.Component {
     }
     var draw = this._interactions[layerId].draw;
     var modify = this._interactions[layerId].modify;
-    ToolUtil.deactivate(this);
-    ToolUtil.activate(this, [draw, modify]);
+    this.deactivate();
+    this.activate([draw, modify]);
   }
   _showModal() {
     this.setState({open: true});
