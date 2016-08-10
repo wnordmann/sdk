@@ -42,7 +42,7 @@ describe('SelectTool', function() {
 
   it('adds a drag box interaction to the map', function() {
     var container = document.createElement('div');
-    var select = ReactDOM.render((
+    ReactDOM.render((
       <Select intl={intl} map={map} />
     ), container);
 
@@ -53,6 +53,14 @@ describe('SelectTool', function() {
       }
     });
     assert.equal(count, 1);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('selects the individual features of a cluster', function() {
+    var container = document.createElement('div');
+    var select = ReactDOM.render((
+      <Select intl={intl} map={map} />
+    ), container);
 
     var selected = [];
     var cluster = new ol.Feature({
