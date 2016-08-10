@@ -78,6 +78,7 @@ class Select extends React.Component {
     } else {
       selected.push(feature);
     }
+    return selected;
   }
   _onBoxEnd(evt) {
     var box = evt.target.getGeometry().getExtent();
@@ -86,7 +87,7 @@ class Select extends React.Component {
         var selected = [];
         if (lyr.getSource() instanceof ol.source.Vector) {
           lyr.getSource().forEachFeatureIntersectingExtent(box, function(feature) {
-            this._handleSelection(feature, selected);
+            selected = this._handleSelection(feature, selected);
           }, this);
           SelectActions.selectFeatures(lyr, selected, true);
         } else {
@@ -96,7 +97,7 @@ class Select extends React.Component {
               var f = state.originalFeatures[i];
               var geom = f.getGeometry();
               if (geom && geom.intersectsExtent(box)) {
-                this._handleSelection(f, selected);
+                selected = this._handleSelection(f, selected);
               }
             }
           }
