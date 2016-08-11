@@ -9,7 +9,6 @@ Boundless Web SDK
 * [For developers](developers.md)
 * [API](api.md)
     * [AddLayer](api/AddLayer.md)
-    * [App](api/App.md)
     * [Bookmarks](api/Bookmarks.md)
     * [Chart](api/Chart.md)
     * [Edit](api/Edit.md)
@@ -32,5 +31,4 @@ Boundless Web SDK
     * [QGISPrint](api/QGISPrint.md)
     * [QueryBuilder](api/QueryBuilder.md)
     * [Select](api/Select.md)
-    * [Toolbar](api/Toolbar.md)
     * [WFST](api/WFST.md)
