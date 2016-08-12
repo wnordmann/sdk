@@ -119,7 +119,7 @@ class Chart extends React.Component {
         values = {};
         for (i = 0, ii = selectedFeatures.length; i < ii; i++) {
           cat = selectedFeatures[i].get(categoryField);
-          if (cat !== undefined) {
+          if (cat !== undefined && cat !== null) {
             cat = cat.toString();
             if (!(cat in values)) {
               values[cat] = [];
@@ -159,7 +159,7 @@ class Chart extends React.Component {
         values = {};
         for (i = 0, ii = selectedFeatures.length; i < ii; i++) {
           cat = selectedFeatures[i].get(categoryField);
-          if (cat !== undefined) {
+          if (cat !== undefined && cat !== null) {
             cat = cat.toString();
             if (!(cat in values)) {
               values[cat] = 1;
