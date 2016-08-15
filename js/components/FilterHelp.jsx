@@ -24,11 +24,6 @@ const messages = defineMessages({
     description: 'Intro text for the filter help dialog',
     defaultMessage: 'Type in'
   },
-  introtextstringsearch: {
-    id: 'filterhelp.introtextstringsearch',
-    description: 'Text to show if string text is available',
-    defaultMessage: 'a string to search all feature attributes, or'
-  },
   introtextsuffix: {
     id: 'filterhelp.introtextsuffix',
     description: 'Last part of the intro text',
@@ -219,9 +214,6 @@ class FilterHelp extends React.Component {
     const {formatMessage} = this.props.intl;
     const styles = this.getStyles();
     var introText = formatMessage(messages.introtextprefix) + ' ';
-    if (this.props.textSearch) {
-      introText += formatMessage(messages.introtextstringsearch) + ' ';
-    }
     introText += formatMessage(messages.introtextsuffix);
     return (
       <span className='filter-help' style={this.props.style}>
@@ -267,10 +259,6 @@ class FilterHelp extends React.Component {
 
 FilterHelp.propTypes = {
   /**
-   * Can we search through all attributes or not?
-   */
-  textSearch: React.PropTypes.bool,
-  /**
    * Style config.
    */
   style: React.PropTypes.object,
@@ -285,7 +273,6 @@ FilterHelp.propTypes = {
 };
 
 FilterHelp.defaultProps = {
-  textSearch: false,
   style: {
     padding: '12px',
     margin: '36px',

@@ -96,7 +96,9 @@ class FilterService {
   filter(expression) {
     //Construct a parse tree from the expression
     var tree = this.parser.parse(expression);
-
+    if (tree.length <= 3) {
+      throw new Error('Incomplete filter');
+    }
     //Convert to js string
     var js = [];
     js.push('return ');

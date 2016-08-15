@@ -32,6 +32,7 @@ import {SortHeaderCell, SortTypes} from './SortHeaderCell.jsx';
 import {LinkCell} from './LinkCell.jsx';
 import {TextCell} from './TextCell.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import Snackbar from 'material-ui/lib/snackbar';
 import FilterService from '../services/FilterService.js';
 import FilterHelp from './FilterHelp.jsx';
 import './FeatureTable.css';
@@ -39,6 +40,11 @@ import './FeatureTable.css';
 const {Table, Column} = FixedDataTable;
 
 const messages = defineMessages({
+  errormsg: {
+    id: 'featuretable.errormsg',
+    description: 'Error message to show when filtering fails',
+    defaultMessage: 'There was an error filtering your features. ({msg})'
+  },
   layerlabel: {
     id: 'featuretable.layerlabel',
     description: 'Label for the layer select',
@@ -125,6 +131,8 @@ class FeatureTable extends React.Component {
       this._setLayer(this.props.layer);
     }
     this.state = {
+      errorOpen: false,
+      error: false,
       muiTheme: context.muiTheme || ThemeManager.getMuiTheme(),
       gridWidth: this.props.width,
       gridHeight: this.props.height,
@@ -187,6 +195,9 @@ class FeatureTable extends React.Component {
       var newState = {};
       newState.features = state.features.slice();
       newState.rowCount = newState.features.length;
+      if (newState.rowCount > 0) {
+        newState.errorOpen = false;
+      }
       newState.originalFeatures = state.originalFeatures.slice();
       newState.selected = state.selected.slice();
       this.setState(newState);
@@ -289,36 +300,34 @@ class FeatureTable extends React.Component {
     var rows = this._selectedOnly ? state.selected : state.originalFeatures;
     var filteredRows = [];
     var queryFilter;
-    try {
-      queryFilter = FilterService.filter(filterBy);
-    } catch (e) {
-      queryFilter = null;
-    }
-    if (queryFilter !== null) {
-      for (var i = 0, ii = rows.length; i < ii; ++i) {
-        var row = rows[i];
-        if (row) {
-          var properties = rows[i].getProperties();
-          if (queryFilter(properties)) {
-            filteredRows.push(rows[i]);
-          }
-        }
+    if (filterBy !== '') {
+      try {
+        queryFilter = FilterService.filter(filterBy.replace(/'/g, '"'));
+      } catch (e) {
+        this.setState({
+          errorOpen: true,
+          error: true,
+          msg: e.message
+        });
+        queryFilter = null;
       }
-    }
-    if (filteredRows.length === 0) {
-      filteredRows = filterBy ? rows.filter(function(row) {
-        var properties = row.getProperties();
-        var geom = row.getGeometryName();
-        for (var key in properties) {
-          if (key !== geom) {
-            var value = '' + properties[key];
-            if (value.toLowerCase().indexOf(filterBy.toLowerCase()) >= 0) {
-              return true;
+      if (queryFilter !== null) {
+        this.setState({
+          errorOpen: false,
+          error: false
+        });
+        for (var i = 0, ii = rows.length; i < ii; ++i) {
+          var row = rows[i];
+          if (row) {
+            var properties = rows[i].getProperties();
+            if (queryFilter(properties)) {
+              filteredRows.push(rows[i]);
             }
           }
         }
-        return false;
-      }) : rows;
+      }
+    } else {
+      filteredRows = rows;
     }
     this._filtered = (rows.length !== filteredRows.length);
     this._filteredRows = filteredRows;
@@ -364,6 +373,11 @@ class FeatureTable extends React.Component {
       }
     };
   }
+  _handleRequestClose() {
+    this.setState({
+      errorOpen: false
+    });
+  }
   render() {
     var {sortIndexes, colSortDirs} = this.state;
     const {formatMessage} = this.props.intl;
@@ -372,6 +386,17 @@ class FeatureTable extends React.Component {
       schema = FeatureStore.getSchema(this._layer);
       id = this._layer.get('id');
       row = FeatureStore.getObjectAt(this._layer, 0);
+    }
+    var error;
+    if (this.state.error === true) {
+      error = (<Snackbar
+        autoHideDuration={5000}
+        style={{transitionProperty : 'none'}}
+        bodyStyle={{lineHeight: '24px', height: 'auto'}}
+        open={this.state.errorOpen}
+        message={formatMessage(messages.errormsg, {msg: this.state.msg})}
+        onRequestClose={this._handleRequestClose.bind(this)}
+      />);
     }
     var columnNodes = [];
     var defaultWidth;
@@ -388,7 +413,10 @@ class FeatureTable extends React.Component {
     }
     for (var key in schema) {
       if (!this.defaultColWidths[id][key] && row) {
-        this.defaultColWidths[id][key] = this._getTextWidth(row[key], '13px Helvetica Neue');
+        this.defaultColWidths[id][key] = Math.max(
+          this._getTextWidth(key, '13px Helvetica Neue'),
+          this._getTextWidth(row[key], '13px Helvetica Neue')
+        );
       }
       var width = this.state.columnWidths[id] && this.state.columnWidths[id][key] ? this.state.columnWidths[id][key] : this.defaultColWidths[id][key] ? this.defaultColWidths[id][key] : defaultWidth;
       columnNodes.push(
@@ -409,7 +437,7 @@ class FeatureTable extends React.Component {
     }
     const buttonStyle = this.props.buttonStyle;
     const styles = this.getStyles();
-    var filterHelp = this._layer ? <FilterHelp textSearch={true} intl={this.props.intl} /> : undefined;
+    var filterHelp = this._layer ? <FilterHelp intl={this.props.intl} /> : undefined;
     return (
       <div style={styles.root} className={classNames('sdk-component feature-table', this.props.className)}>
         <div ref='form'>
@@ -428,6 +456,7 @@ class FeatureTable extends React.Component {
             <RaisedButton disabled={!this._layer} style={buttonStyle} icon={<ClearIcon />} label={formatMessage(messages.clearbuttontext)} tooltip={formatMessage(messages.clearbuttontitle)} onTouchTap={this._clearSelected.bind(this)} disableTouchRipple={true}/>
             <RaisedButton disabled={!this._layer} style={buttonStyle} icon={<ArrowUp />} label={formatMessage(messages.movebuttontext)} tooltip={formatMessage(messages.movebuttontitle)} onTouchTap={this._moveSelectedToTop.bind(this)} disableTouchRipple={true}/>
           </Toolbar>
+          {error}
         </div>
         <Table
           onColumnResizeEndCallback={this._onColumnResize.bind(this)}

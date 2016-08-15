@@ -36,11 +36,3 @@ defaultValue: `{
   maxWidth: '600px'
 }`
 
-
-### `textSearch`
-
-Can we search through all attributes or not?
-
-type: `bool`
-defaultValue: `false`
-
