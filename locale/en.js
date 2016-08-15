@@ -217,6 +217,7 @@ var enMessages = {
   "wfst.layerlabel": "Layer",
   "wfst.modifyfeature": "Select",
   "wfst.modifyfeaturetitle": "Modify an existing feature or select before Delete",
+  "wfst.updatemsg": "Geometry change saved successfully",
   "zoom.zoomintitle": "Zoom in",
   "zoom.zoomouttitle": "Zoom out",
   "zoomtolatlon.buttontext": "Lat/Lon",

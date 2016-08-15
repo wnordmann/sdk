@@ -64,6 +64,11 @@ const messages = defineMessages({
     description: 'Button title for modify / select existing feature',
     defaultMessage: 'Modify an existing feature or select before Delete'
   },
+  updatemsg: {
+    id: 'wfst.updatemsg',
+    description: 'Message to show that geometry change succeeded',
+    defaultMessage: 'Geometry change saved successfully'
+  },
   errormsg: {
     id: 'wfst.errormsg',
     description: 'Error message to show the user when a request fails',
@@ -129,6 +134,7 @@ class WFST extends React.Component {
       features: features,
       wrapX: false
     });
+    this._modify.on('modifystart', this._onModifyStart, this);
     features.on('add', this._onSelectAdd, this);
     features.on('remove', this._onSelectRemove, this);
     this._selectfeature = new SelectFeature(this._selectWMS, this);
@@ -161,6 +167,11 @@ class WFST extends React.Component {
     ToolUtil.deactivate(this);
     this._select.getFeatures().clear();
     this.setState({feature: null, modifySecondary: false, drawSecondary: false});
+  }
+  _onModifyStart(evt) {
+    if (!this._geom) {
+      this._geom = evt.features.item(0).getGeometry().clone();
+    }
   }
   _onLayerSelectChange(layer) {
     this._select.getFeatures().clear();
@@ -263,12 +274,15 @@ class WFST extends React.Component {
         delete me._request;
         if (result && result.transactionSummary.totalUpdated === 1) {
           delete me._dirty[fid];
+          me.setState({info: true, open: true});
         }
         if (!(me.state.layer.getSource() instanceof ol.source.Vector)) {
           me._redraw();
         }
       }, function(xmlhttp, msg) {
         delete me._request;
+        feature.setGeometry(me._geom);
+        delete me._geom;
         me._setError(msg || (xmlhttp.status + ' ' + xmlhttp.statusText));
       });
     }
@@ -358,10 +372,10 @@ class WFST extends React.Component {
       const styles = this.getStyles();
       const {formatMessage} = this.props.intl;
       var error;
-      if (this.state.error === true) {
+      if (this.state.error === true || this.state.info === true) {
         error = (<Snackbar
           open={this.state.open}
-          message={formatMessage(messages.errormsg, {msg: this.state.msg})}
+          message={this.state.error ? formatMessage(messages.errormsg, {msg: this.state.msg}) : formatMessage(messages.updatemsg)}
           autoHideDuration={2000}
           onRequestClose={this._handleRequestClose.bind(this)}
         />);
