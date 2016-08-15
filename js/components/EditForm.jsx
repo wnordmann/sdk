@@ -93,28 +93,31 @@ class EditForm extends React.Component {
   save(evt) {
     const {formatMessage} = this.props.intl;
     if (this.state.dirty) {
-      var values = {}, key;
+      var values = {}, key, hasChange = false;
       for (key in this.state.dirty) {
+        hasChange = true;
         values[key] = this.state.values[key];
       }
-      var me = this;
-      var onSuccess = function(result) {
-        if (result && result.transactionSummary.totalUpdated === 1) {
-          for (key in me.state.dirty) {
-            me.state.feature.set(key, values[key]);
+      if (hasChange) {
+        var me = this;
+        var onSuccess = function(result) {
+          if (result && result.transactionSummary.totalUpdated === 1) {
+            for (key in me.state.dirty) {
+              me.state.feature.set(key, values[key]);
+            }
+            if (me.props.onSuccess) {
+              me.props.onSuccess();
+            }
+            me.setState({dirty: {}});
+          } else {
+            me._setError(formatMessage(messages.updatemsg));
           }
-          if (me.props.onSuccess) {
-            me.props.onSuccess();
-          }
-          me.setState({dirty: {}});
-        } else {
-          me._setError(formatMessage(messages.updatemsg));
-        }
-      };
-      var onFailure = function(xmlhttp, msg) {
-        me._setError(msg || (xmlhttp.status + ' ' + xmlhttp.statusText));
-      };
-      WFSService.updateFeature(this.state.layer, null, this.state.feature, values, onSuccess, onFailure);
+        };
+        var onFailure = function(xmlhttp, msg) {
+          me._setError(msg || (xmlhttp.status + ' ' + xmlhttp.statusText));
+        };
+        WFSService.updateFeature(this.state.layer, null, this.state.feature, values, onSuccess, onFailure);
+      }
     }
   }
   _handleRequestClose() {

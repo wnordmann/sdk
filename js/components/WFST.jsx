@@ -64,10 +64,15 @@ const messages = defineMessages({
     description: 'Button title for modify / select existing feature',
     defaultMessage: 'Modify an existing feature or select before Delete'
   },
-  updatemsg: {
-    id: 'wfst.updatemsg',
+  updategeommsg: {
+    id: 'wfst.updategeommsg',
     description: 'Message to show that geometry change succeeded',
     defaultMessage: 'Geometry change saved successfully'
+  },
+  updateattrmsg: {
+    id: 'wfst.updateattrmsg',
+    description: 'Message to show that attribute change succeeded',
+    defaultMessage: 'Attribute change(s) saved successfully'
   },
   errormsg: {
     id: 'wfst.errormsg',
@@ -265,7 +270,12 @@ class WFST extends React.Component {
       this._dirty[evt.target.getId()] = true;
     }, this);
   }
+  _onSuccess() {
+    const {formatMessage} = this.props.intl;
+    this.setState({info: true, open: true, msg: formatMessage(messages.updateattrmsg)});
+  }
   _onSelectRemove(evt) {
+    const {formatMessage} = this.props.intl;
     var feature = evt.element;
     var fid = feature.getId();
     if (this._dirty[fid]) {
@@ -274,7 +284,7 @@ class WFST extends React.Component {
         delete me._request;
         if (result && result.transactionSummary.totalUpdated === 1) {
           delete me._dirty[fid];
-          me.setState({info: true, open: true});
+          me.setState({info: true, open: true, msg: formatMessage(messages.updategeommsg)});
         }
         if (!(me.state.layer.getSource() instanceof ol.source.Vector)) {
           me._redraw();
@@ -375,7 +385,7 @@ class WFST extends React.Component {
       if (this.state.error === true || this.state.info === true) {
         error = (<Snackbar
           open={this.state.open}
-          message={this.state.error ? formatMessage(messages.errormsg, {msg: this.state.msg}) : formatMessage(messages.updatemsg)}
+          message={this.state.error ? formatMessage(messages.errormsg, {msg: this.state.msg}) : this.state.msg}
           autoHideDuration={2000}
           onRequestClose={this._handleRequestClose.bind(this)}
         />);
@@ -391,7 +401,7 @@ class WFST extends React.Component {
       }
       var editForm;
       if (this.props.showEditForm && this.state.feature) {
-        editForm = (<EditForm onDeleteSuccess={this._onDeleteSuccess.bind(this)} feature={this.state.feature} layer={this.state.layer} />);
+        editForm = (<EditForm onSuccess={this._onSuccess.bind(this)} onDeleteSuccess={this._onDeleteSuccess.bind(this)} feature={this.state.feature} layer={this.state.layer} />);
       }
       const buttonStyle = this.props.buttonStyle;
       return (
