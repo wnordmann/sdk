@@ -93,10 +93,13 @@ class EditForm extends React.Component {
   save(evt) {
     const {formatMessage} = this.props.intl;
     if (this.state.dirty) {
-      var values = {}, key, hasChange = false;
+      var values = {}, key, hasChange = this._geomDirty;
       for (key in this.state.dirty) {
         hasChange = true;
         values[key] = this.state.values[key];
+      }
+      if (this._geomDirty) {
+        values[this.state.feature.getGeometryName()] = this.state.feature.getGeometry();
       }
       if (hasChange) {
         var me = this;
@@ -108,6 +111,9 @@ class EditForm extends React.Component {
             if (me.props.onSuccess) {
               me.props.onSuccess();
             }
+            if (me._geomDirty && me.props.onGeometryUpdate) {
+              me.props.onGeometryUpdate();
+            }
             me.setState({dirty: {}});
           } else {
             me._setError(formatMessage(messages.updatemsg));
@@ -116,7 +122,7 @@ class EditForm extends React.Component {
         var onFailure = function(xmlhttp, msg) {
           me._setError(msg || (xmlhttp.status + ' ' + xmlhttp.statusText));
         };
-        WFSService.updateFeature(this.state.layer, null, this.state.feature, values, onSuccess, onFailure);
+        WFSService.updateFeature(this.state.layer, this.props.map.getView(), this.state.feature, values, onSuccess, onFailure);
       }
     }
   }
@@ -156,6 +162,10 @@ class EditForm extends React.Component {
       }
     };
   }
+  _onChangeGeom(evt) {
+    this._geomDirty = true;
+    evt.target.un('change', this._onChangeGeom, this);
+  }
   render() {
     const styles = this.getStyles();
     const {formatMessage} = this.props.intl;
@@ -173,6 +183,7 @@ class EditForm extends React.Component {
     var feature = this.state.feature, layer = this.state.layer;
     if (feature) {
       fid = feature.getId();
+      feature.on('change', this._onChangeGeom, this);
       var keys = layer.get('wfsInfo').attributes;
       for (var i = 0, ii = keys.length; i < ii; ++i) {
         var key = keys[i];
@@ -198,6 +209,10 @@ class EditForm extends React.Component {
 
 EditForm.propTypes = {
   /**
+   * The ol3 map.
+   */
+  map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
    * The feature whose values to display and edit.
    */
   feature: React.PropTypes.instanceOf(ol.Feature).isRequired,
@@ -209,6 +224,10 @@ EditForm.propTypes = {
    * Css class name to apply on the root element of this component.
    */
   className: React.PropTypes.string,
+  /**
+   * Callback function for successfull geometry update
+   */
+  onGeometryUpdate: React.PropTypes.func,
   /**
    * Callback function for successfull delete
    */

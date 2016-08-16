@@ -120,7 +120,7 @@ class EditPopup extends React.Component {
   render() {
     var editForm;
     if (this.state.feature) {
-      editForm = (<EditForm ref='editForm' intl={this.props.intl} feature={this.state.feature} layer={this.state.layer} onSuccess={this._onSuccess.bind(this)} />);
+      editForm = (<EditForm map={this.props.map} ref='editForm' intl={this.props.intl} feature={this.state.feature} layer={this.state.layer} onSuccess={this._onSuccess.bind(this)} />);
     }
     return (
       <div className={classNames('sdk-component edit-popup', this.props.className)}>

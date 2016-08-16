@@ -64,15 +64,10 @@ const messages = defineMessages({
     description: 'Button title for modify / select existing feature',
     defaultMessage: 'Modify an existing feature or select before Delete'
   },
-  updategeommsg: {
-    id: 'wfst.updategeommsg',
-    description: 'Message to show that geometry change succeeded',
-    defaultMessage: 'Geometry change saved successfully'
-  },
-  updateattrmsg: {
-    id: 'wfst.updateattrmsg',
-    description: 'Message to show that attribute change succeeded',
-    defaultMessage: 'Attribute change(s) saved successfully'
+  updatemsg: {
+    id: 'wfst.updatemsg',
+    description: 'Message to show that geometry or attribute change succeeded',
+    defaultMessage: 'Geometry and/or attribute(s) change saved successfully'
   },
   errormsg: {
     id: 'wfst.errormsg',
@@ -270,9 +265,15 @@ class WFST extends React.Component {
       this._dirty[evt.target.getId()] = true;
     }, this);
   }
+  _onGeomUpdate() {
+    if (!(this.state.layer.getSource() instanceof ol.source.Vector)) {
+      this._redraw();
+    }
+    delete this._dirty[this.state.feature.getId()];
+  }
   _onSuccess() {
     const {formatMessage} = this.props.intl;
-    this.setState({info: true, open: true, msg: formatMessage(messages.updateattrmsg)});
+    this.setState({info: true, open: true, msg: formatMessage(messages.updatemsg)});
   }
   _onSelectRemove(evt) {
     const {formatMessage} = this.props.intl;
@@ -284,7 +285,7 @@ class WFST extends React.Component {
         delete me._request;
         if (result && result.transactionSummary.totalUpdated === 1) {
           delete me._dirty[fid];
-          me.setState({info: true, open: true, msg: formatMessage(messages.updategeommsg)});
+          me.setState({info: true, open: true, msg: formatMessage(messages.updatemsg)});
         }
         if (!(me.state.layer.getSource() instanceof ol.source.Vector)) {
           me._redraw();
@@ -401,7 +402,7 @@ class WFST extends React.Component {
       }
       var editForm;
       if (this.props.showEditForm && this.state.feature) {
-        editForm = (<EditForm onSuccess={this._onSuccess.bind(this)} onDeleteSuccess={this._onDeleteSuccess.bind(this)} feature={this.state.feature} layer={this.state.layer} />);
+        editForm = (<EditForm map={this.props.map} onGeometryUpdate={this._onGeomUpdate.bind(this)} onSuccess={this._onSuccess.bind(this)} onDeleteSuccess={this._onDeleteSuccess.bind(this)} feature={this.state.feature} layer={this.state.layer} />);
       }
       const buttonStyle = this.props.buttonStyle;
       return (
