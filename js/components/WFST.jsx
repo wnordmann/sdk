@@ -252,14 +252,16 @@ class WFST extends React.Component {
     }
   }
   _modifyFeature() {
-    this.deactivate();
-    var layer = this.state.layer;
-    if (layer) {
-      var interactions = [this._select, this._modify];
-      if (!(layer.getSource() instanceof ol.source.Vector)) {
-        interactions.push(this._selectfeature);
+    if (!this.state.modifySecondary) {
+      this.deactivate();
+      var layer = this.state.layer;
+      if (layer) {
+        var interactions = [this._select, this._modify];
+        if (!(layer.getSource() instanceof ol.source.Vector)) {
+          interactions.push(this._selectfeature);
+        }
+        this.activate(interactions);
       }
-      this.activate(interactions);
     }
   }
   _filterLayerList(lyr) {
