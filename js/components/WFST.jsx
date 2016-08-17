@@ -67,12 +67,17 @@ const messages = defineMessages({
   updatemsg: {
     id: 'wfst.updatemsg',
     description: 'Message to show that geometry or attribute change succeeded',
-    defaultMessage: 'Geometry and/or attribute(s) change saved successfully'
+    defaultMessage: 'Geometry and/or attribute(s) change saved successfully.'
+  },
+  deletesuccessmsg: {
+    id: 'wfst.deletesuccessmsg',
+    description: 'Message to show that feature was deleted successfully',
+    defaultMessage: 'Feature deleted succcesfully.'
   },
   errormsg: {
     id: 'wfst.errormsg',
     description: 'Error message to show the user when a request fails',
-    defaultMessage: 'Error saving this feature to GeoServer. {msg}'
+    defaultMessage: 'Error saving this feature (modification) to GeoServer. {msg}'
   },
   deletemsg: {
     id: 'wfst.deletemsg',
@@ -228,6 +233,7 @@ class WFST extends React.Component {
             found = true;
             me.setState({feature: features[i]});
             me._select.getFeatures().push(features[i]);
+            break;
           }
         }
       }
@@ -273,7 +279,7 @@ class WFST extends React.Component {
   }
   _onSuccess() {
     const {formatMessage} = this.props.intl;
-    this.setState({info: true, open: true, msg: formatMessage(messages.updatemsg)});
+    this.setState({error: false, info: true, open: true, msg: formatMessage(messages.updatemsg)});
   }
   _onSelectRemove(evt) {
     const {formatMessage} = this.props.intl;
@@ -285,7 +291,11 @@ class WFST extends React.Component {
         delete me._request;
         if (result && result.transactionSummary.totalUpdated === 1) {
           delete me._dirty[fid];
-          me.setState({info: true, open: true, msg: formatMessage(messages.updatemsg)});
+          me.setState({error: false, info: true, open: true, msg: formatMessage(messages.updatemsg)});
+        } else {
+          feature.setGeometry(me._geom);
+          delete me._geom;
+          me._setError('');
         }
         if (!(me.state.layer.getSource() instanceof ol.source.Vector)) {
           me._redraw();
@@ -357,6 +367,7 @@ class WFST extends React.Component {
     this.setState({disabled: false});
   }
   _onDeleteSuccess() {
+    const {formatMessage} = this.props.intl;
     this._select.getFeatures().clear();
     var source = this.state.layer.getSource();
     if (source instanceof ol.source.Vector) {
@@ -365,7 +376,7 @@ class WFST extends React.Component {
       FeatureStore.removeFeature(this.state.layer, this.state.feature);
       this._redraw();
     }
-    this.setState({feature: null});
+    this.setState({error: false, info: true, open: true, msg: formatMessage(messages.deletesuccessmsg), feature: null});
   }
   getStyles() {
     const muiTheme = this.state.muiTheme;
