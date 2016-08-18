@@ -228,6 +228,15 @@ class FeatureStore extends EventEmitter {
     this._config[id].features = features;
     this._config[id].originalFeatures = features.slice();
   }
+  pagingDone(layer) {
+    var id = layer.get('id');
+    if (!this._pageInfo[id]) {
+      return false;
+    } else {
+      var startIndex = this._pageInfo[id].startIndex;
+      return !(startIndex < layer.get('numberOfFeatures') && !this._pageInfo[id][startIndex]);
+    }
+  }
   loadNextPage(layer, onSuccess, onFailure) {
     var id = layer.get('id');
     if (!this._pageInfo[id]) {
