@@ -364,6 +364,11 @@ class FeatureStore extends EventEmitter {
     this.emitChange();
   }
   setSelection(layer, features, clear) {
+    var id = layer.get('id');
+    layer.once('change:visible', function(evt) {
+      this._config[id].selected = [];
+      this.emitChange();
+    }, this);
     // special handling for clusters
     // if a cluster has children selected, it should not show up as well
     var i, ii;
@@ -387,7 +392,6 @@ class FeatureStore extends EventEmitter {
         dirty[d].changed();
       }
     }
-    var id = layer.get('id');
     if (!this._config[id]) {
       this._config[id] = {};
     }
