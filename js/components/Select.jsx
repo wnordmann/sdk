@@ -126,12 +126,10 @@ class Select extends React.Component {
     this.setState({secondary: false});
   }
   _selectByRectangle() {
-    if (this.state.secondary) {
-      this.deactivate();
-    } else {
+    if (!this.state.secondary) {
       this.activate(this._interactions.RECTANGLE);
+      this.setState({secondary: !this.state.secondary});
     }
-    this.setState({secondary: !this.state.secondary});
   }
   disable() {
     this.setState({disabled: true});
