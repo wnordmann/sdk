@@ -17,6 +17,7 @@ import classNames from 'classnames';
 import SelectActions from '../actions/SelectActions.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import ToolUtil from '../toolutil.js';
+import WFSService from '../services/WFSService.js';
 import FeatureStore from '../stores/FeatureStore.js';
 import RaisedButton from './Button.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -92,7 +93,7 @@ class Select extends React.Component {
           SelectActions.selectFeatures(lyr, selected, true);
         } else {
           var state = FeatureStore.getState(lyr);
-          if (state) {
+          if (state && state.originalFeatures && state.originalFeatures.length > 0) {
             for (var i = 0, ii = state.originalFeatures.length; i < ii; ++i) {
               var f = state.originalFeatures[i];
               var geom = f.getGeometry();
@@ -100,9 +101,17 @@ class Select extends React.Component {
                 selected = this._handleSelection(f, selected);
               }
             }
+            SelectActions.selectFeatures(lyr, selected, true);
+          } else {
+            var me = this;
+            WFSService.bboxFilter(lyr, this.props.map.getView(), box, function(features) {
+              for (var i = 0, ii = features.length; i < ii; ++i) {
+                selected = me._handleSelection(features[i], selected);
+              }
+              SelectActions.selectFeatures(lyr, selected, true);
+            });
           }
         }
-        SelectActions.selectFeatures(lyr, selected, true);
       }
     }, this);
   }
