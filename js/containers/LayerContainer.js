@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import LayerListNew from '../components/LayerListNew.jsx';
+import LayerList from '../components/LayerList.jsx';
 import {addLayers, removeLayer} from '../actions/layers.js';
 
 const mapStateToProps = (state) => {
@@ -33,7 +33,7 @@ class LayerContainer extends React.Component {
   }
   render() {
     return (
-      <LayerListNew layers={this.props.layers} />
+      <LayerList {...this.props} />
     );
   }
 }

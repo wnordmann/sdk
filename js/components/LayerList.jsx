@@ -16,7 +16,6 @@ import ol from 'openlayers';
 import classNames from 'classnames';
 import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import LayerIdService from '../services/LayerIdService.js';
-import LayerStore from '../stores/LayerStore.js';
 import LayerListItem from './LayerListItem.jsx';
 import Label from './Label.jsx';
 import AddLayerModal from './AddLayerModal.jsx';
@@ -28,7 +27,6 @@ import LayersIcon from 'material-ui/lib/svg-icons/maps/layers';
 import Toolbar from 'material-ui/lib/toolbar/toolbar';
 import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import pureRender from 'pure-render-decorator';
 import './LayerList.css';
 
 
@@ -59,28 +57,17 @@ const messages = defineMessages({
  * </div>
  * ```
  */
-@pureRender
 class LayerList extends React.Component {
   constructor(props, context) {
     super(props);
-    LayerStore.bindMap(this.props.map);
     this.state = {
       muiTheme: context.muiTheme || ThemeManager.getMuiTheme()
     };
   }
   componentWillMount() {
-    this._onChangeCb = this._onChange.bind(this);
-    LayerStore.addChangeListener(this._onChangeCb);
-    this._onChange();
     if (this.props.showOnStart) {
       this._showPanel();
     }
-  }
-  componentWillUnmount() {
-    LayerStore.removeChangeListener(this._onChangeCb);
-  }
-  _onChange() {
-    this.setState(LayerStore.getState());
   }
   renderLayerGroup(group) {
     return this.renderLayers(group.getLayers().getArray().slice(0).reverse(), group);
@@ -160,7 +147,7 @@ class LayerList extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     const styles = this.getStyles();
-    var layers = this.state.layers.slice(0).reverse();
+    var layers = this.props.layers ? this.props.layers.slice(0).reverse() : [];
     var divClass = {
       'layer-switcher': true,
       'shown': this.state.visible,
