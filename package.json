@@ -56,9 +56,11 @@
     "react-dom": "0.14.8",
     "react-dropzone": "3.0.0",
     "react-intl": "2.0.0-rc-1",
+    "react-redux": "^4.4.5",
     "react-responsive-decorator": "0.0.1",
     "react-slick": "0.9.1",
     "react-tap-event-plugin": "^0.2.2",
+    "redux": "^3.5.2",
     "slick-carousel-dr-frankenstyle": "^1.5.8",
     "url-parse": "^1.1.1",
     "w3c-schemas": "^1.4.0"
