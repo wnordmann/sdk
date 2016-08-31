@@ -247,8 +247,16 @@ class InfoPopup extends React.Component {
       var me = this;
       map.forEachFeatureAtPixel(pixel, function(feature, layer) {
         if (feature && layer !== null) {
+          var cluster = false;
+          if (feature.get('features')) {
+            if (feature.get('features').length === 1) {
+              feature = feature.get('features')[0];
+            } else {
+              cluster = true;
+            }
+          }
           var popupDef = layer.get('popupInfo');
-          if (popupDef) {
+          if (popupDef && !cluster) {
             var featureKeys = feature.getKeys();
             for (var i = 0, ii = featureKeys.length; i < ii; i++) {
               var value = feature.get(featureKeys[i]);
