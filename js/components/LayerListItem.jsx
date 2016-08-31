@@ -208,7 +208,8 @@ class LayerListItem extends React.Component {
     LayerActions.moveLayerDown(this.props.layer, this.props.group);
   }
   _remove() {
-    LayerActions.removeLayer(this.props.layer);
+    this.props.onRemove(this.props.layer);
+    //LayerActions.removeLayer(this.props.layer);
   }
   _edit() {
     LayerActions.editLayer(this.props.layer);
@@ -373,6 +374,10 @@ LayerListItem.propTypes = {
    * Css class name to apply on the root element of this component.
    */
   className: React.PropTypes.string,
+  /**
+   * Callback for layer removal.
+   */
+  onRemove: React.PropTypes.func.isRequired,
   /**
    * i18n message strings. Provided through the application through context.
    */

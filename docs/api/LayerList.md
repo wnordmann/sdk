@@ -92,6 +92,13 @@ The map whose layers should show up in this layer list.
 type: `instanceOf ol.Map`
 
 
+### `onRemove` (required)
+
+Callback for layer removal.
+
+type: `func`
+
+
 ### `showDownload`
 
 Should we show a download button for layers?

@@ -11,3 +11,19 @@ export const removeLayer = (layer) => {
     layer: layer
   };
 };
+
+export const moveLayerUp = (layer, group) => {
+  return {
+    type: 'MOVE_LAYER_UP',
+    layer: layer,
+    group: group
+  };
+};
+
+export const moveLayerDown = (layer, group) => {
+  return {
+    type: 'MOVE_LAYER_DOWN',
+    layer: layer,
+    group: group
+  };
+};

@@ -104,6 +104,13 @@ Called when a modal is opened by this layer list item.
 type: `func`
 
 
+### `onRemove` (required)
+
+Callback for layer removal.
+
+type: `func`
+
+
 ### `showDownload`
 
 Should we show a download button?

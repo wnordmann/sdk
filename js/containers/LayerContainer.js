@@ -31,9 +31,12 @@ class LayerContainer extends React.Component {
   _onRemove(evt) {
     this.props.dispatch(removeLayer(evt.element));
   }
+  _removeLayer(layer) {
+    this.props.map.getLayers().remove(layer);
+  }
   render() {
     return (
-      <LayerList {...this.props} />
+      <LayerList onRemove={this._removeLayer.bind(this)} {...this.props} />
     );
   }
 }

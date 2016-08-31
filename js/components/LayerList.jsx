@@ -253,6 +253,10 @@ LayerList.propTypes = {
    */
   className: React.PropTypes.string,
   /**
+   * Callback for layer removal.
+   */
+  onRemove: React.PropTypes.func.isRequired,
+  /**
   * i18n message strings. Provided through the application through context.
   */
   intl: intlShape.isRequired
