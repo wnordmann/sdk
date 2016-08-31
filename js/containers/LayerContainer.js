@@ -9,31 +9,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    dispatch: dispatch
-  };
-};
-
 class LayerContainer extends React.Component {
-  constructor(props) {
-    super(props);
-    var map = props.map;
-    var layers = map.getLayers().getArray();
-    for (var i = 0, ii = layers.length; i < ii; ++i) {
-      props.dispatch(addLayer(layers[i]), i);
-    }
-    map.getLayers().on('add', this._onAdd, this);
-    map.getLayers().on('remove', this._onRemove, this);
-  }
-  _onAdd(evt) {
-    // TODO handle nested groups
-    var idx = this.props.map.getLayers().getArray().indexOf(evt.element);
-    this.props.dispatch(addLayer(evt.element, idx));
-  }
-  _onRemove(evt) {
-    this.props.dispatch(removeLayer(evt.element));
-  }
   _removeLayer(layer) {
     this.props.map.getLayers().remove(layer);
   }
@@ -92,8 +68,7 @@ class LayerContainer extends React.Component {
 
 
 LayerContainer = connect(
-   mapStateToProps,
-   mapDispatchToProps
+   mapStateToProps
 )(LayerContainer);
 
 export default LayerContainer;

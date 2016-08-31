@@ -13,7 +13,6 @@
 import React from 'react';
 import ol from 'openlayers';
 import ThemeManager from 'material-ui/lib/styles/theme-manager';
-import LayerStore from '../stores/LayerStore.js';
 import classNames from 'classnames';
 import pureRender from 'pure-render-decorator';
 import List from 'material-ui/lib/lists/list';
@@ -44,23 +43,8 @@ class Legend extends React.Component {
   constructor(props, context) {
     super(props);
     this.state = {
-      flatLayers: [],
       muiTheme: context.muiTheme || ThemeManager.getMuiTheme()
     };
-    LayerStore.bindMap(this.props.map);
-  }
-  componentWillMount() {
-    this._onChangeCb = this._onChange.bind(this);
-    LayerStore.addChangeListener(this._onChangeCb);
-    this._onChange();
-  }
-  componentWillUnmount() {
-    LayerStore.removeChangeListener(this._onChangeCb);
-  }
-  _onChange() {
-    // TODO apply nesting to this component's structure
-    var flatLayers = LayerStore.getState().flatLayers.slice();
-    this.setState({flatLayers: flatLayers});
   }
   getStyles() {
     const muiTheme = this.state.muiTheme;
@@ -76,8 +60,8 @@ class Legend extends React.Component {
     const {formatMessage} = this.props.intl;
     const styles = this.getStyles();
     var legends = [];
-    for (var i = 0, ii = this.state.flatLayers.length; i < ii; ++i) {
-      var layer = this.state.flatLayers[i];
+    for (var i = 0, ii = this.props.flatLayers.length; i < ii; ++i) {
+      var layer = this.props.flatLayers[i];
       if (layer.getVisible()) {
         if ((layer instanceof ol.layer.Tile && layer.getSource() instanceof ol.source.TileWMS) ||
           (layer instanceof ol.layer.Image && layer.getSource() instanceof ol.source.ImageWMS)) {
@@ -101,10 +85,6 @@ Legend.propTypes = {
    * Options to send to the WMS legend. See WMSLegend component.
    */
   wmsOptions: React.PropTypes.object,
-  /**
-   * The map whose layers should show up in this legend component.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
   /**
    * Css class name to apply on the root element of this component.
    */

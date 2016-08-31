@@ -1,14 +1,16 @@
-export const addLayer = (layer, index) => {
+export const addLayer = (map, layer, index) => {
   return {
     type: 'ADD_LAYER',
+    map: map,
     layer: layer,
     index: index
   };
 };
 
-export const removeLayer = (layer) => {
+export const removeLayer = (map, layer) => {
   return {
     type: 'REMOVE_LAYER',
+    map: map,
     layer: layer
   };
 };
