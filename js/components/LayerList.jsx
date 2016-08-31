@@ -257,6 +257,14 @@ LayerList.propTypes = {
    */
   onRemove: React.PropTypes.func.isRequired,
   /**
+   * Callback for layer ordering (move up).
+   */
+  onMoveUp: React.PropTypes.func,
+  /**
+   * Callback for layer ordering (move down).
+   */
+  onMoveDown: React.PropTypes.func,
+  /**
   * i18n message strings. Provided through the application through context.
   */
   intl: intlShape.isRequired

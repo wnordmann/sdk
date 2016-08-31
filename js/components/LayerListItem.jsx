@@ -202,10 +202,16 @@ class LayerListItem extends React.Component {
     );
   }
   _moveUp() {
-    LayerActions.moveLayerUp(this.props.layer, this.props.group);
+    if (this.props.onMoveUp) {
+      this.props.onMoveUp(this.props.layer, this.props.group);
+    }
+    //LayerActions.moveLayerUp(this.props.layer, this.props.group);
   }
   _moveDown() {
-    LayerActions.moveLayerDown(this.props.layer, this.props.group);
+    if (this.props.onMoveDown) {
+      this.props.onMoveDown(this.props.layer, this.props.group);
+    }
+    //LayerActions.moveLayerDown(this.props.layer, this.props.group);
   }
   _remove() {
     this.props.onRemove(this.props.layer);
@@ -378,6 +384,14 @@ LayerListItem.propTypes = {
    * Callback for layer removal.
    */
   onRemove: React.PropTypes.func.isRequired,
+  /**
+   * Callback for layer ordering (move up).
+   */
+  onMoveUp: React.PropTypes.func,
+  /**
+   * Callback for layer ordering (move down).
+   */
+  onMoveDown: React.PropTypes.func,
   /**
    * i18n message strings. Provided through the application through context.
    */

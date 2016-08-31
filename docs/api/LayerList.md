@@ -92,6 +92,20 @@ The map whose layers should show up in this layer list.
 type: `instanceOf ol.Map`
 
 
+### `onMoveDown`
+
+Callback for layer ordering (move down).
+
+type: `func`
+
+
+### `onMoveUp`
+
+Callback for layer ordering (move up).
+
+type: `func`
+
+
 ### `onRemove` (required)
 
 Callback for layer removal.

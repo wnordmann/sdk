@@ -104,6 +104,20 @@ Called when a modal is opened by this layer list item.
 type: `func`
 
 
+### `onMoveDown`
+
+Callback for layer ordering (move down).
+
+type: `func`
+
+
+### `onMoveUp`
+
+Callback for layer ordering (move up).
+
+type: `func`
+
+
 ### `onRemove` (required)
 
 Callback for layer removal.
