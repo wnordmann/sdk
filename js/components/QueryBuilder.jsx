@@ -139,7 +139,7 @@ class QueryBuilder extends React.Component {
     if (this._queryFilter === null) {
       return;
     }
-    var features = FeatureStore.getState(this._layer).features;
+    var features = FeatureStore.getState(this._layer).originalFeatures;
     for (var i = 0, ii = features.length; i < ii; ++i) {
       var properties = features[i].getProperties();
       if (this._queryFilter(properties)) {
@@ -147,9 +147,9 @@ class QueryBuilder extends React.Component {
       }
     }
     if (selectIn === true) {
-      selection = FeatureStore.selectFeaturesInCurrentSelection(this._layer, selection)
+      selection = FeatureStore.selectFeaturesInCurrentSelection(this._layer, selection);
     } else {
-      SelectActions.selectFeatures(this._layer, selection);
+      SelectActions.selectFeatures(this._layer, selection, true);
     }
     this.setState({
       showCount: true,
@@ -161,7 +161,6 @@ class QueryBuilder extends React.Component {
     this._doQuery();
   }
   _newSelection() {
-    SelectActions.clear(this._layer);
     this._doQuery();
   }
   _inSelection() {
