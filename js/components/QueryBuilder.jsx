@@ -143,6 +143,7 @@ class QueryBuilder extends React.Component {
     for (var i = 0, ii = features.length; i < ii; ++i) {
       var properties = features[i].getProperties();
       if (this._queryFilter(properties)) {
+        features[i].selected = true;
         selection.push(features[i]);
       }
     }

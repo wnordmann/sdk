@@ -414,6 +414,10 @@ class FeatureStore extends EventEmitter {
         }
       }
     }
+    // cluster layers need to get redrawn
+    if (layer instanceof ol.layer.Vector && layer.getSource() instanceof ol.source.Cluster) {
+      layer.getSource().changed();
+    }
     this.emitChange();
   }
   setFilter(layer, filter) {
