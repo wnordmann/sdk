@@ -147,7 +147,7 @@ class QueryBuilder extends React.Component {
       }
     }
     if (selectIn === true) {
-      SelectActions.selectFeaturesInCurrentSelection(this._layer, selection);
+      selection = FeatureStore.selectFeaturesInCurrentSelection(this._layer, selection)
     } else {
       SelectActions.selectFeatures(this._layer, selection);
     }

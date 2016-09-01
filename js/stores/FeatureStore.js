@@ -336,6 +336,7 @@ class FeatureStore extends EventEmitter {
       }
     }
     this.emitChange();
+    return selected;
   }
   _updateSelect() {
     var selectedFeatures = this._select.getFeatures();
@@ -493,9 +494,6 @@ let _FeatureStore = new FeatureStore();
 AppDispatcher.register((payload) => {
   let action = payload.action;
   switch (action.type) {
-    case SelectConstants.SELECT_FEATURES_IN:
-      _FeatureStore.selectFeaturesInCurrentSelection(action.layer, action.features);
-      break;
     case SelectConstants.CLEAR:
       _FeatureStore.clearSelection(action.layer, action.filter);
       break;

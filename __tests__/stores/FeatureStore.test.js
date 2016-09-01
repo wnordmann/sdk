@@ -76,7 +76,14 @@ describe('FeatureStore', function() {
     SelectActions.toggleFeature(layer, layer.getSource().getFeatures()[0]);
     SelectActions.toggleFeature(layer, layer.getSource().getFeatures()[1]);
     assert.equal(config.selected.length, 2);
-    SelectActions.selectFeaturesInCurrentSelection(layer, [layer.getSource().getFeatures()[3]]);
+  });
+
+  it('selectFeaturesInCurrentSelection works correctly', function() {
+    FeatureStore.addLayer(layer);
+    var config = FeatureStore._config[layer.get('id')];
+    SelectActions.toggleFeature(layer, layer.getSource().getFeatures()[0]);
+    SelectActions.toggleFeature(layer, layer.getSource().getFeatures()[1]);
+    FeatureStore.selectFeaturesInCurrentSelection(layer, [layer.getSource().getFeatures()[3]]);
     assert.equal(config.selected.length, 0);
   });
 

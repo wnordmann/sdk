@@ -28,13 +28,6 @@ export default {
       filter: filter
     });
   },
-  selectFeaturesInCurrentSelection: (layer, features) => {
-    AppDispatcher.handleAction({
-      type: SelectConstants.SELECT_FEATURES_IN,
-      layer: layer,
-      features: features
-    });
-  },
   selectFeatures: (layer, features, clear) => {
     AppDispatcher.handleAction({
       type: SelectConstants.SELECT_FEATURES,
