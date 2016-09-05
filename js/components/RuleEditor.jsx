@@ -60,7 +60,7 @@ class RuleEditor extends React.Component {
     super(props);
     var title = this.props.initialState ? this.props.initialState.title : undefined;
     this.state = {
-      value: 1,
+      value: props.geometryType === 'Polygon' ? 1 : 2,
       title: title
     };
   }
@@ -78,25 +78,37 @@ class RuleEditor extends React.Component {
       title: title
     });
   }
+  _getTabs() {
+    const {formatMessage} = this.props.intl;
+    var tabs = [];
+    if (this.props.geometryType === 'Polygon') {
+      tabs.push(
+        <Tab key='fill' value={1} label={formatMessage(messages.filltitle)} disableTouchRipple={true}>
+          <FillEditor {...this.props} />
+        </Tab>
+      );
+    }
+    tabs.push((<Tab key='stroke' value={2} label={formatMessage(messages.stroketitle)} disableTouchRipple={true}>
+         <StrokeEditor {...this.props} />
+       </Tab>),
+      (<Tab key='label' value={3} label={formatMessage(messages.labeltitle)} disableTouchRipple={true}>
+         <LabelEditor {...this.props} />
+       </Tab>),
+      (<Tab key='filter' value={4} label={formatMessage(messages.filtertitle)} disableTouchRipple={true}>
+         <FilterEditor {...this.props} />
+       </Tab>)
+    );
+    return tabs;
+  }
   render() {
     if (this.props.visible) {
       const {formatMessage} = this.props.intl;
+      var tabs = this._getTabs();
       return (
         <Paper className={classNames('sdk-component rule-editor', this.props.className)} zIndex={2}>
           <TextField value={this.state.title} ref='title' onChange={this._onTitleChange.bind(this)} floatingLabelText={formatMessage(messages.titlelabel)} />
           <Tabs value={this.state.value} onChange={this.handleChange.bind(this)}>
-            <Tab value={1} label={formatMessage(messages.filltitle)} disableTouchRipple={true}>
-              <FillEditor {...this.props} />
-            </Tab>
-            <Tab value={2} label={formatMessage(messages.stroketitle)} disableTouchRipple={true}>
-              <StrokeEditor {...this.props} />
-            </Tab>
-            <Tab value={3} label={formatMessage(messages.labeltitle)} disableTouchRipple={true}>
-              <LabelEditor {...this.props} />
-            </Tab>
-            <Tab value={4} label={formatMessage(messages.filtertitle)} disableTouchRipple={true}>
-              <FilterEditor {...this.props} />
-            </Tab>
+            {tabs}
           </Tabs>
         </Paper>
       );

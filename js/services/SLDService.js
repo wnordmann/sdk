@@ -52,12 +52,17 @@ class SLDService {
   parseSymbolizer(symbolizerObj) {
     if (symbolizerObj.name.localPart === 'PolygonSymbolizer') {
       return this.parsePolygonSymbolizer(symbolizerObj.value);
+    } else if (symbolizerObj.name.localPart === 'LineSymbolizer') {
+      return this.parseLineSymbolizer(symbolizerObj.value);
     }
+  }
+  parseLineSymbolizer(lineObj) {
+    return this.parseStroke(lineObj.stroke);
   }
   parsePolygonSymbolizer(polyObj) {
     var result = {};
     result.fillColor = this.parseFill(polyObj.fill);
-    // TODO stroke
+    Object.assign(result, this.parseStroke(polyObj.stroke));
     return result;
   }
   parseFill(fillObj) {
@@ -73,6 +78,22 @@ class SLDService {
     return fillColor;
   }
   parseStroke(strokeObj) {
+    var stroke = {};
+    if (strokeObj.cssParameter) {
+      for (var i = 0, ii = strokeObj.cssParameter.length; i < ii; ++i) {
+        if (strokeObj.cssParameter[i].name === 'stroke') {
+          stroke.strokeColor = {
+            hex: strokeObj.cssParameter[i].content[0],
+            rgb: hexToRgb(strokeObj.cssParameter[i].content[0])
+          };
+        } else if (strokeObj.cssParameter[i].name === 'stroke-opacity') {
+          stroke.strokeColor.rgb = Object.assign(stroke.strokeColor.rgb, {a :parseFloat(strokeObj.cssParameter[i].content[0])});
+        } else if (strokeObj.cssParameter[i].name === 'stroke-width') {
+          stroke.strokeWidth = parseFloat(strokeObj.cssParameter[i].content[0]);
+        }
+      }
+    }
+    return stroke;
   }
   createFill(styleState) {
     return {
