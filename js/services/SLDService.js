@@ -65,8 +65,9 @@ class SLDService {
     for (var i = 0, ii = fillObj.cssParameter.length; i < ii; ++i) {
       if (fillObj.cssParameter[i].name === 'fill') {
         fillColor.hex = fillObj.cssParameter[i].content[0];
+        fillColor.rgb = hexToRgb(fillColor.hex);
       } else if (fillObj.cssParameter[i].name === 'fill-opacity') {
-        fillColor.rgb = Object.assign(hexToRgb(fillColor.hex), {a :parseFloat(fillObj.cssParameter[i].content[0])});
+        fillColor.rgb = Object.assign(fillColor.rgb, {a :parseFloat(fillObj.cssParameter[i].content[0])});
       }
     }
     return fillColor;
