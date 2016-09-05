@@ -107,17 +107,23 @@ class SLDService {
     };
   }
   createStroke(styleState) {
-    return {
-      cssParameter: [{
+    var cssParameters = [];
+    if (styleState.strokeColor) {
+      cssParameters.push({
         name: 'stroke',
         content: ['#' + styleState.strokeColor.hex]
       }, {
-        name: 'stroke-width',
-        content: [String(styleState.strokeWidth)]
-      }, {
         name: 'stroke-opacity',
         content: [String(styleState.strokeColor.rgb.a)]
-      }]
+      });
+    } else if (styleState.strokeWidth !== undefined) {
+      cssParameters.push({
+        name: 'stroke-width',
+        content: [String(styleState.strokeWidth)]
+      });
+    }
+    return {
+      cssParameter: cssParameters
     };
   }
   createPolygonSymbolizer(styleState) {
