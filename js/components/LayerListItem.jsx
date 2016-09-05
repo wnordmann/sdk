@@ -17,6 +17,7 @@ import classNames from 'classnames';
 import LabelModal from './LabelModal.jsx';
 import StyleModal from './StyleModal.jsx';
 import LayerActions from '../actions/LayerActions.js';
+import WMSService from '../services/WMSService.js';
 import Slider from 'material-ui/lib/slider';
 import Checkbox from 'material-ui/lib/checkbox';
 import ListItem from 'material-ui/lib/lists/list-item';
@@ -182,7 +183,15 @@ class LayerListItem extends React.Component {
     this.refs.labelmodal.getWrappedInstance().open();
   }
   _style() {
-    this.refs.stylemodal.getWrappedInstance().open();
+    if (!this.props.layer.get('styleInfo')) {
+      var me = this;
+      WMSService.getStyles(this.props.layer.getSource().getUrls()[0], this.props.layer, function(info) {
+        me.props.layer.set('styleInfo', info);
+        me.refs.stylemodal.getWrappedInstance().open();
+      }, undefined);
+    } else {
+      this.refs.stylemodal.getWrappedInstance().open();
+    }
   }
   _onCloseModal() {
     if (this.props.onModalClose) {

@@ -15,6 +15,7 @@ import {XLink_1_0} from 'w3c-schemas/lib/XLink_1_0.js';
 import {Filter_1_0_0} from 'ogc-schemas/lib/Filter_1_0_0.js';
 import {GML_2_1_2} from 'ogc-schemas/lib/GML_2_1_2.js';
 import {SLD_1_0_0} from 'ogc-schemas/lib/SLD_1_0_0.js';
+import {hexToRgb} from '../util.js';
 
 const sldNamespace = 'http://www.opengis.net/sld';
 const ogcNamespace = 'http://www.opengis.net/ogc';
@@ -27,8 +28,51 @@ var context = new Jsonix.Context([XLink_1_0, Filter_1_0_0, GML_2_1_2, SLD_1_0_0]
   }
 });
 var marshaller = context.createMarshaller();
+var unmarshaller = context.createUnmarshaller();
 
 class SLDService {
+  parse(sld) {
+    var info = unmarshaller.unmarshalString(sld).value;
+    var featureTypeStyle = info.namedLayerOrUserLayer[0].namedStyleOrUserStyle[0].featureTypeStyle[0];
+    var rules = [];
+    for (var i = 0, ii = featureTypeStyle.rule.length; i < ii; ++i) {
+      rules.push(this.parseRule(featureTypeStyle.rule[i]));
+    }
+    return rules;
+  }
+  parseRule(ruleObj) {
+    var rule = {};
+    rule.name = ruleObj.name;
+    rule.title = ruleObj.title;
+    for (var i = 0, ii = ruleObj.symbolizer.length; i < ii; ++i) {
+      Object.assign(rule, this.parseSymbolizer(ruleObj.symbolizer[i]));
+    }
+    return rule;
+  }
+  parseSymbolizer(symbolizerObj) {
+    if (symbolizerObj.name.localPart === 'PolygonSymbolizer') {
+      return this.parsePolygonSymbolizer(symbolizerObj.value);
+    }
+  }
+  parsePolygonSymbolizer(polyObj) {
+    var result = {};
+    result.fillColor = this.parseFill(polyObj.fill);
+    // TODO stroke
+    return result;
+  }
+  parseFill(fillObj) {
+    var fillColor = {};
+    for (var i = 0, ii = fillObj.cssParameter.length; i < ii; ++i) {
+      if (fillObj.cssParameter[i].name === 'fill') {
+        fillColor.hex = fillObj.cssParameter[i].content[0];
+      } else if (fillObj.cssParameter[i].name === 'fill-opacity') {
+        fillColor.rgb = Object.assign(hexToRgb(fillColor.hex), {a :parseFloat(fillObj.cssParameter[i].content[0])});
+      }
+    }
+    return fillColor;
+  }
+  parseStroke(strokeObj) {
+  }
   createFill(styleState) {
     return {
       cssParameter: [{

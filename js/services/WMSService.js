@@ -13,6 +13,7 @@
 import {doGET} from '../util.js';
 import URL from 'url-parse';
 import ol from 'openlayers';
+import SLDService from './SLDService';
 
 const wmsCapsFormat = new ol.format.WMSCapabilities();
 const wmsGetFeatureInfoFormats = {
@@ -31,6 +32,21 @@ class WMSService {
     return doGET(urlObj.toString(), function(xmlhttp) {
       var info = wmsCapsFormat.read(xmlhttp.responseText);
       onSuccess.call(this, info.Capability.Layer);
+    }, function(xmlhttp) {
+      onFailure.call(this, xmlhttp);
+    }, this);
+  }
+  getStyles(url, layer, onSuccess, onFailure) {
+    var urlObj = new URL(url);
+    urlObj.set('query', {
+      service: 'WMS',
+      request: 'GetStyles',
+      layers: layer.get('name'),
+      version: '1.1.1'
+    });
+    return doGET(urlObj.toString(), function(xmlhttp) {
+      var info = SLDService.parse(xmlhttp.responseText);
+      onSuccess.call(this, info);
     }, function(xmlhttp) {
       onFailure.call(this, xmlhttp);
     }, this);

@@ -104,7 +104,15 @@ class StyleModal extends React.Component {
     }
   }
   open() {
-    this.setState({open: true});
+    if (this.props.layer.get('styleInfo')) {
+      var rules = this.props.layer.get('styleInfo');
+      for (var i = 0, ii = rules.length; i < ii; ++i) {
+        this._styleState[rules[i].name] = rules[i];
+      }
+      this.setState({open: true, rules: this.props.layer.get('styleInfo')});
+    } else {
+      this.setState({open: true});
+    }
   }
   close() {
     this.setState({open: false});
