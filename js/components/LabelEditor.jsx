@@ -54,7 +54,6 @@ class LabelEditor extends React.Component {
     this._setInitialStateFromProp('labelAttribute', null);
     this._setInitialStateFromProp('fontSize', 12);
     this._setInitialStateFromProp('fontColor', {rgb: {r: 0, g: 0, b: 0, a: 1}, hex: '000000'});
-    this.props.onChange(this.state);
   }
   _setInitialStateFromProp(prop, defaultVal) {
     if (this.props.initialState && this.props.initialState[prop]) {
@@ -64,16 +63,21 @@ class LabelEditor extends React.Component {
     }
   }
   _onItemChange(evt, idx, value) {
-    this.setState({labelAttribute: value});
+    this.setState({labelAttribute: value}, function() {
+      this.props.onChange(this.state);
+    });
   }
   _onChangeFontSize(evt) {
-    this.setState({fontSize: evt.currentTarget.value});
+    this.setState({fontSize: evt.currentTarget.value}, function() {
+      this.props.onChange(this.state);
+    });
   }
   _onChangeFill(color) {
-    this.setState({fontColor: color});
+    this.setState({fontColor: color}, function() {
+      this.props.onChange(this.state);
+    });
   }
   render() {
-    this.props.onChange(this.state);
     const {formatMessage} = this.props.intl;
     var attributeItems = [];
     attributeItems.push(<MenuItem key={0} style={{'minHeight':'32px'}} value={null} primaryText={' '} />);

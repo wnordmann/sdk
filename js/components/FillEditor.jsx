@@ -33,14 +33,18 @@ class FillEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this._setInitialStateFromProp('fillColor', {rgb: {r: 255, g: 0, b: 0, a: 0.5}, hex: 'FF0000'});
-    this.props.onChange(this.state);
+    var changed = this._setInitialStateFromProp('fillColor', {rgb: {r: 255, g: 0, b: 0, a: 0.5}, hex: 'FF0000'});
+    if (changed) {
+      this.props.onChange(this.state);
+    }
   }
   _setInitialStateFromProp(prop, defaultVal) {
     if (this.props.initialState && this.props.initialState[prop]) {
       this.state[prop] = this.props.initialState[prop];
+      return false;
     } else {
       this.state[prop] = defaultVal;
+      return true;
     }
   }
   _onChangeFill(color) {

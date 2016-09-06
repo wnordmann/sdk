@@ -69,8 +69,12 @@ class SLDService {
   }
   parsePolygonSymbolizer(polyObj) {
     var result = {};
-    result.fillColor = this.parseFill(polyObj.fill);
-    Object.assign(result, this.parseStroke(polyObj.stroke));
+    if (polyObj.fill) {
+      result.fillColor = this.parseFill(polyObj.fill);
+    }
+    if (polyObj.stroke) {
+      Object.assign(result, this.parseStroke(polyObj.stroke));
+    }
     return result;
   }
   parseFill(fillObj) {

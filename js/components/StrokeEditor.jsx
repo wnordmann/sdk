@@ -39,15 +39,19 @@ class StrokeEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this._setInitialStateFromProp('strokeColor', {rgb: {r: 0, g: 0, b: 0, a: 1}, hex: '000000'});
-    this._setInitialStateFromProp('strokeWidth', 1);
-    this.props.onChange(this.state);
+    var colorChanged = this._setInitialStateFromProp('strokeColor', {rgb: {r: 0, g: 0, b: 0, a: 1}, hex: '000000'});
+    var widthChanged = this._setInitialStateFromProp('strokeWidth', 1);
+    if (colorChanged || widthChanged) {
+      this.props.onChange(this.state);
+    }
   }
   _setInitialStateFromProp(prop, defaultVal) {
     if (this.props.initialState && this.props.initialState[prop]) {
       this.state[prop] = this.props.initialState[prop];
+      return false;
     } else {
       this.state[prop] = defaultVal;
+      return true;
     }
   }
   _onChangeStrokeWidth(evt) {
