@@ -212,7 +212,7 @@ class StyleModal extends React.Component {
       this._styleState[rule] = {};
     }
     Object.assign(this._styleState[rule], state);
-    this._setStyle(true);
+    this._setStyle();
   }
   _onRuleChange(evt, idx, value) {
     this.setState({rule: value});

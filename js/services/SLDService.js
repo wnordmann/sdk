@@ -116,7 +116,8 @@ class SLDService {
         name: 'stroke-opacity',
         content: [String(styleState.strokeColor.rgb.a)]
       });
-    } else if (styleState.strokeWidth !== undefined) {
+    }
+    if (styleState.strokeWidth !== undefined) {
       cssParameters.push({
         name: 'stroke-width',
         content: [String(styleState.strokeWidth)]
