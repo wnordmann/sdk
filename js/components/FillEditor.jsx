@@ -44,7 +44,7 @@ class FillEditor extends React.Component {
     }
   }
   _onChangeFill(color) {
-    this.state.fillColor = color;
+    this.setState({fillColor: color});
     this.props.onChange(this.state);
   }
   render() {

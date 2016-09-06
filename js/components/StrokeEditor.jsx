@@ -51,13 +51,16 @@ class StrokeEditor extends React.Component {
     }
   }
   _onChangeStrokeWidth(evt) {
-    this.setState({strokeWidth: parseFloat(evt.target.value)});
+    this.setState({strokeWidth: parseFloat(evt.target.value)}, function() {
+      this.props.onChange(this.state);
+    });
   }
   _onChangeStroke(color) {
-    this.setState({strokeColor: color});
+    this.setState({strokeColor: color}, function() {
+      this.props.onChange(this.state);
+    });
   }
   render() {
-    this.props.onChange(this.state);
     const {formatMessage} = this.props.intl;
     return (
       <div className={classNames('sdk-component stroke-editor', this.props.className)}>
