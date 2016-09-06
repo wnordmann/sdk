@@ -69,7 +69,7 @@ class SLDService {
     var fillColor = {};
     for (var i = 0, ii = fillObj.cssParameter.length; i < ii; ++i) {
       if (fillObj.cssParameter[i].name === 'fill') {
-        fillColor.hex = fillObj.cssParameter[i].content[0];
+        fillColor.hex = fillObj.cssParameter[i].content[0].replace('#', '');
         fillColor.rgb = hexToRgb(fillColor.hex);
       } else if (fillObj.cssParameter[i].name === 'fill-opacity') {
         fillColor.rgb = Object.assign(fillColor.rgb, {a :parseFloat(fillObj.cssParameter[i].content[0])});
@@ -83,7 +83,7 @@ class SLDService {
       for (var i = 0, ii = strokeObj.cssParameter.length; i < ii; ++i) {
         if (strokeObj.cssParameter[i].name === 'stroke') {
           stroke.strokeColor = {
-            hex: strokeObj.cssParameter[i].content[0],
+            hex: strokeObj.cssParameter[i].content[0].replace('#', ''),
             rgb: hexToRgb(strokeObj.cssParameter[i].content[0])
           };
         } else if (strokeObj.cssParameter[i].name === 'stroke-opacity') {
