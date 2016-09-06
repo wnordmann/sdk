@@ -54,7 +54,15 @@ class SLDService {
       return this.parsePolygonSymbolizer(symbolizerObj.value);
     } else if (symbolizerObj.name.localPart === 'LineSymbolizer') {
       return this.parseLineSymbolizer(symbolizerObj.value);
+    } else if (symbolizerObj.name.localPart === 'PointSymbolizer') {
+      return this.parsePointSymbolizer(symbolizerObj.value);
     }
+  }
+  parsePointSymbolizer(pointObj) {
+    var result = {};
+    result.fillColor = this.parseFill(pointObj.graphic.externalGraphicOrMark[0].fill);
+    Object.assign(result, this.parseStroke(pointObj.graphic.externalGraphicOrMark[0].stroke));
+    return result;
   }
   parseLineSymbolizer(lineObj) {
     return this.parseStroke(lineObj.stroke);
