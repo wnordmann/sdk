@@ -203,7 +203,6 @@ var enMessages = {
   "strokeeditor.strokewidthlabel": "Stroke width",
   "stylemodal.addrulebutton": "Add",
   "stylemodal.addrulebuttontitle": "Add New Rule",
-  "stylemodal.applybutton": "Apply",
   "stylemodal.closebutton": "Close",
   "stylemodal.errormsg": "Error saving style to GeoServer. {msg}",
   "stylemodal.removerulebutton": "Remove",

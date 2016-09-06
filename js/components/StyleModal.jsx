@@ -37,11 +37,6 @@ const messages = defineMessages({
     description: 'Error message to show the user when a request fails',
     defaultMessage: 'Error saving style to GeoServer. {msg}'
   },
-  applybutton: {
-    id: 'stylemodal.applybutton',
-    description: 'Text for the apply button',
-    defaultMessage: 'Apply'
-  },
   closebutton: {
     id: 'stylemodal.closebutton',
     description: 'Text for the close button',
@@ -179,7 +174,6 @@ class StyleModal extends React.Component {
       RESTService.updateStyle(url, this.props.layer, sld, function(xmlhttp) {
         me.props.layer.getSource().updateParams({'_olSalt': Math.random()});
         LayerActions.styleLayer(me.props.layer);
-        me.close();
       }, function(xmlhttp) {
         me.setState({error: true, errorOpen: true, msg: xmlhttp.status + ' ' + xmlhttp.statusText});
       });
@@ -187,7 +181,6 @@ class StyleModal extends React.Component {
       RESTService.createStyle(url, this.props.layer, sld, function(xmlhttp) {
         me.props.layer.getSource().updateParams({'STYLES': me.props.layer.get('styleName'), '_olSalt': Math.random()});
         LayerActions.styleLayer(me.props.layer);
-        me.close();
       }, function(xmlhttp) {
         me.setState({error: true, errorOpen: true, msg: xmlhttp.status + ' ' + xmlhttp.statusText});
       });
@@ -212,7 +205,6 @@ class StyleModal extends React.Component {
       }
       return null;
     });
-    this.close();
   }
   _onChange(state) {
     var rule = this.state.rule;
@@ -220,6 +212,7 @@ class StyleModal extends React.Component {
       this._styleState[rule] = {};
     }
     Object.assign(this._styleState[rule], state);
+    this._setStyle(true);
   }
   _onRuleChange(evt, idx, value) {
     this.setState({rule: value});
@@ -270,7 +263,6 @@ class StyleModal extends React.Component {
       return (<RuleEditor {...this.props} geometryType={this.state.geometryType} visible={rule.name === this.state.rule} key={key} initialState={this._styleState[rule.name]} onChange={this._onChange.bind(this)} attributes={this.state.attributes} />)
     }, this);
     var actions = [
-      <RaisedButton label={formatMessage(messages.applybutton)} onTouchTap={this._setStyle.bind(this)} />,
       <RaisedButton label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
     ];
     return (
