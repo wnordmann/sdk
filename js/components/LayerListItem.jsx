@@ -185,7 +185,7 @@ class LayerListItem extends React.Component {
   _style() {
     if (!this.props.layer.get('styleInfo')) {
       var me = this;
-      WMSService.getStyles(this.props.layer.getSource().getUrls()[0], this.props.layer, function(info) {
+      WMSService.getStyles(this.props.layer.get('wfsInfo').url, this.props.layer, function(info) {
         me.props.layer.set('styleInfo', info);
         me.refs.stylemodal.getWrappedInstance().open();
       }, undefined);

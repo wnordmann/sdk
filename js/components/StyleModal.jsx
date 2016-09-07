@@ -118,13 +118,19 @@ class StyleModal extends React.Component {
     this.props.layer.un('change:wfsInfo', this._setGeomTypeAndAttributes, this);
   }
   _createStyle(styleState) {
-    var fill = new ol.style.Fill({
-      color: transformColor(styleState.fillColor)
-    });
-    var stroke = new ol.style.Stroke({
-      color: transformColor(styleState.strokeColor),
-      width: styleState.strokeWidth
-    });
+    var fill;
+    if (styleState.fillColor) {
+      fill = new ol.style.Fill({
+        color: transformColor(styleState.fillColor)
+      });
+    }
+    var stroke;
+    if (styleState.strokeColor) {
+      stroke = new ol.style.Stroke({
+        color: transformColor(styleState.strokeColor),
+        width: styleState.strokeWidth
+      });
+    }
     var text;
     if (styleState.labelAttribute) {
       text = new ol.style.Text({

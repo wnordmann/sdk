@@ -185,10 +185,17 @@ class AddLayerModal extends React.Component {
         source: new ol.source.Vector({
           wrapX: false,
           url: function(extent) {
-            return me._getUrl().replace('wms', 'wfs') + 'service=WFS' +
-              '&version=1.1.0&request=GetFeature&typename=' + layer.Name +
-              '&outputFormat=application/json&srsname=EPSG:3857' +
-              '&bbox=' + extent.join(',') + ',EPSG:3857';
+            var urlObj = new URL(me._getUrl().replace('wms', 'wfs'));
+            urlObj.set('query', {
+              service: 'WFS',
+              request: 'GetFeature',
+              version: '1.1.0',
+              typename: layer.Name,
+              outputFormat: 'application/json',
+              srsname: 'EPSG:3857',
+              bbox: extent.join(',') + ',EPSG:3857'
+            });
+            return urlObj.toString();
           },
           format: geojsonFormat,
           strategy: ol.loadingstrategy.tile(ol.tilegrid.createXYZ({
