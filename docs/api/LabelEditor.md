@@ -20,11 +20,36 @@ Css class name to apply on the root element of this component.
 type: `string`
 
 
-### `initialState`
+### `initialFontColor`
 
-Initial state.
+Initial font color.
 
 type: `object`
+defaultValue: `{
+  rgb: {
+    r: 0,
+    g: 0,
+    b: 0,
+    a: 1
+  },
+  hex: '000000'
+}`
+
+
+### `initialFontSize`
+
+Initial font size.
+
+type: `number`
+defaultValue: `12`
+
+
+### `initialLabelAttribute`
+
+Initial label attribute.
+
+type: `string`
+defaultValue: `null`
 
 
 ### `intl`

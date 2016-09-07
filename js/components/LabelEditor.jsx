@@ -50,17 +50,11 @@ const messages = defineMessages({
 class LabelEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
-    this._setInitialStateFromProp('labelAttribute', null);
-    this._setInitialStateFromProp('fontSize', 12);
-    this._setInitialStateFromProp('fontColor', {rgb: {r: 0, g: 0, b: 0, a: 1}, hex: '000000'});
-  }
-  _setInitialStateFromProp(prop, defaultVal) {
-    if (this.props.initialState && this.props.initialState[prop]) {
-      this.state[prop] = this.props.initialState[prop];
-    } else {
-      this.state[prop] = defaultVal;
-    }
+    this.state = {
+      labelAttribute: this.props.initialLabelAttribute,
+      fontSize: this.props.initialFontSize,
+      fontColor: this.props.initialFontColor
+    };
   }
   _onItemChange(evt, idx, value) {
     this.setState({labelAttribute: value}, function() {
@@ -114,9 +108,17 @@ LabelEditor.propTypes = {
    */
   onChange: React.PropTypes.func.isRequired,
   /**
-   * Initial state.
+   * Initial font color.
    */
-  initialState: React.PropTypes.object,
+  initialFontColor: React.PropTypes.object,
+  /**
+   * Initial font size.
+   */
+  initialFontSize: React.PropTypes.number,
+  /**
+   * Initial label attribute.
+   */
+  initialLabelAttribute: React.PropTypes.string,
   /**
    * Css class name to apply on the root element of this component.
    */
@@ -125,6 +127,20 @@ LabelEditor.propTypes = {
   * i18n message strings. Provided through the application through context.
   */
   intl: intlShape.isRequired
+};
+
+LabelEditor.defaultProps = {
+  initialLabelAttribute: null,
+  initialFontSize: 12,
+  initialFontColor: {
+    rgb: {
+      r: 0,
+      g: 0,
+      b: 0,
+      a: 1
+    },
+    hex: '000000'
+  }
 };
 
 export default injectIntl(LabelEditor);

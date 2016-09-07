@@ -92,7 +92,7 @@ class RuleEditor extends React.Component {
          <StrokeEditor intl={this.props.intl} onChange={this.props.onChange} initialStrokeWidth={this.props.initialState ? this.props.initialState.strokeWidth : undefined} initialStrokeColor={this.props.initialState ? this.props.initialState.strokeColor : undefined}  />
        </Tab>),
       (<Tab key='label' value={3} label={formatMessage(messages.labeltitle)} disableTouchRipple={true}>
-         <LabelEditor {...this.props} />
+         <LabelEditor attributes={this.props.attributes} intl={this.props.intl} onChange={this.props.onChange} initialFontColor={this.props.initialState ? this.props.initialState.fontColor : undefined} initialFontSize={this.props.initialState ? this.props.initialState.fontSize : undefined} initialLabelAttribute={this.props.initialState ? this.props.initialState.labelAttribute : undefined} />
        </Tab>),
       (<Tab key='filter' value={4} label={formatMessage(messages.filtertitle)} disableTouchRipple={true}>
          <FilterEditor intl={this.props.intl} onChange={this.props.onChange} initialExpression={this.props.initialState ? this.props.initialState.expression : undefined} />
