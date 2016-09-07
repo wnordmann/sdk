@@ -84,12 +84,12 @@ class RuleEditor extends React.Component {
     if (this.props.geometryType === 'Polygon' || this.props.geometryType === 'Point') {
       tabs.push(
         <Tab key='fill' value={1} label={formatMessage(messages.filltitle)} disableTouchRipple={true}>
-          <FillEditor onChange={this.props.onChange} initialFillColor={this.props.initialState.fillColor} />
+          <FillEditor intl={this.props.intl} onChange={this.props.onChange} initialFillColor={this.props.initialState ? this.props.initialState.fillColor : undefined} />
         </Tab>
       );
     }
     tabs.push((<Tab key='stroke' value={2} label={formatMessage(messages.stroketitle)} disableTouchRipple={true}>
-         <StrokeEditor {...this.props} />
+         <StrokeEditor intl={this.props.intl} onChange={this.props.onChange} initialStrokeWidth={this.props.initialState ? this.props.initialState.strokeWidth : undefined} initialStrokeColor={this.props.initialState ? this.props.initialState.strokeColor : undefined}  />
        </Tab>),
       (<Tab key='label' value={3} label={formatMessage(messages.labeltitle)} disableTouchRipple={true}>
          <LabelEditor {...this.props} />

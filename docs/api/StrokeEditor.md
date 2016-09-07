@@ -13,11 +13,28 @@ Css class name to apply on the root element of this component.
 type: `string`
 
 
-### `initialState`
+### `initialStrokeColor`
 
-Initial state.
+Initial stroke color.
 
 type: `object`
+defaultValue: `{
+  rgb: {
+    r: 0,
+    g: 0,
+    b: 0,
+    a: 1
+  },
+  hex: '000000'
+}`
+
+
+### `initialStrokeWidth`
+
+Initial stroke width.
+
+type: `number`
+defaultValue: `1`
 
 
 ### `intl`

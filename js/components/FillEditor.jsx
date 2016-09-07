@@ -33,7 +33,7 @@ class FillEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      fillColor: props.initialFillColor
+      fillColor: this.props.initialFillColor
     };
   }
   _onChangeFill(color) {

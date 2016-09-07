@@ -38,21 +38,10 @@ const messages = defineMessages({
 class StrokeEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
-    var colorChanged = this._setInitialStateFromProp('strokeColor', {rgb: {r: 0, g: 0, b: 0, a: 1}, hex: '000000'});
-    var widthChanged = this._setInitialStateFromProp('strokeWidth', 1);
-    if (colorChanged || widthChanged) {
-      this.props.onChange(this.state);
-    }
-  }
-  _setInitialStateFromProp(prop, defaultVal) {
-    if (this.props.initialState && this.props.initialState[prop]) {
-      this.state[prop] = this.props.initialState[prop];
-      return false;
-    } else {
-      this.state[prop] = defaultVal;
-      return true;
-    }
+    this.state = {
+      strokeColor: this.props.initialStrokeColor,
+      strokeWidth: this.props.initialStrokeWidth
+    };
   }
   _onChangeStrokeWidth(evt) {
     this.setState({strokeWidth: parseFloat(evt.target.value)}, function() {
@@ -88,13 +77,30 @@ StrokeEditor.propTypes = {
    */
   className: React.PropTypes.string,
   /**
-   * Initial state.
+   * Initial stroke color.
    */
-  initialState: React.PropTypes.object,
+  initialStrokeColor: React.PropTypes.object,
+  /**
+   * Initial stroke width.
+   */
+  initialStrokeWidth: React.PropTypes.number,
   /**
   * i18n message strings. Provided through the application through context.
   */
   intl: intlShape.isRequired
+};
+
+StrokeEditor.defaultProps = {
+  initialStrokeColor: {
+    rgb: {
+      r: 0,
+      g: 0,
+      b: 0,
+      a: 1
+    },
+    hex: '000000'
+  },
+  initialStrokeWidth: 1
 };
 
 export default injectIntl(StrokeEditor);
