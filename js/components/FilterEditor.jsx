@@ -43,17 +43,9 @@ class FilterEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hasError: false
+      hasError: false,
+      expression: this.props.initialExpression
     };
-    this._setInitialStateFromProp('filter', null);
-    this._setInitialStateFromProp('expression', null);
-  }
-  _setInitialStateFromProp(prop, defaultVal) {
-    if (this.props.initialState && this.props.initialState[prop]) {
-      this.state[prop] = this.props.initialState[prop];
-    } else {
-      this.state[prop] = defaultVal;
-    }
   }
   _setQueryFilter(evt) {
     var expression = evt.target.value;
@@ -89,9 +81,9 @@ FilterEditor.propTypes = {
    */
   onChange: React.PropTypes.func.isRequired,
   /**
-   * Initial state.
+   * Initial expression.
    */
-  initialState: React.PropTypes.object,
+  initialExpression: React.PropTypes.string,
   /**
    * Css class name to apply on the root element of this component.
    */
@@ -100,6 +92,11 @@ FilterEditor.propTypes = {
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
+};
+
+FilterEditor.defaultProps = {
+  initialFilter: null,
+  initialExpression: null
 };
 
 export default injectIntl(FilterEditor);

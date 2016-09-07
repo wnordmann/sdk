@@ -13,11 +13,17 @@ Css class name to apply on the root element of this component.
 type: `string`
 
 
-### `initialState`
+### `initialExpression`
 
-Initial state.
+Initial expression.
 
-type: `object`
+type: `string`
+defaultValue: `null`
+
+
+### `initialFilter`
+
+defaultValue: `null`
 
 
 ### `intl`

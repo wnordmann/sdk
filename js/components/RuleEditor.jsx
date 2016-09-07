@@ -95,7 +95,7 @@ class RuleEditor extends React.Component {
          <LabelEditor {...this.props} />
        </Tab>),
       (<Tab key='filter' value={4} label={formatMessage(messages.filtertitle)} disableTouchRipple={true}>
-         <FilterEditor {...this.props} />
+         <FilterEditor intl={this.props.intl} onChange={this.props.onChange} initialExpression={this.props.initialState ? this.props.initialState.expression : undefined} />
        </Tab>)
     );
     return tabs;
