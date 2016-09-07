@@ -32,20 +32,9 @@ const messages = defineMessages({
 class FillEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
-    var changed = this._setInitialStateFromProp('fillColor', {rgb: {r: 255, g: 0, b: 0, a: 0.5}, hex: 'FF0000'});
-    if (changed) {
-      this.props.onChange(this.state);
-    }
-  }
-  _setInitialStateFromProp(prop, defaultVal) {
-    if (this.props.initialState && this.props.initialState[prop]) {
-      this.state[prop] = this.props.initialState[prop];
-      return false;
-    } else {
-      this.state[prop] = defaultVal;
-      return true;
-    }
+    this.state = {
+      fillColor: props.initialFillColor
+    };
   }
   _onChangeFill(color) {
     this.setState({fillColor: color});
@@ -72,13 +61,25 @@ FillEditor.propTypes = {
    */
   className: React.PropTypes.string,
   /**
-   * Initial state.
+   * Initial fill color.
    */
-  initialState: React.PropTypes.object,
+  initialFillColor: React.PropTypes.object,
   /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
+};
+
+FillEditor.defaultProps = {
+  initialFillColor: {
+    rgb: {
+      r: 255,
+      g: 0,
+      b: 0,
+      a: 0.5
+    },
+    hex: 'FF0000'
+  }
 };
 
 export default injectIntl(FillEditor);

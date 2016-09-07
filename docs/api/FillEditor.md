@@ -13,11 +13,20 @@ Css class name to apply on the root element of this component.
 type: `string`
 
 
-### `initialState`
+### `initialFillColor`
 
-Initial state.
+Initial fill color.
 
 type: `object`
+defaultValue: `{
+  rgb: {
+    r: 255,
+    g: 0,
+    b: 0,
+    a: 0.5
+  },
+  hex: 'FF0000'
+}`
 
 
 ### `intl`

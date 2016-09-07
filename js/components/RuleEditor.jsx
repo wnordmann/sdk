@@ -84,7 +84,7 @@ class RuleEditor extends React.Component {
     if (this.props.geometryType === 'Polygon' || this.props.geometryType === 'Point') {
       tabs.push(
         <Tab key='fill' value={1} label={formatMessage(messages.filltitle)} disableTouchRipple={true}>
-          <FillEditor {...this.props} />
+          <FillEditor onChange={this.props.onChange} initialFillColor={this.props.initialState.fillColor} />
         </Tab>
       );
     }
