@@ -40,8 +40,8 @@ defaultValue: `{
 
 Initial font size.
 
-type: `number`
-defaultValue: `12`
+type: `string`
+defaultValue: `'12'`
 
 
 ### `initialLabelAttribute`

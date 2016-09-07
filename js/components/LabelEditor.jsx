@@ -114,7 +114,7 @@ LabelEditor.propTypes = {
   /**
    * Initial font size.
    */
-  initialFontSize: React.PropTypes.number,
+  initialFontSize: React.PropTypes.string,
   /**
    * Initial label attribute.
    */
@@ -131,7 +131,7 @@ LabelEditor.propTypes = {
 
 LabelEditor.defaultProps = {
   initialLabelAttribute: null,
-  initialFontSize: 12,
+  initialFontSize: '12',
   initialFontColor: {
     rgb: {
       r: 0,
