@@ -18,6 +18,7 @@ import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import LabelEditor from './LabelEditor.jsx';
 import Paper from 'material-ui/lib/paper';
 import PolygonSymbolizerEditor from './PolygonSymbolizerEditor.jsx';
+import LineSymbolizerEditor from './LineSymbolizerEditor.jsx';
 import FilterEditor from './FilterEditor.jsx';
 import TextField from 'material-ui/lib/text-field';
 import pureRender from 'pure-render-decorator';
@@ -54,7 +55,7 @@ class RuleEditor extends React.Component {
     super(props);
     var title = this.props.initialState ? this.props.initialState.title : undefined;
     this.state = {
-      value: props.geometryType === 'Polygon' ? 1 : 2,
+      value: 1,
       title: title
     };
   }
@@ -76,8 +77,13 @@ class RuleEditor extends React.Component {
     const {formatMessage} = this.props.intl;
     var tabs = [];
     if (this.props.geometryType === 'Polygon') {
-      tabs.push((<Tab key='fill' value={1} label={formatMessage(messages.symbolizertitle)} disableTouchRipple={true}>
+      tabs.push((<Tab key='poly' value={1} label={formatMessage(messages.symbolizertitle)} disableTouchRipple={true}>
           <PolygonSymbolizerEditor intl={this.props.intl} onChange={this.props.onChange} initialState={this.props.initialState} />
+        </Tab>
+      ));
+    } else if (this.props.geometryType === 'LineString') {
+      tabs.push((<Tab key='line' value={1} label={formatMessage(messages.symbolizertitle)} disableTouchRipple={true}>
+          <LineSymbolizerEditor intl={this.props.intl} onChange={this.props.onChange} initialState={this.props.initialState} />
         </Tab>
       ));
     }
