@@ -146,8 +146,8 @@ class SLDService {
         namespaceURI: sldNamespace
       },
       value: {
-        fill: this.createFill(styleState),
-        stroke: this.createStroke(styleState)
+        fill: styleState.hasFill !== false ? this.createFill(styleState) : undefined,
+        stroke: styleState.hasStroke !== false ? this.createStroke(styleState) : undefined
       }
     };
   }

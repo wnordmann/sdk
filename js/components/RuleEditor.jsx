@@ -17,8 +17,7 @@ import Tab from 'material-ui/lib/tabs/tab';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import LabelEditor from './LabelEditor.jsx';
 import Paper from 'material-ui/lib/paper';
-import StrokeEditor from './StrokeEditor.jsx';
-import FillEditor from './FillEditor.jsx';
+import PolygonSymbolizerEditor from './PolygonSymbolizerEditor.jsx';
 import FilterEditor from './FilterEditor.jsx';
 import TextField from 'material-ui/lib/text-field';
 import pureRender from 'pure-render-decorator';
@@ -29,15 +28,10 @@ const messages = defineMessages({
     description: 'Label for the title text field',
     defaultMessage: 'Title'
   },
-  filltitle: {
-    id: 'ruleeditor.filltitle',
-    description: 'Title for the fill tab',
-    defaultMessage: 'Fill'
-  },
-  stroketitle: {
-    id: 'ruleeditor.stroketitle',
-    description: 'Title for the stroke tab',
-    defaultMessage: 'Stroke'
+  symbolizertitle: {
+    id: 'ruleeditor.symbolizertitle',
+    description: 'Title for the symbolizer tab',
+    defaultMessage: 'Symbolizer'
   },
   labeltitle: {
     id: 'ruleeditor.labeltitle',
@@ -81,17 +75,14 @@ class RuleEditor extends React.Component {
   _getTabs() {
     const {formatMessage} = this.props.intl;
     var tabs = [];
-    if (this.props.geometryType === 'Polygon' || this.props.geometryType === 'Point') {
-      tabs.push(
-        <Tab key='fill' value={1} label={formatMessage(messages.filltitle)} disableTouchRipple={true}>
-          <FillEditor intl={this.props.intl} onChange={this.props.onChange} initialFillColor={this.props.initialState ? this.props.initialState.fillColor : undefined} />
+    if (this.props.geometryType === 'Polygon') {
+      tabs.push((<Tab key='fill' value={1} label={formatMessage(messages.symbolizertitle)} disableTouchRipple={true}>
+          <PolygonSymbolizerEditor intl={this.props.intl} onChange={this.props.onChange} initialState={this.props.initialState} />
         </Tab>
-      );
+      ));
     }
-    tabs.push((<Tab key='stroke' value={2} label={formatMessage(messages.stroketitle)} disableTouchRipple={true}>
-         <StrokeEditor intl={this.props.intl} onChange={this.props.onChange} initialStrokeWidth={this.props.initialState ? this.props.initialState.strokeWidth : undefined} initialStrokeColor={this.props.initialState ? this.props.initialState.strokeColor : undefined}  />
-       </Tab>),
-      (<Tab key='label' value={3} label={formatMessage(messages.labeltitle)} disableTouchRipple={true}>
+    // TODO add Point / LineString
+    tabs.push((<Tab key='label' value={3} label={formatMessage(messages.labeltitle)} disableTouchRipple={true}>
          <LabelEditor attributes={this.props.attributes} intl={this.props.intl} onChange={this.props.onChange} initialFontColor={this.props.initialState ? this.props.initialState.fontColor : undefined} initialFontSize={this.props.initialState ? this.props.initialState.fontSize : undefined} initialLabelAttribute={this.props.initialState ? this.props.initialState.labelAttribute : undefined} />
        </Tab>),
       (<Tab key='filter' value={4} label={formatMessage(messages.filtertitle)} disableTouchRipple={true}>
