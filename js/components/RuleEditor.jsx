@@ -19,6 +19,7 @@ import LabelEditor from './LabelEditor.jsx';
 import Paper from 'material-ui/lib/paper';
 import PolygonSymbolizerEditor from './PolygonSymbolizerEditor.jsx';
 import LineSymbolizerEditor from './LineSymbolizerEditor.jsx';
+import PointSymbolizerEditor from './PointSymbolizerEditor.jsx';
 import FilterEditor from './FilterEditor.jsx';
 import TextField from 'material-ui/lib/text-field';
 import pureRender from 'pure-render-decorator';
@@ -86,8 +87,12 @@ class RuleEditor extends React.Component {
           <LineSymbolizerEditor intl={this.props.intl} onChange={this.props.onChange} initialState={this.props.initialState} />
         </Tab>
       ));
+    } else if (this.props.geometryType === 'Point') {
+      tabs.push((<Tab key='point' value={1} label={formatMessage(messages.symbolizertitle)} disableTouchRipple={true}>
+          <PointSymbolizerEditor intl={this.props.intl} onChange={this.props.onChange} initialState={this.props.initialState} />
+        </Tab>
+      ));
     }
-    // TODO add Point / LineString
     tabs.push((<Tab key='label' value={3} label={formatMessage(messages.labeltitle)} disableTouchRipple={true}>
          <LabelEditor attributes={this.props.attributes} intl={this.props.intl} onChange={this.props.onChange} initialFontColor={this.props.initialState ? this.props.initialState.fontColor : undefined} initialFontSize={this.props.initialState ? this.props.initialState.fontSize : undefined} initialLabelAttribute={this.props.initialState ? this.props.initialState.labelAttribute : undefined} />
        </Tab>),

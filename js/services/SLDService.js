@@ -165,8 +165,8 @@ class SLDService {
   createPointSymbolizer(styleState) {
     var graphicOrMark = [{
       TYPE_NAME: 'SLD_1_0_0.Mark',
-      fill: this.createFill(styleState),
-      stroke: this.createStroke(styleState),
+      fill: styleState.hasFill !== false ? this.createFill(styleState) : undefined,
+      stroke: styleState.hasStroke !== false ? this.createStroke(styleState) : undefined,
       wellKnownName: 'circle'
     }];
     return {

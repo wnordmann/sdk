@@ -172,6 +172,8 @@ var enMessages = {
   "navigation.buttontitle": "Switch to map navigation (pan and zoom)",
   "playback.dateinputlabel": "Date picker",
   "playback.rangeinputlabel": "Slider control for changing the date",
+  "pointsymbolizereditor.filllabel": "Fill",
+  "pointsymbolizereditor.strokelabel": "Stroke",
   "polygonsymbolizereditor.filllabel": "Fill",
   "polygonsymbolizereditor.strokelabel": "Stroke",
   "qgislegend.buttontitle": "Legend",
