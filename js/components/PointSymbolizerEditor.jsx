@@ -40,7 +40,7 @@ class PointSymbolizerEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hasFill: true,
+      hasFill: props.initialState ? props.initialState.fillColor : true,
       hasStroke: true
     };
   }

@@ -10,9 +10,26 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {doPOST} from '../util.js';
+import {doGET, doPOST} from '../util.js';
 
 class RESTService {
+  getStyleName(url, layer, onSuccess, onFailure) {
+    var id = layer.get('id').split(':').pop();
+    url = url.replace(/wms|ows|wfs/g, 'rest/layers/' + id + '.json');
+    doGET(url, function(xmlhttp) {
+      var styleInfo = JSON.parse(xmlhttp.responseText);
+      var styleName = styleInfo.layer.defaultStyle.name;
+      if (styleName.indexOf(':') === -1) {
+        // look for workspace in JSON output
+        if (styleInfo.layer.defaultStyle.workspace) {
+          styleName = styleInfo.layer.defaultStyle.workspace + ':' + styleInfo.layer.defaultStyle.name;
+        }
+      }
+      onSuccess.call(this, styleName);
+    }, function(xmlhttp) {
+      onFailure.call(this, xmlhttp);
+    }, this);
+  }
   createStyle(url, layer, sld, onSuccess, onFailure) {
     var styleName = 'web_sdk_style_' + Math.floor(100000 + Math.random() * 900000);
     var createUrl = url.replace(/wms|ows|wfs/g, 'rest/styles');
@@ -29,7 +46,16 @@ class RESTService {
     }, this);
   }
   updateStyle(url, layer, sld, onSuccess, onFailure) {
-    url = url.replace(/wms|ows|wfs/g, 'rest/styles/' + layer.get('styleName'));
+    var styleName = layer.get('styleName');
+    if (styleName.indexOf(':') !== -1) {
+      var styleInfo = styleName.split(':');
+      var workspace = styleInfo[0];
+      var name = styleInfo[1];
+      // workspaces styles
+      url = url.replace(/wms|ows|wfs/g, 'rest/workspaces/' + workspace + '/styles/' + name);
+    } else {
+      url = url.replace(/wms|ows|wfs/g, 'rest/styles/' + layer.get('styleName'));
+    }
     doPOST(url, sld, function(xmlhttp) {
       onSuccess.call(this, xmlhttp);
     }, function(xmlhttp) {

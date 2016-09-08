@@ -33,8 +33,9 @@ var unmarshaller = context.createUnmarshaller();
 class SLDService {
   parse(sld) {
     var info = unmarshaller.unmarshalString(sld).value;
-    var featureTypeStyle = info.namedLayerOrUserLayer[0].namedStyleOrUserStyle[0].featureTypeStyle[0];
     var rules = [];
+    var namedStyleOrUserStyle = info.namedLayerOrUserLayer[0].namedStyleOrUserStyle[0];
+    var featureTypeStyle = namedStyleOrUserStyle.featureTypeStyle[0];
     for (var i = 0, ii = featureTypeStyle.rule.length; i < ii; ++i) {
       rules.push(this.parseRule(featureTypeStyle.rule[i]));
     }
@@ -60,8 +61,14 @@ class SLDService {
   }
   parsePointSymbolizer(pointObj) {
     var result = {};
-    result.fillColor = this.parseFill(pointObj.graphic.externalGraphicOrMark[0].fill);
-    Object.assign(result, this.parseStroke(pointObj.graphic.externalGraphicOrMark[0].stroke));
+    var fill = pointObj.graphic.externalGraphicOrMark[0].fill;
+    if (fill) {
+      result.fillColor = this.parseFill(fill);
+    }
+    var stroke = pointObj.graphic.externalGraphicOrMark[0].stroke;
+    if (stroke) {
+      Object.assign(result, this.parseStroke(stroke));
+    }
     return result;
   }
   parseLineSymbolizer(lineObj) {
@@ -165,7 +172,7 @@ class SLDService {
   createPointSymbolizer(styleState) {
     var graphicOrMark = [{
       TYPE_NAME: 'SLD_1_0_0.Mark',
-      fill: styleState.hasFill !== false ? this.createFill(styleState) : undefined,
+      fill: styleState.hasFill !== false && styleState.fillColor ? this.createFill(styleState) : undefined,
       stroke: styleState.hasStroke !== false ? this.createStroke(styleState) : undefined,
       wellKnownName: 'circle'
     }];

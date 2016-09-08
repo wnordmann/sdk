@@ -23,6 +23,7 @@ import ListItem from 'material-ui/lib/lists/list-item';
 import FolderIcon from 'material-ui/lib/svg-icons/file/folder-open';
 import LayerIcon from 'material-ui/lib/svg-icons/maps/layers';
 import URL from 'url-parse';
+import RESTService from '../services/RESTService.js';
 import WMSService from '../services/WMSService.js';
 import WFSService from '../services/WFSService.js';
 import classNames from 'classnames';
@@ -114,6 +115,13 @@ class AddLayerModal extends React.Component {
       error: true,
       layerInfo: null,
       msg: msg
+    });
+  }
+  _getStyleName(olLayer) {
+    var url = this._getUrl();
+    RESTService.getStyleName(url, olLayer, function(styleName) {
+      olLayer.set('styleName', styleName);
+    }, function() {
     });
   }
   _getWfsInfo(layer, olLayer, success, scope) {
@@ -226,6 +234,7 @@ class AddLayerModal extends React.Component {
           serverType: 'geoserver'
         })
       });
+      this._getStyleName.call(this, olLayer);
     }
     this._getWfsInfo.call(this, layer, olLayer, this.close, this);
     if (olLayer.get('type') === 'base') {
