@@ -16,7 +16,9 @@ import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import Checkbox from 'material-ui/lib/checkbox';
 import FillEditor from './FillEditor.jsx';
 import StrokeEditor from './StrokeEditor.jsx';
+import SelectField from 'material-ui/lib/select-field';
 import Paper from 'material-ui/lib/paper';
+import MenuItem from 'material-ui/lib/menus/menu-item';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -32,6 +34,15 @@ const messages = defineMessages({
   }
 });
 
+const symboltypes = [
+  'circle',
+  'square',
+  'triangle',
+  'star',
+  'cross',
+  'x'
+];
+
 /**
  * Style editor for a point symbolizer.
  */
@@ -40,26 +51,38 @@ class PointSymbolizerEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hasFill: props.initialState ? props.initialState.fillColor : true,
-      hasStroke: true
+      hasFill: props.initialState ? props.initialState.fillColor !== undefined : true,
+      hasStroke: true,
+      symbolType: props.initialState ? props.initialState.symbolType : 'circle'
     };
   }
   _onFillCheck(evt) {
-    this.setState({hasFill: evt.target.checked});
-    this.props.onChange({
-      hasFill: evt.target.checked
+    this.setState({hasFill: evt.target.checked}, function() {
+      this.props.onChange(this.state);
     });
   }
   _onStrokeCheck(evt) {
-    this.setState({hasStroke: evt.target.checked});
-    this.props.onChange({
-      hasStroke: evt.target.checked
+    this.setState({hasStroke: evt.target.checked}, function() {
+      this.props.onChange(this.state);
+    });
+  }
+  _onChangeSymbol(evt, idx, value) {
+    this.setState({symbolType: value}, function() {
+      this.props.onChange(this.state);
     });
   }
   render() {
     const {formatMessage} = this.props.intl;
+    var options = symboltypes.map(function(symbol, idx) {
+      return (<MenuItem key={idx} value={symbol} primaryText={symbol} />);
+    });
     return (
       <div className={classNames('sdk-component point-symbolizer-editor', this.props.className)}>
+        <Paper>
+          <SelectField value={this.state.symbolType} onChange={this._onChangeSymbol.bind(this)}>
+            {options}
+          </SelectField>
+        </Paper>
         <Paper>
           <Checkbox onCheck={this._onFillCheck.bind(this)} checked={this.state.hasFill} label={formatMessage(messages.filllabel)} />
           <FillEditor onChange={this.props.onChange} intl={this.props.intl} initialFillColor={this.props.initialState ? this.props.initialState.fillColor : undefined} />

@@ -61,11 +61,15 @@ class SLDService {
   }
   parsePointSymbolizer(pointObj) {
     var result = {};
-    var fill = pointObj.graphic.externalGraphicOrMark[0].fill;
+    var externalGraphicOrMark = pointObj.graphic.externalGraphicOrMark[0];
+    if (externalGraphicOrMark.wellKnownName) {
+      result.symbolType = externalGraphicOrMark.wellKnownName;
+    }
+    var fill = externalGraphicOrMark.fill;
     if (fill) {
       result.fillColor = this.parseFill(fill);
     }
-    var stroke = pointObj.graphic.externalGraphicOrMark[0].stroke;
+    var stroke = externalGraphicOrMark.stroke;
     if (stroke) {
       Object.assign(result, this.parseStroke(stroke));
     }
@@ -174,7 +178,7 @@ class SLDService {
       TYPE_NAME: 'SLD_1_0_0.Mark',
       fill: styleState.hasFill !== false && styleState.fillColor ? this.createFill(styleState) : undefined,
       stroke: styleState.hasStroke !== false ? this.createStroke(styleState) : undefined,
-      wellKnownName: 'circle'
+      wellKnownName: styleState.symbolType
     }];
     return {
       name: {

@@ -87,7 +87,8 @@ describe('SLDService', function() {
   it('creates a point symbolizer', function() {
     var symbol = SLDService.createPointSymbolizer({
       strokeColor: strokeColor,
-      fillColor: fillColor
+      fillColor: fillColor,
+      symbolType: 'circle'
     });
     assert.equal(symbol.name.localPart, 'PointSymbolizer');
     assert.equal(symbol.value.graphic.externalGraphicOrMark[0].wellKnownName, 'circle');
