@@ -61,6 +61,9 @@ class SLDService {
   }
   parsePointSymbolizer(pointObj) {
     var result = {};
+    if (pointObj.graphic.size) {
+      result.symbolSize = pointObj.graphic.size.content[0];
+    }
     var externalGraphicOrMark = pointObj.graphic.externalGraphicOrMark[0];
     if (externalGraphicOrMark.wellKnownName) {
       result.symbolType = externalGraphicOrMark.wellKnownName;
@@ -189,7 +192,7 @@ class SLDService {
         graphic: {
           externalGraphicOrMark: graphicOrMark,
           size: {
-            content: ['4']
+            content: [styleState.symbolSize]
           }
         }
       }

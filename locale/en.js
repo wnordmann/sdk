@@ -174,6 +174,8 @@ var enMessages = {
   "playback.rangeinputlabel": "Slider control for changing the date",
   "pointsymbolizereditor.filllabel": "Fill",
   "pointsymbolizereditor.strokelabel": "Stroke",
+  "pointsymbolizereditor.symbolsize": "Size",
+  "pointsymbolizereditor.symboltype": "Symbol",
   "polygonsymbolizereditor.filllabel": "Fill",
   "polygonsymbolizereditor.strokelabel": "Stroke",
   "qgislegend.buttontitle": "Legend",

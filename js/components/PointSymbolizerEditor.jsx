@@ -19,6 +19,7 @@ import StrokeEditor from './StrokeEditor.jsx';
 import SelectField from 'material-ui/lib/select-field';
 import Paper from 'material-ui/lib/paper';
 import MenuItem from 'material-ui/lib/menus/menu-item';
+import TextField from 'material-ui/lib/text-field';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -31,6 +32,16 @@ const messages = defineMessages({
     id: 'pointsymbolizereditor.strokelabel',
     description: 'Label for stroke checkbox',
     defaultMessage: 'Stroke'
+  },
+  symboltype: {
+    id: 'pointsymbolizereditor.symboltype',
+    description: 'Label for symbol select field',
+    defaultMessage: 'Symbol'
+  },
+  symbolsize: {
+    id: 'pointsymbolizereditor.symbolsize',
+    description: 'Label for symbol size input field',
+    defaultMessage: 'Size'
   }
 });
 
@@ -53,7 +64,8 @@ class PointSymbolizerEditor extends React.Component {
     this.state = {
       hasFill: props.initialState ? props.initialState.fillColor !== undefined : true,
       hasStroke: true,
-      symbolType: props.initialState ? props.initialState.symbolType : 'circle'
+      symbolType: props.initialState && props.initialState.symbolType ? props.initialState.symbolType : 'circle',
+      symbolSize: props.initialState && props.initialState.symbolSize ? props.initialState.symbolSize : '4'
     };
   }
   _onFillCheck(evt) {
@@ -71,6 +83,11 @@ class PointSymbolizerEditor extends React.Component {
       this.props.onChange(this.state);
     });
   }
+  _onSymbolSizeChange(evt) {
+    this.setState({symbolSize: evt.target.value}, function() {
+      this.props.onChange(this.state);
+    });
+  }
   render() {
     const {formatMessage} = this.props.intl;
     var options = symboltypes.map(function(symbol, idx) {
@@ -79,9 +96,10 @@ class PointSymbolizerEditor extends React.Component {
     return (
       <div className={classNames('sdk-component point-symbolizer-editor', this.props.className)}>
         <Paper>
-          <SelectField value={this.state.symbolType} onChange={this._onChangeSymbol.bind(this)}>
+          <SelectField floatingLabelText={formatMessage(messages.symboltype)} value={this.state.symbolType} onChange={this._onChangeSymbol.bind(this)}>
             {options}
           </SelectField>
+          <TextField value={this.state.symbolSize} onChange={this._onSymbolSizeChange.bind(this)} floatingLabelText={formatMessage(messages.symbolsize)} />
         </Paper>
         <Paper>
           <Checkbox onCheck={this._onFillCheck.bind(this)} checked={this.state.hasFill} label={formatMessage(messages.filllabel)} />
