@@ -16,7 +16,7 @@ import {transformColor} from '../util.js';
 class OpenLayersService {
   createStyle(styleState, geometryType) {
     var fill;
-    var radius = styleState.symbolSize / 2;
+    var radius = parseFloat(styleState.symbolSize) / 2;
     if (styleState.hasFill !== false && styleState.fillColor) {
       fill = new ol.style.Fill({
         color: transformColor(styleState.fillColor)
