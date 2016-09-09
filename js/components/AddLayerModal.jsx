@@ -234,8 +234,8 @@ class AddLayerModal extends React.Component {
           serverType: 'geoserver'
         })
       });
-      this._getStyleName.call(this, olLayer);
     }
+    this._getStyleName.call(this, olLayer);
     this._getWfsInfo.call(this, layer, olLayer, this.close, this);
     if (olLayer.get('type') === 'base') {
       var foundGroup = false;

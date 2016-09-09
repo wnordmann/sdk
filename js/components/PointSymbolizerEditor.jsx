@@ -63,7 +63,7 @@ class PointSymbolizerEditor extends React.Component {
     super(props);
     this.state = {
       hasFill: props.initialState ? props.initialState.fillColor !== undefined : true,
-      hasStroke: true,
+      hasStroke: props.initialState ? props.initialState.strokeColor !== undefined : true,
       symbolType: props.initialState && props.initialState.symbolType ? props.initialState.symbolType : 'circle',
       symbolSize: props.initialState && props.initialState.symbolSize ? props.initialState.symbolSize : '4'
     };
