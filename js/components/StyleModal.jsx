@@ -20,9 +20,9 @@ import LayerActions from '../actions/LayerActions.js';
 import RaisedButton from 'material-ui/lib/raised-button';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
-import {transformColor} from '../util.js';
 import RuleEditor from './RuleEditor.jsx';
 import SLDService from '../services/SLDService.js';
+import OpenLayersService from '../services/OpenLayersService.js';
 import RESTService from '../services/RESTService.js';
 import Snackbar from 'material-ui/lib/snackbar';
 
@@ -104,7 +104,11 @@ class StyleModal extends React.Component {
       for (var i = 0, ii = rules.length; i < ii; ++i) {
         this._styleState[rules[i].name] = rules[i];
       }
-      this.setState({open: true, rule: rules[0].name, rules: rules});
+      this.setState({open: true, rule: rules[0].name, rules: rules}, function() {
+        if (this.props.layer instanceof ol.layer.Vector) {
+          this._setStyleVector();
+        }
+      });
     } else {
       this.setState({open: true});
     }
@@ -118,51 +122,7 @@ class StyleModal extends React.Component {
     this.props.layer.un('change:wfsInfo', this._setGeomTypeAndAttributes, this);
   }
   _createStyle(styleState) {
-    var fill;
-    if (styleState.fillColor) {
-      fill = new ol.style.Fill({
-        color: transformColor(styleState.fillColor)
-      });
-    }
-    var stroke;
-    if (styleState.strokeColor) {
-      stroke = new ol.style.Stroke({
-        color: transformColor(styleState.strokeColor),
-        width: styleState.strokeWidth
-      });
-    }
-    var text;
-    if (styleState.labelAttribute) {
-      text = new ol.style.Text({
-        font: styleState.fontSize + 'px Calibri,sans-serif',
-        fill: new ol.style.Fill({
-          color: transformColor(styleState.fontColor)
-        })
-      });
-    }
-    var result;
-    if (this.state.geometryType === 'Polygon') {
-      result = new ol.style.Style({
-        fill: fill,
-        stroke: stroke,
-        text: text
-      });
-    } else if (this.state.geometryType === 'LineString') {
-      result = new ol.style.Style({
-        stroke: stroke,
-        text: text
-      });
-    } else if (this.state.geometryType === 'Point') {
-      result = new ol.style.Style({
-        image: new ol.style.Circle({
-          fill: fill,
-          stroke: stroke,
-          radius: 4
-        }),
-        text: text
-      });
-    }
-    return result;
+    return OpenLayersService.createStyle(styleState, this.state.geometryType);
   }
   _setStyle() {
     var layer = this.props.layer;
