@@ -52,55 +52,62 @@ class OpenLayersService {
       });
     } else if (geometryType === 'Point') {
       var image;
-      if (styleState.symbolType === 'circle') {
-        image = new ol.style.Circle({
-          fill: fill,
-          stroke: stroke,
-          radius: radius
+      if (styleState.externalGraphic) {
+        image = new ol.style.Icon({
+          src: styleState.externalGraphic,
+          scale: styleState.symbolSize / Math.max(styleState.imageWidth, styleState.imageHeight)
         });
-      } else if (styleState.symbolType === 'square') {
-        image = new ol.style.RegularShape({
-          fill: fill,
-          stroke: stroke,
-          points: 4,
-          radius: radius,
-          angle: Math.PI / 4
-        });
-      } else if (styleState.symbolType === 'triangle') {
-        image = new ol.style.RegularShape({
-          fill: fill,
-          stroke: stroke,
-          points: 3,
-          radius: radius,
-          angle: 0
-        });
-      } else if (styleState.symbolType === 'star') {
-        image = new ol.style.RegularShape({
-          fill: fill,
-          stroke: stroke,
-          points: 5,
-          radius: radius,
-          radius2: 0.5 * radius,
-          angle: 0
-        });
-      } else if (styleState.symbolType === 'cross') {
-        image = new ol.style.RegularShape({
-          fill: fill,
-          stroke: stroke,
-          points: 4,
-          radius: radius,
-          radius2: 0,
-          angle: 0
-        });
-      } else if (styleState.symbolType === 'x') {
-        image = new ol.style.RegularShape({
-          fill: fill,
-          stroke: stroke,
-          points: 4,
-          radius: radius,
-          radius2: 0,
-          angle: Math.PI / 4
-        });
+      } else {
+        if (styleState.symbolType === 'circle') {
+          image = new ol.style.Circle({
+            fill: fill,
+            stroke: stroke,
+            radius: radius
+          });
+        } else if (styleState.symbolType === 'square') {
+          image = new ol.style.RegularShape({
+            fill: fill,
+            stroke: stroke,
+            points: 4,
+            radius: radius,
+            angle: Math.PI / 4
+          });
+        } else if (styleState.symbolType === 'triangle') {
+          image = new ol.style.RegularShape({
+            fill: fill,
+            stroke: stroke,
+            points: 3,
+            radius: radius,
+            angle: 0
+          });
+        } else if (styleState.symbolType === 'star') {
+          image = new ol.style.RegularShape({
+            fill: fill,
+            stroke: stroke,
+            points: 5,
+            radius: radius,
+            radius2: 0.5 * radius,
+            angle: 0
+          });
+        } else if (styleState.symbolType === 'cross') {
+          image = new ol.style.RegularShape({
+            fill: fill,
+            stroke: stroke,
+            points: 4,
+            radius: radius,
+            radius2: 0,
+            angle: 0
+          });
+        } else if (styleState.symbolType === 'x') {
+          image = new ol.style.RegularShape({
+            fill: fill,
+            stroke: stroke,
+            points: 4,
+            radius: radius,
+            radius2: 0,
+            angle: Math.PI / 4
+          });
+        }
       }
       result = new ol.style.Style({
         image: image,

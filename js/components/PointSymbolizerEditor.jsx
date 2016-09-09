@@ -42,6 +42,11 @@ const messages = defineMessages({
     id: 'pointsymbolizereditor.symbolsize',
     description: 'Label for symbol size input field',
     defaultMessage: 'Size'
+  },
+  externalgraphic: {
+    id: 'pointsymbolizereditor.externalgraphic',
+    description: 'Label for external graphic field',
+    defaultMessage: 'URL'
   }
 });
 
@@ -65,8 +70,28 @@ class PointSymbolizerEditor extends React.Component {
       hasFill: props.initialState ? props.initialState.fillColor !== undefined : true,
       hasStroke: props.initialState ? props.initialState.strokeColor !== undefined : true,
       symbolType: props.initialState && props.initialState.symbolType ? props.initialState.symbolType : 'circle',
-      symbolSize: props.initialState && props.initialState.symbolSize ? props.initialState.symbolSize : '4'
+      symbolSize: props.initialState && props.initialState.symbolSize ? props.initialState.symbolSize : '4',
+      externalGraphic: props.initialState ? props.initialState.externalGraphic : undefined
     };
+    if (this.state.externalGraphic) {
+      this._getImageSize(this.state.externalGraphic, function(width, height) {
+        this.setState({
+          imageWidth: width,
+          imageHeight: height
+        }, function() {
+          this.props.onChange(this.state);
+        });
+      }, this);
+    }
+  }
+  _getImageSize(url, callback, scope) {
+    var newImg = new Image();
+    newImg.onload = function() {
+      var height = newImg.height;
+      var width = newImg.width;
+      callback.call(scope, height, width);
+    };
+    newImg.src = url;
   }
   _onFillCheck(evt) {
     this.setState({hasFill: evt.target.checked}, function() {
@@ -88,6 +113,18 @@ class PointSymbolizerEditor extends React.Component {
       this.props.onChange(this.state);
     });
   }
+  _onUrlChange(evt) {
+    var url = evt.target.value;
+    this._getImageSize(url, function(width, height) {
+      this.setState({
+        externalGraphic: url,
+        imageWidth: width,
+        imageHeight: height
+      }, function() {
+        this.props.onChange(this.state);
+      });
+    }, this);
+  }
   render() {
     const {formatMessage} = this.props.intl;
     var options = symboltypes.map(function(symbol, idx) {
@@ -100,6 +137,7 @@ class PointSymbolizerEditor extends React.Component {
             {options}
           </SelectField>
           <TextField value={this.state.symbolSize} onChange={this._onSymbolSizeChange.bind(this)} floatingLabelText={formatMessage(messages.symbolsize)} />
+          <TextField fullWidth={true} value={this.state.externalGraphic} onChange={this._onUrlChange.bind(this)} floatingLabelText={formatMessage(messages.externalgraphic)} />
         </Paper>
         <Paper>
           <Checkbox onCheck={this._onFillCheck.bind(this)} checked={this.state.hasFill} label={formatMessage(messages.filllabel)} />

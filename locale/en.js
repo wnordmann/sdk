@@ -172,6 +172,7 @@ var enMessages = {
   "navigation.buttontitle": "Switch to map navigation (pan and zoom)",
   "playback.dateinputlabel": "Date picker",
   "playback.rangeinputlabel": "Slider control for changing the date",
+  "pointsymbolizereditor.externalgraphic": "URL",
   "pointsymbolizereditor.filllabel": "Fill",
   "pointsymbolizereditor.strokelabel": "Stroke",
   "pointsymbolizereditor.symbolsize": "Size",

@@ -65,16 +65,20 @@ class SLDService {
       result.symbolSize = pointObj.graphic.size.content[0];
     }
     var externalGraphicOrMark = pointObj.graphic.externalGraphicOrMark[0];
-    if (externalGraphicOrMark.wellKnownName) {
-      result.symbolType = externalGraphicOrMark.wellKnownName;
-    }
-    var fill = externalGraphicOrMark.fill;
-    if (fill) {
-      result.fillColor = this.parseFill(fill);
-    }
-    var stroke = externalGraphicOrMark.stroke;
-    if (stroke) {
-      Object.assign(result, this.parseStroke(stroke));
+    if (externalGraphicOrMark.TYPE_NAME === 'SLD_1_0_0.ExternalGraphic') {
+      result.externalGraphic = externalGraphicOrMark.onlineResource.href;
+    } else {
+      if (externalGraphicOrMark.wellKnownName) {
+        result.symbolType = externalGraphicOrMark.wellKnownName;
+      }
+      var fill = externalGraphicOrMark.fill;
+      if (fill) {
+        result.fillColor = this.parseFill(fill);
+      }
+      var stroke = externalGraphicOrMark.stroke;
+      if (stroke) {
+        Object.assign(result, this.parseStroke(stroke));
+      }
     }
     return result;
   }
