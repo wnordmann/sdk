@@ -256,7 +256,10 @@ class InfoPopup extends React.Component {
             }
           }
           var popupDef = layer.get('popupInfo');
-          if (popupDef && !cluster) {
+          if (popupDef === ALL_ATTRS) {
+            me._contentAsObject = true;
+            popupTexts.push(me._createSimpleTable({features: [feature], layer: layer}));
+          } else if (popupDef && !cluster) {
             var featureKeys = feature.getKeys();
             for (var i = 0, ii = featureKeys.length; i < ii; i++) {
               var value = feature.get(featureKeys[i]);
