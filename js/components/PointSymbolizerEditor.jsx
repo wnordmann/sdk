@@ -147,18 +147,18 @@ class PointSymbolizerEditor extends React.Component {
     return (
       <div className={classNames('sdk-component point-symbolizer-editor', this.props.className)}>
         <Paper>
-          <SelectField style={this.state.externalGraphic ? {display: 'none'}: undefined} floatingLabelText={formatMessage(messages.symboltype)} value={this.state.symbolType} onChange={this._onChangeSymbol.bind(this)}>
+          <SelectField style={this.state.externalGraphic ? {display: 'none'} : undefined} floatingLabelText={formatMessage(messages.symboltype)} value={this.state.symbolType} onChange={this._onChangeSymbol.bind(this)}>
             {options}
           </SelectField>
           <TextField value={this.state.symbolSize} onChange={this._onSymbolSizeChange.bind(this)} floatingLabelText={formatMessage(messages.symbolsize)} />
           <TextField value={this.state.rotation} onChange={this._onSymbolRotationChange.bind(this)} floatingLabelText={formatMessage(messages.symbolrotation)} />
-          <TextField fullWidth={true} value={this.state.externalGraphic} onChange={this._onUrlChange.bind(this)} floatingLabelText={formatMessage(messages.externalgraphic)} />
+          <TextField fullWidth={true} value={this.state.externalGraphic} onBlur={this._onUrlChange.bind(this)} floatingLabelText={formatMessage(messages.externalgraphic)} />
         </Paper>
-        <Paper style={this.state.externalGraphic ? {display: 'none'}: undefined}>
+        <Paper style={this.state.externalGraphic ? {display: 'none'} : undefined}>
           <Checkbox onCheck={this._onFillCheck.bind(this)} checked={this.state.hasFill} label={formatMessage(messages.filllabel)} />
           <FillEditor onChange={this.props.onChange} intl={this.props.intl} initialFillColor={this.props.initialState ? this.props.initialState.fillColor : undefined} />
         </Paper>
-        <Paper style={this.state.externalGraphic ? {display: 'none'}: undefined}>
+        <Paper style={this.state.externalGraphic ? {display: 'none'} : undefined}>
           <Checkbox onCheck={this._onStrokeCheck.bind(this)} checked={this.state.hasStroke} label={formatMessage(messages.strokelabel)} />
           <StrokeEditor onChange={this.props.onChange} intl={this.props.intl} initialStrokeColor={this.props.initialState ? this.props.initialState.strokeColor : undefined} initialStrokeWidth={this.props.initialState ? this.props.initialState.strokeWidth : undefined} />
         </Paper>
