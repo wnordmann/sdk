@@ -69,6 +69,7 @@
     "babelify": "^6.0.2",
     "browserify": "^11.2.0",
     "chai": "^1.10.0",
+    "chai-xml": "^0.3.1",
     "clean-css": "^3.4.6",
     "cssify": "^0.8.0",
     "dr-frankenstyle-win": "0.2.12",

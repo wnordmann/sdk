@@ -100,7 +100,7 @@ class StyleModal extends React.Component {
   }
   open() {
     if (this.props.layer.get('styleInfo')) {
-      var rules = this.props.layer.get('styleInfo');
+      var rules = this.props.layer.get('styleInfo').rules;
       for (var i = 0, ii = rules.length; i < ii; ++i) {
         this._styleState[rules[i].name] = rules[i];
       }
@@ -134,7 +134,7 @@ class StyleModal extends React.Component {
   }
   _generateSLD() {
     var me = this;
-    var sld = SLDService.createSLD(this.props.layer.get('id'), this.state.geometryType, this.state.rules, this._styleState);
+    var sld = SLDService.createSLD(this.props.layer, this.state.geometryType, this.state.rules, this._styleState);
     if (!(this._sld && this._sld === sld)) {
       var url = this.props.layer.getSource().getUrls()[0];
       if (this.props.layer.get('styleName')) {

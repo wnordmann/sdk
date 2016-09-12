@@ -38,14 +38,18 @@ const graphicFormats = {
 
 class SLDService {
   parse(sld) {
+    var result = {rules: []};
     var info = unmarshaller.unmarshalString(sld).value;
-    var rules = [];
-    var namedStyleOrUserStyle = info.namedLayerOrUserLayer[0].namedStyleOrUserStyle[0];
+    var layer = info.namedLayerOrUserLayer[0];
+    result.layerName = layer.name;
+    var namedStyleOrUserStyle = layer.namedStyleOrUserStyle[0];
+    result.styleName = namedStyleOrUserStyle.name;
     var featureTypeStyle = namedStyleOrUserStyle.featureTypeStyle[0];
+    result.featureTypeStyleName = featureTypeStyle.name;
     for (var i = 0, ii = featureTypeStyle.rule.length; i < ii; ++i) {
-      rules.push(this.parseRule(featureTypeStyle.rule[i]));
+      result.rules.push(this.parseRule(featureTypeStyle.rule[i]));
     }
-    return rules;
+    return result;
   }
   parseRule(ruleObj) {
     var rule = {};
@@ -355,7 +359,9 @@ class SLDService {
       filter: filter
     };
   }
-  createSLD(layerName, geometryType, rules, styleState) {
+  createSLD(layer, geometryType, rules, styleState) {
+    var layerName = layer.get('id');
+    var styleInfo = layer.get('styleInfo');
     var result = {
       name: {
         namespaceURI: sldNamespace,
@@ -370,7 +376,9 @@ class SLDService {
         name: layerName,
         namedStyleOrUserStyle: [{
           TYPE_NAME: 'SLD_1_0_0.UserStyle',
+          name: styleInfo ? styleInfo.styleName : undefined,
           featureTypeStyle: [{
+            name: styleInfo ? styleInfo.featureTypeStyleName : undefined,
             rule: ruleContainer
           }]
         }]

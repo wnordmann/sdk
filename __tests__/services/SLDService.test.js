@@ -1,8 +1,16 @@
 /* global beforeEach, describe, it */
 
 var assert = require('chai').assert;
+var expect  = require('chai').expect;
+var chai    = require('chai');
+var chaiXml = require('chai-xml');
+var raf = require('raf');
+raf.polyfill();
+var ol = require('openlayers');
 
 var SLDService = require('../../js/services/SLDService.js');
+
+chai.use(chaiXml);
 
 describe('SLDService', function() {
 
@@ -96,6 +104,18 @@ describe('SLDService', function() {
     assert.equal(symbol.value.graphic.externalGraphicOrMark[0].fill !== undefined, true);
     assert.equal(symbol.value.graphic.externalGraphicOrMark[0].stroke !== undefined, true);
     assert.equal(symbol.value.graphic.size.content[0], '4');
+  });
+
+  it('roundtrips PointSymbolizer ExternalGraphic', function() {
+    var sld = '<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"><sld:NamedLayer><sld:Name>Default Styler</sld:Name><sld:UserStyle><sld:Name>Default Styler</sld:Name><sld:FeatureTypeStyle><sld:Name>name</sld:Name><sld:Rule><sld:Name>rule1</sld:Name><sld:PointSymbolizer><sld:Graphic><sld:ExternalGraphic><sld:OnlineResource xlink:href="https://cdn1.iconfinder.com/data/icons/Map-Markers-Icons-Demo-PNG/128/Map-Marker-Marker-Outside-Azure.png"/><sld:Format>image/png</sld:Format></sld:ExternalGraphic><sld:Size>20</sld:Size><sld:Rotation>90.0</sld:Rotation></sld:Graphic></sld:PointSymbolizer></sld:Rule></sld:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>';
+    var info = SLDService.parse(sld);
+    var styleState = {};
+    for (var i = 0, ii = info.rules.length; i < ii; ++i) {
+      var key = info.rules[i].name;
+      styleState[key] = info.rules[i];
+    }
+    var sld2 = SLDService.createSLD(new ol.layer.Layer({id: 'Default Styler', styleInfo: info}), 'Point', info.rules, styleState);
+    expect(sld).xml.to.equal(sld2);
   });
 
 });
