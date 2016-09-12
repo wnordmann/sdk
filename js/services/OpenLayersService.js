@@ -52,9 +52,11 @@ class OpenLayersService {
       });
     } else if (geometryType === 'Point') {
       var image;
+      var rotation = styleState.rotation ? (parseFloat(styleState.rotation) / 180) * Math.PI : undefined;
       if (styleState.externalGraphic) {
         image = new ol.style.Icon({
           src: styleState.externalGraphic,
+          rotation: rotation,
           scale: styleState.symbolSize / Math.max(styleState.imageWidth, styleState.imageHeight)
         });
       } else {
@@ -62,6 +64,7 @@ class OpenLayersService {
           image = new ol.style.Circle({
             fill: fill,
             stroke: stroke,
+            rotation: rotation,
             radius: radius
           });
         } else if (styleState.symbolType === 'square') {
@@ -70,12 +73,14 @@ class OpenLayersService {
             stroke: stroke,
             points: 4,
             radius: radius,
+            rotation: rotation,
             angle: Math.PI / 4
           });
         } else if (styleState.symbolType === 'triangle') {
           image = new ol.style.RegularShape({
             fill: fill,
             stroke: stroke,
+            rotation: rotation,
             points: 3,
             radius: radius,
             angle: 0
@@ -84,6 +89,7 @@ class OpenLayersService {
           image = new ol.style.RegularShape({
             fill: fill,
             stroke: stroke,
+            rotation: rotation,
             points: 5,
             radius: radius,
             radius2: 0.5 * radius,
@@ -93,6 +99,7 @@ class OpenLayersService {
           image = new ol.style.RegularShape({
             fill: fill,
             stroke: stroke,
+            rotation: rotation,
             points: 4,
             radius: radius,
             radius2: 0,
@@ -102,6 +109,7 @@ class OpenLayersService {
           image = new ol.style.RegularShape({
             fill: fill,
             stroke: stroke,
+            rotation: rotation,
             points: 4,
             radius: radius,
             radius2: 0,
