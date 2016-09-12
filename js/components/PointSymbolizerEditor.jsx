@@ -43,6 +43,11 @@ const messages = defineMessages({
     description: 'Label for symbol size input field',
     defaultMessage: 'Size'
   },
+  symbolrotation: {
+    id: 'pointsymbolizereditor.symbolrotation',
+    description: 'Label for symbol rotation input field',
+    defaultMessage: 'Rotation'
+  },
   externalgraphic: {
     id: 'pointsymbolizereditor.externalgraphic',
     description: 'Label for external graphic field',
@@ -71,6 +76,7 @@ class PointSymbolizerEditor extends React.Component {
       hasStroke: props.initialState ? props.initialState.strokeColor !== undefined : true,
       symbolType: props.initialState && props.initialState.symbolType ? props.initialState.symbolType : 'circle',
       symbolSize: props.initialState && props.initialState.symbolSize ? props.initialState.symbolSize : '4',
+      rotation: props.initialState && props.initialState.rotation ? props.initialState.rotation : '0',
       externalGraphic: props.initialState ? props.initialState.externalGraphic : undefined
     };
     if (this.state.externalGraphic) {
@@ -113,6 +119,11 @@ class PointSymbolizerEditor extends React.Component {
       this.props.onChange(this.state);
     });
   }
+  _onSymbolRotationChange(evt) {
+    this.setState({rotation: evt.target.value}, function() {
+      this.props.onChange(this.state);
+    });
+  }
   _onUrlChange(evt) {
     var url = evt.target.value;
     this._getImageSize(url, function(width, height) {
@@ -137,6 +148,7 @@ class PointSymbolizerEditor extends React.Component {
             {options}
           </SelectField>
           <TextField value={this.state.symbolSize} onChange={this._onSymbolSizeChange.bind(this)} floatingLabelText={formatMessage(messages.symbolsize)} />
+          <TextField value={this.state.rotation} onChange={this._onSymbolRotationChange.bind(this)} floatingLabelText={formatMessage(messages.symbolrotation)} />
           <TextField fullWidth={true} value={this.state.externalGraphic} onChange={this._onUrlChange.bind(this)} floatingLabelText={formatMessage(messages.externalgraphic)} />
         </Paper>
         <Paper>

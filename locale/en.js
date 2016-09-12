@@ -175,6 +175,7 @@ var enMessages = {
   "pointsymbolizereditor.externalgraphic": "URL",
   "pointsymbolizereditor.filllabel": "Fill",
   "pointsymbolizereditor.strokelabel": "Stroke",
+  "pointsymbolizereditor.symbolrotation": "Rotation",
   "pointsymbolizereditor.symbolsize": "Size",
   "pointsymbolizereditor.symboltype": "Symbol",
   "polygonsymbolizereditor.filllabel": "Fill",

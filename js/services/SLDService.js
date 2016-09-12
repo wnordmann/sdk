@@ -30,6 +30,12 @@ var context = new Jsonix.Context([XLink_1_0, Filter_1_0_0, GML_2_1_2, SLD_1_0_0]
 var marshaller = context.createMarshaller();
 var unmarshaller = context.createUnmarshaller();
 
+const graphicFormats = {
+  'image/jpeg': /\.jpe?g$/i,
+  'image/gif': /\.gif$/i,
+  'image/png': /\.png$/i
+};
+
 class SLDService {
   parse(sld) {
     var info = unmarshaller.unmarshalString(sld).value;
@@ -61,6 +67,9 @@ class SLDService {
   }
   parsePointSymbolizer(pointObj) {
     var result = {};
+    if (pointObj.graphic.rotation) {
+      result.rotation = pointObj.graphic.rotation.content[0];
+    }
     if (pointObj.graphic.size) {
       result.symbolSize = pointObj.graphic.size.content[0];
     }
@@ -180,13 +189,32 @@ class SLDService {
       }
     };
   }
+  _getGraphicFormat(href) {
+    var format;
+    for (var key in graphicFormats) {
+      if (graphicFormats[key].test(href)) {
+        format = key;
+        break;
+      }
+    }
+    return format || 'image/png';
+  }
   createPointSymbolizer(styleState) {
-    var graphicOrMark = [{
-      TYPE_NAME: 'SLD_1_0_0.Mark',
-      fill: styleState.hasFill !== false && styleState.fillColor ? this.createFill(styleState) : undefined,
-      stroke: styleState.hasStroke !== false ? this.createStroke(styleState) : undefined,
-      wellKnownName: styleState.symbolType
-    }];
+    var graphicOrMark;
+    if (styleState.externalGraphic) {
+      graphicOrMark = [{
+        TYPE_NAME: 'SLD_1_0_0.ExternalGraphic',
+        onlineResource: {href: styleState.externalGraphic},
+        format: this._getGraphicFormat(styleState.externalGraphic)
+      }];
+    } else {
+      graphicOrMark = [{
+        TYPE_NAME: 'SLD_1_0_0.Mark',
+        fill: styleState.hasFill !== false && styleState.fillColor ? this.createFill(styleState) : undefined,
+        stroke: styleState.hasStroke !== false ? this.createStroke(styleState) : undefined,
+        wellKnownName: styleState.symbolType
+      }];
+    }
     return {
       name: {
         localPart: 'PointSymbolizer',
@@ -195,6 +223,9 @@ class SLDService {
       value: {
         graphic: {
           externalGraphicOrMark: graphicOrMark,
+          rotation: {
+            content: [styleState.rotation]
+          },
           size: {
             content: [styleState.symbolSize]
           }
