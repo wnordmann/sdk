@@ -216,7 +216,7 @@ class SLDService {
         TYPE_NAME: 'SLD_1_0_0.Mark',
         fill: styleState.hasFill !== false && styleState.fillColor ? this.createFill(styleState) : undefined,
         stroke: styleState.hasStroke !== false ? this.createStroke(styleState) : undefined,
-        wellKnownName: styleState.symbolType
+        wellKnownName: [styleState.symbolType]
       }];
     }
     return {
