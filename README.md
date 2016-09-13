@@ -2,6 +2,8 @@
 New javascript SDK based on React and Flux
 For example usage see: https://github.com/boundlessgeo/sdk-apps
 
+For online docs see: https://boundlessgeo.github.io/sdk/book/index.html and https://boundlessgeo.github.io/sdk/book.pdf
+
 ## Generating docs
 
     npm run docs
