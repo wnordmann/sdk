@@ -91,11 +91,12 @@ class PointSymbolizerEditor extends React.Component {
         this.setState({
           imageWidth: width,
           imageHeight: height
-        }, function() {
-          this.props.onChange(this.state);
-        });
+        }, this._onChange);
       }, this);
     }
+  }
+  _onChange() {
+    this.props.onChange(this.state);
   }
   _getImageSize(url, callback, scope) {
     var newImg = new Image();
@@ -112,45 +113,36 @@ class PointSymbolizerEditor extends React.Component {
   _onOpacityChange(evt, value) {
     this.setState({
       opacity: value
-    }, function() {
-      this.props.onChange(this.state);
-    });
+    }, this._onChange);
   }
   _onFillCheck(evt) {
-    this.setState({hasFill: evt.target.checked}, function() {
-      this.props.onChange(this.state);
-    });
+    this.setState({hasFill: evt.target.checked}, this._onChange);
   }
   _onStrokeCheck(evt) {
-    this.setState({hasStroke: evt.target.checked}, function() {
-      this.props.onChange(this.state);
-    });
+    this.setState({hasStroke: evt.target.checked}, this._onChange);
   }
   _onChangeSymbol(evt, idx, value) {
-    this.setState({symbolType: value}, function() {
-      this.props.onChange(this.state);
-    });
+    this.setState({symbolType: value}, this._onChange);
   }
   _onSymbolSizeChange(evt) {
-    this.setState({symbolSize: evt.target.value}, function() {
-      this.props.onChange(this.state);
-    });
+    this.setState({symbolSize: evt.target.value}, this._onChange);
   }
   _onSymbolRotationChange(evt) {
-    this.setState({rotation: evt.target.value}, function() {
-      this.props.onChange(this.state);
-    });
+    this.setState({rotation: evt.target.value}, this._onChange);
   }
   _onUrlChange(evt) {
+    this.setState({
+      externalGraphic: evt.target.value
+    });
+  }
+  _onUrlBlur(evt) {
     var url = evt.target.value;
     this._getImageSize(url, function(width, height) {
       this.setState({
         externalGraphic: url,
         imageWidth: width,
         imageHeight: height
-      }, function() {
-        this.props.onChange(this.state);
-      });
+      }, this._onChange);
     }, this);
   }
   render() {
@@ -166,7 +158,7 @@ class PointSymbolizerEditor extends React.Component {
           </SelectField>
           <TextField value={this.state.symbolSize} onChange={this._onSymbolSizeChange.bind(this)} floatingLabelText={formatMessage(messages.symbolsize)} />
           <TextField value={this.state.rotation} onChange={this._onSymbolRotationChange.bind(this)} floatingLabelText={formatMessage(messages.symbolrotation)} />
-          <TextField fullWidth={true} value={this.state.externalGraphic} onBlur={this._onUrlChange.bind(this)} floatingLabelText={formatMessage(messages.externalgraphic)} />
+          <TextField fullWidth={true} value={this.state.externalGraphic} onChange={this._onUrlChange.bind(this)} onBlur={this._onUrlBlur.bind(this)} floatingLabelText={formatMessage(messages.externalgraphic)} />
           <Slider style={!this.state.externalGraphic ? {display: 'none'} : {width: 250}} description={formatMessage(messages.opacity)} defaultValue={this.state.opacity} onChange={this._onOpacityChange.bind(this)} />
         </Paper>
         <Paper style={this.state.externalGraphic ? {display: 'none'} : undefined}>
