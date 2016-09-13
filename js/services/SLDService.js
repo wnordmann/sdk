@@ -368,7 +368,7 @@ class SLDService {
       filter: filter
     };
   }
-  createSLD(layer, geometryType, rules, styleState) {
+  createSLD(layer, geometryType, rules) {
     var layerName = layer.get('id');
     var styleInfo = layer.get('styleInfo');
     var result = {
@@ -395,7 +395,7 @@ class SLDService {
     };
     for (var i = rules.length - 1; i >= 0; --i) {
       var rule = rules[i].name;
-      var style = styleState[rule];
+      var style = rules[i];
       ruleContainer.push(this.createRule(rule, style.title, geometryType, style));
     }
     return marshaller.marshalString(result);

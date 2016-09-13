@@ -76,7 +76,6 @@ const messages = defineMessages({
 class StyleModal extends React.Component {
   constructor(props) {
     super(props);
-    this._styleState = {};
     this._styleCache = {};
     this._ruleCounter = 1;
     this.state = {
@@ -105,7 +104,6 @@ class StyleModal extends React.Component {
         if (rules[i].name === undefined) {
           rules[i].name = 'Untitled ' + (i + 1);
         }
-        this._styleState[rules[i].name] = rules[i];
       }
       this.setState({open: true, rule: rules[0].name, rules: rules}, function() {
         if (this.props.layer instanceof ol.layer.Vector) {
@@ -137,7 +135,7 @@ class StyleModal extends React.Component {
   }
   _generateSLD() {
     var me = this;
-    var sld = SLDService.createSLD(this.props.layer, this.state.geometryType, this.state.rules, this._styleState);
+    var sld = SLDService.createSLD(this.props.layer, this.state.geometryType, this.state.rules);
     if (!(this._sld && this._sld === sld)) {
       var url = this.props.layer.getSource().getUrls()[0];
       if (this.props.layer.get('styleName')) {
@@ -164,7 +162,7 @@ class StyleModal extends React.Component {
       // loop over the rules and see which one we match
       for (var i = me.state.rules.length - 1; i >= 0; --i) {
         var rule = me.state.rules[i].name;
-        var styleState = me._styleState[rule];
+        var styleState = rule;
         if (!styleState.filter || styleState.filter(feature.getProperties())) {
           var style = me._createStyle(styleState);
           if (styleState.labelAttribute) {
@@ -179,10 +177,8 @@ class StyleModal extends React.Component {
   }
   _onChange(state) {
     var rule = this.state.rule;
-    if (!this._styleState[rule]) {
-      this._styleState[rule] = {};
-    }
-    Object.assign(this._styleState[rule], state);
+    var styleState = this._getRuleByName(rule);
+    Object.assign(styleState, state);
     this._setStyle();
   }
   _onRuleChange(evt, idx, value) {
@@ -214,6 +210,13 @@ class StyleModal extends React.Component {
       errorOpen: false
     });
   }
+  _getRuleByName(ruleName) {
+    for (var i = 0, ii = this.state.rules.length; i < ii; ++i) {
+      if (this.state.rules[i].name === ruleName) {
+        return this.state.rules[i];
+      }
+    }
+  }
   render() {
     const {formatMessage} = this.props.intl;
     var error;
@@ -231,7 +234,8 @@ class StyleModal extends React.Component {
     });
     // TODO see if we can do with a single rule editor
     var ruleEditors = this.state.rules.map(function(rule, key) {
-      return (<RuleEditor {...this.props} geometryType={this.state.geometryType} visible={rule.name === this.state.rule} key={key} initialState={this._styleState[rule.name]} onChange={this._onChange.bind(this)} attributes={this.state.attributes} />)
+      var symbol = this._getRuleByName(rule.name);
+      return (<RuleEditor {...this.props} geometryType={this.state.geometryType} visible={rule.name === this.state.rule} key={key} initialState={symbol} onChange={this._onChange.bind(this)} attributes={this.state.attributes} />)
     }, this);
     var actions = [
       <RaisedButton label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
