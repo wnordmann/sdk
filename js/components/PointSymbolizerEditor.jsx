@@ -16,6 +16,7 @@ import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import Checkbox from 'material-ui/lib/checkbox';
 import FillEditor from './FillEditor.jsx';
 import StrokeEditor from './StrokeEditor.jsx';
+import Slider from 'material-ui/lib/slider';
 import SelectField from 'material-ui/lib/select-field';
 import Paper from 'material-ui/lib/paper';
 import MenuItem from 'material-ui/lib/menus/menu-item';
@@ -32,6 +33,11 @@ const messages = defineMessages({
     id: 'pointsymbolizereditor.strokelabel',
     description: 'Label for stroke checkbox',
     defaultMessage: 'Stroke'
+  },
+  opacity: {
+    id: 'pointsymbolizereditor.opacity',
+    description: 'Label for opacity slider',
+    defaultMessage: 'Opacity'
   },
   symboltype: {
     id: 'pointsymbolizereditor.symboltype',
@@ -77,7 +83,8 @@ class PointSymbolizerEditor extends React.Component {
       symbolType: props.initialState && props.initialState.symbolType ? props.initialState.symbolType : 'circle',
       symbolSize: props.initialState && props.initialState.symbolSize ? props.initialState.symbolSize : '4',
       rotation: props.initialState && props.initialState.rotation ? props.initialState.rotation : '0',
-      externalGraphic: props.initialState ? props.initialState.externalGraphic : undefined
+      externalGraphic: props.initialState ? props.initialState.externalGraphic : undefined,
+      opacity: props.initialState ? props.initialState.opacity : undefined
     };
     if (this.state.externalGraphic) {
       this._getImageSize(this.state.externalGraphic, function(width, height) {
@@ -101,6 +108,13 @@ class PointSymbolizerEditor extends React.Component {
       callback.call(scope, undefined, undefined);
     };
     newImg.src = url;
+  }
+  _onOpacityChange(evt, value) {
+    this.setState({
+      opacity: value
+    }, function() {
+      this.props.onChange(this.state);
+    });
   }
   _onFillCheck(evt) {
     this.setState({hasFill: evt.target.checked}, function() {
@@ -153,6 +167,7 @@ class PointSymbolizerEditor extends React.Component {
           <TextField value={this.state.symbolSize} onChange={this._onSymbolSizeChange.bind(this)} floatingLabelText={formatMessage(messages.symbolsize)} />
           <TextField value={this.state.rotation} onChange={this._onSymbolRotationChange.bind(this)} floatingLabelText={formatMessage(messages.symbolrotation)} />
           <TextField fullWidth={true} value={this.state.externalGraphic} onBlur={this._onUrlChange.bind(this)} floatingLabelText={formatMessage(messages.externalgraphic)} />
+          <Slider style={!this.state.externalGraphic ? {display: 'none'} : {width: 250}} description={formatMessage(messages.opacity)} defaultValue={this.state.opacity} onChange={this._onOpacityChange.bind(this)} />
         </Paper>
         <Paper style={this.state.externalGraphic ? {display: 'none'} : undefined}>
           <Checkbox onCheck={this._onFillCheck.bind(this)} checked={this.state.hasFill} label={formatMessage(messages.filllabel)} />

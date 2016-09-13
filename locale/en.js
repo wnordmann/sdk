@@ -174,6 +174,7 @@ var enMessages = {
   "playback.rangeinputlabel": "Slider control for changing the date",
   "pointsymbolizereditor.externalgraphic": "URL",
   "pointsymbolizereditor.filllabel": "Fill",
+  "pointsymbolizereditor.opacity": "Opacity",
   "pointsymbolizereditor.strokelabel": "Stroke",
   "pointsymbolizereditor.symbolrotation": "Rotation",
   "pointsymbolizereditor.symbolsize": "Size",

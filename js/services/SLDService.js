@@ -71,6 +71,9 @@ class SLDService {
   }
   parsePointSymbolizer(pointObj) {
     var result = {};
+    if (pointObj.graphic.opacity) {
+      result.opacity = parseFloat(pointObj.graphic.opacity.content[0]);
+    }
     if (pointObj.graphic.rotation) {
       result.rotation = pointObj.graphic.rotation.content[0];
     }
@@ -219,7 +222,7 @@ class SLDService {
         wellKnownName: [styleState.symbolType]
       }];
     }
-    return {
+    var result = {
       name: {
         localPart: 'PointSymbolizer',
         namespaceURI: sldNamespace
@@ -236,6 +239,12 @@ class SLDService {
         }
       }
     };
+    if (styleState.opacity !== undefined) {
+      result.value.graphic.opacity = {
+        content: ['' + styleState.opacity]
+      };
+    }
+    return result;
   }
   createTextSymbolizer(styleState) {
     var fontFamily = 'sans-serif';

@@ -57,6 +57,7 @@ class OpenLayersService {
         image = new ol.style.Icon({
           src: styleState.externalGraphic,
           rotation: rotation,
+          opacity: styleState.opacity,
           scale: styleState.symbolSize / Math.max(styleState.imageWidth, styleState.imageHeight)
         });
       } else {
