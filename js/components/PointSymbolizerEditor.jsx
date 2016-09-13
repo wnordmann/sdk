@@ -93,6 +93,8 @@ class PointSymbolizerEditor extends React.Component {
           imageHeight: height
         }, this._onChange);
       }, this);
+    } else {
+      this._onChange();
     }
   }
   _onChange() {
@@ -124,10 +126,16 @@ class PointSymbolizerEditor extends React.Component {
   _onChangeSymbol(evt, idx, value) {
     this.setState({symbolType: value}, this._onChange);
   }
-  _onSymbolSizeChange(evt) {
+  _onSymbolSizeBlur(evt) {
     this.setState({symbolSize: evt.target.value}, this._onChange);
   }
+  _onSymbolSizeChange(evt) {
+    this.setState({symbolSize: evt.target.value});
+  }
   _onSymbolRotationChange(evt) {
+    this.setState({rotation: evt.target.value});
+  }
+  _onSymbolRotationBlur(evt) {
     this.setState({rotation: evt.target.value}, this._onChange);
   }
   _onUrlChange(evt) {
@@ -156,8 +164,8 @@ class PointSymbolizerEditor extends React.Component {
           <SelectField style={this.state.externalGraphic ? {display: 'none'} : undefined} floatingLabelText={formatMessage(messages.symboltype)} value={this.state.symbolType} onChange={this._onChangeSymbol.bind(this)}>
             {options}
           </SelectField>
-          <TextField value={this.state.symbolSize} onChange={this._onSymbolSizeChange.bind(this)} floatingLabelText={formatMessage(messages.symbolsize)} />
-          <TextField value={this.state.rotation} onChange={this._onSymbolRotationChange.bind(this)} floatingLabelText={formatMessage(messages.symbolrotation)} />
+          <TextField value={this.state.symbolSize} onChange={this._onSymbolSizeChange.bind(this)} onBlur={this._onSymbolSizeBlur.bind(this)} floatingLabelText={formatMessage(messages.symbolsize)} />
+          <TextField value={this.state.rotation} onChange={this._onSymbolRotationChange.bind(this)} onBlur={this._onSymbolRotationBlur.bind(this)} floatingLabelText={formatMessage(messages.symbolrotation)} />
           <TextField fullWidth={true} value={this.state.externalGraphic} onChange={this._onUrlChange.bind(this)} onBlur={this._onUrlBlur.bind(this)} floatingLabelText={formatMessage(messages.externalgraphic)} />
           <Slider style={!this.state.externalGraphic ? {display: 'none'} : {width: 250}} description={formatMessage(messages.opacity)} defaultValue={this.state.opacity} onChange={this._onOpacityChange.bind(this)} />
         </Paper>
