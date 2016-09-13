@@ -85,7 +85,7 @@ class SLDService {
       result.externalGraphic = externalGraphicOrMark.onlineResource.href;
     } else {
       if (externalGraphicOrMark.wellKnownName) {
-        result.symbolType = externalGraphicOrMark.wellKnownName;
+        result.symbolType = externalGraphicOrMark.wellKnownName.content[0];
       }
       var fill = externalGraphicOrMark.fill;
       if (fill) {
@@ -239,7 +239,7 @@ class SLDService {
         }
       }
     };
-    if (styleState.opacity !== undefined) {
+    if (styleState.externalGraphic && styleState.opacity !== undefined) {
       result.value.graphic.opacity = {
         content: ['' + styleState.opacity]
       };
