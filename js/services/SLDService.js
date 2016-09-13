@@ -56,6 +56,7 @@ class SLDService {
     rule.name = ruleObj.name;
     rule.title = ruleObj.title;
     for (var i = 0, ii = ruleObj.symbolizer.length; i < ii; ++i) {
+      // TODO does it make sense to keep symbolizers separate?
       Object.assign(rule, this.parseSymbolizer(ruleObj.symbolizer[i]));
     }
     return rule;
@@ -67,7 +68,28 @@ class SLDService {
       return this.parseLineSymbolizer(symbolizerObj.value);
     } else if (symbolizerObj.name.localPart === 'PointSymbolizer') {
       return this.parsePointSymbolizer(symbolizerObj.value);
+    } else if (symbolizerObj.name.localPart === 'TextSymbolizer') {
+      return this.parseTextSymbolizer(symbolizerObj.value);
     }
+  }
+  parseTextSymbolizer(textObj) {
+    var result = {};
+    var labelInfo = textObj.label.content[0].value;
+    if (labelInfo.TYPE_NAME === 'Filter_1_0_0.PropertyNameType') {
+      result.labelAttribute = labelInfo.content[0];
+    }
+    if (textObj.font) {
+      for (var i = 0, ii = textObj.font.cssParameter.length; i < ii; ++i) {
+        var param = textObj.font.cssParameter[i];
+        if (param.name === 'font-size') {
+          result.fontSize = param.content[0];
+        }
+      }
+    }
+    if (textObj.fill) {
+      result.fontColor = this.parseFill(textObj.fill);
+    }
+    return result;
   }
   parsePointSymbolizer(pointObj) {
     var result = {};
@@ -247,7 +269,6 @@ class SLDService {
     return result;
   }
   createTextSymbolizer(styleState) {
-    var fontFamily = 'sans-serif';
     return {
       name: {
         localPart: 'TextSymbolizer',
@@ -260,25 +281,8 @@ class SLDService {
             content: ['#' + styleState.fontColor.hex]
           }]
         },
-        halo: {
-          fill: {
-            cssParameter: [{
-              name: 'fill',
-              content: ['#FFFFFF']
-            }]
-          },
-          radius: {
-            content: ['1']
-          }
-        },
-        labelPlacement: {
-          linePlacement: {}
-        },
         font: {
           cssParameter: [{
-            name: 'font-family',
-            content: [fontFamily]
-          }, {
             name: 'font-size',
             content: [String(styleState.fontSize)]
           }]
