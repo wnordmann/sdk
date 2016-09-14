@@ -29,6 +29,7 @@ class WMSLegend extends React.Component {
     super(props);
     this.state = {
       salt: Math.random(),
+      dynamic: false,
       muiTheme: context.muiTheme || ThemeManager.getMuiTheme()
     };
   }
@@ -38,7 +39,7 @@ class WMSLegend extends React.Component {
       let action = payload.action;
       switch (action.type) {
         case LayerConstants.STYLE_LAYER:
-          me.setState({salt: Math.random()});
+          me.setState({dynamic: true, salt: Math.random()});
           break;
         default:
           break;
@@ -73,7 +74,7 @@ class WMSLegend extends React.Component {
       '_olSalt': this.state.salt,
       style: params.STYLES ? params.STYLES : ''
     });
-    var legendUrl = (params.STYLES === undefined && layer.get('legendUrl')) ? layer.get('legendUrl') : url.toString();
+    var legendUrl = (!this.state.dynamic && params.STYLES === undefined && layer.get('legendUrl')) ? layer.get('legendUrl') : url.toString();
     return (<img className={classNames('sdk-component wms-legend', this.props.className)} src={legendUrl} />);
   }
 }
@@ -109,6 +110,7 @@ WMSLegend.defaultProps = {
   height: 20,
   width: 20,
   options: {
+    forceLabels: 'on',
     fontAntiAliasing: true,
     fontSize: 11,
     fontName: 'Arial'

@@ -67,12 +67,16 @@ class RuleEditor extends React.Component {
       });
     }
   }
-  _onTitleChange() {
+  _onTitleBlur() {
     var title = this.refs.title.getValue();
     this.setState({title: title});
     this.props.onChange({
       title: title
     });
+  }
+  _onTitleChange() {
+    var title = this.refs.title.getValue();
+    this.setState({title: title});
   }
   _getTabs() {
     const {formatMessage} = this.props.intl;
@@ -108,7 +112,7 @@ class RuleEditor extends React.Component {
       var tabs = this._getTabs();
       return (
         <Paper className={classNames('sdk-component rule-editor', this.props.className)} zIndex={2}>
-          <TextField value={this.state.title} ref='title' onChange={this._onTitleChange.bind(this)} floatingLabelText={formatMessage(messages.titlelabel)} />
+          <TextField value={this.state.title} ref='title' onBlur={this._onTitleBlur.bind(this)} onChange={this._onTitleChange.bind(this)} floatingLabelText={formatMessage(messages.titlelabel)} />
           <Tabs value={this.state.value} onChange={this.handleChange.bind(this)}>
             {tabs}
           </Tabs>

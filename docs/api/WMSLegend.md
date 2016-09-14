@@ -42,6 +42,7 @@ Options to send as LEGEND_OPTIONS parameter.
 
 type: `object`
 defaultValue: `{
+  forceLabels: 'on',
   fontAntiAliasing: true,
   fontSize: 11,
   fontName: 'Arial'

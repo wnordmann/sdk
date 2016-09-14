@@ -67,7 +67,7 @@ describe('WMSLegend', function() {
     assert.equal(url.query.width, '20');
     assert.equal(url.query.height, '20');
     assert.equal(url.query.layer, layerName);
-    assert.equal(url.query.legend_options, 'fontColor:0x000000;fontAntiAliasing:true;fontSize:11;fontName:Arial');
+    assert.equal(url.query.legend_options, 'fontColor:0x000000;forceLabels:on;fontAntiAliasing:true;fontSize:11;fontName:Arial');
     assert.equal(url.query.format, 'image/png');
     assert.equal(url.pathname, wmsPath);
     assert.equal(url.host, wmsHost);
