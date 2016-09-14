@@ -1,11 +1,8 @@
 {
   "name": "boundless-sdk",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "SDK for OpenLayers 3 and React plus Flux",
   "main": "index.js",
-  "publishConfig": {
-    "registry": "https://npm.boundlessgeo.com/"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/boundlessgeo/sdk.git"
