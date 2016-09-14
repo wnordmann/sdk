@@ -203,7 +203,7 @@ class StyleModal extends React.Component {
       }
     }
     rules.splice(idx, 1);
-    this.setState({rules: rules, rule: rules.length > 0 ? rules[0].name : null});
+    this.setState({rules: rules, rule: rules.length > 0 ? rules[0].name : null}, this._setStyle);
   }
   _handleRequestClose() {
     this.setState({
