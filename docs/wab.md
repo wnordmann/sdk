@@ -18,7 +18,7 @@ destination is not empty, continue? [y/N]
 Now run the npm install command:
 
 ```
-npm install --registry https://npm.boundlessgeo.com
+npm install
 ```
 
 After this run:
