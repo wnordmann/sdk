@@ -175,6 +175,7 @@ class MapConfigService {
     config.layers = layers;
     var view = map.getView();
     config.view = {
+      projection: view.getProjection().getCode(),
       center: view.getCenter(),
       resolution: view.getResolution(),
       rotation: view.getRotation()
