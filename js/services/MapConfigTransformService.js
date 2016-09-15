@@ -16,6 +16,7 @@
 class MapConfigTransformService {
   transform(data) {
     var i, ii, layers = [];
+    var groups = {};
     for (i = 0, ii = data.map.layers.length; i < ii; ++i) {
       var layer = data.map.layers[i];
       var source = data.sources[layer.source];
@@ -53,17 +54,35 @@ class MapConfigTransformService {
         layerConfig = undefined;
       }
       if (layerConfig !== undefined) {
-        layers.push(layerConfig);
+        if (layer.group) {
+          if (layer.group === 'background') {
+            layerConfig.properties.type = 'base';
+          }
+          if (!groups[layer.group]) {
+            groups[layer.group] = {
+              type: 'Group',
+              properties: {
+                title: layer.group === 'background' ? 'Base Maps' : layer.group,
+                type: layer.group === 'background' ? 'base-group' : undefined
+              },
+              children: []
+            };
+            layers.push(groups[layer.group]);
+          }
+          groups[layer.group].children.push(layerConfig);
+        } else {
+          layers.push(layerConfig);
+        }
       }
-     }
-     return {
-       layers: layers,
-       view: {
-         center: data.map.center,
-         projection: data.map.projection,
-         zoom: data.map.zoom
-       }
-     };
+    }
+    return {
+      layers: layers,
+      view: {
+        center: data.map.center,
+        projection: data.map.projection,
+        zoom: data.map.zoom
+      }
+    };
   }
 }
 
