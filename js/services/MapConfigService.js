@@ -159,8 +159,14 @@ class MapConfigService {
     }
     var view = map.getView();
     view.setCenter(viewConfig.center);
-    view.setResolution(viewConfig.resolution);
-    view.setRotation(viewConfig.rotation);
+    if (viewConfig.resolution !== undefined) {
+      view.setResolution(viewConfig.resolution);
+    } else if (viewConfig.zoom !== undefined) {
+      view.setZoom(viewConfig.zoom);
+    }
+    if (viewConfig.rotation !== undefined) {
+      view.setRotation(viewConfig.rotation);
+    }
   }
   save(map) {
     var layers = [];
