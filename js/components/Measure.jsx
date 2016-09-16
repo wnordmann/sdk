@@ -71,27 +71,35 @@ class Measure extends React.Component {
       value: null,
       disabled: false
     };
+    this._lengthStyle = new ol.style.Style({
+      stroke: new ol.style.Stroke({
+        color: '#FFC107',
+        width: 2
+      })
+    });
+    this._areaStyle = new ol.style.Style({
+      fill: new ol.style.Fill({
+        color: 'rgba(255,213,79, 0.5)'
+      }),
+      stroke: new ol.style.Stroke({
+        color: '#FFA000'
+      })
+    });
   }
   componentDidMount() {
+    var areaStyle = this._areaStyle;
+    var lengthStyle = this._lengthStyle;
     this._layer = new ol.layer.Vector({
       title: null,
       zIndex: 1000,
       managed: false,
-      style: new ol.style.Style({
-        fill: new ol.style.Fill({
-          color: 'rgba(255, 255, 255, 0.2)'
-        }),
-        stroke: new ol.style.Stroke({
-          color: '#ffcc33',
-          width: 2
-        }),
-        image: new ol.style.Circle({
-          radius: 7,
-          fill: new ol.style.Fill({
-            color: '#ffcc33'
-          })
-        })
-      }),
+      style: function(feature) {
+        if (feature.getGeometry() instanceof ol.geom.Polygon) {
+          return areaStyle;
+        } else {
+          return lengthStyle;
+        }
+      },
       source: new ol.source.Vector({wrapX: false})
     });
     this.props.map.addLayer(this._layer);
