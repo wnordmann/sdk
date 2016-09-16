@@ -13,7 +13,7 @@
 import React from 'react';
 import ol from 'openlayers';
 import ThemeManager from 'material-ui/lib/styles/theme-manager';
-import IconButton from 'material-ui/lib/icon-button';
+import Button from './Button.jsx';
 import classNames from 'classnames';
 import NorthIcon from 'material-ui/lib/svg-icons/maps/navigation';
 import pureRender from 'pure-render-decorator';
@@ -80,7 +80,7 @@ class Rotate extends React.Component {
     const muiTheme = this.state.muiTheme;
     const rawTheme = muiTheme.rawTheme;
     return {
-      root: Object.assign(this.props.style, {
+      root: Object.assign(this.props.style || {}, {
         background: rawTheme.palette.primary1Color
       }),
       icon: {
@@ -98,7 +98,7 @@ class Rotate extends React.Component {
         transform: 'rotate(' + this.state.rotation + 'rad)'
       };
       return (
-        <IconButton className={classNames('sdk-component rotate', this.props.className)} tooltipPosition='top-left' iconStyle={iconStyle} style={styles.root} tooltip={formatMessage(messages.rotatetitle)} onTouchTap={this._resetNorth.bind(this)}><NorthIcon color={styles.icon.color}/></IconButton>
+        <Button tooltipStyle={{'top':'-50px'}} action={true} mini={true} secondary={true} className={classNames('sdk-component rotate', this.props.className)} tooltipPosition='top-left' iconStyle={iconStyle} style={styles.root} tooltip={formatMessage(messages.rotatetitle)} onTouchTap={this._resetNorth.bind(this)}><NorthIcon color={styles.icon.color}/></Button>
       );
     }
   }
@@ -133,14 +133,7 @@ Rotate.propTypes = {
 
 Rotate.defaultProps = {
   autoHide: true,
-  duration: 250,
-  style: {
-    background: 'rgba(0,60,136,.7)',
-    borderRadius: '2px',
-    width: '28px',
-    height: '28px',
-    padding: '2px'
-  }
+  duration: 250
 };
 
 Rotate.contextTypes = {

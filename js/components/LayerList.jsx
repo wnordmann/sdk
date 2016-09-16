@@ -21,7 +21,7 @@ import LayerListItem from './LayerListItem.jsx';
 import Label from './Label.jsx';
 import AddLayerModal from './AddLayerModal.jsx';
 import RaisedButton from 'material-ui/lib/raised-button';
-import IconButton from 'material-ui/lib/icon-button';
+import Button from './Button.jsx';
 import NoteAdd from 'material-ui/lib/svg-icons/action/note-add';
 import List from 'material-ui/lib/lists/list';
 import LayersIcon from 'material-ui/lib/svg-icons/maps/layers';
@@ -149,7 +149,7 @@ class LayerList extends React.Component {
     const muiTheme = this.state.muiTheme;
     const rawTheme = muiTheme.rawTheme;
     return {
-      root: Object.assign(this.props.style, {
+      root: Object.assign(this.props.style || {}, {
         background: rawTheme.palette.primary1Color
       }),
       icon: {
@@ -179,7 +179,7 @@ class LayerList extends React.Component {
     }
     return (
       <div ref='parent' className={classNames(divClass, this.props.className)}>
-        <IconButton style={styles.root} className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={this._togglePanel.bind(this)}><LayersIcon color={styles.icon.color} /></IconButton>
+        <Button tooltipStyle={{'top':'-50px'}} action={true} mini={true} secondary={true} style={styles.root} className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={this._togglePanel.bind(this)}><LayersIcon color={styles.icon.color} /></Button>
         <div className='layer-tree-panel clearfix'>
           {tipLabel}
           <List className='layer-list-list'>
@@ -282,13 +282,7 @@ LayerList.defaultProps = {
   showDownload: false,
   downloadFormat: 'GeoJSON',
   showOpacity: false,
-  showOnStart: false,
-  style: {
-    borderRadius: '2px',
-    width: '28px',
-    height: '28px',
-    padding: '2px'
-  }
+  showOnStart: false
 };
 
 LayerList.contextTypes = {

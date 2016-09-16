@@ -15,7 +15,7 @@ import ol from 'openlayers';
 import classNames from 'classnames';
 import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import LayerStore from '../stores/LayerStore.js';
-import IconButton from 'material-ui/lib/icon-button';
+import Button from './Button.jsx';
 import LegendIcon from 'material-ui/lib/svg-icons/image/image';
 import List from 'material-ui/lib/lists/list';
 import ListItem from 'material-ui/lib/lists/list-item';
@@ -107,7 +107,7 @@ class QGISLegend extends React.Component {
     const muiTheme = this.state.muiTheme;
     const rawTheme = muiTheme.rawTheme;
     return {
-      root: Object.assign(this.props.style, {
+      root: Object.assign(this.props.style || {}, {
         background: rawTheme.palette.primary1Color
       }),
       icon: {
@@ -127,7 +127,7 @@ class QGISLegend extends React.Component {
     var items = this._renderItems(this.props.legendData, this.props.legendBasePath);
     return (
       <div className={classNames(divClass, this.props.className)}>
-        <IconButton style={styles.root} className='legendbutton' tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._togglePanel.bind(this)}><LegendIcon color={styles.icon.color} /></IconButton>
+        <Button tooltipStyle={{'top':'-50px'}} action={true} mini={true} secondary={true} style={styles.root} className='legendbutton' tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._togglePanel.bind(this)}><LegendIcon color={styles.icon.color} /></Button>
         <div className='legend-panel' id='legend'>{items}</div>
       </div>
     );
@@ -167,13 +167,7 @@ QGISLegend.propTypes = {
 
 QGISLegend.defaultProps = {
   legendBasePath: './legend/',
-  showExpandedOnStartup: false,
-  style: {
-    borderRadius: '2px',
-    width: '28px',
-    height: '28px',
-    padding: '2px'
-  }
+  showExpandedOnStartup: false
 };
 
 QGISLegend.contextTypes = {

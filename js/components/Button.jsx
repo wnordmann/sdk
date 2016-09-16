@@ -1,5 +1,6 @@
 import React from 'react';
 import RaisedButton from 'material-ui/lib/raised-button';
+import FloatingActionButton from 'material-ui/lib/floating-action-button';
 import Tooltip from 'material-ui/lib/tooltip';
 import classNames from 'classnames';
 import './Button.css';
@@ -27,9 +28,16 @@ class Button extends React.Component {
   render() {
     var styleConfig = {left: 12, boxSizing: 'border-box'};
     var style = this.props.tooltipStyle ? Object.assign(styleConfig, this.props.tooltipStyle) : styleConfig;
+    var button, buttonStyle;
+    if (this.props.action === true) {
+      button = (<FloatingActionButton ref='button' {...this.props} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)} disableTouchRipple={true}/>);
+    } else {
+      buttonStyle = {margin: '10px 12px'};
+      button = (<RaisedButton ref='button' {...this.props} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)} disableTouchRipple={true}/>);
+    }
     return (
-      <span style={{margin: '10px 12px'}} className={classNames('sdk-component sdk-button', this.props.className)} >
-        <RaisedButton ref='button' {...this.props} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)} disableTouchRipple={true}/>
+      <span style={buttonStyle} className={classNames('sdk-component sdk-button', this.props.className)} >
+        {button}
         <Tooltip verticalPosition='bottom' style={style} show={this.state.showTooltip} label={this.props.tooltip || ''} />
       </span>
     );
@@ -37,6 +45,10 @@ class Button extends React.Component {
 }
 
 Button.propTypes = {
+  /**
+   * Should we display as a floating action button?
+   */
+  action: React.PropTypes.bool,
   /**
    * Should this button be disabled?
    */

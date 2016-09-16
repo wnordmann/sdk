@@ -17,7 +17,7 @@ import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import classNames from 'classnames';
 import pureRender from 'pure-render-decorator';
 import Snackbar from 'material-ui/lib/snackbar';
-import IconButton from 'material-ui/lib/icon-button';
+import Button from './Button.jsx';
 import MyLocation from 'material-ui/lib/svg-icons/maps/my-location';
 
 const messages = defineMessages({
@@ -120,7 +120,7 @@ class Geolocation extends React.Component {
     const muiTheme = this.state.muiTheme;
     const rawTheme = muiTheme.rawTheme;
     return {
-      root: Object.assign(this.props.style, {
+      root: Object.assign(this.props.style || {}, {
         background: rawTheme.palette.primary1Color
       }),
       icon: {
@@ -150,7 +150,7 @@ class Geolocation extends React.Component {
         color = styles.icon.color;
       }
       return (
-        <IconButton style={styles.root} className={classNames('sdk-component geolocation', this.props.className)} tooltipPosition='top-right' tooltip={tooltip} onTouchTap={this._geolocate.bind(this)}><MyLocation color={color} /></IconButton>
+        <Button tooltipStyle={{'top':'-50px'}} action={true} mini={true} secondary={true} style={styles.root} className={classNames('sdk-component geolocation', this.props.className)} tooltipPosition='top-right' tooltip={tooltip} onTouchTap={this._geolocate.bind(this)}><MyLocation color={color} /></Button>
       );
     }
   }
@@ -173,15 +173,6 @@ Geolocation.propTypes = {
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
-};
-
-Geolocation.defaultProps = {
-  style: {
-    borderRadius: '2px',
-    width: '28px',
-    height: '28px',
-    padding: '2px'
-  }
 };
 
 Geolocation.contextTypes = {

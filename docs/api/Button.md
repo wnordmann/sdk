@@ -6,6 +6,13 @@ Button with built-in tooltip.
 Properties
 ----------
 
+### `action`
+
+Should we display as a floating action button?
+
+type: `bool`
+
+
 ### `className`
 
 Css class name to apply on the span.

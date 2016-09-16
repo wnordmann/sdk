@@ -13,7 +13,7 @@
 import React from 'react';
 import ol from 'openlayers';
 import classNames from 'classnames';
-import IconButton from 'material-ui/lib/icon-button';
+import Button from './Button.jsx';
 import ZoomIn from 'material-ui/lib/svg-icons/action/zoom-in';
 import ZoomOut from 'material-ui/lib/svg-icons/action/zoom-out';
 import pureRender from 'pure-render-decorator';
@@ -76,7 +76,7 @@ class Zoom extends React.Component {
     const muiTheme = this.state.muiTheme;
     const rawTheme = muiTheme.rawTheme;
     return {
-      root: Object.assign(this.props.style, {
+      root: Object.assign(this.props.style || {}, {
         background: rawTheme.palette.primary1Color
       }),
       icon: {
@@ -89,8 +89,8 @@ class Zoom extends React.Component {
     const {formatMessage} = this.props.intl;
     return (
       <div className={classNames('sdk-component zoom', this.props.className)}>
-        <IconButton tooltipPosition='top-right' style={styles.root} tooltip={this.props.zoomInTipLabel ? this.props.zoomInTipLabel : formatMessage(messages.zoomintitle)} onTouchTap={this._zoomIn.bind(this)}><ZoomIn color={styles.icon.color} /></IconButton><br/>
-        <IconButton tooltipPosition='top-right' style={Object.assign({marginTop: '25px'}, styles.root)} tooltip={this.props.zoomOutTipLabel ? this.props.zoomOutTipLabel : formatMessage(messages.zoomouttitle)} onTouchTap={this._zoomOut.bind(this)}><ZoomOut color={styles.icon.color}/></IconButton>
+        <Button action={true} mini={true} secondary={true} tooltipStyle={{'top':'-50px'}} tooltipPosition='top-right' style={styles.root} tooltip={this.props.zoomInTipLabel ? this.props.zoomInTipLabel : formatMessage(messages.zoomintitle)} onTouchTap={this._zoomIn.bind(this)}><ZoomIn color={styles.icon.color} /></Button><br/>
+        <Button action={true} mini={true} secondary={true} tooltipStyle={{'top':'-50px'}} tooltipPosition='top-right' style={Object.assign({marginTop: 15}, styles.root)} tooltip={this.props.zoomOutTipLabel ? this.props.zoomOutTipLabel : formatMessage(messages.zoomouttitle)} onTouchTap={this._zoomOut.bind(this)}><ZoomOut color={styles.icon.color}/></Button>
       </div>
     );
   }
@@ -133,13 +133,7 @@ Zoom.propTypes = {
 
 Zoom.defaultProps = {
   delta: 1,
-  duration: 250,
-  style: {
-    borderRadius: '2px',
-    width: '28px',
-    height: '28px',
-    padding: '2px'
-  }
+  duration: 250
 };
 
 Zoom.contextTypes = {

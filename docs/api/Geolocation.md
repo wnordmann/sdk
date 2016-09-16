@@ -38,10 +38,4 @@ type: `instanceOf ol.Map`
 Style for the button.
 
 type: `object`
-defaultValue: `{
-  borderRadius: '2px',
-  width: '28px',
-  height: '28px',
-  padding: '2px'
-}`
 

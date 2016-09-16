@@ -15,7 +15,7 @@ import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import classNames from 'classnames';
-import IconButton from 'material-ui/lib/icon-button';
+import Button from './Button.jsx';
 import HomeIcon from 'material-ui/lib/svg-icons/maps/zoom-out-map';
 import pureRender from 'pure-render-decorator';
 
@@ -72,7 +72,7 @@ class HomeButton extends React.Component {
     const muiTheme = this.state.muiTheme;
     const rawTheme = muiTheme.rawTheme;
     return {
-      root: Object.assign(this.props.style, {
+      root: Object.assign(this.props.style || {}, {
         background: rawTheme.palette.primary1Color
       }),
       icon: {
@@ -84,7 +84,7 @@ class HomeButton extends React.Component {
     const {formatMessage} = this.props.intl;
     const styles = this.getStyles();
     return (
-      <IconButton className={classNames('sdk-component home-button', this.props.className)} tooltipPosition='top-right' style={styles.root} tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._goHome.bind(this)} ><HomeIcon color={styles.icon.color} /></IconButton>
+      <Button tooltipStyle={{'top':'-50px'}} action={true} mini={true} secondary={true} className={classNames('sdk-component home-button', this.props.className)} tooltipPosition='top-right' style={styles.root} tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._goHome.bind(this)} ><HomeIcon color={styles.icon.color} /></Button>
     );
   }
 }
@@ -110,15 +110,6 @@ HomeButton.propTypes = {
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
-};
-
-HomeButton.defaultProps = {
-  style: {
-    borderRadius: '2px',
-    width: '28px',
-    height: '28px',
-    padding: '2px'
-  }
 };
 
 HomeButton.contextTypes = {
