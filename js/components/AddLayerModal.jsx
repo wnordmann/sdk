@@ -337,7 +337,7 @@ class AddLayerModal extends React.Component {
       input = (
         <div>
           <TextField style={{width: '512px'}} floatingLabelText={formatMessage(messages.inputfieldlabel, {serviceType: serviceType})} defaultValue={this.props.url} ref='url' />
-          <RaisedButton style={{float: 'right'}} label={formatMessage(messages.connectbutton)} onTouchTap={this._connect.bind(this)} disableTouchRipple={true}/>
+          <RaisedButton style={{float: 'right', marginTop: 27}} label={formatMessage(messages.connectbutton)} onTouchTap={this._connect.bind(this)} disableTouchRipple={true}/>
         </div>
       );
     }
