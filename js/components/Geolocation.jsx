@@ -123,9 +123,6 @@ class Geolocation extends React.Component {
       root: Object.assign(this.props.style || {}, {
         background: rawTheme.palette.primary1Color
       }),
-      icon: {
-        color: rawTheme.palette.textColor
-      },
       iconactive: {
         color: rawTheme.palette.accent1Color
       }
@@ -146,8 +143,6 @@ class Geolocation extends React.Component {
       if (this.state.tracking) {
         color = styles.iconactive.color;
         tooltip += ' (' + formatMessage(messages.trackingtitle) + ')';
-      } else {
-        color = styles.icon.color;
       }
       return (
         <Button tooltipStyle={{'top':'-50px'}} action={true} mini={true} secondary={true} style={styles.root} className={classNames('sdk-component geolocation', this.props.className)} tooltipPosition='top-right' tooltip={tooltip} onTouchTap={this._geolocate.bind(this)}><MyLocation color={color} /></Button>

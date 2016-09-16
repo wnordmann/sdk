@@ -74,17 +74,14 @@ class HomeButton extends React.Component {
     return {
       root: Object.assign(this.props.style || {}, {
         background: rawTheme.palette.primary1Color
-      }),
-      icon: {
-        color: rawTheme.palette.textColor
-      }
+      })
     };
   }
   render() {
     const {formatMessage} = this.props.intl;
     const styles = this.getStyles();
     return (
-      <Button tooltipStyle={{'top':'-50px'}} action={true} mini={true} secondary={true} className={classNames('sdk-component home-button', this.props.className)} tooltipPosition='top-right' style={styles.root} tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._goHome.bind(this)} ><HomeIcon color={styles.icon.color} /></Button>
+      <Button tooltipStyle={{'top':'-50px'}} action={true} mini={true} secondary={true} className={classNames('sdk-component home-button', this.props.className)} tooltipPosition='top-right' style={styles.root} tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._goHome.bind(this)} ><HomeIcon /></Button>
     );
   }
 }

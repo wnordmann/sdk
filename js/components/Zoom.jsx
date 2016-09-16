@@ -78,10 +78,7 @@ class Zoom extends React.Component {
     return {
       root: Object.assign(this.props.style || {}, {
         background: rawTheme.palette.primary1Color
-      }),
-      icon: {
-        color: rawTheme.palette.textColor
-      }
+      })
     };
   }
   render() {
@@ -89,8 +86,8 @@ class Zoom extends React.Component {
     const {formatMessage} = this.props.intl;
     return (
       <div className={classNames('sdk-component zoom', this.props.className)}>
-        <Button action={true} mini={true} secondary={true} tooltipStyle={{'top':'-50px'}} tooltipPosition='top-right' style={styles.root} tooltip={this.props.zoomInTipLabel ? this.props.zoomInTipLabel : formatMessage(messages.zoomintitle)} onTouchTap={this._zoomIn.bind(this)}><ZoomIn color={styles.icon.color} /></Button><br/>
-        <Button action={true} mini={true} secondary={true} tooltipStyle={{'top':'-50px'}} tooltipPosition='top-right' style={Object.assign({marginTop: 15}, styles.root)} tooltip={this.props.zoomOutTipLabel ? this.props.zoomOutTipLabel : formatMessage(messages.zoomouttitle)} onTouchTap={this._zoomOut.bind(this)}><ZoomOut color={styles.icon.color}/></Button>
+        <Button action={true} mini={true} secondary={true} tooltipStyle={{'top':'-50px'}} tooltipPosition='top-right' style={styles.root} tooltip={this.props.zoomInTipLabel ? this.props.zoomInTipLabel : formatMessage(messages.zoomintitle)} onTouchTap={this._zoomIn.bind(this)}><ZoomIn /></Button><br/>
+        <Button action={true} mini={true} secondary={true} tooltipStyle={{'top':'-50px'}} tooltipPosition='top-right' style={Object.assign({marginTop: 15}, styles.root)} tooltip={this.props.zoomOutTipLabel ? this.props.zoomOutTipLabel : formatMessage(messages.zoomouttitle)} onTouchTap={this._zoomOut.bind(this)}><ZoomOut /></Button>
       </div>
     );
   }

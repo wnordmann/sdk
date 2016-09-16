@@ -151,10 +151,7 @@ class LayerList extends React.Component {
     return {
       root: Object.assign(this.props.style || {}, {
         background: rawTheme.palette.primary1Color
-      }),
-      icon: {
-        color: rawTheme.palette.textColor
-      }
+      })
     };
   }
   render() {
@@ -179,7 +176,7 @@ class LayerList extends React.Component {
     }
     return (
       <div ref='parent' className={classNames(divClass, this.props.className)}>
-        <Button tooltipStyle={{'top':'-50px'}} action={true} mini={true} secondary={true} style={styles.root} className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={this._togglePanel.bind(this)}><LayersIcon color={styles.icon.color} /></Button>
+        <Button tooltipStyle={{'top':'-50px'}} action={true} mini={true} secondary={true} style={styles.root} className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={this._togglePanel.bind(this)}><LayersIcon /></Button>
         <div className='layer-tree-panel clearfix'>
           {tipLabel}
           <List className='layer-list-list'>
