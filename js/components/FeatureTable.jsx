@@ -136,6 +136,7 @@ class FeatureTable extends React.Component {
       this._setLayer(this.props.layer);
     }
     this.state = {
+      active: false,
       errorOpen: false,
       error: false,
       muiTheme: context.muiTheme || ThemeManager.getMuiTheme(),
@@ -383,6 +384,14 @@ class FeatureTable extends React.Component {
       errorOpen: false
     });
   }
+  _handleRequestCloseActive() {
+    this.setState({
+      active: false
+    });
+  }
+  setActive(active) {
+    this.setState({active: active});
+  }
   render() {
     var {sortIndexes, colSortDirs} = this.state;
     const {formatMessage} = this.props.intl;
@@ -443,9 +452,16 @@ class FeatureTable extends React.Component {
     const buttonStyle = this.props.buttonStyle;
     const styles = this.getStyles();
     var filterHelp = this._layer ? <FilterHelp intl={this.props.intl} /> : undefined;
-    return (<div style={styles.root} className={classNames('sdk-component feature-table', this.props.className)}>
-      <div style={{padding: 16, display: !this._layer ? 'block' : 'none'}}>{formatMessage(messages.nodatamsg)}</div>
-        <div style={{display: !this._layer ? 'none' : 'block'}}>
+    return (
+      <div style={styles.root} className={classNames('sdk-component feature-table', this.props.className)}>
+        <Snackbar
+          autoHideDuration={5000}
+          open={!this._layer && this.state.active}
+          bodyStyle={{lineHeight: '24px', height: 'auto'}}
+          style={{bottom: 'auto', top: 0, position: 'absolute'}}
+          message={formatMessage(messages.nodatamsg)}
+          onRequestClose={this._handleRequestCloseActive.bind(this)}
+        />
         <div ref='form'>
           <div className='feature-table-options'>
             <div className='feature-table-selector'>
@@ -478,7 +494,7 @@ class FeatureTable extends React.Component {
           {columnNodes}
         </Table>
       </div>
-    </div>);
+    );
   }
 }
 
