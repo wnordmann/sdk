@@ -39,6 +39,11 @@ var SelectFeature = function(handleEvent, scope) {
 ol.inherits(SelectFeature, ol.interaction.Interaction);
 
 const messages = defineMessages({
+  nodatamsg: {
+    id: 'wfst.nodatamsg',
+    description: 'Message to display if there are no layers with data',
+    defaultMessage: 'You haven\’t loaded any layers with feature data yet, so there is no data to edit. First add a layer with feature data.'
+  },
   layerlabel: {
     id: 'wfst.layerlabel',
     description: 'Label for the layer combo box',
@@ -124,6 +129,7 @@ class WFST extends React.Component {
       }
     });
     this.state = {
+      active: false,
       muiTheme: context.muiTheme || ThemeManager.getMuiTheme(),
       modifySecondary: false,
       drawSecondary: false,
@@ -389,6 +395,14 @@ class WFST extends React.Component {
       }
     };
   }
+  _handleRequestCloseActive() {
+    this.setState({
+      active: false
+    });
+  }
+  setActive(active) {
+    this.setState({active: active});
+  }
   render() {
     if (!this.state.visible) {
       return (<article />);
@@ -420,6 +434,14 @@ class WFST extends React.Component {
       const buttonStyle = this.props.buttonStyle;
       return (
         <div style={styles.root} className={classNames('sdk-component wfst', this.props.className)}>
+          <Snackbar
+            autoHideDuration={5000}
+            open={!this.state.layer && this.state.active}
+            bodyStyle={{lineHeight: '24px', height: 'auto'}}
+            style={{bottom: 'auto', top: 0, position: 'absolute'}}
+            message={formatMessage(messages.nodatamsg)}
+            onRequestClose={this._handleRequestCloseActive.bind(this)}
+          />
           {layerSelector}
           <Toolbar>
             <ToolbarGroup>
@@ -494,4 +516,4 @@ WFST.contextTypes = {
   muiTheme: React.PropTypes.object
 };
 
-export default injectIntl(WFST);
+export default injectIntl(WFST, {withRef: true});

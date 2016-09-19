@@ -226,6 +226,7 @@ var enMessages = {
   "wfst.layerlabel": "Layer",
   "wfst.modifyfeature": "Select",
   "wfst.modifyfeaturetitle": "Modify an existing feature or select before Delete",
+  "wfst.nodatamsg": "You haven’t loaded any layers with feature data yet, so there is no data to edit. First add a layer with feature data.",
   "wfst.updatemsg": "Geometry and/or attribute(s) change saved successfully.",
   "zoom.zoomintitle": "Zoom in",
   "zoom.zoomouttitle": "Zoom out",
