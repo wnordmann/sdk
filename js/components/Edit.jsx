@@ -22,7 +22,7 @@ import LayerConstants from '../constants/LayerConstants.js';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import SelectField from 'material-ui/lib/select-field';
 import Toolbar from 'material-ui/lib/toolbar/toolbar';
-import RaisedButton from './Button.jsx';
+import Button from './Button.jsx';
 import ol from 'openlayers';
 import {transformColor} from '../util.js';
 import ColorPicker from 'react-color';
@@ -352,9 +352,9 @@ class Edit extends React.Component {
     }
     var button;
     if (this.state.enable === true) {
-      button = (<RaisedButton tooltip={formatMessage(messages.enabletitle)} style={buttonStyle} disabled={this.state.layers.length === 0} label={formatMessage(messages.enable)} onTouchTap={this._enableEditMode.bind(this)} />);
+      button = (<Button tooltip={formatMessage(messages.enabletitle)} style={buttonStyle} disabled={this.state.layers.length === 0} label={formatMessage(messages.enable)} onTouchTap={this._enableEditMode.bind(this)} />);
     } else {
-      button = (<RaisedButton tooltip={formatMessage(messages.disabletitle)}style={buttonStyle} disabled={this.state.layers.length === 0} label={formatMessage(messages.disable)} onTouchTap={this.disableEditMode.bind(this)} />);
+      button = (<Button tooltip={formatMessage(messages.disabletitle)}style={buttonStyle} disabled={this.state.layers.length === 0} label={formatMessage(messages.disable)} onTouchTap={this.disableEditMode.bind(this)} />);
     }
     var attributeFormItems;
     if (this.state.attributes !== null) {
@@ -365,12 +365,12 @@ class Edit extends React.Component {
       }
     }
     var attributeActions = [
-      <RaisedButton tooltip={formatMessage(messages.okbuttontitle)} label={formatMessage(messages.okbuttontext)} onTouchTap={this._setAttributes.bind(this)} />,
-      <RaisedButton tooltip={formatMessage(messages.closebuttontitle)} label={formatMessage(messages.closebuttontext)} onTouchTap={this.closeAttributes.bind(this)} />
+      <Button buttonType='Flat' tooltip={formatMessage(messages.okbuttontitle)} label={formatMessage(messages.okbuttontext)} onTouchTap={this._setAttributes.bind(this)} />,
+      <Button buttonType='Flat' tooltip={formatMessage(messages.closebuttontitle)} label={formatMessage(messages.closebuttontext)} onTouchTap={this.closeAttributes.bind(this)} />
     ];
     var actions = [
-      <RaisedButton tooltip={formatMessage(messages.createbuttontitle)} label={formatMessage(messages.createbuttontext)} onTouchTap={this._createLayer.bind(this)} />,
-      <RaisedButton tooltip={formatMessage(messages.closebuttontitle)} label={formatMessage(messages.closebuttontext)} onTouchTap={this.close.bind(this)} />
+      <Button buttonType='Flat' tooltip={formatMessage(messages.createbuttontitle)} label={formatMessage(messages.createbuttontext)} onTouchTap={this._createLayer.bind(this)} />,
+      <Button buttonType='Flat' tooltip={formatMessage(messages.closebuttontitle)} label={formatMessage(messages.closebuttontext)} onTouchTap={this.close.bind(this)} />
     ];
     return (
       <div style={styles.root} className={classNames('sdk-component edit', this.props.className)}>
@@ -378,7 +378,7 @@ class Edit extends React.Component {
           {options}
         </SelectField>
         <Toolbar>
-          <RaisedButton tooltip={formatMessage(messages.newlayertitle)} style={buttonStyle} label={formatMessage(messages.newlayer)} onTouchTap={this._showModal.bind(this)} />
+          <Button tooltip={formatMessage(messages.newlayertitle)} style={buttonStyle} label={formatMessage(messages.newlayer)} onTouchTap={this._showModal.bind(this)} />
           {button}
         </Toolbar>
         <Dialog open={this.state.attributeOpen} actions={attributeActions} autoScrollBodyContent={true} onRequestClose={this.closeAttributes.bind(this)} modal={true} title={formatMessage(messages.newfeaturemodaltitle)}>

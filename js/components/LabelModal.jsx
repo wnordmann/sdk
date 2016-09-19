@@ -13,7 +13,7 @@
 import React from 'react';
 import ol from 'openlayers';
 import Dialog from 'material-ui/lib/dialog';
-import RaisedButton from 'material-ui/lib/raised-button';
+import Button from './Button.jsx';
 import classNames from 'classnames';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
@@ -143,9 +143,9 @@ class LabelModal extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     var actions = [
-      <RaisedButton label={formatMessage(messages.applybutton)} onTouchTap={this._setLabel.bind(this)} />,
-      <RaisedButton label={formatMessage(messages.clearbutton)} onTouchTap={this._clearLabel.bind(this)} />,
-      <RaisedButton label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
+      <Button buttonType='Flat' label={formatMessage(messages.applybutton)} onTouchTap={this._setLabel.bind(this)} />,
+      <Button buttonType='Flat' label={formatMessage(messages.clearbutton)} onTouchTap={this._clearLabel.bind(this)} />,
+      <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
     ];
     return (
       <Dialog className={classNames('sdk-component label-modal', this.props.className)} autoScrollBodyContent={true} modal={true} actions={actions} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} open={this.state.open} onRequestClose={this.close.bind(this)} >

@@ -5,7 +5,7 @@ import SelectField from 'material-ui/lib/select-field';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import TextField from 'material-ui/lib/text-field';
 import Dialog from 'material-ui/lib/dialog';
-import RaisedButton from './Button.jsx';
+import Button from './Button.jsx';
 import Tabs from 'material-ui/lib/tabs/tabs';
 import Tab from 'material-ui/lib/tabs/tab';
 import classNames from 'classnames';
@@ -177,11 +177,11 @@ class ZoomToLatLon extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     var actions = [
-      <RaisedButton tooltip={formatMessage(messages.zoombuttontitle)} label={formatMessage(messages.zoombuttontext)} onTouchTap={this._zoomToLatLon.bind(this)} />,
-      <RaisedButton tooltip={formatMessage(messages.closebuttontitle)} label={formatMessage(messages.closebuttontext)} onTouchTap={this.closeDialog.bind(this)} />
+      <Button buttonType='Flat' tooltip={formatMessage(messages.zoombuttontitle)} label={formatMessage(messages.zoombuttontext)} onTouchTap={this._zoomToLatLon.bind(this)} />,
+      <Button buttonType='Flat' tooltip={formatMessage(messages.closebuttontitle)} label={formatMessage(messages.closebuttontext)} onTouchTap={this.closeDialog.bind(this)} />
     ];
     return (
-      <RaisedButton {...this.props} className={classNames('sdk-component zoom-to-latlon', this.props.className)} onTouchTap={this.openDialog.bind(this)} label={formatMessage(messages.buttontext)} tooltip={formatMessage(messages.buttontitle)}>
+      <Button {...this.props} className={classNames('sdk-component zoom-to-latlon', this.props.className)} onTouchTap={this.openDialog.bind(this)} label={formatMessage(messages.buttontext)} tooltip={formatMessage(messages.buttontitle)}>
         <Dialog actions={actions} open={this.state.open} autoScrollBodyContent={true} onRequestClose={this.closeDialog.bind(this)} modal={true} title={formatMessage(messages.modaltitle)}>
           <Tabs value={this.state.value} onChange={this.handleChange.bind(this)}>
             <Tab value={1} label={formatMessage(messages.ddtitle)} disableTouchRipple={true}>
@@ -209,7 +209,7 @@ class ZoomToLatLon extends React.Component {
             </Tab>
           </Tabs>
         </Dialog>
-      </RaisedButton>
+      </Button>
     );
   }
 }

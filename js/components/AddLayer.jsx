@@ -13,7 +13,7 @@
 import React from 'react';
 import ol from 'openlayers';
 import Snackbar from 'material-ui/lib/snackbar';
-import RaisedButton from './Button.jsx';
+import Button from './Button.jsx';
 import UploadIcon from 'material-ui/lib/svg-icons/file/file-upload';
 import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import Dialog from 'material-ui/lib/dialog';
@@ -275,16 +275,16 @@ class AddLayer extends React.Component {
       );
     }
     var actions = [
-      (<RaisedButton tooltip={formatMessage(messages.applybuttontitle)} style={buttonStyle} disabled={this.state.showProgress || this.state.fileName === null} label={formatMessage(messages.applybuttontext)} onTouchTap={this._readVectorFile.bind(this)} />),
-      (<RaisedButton style={buttonStyle} disabled={this.state.showProgress} label={formatMessage(messages.closebuttontext)} tooltip={formatMessage(messages.closebuttontitle)} onTouchTap={this._closeDialog.bind(this)} />)
+      (<Button buttonType='Flat' tooltip={formatMessage(messages.applybuttontitle)} style={buttonStyle} disabled={this.state.showProgress || this.state.fileName === null} label={formatMessage(messages.applybuttontext)} onTouchTap={this._readVectorFile.bind(this)} />),
+      (<Button buttonType='Flat' style={buttonStyle} disabled={this.state.showProgress} label={formatMessage(messages.closebuttontext)} tooltip={formatMessage(messages.closebuttontitle)} onTouchTap={this._closeDialog.bind(this)} />)
     ];
     return (
-      <RaisedButton {...this.props} className={classNames('sdk-component add-layer', this.props.className)} icon={<UploadIcon />} tooltip={formatMessage(messages.menutitle)} label={formatMessage(messages.menutext)} onTouchTap={this._showDialog.bind(this)}>
+      <Button {...this.props} className={classNames('sdk-component add-layer', this.props.className)} icon={<UploadIcon />} tooltip={formatMessage(messages.menutitle)} label={formatMessage(messages.menutext)} onTouchTap={this._showDialog.bind(this)}>
         <Dialog style={styles.dialog} autoScrollBodyContent={true} actions={actions} open={this.state.open} onRequestClose={this._closeDialog.bind(this)} modal={true} title={formatMessage(messages.modaltitle)}>
           {error}
           {body}
         </Dialog>
-      </RaisedButton>
+      </Button>
     );
   }
 }

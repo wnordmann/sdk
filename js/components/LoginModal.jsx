@@ -14,7 +14,7 @@ import React from 'react';
 import Dialog from 'material-ui/lib/dialog';
 import classNames from 'classnames';
 import TextField from 'material-ui/lib/text-field';
-import RaisedButton from 'material-ui/lib/raised-button';
+import Button from './Button.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import LoginActions from '../actions/LoginActions.js';
 import Snackbar from 'material-ui/lib/snackbar';
@@ -115,8 +115,8 @@ class LoginModal extends React.Component {
       />);
     }
     var actions = [
-      <RaisedButton style={{margin: '10px 12px'}} secondary={true} label={formatMessage(messages.loginbutton)} onTouchTap={this._doLogin.bind(this)} />,
-      <RaisedButton style={{margin: '10px 12px'}} label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
+      <Button buttonType='Flat' style={{margin: '10px 12px'}} secondary={true} label={formatMessage(messages.loginbutton)} onTouchTap={this._doLogin.bind(this)} />,
+      <Button buttonType='Flat' style={{margin: '10px 12px'}} label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
     ];
     return (
       <Dialog className={classNames('sdk-component login-modal', this.props.className)} actions={actions} title={formatMessage(messages.title)} open={this.state.open} onRequestClose={this.close.bind(this)}>

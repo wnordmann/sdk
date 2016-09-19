@@ -13,7 +13,7 @@
 import React from 'react';
 import ol from 'openlayers';
 import LayerStore from '../stores/LayerStore.js';
-import RaisedButton from 'material-ui/lib/raised-button';
+import Button from './Button.jsx';
 import classNames from 'classnames';
 import Dialog from 'material-ui/lib/dialog';
 import SelectField from 'material-ui/lib/select-field';
@@ -335,8 +335,8 @@ class QGISPrint extends React.Component {
         loading = (<LinearProgress mode="indeterminate"/>);
       }
       var actions = [
-        <RaisedButton label={formatMessage(messages.printbuttontext)} onTouchTap={this._print.bind(this)} />,
-        <RaisedButton label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
+        <Button buttonType='Flat' label={formatMessage(messages.printbuttontext)} onTouchTap={this._print.bind(this)} />,
+        <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
       ];
       dialog = (
         <Dialog actions={actions} title={formatMessage(messages.modaltitle)} modal={true} open={this.state.open} onRequestClose={this.close.bind(this)}>
@@ -351,7 +351,7 @@ class QGISPrint extends React.Component {
     }
     return (
       <span className={classNames('sdk-component qgis-print', this.props.className)}>
-        <IconMenu {...this.props} iconButtonElement={<RaisedButton label={formatMessage(messages.printmenutext)} />} value={this.state.layoutName}>
+        <IconMenu {...this.props} iconButtonElement={<Button label={formatMessage(messages.printmenutext)} />} value={this.state.layoutName}>
           {listitems}
         </IconMenu>
         {dialog}

@@ -1,10 +1,15 @@
 import React from 'react';
 import RaisedButton from 'material-ui/lib/raised-button';
+import FlatButton from 'material-ui/lib/flat-button';
 import FloatingActionButton from 'material-ui/lib/floating-action-button';
 import Tooltip from 'material-ui/lib/tooltip';
 import classNames from 'classnames';
 import pureRender from 'pure-render-decorator';
 import './Button.css';
+
+const RAISED = 'Raised';
+const FLAT = 'Flat';
+const ACTION = 'Action';
 
 /**
  * Button with built-in tooltip.
@@ -31,8 +36,10 @@ class Button extends React.Component {
     var styleConfig = {left: 12, boxSizing: 'border-box'};
     var style = this.props.tooltipStyle ? Object.assign(styleConfig, this.props.tooltipStyle) : styleConfig;
     var button, buttonStyle;
-    if (this.props.action === true) {
+    if (this.props.buttonType === ACTION) {
       button = (<FloatingActionButton ref='button' {...this.props} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)} disableTouchRipple={true}/>);
+    } else if (this.props.buttonType === FLAT) {
+      button = (<FlatButton ref='button' {...this.props} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)} disableTouchRipple={true}/>);
     } else {
       buttonStyle = {margin: '10px 12px'};
       button = (<RaisedButton ref='button' {...this.props} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)} disableTouchRipple={true}/>);
@@ -48,9 +55,9 @@ class Button extends React.Component {
 
 Button.propTypes = {
   /**
-   * Should we display as a floating action button?
+   * Type of button.
    */
-  action: React.PropTypes.bool,
+  buttonType: React.PropTypes.oneOf([RAISED, FLAT, ACTION]),
   /**
    * Should this button be disabled?
    */
@@ -67,6 +74,10 @@ Button.propTypes = {
    * Style for tooltip element.
    */
   tooltipStyle: React.PropTypes.object
+};
+
+Button.defaultProps = {
+  buttonType: RAISED
 };
 
 export default Button;

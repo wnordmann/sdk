@@ -6,11 +6,12 @@ Button with built-in tooltip.
 Properties
 ----------
 
-### `action`
+### `buttonType`
 
-Should we display as a floating action button?
+Type of button.
 
-type: `bool`
+type: `enum (RAISED|FLAT|ACTION)`
+defaultValue: `'Raised'`
 
 
 ### `className`

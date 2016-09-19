@@ -17,8 +17,7 @@ import Snackbar from 'material-ui/lib/snackbar';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import TextField from 'material-ui/lib/text-field';
-import RaisedButton from 'material-ui/lib/raised-button';
-import FlatButton from 'material-ui/lib/flat-button';
+import Button from './Button.jsx';
 import List from 'material-ui/lib/lists/list';
 import ListItem from 'material-ui/lib/lists/list-item';
 import FolderIcon from 'material-ui/lib/svg-icons/file/folder-open';
@@ -338,12 +337,12 @@ class AddLayerModal extends React.Component {
       input = (
         <div>
           <TextField style={{width: '512px'}} floatingLabelText={formatMessage(messages.inputfieldlabel, {serviceType: serviceType})} defaultValue={this.props.url} ref='url' />
-          <RaisedButton style={{float: 'right', marginTop: 27}} label={formatMessage(messages.connectbutton)} onTouchTap={this._connect.bind(this)} disableTouchRipple={true}/>
+          <Button style={{float: 'right', marginTop: 27}} label={formatMessage(messages.connectbutton)} onTouchTap={this._connect.bind(this)} disableTouchRipple={true}/>
         </div>
       );
     }
     var actions = [
-      <FlatButton label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
+      <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
     ];
     return (
       <Dialog className={classNames('sdk-component add-layer-modal', this.props.className)}  actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title)} open={this.state.open} onRequestClose={this.close.bind(this)}>

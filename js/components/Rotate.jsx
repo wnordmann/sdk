@@ -95,7 +95,7 @@ class Rotate extends React.Component {
         transform: 'rotate(' + this.state.rotation + 'rad)'
       };
       return (
-        <Button tooltipStyle={{'top':'-50px'}} action={true} mini={true} secondary={true} className={classNames('sdk-component rotate', this.props.className)} tooltipPosition='top-left' iconStyle={iconStyle} style={styles.root} tooltip={formatMessage(messages.rotatetitle)} onTouchTap={this._resetNorth.bind(this)}><NorthIcon /></Button>
+        <Button tooltipStyle={{'top':'-50px'}} buttonType='Action' mini={true} secondary={true} className={classNames('sdk-component rotate', this.props.className)} tooltipPosition='top-left' iconStyle={iconStyle} style={styles.root} tooltip={formatMessage(messages.rotatetitle)} onTouchTap={this._resetNorth.bind(this)}><NorthIcon /></Button>
       );
     }
   }

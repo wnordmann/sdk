@@ -15,7 +15,7 @@ import ol from 'openlayers';
 import classNames from 'classnames';
 import FilterService from '../services/FilterService.js';
 import Dialog from 'material-ui/lib/dialog';
-import RaisedButton from 'material-ui/lib/raised-button';
+import Button from './Button.jsx';
 import List from 'material-ui/lib/lists/list';
 import ListItem from 'material-ui/lib/lists/list-item';
 import DeleteIcon from 'material-ui/lib/svg-icons/action/delete';
@@ -182,13 +182,13 @@ class FilterModal extends React.Component {
       return (<ListItem key={filterName} rightIcon={<DeleteIcon />} primaryText={f.title} ref={filterName} onTouchTap={this._removeFilter.bind(this, f)} />);
     }, this);
     var actions = [
-      <RaisedButton label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
+      <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
     ];
     return (
       <Dialog className={classNames('sdk-component filter-modal', this.props.className)} actions={actions} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} modal={true} open={this.state.open} onRequestClose={this.close.bind(this)}>
         <TextField errorText={errorText} style={{width: 512}} ref='filterTextBox' />
         <FilterHelp intl={this.props.intl} />
-        <RaisedButton style={{float: 'right'}} label={formatMessage(messages.addfiltertext)} onTouchTap={this._addFilter.bind(this)} />
+        <Button style={{float: 'right'}} label={formatMessage(messages.addfiltertext)} onTouchTap={this._addFilter.bind(this)} />
         <List>
           {filters}
         </List>

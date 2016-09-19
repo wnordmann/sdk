@@ -124,7 +124,7 @@ class QGISLegend extends React.Component {
     var items = this._renderItems(this.props.legendData, this.props.legendBasePath);
     return (
       <div className={classNames(divClass, this.props.className)}>
-        <Button tooltipStyle={{'top':'-50px'}} action={true} mini={true} secondary={true} style={styles.root} className='legendbutton' tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._togglePanel.bind(this)}><LegendIcon /></Button>
+        <Button tooltipStyle={{'top':'-50px'}} buttonType='Action' mini={true} secondary={true} style={styles.root} className='legendbutton' tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._togglePanel.bind(this)}><LegendIcon /></Button>
         <div className='legend-panel' id='legend'>{items}</div>
       </div>
     );
