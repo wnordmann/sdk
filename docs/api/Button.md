@@ -10,7 +10,7 @@ Properties
 
 Type of button.
 
-type: `enum (RAISED|FLAT|ACTION)`
+type: `enum ('Raised'|'Flat'|'Action')`
 defaultValue: `'Raised'`
 
 

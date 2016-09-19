@@ -7,10 +7,6 @@ import classNames from 'classnames';
 import pureRender from 'pure-render-decorator';
 import './Button.css';
 
-const RAISED = 'Raised';
-const FLAT = 'Flat';
-const ACTION = 'Action';
-
 /**
  * Button with built-in tooltip.
  */
@@ -36,9 +32,9 @@ class Button extends React.Component {
     var styleConfig = {left: 12, boxSizing: 'border-box'};
     var style = this.props.tooltipStyle ? Object.assign(styleConfig, this.props.tooltipStyle) : styleConfig;
     var button, buttonStyle;
-    if (this.props.buttonType === ACTION) {
+    if (this.props.buttonType === 'Action') {
       button = (<FloatingActionButton ref='button' {...this.props} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)} disableTouchRipple={true}/>);
-    } else if (this.props.buttonType === FLAT) {
+    } else if (this.props.buttonType === 'Flat') {
       button = (<FlatButton ref='button' {...this.props} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)} disableTouchRipple={true}/>);
     } else {
       buttonStyle = {margin: '10px 12px'};
@@ -57,7 +53,7 @@ Button.propTypes = {
   /**
    * Type of button.
    */
-  buttonType: React.PropTypes.oneOf([RAISED, FLAT, ACTION]),
+  buttonType: React.PropTypes.oneOf(['Raised', 'Flat', 'Action']),
   /**
    * Should this button be disabled?
    */
@@ -77,7 +73,7 @@ Button.propTypes = {
 };
 
 Button.defaultProps = {
-  buttonType: RAISED
+  buttonType: 'Raised'
 };
 
 export default Button;
