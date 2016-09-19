@@ -62,6 +62,7 @@ var enMessages = {
   "featuretable.layerlabel": "Layer",
   "featuretable.movebuttontext": "Move",
   "featuretable.movebuttontitle": "Move selected to top",
+  "featuretable.nodatamsg": "You haven’t loaded any layers with feature data yet, so there is no data to display in the table. When you add a layer with feature data, that data will show here.",
   "featuretable.onlyselected": "Selected only",
   "featuretable.zoombuttontext": "Zoom",
   "featuretable.zoombuttontitle": "Zoom to selected",

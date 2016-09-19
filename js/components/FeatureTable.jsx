@@ -40,6 +40,11 @@ import './FeatureTable.css';
 const {Table, Column} = FixedDataTable;
 
 const messages = defineMessages({
+  nodatamsg: {
+    id: 'featuretable.nodatamsg',
+    description: 'Message to display if there are no layers with data',
+    defaultMessage: 'You haven\’t loaded any layers with feature data yet, so there is no data to display in the table. When you add a layer with feature data, that data will show here.'
+  },
   errormsg: {
     id: 'featuretable.errormsg',
     description: 'Error message to show when filtering fails',
@@ -438,8 +443,9 @@ class FeatureTable extends React.Component {
     const buttonStyle = this.props.buttonStyle;
     const styles = this.getStyles();
     var filterHelp = this._layer ? <FilterHelp intl={this.props.intl} /> : undefined;
-    return (
-      <div style={styles.root} className={classNames('sdk-component feature-table', this.props.className)}>
+    return (<div style={styles.root} className={classNames('sdk-component feature-table', this.props.className)}>
+      <div style={{padding: 16, display: !this._layer ? 'block' : 'none'}}>{formatMessage(messages.nodatamsg)}</div>
+        <div style={{display: !this._layer ? 'none' : 'block'}}>
         <div ref='form'>
           <div className='feature-table-options'>
             <div className='feature-table-selector'>
@@ -471,7 +477,8 @@ class FeatureTable extends React.Component {
           className='feature-table-table'>
           {columnNodes}
         </Table>
-      </div>);
+      </div>
+    </div>);
   }
 }
 
