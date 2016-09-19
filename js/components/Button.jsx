@@ -3,11 +3,13 @@ import RaisedButton from 'material-ui/lib/raised-button';
 import FloatingActionButton from 'material-ui/lib/floating-action-button';
 import Tooltip from 'material-ui/lib/tooltip';
 import classNames from 'classnames';
+import pureRender from 'pure-render-decorator';
 import './Button.css';
 
 /**
  * Button with built-in tooltip.
  */
+@pureRender
 class Button extends React.Component {
   constructor(props) {
     super(props);
