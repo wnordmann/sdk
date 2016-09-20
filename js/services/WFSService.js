@@ -78,14 +78,14 @@ class WFSService {
       onFailure.call(this, xmlhttp);
     }, this);
   }
-  describeFeatureType(url, layer, onSuccess, onFailure) {
+  describeFeatureType(url, layerName, onSuccess, onFailure, scope) {
     var dftUrl = new URL(url);
     dftUrl.set('pathname', dftUrl.pathname.replace('wms', 'wfs'));
     dftUrl.set('query', {
       service: 'WFS',
       request: 'DescribeFeatureType',
       version: '1.0.0',
-      typename: layer.Name
+      typename: layerName
     });
     doGET(dftUrl.toString(), function(xmlhttp) {
       if (xmlhttp.responseText.indexOf('ServiceExceptionReport') === -1) {
@@ -107,9 +107,9 @@ class WFSService {
         attributes.sort(function(a, b) {
           return a.toLowerCase().localeCompare(b.toLowerCase());
         });
-        onSuccess.call(this, {
+        onSuccess.call(scope || this, {
           featureNS: schema.targetNamespace,
-          featurePrefix: layer.Name.split(':').shift(),
+          featurePrefix: layerName.split(':').shift(),
           featureType: schema.element[0].name,
           geometryType: geometryType,
           geometryName: geometryName,
@@ -117,10 +117,10 @@ class WFSService {
           url: url.replace('wms', 'wfs')
         });
       } else {
-        onFailure.call(this);
+        onFailure.call(scope || this);
       }
     }, function(xmlhttp) {
-      onFailure.call(this);
+      onFailure.call(scope || this);
     }, this);
   }
   loadFeatures(layer, startIndex, maxFeatures, srsName, onSuccess, onFailure) {

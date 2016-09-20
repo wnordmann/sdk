@@ -35,6 +35,7 @@ class MapConfigTransformService {
           type: 'OSM'
         };
       } else if (source.ptype === 'gxp_wmscsource') {
+        layerConfig.properties.isSelectable = layer.capability.queryable;
         layerConfig.properties.popupInfo = '#AllAttributes';
         layerConfig.type = 'Tile';
         layerConfig.source = {

@@ -127,7 +127,7 @@ class AddLayerModal extends React.Component {
   _getWfsInfo(layer, olLayer, success, scope) {
     var me = this;
     // do a WFS DescribeFeatureType request to get wfsInfo
-    WFSService.describeFeatureType(me._getUrl(), layer, function(wfsInfo) {
+    WFSService.describeFeatureType(me._getUrl(), layer.Name, function(wfsInfo) {
       olLayer.set('wfsInfo', wfsInfo);
       success.call(scope);
     }, function() {
