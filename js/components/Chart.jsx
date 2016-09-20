@@ -257,7 +257,7 @@ class Chart extends React.Component {
         return (<MenuItem key={idx} value={key} primaryText={key} />);
       });
       return (
-        <IconMenu {...this.props} className={classNames('sdk-component chart', this.props.className)} iconButtonElement={<RaisedButton label={formatMessage(messages.dropdowntext)} />} onChange={this._onClick.bind(this)}>
+        <IconMenu {...this.props} anchorOrigin={{horizontal: 'left', vertical: 'top'}} targetOrigin={{horizontal: 'left', vertical: 'top'}} className={classNames('sdk-component chart', this.props.className)} iconButtonElement={<RaisedButton label={formatMessage(messages.dropdowntext)} />} onChange={this._onClick.bind(this)}>
           {listitems}
         </IconMenu>
       );

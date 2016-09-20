@@ -97,7 +97,7 @@ class Login extends React.Component {
     const {formatMessage} = this.props.intl;
     if (this.state.user !== null) {
       return (
-        <IconMenu {...this.props} className={classNames('sdk-component login', this.props.className)} iconButtonElement={<RaisedButton label={this.state.user} />} onItemTouchTap={this._doLogout.bind(this)}>
+        <IconMenu {...this.props} anchorOrigin={{horizontal: 'left', vertical: 'top'}} targetOrigin={{horizontal: 'left', vertical: 'top'}} className={classNames('sdk-component login', this.props.className)} iconButtonElement={<RaisedButton label={this.state.user} />} onItemTouchTap={this._doLogout.bind(this)}>
           <MenuItem primaryText={formatMessage(messages.logouttext)}/>
         </IconMenu>
       );

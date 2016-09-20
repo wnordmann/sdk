@@ -150,7 +150,7 @@ class Bookmarks extends React.Component {
         return (<MenuItem key={bookmark.name} value={bookmark.name} primaryText={bookmark.name}/>);
       }, this);
       return (
-        <IconMenu className={classNames('sdk-component story-panel', this.props.className)} iconButtonElement={<RaisedButton label={formatMessage(messages.dropdowntext)} />} value={this.state.value} onChange={this._handleChange.bind(this)}>
+        <IconMenu anchorOrigin={{horizontal: 'left', vertical: 'top'}} targetOrigin={{horizontal: 'left', vertical: 'top'}} className={classNames('sdk-component story-panel', this.props.className)} iconButtonElement={<RaisedButton label={formatMessage(messages.dropdowntext)} />} value={this.state.value} onChange={this._handleChange.bind(this)}>
           {menuChildren}
         </IconMenu>
       );
