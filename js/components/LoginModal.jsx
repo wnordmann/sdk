@@ -30,7 +30,7 @@ const messages = defineMessages({
   helptext: {
     id: 'loginmodal.helptext',
     description: 'Help text',
-    defaultMessage: 'Use your GeoServer credentials to login. Don\'t have a login yet? Ask your team administrator to set up an account for you.'
+    defaultMessage: 'Use your GeoServer credentials to login.'
   },
   usernamelabel: {
     id: 'loginmodal.userlabel',

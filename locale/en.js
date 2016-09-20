@@ -151,7 +151,7 @@ var enMessages = {
   "login.logouttext": "Logout",
   "loginmodal.closebutton": "Close",
   "loginmodal.errormsg": "There was an error communicating with GeoServer, details: {details}",
-  "loginmodal.helptext": "Use your GeoServer credentials to login. Don't have a login yet? Ask your team administrator to set up an account for you.",
+  "loginmodal.helptext": "Use your GeoServer credentials to login.",
   "loginmodal.invalidcredentialsmsg": "Invalid credentials",
   "loginmodal.loginbutton": "Login",
   "loginmodal.passwordlabel": "Password",
