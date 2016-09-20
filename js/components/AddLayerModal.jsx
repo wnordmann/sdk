@@ -33,7 +33,7 @@ const messages = defineMessages({
   title: {
     id: 'addwmslayermodal.title',
     description: 'Title for the modal Add layer dialog',
-    defaultMessage: 'Add Layer'
+    defaultMessage: 'Add Layer from OGC:{serviceType}'
   },
   nolayertitle: {
     id: 'addwmslayermodal.nolayertitle',
@@ -53,7 +53,7 @@ const messages = defineMessages({
   inputfieldlabel: {
     id: 'addwmslayermodal.inputfieldlabel',
     description: 'Label for input field',
-    defaultMessage: '{serviceType} Endpoint'
+    defaultMessage: '{serviceType} URL'
   },
   connectbutton: {
     id: 'addwmslayermodal.connectbutton',
@@ -332,8 +332,8 @@ class AddLayerModal extends React.Component {
       />);
     }
     var input;
+    var serviceType = this.props.asVector ? 'WFS' : 'WMS';
     if (this.props.allowUserInput) {
-      var serviceType = this.props.asVector ? 'WFS' : 'WMS';
       input = (
         <div>
           <TextField style={{width: '512px'}} floatingLabelText={formatMessage(messages.inputfieldlabel, {serviceType: serviceType})} defaultValue={this.props.url} ref='url' />
@@ -345,7 +345,7 @@ class AddLayerModal extends React.Component {
       <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
     ];
     return (
-      <Dialog className={classNames('sdk-component add-layer-modal', this.props.className)}  actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title)} open={this.state.open} onRequestClose={this.close.bind(this)}>
+      <Dialog className={classNames('sdk-component add-layer-modal', this.props.className)}  actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title, {serviceType: serviceType})} open={this.state.open} onRequestClose={this.close.bind(this)}>
         {input}
         {layers}
         {error}
