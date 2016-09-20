@@ -18,6 +18,7 @@ import Button from './Button.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import LoginActions from '../actions/LoginActions.js';
 import Snackbar from 'material-ui/lib/snackbar';
+import Paper from 'material-ui/lib/paper';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -25,6 +26,11 @@ const messages = defineMessages({
     id: 'loginmodal.title',
     description: 'Title for the modal Login dialog',
     defaultMessage: 'Login'
+  },
+  helptext: {
+    id: 'loginmodal.helptext',
+    description: 'Help text',
+    defaultMessage: 'Use your GeoServer credentials to login. Don\'t have a login yet? Ask your team administrator to set up an account for you.'
   },
   usernamelabel: {
     id: 'loginmodal.userlabel',
@@ -121,6 +127,7 @@ class LoginModal extends React.Component {
     return (
       <Dialog className={classNames('sdk-component login-modal', this.props.className)} actions={actions} title={formatMessage(messages.title)} open={this.state.open} onRequestClose={this.close.bind(this)}>
         {error}
+        <Paper>{formatMessage(messages.helptext)}</Paper>
         <TextField style={{width: '512px'}} floatingLabelText={formatMessage(messages.usernamelabel)} ref='username' /><br/>
         <TextField style={{width: '512px'}} onKeyDown={this._onEnter.bind(this)} type="password" floatingLabelText={formatMessage(messages.passwordlabel)} ref='password' />
       </Dialog>
