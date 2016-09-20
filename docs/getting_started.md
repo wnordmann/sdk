@@ -62,21 +62,21 @@ $ web-sdk --help
 ```
 
 ### Creating the application
-Let's create our first application with the following command (when using a globally installed ```web-sdk``` you can simply use ```web-sdk /tmp/myapp```):
+Let's create our first application with the following command (when using a globally installed ```web-sdk``` you can simply use ```web-sdk ~/myapp```):
 
 ```
-$ node_modules/.bin/web-sdk /tmp/myapp
+$ node_modules/.bin/web-sdk ~/myapp
 
-   create : /tmp/myapp
-   create : /tmp/myapp/app.jsx
-   create : /tmp/myapp/app.css
-   create : /tmp/myapp/createbuild.js
-   create : /tmp/myapp/debug-server.js
-   create : /tmp/myapp/index.html
-   create : /tmp/myapp/package.json
+   create : ~/myapp
+   create : ~/myapp/app.jsx
+   create : ~/myapp/app.css
+   create : ~/myapp/createbuild.js
+   create : ~/myapp/debug-server.js
+   create : ~/myapp/index.html
+   create : ~/myapp/package.json
 
    install dependencies:
-     $ cd /tmp/myapp && npm install
+     $ cd ~/myapp && npm install
 
    run the app:
      $ npm start
@@ -101,15 +101,15 @@ This will start up a debug server on port 3000:
 ```
 $ npm start
 
-> myapp@0.0.0 start /private/tmp/myapp
+> myapp@0.0.0 start ~/myapp
 > npm-run-all --parallel createdir start:debug
 
 
-> myapp@0.0.0 createdir /private/tmp/myapp
+> myapp@0.0.0 createdir ~/myapp
 > node createbuild.js
 
 
-> myapp@0.0.0 start:debug /private/tmp/myapp
+> myapp@0.0.0 start:debug ~/myapp
 > node debug-server.js
 
 info serve-lib Parsing dependencies.
@@ -122,7 +122,7 @@ To create a zip file package for production use the following command:
 $ npm run package
 ```
 
-You will be prompted for a destination file path and file name for the zip file, for instance ```/tmp/myapp.zip```.
+You will be prompted for a destination file path and file name for the zip file, for instance ```~/myapp.zip```.
 
 ## Using Boundless Web SDK from npm
 The following packages are relevant for the Boundless Web SDK:
