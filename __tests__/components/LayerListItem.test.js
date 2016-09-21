@@ -74,4 +74,19 @@ describe('LayerListItem', function() {
     ReactDOM.unmountComponentAtNode(container);
   });
 
+  it('modifies lat lon extent for EPSG:3857', function() {
+    var container = document.createElement('div');
+    var url = 'http://localhost:8080/geoserver/wms';
+    var item = ReactDOM.render((
+      <LayerListItem intl={intl} title={overlay.get('title')} map={map} layer={overlay} />
+    ), container);
+    var bbox = [-170, -90, 170, 90];
+    item._modifyLatLonBBOX(bbox);
+    assert.equal(bbox[0], -170);
+    assert.equal(bbox[1], -85);
+    assert.equal(bbox[2], 170);
+    assert.equal(bbox[3], 85);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
 });

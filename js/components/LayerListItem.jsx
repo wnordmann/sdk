@@ -199,9 +199,21 @@ class LayerListItem extends React.Component {
     }
     this.refs.filtermodal.getWrappedInstance().close();
   }
+  _modifyLatLonBBOX(bbox) {
+    bbox[0] = Math.max(-180, bbox[0]);
+    bbox[1] = Math.max(-85, bbox[1]);
+    bbox[2] = Math.min(180, bbox[2]);
+    bbox[3] = Math.min(85, bbox[3]);
+    return bbox;
+  }
   _zoomTo() {
     var map = this.props.map;
+    var view = map.getView();
     var extent = this.props.layer.get('EX_GeographicBoundingBox');
+    if (view.getProjection().getCode() === 'EPSG:3857') {
+      this._modifyLatLonBBOX(extent);
+    }
+    extent = ol.proj.transformExtent(extent, 'EPSG:4326', view.getProjection());
     if (!extent) {
       extent = this.props.layer.getSource().getExtent();
     }

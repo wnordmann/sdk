@@ -154,13 +154,6 @@ class AddLayerModal extends React.Component {
       }
     }
   }
-  _modifyLatLonBBOX(bbox) {
-    bbox[0] = Math.max(-180, bbox[0]);
-    bbox[1] = Math.max(-85, bbox[1]);
-    bbox[2] = Math.min(180, bbox[2]);
-    bbox[3] = Math.min(85, bbox[3]);
-    return bbox;
-  }
   _getLegendUrl(layer) {
     if (layer.Style && layer.Style.length === 1) {
       if (layer.Style[0].LegendURL && layer.Style[0].LegendURL.length >= 1) {
@@ -170,12 +163,7 @@ class AddLayerModal extends React.Component {
   }
   _onLayerClick(layer) {
     var map = this.props.map;
-    var view = map.getView();
     var EX_GeographicBoundingBox = layer.EX_GeographicBoundingBox;
-    if (view.getProjection().getCode() === 'EPSG:3857') {
-      this._modifyLatLonBBOX(EX_GeographicBoundingBox);
-    }
-    var extent = ol.proj.transformExtent(layer.EX_GeographicBoundingBox, 'EPSG:4326', view.getProjection());
     var olLayer, titleObj = this._getLayerTitle(layer);
     var timeInfo = this._getDimensionInfo(layer);
     if (this.props.asVector) {
@@ -223,7 +211,7 @@ class AddLayerModal extends React.Component {
         isWFST: true,
         timeInfo: timeInfo,
         type: layer.Layer ? 'base' : undefined,
-        EX_GeographicBoundingBox: extent,
+        EX_GeographicBoundingBox: EX_GeographicBoundingBox,
         popupInfo: '#AllAttributes',
         source: new ol.source.TileWMS({
           url: this._getUrl(),
@@ -253,9 +241,6 @@ class AddLayerModal extends React.Component {
       }
     } else {
       map.addLayer(olLayer);
-    }
-    if (!this.props.asVector) {
-      view.fit(extent, map.getSize());
     }
   }
   _getUrl() {
