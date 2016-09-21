@@ -36,6 +36,7 @@ class MapConfigTransformService {
         };
       } else if (source.ptype === 'gxp_wmscsource') {
         layerConfig.properties.isSelectable = layer.capability.queryable;
+        layerConfig.properties.isWFST = layer.capability.queryable;
         layerConfig.properties.popupInfo = '#AllAttributes';
         layerConfig.properties.styleName = layer.capability.styles[0].name;
         layerConfig.properties.legendUrl = layer.capability.styles[0].legend.href;
