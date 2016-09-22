@@ -17,7 +17,7 @@ import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import ToolConstants from '../constants/ToolConstants.js';
 import LayerStore from '../stores/LayerStore.js';
 import pureRender from 'pure-render-decorator';
-import CircularProgress from 'material-ui/lib/circular-progress';
+import CircularProgress from 'material-ui/CircularProgress';
 import './LoadingPanel.css';
 
 /**

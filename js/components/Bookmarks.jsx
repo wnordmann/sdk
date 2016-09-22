@@ -13,9 +13,9 @@
 import React from 'react';
 import ol from 'openlayers';
 import Slider from 'react-slick';
-import IconMenu from 'material-ui/lib/menus/icon-menu';
-import MenuItem from 'material-ui/lib/menus/menu-item';
-import RaisedButton from 'material-ui/lib/raised-button';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import RaisedButton from 'material-ui/RaisedButton';
 import './Bookmarks.css';
 import './slick.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';

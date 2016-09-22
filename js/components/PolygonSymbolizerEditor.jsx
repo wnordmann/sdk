@@ -13,10 +13,10 @@
 import React from 'react';
 import classNames from 'classnames';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
-import Checkbox from 'material-ui/lib/checkbox';
+import Checkbox from 'material-ui/Checkbox';
 import FillEditor from './FillEditor.jsx';
 import StrokeEditor from './StrokeEditor.jsx';
-import Paper from 'material-ui/lib/paper';
+import Paper from 'material-ui/Paper';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({

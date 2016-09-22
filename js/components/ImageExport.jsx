@@ -13,9 +13,9 @@
 import React from 'react';
 import ol from 'openlayers';
 import 'blueimp-canvas-to-blob';
-import RaisedButton from 'material-ui/lib/raised-button';
+import RaisedButton from 'material-ui/RaisedButton';
 import classNames from 'classnames';
-import CameraIcon from 'material-ui/lib/svg-icons/image/camera-alt';
+import CameraIcon from 'material-ui/svg-icons/image/camera-alt';
 import FileSaver from 'browser-filesaver';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';

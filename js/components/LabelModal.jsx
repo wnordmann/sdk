@@ -12,7 +12,7 @@
 
 import React from 'react';
 import ol from 'openlayers';
-import Dialog from 'material-ui/lib/dialog';
+import Dialog from 'material-ui/Dialog';
 import Button from './Button.jsx';
 import classNames from 'classnames';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';

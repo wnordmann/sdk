@@ -13,18 +13,18 @@
 import React from 'react';
 import ol from 'openlayers';
 import classNames from 'classnames';
-import Dialog from 'material-ui/lib/dialog';
-import SelectField from 'material-ui/lib/select-field';
-import MenuItem from 'material-ui/lib/menus/menu-item';
+import Dialog from 'material-ui/Dialog';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 import LayerActions from '../actions/LayerActions.js';
-import RaisedButton from 'material-ui/lib/raised-button';
+import RaisedButton from 'material-ui/RaisedButton';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import RuleEditor from './RuleEditor.jsx';
 import SLDService from '../services/SLDService.js';
 import OpenLayersService from '../services/OpenLayersService.js';
 import RESTService from '../services/RESTService.js';
-import Snackbar from 'material-ui/lib/snackbar';
+import Snackbar from 'material-ui/Snackbar';
 
 const messages = defineMessages({
   title: {

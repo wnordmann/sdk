@@ -16,7 +16,7 @@ import GeocodingConstants from '../constants/GeocodingConstants.js';
 import GeocodingActions from '../actions/GeocodingActions.js';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import classNames from 'classnames';
-import TextField from 'material-ui/lib/text-field';
+import TextField from 'material-ui/TextField';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({

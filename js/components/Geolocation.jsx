@@ -13,12 +13,12 @@
 import React from 'react';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import ThemeManager from 'material-ui/lib/styles/theme-manager';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import classNames from 'classnames';
 import pureRender from 'pure-render-decorator';
-import Snackbar from 'material-ui/lib/snackbar';
+import Snackbar from 'material-ui/Snackbar';
 import Button from './Button.jsx';
-import MyLocation from 'material-ui/lib/svg-icons/maps/my-location';
+import MyLocation from 'material-ui/svg-icons/maps/my-location';
 
 const messages = defineMessages({
   error: {
@@ -52,7 +52,7 @@ class Geolocation extends React.Component {
   constructor(props, context) {
     super(props);
     this.state = {
-      muiTheme: context.muiTheme || ThemeManager.getMuiTheme(),
+      muiTheme: context.muiTheme || getMuiTheme(),
       error: false,
       open: false,
       tracking: false

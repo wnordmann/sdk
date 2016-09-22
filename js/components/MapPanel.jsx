@@ -14,7 +14,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import LayerStore from '../stores/LayerStore.js';
-import Snackbar from 'material-ui/lib/snackbar';
+import Snackbar from 'material-ui/Snackbar';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
@@ -127,7 +127,7 @@ class MapPanel extends React.Component {
       />);
     }
     return (
-      <div ref='map' {...this.props} className={classNames('sdk-component map-panel', this.props.className)}>{error}{this.props.children}</div>
+      <div ref='map' className={classNames('sdk-component map-panel', this.props.className)}>{error}{this.props.children}</div>
     );
   }
 }

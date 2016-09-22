@@ -12,11 +12,11 @@
 
 import React from 'react';
 import ol from 'openlayers';
-import Snackbar from 'material-ui/lib/snackbar';
+import Snackbar from 'material-ui/Snackbar';
 import Button from './Button.jsx';
-import UploadIcon from 'material-ui/lib/svg-icons/file/file-upload';
-import ThemeManager from 'material-ui/lib/styles/theme-manager';
-import Dialog from 'material-ui/lib/dialog';
+import UploadIcon from 'material-ui/svg-icons/file/file-upload';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import Dialog from 'material-ui/Dialog';
 import Dropzone from 'react-dropzone';
 import GridList from 'material-ui/lib/grid-list/grid-list';
 import GridTile from 'material-ui/lib/grid-list/grid-tile';
@@ -124,7 +124,7 @@ class AddLayer extends React.Component {
       errorOpen: false,
       fileName: null,
       showProgress: false,
-      muiTheme: context.muiTheme || ThemeManager.getMuiTheme()
+      muiTheme: context.muiTheme || getMuiTheme()
     };
   }
   _showDialog() {

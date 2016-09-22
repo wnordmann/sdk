@@ -12,12 +12,11 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ThemeManager from 'material-ui/lib/styles/theme-manager';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import ol from 'openlayers';
 import classNames from 'classnames';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
-import List from 'material-ui/lib/lists/list';
-import ListItem from 'material-ui/lib/lists/list-item';
+import {List, ListItem} from 'material-ui/List';
 import GeocodingConstants from '../constants/GeocodingConstants.js';
 import GeocodingActions from '../actions/GeocodingActions.js';
 import pureRender from 'pure-render-decorator';
@@ -63,7 +62,7 @@ class GeocodingResults extends React.Component {
     });
     this.state = {
       searchResults: null,
-      muiTheme: context.muiTheme || ThemeManager.getMuiTheme()
+      muiTheme: context.muiTheme || getMuiTheme()
     };
   }
   componentDidMount() {

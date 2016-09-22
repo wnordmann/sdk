@@ -12,7 +12,7 @@
 
 import React from 'react';
 import classNames from 'classnames';
-import TextField from 'material-ui/lib/text-field';
+import TextField from 'material-ui/TextField';
 import FilterService from '../services/FilterService.js';
 import pureRender from 'pure-render-decorator';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';

@@ -14,18 +14,17 @@ import React from 'react';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import classNames from 'classnames';
-import ThemeManager from 'material-ui/lib/styles/theme-manager';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import LayerConstants from '../constants/LayerConstants.js';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LayerSelector from './LayerSelector.jsx';
 import FeatureStore from '../stores/FeatureStore.js';
 import ToolUtil from '../toolutil.js';
 import RaisedButton from './Button.jsx';
-import DrawIcon from 'material-ui/lib/svg-icons/image/brush';
-import EditIcon from 'material-ui/lib/svg-icons/editor/mode-edit';
-import Snackbar from 'material-ui/lib/snackbar';
-import Toolbar from 'material-ui/lib/toolbar/toolbar';
-import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group';
+import DrawIcon from 'material-ui/svg-icons/image/brush';
+import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
+import Snackbar from 'material-ui/Snackbar';
+import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import pureRender from 'pure-render-decorator';
 import EditForm from './EditForm.jsx';
 import WFSService from '../services/WFSService.js';
@@ -130,7 +129,7 @@ class WFST extends React.Component {
     });
     this.state = {
       active: false,
-      muiTheme: context.muiTheme || ThemeManager.getMuiTheme(),
+      muiTheme: context.muiTheme || getMuiTheme(),
       modifySecondary: false,
       drawSecondary: false,
       disabled: false,

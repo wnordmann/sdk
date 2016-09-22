@@ -13,14 +13,14 @@
 import React from 'react';
 import classNames from 'classnames';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
-import Checkbox from 'material-ui/lib/checkbox';
+import Checkbox from 'material-ui/Checkbox';
 import FillEditor from './FillEditor.jsx';
 import StrokeEditor from './StrokeEditor.jsx';
-import Slider from 'material-ui/lib/slider';
-import SelectField from 'material-ui/lib/select-field';
-import Paper from 'material-ui/lib/paper';
-import MenuItem from 'material-ui/lib/menus/menu-item';
-import TextField from 'material-ui/lib/text-field';
+import Slider from 'material-ui/Slider';
+import SelectField from 'material-ui/SelectField';
+import Paper from 'material-ui/Paper';
+import MenuItem from 'material-ui/MenuItem';
+import TextField from 'material-ui/TextField';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({

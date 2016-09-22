@@ -13,10 +13,10 @@
 import React from 'react';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import ThemeManager from 'material-ui/lib/styles/theme-manager';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import classNames from 'classnames';
 import Button from './Button.jsx';
-import HomeIcon from 'material-ui/lib/svg-icons/maps/zoom-out-map';
+import HomeIcon from 'material-ui/svg-icons/maps/zoom-out-map';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -56,7 +56,7 @@ class HomeButton extends React.Component {
       }
     }
     this.state = {
-      muiTheme: context.muiTheme || ThemeManager.getMuiTheme()
+      muiTheme: context.muiTheme || getMuiTheme()
     };
   }
   _goHome() {

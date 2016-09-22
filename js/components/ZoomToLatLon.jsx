@@ -1,13 +1,12 @@
 import React from 'react';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import SelectField from 'material-ui/lib/select-field';
-import MenuItem from 'material-ui/lib/menus/menu-item';
-import TextField from 'material-ui/lib/text-field';
-import Dialog from 'material-ui/lib/dialog';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import TextField from 'material-ui/TextField';
+import Dialog from 'material-ui/Dialog';
 import Button from './Button.jsx';
-import Tabs from 'material-ui/lib/tabs/tabs';
-import Tab from 'material-ui/lib/tabs/tab';
+import {Tabs, Tab} from 'material-ui/Tabs';
 import classNames from 'classnames';
 import pureRender from 'pure-render-decorator';
 

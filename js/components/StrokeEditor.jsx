@@ -14,7 +14,7 @@ import React from 'react';
 import ColorPicker from 'react-color';
 import classNames from 'classnames';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
-import TextField from 'material-ui/lib/text-field';
+import TextField from 'material-ui/TextField';
 import Label from './Label.jsx';
 import pureRender from 'pure-render-decorator';
 

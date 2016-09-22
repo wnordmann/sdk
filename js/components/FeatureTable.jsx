@@ -13,26 +13,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
-import ThemeManager from 'material-ui/lib/styles/theme-manager';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import classNames from 'classnames';
 import debounce from  'debounce';
 import FixedDataTable from 'fixed-data-table';
 import './fixed-data-table.css';
 import RaisedButton from './Button.jsx';
-import ActionSearch from 'material-ui/lib/svg-icons/action/search';
-import ClearIcon from 'material-ui/lib/svg-icons/content/clear';
-import ArrowUp from 'material-ui/lib/svg-icons/hardware/keyboard-arrow-up';
-import TextField from 'material-ui/lib/text-field';
-import Checkbox from 'material-ui/lib/checkbox';
+import ActionSearch from 'material-ui/svg-icons/action/search';
+import ClearIcon from 'material-ui/svg-icons/content/clear';
+import ArrowUp from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
+import TextField from 'material-ui/TextField';
+import Checkbox from 'material-ui/Checkbox';
 import FeatureStore from '../stores/FeatureStore.js';
 import SelectActions from '../actions/SelectActions.js';
 import LayerSelector from './LayerSelector.jsx';
-import Toolbar from 'material-ui/lib/toolbar/toolbar';
+import {Toolbar} from 'material-ui/Toolbar';
 import {SortHeaderCell, SortTypes} from './SortHeaderCell.jsx';
 import {LinkCell} from './LinkCell.jsx';
 import {TextCell} from './TextCell.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import Snackbar from 'material-ui/lib/snackbar';
+import Snackbar from 'material-ui/Snackbar';
 import FilterService from '../services/FilterService.js';
 import FilterHelp from './FilterHelp.jsx';
 import './FeatureTable.css';
@@ -139,7 +139,7 @@ class FeatureTable extends React.Component {
       active: false,
       errorOpen: false,
       error: false,
-      muiTheme: context.muiTheme || ThemeManager.getMuiTheme(),
+      muiTheme: context.muiTheme || getMuiTheme(),
       gridWidth: this.props.width,
       gridHeight: this.props.height,
       features: [],

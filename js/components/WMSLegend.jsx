@@ -14,7 +14,7 @@ import React from 'react';
 import ol from 'openlayers';
 import classNames from 'classnames';
 import {rgbToHex} from '../util.js';
-import ThemeManager from 'material-ui/lib/styles/theme-manager';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import URL from 'url-parse';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LayerConstants from '../constants/LayerConstants.js';
@@ -30,7 +30,7 @@ class WMSLegend extends React.Component {
     this.state = {
       salt: Math.random(),
       dynamic: false,
-      muiTheme: context.muiTheme || ThemeManager.getMuiTheme()
+      muiTheme: context.muiTheme || getMuiTheme()
     };
   }
   componentDidMount() {

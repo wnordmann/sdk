@@ -12,12 +12,11 @@
 
 import React from 'react';
 import ol from 'openlayers';
-import ThemeManager from 'material-ui/lib/styles/theme-manager';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import LayerStore from '../stores/LayerStore.js';
 import classNames from 'classnames';
 import pureRender from 'pure-render-decorator';
-import List from 'material-ui/lib/lists/list';
-import ListItem from 'material-ui/lib/lists/list-item';
+import {List, ListItem} from 'material-ui/List';
 import WMSLegend from './WMSLegend.jsx';
 import Label from './Label.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -45,7 +44,7 @@ class Legend extends React.Component {
     super(props);
     this.state = {
       flatLayers: [],
-      muiTheme: context.muiTheme || ThemeManager.getMuiTheme()
+      muiTheme: context.muiTheme || getMuiTheme()
     };
     LayerStore.bindMap(this.props.map);
   }

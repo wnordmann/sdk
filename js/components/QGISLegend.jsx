@@ -13,12 +13,11 @@
 import React from 'react';
 import ol from 'openlayers';
 import classNames from 'classnames';
-import ThemeManager from 'material-ui/lib/styles/theme-manager';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import LayerStore from '../stores/LayerStore.js';
 import Button from './Button.jsx';
-import LegendIcon from 'material-ui/lib/svg-icons/image/image';
-import List from 'material-ui/lib/lists/list';
-import ListItem from 'material-ui/lib/lists/list-item';
+import LegendIcon from 'material-ui/svg-icons/image/image';
+import {List, ListItem} from 'material-ui/List';
 import './QGISLegend.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
@@ -69,7 +68,7 @@ class QGISLegend extends React.Component {
     super(props);
     LayerStore.bindMap(this.props.map);
     this.state = {
-      muiTheme: context.muiTheme || ThemeManager.getMuiTheme(),
+      muiTheme: context.muiTheme || getMuiTheme(),
       visible: this.props.showExpandedOnStartup
     };
   }

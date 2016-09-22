@@ -14,19 +14,18 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import classNames from 'classnames';
-import ThemeManager from 'material-ui/lib/styles/theme-manager';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import LayerIdService from '../services/LayerIdService.js';
 import LayerStore from '../stores/LayerStore.js';
 import LayerListItem from './LayerListItem.jsx';
 import Label from './Label.jsx';
 import AddLayerModal from './AddLayerModal.jsx';
-import RaisedButton from 'material-ui/lib/raised-button';
+import RaisedButton from 'material-ui/RaisedButton';
 import Button from './Button.jsx';
-import NoteAdd from 'material-ui/lib/svg-icons/action/note-add';
-import List from 'material-ui/lib/lists/list';
-import LayersIcon from 'material-ui/lib/svg-icons/maps/layers';
-import Toolbar from 'material-ui/lib/toolbar/toolbar';
-import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group';
+import NoteAdd from 'material-ui/svg-icons/action/note-add';
+import {List} from 'material-ui/List';
+import LayersIcon from 'material-ui/svg-icons/maps/layers';
+import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import './LayerList.css';
@@ -65,7 +64,7 @@ class LayerList extends React.Component {
     super(props);
     LayerStore.bindMap(this.props.map);
     this.state = {
-      muiTheme: context.muiTheme || ThemeManager.getMuiTheme()
+      muiTheme: context.muiTheme || getMuiTheme()
     };
   }
   componentWillMount() {
@@ -169,7 +168,7 @@ class LayerList extends React.Component {
     if (this.props.addLayer) {
       addLayer = (
           <article className="layer-list-add">
-          <Toolbar><ToolbarGroup firstChild={true} float="right"><RaisedButton icon={<NoteAdd />} label={formatMessage(messages.addlayertext)} onTouchTap={this._showAddLayer.bind(this)} disableTouchRipple={true}/></ToolbarGroup></Toolbar>
+          <Toolbar><ToolbarGroup firstChild={true} style={{float: 'right'}}><RaisedButton icon={<NoteAdd />} label={formatMessage(messages.addlayertext)} onTouchTap={this._showAddLayer.bind(this)} disableTouchRipple={true}/></ToolbarGroup></Toolbar>
           <AddLayerModal srsName={this.props.map.getView().getProjection().getCode()} allowUserInput={this.props.addLayer.allowUserInput} asVector={this.props.addLayer.asVector} map={this.props.map} url={this.props.addLayer.url} ref='addlayermodal'/>
           </article>
       );

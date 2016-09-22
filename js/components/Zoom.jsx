@@ -14,10 +14,10 @@ import React from 'react';
 import ol from 'openlayers';
 import classNames from 'classnames';
 import Button from './Button.jsx';
-import ZoomIn from 'material-ui/lib/svg-icons/action/zoom-in';
-import ZoomOut from 'material-ui/lib/svg-icons/action/zoom-out';
+import ZoomIn from 'material-ui/svg-icons/action/zoom-in';
+import ZoomOut from 'material-ui/svg-icons/action/zoom-out';
 import pureRender from 'pure-render-decorator';
-import ThemeManager from 'material-ui/lib/styles/theme-manager';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 const messages = defineMessages({
@@ -47,7 +47,7 @@ class Zoom extends React.Component {
   constructor(props, context) {
     super(props);
     this.state = {
-      muiTheme: context.muiTheme || ThemeManager.getMuiTheme()
+      muiTheme: context.muiTheme || getMuiTheme()
     };
   }
   _zoomIn() {
@@ -86,8 +86,8 @@ class Zoom extends React.Component {
     const {formatMessage} = this.props.intl;
     return (
       <div className={classNames('sdk-component zoom', this.props.className)}>
-        <Button buttonType='Action' mini={true} secondary={true} tooltipStyle={{'top':'-50px'}} tooltipPosition='top-right' style={styles.root} tooltip={this.props.zoomInTipLabel ? this.props.zoomInTipLabel : formatMessage(messages.zoomintitle)} onTouchTap={this._zoomIn.bind(this)}><ZoomIn /></Button><br/>
-        <Button buttonType='Action' mini={true} secondary={true} tooltipStyle={{'top':'-50px'}} tooltipPosition='top-right' style={Object.assign({marginTop: 15}, styles.root)} tooltip={this.props.zoomOutTipLabel ? this.props.zoomOutTipLabel : formatMessage(messages.zoomouttitle)} onTouchTap={this._zoomOut.bind(this)}><ZoomOut /></Button>
+        <Button buttonType='Action' mini={true} tooltipStyle={{'top':'-50px'}} tooltipPosition='top-right' style={styles.root} tooltip={this.props.zoomInTipLabel ? this.props.zoomInTipLabel : formatMessage(messages.zoomintitle)} onTouchTap={this._zoomIn.bind(this)}><ZoomIn /></Button><br/>
+        <Button buttonType='Action' mini={true} tooltipStyle={{'top':'-50px'}} tooltipPosition='top-right' style={Object.assign({marginTop: 15}, styles.root)} tooltip={this.props.zoomOutTipLabel ? this.props.zoomOutTipLabel : formatMessage(messages.zoomouttitle)} onTouchTap={this._zoomOut.bind(this)}><ZoomOut /></Button>
       </div>
     );
   }

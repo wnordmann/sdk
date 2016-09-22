@@ -11,10 +11,10 @@
  */
 
 import React from 'react';
-import IconMenu from 'material-ui/lib/menus/icon-menu';
 import classNames from 'classnames';
-import MenuItem from 'material-ui/lib/menus/menu-item';
-import RaisedButton from 'material-ui/lib/raised-button';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import RaisedButton from 'material-ui/RaisedButton';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import LoginModal from './LoginModal.jsx';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
@@ -103,7 +103,7 @@ class Login extends React.Component {
       );
     } else {
       return (
-        <RaisedButton {...this.props} className={classNames('sdk-component login', this.props.className)} label={formatMessage(messages.buttontext)} onTouchTap={this._showLoginDialog.bind(this)}>
+        <RaisedButton style={this.props.style} className={classNames('sdk-component login', this.props.className)} label={formatMessage(messages.buttontext)} onTouchTap={this._showLoginDialog.bind(this)}>
           <LoginModal ref='loginmodal' {...this.props} />
         </RaisedButton>
       );

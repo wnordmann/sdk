@@ -14,11 +14,11 @@ import React from 'react';
 import FeatureStore from '../stores/FeatureStore.js';
 import c3 from 'c3-windows';
 import './c3.min.css';
-import ThemeManager from 'material-ui/lib/styles/theme-manager';
-import IconMenu from 'material-ui/lib/menus/icon-menu';
-import MenuItem from 'material-ui/lib/menus/menu-item';
-import RaisedButton from 'material-ui/lib/raised-button';
-import SelectField from 'material-ui/lib/select-field';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import RaisedButton from 'material-ui/RaisedButton';
+import SelectField from 'material-ui/SelectField';
 import classNames from 'classnames';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import './Chart.css';
@@ -76,7 +76,7 @@ class Chart extends React.Component {
       chart: this.props.charts[0],
       value: this.props.charts[0].title,
       selected: null,
-      muiTheme: context.muiTheme || ThemeManager.getMuiTheme()
+      muiTheme: context.muiTheme || getMuiTheme()
     };
   }
   componentDidMount() {

@@ -1,7 +1,7 @@
 import React from 'react';
 import ol from 'openlayers';
 import debounce from  'debounce';
-import Slider from 'material-ui/lib/slider';
+import Slider from 'material-ui/Slider';
 import pureRender from 'pure-render-decorator';
 
 /**

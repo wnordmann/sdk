@@ -1,8 +1,8 @@
 import React from 'react';
-import RaisedButton from 'material-ui/lib/raised-button';
-import FlatButton from 'material-ui/lib/flat-button';
-import FloatingActionButton from 'material-ui/lib/floating-action-button';
-import Tooltip from 'material-ui/lib/tooltip';
+import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import Tooltip from 'material-ui/internal/Tooltip';
 import classNames from 'classnames';
 import pureRender from 'pure-render-decorator';
 import './Button.css';
@@ -33,12 +33,12 @@ class Button extends React.Component {
     var style = this.props.tooltipStyle ? Object.assign(styleConfig, this.props.tooltipStyle) : styleConfig;
     var button, buttonStyle;
     if (this.props.buttonType === 'Action') {
-      button = (<FloatingActionButton ref='button' {...this.props} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)} disableTouchRipple={true}/>);
+      button = (<FloatingActionButton onTouchTap={this.props.onTouchTap} style={this.props.style} children={this.props.children} mini={this.props.mini} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)} />);
     } else if (this.props.buttonType === 'Flat') {
-      button = (<FlatButton ref='button' {...this.props} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)} disableTouchRipple={true}/>);
+      button = (<FlatButton onTouchTap={this.props.onTouchTap} icon={this.props.icon} children={this.props.children} label={this.props.label} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)} />);
     } else {
       buttonStyle = {margin: '10px 12px'};
-      button = (<RaisedButton ref='button' {...this.props} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)} disableTouchRipple={true}/>);
+      button = (<RaisedButton onTouchTap={this.props.onTouchTap} icon={this.props.icon} children={this.props.children} label={this.props.label} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)} />);
     }
     return (
       <span style={buttonStyle} className={classNames('sdk-component sdk-button', this.props.className)} >

@@ -12,16 +12,16 @@
 
 import React from 'react';
 import ol from 'openlayers';
-import Snackbar from 'material-ui/lib/snackbar';
+import Snackbar from 'material-ui/Snackbar';
 import FeatureStore from '../stores/FeatureStore.js';
-import ThemeManager from 'material-ui/lib/styles/theme-manager';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import classNames from 'classnames';
 import LayerSelector from './LayerSelector.jsx';
 import SelectActions from '../actions/SelectActions.js';
 import FilterService from '../services/FilterService.js';
 import FilterHelp from './FilterHelp.jsx';
-import Toolbar from 'material-ui/lib/toolbar/toolbar';
-import TextField from 'material-ui/lib/text-field';
+import {Toolbar} from 'material-ui/Toolbar';
+import TextField from 'material-ui/TextField';
 import RaisedButton from './Button.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import './QueryBuilder.css';
@@ -98,7 +98,7 @@ class QueryBuilder extends React.Component {
     super(props);
     FeatureStore.bindMap(this.props.map);
     this.state = {
-      muiTheme: context.muiTheme || ThemeManager.getMuiTheme(),
+      muiTheme: context.muiTheme || getMuiTheme(),
       showCount: false,
       errorText: null
     };

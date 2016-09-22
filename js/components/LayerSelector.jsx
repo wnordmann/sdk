@@ -15,8 +15,8 @@ import ol from 'openlayers';
 import classNames from 'classnames';
 import LayerStore from '../stores/LayerStore.js';
 import pureRender from 'pure-render-decorator';
-import SelectField from 'material-ui/lib/select-field';
-import MenuItem from 'material-ui/lib/menus/menu-item';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 const messages = defineMessages({
@@ -92,7 +92,7 @@ class LayerSelector extends React.Component {
       );
     });
     return (
-      <SelectField {...this.props} className={classNames('sdk-component layer-selector', this.props.className)} floatingLabelText={formatMessage(messages.labeltext)} hintText={formatMessage(messages.emptytext)} value={this.state.value} onChange={this._onItemChange.bind(this)}>
+      <SelectField className={classNames('sdk-component layer-selector', this.props.className)} floatingLabelText={formatMessage(messages.labeltext)} hintText={formatMessage(messages.emptytext)} value={this.state.value} onChange={this._onItemChange.bind(this)}>
         {selectItems}
       </SelectField>
     );

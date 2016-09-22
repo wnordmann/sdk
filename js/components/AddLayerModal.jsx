@@ -12,16 +12,15 @@
 
 import React from 'react';
 import ol from 'openlayers';
-import Dialog from 'material-ui/lib/dialog';
-import Snackbar from 'material-ui/lib/snackbar';
+import Dialog from 'material-ui/Dialog';
+import Snackbar from 'material-ui/Snackbar';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
-import TextField from 'material-ui/lib/text-field';
+import TextField from 'material-ui/TextField';
 import Button from './Button.jsx';
-import List from 'material-ui/lib/lists/list';
-import ListItem from 'material-ui/lib/lists/list-item';
-import FolderIcon from 'material-ui/lib/svg-icons/file/folder-open';
-import LayerIcon from 'material-ui/lib/svg-icons/maps/layers';
+import {List, ListItem} from 'material-ui/List';
+import FolderIcon from 'material-ui/svg-icons/file/folder-open';
+import LayerIcon from 'material-ui/svg-icons/maps/layers';
 import URL from 'url-parse';
 import RESTService from '../services/RESTService.js';
 import WMSService from '../services/WMSService.js';

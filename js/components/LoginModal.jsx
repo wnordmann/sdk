@@ -11,14 +11,14 @@
  */
 
 import React from 'react';
-import Dialog from 'material-ui/lib/dialog';
+import Dialog from 'material-ui/Dialog';
 import classNames from 'classnames';
-import TextField from 'material-ui/lib/text-field';
+import TextField from 'material-ui/TextField';
 import Button from './Button.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import LoginActions from '../actions/LoginActions.js';
-import Snackbar from 'material-ui/lib/snackbar';
-import Paper from 'material-ui/lib/paper';
+import Snackbar from 'material-ui/Snackbar';
+import Paper from 'material-ui/Paper';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({

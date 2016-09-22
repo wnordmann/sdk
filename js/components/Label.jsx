@@ -11,13 +11,11 @@
  */
 
 import React from 'react';
-import Typography from 'material-ui/lib/styles/typography';
-import StylePropable from 'material-ui/lib/mixins/style-propable';
+import Typography from 'material-ui/styles/typography';
 
 class Label extends React.Component {
   constructor(props) {
     super(props);
-    this.mergeStyles = StylePropable.mergeStyles.bind(this);
   }
   render() {
     const {
@@ -31,7 +29,7 @@ class Label extends React.Component {
       'paddingBottom':'4px',
       'display':'inline-block'
     }
-    return (<div style={this.mergeStyles(baseStyle, style)}>{this.props.children}</div>);
+    return (<div style={Object.assign({}, baseStyle, style)}>{this.props.children}</div>);
   }
 }
 

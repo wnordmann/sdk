@@ -15,11 +15,11 @@ import React from 'react';
 import ol from 'openlayers';
 global.ol = ol;
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import ThemeManager from 'material-ui/lib/styles/theme-manager';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import ToolActions from '../actions/ToolActions.js';
 import classNames from 'classnames';
 import Button from './Button.jsx';
-import GlobeIcon from 'material-ui/lib/svg-icons/action/three-d-rotation';
+import GlobeIcon from 'material-ui/svg-icons/action/three-d-rotation';
 import pureRender from 'pure-render-decorator';
 import olcs from 'ol3-cesium';
 
@@ -58,7 +58,7 @@ class Globe extends React.Component {
     super(props);
     this.state = {
       globe: false,
-      muiTheme: context.muiTheme || ThemeManager.getMuiTheme()
+      muiTheme: context.muiTheme || getMuiTheme()
     };
   }
   init() {

@@ -12,10 +12,10 @@
 
 import React from 'react';
 import ol from 'openlayers';
-import ThemeManager from 'material-ui/lib/styles/theme-manager';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Button from './Button.jsx';
 import classNames from 'classnames';
-import NorthIcon from 'material-ui/lib/svg-icons/maps/navigation';
+import NorthIcon from 'material-ui/svg-icons/maps/navigation';
 import pureRender from 'pure-render-decorator';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
@@ -42,7 +42,7 @@ class Rotate extends React.Component {
     super(props);
     this.state = {
       rotation: 0,
-      muiTheme: context.muiTheme || ThemeManager.getMuiTheme()
+      muiTheme: context.muiTheme || getMuiTheme()
     };
   }
   componentDidMount() {

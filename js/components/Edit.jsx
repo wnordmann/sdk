@@ -13,15 +13,15 @@
 /* eslint react/prop-types: 0 */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Dialog from 'material-ui/lib/dialog';
-import ThemeManager from 'material-ui/lib/styles/theme-manager';
-import TextField from 'material-ui/lib/text-field';
+import Dialog from 'material-ui/Dialog';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import TextField from 'material-ui/TextField';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import ToolUtil from '../toolutil.js';
 import LayerConstants from '../constants/LayerConstants.js';
-import MenuItem from 'material-ui/lib/menus/menu-item';
-import SelectField from 'material-ui/lib/select-field';
-import Toolbar from 'material-ui/lib/toolbar/toolbar';
+import MenuItem from 'material-ui/MenuItem';
+import SelectField from 'material-ui/SelectField';
+import {Toolbar} from 'material-ui/Toolbar';
 import Button from './Button.jsx';
 import ol from 'openlayers';
 import {transformColor} from '../util.js';
@@ -166,7 +166,7 @@ class Edit extends React.Component {
     this._interactions = {};
     this.state = {
       layers: [],
-      muiTheme: context.muiTheme || ThemeManager.getMuiTheme(),
+      muiTheme: context.muiTheme || getMuiTheme(),
       enable: true,
       attributes: null,
       attributeOpen: false,

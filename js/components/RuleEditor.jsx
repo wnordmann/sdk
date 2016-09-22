@@ -11,17 +11,16 @@
  */
 
 import React from 'react';
-import Tabs from 'material-ui/lib/tabs/tabs';
+import {Tabs, Tab} from 'material-ui/Tabs';
 import classNames from 'classnames';
-import Tab from 'material-ui/lib/tabs/tab';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import LabelEditor from './LabelEditor.jsx';
-import Paper from 'material-ui/lib/paper';
+import Paper from 'material-ui/Paper';
 import PolygonSymbolizerEditor from './PolygonSymbolizerEditor.jsx';
 import LineSymbolizerEditor from './LineSymbolizerEditor.jsx';
 import PointSymbolizerEditor from './PointSymbolizerEditor.jsx';
 import FilterEditor from './FilterEditor.jsx';
-import TextField from 'material-ui/lib/text-field';
+import TextField from 'material-ui/TextField';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({

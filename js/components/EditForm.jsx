@@ -13,13 +13,13 @@
 import React from 'react';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import Snackbar from 'material-ui/lib/snackbar';
-import ThemeManager from 'material-ui/lib/styles/theme-manager';
+import Snackbar from 'material-ui/Snackbar';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import classNames from 'classnames';
 import RaisedButton from './Button.jsx';
-import DeleteIcon from 'material-ui/lib/svg-icons/action/delete';
-import SaveIcon from 'material-ui/lib/svg-icons/content/save';
-import TextField from 'material-ui/lib/text-field';
+import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import SaveIcon from 'material-ui/svg-icons/content/save';
+import TextField from 'material-ui/TextField';
 import WFSService from '../services/WFSService.js';
 
 const messages = defineMessages({
@@ -64,7 +64,7 @@ class EditForm extends React.Component {
   constructor(props, context) {
     super(props);
     this.state = {
-      muiTheme: context.muiTheme || ThemeManager.getMuiTheme(),
+      muiTheme: context.muiTheme || getMuiTheme(),
       error: false,
       open: false,
       dirty: {},

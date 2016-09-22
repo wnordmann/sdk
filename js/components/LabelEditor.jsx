@@ -12,10 +12,10 @@
 
 import React from 'react';
 import ColorPicker from 'react-color';
-import MenuItem from 'material-ui/lib/menus/menu-item';
+import MenuItem from 'material-ui/MenuItem';
 import classNames from 'classnames';
-import SelectField from 'material-ui/lib/select-field';
-import TextField from 'material-ui/lib/text-field';
+import SelectField from 'material-ui/SelectField';
+import TextField from 'material-ui/TextField';
 import Label from './Label.jsx';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';

@@ -12,9 +12,9 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ThemeManager from 'material-ui/lib/styles/theme-manager';
-import Popover from 'material-ui/lib/popover/popover';
-import HelpOutline from 'material-ui/lib/svg-icons/action/help-outline';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import Popover from 'material-ui/Popover';
+import HelpOutline from 'material-ui/svg-icons/action/help-outline';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import './FilterHelp.css';
 
@@ -189,7 +189,7 @@ class FilterHelp extends React.Component {
     super(props);
     this.state = {
       help: false,
-      muiTheme: context.muiTheme || ThemeManager.getMuiTheme()
+      muiTheme: context.muiTheme || getMuiTheme()
     };
   }
   componentDidMount() {
