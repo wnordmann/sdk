@@ -488,10 +488,6 @@ WFST.propTypes = {
    */
   showEditForm: React.PropTypes.bool,
   /**
-   * Style for the buttons in the toolbar.
-   */
-  buttonStyle: React.PropTypes.object,
-  /**
    * Css class name to apply on the root element of this component.
    */
   className: React.PropTypes.string,
@@ -502,9 +498,6 @@ WFST.propTypes = {
 };
 
 WFST.defaultProps = {
-  buttonStyle: {
-    margin: '10px 12px'
-  },
   showEditForm: false,
   layerSelector: true,
   visible: true,

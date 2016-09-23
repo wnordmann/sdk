@@ -548,10 +548,6 @@ FeatureTable.propTypes = {
    */
   refreshRate: React.PropTypes.number,
   /**
-   * Style for the buttons in the toolbar.
-   */
-  buttonStyle: React.PropTypes.object,
-  /**
    * Css class name to apply on the root element of this component.
    */
   className: React.PropTypes.string,
@@ -569,9 +565,6 @@ FeatureTable.defaultProps = {
   columnWidth: 100,
   minColumnWidth: 10,
   pointZoom: 16,
-  buttonStyle: {
-    margin: '10px 12px'
-  },
   offset: [0, 0],
   refreshRate: 250
 };
