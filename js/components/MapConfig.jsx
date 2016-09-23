@@ -131,8 +131,8 @@ class MapConfig extends React.Component {
     return (
       <ToolbarGroup lastChild={this.props.lastChild} firstChild={this.props.firstChild} className={classNames('sdk-component map-config', this.props.className)}>
         {info}
-        <RaisedButton style={this.props.buttonStyle} tooltip={formatMessage(messages.loadtitle)} disabled={this.state.disabled} label={formatMessage(messages.loadtext)} onTouchTap={this._load.bind(this)} />
-        <RaisedButton style={this.props.buttonStyle} label={formatMessage(messages.savetext)} tooltip={formatMessage(messages.savetitle)} onTouchTap={this._save.bind(this)} />
+        <RaisedButton tooltip={formatMessage(messages.loadtitle)} disabled={this.state.disabled} label={formatMessage(messages.loadtext)} onTouchTap={this._load.bind(this)} />
+        <RaisedButton label={formatMessage(messages.savetext)} tooltip={formatMessage(messages.savetitle)} onTouchTap={this._save.bind(this)} />
       </ToolbarGroup>
     );
   }
@@ -143,10 +143,6 @@ MapConfig.propTypes = {
    * The ol3 map to save the layers from.
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * Style for the buttons.
-   */
-  buttonStyle: React.PropTypes.object,
   /**
    * Css class name to apply on the root element of this component.
    */
@@ -163,12 +159,6 @@ MapConfig.propTypes = {
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
-};
-
-MapConfig.defaultProps = {
-  buttonStyle: {
-    margin: '10px 12px'
-  }
 };
 
 export default injectIntl(MapConfig);
