@@ -430,7 +430,6 @@ class WFST extends React.Component {
       if (this.props.showEditForm && this.state.feature) {
         editForm = (<EditForm map={this.props.map} onGeometryUpdate={this._onGeomUpdate.bind(this)} onSuccess={this._onSuccess.bind(this)} onDeleteSuccess={this._onDeleteSuccess.bind(this)} feature={this.state.feature} layer={this.state.layer} />);
       }
-      const buttonStyle = this.props.buttonStyle;
       return (
         <div style={styles.root} className={classNames('sdk-component wfst', this.props.className)}>
           <Snackbar
@@ -444,10 +443,10 @@ class WFST extends React.Component {
           {layerSelector}
           <Toolbar>
             <ToolbarGroup firstChild={true}>
-              <RaisedButton secondary={this.state.drawSecondary} tooltip={formatMessage(messages.drawfeaturetitle)} style={buttonStyle} label={formatMessage(messages.drawfeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._drawFeature.bind(this)} icon={<DrawIcon />} />
+              <RaisedButton secondary={this.state.drawSecondary} tooltip={formatMessage(messages.drawfeaturetitle)} label={formatMessage(messages.drawfeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._drawFeature.bind(this)} icon={<DrawIcon />} />
             </ToolbarGroup>
             <ToolbarGroup lastChild={true}>
-              <RaisedButton secondary={this.state.modifySecondary} tooltip={formatMessage(messages.modifyfeaturetitle)} style={buttonStyle} label={formatMessage(messages.modifyfeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._modifyFeature.bind(this)} icon={<EditIcon />} />
+              <RaisedButton secondary={this.state.modifySecondary} tooltip={formatMessage(messages.modifyfeaturetitle)} label={formatMessage(messages.modifyfeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._modifyFeature.bind(this)} icon={<EditIcon />} />
             </ToolbarGroup>
           </Toolbar>
           {error}

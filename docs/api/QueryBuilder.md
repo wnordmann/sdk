@@ -10,16 +10,6 @@ A component that allows users to perform queries on vector layers. Queries can b
 Properties
 ----------
 
-### `buttonStyle`
-
-Style for the buttons in the toolbar.
-
-type: `object`
-defaultValue: `{
-  margin: '10px 12px'
-}`
-
-
 ### `className`
 
 Css class name to apply on the root element of this component.

@@ -126,6 +126,9 @@ class AddLayer extends React.Component {
       muiTheme: context.muiTheme || getMuiTheme()
     };
   }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
+  }
   _showDialog() {
     this.setState({open: true});
   }
@@ -236,7 +239,6 @@ class AddLayer extends React.Component {
   }
   render() {
     const {formatMessage} = this.props.intl;
-    const buttonStyle = this.props.buttonStyle;
     const styles = this.getStyles();
     var error;
     if (this.state.error === true) {
@@ -274,8 +276,8 @@ class AddLayer extends React.Component {
       );
     }
     var actions = [
-      (<Button buttonType='Flat' tooltip={formatMessage(messages.applybuttontitle)} style={buttonStyle} disabled={this.state.showProgress || this.state.fileName === null} label={formatMessage(messages.applybuttontext)} onTouchTap={this._readVectorFile.bind(this)} />),
-      (<Button buttonType='Flat' style={buttonStyle} disabled={this.state.showProgress} label={formatMessage(messages.closebuttontext)} tooltip={formatMessage(messages.closebuttontitle)} onTouchTap={this._closeDialog.bind(this)} />)
+      (<Button buttonType='Flat' tooltip={formatMessage(messages.applybuttontitle)} disabled={this.state.showProgress || this.state.fileName === null} label={formatMessage(messages.applybuttontext)} onTouchTap={this._readVectorFile.bind(this)} />),
+      (<Button buttonType='Flat' disabled={this.state.showProgress} label={formatMessage(messages.closebuttontext)} tooltip={formatMessage(messages.closebuttontitle)} onTouchTap={this._closeDialog.bind(this)} />)
     ];
     return (
       <Button {...this.props} className={classNames('sdk-component add-layer', this.props.className)} icon={<UploadIcon />} tooltip={formatMessage(messages.menutitle)} label={formatMessage(messages.menutext)} onTouchTap={this._showDialog.bind(this)}>
@@ -306,28 +308,22 @@ AddLayer.propTypes = {
    */
   pointRadius: React.PropTypes.number,
   /**
-   * Style for the buttons in the toolbar of the dialog.
-   */
-  buttonStyle: React.PropTypes.object,
-  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
 };
 
 AddLayer.defaultProps = {
-  style: {
-    margin: '10px 12px'
-  },
-  buttonStyle: {
-    margin: '10px 12px'
-  },
   strokeWidth: 2,
   pointRadius: 7
 };
 
 AddLayer.contextTypes = {
   muiTheme: React.PropTypes.object
+};
+
+AddLayer.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(AddLayer);

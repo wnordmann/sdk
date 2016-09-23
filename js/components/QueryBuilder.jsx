@@ -184,7 +184,6 @@ class QueryBuilder extends React.Component {
   render() {
     const styles = this.getStyles();
     const {formatMessage} = this.props.intl;
-    const buttonStyle = this.props.buttonStyle;
     var count;
     if (this.state.showCount === true) {
       count = (<Snackbar
@@ -199,9 +198,9 @@ class QueryBuilder extends React.Component {
         <LayerSelector {...this.props} onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /><br/>
         <TextField floatingLabelText={formatMessage(messages.filterlabel)} errorText={this.state.errorText} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} /><FilterHelp intl={this.props.intl} /><br/>
         <Toolbar>
-          <RaisedButton style={buttonStyle} label={formatMessage(messages.newbuttontext)} tooltip={formatMessage(messages.newbuttontitle)} onTouchTap={this._newSelection.bind(this)} />
-          <RaisedButton style={buttonStyle} label={formatMessage(messages.addbuttontext)} tooltip={formatMessage(messages.addbuttontitle)}onTouchTap={this._addSelection.bind(this)} />
-          <RaisedButton style={buttonStyle} label={formatMessage(messages.selectintext)} tooltip={formatMessage(messages.selectintitle)} onTouchTap={this._inSelection.bind(this)} />
+          <RaisedButton label={formatMessage(messages.newbuttontext)} tooltip={formatMessage(messages.newbuttontitle)} onTouchTap={this._newSelection.bind(this)} />
+          <RaisedButton label={formatMessage(messages.addbuttontext)} tooltip={formatMessage(messages.addbuttontitle)}onTouchTap={this._addSelection.bind(this)} />
+          <RaisedButton label={formatMessage(messages.selectintext)} tooltip={formatMessage(messages.selectintitle)} onTouchTap={this._inSelection.bind(this)} />
         </Toolbar>
         {count}
       </div>
@@ -221,17 +220,7 @@ QueryBuilder.propTypes = {
   /**
    * Css class name to apply on the root element of this component.
    */
-  className: React.PropTypes.string,
-  /**
-   * Style for the buttons in the toolbar.
-   */
-  buttonStyle: React.PropTypes.object
-};
-
-QueryBuilder.defaultProps = {
-  buttonStyle: {
-    margin: '10px 12px'
-  }
+  className: React.PropTypes.string
 };
 
 QueryBuilder.contextTypes = {

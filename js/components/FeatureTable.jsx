@@ -449,7 +449,6 @@ class FeatureTable extends React.Component {
           width={width} />
         );
     }
-    const buttonStyle = this.props.buttonStyle;
     const styles = this.getStyles();
     var filterHelp = this._layer ? <FilterHelp intl={this.props.intl} /> : undefined;
     return (
@@ -474,9 +473,9 @@ class FeatureTable extends React.Component {
             <Checkbox label={formatMessage(messages.onlyselected)} id='featuretable-onlyselected' disabled={!this._layer} checked={this._selectedOnly} onCheck={this._filter.bind(this)} disableTouchRipple={true}/>
           </div>
           <Toolbar className='feature-table-toolbar'>
-            <RaisedButton disabled={!this._layer} style={buttonStyle} icon={<ActionSearch />} label={formatMessage(messages.zoombuttontext)} tooltip={formatMessage(messages.zoombuttontitle)} onTouchTap={this._zoomSelected.bind(this)} disableTouchRipple={true}/>
-            <RaisedButton disabled={!this._layer} style={buttonStyle} icon={<ClearIcon />} label={formatMessage(messages.clearbuttontext)} tooltip={formatMessage(messages.clearbuttontitle)} onTouchTap={this._clearSelected.bind(this)} disableTouchRipple={true}/>
-            <RaisedButton disabled={!this._layer} style={buttonStyle} icon={<ArrowUp />} label={formatMessage(messages.movebuttontext)} tooltip={formatMessage(messages.movebuttontitle)} onTouchTap={this._moveSelectedToTop.bind(this)} disableTouchRipple={true}/>
+            <RaisedButton disabled={!this._layer} icon={<ActionSearch />} label={formatMessage(messages.zoombuttontext)} tooltip={formatMessage(messages.zoombuttontitle)} onTouchTap={this._zoomSelected.bind(this)} disableTouchRipple={true}/>
+            <RaisedButton disabled={!this._layer} icon={<ClearIcon />} label={formatMessage(messages.clearbuttontext)} tooltip={formatMessage(messages.clearbuttontitle)} onTouchTap={this._clearSelected.bind(this)} disableTouchRipple={true}/>
+            <RaisedButton disabled={!this._layer} icon={<ArrowUp />} label={formatMessage(messages.movebuttontext)} tooltip={formatMessage(messages.movebuttontitle)} onTouchTap={this._moveSelectedToTop.bind(this)} disableTouchRipple={true}/>
           </Toolbar>
           {error}
         </div>

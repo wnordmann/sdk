@@ -11,16 +11,6 @@ Only vector layers can be added. Supported formats for layers are GeoJSON, GPX a
 Properties
 ----------
 
-### `buttonStyle`
-
-Style for the buttons in the toolbar of the dialog.
-
-type: `object`
-defaultValue: `{
-  margin: '10px 12px'
-}`
-
-
 ### `className`
 
 Css class name to apply on the button.
@@ -56,11 +46,4 @@ The stroke width in pixels used in the style for the uploaded data.
 
 type: `number`
 defaultValue: `2`
-
-
-### `style`
-
-defaultValue: `{
-  margin: '10px 12px'
-}`
 

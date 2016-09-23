@@ -13,7 +13,7 @@
 import React from 'react';
 import ol from 'openlayers';
 import 'blueimp-canvas-to-blob';
-import RaisedButton from 'material-ui/RaisedButton';
+import RaisedButton from './Button.jsx';
 import classNames from 'classnames';
 import CameraIcon from 'material-ui/svg-icons/image/camera-alt';
 import FileSaver from 'browser-filesaver';
@@ -58,7 +58,7 @@ class ImageExport extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <RaisedButton {...this.props} className={classNames('sdk-component image-export', this.props.className)} icon={<CameraIcon />} label={formatMessage(messages.buttontext)} onTouchTap={this._handleClick.bind(this)} />
+      <RaisedButton className={classNames('sdk-component image-export', this.props.className)} icon={<CameraIcon />} label={formatMessage(messages.buttontext)} onTouchTap={this._handleClick.bind(this)} />
     );
   }
 }
@@ -76,12 +76,6 @@ ImageExport.propTypes = {
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
-};
-
-ImageExport.defaultProps = {
-  style: {
-    margin: '10px 12px'
-  }
 };
 
 export default injectIntl(ImageExport);

@@ -40,7 +40,7 @@ class Geocoding extends React.Component {
     super(props);
     var me = this;
     this.state = {
-      value: null
+      value: ''
     };
     this._dispatchToken = AppDispatcher.register((payload) => {
       let action = payload.action;
@@ -75,7 +75,7 @@ class Geocoding extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <TextField {...this.props} className={classNames('sdk-component geocoding', this.props.className)} ref='query' value={this.state.value} hintText={formatMessage(messages.placeholder)} onChange={this._searchAddress.bind(this)}/>
+      <TextField className={classNames('sdk-component geocoding', this.props.className)} ref='query' value={this.state.value} hintText={formatMessage(messages.placeholder)} onChange={this._searchAddress.bind(this)}/>
     );
   }
 }
