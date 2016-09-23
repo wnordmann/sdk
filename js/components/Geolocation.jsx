@@ -124,7 +124,7 @@ class Geolocation extends React.Component {
         background: rawTheme.palette.primary1Color
       }),
       iconactive: {
-        color: rawTheme.palette.accent1Color
+        color: rawTheme.palette.active1Color
       }
     };
   }
@@ -145,7 +145,7 @@ class Geolocation extends React.Component {
         tooltip += ' (' + formatMessage(messages.trackingtitle) + ')';
       }
       return (
-        <Button tooltipStyle={{'top':'-50px'}} buttonType='Action' mini={true} secondary={true} style={styles.root} className={classNames('sdk-component geolocation', this.props.className)} tooltipPosition='top-right' tooltip={tooltip} onTouchTap={this._geolocate.bind(this)}><MyLocation color={color} /></Button>
+        <Button backgroundColor={color} tooltipStyle={{'top':'-50px'}} buttonType='Action' mini={true} secondary={true} style={styles.root} className={classNames('sdk-component geolocation', this.props.className)} tooltipPosition='top-right' tooltip={tooltip} onTouchTap={this._geolocate.bind(this)}><MyLocation color={color} /></Button>
       );
     }
   }

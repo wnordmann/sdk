@@ -19,7 +19,7 @@ import IconButton from 'material-ui/IconButton';
 import PlayIcon from 'material-ui/svg-icons/av/play-arrow';
 import PauseIcon from 'material-ui/svg-icons/av/pause';
 import Slider from 'material-ui/Slider';
-import DatePicker from 'material-ui/lib/date-picker/date-picker';
+import DatePicker from 'material-ui/DatePicker';
 import LayerStore from '../stores/LayerStore.js';
 import {injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';

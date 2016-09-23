@@ -26,6 +26,9 @@ type: `custom`
 
 ### `style`
 
+Style config object.
+
+type: `object`
 defaultValue: `{
   margin: '10px 12px'
 }`

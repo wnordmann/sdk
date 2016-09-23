@@ -121,6 +121,10 @@ Login.propTypes = {
    */
   className: React.PropTypes.string,
   /**
+   * Style config object.
+   */
+  style: React.PropTypes.object,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired

@@ -27,11 +27,25 @@ Css class name to apply on the root element of this component.
 type: `string`
 
 
+### `firstChild`
+
+Are we the first child of the toolbar?
+
+type: `bool`
+
+
 ### `intl`
 
 i18n message strings. Provided through the application through context.
 
 type: `custom`
+
+
+### `lastChild`
+
+Are we the last child of the toolbar?
+
+type: `bool`
 
 
 ### `map` (required)

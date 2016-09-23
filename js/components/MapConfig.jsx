@@ -129,7 +129,7 @@ class MapConfig extends React.Component {
       info = (<Snackbar autoHideDuration={2000} message={this.state.msg} open={this.state.info} onRequestClose={this._onRequestClose.bind(this)} />);
     }
     return (
-      <ToolbarGroup className={classNames('sdk-component map-config', this.props.className)}>
+      <ToolbarGroup lastChild={this.props.lastChild} firstChild={this.props.firstChild} className={classNames('sdk-component map-config', this.props.className)}>
         {info}
         <RaisedButton style={this.props.buttonStyle} tooltip={formatMessage(messages.loadtitle)} disabled={this.state.disabled} label={formatMessage(messages.loadtext)} onTouchTap={this._load.bind(this)} />
         <RaisedButton style={this.props.buttonStyle} label={formatMessage(messages.savetext)} tooltip={formatMessage(messages.savetitle)} onTouchTap={this._save.bind(this)} />
@@ -151,6 +151,14 @@ MapConfig.propTypes = {
    * Css class name to apply on the root element of this component.
    */
   className: React.PropTypes.string,
+  /**
+   * Are we the last child of the toolbar?
+   */
+  lastChild: React.PropTypes.bool,
+  /**
+   * Are we the first child of the toolbar?
+   */
+  firstChild: React.PropTypes.bool,
   /**
    * i18n message strings. Provided through the application through context.
    */

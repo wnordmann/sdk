@@ -76,7 +76,6 @@ describe('LayerListItem', function() {
 
   it('modifies lat lon extent for EPSG:3857', function() {
     var container = document.createElement('div');
-    var url = 'http://localhost:8080/geoserver/wms';
     var item = ReactDOM.render((
       <LayerListItem intl={intl} title={overlay.get('title')} map={map} layer={overlay} />
     ), container);

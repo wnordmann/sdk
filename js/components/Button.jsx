@@ -33,12 +33,12 @@ class Button extends React.Component {
     var style = this.props.tooltipStyle ? Object.assign(styleConfig, this.props.tooltipStyle) : styleConfig;
     var button, buttonStyle;
     if (this.props.buttonType === 'Action') {
-      button = (<FloatingActionButton onTouchTap={this.props.onTouchTap} style={this.props.style} children={this.props.children} mini={this.props.mini} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)} />);
+      button = (<FloatingActionButton backgroundColor={this.props.backgroundColor} onTouchTap={this.props.onTouchTap} style={this.props.style} children={this.props.children} mini={this.props.mini} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)} />);
     } else if (this.props.buttonType === 'Flat') {
       button = (<FlatButton onTouchTap={this.props.onTouchTap} icon={this.props.icon} children={this.props.children} label={this.props.label} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)} />);
     } else {
       buttonStyle = {margin: '10px 12px'};
-      button = (<RaisedButton onTouchTap={this.props.onTouchTap} icon={this.props.icon} children={this.props.children} label={this.props.label} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)} />);
+      button = (<RaisedButton secondary={this.props.secondary} onTouchTap={this.props.onTouchTap} icon={this.props.icon} children={this.props.children} label={this.props.label} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)} />);
     }
     return (
       <span style={buttonStyle} className={classNames('sdk-component sdk-button', this.props.className)} >
@@ -69,7 +69,39 @@ Button.propTypes = {
   /**
    * Style for tooltip element.
    */
-  tooltipStyle: React.PropTypes.object
+  tooltipStyle: React.PropTypes.object,
+  /**
+   * Background color.
+   */
+  backgroundColor: React.PropTypes.string,
+  /**
+   * Function to execute when the button is clicked.
+   */
+  onTouchTap: React.PropTypes.func,
+  /**
+   * Style config object.
+   */
+  style: React.PropTypes.object,
+  /**
+   * Child components.
+   */
+  children: React.PropTypes.node,
+  /**
+   * Should this button be mini? Only applies to certain button types.
+   */
+  mini: React.PropTypes.bool,
+  /**
+   * Optional icon.
+   */
+  icon: React.PropTypes.node,
+  /**
+   * Label to show on the button.
+   */
+  label: React.PropTypes.string,
+  /**
+   * Should we use the secondary state?
+   */
+  secondary: React.PropTypes.bool
 };
 
 Button.defaultProps = {
