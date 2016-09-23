@@ -38,7 +38,7 @@ class Button extends React.Component {
       button = (<FlatButton onTouchTap={this.props.onTouchTap} icon={this.props.icon} children={this.props.children} label={this.props.label} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)} />);
     } else {
       buttonStyle = {margin: '10px 12px'};
-      button = (<RaisedButton secondary={this.props.secondary} onTouchTap={this.props.onTouchTap} icon={this.props.icon} children={this.props.children} label={this.props.label} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)} />);
+      button = (<RaisedButton style={this.props.style} secondary={this.props.secondary} onTouchTap={this.props.onTouchTap} icon={this.props.icon} children={this.props.children} label={this.props.label} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)} />);
     }
     return (
       <span style={buttonStyle} className={classNames('sdk-component sdk-button', this.props.className)} >
