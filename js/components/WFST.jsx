@@ -443,10 +443,10 @@ class WFST extends React.Component {
           />
           {layerSelector}
           <Toolbar>
-            <ToolbarGroup>
+            <ToolbarGroup firstChild={true}>
               <RaisedButton secondary={this.state.drawSecondary} tooltip={formatMessage(messages.drawfeaturetitle)} style={buttonStyle} label={formatMessage(messages.drawfeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._drawFeature.bind(this)} icon={<DrawIcon />} />
             </ToolbarGroup>
-            <ToolbarGroup>
+            <ToolbarGroup lastChild={true}>
               <RaisedButton secondary={this.state.modifySecondary} tooltip={formatMessage(messages.modifyfeaturetitle)} style={buttonStyle} label={formatMessage(messages.modifyfeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._modifyFeature.bind(this)} icon={<EditIcon />} />
             </ToolbarGroup>
           </Toolbar>
