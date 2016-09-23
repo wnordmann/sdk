@@ -44,7 +44,7 @@ export class SortHeaderCell extends React.Component {
   render() {
     var {sortDir, children, ...props} = this.props;
     return (
-      <Cell {...props} className={classNames('sdk-component sort-header-cell', props.className)}>
+      <Cell className={classNames('sdk-component sort-header-cell', props.className)}>
         <a onClick={this._onSortChange}>
           {children} {sortDir ? (sortDir === SortTypes.DESC ? '↓' : '↑') : ''}
         </a>
