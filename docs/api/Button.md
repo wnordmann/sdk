@@ -49,6 +49,13 @@ Optional icon.
 type: `node`
 
 
+### `iconStyle`
+
+Icon style config object.
+
+type: `object`
+
+
 ### `label`
 
 Label to show on the button.

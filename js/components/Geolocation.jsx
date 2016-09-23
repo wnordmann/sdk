@@ -139,13 +139,15 @@ class Geolocation extends React.Component {
         onRequestClose={this._handleRequestClose.bind(this)}
       />);
     } else {
-      var color, tooltip = formatMessage(messages.buttontitle);
+      var iconStyle, tooltip = formatMessage(messages.buttontitle);
       if (this.state.tracking) {
-        color = styles.iconactive.color;
+        iconStyle = {
+          fill: styles.iconactive.color
+        };
         tooltip += ' (' + formatMessage(messages.trackingtitle) + ')';
       }
       return (
-        <Button backgroundColor={color} tooltipStyle={{'top':'-50px'}} buttonType='Action' mini={true} secondary={true} style={styles.root} className={classNames('sdk-component geolocation', this.props.className)} tooltipPosition='top-right' tooltip={tooltip} onTouchTap={this._geolocate.bind(this)}><MyLocation color={color} /></Button>
+        <Button iconStyle={iconStyle} tooltipStyle={{'top':'-50px'}} buttonType='Action' mini={true} secondary={true} style={styles.root} className={classNames('sdk-component geolocation', this.props.className)} tooltipPosition='top-right' tooltip={tooltip} onTouchTap={this._geolocate.bind(this)}><MyLocation /></Button>
       );
     }
   }

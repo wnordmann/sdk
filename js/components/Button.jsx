@@ -33,7 +33,7 @@ class Button extends React.Component {
     var style = this.props.tooltipStyle ? Object.assign(styleConfig, this.props.tooltipStyle) : styleConfig;
     var button, buttonStyle;
     if (this.props.buttonType === 'Action') {
-      button = (<FloatingActionButton backgroundColor={this.props.backgroundColor} onTouchTap={this.props.onTouchTap} style={this.props.style} children={this.props.children} mini={this.props.mini} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)} />);
+      button = (<FloatingActionButton iconStyle={this.props.iconStyle} backgroundColor={this.props.backgroundColor} onTouchTap={this.props.onTouchTap} style={this.props.style} children={this.props.children} mini={this.props.mini} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)} />);
     } else if (this.props.buttonType === 'Flat') {
       button = (<FlatButton onTouchTap={this.props.onTouchTap} icon={this.props.icon} children={this.props.children} label={this.props.label} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)} />);
     } else {
@@ -101,7 +101,11 @@ Button.propTypes = {
   /**
    * Should we use the secondary state?
    */
-  secondary: React.PropTypes.bool
+  secondary: React.PropTypes.bool,
+  /**
+   * Icon style config object.
+   */
+  iconStyle: React.PropTypes.object
 };
 
 Button.defaultProps = {
