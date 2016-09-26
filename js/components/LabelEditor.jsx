@@ -18,6 +18,7 @@ import SelectField from 'material-ui/SelectField';
 import TextField from 'material-ui/TextField';
 import Label from './Label.jsx';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -55,6 +56,9 @@ class LabelEditor extends React.Component {
       fontSize: this.props.initialFontSize,
       fontColor: this.props.initialFontColor
     };
+  }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
   }
   _onItemChange(evt, idx, value) {
     this.setState({labelAttribute: value}, function() {
@@ -141,6 +145,10 @@ LabelEditor.defaultProps = {
     },
     hex: '000000'
   }
+};
+
+LabelEditor.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(LabelEditor);

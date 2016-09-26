@@ -67,6 +67,9 @@ class LayerList extends React.Component {
       muiTheme: context.muiTheme || getMuiTheme()
     };
   }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
+  }
   componentWillMount() {
     this._onChangeCb = this._onChange.bind(this);
     LayerStore.addChangeListener(this._onChangeCb);
@@ -283,6 +286,10 @@ LayerList.defaultProps = {
 
 LayerList.contextTypes = {
   muiTheme: React.PropTypes.object
+};
+
+LayerList.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(LayerList);

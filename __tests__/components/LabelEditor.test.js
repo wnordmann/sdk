@@ -6,6 +6,10 @@ var assert = require('chai').assert;
 var raf = require('raf');
 raf.polyfill();
 var intl = require('../mock-i18n.js');
+require('phantomjs-polyfill-object-assign');
+var injectTapEventPlugin = require('react-tap-event-plugin');
+
+injectTapEventPlugin();
 
 var LabelEditor = require('../../js/components/LabelEditor.jsx');
 

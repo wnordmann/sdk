@@ -7,6 +7,10 @@ var raf = require('raf');
 raf.polyfill();
 var ol = require('openlayers');
 var intl = require('../mock-i18n.js');
+require('phantomjs-polyfill-object-assign');
+var injectTapEventPlugin = require('react-tap-event-plugin');
+
+injectTapEventPlugin();
 
 var LabelModal = require('../../js/components/LabelModal.jsx');
 

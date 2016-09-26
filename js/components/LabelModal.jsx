@@ -19,6 +19,7 @@ import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import {transformColor} from '../util.js';
 import LabelEditor from './LabelEditor.jsx';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const messages = defineMessages({
   title: {
@@ -54,6 +55,9 @@ class LabelModal extends React.Component {
       attributes: [],
       open: false
     };
+  }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
   }
   componentDidMount() {
     var source = this.props.layer.getSource();
@@ -168,6 +172,10 @@ LabelModal.propTypes = {
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
+};
+
+LabelModal.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(LabelModal, {withRef: true});
