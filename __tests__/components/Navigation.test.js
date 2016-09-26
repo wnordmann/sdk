@@ -4,12 +4,9 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 var assert = require('chai').assert;
-var injectTapEventPlugin = require('react-tap-event-plugin');
 var intl = require('../mock-i18n.js');
 
 var Navigation = require('../../js/components/Navigation.jsx');
-
-injectTapEventPlugin();
 
 var tapDataInjector = function(x, y) {
   return {

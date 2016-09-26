@@ -3,9 +3,6 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var assert = require('chai').assert;
-var injectTapEventPlugin = require('react-tap-event-plugin');
-
-injectTapEventPlugin();
 
 var Button = require('../../js/components/Button.jsx');
 
