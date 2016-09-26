@@ -345,6 +345,7 @@ class QGISPrint extends React.Component {
       dialog = (
         <Dialog actions={actions} title={formatMessage(messages.modaltitle)} modal={true} open={this.state.open} onRequestClose={this.close.bind(this)}>
           {elements}
+          <br/>
           <SelectField floatingLabelText={formatMessage(messages.resolutionlabel)} value={this.state.resolution} onChange={this._onResolutionChange.bind(this)}>
             {selectOptions}
           </SelectField>
@@ -355,7 +356,7 @@ class QGISPrint extends React.Component {
     }
     return (
       <span className={classNames('sdk-component qgis-print', this.props.className)}>
-        <IconMenu {...this.props} anchorOrigin={{horizontal: 'left', vertical: 'top'}} targetOrigin={{horizontal: 'left', vertical: 'top'}} iconButtonElement={<Button label={formatMessage(messages.printmenutext)} />} value={this.state.layoutName}>
+        <IconMenu style={this.props.style} anchorOrigin={{horizontal: 'left', vertical: 'top'}} targetOrigin={{horizontal: 'left', vertical: 'top'}} iconButtonElement={<Button label={formatMessage(messages.printmenutext)} />} value={this.state.layoutName}>
           {listitems}
         </IconMenu>
         {dialog}
@@ -411,6 +412,10 @@ QGISPrint.propTypes = {
    * Css class name to apply on the root element of this component.
    */
   className: React.PropTypes.string,
+  /**
+   * Style config object for IconMenu.
+   */
+  style: React.PropTypes.object,
   /**
    * i18n message strings. Provided through the application through context.
    */

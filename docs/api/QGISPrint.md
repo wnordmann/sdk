@@ -85,6 +85,9 @@ defaultValue: `[72, 150, 300]`
 
 ### `style`
 
+Style config object for IconMenu.
+
+type: `object`
 defaultValue: `{
   margin: '10px 12px'
 }`
