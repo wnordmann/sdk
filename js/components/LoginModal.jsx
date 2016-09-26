@@ -19,6 +19,7 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import LoginActions from '../actions/LoginActions.js';
 import Snackbar from 'material-ui/Snackbar';
 import Paper from 'material-ui/Paper';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -76,6 +77,9 @@ class LoginModal extends React.Component {
       errorOpen: false,
       open: false
     };
+  }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
   }
   _onEnter(evt) {
     if (evt.keyCode === 13) {
@@ -144,6 +148,10 @@ LoginModal.propTypes = {
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
+};
+
+LoginModal.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(LoginModal, {withRef: true});

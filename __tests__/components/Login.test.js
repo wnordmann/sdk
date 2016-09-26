@@ -4,6 +4,9 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var assert = require('chai').assert;
 var intl = require('../mock-i18n.js');
+var injectTapEventPlugin = require('react-tap-event-plugin');
+
+injectTapEventPlugin();
 
 var Login = require('../../js/components/Login.jsx');
 

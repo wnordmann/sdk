@@ -48,6 +48,9 @@ class Legend extends React.Component {
     };
     LayerStore.bindMap(this.props.map);
   }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
+  }
   componentWillMount() {
     this._onChangeCb = this._onChange.bind(this);
     LayerStore.addChangeListener(this._onChangeCb);
@@ -116,6 +119,10 @@ Legend.propTypes = {
 
 Legend.contextTypes = {
   muiTheme: React.PropTypes.object
+};
+
+Legend.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(Legend);

@@ -18,6 +18,7 @@ import ToolConstants from '../constants/ToolConstants.js';
 import LayerStore from '../stores/LayerStore.js';
 import pureRender from 'pure-render-decorator';
 import CircularProgress from 'material-ui/CircularProgress';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import './LoadingPanel.css';
 
 /**
@@ -38,6 +39,9 @@ class LoadingPanel extends React.Component {
     this._loading = 0;
     this._loaded = 0;
     LayerStore.bindMap(this.props.map);
+  }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
   }
   componentWillMount() {
     this._onChangeCb = this._onChange.bind(this);
@@ -135,5 +139,9 @@ LoadingPanel.propTypes = {
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired
 }
+
+LoadingPanel.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
+};
 
 export default LoadingPanel;

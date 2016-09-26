@@ -33,6 +33,7 @@ import MoveDownIcon from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -118,6 +119,9 @@ class LayerListItem extends React.Component {
     this.state = {
       checked: props.layer.getVisible()
     };
+  }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
   }
   _handleChange(event) {
     var visible = event.target.checked;
@@ -398,6 +402,10 @@ LayerListItem.propTypes = {
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
+};
+
+LayerListItem.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(LayerListItem);

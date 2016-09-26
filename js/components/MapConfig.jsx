@@ -18,6 +18,7 @@ import {ToolbarGroup} from 'material-ui/Toolbar';
 import Snackbar from 'material-ui/Snackbar';
 import MapConfigService from '../services/MapConfigService.js';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -81,6 +82,9 @@ class MapConfig extends React.Component {
       info: false,
       disabled: global.localStorage.getItem(localStorageKey) === null
     };
+  }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
   }
   _load() {
     const {formatMessage} = this.props.intl;
@@ -159,6 +163,10 @@ MapConfig.propTypes = {
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
+};
+
+MapConfig.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(MapConfig);

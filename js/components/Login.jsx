@@ -20,6 +20,7 @@ import LoginModal from './LoginModal.jsx';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LoginConstants from '../constants/LoginConstants.js';
 import AuthService from '../services/AuthService.js';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -60,6 +61,9 @@ class Login extends React.Component {
           break;
       }
     });
+  }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
   }
   componentDidMount() {
     var me = this;
@@ -135,6 +139,10 @@ Login.defaultProps = {
     margin: '10px 12px'
   },
   url: '/geoserver/app/api/login'
+};
+
+Login.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(Login);
