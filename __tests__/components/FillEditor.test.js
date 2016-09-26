@@ -6,6 +6,7 @@ var assert = require('chai').assert;
 var raf = require('raf');
 raf.polyfill();
 var intl = require('../mock-i18n.js');
+require('phantomjs-polyfill-object-assign');
 
 var FillEditor = require('../../js/components/FillEditor.jsx');
 

@@ -21,6 +21,7 @@ import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import TextField from 'material-ui/TextField';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import FilterHelp from './FilterHelp.jsx';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -68,6 +69,9 @@ class FilterModal extends React.Component {
       filters: [],
       hasError: false
     };
+  }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
   }
   open() {
     this.setState({open: true});
@@ -185,7 +189,7 @@ class FilterModal extends React.Component {
     ];
     return (
       <Dialog className={classNames('sdk-component filter-modal', this.props.className)} actions={actions} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} modal={true} open={this.state.open} onRequestClose={this.close.bind(this)}>
-        <TextField errorText={errorText} style={{width: 512}} ref='filterTextBox' />
+        <TextField name='filter' errorText={errorText} style={{width: 512}} ref='filterTextBox' />
         <FilterHelp intl={this.props.intl} />
         <Button style={{float: 'right'}} label={formatMessage(messages.addfiltertext)} onTouchTap={this._addFilter.bind(this)} />
         <List>
@@ -209,6 +213,10 @@ FilterModal.propTypes = {
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
+};
+
+FilterModal.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(FilterModal, {withRef: true});

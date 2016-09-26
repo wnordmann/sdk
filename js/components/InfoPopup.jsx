@@ -23,6 +23,7 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import IconButton from 'material-ui/IconButton';
 import CloserIcon from 'material-ui/svg-icons/navigation/close';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import './BasePopup.css';
 import './InfoPopup.css';
 
@@ -78,6 +79,9 @@ class InfoPopup extends React.Component {
     this.state = {
       popupTexts: []
     };
+  }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
   }
   componentDidMount() {
     this.overlayPopup = new ol.Overlay({
@@ -358,6 +362,10 @@ InfoPopup.propTypes = {
 InfoPopup.defaultProps = {
   hover: false,
   infoFormat: 'text/plain'
+};
+
+InfoPopup.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(InfoPopup);

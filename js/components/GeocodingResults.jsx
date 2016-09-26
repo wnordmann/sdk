@@ -65,6 +65,9 @@ class GeocodingResults extends React.Component {
       muiTheme: context.muiTheme || getMuiTheme()
     };
   }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
+  }
   componentDidMount() {
     this._layer = new ol.layer.Vector({
       title: null,
@@ -180,6 +183,10 @@ GeocodingResults.defaultProps = {
 
 GeocodingResults.contextTypes = {
   muiTheme: React.PropTypes.object
+};
+
+GeocodingResults.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(GeocodingResults);

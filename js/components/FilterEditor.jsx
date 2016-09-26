@@ -15,6 +15,7 @@ import classNames from 'classnames';
 import TextField from 'material-ui/TextField';
 import FilterService from '../services/FilterService.js';
 import pureRender from 'pure-render-decorator';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 const messages = defineMessages({
@@ -46,6 +47,9 @@ class FilterEditor extends React.Component {
       hasError: false,
       expression: this.props.initialExpression
     };
+  }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
   }
   _setQueryFilter(evt) {
     var expression = evt.target.value;
@@ -97,6 +101,10 @@ FilterEditor.propTypes = {
 FilterEditor.defaultProps = {
   initialFilter: null,
   initialExpression: null
+};
+
+FilterEditor.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(FilterEditor);

@@ -17,6 +17,7 @@ import GeocodingActions from '../actions/GeocodingActions.js';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import classNames from 'classnames';
 import TextField from 'material-ui/TextField';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -52,6 +53,9 @@ class Geocoding extends React.Component {
           break;
       }
     });
+  }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
   }
   componentWillUnmount() {
     AppDispatcher.unregister(this._dispatchToken);
@@ -97,6 +101,10 @@ Geocoding.propTypes = {
 
 Geocoding.defaultProps = {
   maxResults: 5
+};
+
+Geocoding.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(Geocoding);
