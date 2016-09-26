@@ -186,11 +186,11 @@ class Edit extends React.Component {
       }
     });
   }
-  componentWillUnmount() {
-    AppDispatcher.unregister(this._dispatchToken);
-  }
   getChildContext() {
     return {muiTheme: getMuiTheme()};
+  }
+  componentWillUnmount() {
+    AppDispatcher.unregister(this._dispatchToken);
   }
   removeLayer(layer) {
     var idx = -1;

@@ -25,28 +25,24 @@ global.IntlProvider = IntlProvider;
 import injectTapEventPlugin from 'react-tap-event-plugin';
 global.injectTapEventPlugin = injectTapEventPlugin;
 
-import AppBar from 'material-ui/lib/app-bar';
+import AppBar from 'material-ui/AppBar';
 global.AppBar = AppBar;
 
-import Toolbar from 'material-ui/lib/toolbar/toolbar';
+import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 global.Toolbar = Toolbar;
-
-import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group';
 global.ToolbarGroup = ToolbarGroup;
 
-import RaisedButton from 'material-ui/lib/raised-button';
+import RaisedButton from 'material-ui/RaisedButton';
 global.RaisedButton = RaisedButton;
 
-import IconMenu from 'material-ui/lib/menus/icon-menu';
+import IconMenu from 'material-ui/IconMenu';
 global.IconMenu = IconMenu;
 
-import MenuItem from 'material-ui/lib/menus/menu-item';
+import MenuItem from 'material-ui/MenuItem';
 global.MenuItem = MenuItem;
 
-import Tabs from 'material-ui/lib/tabs/tabs';
+import {Tabs, Tab} from 'material-ui/Tabs';
 global.Tabs = Tabs;
-
-import Tab from 'material-ui/lib/tabs/tab';
 global.Tab = Tab;
 
 import AddLayer from './components/AddLayer.jsx';

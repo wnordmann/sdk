@@ -79,15 +79,15 @@ class Chart extends React.Component {
       muiTheme: context.muiTheme || getMuiTheme()
     };
   }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
+  }
   componentDidMount() {
     this._onChangeCb = this._onChange.bind(this);
     FeatureStore.addChangeListener(this._onChangeCb);
   }
   componentWillUnmount() {
     FeatureStore.removeChangeListener(this._onChangeCb);
-  }
-  getChildContext() {
-    return {muiTheme: getMuiTheme()};
   }
   _onChange() {
     this._storeConfig = FeatureStore.getState();

@@ -83,13 +83,13 @@ class AddLayerModal extends React.Component {
       layerInfo: null
     };
   }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
+  }
   componentWillUnmount() {
     if (this._request) {
       this._request.abort();
     }
-  }
-  getChildContext() {
-    return {muiTheme: getMuiTheme()};
   }
   _getCaps(url) {
     var me = this;
