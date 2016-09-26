@@ -4,6 +4,7 @@ import FlatButton from 'material-ui/FlatButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Tooltip from 'material-ui/internal/Tooltip';
 import classNames from 'classnames';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
 import './Button.css';
 
@@ -17,6 +18,9 @@ class Button extends React.Component {
     this.state = {
       showTooltip: false
     };
+  }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
   }
   showTooltip(evt) {
     if (this.props.tooltip && !this.props.disabled) {
@@ -110,6 +114,10 @@ Button.propTypes = {
 
 Button.defaultProps = {
   buttonType: 'Raised'
+};
+
+Button.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default Button;

@@ -189,6 +189,9 @@ class Edit extends React.Component {
   componentWillUnmount() {
     AppDispatcher.unregister(this._dispatchToken);
   }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
+  }
   removeLayer(layer) {
     var idx = -1;
     for (var i = 0, ii = this.state.layers.length; i < ii; ++i) {
@@ -454,6 +457,10 @@ Edit.defaultProps = {
 
 Edit.contextTypes = {
   muiTheme: React.PropTypes.object
+};
+
+Edit.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(Edit, {withRef: true});

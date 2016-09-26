@@ -8,6 +8,9 @@ var raf = require('raf');
 raf.polyfill();
 var ol = require('openlayers');
 var intl = require('../mock-i18n.js');
+var injectTapEventPlugin = require('react-tap-event-plugin');
+
+injectTapEventPlugin();
 
 var AddLayer = require('../../js/components/AddLayer.jsx');
 

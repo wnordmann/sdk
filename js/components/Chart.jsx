@@ -86,6 +86,9 @@ class Chart extends React.Component {
   componentWillUnmount() {
     FeatureStore.removeChangeListener(this._onChangeCb);
   }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
+  }
   _onChange() {
     this._storeConfig = FeatureStore.getState();
     this.setState({selected: this._storeConfig[this.state.chart.layer].selected});
@@ -312,6 +315,10 @@ Chart.defaultProps = {
 
 Chart.contextTypes = {
   muiTheme: React.PropTypes.object
+};
+
+Chart.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(Chart);

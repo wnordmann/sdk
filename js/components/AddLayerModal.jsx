@@ -26,6 +26,7 @@ import RESTService from '../services/RESTService.js';
 import WMSService from '../services/WMSService.js';
 import WFSService from '../services/WFSService.js';
 import classNames from 'classnames';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import './AddLayerModal.css';
 
 const messages = defineMessages({
@@ -86,6 +87,9 @@ class AddLayerModal extends React.Component {
     if (this._request) {
       this._request.abort();
     }
+  }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
   }
   _getCaps(url) {
     var me = this;
@@ -372,6 +376,10 @@ AddLayerModal.propTypes = {
 AddLayerModal.defaultProps = {
   asVector: false,
   allowUserInput: false
+};
+
+AddLayerModal.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(AddLayerModal, {withRef: true});

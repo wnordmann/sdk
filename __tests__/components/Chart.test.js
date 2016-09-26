@@ -7,6 +7,9 @@ var raf = require('raf');
 raf.polyfill();
 var ol = require('openlayers');
 var intl = require('../mock-i18n.js');
+var injectTapEventPlugin = require('react-tap-event-plugin');
+
+injectTapEventPlugin();
 
 var Chart = require('../../js/components/Chart.jsx');
 
@@ -62,7 +65,7 @@ describe('Chart', function() {
     var divs = container.querySelectorAll('div');
     var found = false;
     for (var i = 0, ii = divs.length; i < ii; ++i) {
-      if (divs[i].getAttribute('value') === charts[0].title) {
+      if (divs[i].innerHTML === charts[0].title) {
         found = true;
         break;
       }
