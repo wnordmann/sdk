@@ -72,6 +72,9 @@ class QGISLegend extends React.Component {
       visible: this.props.showExpandedOnStartup
     };
   }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
+  }
   _hidePanel() {
     this.setState({visible: false});
   }
@@ -168,6 +171,10 @@ QGISLegend.defaultProps = {
 
 QGISLegend.contextTypes = {
   muiTheme: React.PropTypes.object
+};
+
+QGISLegend.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(QGISLegend);

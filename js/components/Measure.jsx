@@ -21,6 +21,7 @@ import RaisedButton from './Button.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import ToolUtil from '../toolutil.js';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -85,6 +86,9 @@ class Measure extends React.Component {
         color: '#FFA000'
       })
     });
+  }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
   }
   componentDidMount() {
     var areaStyle = this._areaStyle;
@@ -311,6 +315,10 @@ Measure.defaultProps = {
     margin: '10px 12px'
   },
   geodesic: true
+};
+
+Measure.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(Measure);

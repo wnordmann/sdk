@@ -22,6 +22,7 @@ import Slider from 'material-ui/Slider';
 import DatePicker from 'material-ui/DatePicker';
 import LayerStore from '../stores/LayerStore.js';
 import {injectIntl, intlShape} from 'react-intl';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
 
 /**
@@ -61,6 +62,9 @@ class Playback extends React.Component {
     // TODO
     this._loading = 0;
     this._loaded = 0;
+  }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
   }
   componentDidMount() {
     this._onChangeCb = this._onChange.bind(this);
@@ -210,12 +214,12 @@ class Playback extends React.Component {
       this._refreshTimeLayers();
       if (this.state.dates) {
         controls.push(<Slider step={1} key='slider' style={{width: 200, 'float': 'left', marginTop: 8}} min={0} max={this.state.dates.length - 1} value={this.state.dateStep} onChange={this._onRangeChangeValues.bind(this)} />,
-        <DatePicker key='date' disabled={true} autoOk={true} style={{width: 200, paddingLeft: 15, overflow: 'hidden'}} value={new Date(this.state.date)} />);
+        <DatePicker name='date' key='date' disabled={true} autoOk={true} style={{width: 200, paddingLeft: 15, overflow: 'hidden'}} value={new Date(this.state.date)} />);
       } else if (this.state.minDate !== undefined && this.state.maxDate !== undefined) {
         var minDate = new Date(this.state.minDate);
         var maxDate = new Date(this.state.maxDate);
         controls.push(<Slider step={this.state.interval} key='slider' style={{width: 200, 'float': 'left', marginTop: 8}} min={this.state.minDate} max={this.state.maxDate} value={this.state.date} onChange={this._onRangeChange.bind(this)} />,
-      <DatePicker key='date' autoOk={true} minDate={minDate} maxDate={maxDate} style={{width: 85, paddingLeft: 18, overflow: 'hidden'}} onChange={this._onDateChange.bind(this)} value={new Date(this.state.date)} />);
+      <DatePicker name='date' key='date' autoOk={true} minDate={minDate} maxDate={maxDate} style={{width: 85, paddingLeft: 18, overflow: 'hidden'}} onChange={this._onDateChange.bind(this)} value={new Date(this.state.date)} />);
       }
     }
     return (
@@ -265,6 +269,10 @@ Playback.defaultProps = {
   interval: 500,
   numIntervals: 100,
   autoPlay: false
+};
+
+Playback.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(Playback);

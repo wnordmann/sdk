@@ -103,6 +103,9 @@ class QueryBuilder extends React.Component {
       errorText: null
     };
   }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
+  }
   _onLayerSelectChange(layer) {
     this._layer = layer;
   }
@@ -225,6 +228,10 @@ QueryBuilder.propTypes = {
 
 QueryBuilder.contextTypes = {
   muiTheme: React.PropTypes.object
+};
+
+QueryBuilder.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(QueryBuilder);

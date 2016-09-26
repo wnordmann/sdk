@@ -7,6 +7,9 @@ var raf = require('raf');
 raf.polyfill();
 var ol = require('openlayers');
 var intl = require('../mock-i18n.js');
+var injectTapEventPlugin = require('react-tap-event-plugin');
+
+injectTapEventPlugin();
 
 var Playback = require('../../js/components/Playback.jsx');
 
@@ -42,12 +45,12 @@ describe('Playback', function() {
   });
 
 
-  it('zooms to the correct location when home button is pressed', function() {
+  it('has the correct date value', function() {
     var container = document.createElement('div');
     ReactDOM.render((
       <Playback minDate={500000000000} maxDate={1500000000000} intl={intl} map={map}/>
     ), container);
-    assert.equal(container.querySelector('input[type=text]').value, '11/5/1985');
+    assert.equal(container.querySelector('input[type=text]').value, '1985-11-05');
     ReactDOM.unmountComponentAtNode(container);
   });
 
