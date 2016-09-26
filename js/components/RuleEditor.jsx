@@ -21,6 +21,7 @@ import LineSymbolizerEditor from './LineSymbolizerEditor.jsx';
 import PointSymbolizerEditor from './PointSymbolizerEditor.jsx';
 import FilterEditor from './FilterEditor.jsx';
 import TextField from 'material-ui/TextField';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -58,6 +59,9 @@ class RuleEditor extends React.Component {
       value: 1,
       title: title
     };
+  }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
   }
   handleChange(value) {
     if (value === parseInt(value, 10)) {
@@ -110,7 +114,7 @@ class RuleEditor extends React.Component {
       const {formatMessage} = this.props.intl;
       var tabs = this._getTabs();
       return (
-        <Paper className={classNames('sdk-component rule-editor', this.props.className)} zIndex={2}>
+        <Paper className={classNames('sdk-component rule-editor', this.props.className)} zDepth={2}>
           <TextField value={this.state.title} ref='title' onBlur={this._onTitleBlur.bind(this)} onChange={this._onTitleChange.bind(this)} floatingLabelText={formatMessage(messages.titlelabel)} />
           <Tabs value={this.state.value} onChange={this.handleChange.bind(this)}>
             {tabs}
@@ -152,6 +156,10 @@ RuleEditor.propTypes = {
   * i18n message strings. Provided through the application through context.
   */
   intl: intlShape.isRequired
+};
+
+RuleEditor.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(RuleEditor);

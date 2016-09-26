@@ -24,6 +24,7 @@ import RuleEditor from './RuleEditor.jsx';
 import SLDService from '../services/SLDService.js';
 import OpenLayersService from '../services/OpenLayersService.js';
 import RESTService from '../services/RESTService.js';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Snackbar from 'material-ui/Snackbar';
 
 const messages = defineMessages({
@@ -89,6 +90,9 @@ class StyleModal extends React.Component {
         name: 'Rule 1'
       }]
     };
+  }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
   }
   componentDidMount() {
     if (this.props.layer.get('wfsInfo')) {
@@ -267,6 +271,10 @@ StyleModal.propTypes = {
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
+};
+
+StyleModal.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(StyleModal, {withRef: true});

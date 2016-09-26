@@ -150,6 +150,9 @@ class WFST extends React.Component {
     this._selectfeature = new SelectFeature(this._selectWMS, this);
     this._dirty = {};
   }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
+  }
   componentWillUnmount() {
     AppDispatcher.unregister(this._dispatchToken);
     AppDispatcher.unregister(this._dispatchToken2);
@@ -505,6 +508,10 @@ WFST.defaultProps = {
 
 WFST.contextTypes = {
   muiTheme: React.PropTypes.object
+};
+
+WFST.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(WFST, {withRef: true});
