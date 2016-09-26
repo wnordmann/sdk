@@ -149,6 +149,9 @@ class FeatureTable extends React.Component {
       help: false
     };
   }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
+  }
   componentWillMount() {
     FeatureStore.addChangeListener(this._onChange);
     this._onChange();
@@ -570,6 +573,10 @@ FeatureTable.defaultProps = {
 
 FeatureTable.contextTypes = {
   muiTheme: React.PropTypes.object
+};
+
+FeatureTable.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(FeatureTable, {withRef: true}); // withRef needed so apps can call setDimensionsOnState

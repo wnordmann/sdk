@@ -8,6 +8,9 @@ var raf = require('raf');
 raf.polyfill();
 var ol = require('openlayers');
 require('phantomjs-polyfill-object-assign');
+var injectTapEventPlugin = require('react-tap-event-plugin');
+
+injectTapEventPlugin();
 
 var EditForm = require('../../js/components/EditForm.jsx');
 

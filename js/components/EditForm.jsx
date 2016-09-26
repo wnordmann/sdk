@@ -73,6 +73,9 @@ class EditForm extends React.Component {
       feature: props.feature
     };
   }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
+  }
   componentWillReceiveProps(newProps) {
     if (newProps.feature !== this.state.feature) {
       this.setState({layer: newProps.layer, feature: newProps.feature, values: newProps.feature.getProperties()});
@@ -244,6 +247,10 @@ EditForm.propTypes = {
 
 EditForm.contextTypes = {
   muiTheme: React.PropTypes.object
+};
+
+EditForm.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(EditForm, {withRef: true});

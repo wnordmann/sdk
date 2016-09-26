@@ -20,6 +20,7 @@ import IconButton from 'material-ui/IconButton';
 import CloserIcon from 'material-ui/svg-icons/navigation/close';
 import classNames from 'classnames';
 import EditForm from './EditForm.jsx';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import './BasePopup.css';
 
 /**
@@ -39,6 +40,9 @@ class EditPopup extends React.Component {
     };
     this.props.map.on('singleclick', this._onMapClick, this);
     this.active = true;
+  }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
   }
   componentDidMount() {
     this.overlayPopup = new ol.Overlay({
@@ -146,6 +150,10 @@ EditPopup.propTypes = {
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
+};
+
+EditPopup.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(EditPopup);
