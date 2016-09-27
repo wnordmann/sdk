@@ -27,6 +27,13 @@ Extent to fit on the map initially.
 type: `arrayOf number`
 
 
+### `id`
+
+Identifier of the map div.
+
+type: `string`
+
+
 ### `intl`
 
 i18n message strings. Provided through the application through context.

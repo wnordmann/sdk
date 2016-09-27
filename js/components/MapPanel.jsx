@@ -127,7 +127,7 @@ class MapPanel extends React.Component {
       />);
     }
     return (
-      <div ref='map' className={classNames('sdk-component map-panel', this.props.className)}>{error}{this.props.children}</div>
+      <div id={this.props.id} ref='map' className={classNames('sdk-component map-panel', this.props.className)}>{error}{this.props.children}</div>
     );
   }
 }
@@ -137,6 +137,10 @@ MapPanel.propTypes = {
    * The map to use for this map panel.
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * Identifier of the map div.
+   */
+  id: React.PropTypes.string,
   /**
    * Css class name to apply on the map div.
    */
