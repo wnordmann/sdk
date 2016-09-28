@@ -99,6 +99,13 @@ global.Login = Login;
 import MapConfig from './components/MapConfig.jsx';
 global.MapConfig = MapConfig;
 
+
+import MapConfigTransformService from './services/MapConfigTransformService.js';
+global.MapConfigTransformService = MapConfigTransformService;
+
+import MapConfigService from './services/MapConfigService.js';
+global.MapConfigService = MapConfigService;
+
 import MapPanel from './components/MapPanel.jsx';
 global.MapPanel = MapPanel;
 
