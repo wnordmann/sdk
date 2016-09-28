@@ -35,9 +35,6 @@ import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 global.Toolbar = Toolbar;
 global.ToolbarGroup = ToolbarGroup;
 
-import RaisedButton from 'material-ui/RaisedButton';
-global.RaisedButton = RaisedButton;
-
 import IconMenu from 'material-ui/IconMenu';
 global.IconMenu = IconMenu;
 
