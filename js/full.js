@@ -25,6 +25,9 @@ global.IntlProvider = IntlProvider;
 import injectTapEventPlugin from 'react-tap-event-plugin';
 global.injectTapEventPlugin = injectTapEventPlugin;
 
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+global.getMuiTheme = getMuiTheme;
+
 import AppBar from 'material-ui/AppBar';
 global.AppBar = AppBar;
 
