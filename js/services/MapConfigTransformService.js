@@ -24,7 +24,7 @@ class MapConfigTransformService {
         properties: {
           isRemovable: true,
           visible: layer.visibility,
-          title: layer.title,
+          title: layer.title || layer.name.split(':')[0],
           id: layer.name,
           name: layer.name
         }
@@ -35,23 +35,32 @@ class MapConfigTransformService {
           type: 'OSM'
         };
       } else if (source.ptype === 'gxp_wmscsource') {
-        layerConfig.properties.isSelectable = layer.capability.queryable;
-        layerConfig.properties.isWFST = layer.capability.queryable;
         layerConfig.properties.popupInfo = '#AllAttributes';
-        layerConfig.properties.styleName = layer.capability.styles[0].name;
-        layerConfig.properties.legendUrl = layer.capability.styles[0].legend.href;
-        layerConfig.properties.EX_GeographicBoundingBox = layer.capability.llbbox;
+        if (layer.capability) {
+          layerConfig.properties.isSelectable = layer.capability.queryable;
+          layerConfig.properties.isWFST = layer.capability.queryable;
+          layerConfig.properties.styleName = layer.capability.styles[0].name;
+          layerConfig.properties.legendUrl = layer.capability.styles[0].legend.href;
+          layerConfig.properties.EX_GeographicBoundingBox = layer.capability.llbbox;
+        }
         layerConfig.type = 'Tile';
+        var params = {
+          LAYERS: layer.name,
+          TILED: 'TRUE'
+        };
+        if (layer.styles) {
+          params.STYLES = layer.styles;
+        }
+        if (layer.format) {
+          params.FORMAT = layer.format;
+        }
+        if (layer.transparent !== undefined) {
+          params.TRANSPARENT = layer.transparent;
+        }
         layerConfig.source = {
           type: 'TileWMS',
           properties: {
-            params: {
-              LAYERS: layer.name,
-              STYLES: layer.styles,
-              TILED: 'TRUE',
-              FORMAT: layer.format,
-              TRANSPARENT: layer.transparent
-            },
+            params: params,
             url: source.url
           }
         };
