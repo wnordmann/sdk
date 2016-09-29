@@ -36,6 +36,15 @@ const graphicFormats = {
   'image/png': /\.png$/i
 };
 
+// make sure <= is on top of < etc.
+const comparisonOps = {
+  '==': 'PropertyIsEqualTo',
+  '>=': 'PropertyIsGreaterThanOrEqualTo',
+  '<=': 'PropertyIsLessThanOrEqualTo',
+  '>' : 'PropertyIsGreaterThan',
+  '<' : 'PropertyIsLessThan'
+};
+
 class SLDService {
   parse(sld) {
     var result = {rules: []};
@@ -59,7 +68,50 @@ class SLDService {
       // TODO does it make sense to keep symbolizers separate?
       Object.assign(rule, this.parseSymbolizer(ruleObj.symbolizer[i]));
     }
+    if (ruleObj.filter) {
+      rule.expression = this.filterToExpression(ruleObj.filter);
+    }
     return rule;
+  }
+  parseComparisonOps(op) {
+    var name, value, operator;
+    for (var key in comparisonOps) {
+      if (comparisonOps[key] === op.name.localPart) {
+        operator = key;
+        break;
+      }
+    }
+    for (var i = 0, ii = op.value.expression.length; i < ii; ++i) {
+      var expr = op.value.expression[i];
+      if (expr.name.localPart === 'PropertyName') {
+        name = expr.value.content[0];
+      }
+      if (expr.name.localPart === 'Literal') {
+        value = expr.value.content[0];
+      }
+    }
+    if (name !== undefined && value !== undefined && operator !== undefined) {
+      return name + ' ' + operator + ' ' + value;
+    }
+  }
+  parseLogicOps(logicOps) {
+    var expressions = [];
+    // TODO other logical operators
+    if (logicOps.name.localPart === 'And') {
+      for (var i = 0, ii = logicOps.value.ops.length; i < ii; ++i) {
+        var op = logicOps.value.ops[i];
+        // TODO this can be another logical as well
+        expressions.push(this.parseComparisonOps(op));
+      }
+      return expressions.join(' ' + logicOps.name.localPart.toLowerCase() + ' ');
+    }
+  }
+  filterToExpression(filter) {
+    if (filter.comparisonOps) {
+      return this.parseComparisonOps(filter.comparisonOps);
+    } else if (filter.logicOps) {
+      return this.parseLogicOps(filter.logicOps);
+    }
   }
   parseSymbolizer(symbolizerObj) {
     if (symbolizerObj.name.localPart === 'PolygonSymbolizer') {
@@ -253,7 +305,7 @@ class SLDService {
         graphic: {
           externalGraphicOrMark: graphicOrMark,
           rotation: {
-            content: [styleState.rotation]
+            content: styleState.rotation !== undefined ? [styleState.rotation] : undefined
           },
           size: {
             content: [styleState.symbolSize]
@@ -302,14 +354,30 @@ class SLDService {
     };
   }
   expressionToFilter(expression) {
+    // TODO handle more
+    if (expression.indexOf('and') !== -1) {
+      var expressions = expression.split(' and ');
+      var result = {
+        logicOps: {
+          name: {
+            namespaceURI: ogcNamespace,
+            localPart: 'And'
+          },
+          value: {
+            ops: []
+          }
+        }
+      };
+      for (var i = 0, ii = expressions.length; i < ii; ++i) {
+        result.logicOps.value.ops.push(this.expressionToComparisonOp(expressions[i]).comparisonOps);
+      }
+      return result;
+    } else {
+      return this.expressionToComparisonOp(expression);
+    }
+  }
+  expressionToComparisonOp(expression) {
     // TODO support more (complex) filters, maybe using jison
-    var comparisonOps = {
-      '==': 'PropertyIsEqualTo',
-      '>=': 'PropertyIsGreaterThanOrEqualTo',
-      '>' : 'PropertyIsGreaterThan',
-      '<' : 'PropertyIsLessThan',
-      '<=': 'PropertyIsLessThanOrEqualTo'
-    };
     var operator, property, value;
     for (var key in comparisonOps) {
       var idx = expression.indexOf(key);
@@ -317,6 +385,7 @@ class SLDService {
         operator = comparisonOps[key];
         property = expression.substring(0, idx).trim();
         value = expression.substring(idx + key.length).replace(/"/g, '').trim();
+        break;
       }
     }
     if (operator) {
