@@ -24,7 +24,7 @@ class MapConfigTransformService {
         properties: {
           isRemovable: true,
           visible: layer.visibility,
-          title: layer.title || layer.name.split(':')[0],
+          title: layer.title || layer.name.split(':').pop(),
           id: layer.name,
           name: layer.name
         }
