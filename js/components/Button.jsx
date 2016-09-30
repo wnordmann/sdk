@@ -5,7 +5,6 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import classNames from 'classnames';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
-import './Button.css';
 
 /**
  * Button with built-in tooltip.
