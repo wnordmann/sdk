@@ -86,8 +86,8 @@ class Zoom extends React.Component {
     const {formatMessage} = this.props.intl;
     return (
       <div className={classNames('sdk-component zoom', this.props.className)}>
-        <Button buttonType='Action' mini={true} tooltipStyle={{'top':'-50px'}} tooltipPosition='top-right' style={styles.root} tooltip={this.props.zoomInTipLabel ? this.props.zoomInTipLabel : formatMessage(messages.zoomintitle)} onTouchTap={this._zoomIn.bind(this)}><ZoomIn /></Button><br/>
-        <Button buttonType='Action' mini={true} tooltipStyle={{'top':'-50px'}} tooltipPosition='top-right' style={Object.assign({marginTop: 15}, styles.root)} tooltip={this.props.zoomOutTipLabel ? this.props.zoomOutTipLabel : formatMessage(messages.zoomouttitle)} onTouchTap={this._zoomOut.bind(this)}><ZoomOut /></Button>
+        <Button buttonType='Action' mini={true} style={styles.root} tooltip={this.props.zoomInTipLabel ? this.props.zoomInTipLabel : formatMessage(messages.zoomintitle)} onTouchTap={this._zoomIn.bind(this)}><ZoomIn /></Button><br/>
+        <Button buttonType='Action' mini={true} style={Object.assign({marginTop: 15}, styles.root)} tooltip={this.props.zoomOutTipLabel ? this.props.zoomOutTipLabel : formatMessage(messages.zoomouttitle)} onTouchTap={this._zoomOut.bind(this)}><ZoomOut /></Button>
       </div>
     );
   }

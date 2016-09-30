@@ -15,19 +15,23 @@ class Button extends React.Component {
     return {muiTheme: getMuiTheme()};
   }
   render() {
-    var button, buttonStyle, hintStyle;
+    var button, buttonStyle;
     if (this.props.buttonType === 'Action') {
       button = (<FloatingActionButton iconStyle={this.props.iconStyle} backgroundColor={this.props.backgroundColor} onTouchTap={this.props.onTouchTap} style={this.props.style} children={this.props.children} mini={this.props.mini}  />);
     } else if (this.props.buttonType === 'Flat') {
-      hintStyle = 'hint--small';
       button = (<FlatButton onTouchTap={this.props.onTouchTap} icon={this.props.icon} children={this.props.children} label={this.props.label} />);
     } else {
-      hintStyle = 'hint--small';
       buttonStyle = {margin: '10px 12px'};
       button = (<RaisedButton disabled={this.props.disabled} style={this.props.style} secondary={this.props.secondary} onTouchTap={this.props.onTouchTap} icon={this.props.icon} children={this.props.children} label={this.props.label} />);
     }
+    var className = {
+      'sdk-component': true,
+      'sdk-button': true,
+      'hint--small': this.props.buttonType !== 'Action'
+    };
+    className['hint--' + this.props.tooltipPosition] = this.props.tooltip !== undefined;
     return (
-      <span style={buttonStyle} className={classNames('hint--bottom', hintStyle, this.props.className)} aria-label={this.props.tooltip}>
+      <span style={buttonStyle} className={classNames(className, this.props.className)} aria-label={this.props.tooltip}>
         {button}
       </span>
     );
@@ -39,6 +43,10 @@ Button.propTypes = {
    * Type of button.
    */
   buttonType: React.PropTypes.oneOf(['Raised', 'Flat', 'Action']),
+  /**
+   * Position of the tooltip.
+   */
+  tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left']),
   /**
    * Should this button be disabled?
    */
@@ -90,7 +98,8 @@ Button.propTypes = {
 };
 
 Button.defaultProps = {
-  buttonType: 'Raised'
+  buttonType: 'Raised',
+  tooltipPosition: 'bottom'
 };
 
 Button.childContextTypes = {

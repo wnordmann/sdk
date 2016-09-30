@@ -97,3 +97,11 @@ The tooltip to show for this button.
 
 type: `string`
 
+
+### `tooltipPosition`
+
+Position of the tooltip.
+
+type: `enum ('bottom'|'bottom-right'|'bottom-left'|'right'|'left'|'top-right'|'top'|'top-left')`
+defaultValue: `'bottom'`
+

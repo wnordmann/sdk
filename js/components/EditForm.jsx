@@ -16,7 +16,7 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Snackbar from 'material-ui/Snackbar';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import classNames from 'classnames';
-import RaisedButton from './Button.jsx';
+import Button from './Button.jsx';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import SaveIcon from 'material-ui/svg-icons/content/save';
 import TextField from 'material-ui/TextField';
@@ -201,8 +201,8 @@ class EditForm extends React.Component {
         {error}
         <div className='edit-form-submit'>
           <span style={{'float':'right'}}>
-            <RaisedButton style={{margin: '0px 12px'}} ref='saveButton' tooltip={formatMessage(messages.savetitle)} tooltipStyle={{'top':'-50px'}} label={formatMessage(messages.save)} onTouchTap={this.save.bind(this)} icon={<SaveIcon />} />
-            <RaisedButton style={{margin: '0px 12px'}} ref='deleteButton' tooltip={formatMessage(messages.deletefeaturetitle)} tooltipStyle={{'top':'-50px'}} label={formatMessage(messages.deletefeature)} onTouchTap={this.deleteFeature.bind(this)} icon={<DeleteIcon />} />
+            <Button ref='saveButton' tooltip={formatMessage(messages.savetitle)} tooltipPosition='top' label={formatMessage(messages.save)} onTouchTap={this.save.bind(this)} icon={<SaveIcon />} />
+            <Button ref='deleteButton' tooltip={formatMessage(messages.deletefeaturetitle)} tooltipPosition='top' label={formatMessage(messages.deletefeature)} onTouchTap={this.deleteFeature.bind(this)} icon={<DeleteIcon />} />
           </span>
         </div>
       </div>

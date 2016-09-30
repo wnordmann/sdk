@@ -147,7 +147,7 @@ class Geolocation extends React.Component {
         tooltip += ' (' + formatMessage(messages.trackingtitle) + ')';
       }
       return (
-        <Button iconStyle={iconStyle} tooltipStyle={{'top':'-50px'}} buttonType='Action' mini={true} secondary={true} style={styles.root} className={classNames('sdk-component geolocation', this.props.className)} tooltipPosition='top-right' tooltip={tooltip} onTouchTap={this._geolocate.bind(this)}><MyLocation /></Button>
+        <Button iconStyle={iconStyle} buttonType='Action' mini={true} secondary={true} style={styles.root} className={classNames('sdk-component geolocation', this.props.className)} tooltip={tooltip} onTouchTap={this._geolocate.bind(this)}><MyLocation /></Button>
       );
     }
   }
