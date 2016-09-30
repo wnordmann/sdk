@@ -37,6 +37,7 @@
     "debounce": "^1.0.0",
     "fixed-data-table": "0.6.3",
     "flux": "^2.0.1",
+    "hint.css": "^2.4.0",
     "jison": "^0.4.17",
     "jsonix": "^2.4.1",
     "jspdf-browserify": "^1.0.272",
