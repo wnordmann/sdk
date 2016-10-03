@@ -14,7 +14,7 @@ import React from 'react';
 import classNames from 'classnames';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
-import RaisedButton from 'material-ui/RaisedButton';
+import Button from './Button.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import LoginModal from './LoginModal.jsx';
 import AppDispatcher from '../dispatchers/AppDispatcher.js';
@@ -101,15 +101,15 @@ class Login extends React.Component {
     const {formatMessage} = this.props.intl;
     if (this.state.user !== null) {
       return (
-        <IconMenu {...this.props} anchorOrigin={{horizontal: 'left', vertical: 'top'}} targetOrigin={{horizontal: 'left', vertical: 'top'}} className={classNames('sdk-component login', this.props.className)} iconButtonElement={<RaisedButton label={this.state.user} />} onItemTouchTap={this._doLogout.bind(this)}>
+        <IconMenu anchorOrigin={{horizontal: 'left', vertical: 'top'}} targetOrigin={{horizontal: 'left', vertical: 'top'}} className={classNames('sdk-component login', this.props.className)} iconButtonElement={<Button label={this.state.user} />} onItemTouchTap={this._doLogout.bind(this)}>
           <MenuItem primaryText={formatMessage(messages.logouttext)}/>
         </IconMenu>
       );
     } else {
       return (
-        <RaisedButton style={this.props.style} className={classNames('sdk-component login', this.props.className)} label={formatMessage(messages.buttontext)} onTouchTap={this._showLoginDialog.bind(this)}>
+        <Button className={classNames('sdk-component login', this.props.className)} label={formatMessage(messages.buttontext)} onTouchTap={this._showLoginDialog.bind(this)}>
           <LoginModal ref='loginmodal' {...this.props} />
-        </RaisedButton>
+        </Button>
       );
     }
   }
@@ -125,19 +125,12 @@ Login.propTypes = {
    */
   className: React.PropTypes.string,
   /**
-   * Style config object.
-   */
-  style: React.PropTypes.object,
-  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
 };
 
 Login.defaultProps = {
-  style: {
-    margin: '10px 12px'
-  },
   url: '/geoserver/app/api/login'
 };
 

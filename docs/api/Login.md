@@ -24,16 +24,6 @@ i18n message strings. Provided through the application through context.
 type: `custom`
 
 
-### `style`
-
-Style config object.
-
-type: `object`
-defaultValue: `{
-  margin: '10px 12px'
-}`
-
-
 ### `url`
 
 Url to geoserver login endpoint.
