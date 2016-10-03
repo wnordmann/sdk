@@ -178,7 +178,7 @@ class LayerList extends React.Component {
     }
     return (
       <div ref='parent' className={classNames(divClass, this.props.className)}>
-        <Button buttonType='Action' mini={true} style={styles.root} className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={this._togglePanel.bind(this)}><LayersIcon /></Button>
+        <Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} style={styles.root} className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={this._togglePanel.bind(this)}><LayersIcon /></Button>
         <div className='layer-tree-panel clearfix'>
           {tipLabel}
           <List className='layer-list-list'>
@@ -264,6 +264,10 @@ LayerList.propTypes = {
    * Css class name to apply on the root element of this component.
    */
   className: React.PropTypes.string,
+  /**
+   * Position of the tooltip.
+   */
+  tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left']),
   /**
   * i18n message strings. Provided through the application through context.
   */

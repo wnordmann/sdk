@@ -127,7 +127,7 @@ class Globe extends React.Component {
       tooltip = formatMessage(messages.globetext);
     }
     return (
-      <Button buttonType='Action' mini={true} secondary={true} className={classNames('sdk-component globe', this.props.className)} style={styles.root} tooltip={tooltip} onTouchTap={this._toggle.bind(this)}>{icon}</Button>
+      <Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} secondary={true} className={classNames('sdk-component globe', this.props.className)} style={styles.root} tooltip={tooltip} onTouchTap={this._toggle.bind(this)}>{icon}</Button>
     );
   }
 }
@@ -137,6 +137,10 @@ Globe.propTypes = {
    * Resolution at which to hide the scalebar in 3D mode
    */
   hideScalebar: React.PropTypes.number,
+  /**
+   * Position of the tooltip.
+   */
+  tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left']),
   /**
    * The ol3 map instance to work on.
    */
