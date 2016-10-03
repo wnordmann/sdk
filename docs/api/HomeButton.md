@@ -46,3 +46,10 @@ Style for the button.
 
 type: `object`
 
+
+### `tooltipPosition`
+
+Position of the tooltip.
+
+type: `enum ('bottom'|'bottom-right'|'bottom-left'|'right'|'left'|'top-right'|'top'|'top-left')`
+

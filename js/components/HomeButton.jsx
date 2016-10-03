@@ -81,7 +81,7 @@ class HomeButton extends React.Component {
     const {formatMessage} = this.props.intl;
     const styles = this.getStyles();
     return (
-      <Button buttonType='Action' mini={true} secondary={true} className={classNames('sdk-component home-button', this.props.className)} style={styles.root} tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._goHome.bind(this)} ><HomeIcon /></Button>
+      <Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} secondary={true} className={classNames('sdk-component home-button', this.props.className)} style={styles.root} tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._goHome.bind(this)} ><HomeIcon /></Button>
     );
   }
 }
@@ -91,6 +91,10 @@ HomeButton.propTypes = {
    * The ol3 map for whose view the initial center and zoom should be restored.
    */
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
+  /**
+   * Position of the tooltip.
+   */
+  tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left']),
   /**
    * Extent to fit on the map on pressing this button. If not set, the initial extent of the map will be used.
    */
