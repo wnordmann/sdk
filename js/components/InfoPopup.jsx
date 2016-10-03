@@ -19,6 +19,7 @@ import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import ToolUtil from '../toolutil.js';
 import ToolConstants from '../constants/ToolConstants.js';
 import WMSService from '../services/WMSService.js';
+import WMTSService from '../services/WMTSService.js';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import IconButton from 'material-ui/IconButton';
 import CloserIcon from 'material-ui/svg-icons/navigation/close';
@@ -123,7 +124,7 @@ class InfoPopup extends React.Component {
     var layers = [];
     for (var i = 0, ii = state.flatLayers.length; i < ii; ++i) {
       var layer = state.flatLayers[i];
-      if (layer instanceof ol.layer.Tile && layer.getVisible() && layer.getSource() instanceof ol.source.TileWMS && layer.get('popupInfo') && layer.get('popupInfo') !== '') {
+      if (layer instanceof ol.layer.Tile && layer.getVisible() && (layer.getSource() instanceof ol.source.TileWMS || layer.getSource() instanceof ol.source.WMTS) && layer.get('popupInfo') && layer.get('popupInfo') !== '') {
         layers.push(layer);
       }
     }
@@ -225,7 +226,11 @@ class InfoPopup extends React.Component {
         called = true;
         var infoFormat = this.props.infoFormat;
         var callback = (infoFormat === 'text/plain' || infoFormat === 'text/html') ? onReadyAll : onReady;
-        WMSService.getFeatureInfo(layer, evt.coordinate, view, infoFormat, callback);
+        if (layer.getSource() instanceof ol.source.TileWMS) {
+          WMSService.getFeatureInfo(layer, evt.coordinate, view, infoFormat, callback);
+        } else if (layer.getSource() instanceof ol.source.WMTS) {
+          WMTSService.getFeatureInfo(layer, evt.coordinate, view, infoFormat, callback);
+        }
       } else if (popupDef) {
         called = true;
         WMSService.getFeatureInfo(layer, evt.coordinate, view, 'application/json', onReady);
