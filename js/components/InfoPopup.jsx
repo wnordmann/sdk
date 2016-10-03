@@ -222,18 +222,16 @@ class InfoPopup extends React.Component {
     for (var i = 0; i < len; i++) {
       var layer = allLayers[i];
       popupDef = layer.get('popupInfo');
+      var source = layer.getSource();
+      var service = source instanceof ol.source.TileWMS ? WMSService : WMTSService;
       if (popupDef === ALL_ATTRS) {
         called = true;
         var infoFormat = this.props.infoFormat;
         var callback = (infoFormat === 'text/plain' || infoFormat === 'text/html') ? onReadyAll : onReady;
-        if (layer.getSource() instanceof ol.source.TileWMS) {
-          WMSService.getFeatureInfo(layer, evt.coordinate, view, infoFormat, callback);
-        } else if (layer.getSource() instanceof ol.source.WMTS) {
-          WMTSService.getFeatureInfo(layer, evt.coordinate, view, infoFormat, callback);
-        }
+        service.getFeatureInfo(layer, evt.coordinate, view, infoFormat, callback);
       } else if (popupDef) {
         called = true;
-        WMSService.getFeatureInfo(layer, evt.coordinate, view, 'application/json', onReady);
+        service.getFeatureInfo(layer, evt.coordinate, view, 'application/json', onReady);
       }
     }
     if (called === false) {
