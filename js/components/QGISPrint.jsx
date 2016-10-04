@@ -307,8 +307,11 @@ class QGISPrint extends React.Component {
   render() {
     const {formatMessage} = this.props.intl;
     var listitems = this.props.layouts.map(function(lyt, idx) {
-      var href = this.props.thumbnailPath + lyt.thumbnail;
-      return (<MenuItem onTouchTap={this._onClick.bind(this, lyt)} key={idx} value={lyt.name} primaryText={lyt.name}><div><img src={href}/></div></MenuItem>);
+      var thumbnail;
+      if (lyt.thumbnail) {
+        thumbnail = (<img src={this.props.thumbnailPath + lyt.thumbnail}/>);
+      }
+      return (<MenuItem onTouchTap={this._onClick.bind(this, lyt)} key={idx} value={lyt.name} primaryText={lyt.name}><div>{thumbnail}</div></MenuItem>);
     }, this);
     var dialog, layout = this.state.layout;
     if (layout !== null) {
@@ -372,14 +375,14 @@ QGISPrint.propTypes = {
   map: React.PropTypes.instanceOf(ol.Map).isRequired,
   /**
    * An array of print layouts. Each layout is an object with keys such as: name (string, required),
-   * thumbnail (string, required), width (number, required), height (number, required) and an array of elements.
+   * thumbnail (string), width (number, required), height (number, required) and an array of elements.
    * Elements are objects with keys such as name (string, optional), type (enum('map', 'label', legend'), optional),
    * height (number, required), width (number, required), x (number, required), y (number, required), font (string),
    * id (string, required), size (number), grid (object with intervalX, intervalY, annotationEnabled and crs keys).
    */
   layouts: React.PropTypes.arrayOf(React.PropTypes.shape({
     name: React.PropTypes.string.isRequired,
-    thumbnail: React.PropTypes.string.isRequired,
+    thumbnail: React.PropTypes.string,
     width: React.PropTypes.number.isRequired,
     elements: React.PropTypes.arrayOf(React.PropTypes.shape({
       name: React.PropTypes.string,

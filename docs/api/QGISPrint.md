@@ -60,7 +60,7 @@ type: `custom`
 ### `layouts` (required)
 
 An array of print layouts. Each layout is an object with keys such as: name (string, required),
-thumbnail (string, required), width (number, required), height (number, required) and an array of elements.
+thumbnail (string), width (number, required), height (number, required) and an array of elements.
 Elements are objects with keys such as name (string, optional), type (enum('map', 'label', legend'), optional),
 height (number, required), width (number, required), x (number, required), y (number, required), font (string),
 id (string, required), size (number), grid (object with intervalX, intervalY, annotationEnabled and crs keys).
