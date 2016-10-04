@@ -152,7 +152,7 @@ class Measure extends React.Component {
     this._createTooltip();
   }
   _onDrawEnd() {
-    this._tooltipElement.className = 'tooltip tooltip-static';
+    this._tooltipElement.className = 'sdk-tooltip sdk-tooltip-static';
     this._tooltip.setOffset([0, -7]);
     this._sketch = null;
     this._tooltipElement = null;
@@ -215,7 +215,7 @@ class Measure extends React.Component {
       this._tooltipElement.parentNode.removeChild(this._tooltipElement);
     }
     this._tooltipElement = document.createElement('div');
-    this._tooltipElement.className = 'tooltip tooltip-measure';
+    this._tooltipElement.className = 'sdk-tooltip sdk-tooltip-measure';
     this._tooltip = new ol.Overlay({
       element: this._tooltipElement,
       offset: [0, -15],
