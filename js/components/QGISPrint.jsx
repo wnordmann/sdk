@@ -356,7 +356,7 @@ class QGISPrint extends React.Component {
     }
     return (
       <span className={classNames('sdk-component qgis-print', this.props.className)}>
-        <IconMenu style={this.props.style} anchorOrigin={{horizontal: 'left', vertical: 'top'}} targetOrigin={{horizontal: 'left', vertical: 'top'}} iconButtonElement={<Button label={formatMessage(messages.printmenutext)} />} value={this.state.layoutName}>
+        <IconMenu anchorOrigin={{horizontal: 'left', vertical: 'top'}} targetOrigin={{horizontal: 'left', vertical: 'top'}} iconButtonElement={<Button label={formatMessage(messages.printmenutext)} />} value={this.state.layoutName}>
           {listitems}
         </IconMenu>
         {dialog}
@@ -423,9 +423,6 @@ QGISPrint.propTypes = {
 };
 
 QGISPrint.defaultProps = {
-  style: {
-    margin: '10px 12px'
-  },
   thumbnailPath: '../../resources/print/',
   resolutions: [72, 150, 300]
 };

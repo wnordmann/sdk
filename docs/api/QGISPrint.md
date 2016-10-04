@@ -88,9 +88,6 @@ defaultValue: `[72, 150, 300]`
 Style config object for IconMenu.
 
 type: `object`
-defaultValue: `{
-  margin: '10px 12px'
-}`
 
 
 ### `thumbnailPath`
