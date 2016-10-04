@@ -32,7 +32,10 @@ class MapConfigTransformService {
       if (source.ptype === 'gxp_osmsource') {
         layerConfig.type = 'Tile';
         layerConfig.source = {
-          type: 'OSM'
+          type: 'OSM',
+          properties: {
+            crossOrigin: 'anonymous'
+          }
         };
       } else if (source.ptype === 'gxp_wmscsource') {
         layerConfig.properties.popupInfo = '#AllAttributes';
@@ -60,6 +63,7 @@ class MapConfigTransformService {
         layerConfig.source = {
           type: 'TileWMS',
           properties: {
+            crossOrigin: 'anonymous',
             params: params,
             url: source.url
           }
