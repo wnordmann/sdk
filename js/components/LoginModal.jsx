@@ -125,8 +125,8 @@ class LoginModal extends React.Component {
       />);
     }
     var actions = [
-      <Button buttonType='Flat' style={{margin: '10px 12px'}} secondary={true} label={formatMessage(messages.loginbutton)} onTouchTap={this._doLogin.bind(this)} />,
-      <Button buttonType='Flat' style={{margin: '10px 12px'}} label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
+      <Button buttonType='Flat' primary={true} label={formatMessage(messages.loginbutton)} onTouchTap={this._doLogin.bind(this)} />,
+      <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
     ];
     return (
       <Dialog className={classNames('sdk-component login-modal', this.props.className)} actions={actions} title={formatMessage(messages.title)} open={this.state.open} onRequestClose={this.close.bind(this)}>

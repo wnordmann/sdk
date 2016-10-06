@@ -19,7 +19,7 @@ class Button extends React.Component {
     if (this.props.buttonType === 'Action') {
       button = (<FloatingActionButton iconStyle={this.props.iconStyle} backgroundColor={this.props.backgroundColor} onTouchTap={this.props.onTouchTap} style={this.props.style} children={this.props.children} mini={this.props.mini}  />);
     } else if (this.props.buttonType === 'Flat') {
-      button = (<FlatButton onTouchTap={this.props.onTouchTap} icon={this.props.icon} children={this.props.children} label={this.props.label} />);
+      button = (<FlatButton secondary={this.props.secondary} primary={this.props.primary} onTouchTap={this.props.onTouchTap} icon={this.props.icon} children={this.props.children} label={this.props.label} />);
     } else {
       buttonStyle = {margin: '10px 12px'};
       button = (<RaisedButton disabled={this.props.disabled} style={this.props.style} secondary={this.props.secondary} onTouchTap={this.props.onTouchTap} icon={this.props.icon} children={this.props.children} label={this.props.label} />);
@@ -87,6 +87,10 @@ Button.propTypes = {
    * Label to show on the button.
    */
   label: React.PropTypes.string,
+  /**
+   * Should we use the primary state?
+   */
+  primary: React.PropTypes.bool,
   /**
    * Should we use the secondary state?
    */

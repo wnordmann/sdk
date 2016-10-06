@@ -352,7 +352,7 @@ class AddLayerModal extends React.Component {
       );
     }
     var actions = [
-      <Button buttonType='Flat' label={formatMessage(messages.addbutton)} onTouchTap={this.addLayers.bind(this)} />,
+      <Button buttonType='Flat' primary={true} label={formatMessage(messages.addbutton)} onTouchTap={this.addLayers.bind(this)} />,
       <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
     ];
     return (

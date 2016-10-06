@@ -77,6 +77,13 @@ Function to execute when the button is clicked.
 type: `func`
 
 
+### `primary`
+
+Should we use the primary state?
+
+type: `bool`
+
+
 ### `secondary`
 
 Should we use the secondary state?
