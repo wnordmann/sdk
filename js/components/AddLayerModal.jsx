@@ -19,6 +19,7 @@ import pureRender from 'pure-render-decorator';
 import TextField from 'material-ui/TextField';
 import Button from './Button.jsx';
 import {List, ListItem} from 'material-ui/List';
+import Checkbox from 'material-ui/Checkbox';
 import FolderIcon from 'material-ui/svg-icons/file/folder-open';
 import LayerIcon from 'material-ui/svg-icons/maps/layers';
 import URL from 'url-parse';
@@ -59,6 +60,11 @@ const messages = defineMessages({
     id: 'addwmslayermodal.connectbutton',
     description: 'Text for connect button',
     defaultMessage: 'Connect'
+  },
+  addbutton: {
+    id: 'addwmslayermodal.addbutton',
+    description: 'Text for the add button',
+    defaultMessage: 'Add'
   },
   closebutton: {
     id: 'addwmslayermodal.closebutton',
@@ -268,15 +274,15 @@ class AddLayerModal extends React.Component {
       }, this);
       childList = children;
     }
-    var onTouchTap;
+    var onCheck;
     if (layer.Name) {
-      onTouchTap = this._onLayerClick.bind(this, layer);
+      onCheck = this._onCheck.bind(this, layer);
     }
-    var leftIcon;
+    var icon;
     if (layer.Layer) {
-      leftIcon = <FolderIcon />;
+      icon = <FolderIcon />;
     } else if (layer.Name) {
-      leftIcon = <LayerIcon />;
+      icon = <LayerIcon />;
     }
     var layerTitle = this._getLayerTitle(layer);
     var primaryText;
@@ -286,8 +292,18 @@ class AddLayerModal extends React.Component {
       primaryText = layerTitle.title;
     }
     return (
-      <ListItem onTouchTap={onTouchTap} leftIcon={leftIcon} initiallyOpen={true} key={layer.Name} primaryText={primaryText} secondaryText={layer.Name} nestedItems={childList} disableTouchRipple={true}/>
+      <ListItem leftCheckbox={<Checkbox onCheck={onCheck} />} rightIcon={icon} initiallyOpen={true} key={layer.Name} primaryText={primaryText} secondaryText={layer.Name} nestedItems={childList} />
     );
+  }
+  _onCheck(layer, proxy, checked) {
+    if (checked) {
+      this._checkedLayers.push(layer);
+    } else {
+      var idx = this._checkedLayers.indexOf(layer)
+      if (idx > -1) {
+        this._checkedLayers.splice(idx, 1);
+      }
+    }
   }
   open() {
     this._getCaps(this.props.url);
@@ -296,12 +312,18 @@ class AddLayerModal extends React.Component {
   close() {
     this.setState({open: false});
   }
+  addLayers() {
+    for (var i = 0, ii = this._checkedLayers.length; i < ii; ++i) {
+      this._onLayerClick(this._checkedLayers[i]);
+    }
+  }
   _handleRequestClose() {
     this.setState({
       errorOpen: false
     });
   }
   render() {
+    this._checkedLayers = [];
     const {formatMessage} = this.props.intl;
     var layers;
     if (this.state.layerInfo) {
@@ -330,6 +352,7 @@ class AddLayerModal extends React.Component {
       );
     }
     var actions = [
+      <Button buttonType='Flat' label={formatMessage(messages.addbutton)} onTouchTap={this.addLayers.bind(this)} />,
       <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
     ];
     return (
