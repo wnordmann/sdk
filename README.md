@@ -1,4 +1,7 @@
 # SDK
+
+[![Travis CI Status](https://secure.travis-ci.org/boundlessgeo/sdk.svg)](http://travis-ci.org/#!/boundlessgeo/sdk)
+
 New javascript SDK based on React and Flux
 For example usage see: https://github.com/boundlessgeo/sdk-apps
 
