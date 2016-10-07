@@ -55,7 +55,7 @@
     "react-dropzone": "3.6.0",
     "react-intl": "2.0.0-rc-1",
     "react-responsive-decorator": "0.0.1",
-    "react-slick": "0.9.1",
+    "react-slick": "^0.14.5",
     "react-tap-event-plugin": "^1.0.0",
     "slick-carousel-dr-frankenstyle": "^1.5.8",
     "url-parse": "^1.1.1",
