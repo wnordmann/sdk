@@ -45,6 +45,9 @@ class WFSService {
         var ft = info.featureTypeList.featureType[i];
         var layer = {};
         layer.Name = ft.name.prefix + ':' + ft.name.localPart;
+        if (ft.keywords) {
+          layer.KeywordList = ft.keywords[0].keyword;
+        }
         layer.Title = ft.title;
         layer.Abstract = ft._abstract;
         layer.EX_GeographicBoundingBox = [

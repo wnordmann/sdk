@@ -299,8 +299,24 @@ class AddLayerModal extends React.Component {
       primaryText = layerTitle.title;
     }
     var displayValue = 'block';
-    if (filter !== null && layerTitle.title.toUpperCase().indexOf(filter.toUpperCase()) === -1) {
-      displayValue = 'none';
+    var search = [layer.Title];
+    if (layer.Abstract !== undefined) {
+      search.push(layer.Abstract);
+    }
+    if (layer.KeywordList) {
+      search = search.concat(layer.KeywordList);
+    }
+    if (filter !== null) {
+      var match = false;
+      for (var i = 0, ii = search.length; i < ii; ++i) {
+        if (search[i].toUpperCase().indexOf(filter.toUpperCase()) !== -1) {
+          match = true;
+          break;
+        }
+      }
+      if (match === false) {
+        displayValue = 'none';
+      }
     }
     return (
       <ListItem style={{display: displayValue}} leftCheckbox={<Checkbox onCheck={onCheck} />} rightIcon={icon} initiallyOpen={true} key={layer.Name} primaryText={primaryText} secondaryText={layer.Name} nestedItems={childList} />
