@@ -8,7 +8,7 @@
     "url": "https://github.com/boundlessgeo/sdk.git"
   },
   "scripts": {
-    "cover": "node_modules/.bin/mochify --plugin [ mochify-istanbul --report text --exclude **/js/constants/* --exclude **/js/**/*.css --exclude **/__tests__/**/* ] --transform ./scripts/test-transform.js __tests__/**/*.test.js",
+    "cover": "node_modules/.bin/mochify --plugin [ mochify-istanbul --report text --report lcovonly --dir ./coverage --exclude **/js/constants/* --exclude **/js/**/*.css --exclude **/__tests__/**/* ] --transform ./scripts/test-transform.js __tests__/**/*.test.js",
     "postinstall": "node scripts/install.js",
     "i18n": "node scripts/generate-locale.js",
     "css:drfrankenstyle": "node_modules/.bin/dr-frankenstyle dist/css",
@@ -69,6 +69,7 @@
     "chai": "^1.10.0",
     "chai-xml": "^0.3.1",
     "clean-css": "^3.4.6",
+    "coveralls": "^2.11.14",
     "cssify": "^0.8.0",
     "dr-frankenstyle-win": "0.2.12",
     "envify": "3.4.0",
@@ -80,6 +81,7 @@
     "licensify": "^2.2.0",
     "minifyify": "^7.1.0",
     "mocha": "^2.1.0",
+    "mocha-lcov-reporter": "^1.2.0",
     "mochify": "^2.10.0",
     "mochify-istanbul": "^2.4.1",
     "npm-run-all": "^1.2.11",

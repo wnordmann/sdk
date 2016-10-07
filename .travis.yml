@@ -19,6 +19,10 @@ before_script:
 
 script: "npm run test"
 
+after_success:
+  - "npm run cover"
+  - "cat coverage/lcov.info | ./node_modules/.bin/coveralls"
+
 branches:
   only:
     - master
