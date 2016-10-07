@@ -1,7 +1,7 @@
 # SDK
 
 [![Travis CI Status](https://secure.travis-ci.org/boundlessgeo/sdk.svg)](http://travis-ci.org/#!/boundlessgeo/sdk)
-[![Coverage Status](https://coveralls.io/repos/boundlessgeo/sdk/badge.svg?branch=master)](https://coveralls.io/r/boundlessgeo/sdk?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/boundlessgeo/sdk/badge.svg?branch=master)](https://coveralls.io/github/boundlessgeo/sdk?branch=master)
 
 New javascript SDK based on React and Flux
 For example usage see: https://github.com/boundlessgeo/sdk-apps
