@@ -41,6 +41,11 @@ const messages = defineMessages({
     description: 'Title to show if layer has no title',
     defaultMessage: 'No Title'
   },
+  filtertitle: {
+    id: 'addwmslayermodal.filtertitle',
+    description: 'Title for the filter field',
+    defaultMessage: 'Filter'
+  },
   errormsg: {
     id: 'addwmslayermodal.errormsg',
     description: 'Error message to show the user when an XHR request fails',
@@ -83,6 +88,7 @@ class AddLayerModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      filter: null,
       error: false,
       errorOpen: false,
       open: false,
@@ -267,6 +273,7 @@ class AddLayerModal extends React.Component {
     this._getCaps(url);
   }
   _getLayersMarkup(layer) {
+    var filter = this.state.filter;
     var childList;
     if (layer.Layer) {
       var children = layer.Layer.map(function(child) {
@@ -291,8 +298,12 @@ class AddLayerModal extends React.Component {
     } else {
       primaryText = layerTitle.title;
     }
+    var displayValue = 'block';
+    if (filter !== null && layerTitle.title.toUpperCase().indexOf(filter.toUpperCase()) === -1) {
+      displayValue = 'none';
+    }
     return (
-      <ListItem leftCheckbox={<Checkbox onCheck={onCheck} />} rightIcon={icon} initiallyOpen={true} key={layer.Name} primaryText={primaryText} secondaryText={layer.Name} nestedItems={childList} />
+      <ListItem style={{display: displayValue}} leftCheckbox={<Checkbox onCheck={onCheck} />} rightIcon={icon} initiallyOpen={true} key={layer.Name} primaryText={primaryText} secondaryText={layer.Name} nestedItems={childList} />
     );
   }
   _onCheck(layer, proxy, checked) {
@@ -321,6 +332,9 @@ class AddLayerModal extends React.Component {
     this.setState({
       errorOpen: false
     });
+  }
+  _onFilterChange(proxy, value) {
+    this.setState({filter: value});
   }
   render() {
     this._checkedLayers = [];
@@ -357,6 +371,7 @@ class AddLayerModal extends React.Component {
     ];
     return (
       <Dialog className={classNames('sdk-component add-layer-modal', this.props.className)}  actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title, {serviceType: serviceType})} open={this.state.open} onRequestClose={this.close.bind(this)}>
+        <TextField floatingLabelText={formatMessage(messages.filtertitle)} onChange={this._onFilterChange.bind(this)} />
         {input}
         {layers}
         {error}

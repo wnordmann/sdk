@@ -17,6 +17,7 @@ var enMessages = {
   "addwmslayermodal.connectbutton": "Connect",
   "addwmslayermodal.corserror": "Could not connect to GeoServer. Please verify that the server is online and CORS is enabled.",
   "addwmslayermodal.errormsg": "Error. {msg}",
+  "addwmslayermodal.filtertitle": "Filter",
   "addwmslayermodal.inputfieldlabel": "{serviceType} URL",
   "addwmslayermodal.nolayertitle": "No Title",
   "addwmslayermodal.title": "Add Layer from OGC:{serviceType}",
