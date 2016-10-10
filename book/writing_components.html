@@ -1,0 +1,849 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <title>Writing components · GitBook</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.0-pre.1">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+        <link rel="stylesheet" href="styles/website.css">
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="developers.html" />
+    
+    
+    <link rel="prev" href="tutorial.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="getting_started.html">
+            
+                <a href="getting_started.html">
+            
+                    
+                    Getting started
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="wab.html">
+            
+                <a href="wab.html">
+            
+                    
+                    QGIS Web Application Builder
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="tutorial.html">
+            
+                <a href="tutorial.html">
+            
+                    
+                    Tutorial
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.5" data-path="writing_components.html">
+            
+                <a href="writing_components.html">
+            
+                    
+                    Writing components
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="developers.html">
+            
+                <a href="developers.html">
+            
+                    
+                    For developers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="api.html">
+            
+                <a href="api.html">
+            
+                    
+                    API
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.1" data-path="api/AddLayer.html">
+            
+                <a href="api/AddLayer.html">
+            
+                    
+                    AddLayer
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.2" data-path="api/Bookmarks.html">
+            
+                <a href="api/Bookmarks.html">
+            
+                    
+                    Bookmarks
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3" data-path="api/Chart.html">
+            
+                <a href="api/Chart.html">
+            
+                    
+                    Chart
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.4" data-path="api/Edit.html">
+            
+                <a href="api/Edit.html">
+            
+                    
+                    Edit
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5" data-path="api/EditPopup.html">
+            
+                <a href="api/EditPopup.html">
+            
+                    
+                    EditPopup
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.6" data-path="api/FeatureTable.html">
+            
+                <a href="api/FeatureTable.html">
+            
+                    
+                    FeatureTable
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.7" data-path="api/Geocoding.html">
+            
+                <a href="api/Geocoding.html">
+            
+                    
+                    Geocoding
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.8" data-path="api/GeocodingResults.html">
+            
+                <a href="api/GeocodingResults.html">
+            
+                    
+                    GeocodingResults
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.9" data-path="api/Geolocation.html">
+            
+                <a href="api/Geolocation.html">
+            
+                    
+                    Geolocation
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.10" data-path="api/Globe.html">
+            
+                <a href="api/Globe.html">
+            
+                    
+                    Globe
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.11" data-path="api/HomeButton.html">
+            
+                <a href="api/HomeButton.html">
+            
+                    
+                    HomeButton
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.12" data-path="api/ImageExport.html">
+            
+                <a href="api/ImageExport.html">
+            
+                    
+                    ImageExport
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.13" data-path="api/InfoPopup.html">
+            
+                <a href="api/InfoPopup.html">
+            
+                    
+                    InfoPopup
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.14" data-path="api/LayerList.html">
+            
+                <a href="api/LayerList.html">
+            
+                    
+                    LayerList
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.15" data-path="api/LoadingPanel.html">
+            
+                <a href="api/LoadingPanel.html">
+            
+                    
+                    LoadingPanel
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.16" data-path="api/Login.html">
+            
+                <a href="api/Login.html">
+            
+                    
+                    Login
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.17" data-path="api/MapConfig.html">
+            
+                <a href="api/MapConfig.html">
+            
+                    
+                    MapConfig
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.18" data-path="api/Measure.html">
+            
+                <a href="api/Measure.html">
+            
+                    
+                    Measure
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.19" data-path="api/Playback.html">
+            
+                <a href="api/Playback.html">
+            
+                    
+                    Playback
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.20" data-path="api/QGISLegend.html">
+            
+                <a href="api/QGISLegend.html">
+            
+                    
+                    QGISLegend
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.21" data-path="api/QGISPrint.html">
+            
+                <a href="api/QGISPrint.html">
+            
+                    
+                    QGISPrint
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.22" data-path="api/QueryBuilder.html">
+            
+                <a href="api/QueryBuilder.html">
+            
+                    
+                    QueryBuilder
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.23" data-path="api/Select.html">
+            
+                <a href="api/Select.html">
+            
+                    
+                    Select
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.24" data-path="api/WFST.html">
+            
+                <a href="api/WFST.html">
+            
+                    
+                    WFST
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >Writing components</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="creating-application-components">Creating application components</h1><h2 id="introduction">Introduction</h2><p>This tutorial will show how to add additional functionality in the form of components to applications built using the Boundless Web SDK.</p><p>Three examples will be shown:</p><ul><li>Component that acts like a MapTool (DrawBox)
+</li>
+<li>Component that shows output (BoxInfo)
+</li>
+<li>Modify the DrawBox component so it shows a popup
+</li></ul>
+<p>These examples illustrate how to draw a box on a map and how to query that box (get its area).</p><p>Drawing boxes with a <img alt="custom component" src="action_drawingboxes.png">.</p><h2 id="component-that-acts-like-a-maptool">Component that acts like a MapTool</h2><p>The component will add a button called &#x201C;Draw Box&#x201D; to the toolbar which when clicked will allow the user to draw a rectangle on the map.</p><p>To begin, create a new application:</p><pre><code>web-sdk ~/myapp
+cd ~/myapp
+nvm use 6.0.0
+npm i
+npm start</code></pre>
+<p>Verify in the browser that the application is running successfully by navigating to <a href="http://localhost:3000/" target="_blank">http://localhost:3000/</a>, replacing localhost with the name of the host where the Web SDK is being served.</p><h2 id="add-a-toolbar">Add a toolbar</h2><p>The first step is adding a toolbar so we have a container to put in our new MapTool. Open up app.jsx and add an import statement for the toolbar:</p><pre><code class="lang-javascript"><span class="hljs-keyword">import</span> Toolbar <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;material-ui/lib/toolbar/toolbar&apos;</span>;</code></pre>
+<p>Add the Toolbar component to the render method:</p><pre><code class="lang-xml">  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&apos;content&apos;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">Toolbar</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">MapPanel</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&apos;map&apos;</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> /&gt;</span></code></pre>
+<p>Open up app.css and change the .map selector to take into account the space that the toolbar takes up:</p><pre><code class="lang-css"><span class="hljs-selector-id">#map</span> {
+  <span class="hljs-attribute">position</span>: absolute;
+  <span class="hljs-attribute">top</span>: <span class="hljs-number">56px</span>;
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>;
+  <span class="hljs-attribute">left</span>: <span class="hljs-number">0px</span>;
+  <span class="hljs-attribute">height</span>: <span class="hljs-built_in">calc</span>(100% - 56px);
+}</code></pre>
+<p>Also move the layer list and zoom button to be a child of MapPanel:</p><pre><code class="lang-html">  <span class="hljs-tag">&lt;<span class="hljs-name">MapPanel</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&apos;map&apos;</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">LayerList</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&apos;zoom-buttons&apos;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">Zoom</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">MapPanel</span>&gt;</span></code></pre>
+<p>Open up app.css to give the zoom buttons the correct z-index so it&apos;s on top of the map:</p><pre><code class="lang-css"><span class="hljs-selector-id">#zoom-buttons</span> {
+  <span class="hljs-attribute">z-index</span>: <span class="hljs-number">1100</span>;
+  <span class="hljs-attribute">margin-left</span>: <span class="hljs-number">20px</span>;
+  <span class="hljs-attribute">position</span>: absolute;
+  <span class="hljs-attribute">top</span>: <span class="hljs-number">20px</span>;
+}</code></pre>
+<p>We have now prepared the application for writing our own tool and adding it to the toolbar.</p><p>Create a new directory <code>js/components</code> and create a new file in it named <code>DrawBox.jsx</code>. Copy and paste the following content:</p><pre><code class="lang-javascript"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react&apos;</span>;
+<span class="hljs-keyword">import</span> ol <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;openlayers&apos;</span>;
+<span class="hljs-keyword">import</span> ToolUtil <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;boundless-sdk/js/toolutil.js&apos;</span>;
+<span class="hljs-keyword">import</span> RaisedButton <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;boundless-sdk/js/components/Button.jsx&apos;</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DrawBox</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{ 
+  <span class="hljs-keyword">constructor</span>(props) { 
+    <span class="hljs-keyword">super</span>(props);
+    <span class="hljs-keyword">this</span>._dispatchToken = ToolUtil.register(<span class="hljs-keyword">this</span>);
+    <span class="hljs-keyword">var</span> source = <span class="hljs-keyword">new</span> ol.source.Vector({wrapX: <span class="hljs-literal">false</span>});
+    <span class="hljs-keyword">this</span>._interaction = <span class="hljs-keyword">new</span> ol.interaction.Draw({
+      source: source,
+      type: <span class="hljs-string">&apos;LineString&apos;</span>,
+      geometryFunction: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">coordinates, geometry</span>) </span>{ 
+        <span class="hljs-keyword">if</span> (!geometry) { 
+          geometry = <span class="hljs-keyword">new</span> ol.geom.Polygon(<span class="hljs-literal">null</span>);
+        } 
+        <span class="hljs-keyword">var</span> start = coordinates[<span class="hljs-number">0</span>];
+        <span class="hljs-keyword">var</span> end = coordinates[<span class="hljs-number">1</span>];
+        geometry.setCoordinates([
+          [start, [start[<span class="hljs-number">0</span>], end[<span class="hljs-number">1</span>]], end, [end[<span class="hljs-number">0</span>], start[<span class="hljs-number">1</span>]], start]
+        ]);
+        <span class="hljs-keyword">return</span> geometry;
+      },
+      maxPoints: <span class="hljs-number">2</span> 
+    });
+    <span class="hljs-keyword">this</span>._layer = <span class="hljs-keyword">new</span> ol.layer.Vector({
+      title: <span class="hljs-literal">null</span>, <span class="hljs-comment">/* to keep it out of the LayerList */</span>
+      style: <span class="hljs-keyword">new</span> ol.style.Style({
+        stroke: <span class="hljs-keyword">new</span> ol.style.Stroke({
+          color: <span class="hljs-keyword">this</span>.props.strokeColor
+        })
+      }),
+      source: source,
+      zIndex: <span class="hljs-number">100000</span>
+    });
+    <span class="hljs-keyword">this</span>.props.map.addLayer(<span class="hljs-keyword">this</span>._layer);
+  } 
+  componentWillUnmount() { 
+    AppDispatcher.unregister(<span class="hljs-keyword">this</span>._dispatchToken);
+  } 
+  activate(interactions) { 
+    ToolUtil.activate(<span class="hljs-keyword">this</span>, interactions);
+  } 
+  deactivate() { 
+    ToolUtil.deactivate(<span class="hljs-keyword">this</span>);
+  } 
+  _drawBox() { 
+    <span class="hljs-keyword">this</span>.activate(<span class="hljs-keyword">this</span>._interaction);
+  } 
+  render() { 
+    <span class="hljs-keyword">return</span> ( 
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">RaisedButton</span> {<span class="hljs-attr">...this.props</span>} <span class="hljs-attr">label</span>=<span class="hljs-string">&apos;Draw Box&apos;</span> <span class="hljs-attr">tooltip</span>=<span class="hljs-string">&apos;Click in the map and move the mouse to draw a box&apos;</span> <span class="hljs-attr">onTouchTap</span>=<span class="hljs-string">{this._drawBox.bind(this)}</span> /&gt;</span>
+    );
+  }
+}
+
+DrawBox.propTypes = {
+  strokeColor: React.PropTypes.string
+};
+
+DrawBox.defaultProps = {
+  strokeColor: &apos;#FF0000&apos;
+};
+
+export default DrawBox;</span></code></pre>
+<p>Open up app.jsx and add an import for our new DrawBox component:</p><pre><code class="lang-javascript"><span class="hljs-keyword">import</span> DrawBox <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./js/components/DrawBox.jsx&apos;</span>;</code></pre>
+<p>and add a DrawBox to the Toolbar:</p><pre><code class="lang-html">  <span class="hljs-tag">&lt;<span class="hljs-name">Toolbar</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">DrawBox</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">Toolbar</span>&gt;</span></code></pre>
+<p>Save and reload the browser. You will now see a button in the Toolbar that reads Draw Box. Let&apos;s examine the code in more detail.</p><p>Any MapTool kind of component will have the following:</p><pre><code class="lang-javascript"><span class="hljs-keyword">import</span> ToolUtil <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;boundless-sdk/js/toolutil.js&apos;</span>;
+
+  <span class="hljs-keyword">constructor</span>(props) {
+    <span class="hljs-keyword">super</span>(props);
+    <span class="hljs-keyword">this</span>._dispatchToken = ToolUtil.register(<span class="hljs-keyword">this</span>);
+    ...
+
+  componentWillUnmount() {
+    AppDispatcher.unregister(<span class="hljs-keyword">this</span>._dispatchToken);
+  }
+  activate(interactions) {
+    ToolUtil.activate(<span class="hljs-keyword">this</span>, interactions);
+  }
+  deactivate() {
+    ToolUtil.deactivate(<span class="hljs-keyword">this</span>);
+  }</code></pre>
+<p>In the constructor, we will register for all the events on the application dispatcher that are tool related. This means we will get deactivated automatically when another tool in the same toggleGroup gets activated. In the componentWillUnmount function we will unregister those listeners. Any map tool will have to have an activate and deactivate function. In our case, when the button is pressed, we will activate our instance of <code>`ol.interaction.Draw</code>. Optionally it can also have an enable and disable function to handle disabling itself in 3D mode and enabling itself in 2D mode.</p><p>In our constructor we are creating a vector source to keep our boxes, and a draw interaction that can draw box geometries. Using a vector layer the boxes are displayed on the map, using a stroke color that can be configured by the end user and defaults to red.</p><p>Open up app.jsx and change our DrawBox to have a blue stroke color:</p><pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">DrawBox</span> <span class="hljs-attr">strokeColor</span>=<span class="hljs-string">&apos;#0000FF&apos;</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> /&gt;</span></code></pre>
+<h2 id="component-that-shows-output">Component that shows output</h2><p>In this exercise we will be creating a new component that will show the area of a box that is drawn by the DrawBox tool. In order to have 2 components communicate, we need to use the AppDispatcher. First, we need to prepare the HTML structure of the application for the box info panel. Open up app.jsx and wrap the Toolbar and MapPanel in a new div:</p><pre><code class="lang-html">  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&apos;row container&apos;</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+<p>After this div, add a new row for our box info:</p><pre><code>  &lt;div className=&apos;row boxinfo&apos;&gt;
+  &lt;/div&gt;</code></pre>
+<p>The complete render function will now look like:</p><pre><code class="lang-javascript">  render() {
+    <span class="hljs-keyword">return</span> (
+      &lt;div id=&apos;content&apos;&gt;
+        &lt;div className=&apos;row container&apos;&gt;
+          &lt;Toolbar&gt;
+            &lt;DrawBox strokeColor=&apos;#0000FF&apos; map={map} /&gt;
+          &lt;/Toolbar&gt;
+          &lt;MapPanel id=&apos;map&apos; map={map}&gt;
+            &lt;div&gt;&lt;LayerList map={map} /&gt;&lt;/div&gt;
+            &lt;div id=&apos;zoom-buttons&apos;&gt;&lt;Zoom map={map} /&gt;&lt;/div&gt;
+          &lt;/MapPanel&gt;
+        &lt;/div&gt;
+        &lt;div className=&apos;row boxinfo&apos;&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    );
+  }</code></pre>
+<p>Open up app.css and give some space to our boxinfo container:</p><pre><code class="lang-css"><span class="hljs-selector-class">.container</span> {
+  <span class="hljs-attribute">height</span>: <span class="hljs-number">75%</span>;
+}
+<span class="hljs-selector-class">.boxinfo</span> {
+  <span class="hljs-attribute">position</span>: absolute;
+  <span class="hljs-attribute">top</span>: <span class="hljs-number">75%</span>;
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>;
+  <span class="hljs-attribute">height</span>: <span class="hljs-number">25%</span>;
+}</code></pre>
+<p>And change the height of the map to:</p><pre><code class="lang-css"><span class="hljs-selector-tag">height</span>: <span class="hljs-selector-tag">calc</span>(75% <span class="hljs-selector-tag">-</span> 56<span class="hljs-selector-tag">px</span>);</code></pre>
+<p>We have now prepared a container for our new component. Create a new file <code>js/components/BoxInfo.jsx</code> and open it up in your favourite text editor:</p><pre><code class="lang-javascript"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react&apos;</span>;
+<span class="hljs-keyword">import</span> AppDispatcher <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;boundless-sdk/js/dispatchers/AppDispatcher.js&apos;</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">BoxInfo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+  <span class="hljs-keyword">constructor</span>(props) {
+    <span class="hljs-keyword">super</span>(props);
+    <span class="hljs-keyword">this</span>.state = {
+      boxInfo: []
+    };
+    <span class="hljs-keyword">var</span> me = <span class="hljs-keyword">this</span>;
+    AppDispatcher.register((payload) =&gt; {
+      <span class="hljs-keyword">let</span> action = payload.action;
+      <span class="hljs-keyword">switch</span> (action.type) {
+        <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;DRAWBOX&apos;</span>:
+          <span class="hljs-keyword">var</span> geom = action.geometry;
+          <span class="hljs-keyword">var</span> start = <span class="hljs-number">0</span>;
+          <span class="hljs-comment">// only show 5 last entries</span>
+          <span class="hljs-keyword">if</span> (me.state.boxInfo.length &gt; <span class="hljs-number">4</span>) {
+            start = me.state.boxInfo.length - <span class="hljs-number">4</span>;
+          }
+          <span class="hljs-keyword">var</span> boxInfo = me.state.boxInfo.slice(start);
+          boxInfo.push(<span class="hljs-keyword">this</span>.props.tplText.replace(<span class="hljs-string">&apos;{area}&apos;</span>, geom.getArea()));
+          me.setState({boxInfo: boxInfo});
+          <span class="hljs-keyword">break</span>;
+        <span class="hljs-keyword">default</span>:
+          <span class="hljs-keyword">break</span>;
+      }
+    });
+
+  }
+  render() {
+    <span class="hljs-keyword">var</span> boxInfo = [];
+    boxInfo.push(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{{margin:</span> <span class="hljs-attr">0</span>, <span class="hljs-attr">backgroundColor:</span> &apos;<span class="hljs-attr">grey</span>&apos;}} <span class="hljs-attr">key</span>=<span class="hljs-string">&apos;header&apos;</span>&gt;</span>{this.props.title}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, ii = <span class="hljs-keyword">this</span>.state.boxInfo.length; i &lt; ii; ++i) {
+      boxInfo.push(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{i}</span>&gt;</span>{this.state.boxInfo[i]}<span class="hljs-tag">&lt;<span class="hljs-name">br</span>/&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span></span>);
+    }
+    <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{boxInfo}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>);
+  }
+}
+
+BoxInfo.propTypes = {
+  title: React.PropTypes.string,
+  tplText: React.PropTypes.string
+};
+
+
+BoxInfo.defaultProps = {
+  title: <span class="hljs-string">&apos;Box info&apos;</span>,
+  tplText: <span class="hljs-string">&apos;Area: {area}&apos;</span>
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> BoxInfo;</code></pre>
+<p>Later on we will examine this code in more detail, but for now just copy and paste this code. Open up app.jsx and add the BoxInfo component:</p><pre><code class="lang-javascript"><span class="hljs-keyword">import</span> BoxInfo <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./js/components/BoxInfo.jsx&apos;</span>;
+
+..
+  &lt;div className=<span class="hljs-string">&apos;row boxinfo&apos;</span>&gt;
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">BoxInfo</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span></code></pre>
+<p>Now when drawing a box we want to display the area in the box info tool, but nothing will happen as yet. This is because we are not firing DRAWBOX as yet through the AppDispatcher from the DrawBox tool. Open up DrawBox.jsx and make the following changes:</p><pre><code class="lang-javascript"><span class="hljs-keyword">import</span> AppDispatcher <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;boundless-sdk/js//dispatchers/AppDispatcher.js&apos;</span>;
+
+  source.on(<span class="hljs-string">&apos;addfeature&apos;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">evt</span>) </span>{
+    AppDispatcher.handleAction({
+      type: <span class="hljs-string">&apos;DRAWBOX&apos;</span>,
+      geometry: evt.feature.getGeometry()
+    });
+  }, <span class="hljs-keyword">this</span>);</code></pre>
+<p>Add the <code>addfeature</code> listener in the constructor. Reload the browser and a draw a box. After drawing the box, its area should get displayed. Now we will investigate the BoxInfo code in more detail. In the constructor we register a listener on the AppDispatcher for <code>DRAWBOX</code>, the geometry will get sent in the payload. We will keep information from the last 5 drawn boxes, and it will get displayed by calling <code>setState</code> with the boxInfo array. The BoxInfo component can get configured with 2 properties:</p><ul><li>title, the title to display in the header of the panel
+</li>
+<li>tplText, the template text to display for each box
+</li></ul>
+<p>Now open up app.jsx and edit our BoxInfo definition:</p><pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">BoxInfo</span> <span class="hljs-attr">title</span>=<span class="hljs-string">&apos;Information about drawn boxes&apos;</span> <span class="hljs-attr">tplText</span>=<span class="hljs-string">&apos;Area of drawn box: {area}&apos;</span> /&gt;</span></code></pre>
+<p>and verify that these changes have effect.</p><h2 id="modify-the-drawbox-component-so-it-shows-a-popup">Modify the DrawBox component so it shows a popup</h2><p>In this exercise we will be changing the DrawBox component so that it will also show an InfoPopup after drawing a box with its area. Open up <code>js/components/DrawBox.jsx</code> in your favourite text editor and make the following addition for the import:</p><pre><code class="lang-javascript"><span class="hljs-keyword">import</span> ToolActions <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;boundless-sdk/js/actions/ToolActions.js&apos;</span>;</code></pre>
+<p>Also modify the <code>addfeature</code> listener of the vector source:</p><pre><code class="lang-javascript">    source.on(<span class="hljs-string">&apos;addfeature&apos;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">evt</span>) </span>{
+      evt.feature.set(<span class="hljs-string">&apos;AREA&apos;</span>, evt.feature.getGeometry().getArea());
+      ToolActions.showPopup(evt.feature, <span class="hljs-keyword">this</span>._layer);
+      ..</code></pre>
+<p>This will set the AREA as an attribute on the feature and will call the showPopup function of ToolActions to display the popup for this feature. However our changes are not yet complete, we need to make 2 more changes. Open up <code>js/components/DrawBox.jsx</code> and change the definition of the layer:</p><pre><code class="lang-javascript">  popupInfo: <span class="hljs-string">&apos;#AllAttributes&apos;</span>,</code></pre>
+<p>This will indicate that all the feature&apos;s attributes need to get displayed in the popup, in our case this is only AREA. Now open up app.jsx:</p><pre><code class="lang-javascript"><span class="hljs-keyword">import</span> InfoPopup <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;boundless-sdk/js/components/InfoPopup.jsx&apos;</span>;</code></pre>
+<p>In the render function add the InfoPopup after the MapPanel:</p><pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&apos;ol-popup&apos;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">InfoPopup</span> <span class="hljs-attr">toggleGroup</span>=<span class="hljs-string">&apos;navigation&apos;</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+<p>And then change the DrawBox configuration so it is in the same toggleGroup:</p><pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">DrawBox</span> <span class="hljs-attr">toggleGroup</span>=<span class="hljs-string">&apos;navigation&apos;</span> <span class="hljs-attr">strokeColor</span>=<span class="hljs-string">&apos;#0000FF&apos;</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> /&gt;</span></code></pre>
+<p>Now reload the application and a draw a box. It should a popup with its area as well.</p>
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="tutorial.html" class="navigation navigation-prev " aria-label="Previous page: Tutorial">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="developers.html" class="navigation navigation-next " aria-label="Next page: For developers">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Writing components","level":"1.5","depth":1,"next":{"title":"For developers","level":"1.6","depth":1,"path":"developers.md","ref":"developers.md","articles":[]},"previous":{"title":"Tutorial","level":"1.4","depth":1,"path":"tutorial.md","ref":"tutorial.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"writing_components.md","mtime":"2016-10-10T12:50:56.031Z","type":"markdown"},"gitbook":{"version":"3.2.0-pre.1","time":"2016-10-10T12:54:48.151Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

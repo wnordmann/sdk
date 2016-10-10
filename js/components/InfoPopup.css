@@ -1,0 +1,64 @@
+.popup-content {
+  height: 300px;
+}
+.popup-content.auto {
+  height: auto;
+}
+.popup-header {
+  height: 120px;
+}
+.popup-body {
+  height: calc(100% - 120px);
+  overflow: auto;
+}
+
+.popup-table-header {
+  position: relative;
+}
+/* First list-entry should always be fixed */
+.popup-body > div:first-of-type .popup-table-header {
+  position: absolute;
+  width: calc(100% - 10px);
+  top: 0px;
+  left: 0px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding: 5px;
+  border-bottom-width: 0px !important;
+}
+.popup-body > div:first-of-type .popup-table-header tr {
+  width: 100%;
+  display: table;
+}
+
+.popup-body > div:first-of-type .popup-table-header th {
+  width: auto;
+}
+/* Subsequent list-entries are only fixed if their class is set */
+.popup-table-header.popup-header-fixed {
+  position: absolute;
+  width: calc(100% - 10px);
+  top: 0px;
+  left: 0px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding: 5px;
+  border-bottom-width: 0px !important;
+}
+.popup-table-header.popup-header-fixed tr {
+  width: 100%;
+  display: table;
+}
+
+.popup-table-header.popup-header-fixed th {
+  width: auto;
+}
+.popup-table-headerpadding {
+  height: 0px !important;
+}
+.popup-table-headerpadding.popup-body-noheader {
+  height: 119px !important;
+}
+.popup table {
+  margin-left: 20px;
+}

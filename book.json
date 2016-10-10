@@ -1,0 +1,7 @@
+{
+  "root": "docs",
+  "styles": {
+    "website": "styles/website.css",
+    "print": "styles/print.css"
+  }
+}

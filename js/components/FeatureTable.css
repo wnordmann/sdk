@@ -1,0 +1,35 @@
+.public_fixedDataTable_header .public_fixedDataTableCell_main {
+  font-weight: normal;
+  color: rgb(158, 158, 158);
+  font-size: 12px;
+}
+.public_fixedDataTableCell_cellContent {
+  font-size: 13px;
+}
+.row-selected .public_fixedDataTableCell_main {
+  background-color: yellow;
+}
+.feature-table-options {
+  padding-left: 36px;
+  padding-bottom: 12px;
+}
+.feature-table-selector {
+  display: inline-block;
+  position: relative;
+  top: 0px;
+  padding-right: 12px;
+  padding-bottom: 12px;
+}
+.feature-table-filter {
+  display: inline-block;
+  position: relative;
+  top: 8px;
+  
+  padding-bottom: 12px;
+}
+.feature-table-filter > div {
+  margin-right: 24px;
+}
+.feature-table .filter-help {
+  right: 0;
+}
