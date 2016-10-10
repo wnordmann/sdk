@@ -51,7 +51,7 @@ ENCRYPTED_IV_VAR="encrypted_${ENCRYPTION_LABEL}_iv"
 ENCRYPTED_KEY=${!ENCRYPTED_KEY_VAR}
 ENCRYPTED_IV=${!ENCRYPTED_IV_VAR}
 openssl aes-256-cbc -K $ENCRYPTED_KEY -iv $ENCRYPTED_IV -in id_rsa.pub.enc -out deploy_key -d
-rm deploy-key.enc # Don't need it anymore
+rm id_rsa.pub.enc # Don't need it anymore
 chmod 600 deploy_key
 mv deploy_key ~/.ssh/id_rsa
 
