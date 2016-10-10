@@ -8,3 +8,6 @@ js/components/fixed-data-table.css
 _book
 book.pdf
 coverage
+dist
+locale
+docs/api
