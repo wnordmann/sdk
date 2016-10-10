@@ -25,7 +25,10 @@
     "test:mochify:wd": "node_modules/.bin/mochify --transform ./scripts/test-transform.js --wd __tests__/**/*.test.js",
     "test:mochify": "node_modules/.bin/mochify --reporter list --transform ./scripts/test-transform.js __tests__/**/*.test.js",
     "test:lint": "eslint __tests__ js --ext .jsx,.js",
-    "test": "node_modules/.bin/npm-run-all --parallel test:mochify test:lint"
+    "test": "node_modules/.bin/npm-run-all --parallel test:mochify test:lint",
+    "copy:build": "cp -R dist out",
+    "copy:docs": "cp -R _book out/book",
+    "spec" : "node_modules/.bin/npm-run-all build docs copy:build copy:docs"
   },
   "author": "Boundless Spatial, Inc.",
   "license": "Apache-2.0",
