@@ -28,7 +28,7 @@
     "test": "node_modules/.bin/npm-run-all --parallel test:mochify test:lint",
     "copy:build": "cp -R dist out",
     "copy:docs": "cp -R _book out/book",
-    "spec" : "node_modules/.bin/npm-run-all build docs copy:build copy:docs"
+    "spec" : "node_modules/.bin/npm-run-all build generate:docs generate:gitbook copy:build copy:docs"
   },
   "author": "Boundless Spatial, Inc.",
   "license": "Apache-2.0",
