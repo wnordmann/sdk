@@ -1,9 +1,6 @@
 .book-header {
   background: url("logo.png") no-repeat right !important;
 }
-.page-inner {
-  background: linear-gradient(to bottom, #235c73 0%, #112d39 100%) !important;
-}
 .fa-facebook{
  	visibility: hidden;
 }

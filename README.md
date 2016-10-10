@@ -9,7 +9,7 @@ For the user interface, [material-ui](http://www.material-ui.com/) is used.
 
 For example usage see [the corresponding apps repository](https://github.com/boundlessgeo/sdk-apps)
 
-For online docs see [HTML](https://boundlessgeo.github.io/sdk/book/index.html) and [PDF](https://boundlessgeo.github.io/sdk/book.pdf)
+For online docs see [HTML](https://boundlessgeo.github.io/sdk/book/index.html)
 
 ## Generating docs
 
@@ -29,18 +29,6 @@ The doc build also requires that [ebook-convert](https://calibre-ebook.com) from
 
 ## Testing
     npm test
-
-## Pre commit hook
-In order to keep the full build (used by the QGIS Web Application Builder) up to date, install a pre commit hook in your local git repository (.git/hooks/pre-commit):
-
-    #!/bin/sh
-    npm test
-    npm run build
-    git add dist/js
-    npm run docs
-    git add docs
-    npm run i18n
-    git add locale/en.js
 
 ## npm run build
 If you run into this error: Error: EMFILE, open 'sdk/node_modules/react/package.json' run the solution from here: https://github.com/andreypopp/react-app-express/issues/1#issuecomment-34113065
