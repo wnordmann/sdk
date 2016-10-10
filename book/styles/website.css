@@ -1,0 +1,12 @@
+.book-header {
+  background: url("logo.png") no-repeat right !important;
+}
+.fa-facebook{
+ 	visibility: hidden;
+}
+.fa-twitter{
+	visibility: hidden;
+}
+.fa-share-alt{
+	visibility: hidden;
+}
