@@ -9,7 +9,6 @@ cache:
   directories:
     - node_modules
 env:
-  - DISPLAY=:99.0
   global:
   - ENCRYPTION_LABEL: "d1139ddcac92"
   - COMMIT_AUTHOR_EMAIL: "bartvde@boundlessgeo.com"
@@ -18,6 +17,7 @@ before_install:
   - "npm prune"
 
 before_script:
+  - "export DISPLAY=:99.0"
   - "npm ls"
 
 script:
