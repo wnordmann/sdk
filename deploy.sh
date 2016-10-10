@@ -26,6 +26,9 @@ cd ..
 # Clean out existing contents
 rm -rf out/* || exit 0
 
+# Copy deploy key back
+cp deploy_key.enc out
+
 # Run our compile script
 npm run spec
 
