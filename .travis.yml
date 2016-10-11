@@ -22,9 +22,9 @@ before_script:
 
 script:
   - "npm run test"
-  - "bash ./deploy.sh"
 
 after_success:
+  - "bash ./deploy.sh"
   - "npm run cover"
   - "cat coverage/lcov.info | ./node_modules/.bin/coveralls"
 
