@@ -29,8 +29,10 @@
     "createdir:build:js": "mkdir -p dist/js",
     "createdir:build:css": "mkdir -p dist/css",
     "createdir:docs": "mkdir -p docs/api",
+    "createdir:locale": "mkdir -p locale",
     "copy:build": "cp -R dist out",
     "copy:docs": "cp -R _book out/book",
+    "release": "node_modules/.bin/npm-run-all createdir:build:js createdir:build:css createdir:locale createdir:docs build generate:docs generate:gitbook i18n",
     "spec" : "node_modules/.bin/npm-run-all createdir:build:js createdir:build:css createdir:docs build generate:docs generate:gitbook copy:build copy:docs"
   },
   "author": "Boundless Spatial, Inc.",
