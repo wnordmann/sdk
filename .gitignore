@@ -5,7 +5,9 @@ build
 js/components/c3.min.css
 js/components/slick.css
 js/components/fixed-data-table.css
+dist
 _book
 book.pdf
 coverage
 locale
+docs/api
