@@ -67,4 +67,11 @@ describe('MapConfigTransfrormService', function() {
     assert.equal(JSON.stringify(result), JSON.stringify(expected));
   });
 
+  it('transform Bing source correctly', function() {
+    var config = {'sources':{'bing':{'apiKey':'AkGbxXx6tDWf1swIhPJyoAVp06H0s0gDTYslNWWHZ6RoPqMpB9ld5FY1WutX8UoF','ptype':'gxp_bingsource','projection':'EPSG:102113','id':'bing'}}, 'map':{'projection':'EPSG:102113','layers':[{'source':'bing','name':'AerialWithLabels','title':'Bing Aerial With Labels','visibility':true,'opacity':1,'group':'background','fixed':true,'selected':true},{'source':'bing','name':'Aerial','title':'Bing Aerial','visibility':false,'opacity':1,'group':'background','fixed':true,'selected':false},{'source':'bing','name':'Road','title':'Bing Roads','visibility':false,'opacity':1,'group':'background','fixed':true,'selected':false}],'center':[0,0],'zoom':3}};
+    var result = MapConfigTransformService.transform(config);
+    var expected = {'layers':[{'type':'Group','properties':{'title':'Base Maps','type':'base-group'},'children':[{'properties':{'isRemovable':true,'visible':true,'title':'Bing Aerial With Labels','id':'AerialWithLabels','name':'AerialWithLabels','type':'base'},'type':'Tile','source':{'type':'BingMaps','properties':{'key':'AkGbxXx6tDWf1swIhPJyoAVp06H0s0gDTYslNWWHZ6RoPqMpB9ld5FY1WutX8UoF','imagerySet':'AerialWithLabels'}}},{'properties':{'isRemovable':true,'visible':false,'title':'Bing Aerial','id':'Aerial','name':'Aerial','type':'base'},'type':'Tile','source':{'type':'BingMaps','properties':{'key':'AkGbxXx6tDWf1swIhPJyoAVp06H0s0gDTYslNWWHZ6RoPqMpB9ld5FY1WutX8UoF','imagerySet':'Aerial'}}},{'properties':{'isRemovable':true,'visible':false,'title':'Bing Roads','id':'Road','name':'Road','type':'base'},'type':'Tile','source':{'type':'BingMaps','properties':{'key':'AkGbxXx6tDWf1swIhPJyoAVp06H0s0gDTYslNWWHZ6RoPqMpB9ld5FY1WutX8UoF','imagerySet':'Road'}}}]}],'view':{'center':[0,0],'projection':'EPSG:102113','zoom':3}};
+    assert.equal(JSON.stringify(result), JSON.stringify(expected));
+  });
+
 });

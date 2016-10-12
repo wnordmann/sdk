@@ -104,6 +104,15 @@ class MapConfigTransformService {
             maxZoom: maxZoom[layer.name]
           }
         };
+      } else if (source.ptype === 'gxp_bingsource') {
+        layerConfig.type = 'Tile';
+        layerConfig.source = {
+          type: 'BingMaps',
+          properties: {
+            key: source.apiKey,
+            imagerySet: layer.name
+          }
+        };
       } else {
         layerConfig = undefined;
       }
