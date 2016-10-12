@@ -178,6 +178,17 @@ describe('MapConfigService', function() {
     assert.equal(result.getSource() instanceof ol.source.OSM, true);
   });
 
+  it('creates and serializes TMS source correctly', function() {
+    var config = {'type':'TMS','properties':{'format':'png','urls':['http://a.tiles.mapbox.com/v1/mapbox.geography-class/','http://b.tiles.mapbox.com/v1/mapbox.geography-class/','http://c.tiles.mapbox.com/v1/mapbox.geography-class/','http://d.tiles.mapbox.com/v1/mapbox.geography-class/'],'maxZoom':8}};
+    var source = MapConfigService.generateSourceFromConfig(config);
+    assert.equal(source instanceof ol.source.XYZ, true);
+    assert.equal(source.get('originalType'), 'TMS');
+    assert.equal(source.get('originalProperties').urls[0], 'http://a.tiles.mapbox.com/v1/mapbox.geography-class/');
+    var json = MapConfigService.getSourceConfig(source);
+    var expected = {'type':'TMS','properties':{'format':'png','maxZoom':8,'wrapX':false,'urls':['http://a.tiles.mapbox.com/v1/mapbox.geography-class/','http://b.tiles.mapbox.com/v1/mapbox.geography-class/','http://c.tiles.mapbox.com/v1/mapbox.geography-class/','http://d.tiles.mapbox.com/v1/mapbox.geography-class/']}};
+    assert.equal(JSON.stringify(json), JSON.stringify(expected));
+  });
+
   it('returns the correct layer config for group layer (and vice versa)', function() {
     var layer = new ol.layer.Group({
       layers: [
@@ -185,6 +196,7 @@ describe('MapConfigService', function() {
           source: new ol.source.OSM()
         }),
         new ol.layer.Tile({
+          wfsInfo: true,
           source: new ol.source.TileWMS()
         })
       ]

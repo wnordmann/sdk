@@ -60,4 +60,11 @@ describe('MapConfigTransfrormService', function() {
     assert.equal(JSON.stringify(result), JSON.stringify(expected));
   });
 
+  it('transforms MapBox source correctly', function() {
+    var config = {'sources':{'mapbox':{'ptype':'gxp_mapboxsource','projection':'EPSG:102113','id':'mapbox'}},'map':{'projection':'EPSG:102113','layers':[{'source':'mapbox','name':'geography-class','title':'Geography Class','visibility':true,'opacity':1,'group':'','fixed':false,'selected':true}],'center':[0,0],'zoom':3}};
+    var result = MapConfigTransformService.transform(config);
+    var expected = {'layers':[{'properties':{'isRemovable':true,'visible':true,'title':'Geography Class','id':'geography-class','name':'geography-class'},'type':'Tile','source':{'type':'TMS','properties':{'attributions':['<a href="http://mapbox.com">MapBox</a> | <a href="http://mapbox.com/tos">Terms of Service</a>'],'format':'png','urls':['http://a.tiles.mapbox.com/v1/mapbox.geography-class/','http://b.tiles.mapbox.com/v1/mapbox.geography-class/','http://c.tiles.mapbox.com/v1/mapbox.geography-class/','http://d.tiles.mapbox.com/v1/mapbox.geography-class/'],'maxZoom':8}}}],'view':{'center':[0,0],'projection':'EPSG:102113','zoom':3}};
+    assert.equal(JSON.stringify(result), JSON.stringify(expected));
+  });
+
 });
