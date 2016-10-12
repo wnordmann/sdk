@@ -48,6 +48,12 @@ class MapConfigService {
       };
       delete props.urls;
       delete props.url;
+      var source = new ol.source[config.type](props);
+      source.set('originalType', 'TMS');
+      source.set('originalProperties', Object.assign({}, props, {
+        urls: urls
+      }));
+      return source;
     }
     return new ol.source[config.type](props);
   }
@@ -134,11 +140,16 @@ class MapConfigService {
         attributions: attributions
       };
     } else if (source instanceof ol.source.XYZ) {
-      config.type = 'XYZ';
-      config.properties = {
-        attributions: attributions,
-        urls: source.getUrls()
-      };
+      if (source.get('originalType') === 'TMS') {
+        config.type = 'TMS';
+        config.properties = source.get('originalProperties');
+      } else {
+        config.type = 'XYZ';
+        config.properties = {
+          attributions: attributions,
+          urls: source.getUrls()
+        };
+      }
     }
     return config;
   }
