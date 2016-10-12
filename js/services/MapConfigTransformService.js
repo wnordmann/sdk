@@ -37,6 +37,19 @@ class MapConfigTransformService {
             crossOrigin: 'anonymous'
           }
         };
+      } else if (source.ptype === 'gxp_arcrestsource') {
+        layerConfig.type = 'Tile';
+        layerConfig.source = {
+          type: 'TileArcGISRest',
+          properties: {
+            crossOrigin: 'anonymous',
+            url: source.url,
+            params: {
+              LAYERS: layer.layerid,
+              FORMAT: layer.format
+            }
+          }
+        };
       } else if (source.ptype === 'gxp_wmscsource') {
         layerConfig.properties.popupInfo = '#AllAttributes';
         if (layer.capability) {
