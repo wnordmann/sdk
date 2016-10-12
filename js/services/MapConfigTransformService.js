@@ -68,6 +68,42 @@ class MapConfigTransformService {
             url: source.url
           }
         };
+      } else if (source.ptype === 'gxp_mapboxsource') {
+        var urls = [
+          'http://a.tiles.mapbox.com/v1/mapbox.' + layer.name + '/',
+          'http://b.tiles.mapbox.com/v1/mapbox.' + layer.name + '/',
+          'http://c.tiles.mapbox.com/v1/mapbox.' + layer.name + '/',
+          'http://d.tiles.mapbox.com/v1/mapbox.' + layer.name + '/'
+        ];
+        var attribution = /^world/.test(layer.name) ?
+          '<a href="http://mapbox.com">MapBox</a> | Some Data &copy; OSM CC-BY-SA | <a href="http://mapbox.com/tos">Terms of Service</a>' :
+          '<a href="http://mapbox.com">MapBox</a> | <a href="http://mapbox.com/tos">Terms of Service</a>';
+        var maxZoom = {
+          'blue-marble-topo-bathy-jan': 8,
+          'blue-marble-topo-bathy-jul': 8,
+          'blue-marble-topo-jan': 8,
+          'blue-marble-topo-jul': 8,
+          'control-room': 8,
+          'geography-class': 8,
+          'natural-earth-hypso': 6,
+          'natural-earth-hypso-bathy': 6,
+          'natural-earth-1': 6,
+          'natural-earth-2': 6,
+          'world-dark': 11,
+          'world-light': 11,
+          'world-glass': 10,
+          'world-print': 9
+        };
+        layerConfig.type = 'Tile';
+        layerConfig.source = {
+          type: 'TMS',
+          properties: {
+            attributions: [attribution],
+            format: 'png',
+            urls: urls,
+            maxZoom: maxZoom[layer.name]
+          }
+        };
       } else {
         layerConfig = undefined;
       }

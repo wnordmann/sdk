@@ -33,6 +33,22 @@ class MapConfigService {
     if (config.type === 'Vector') {
       props.format = (props.format.type === 'GeoJSON') ? new ol.format.GeoJSON() : undefined;
     }
+    if (config.type === 'TMS') {
+      config.type = 'XYZ';
+      var urls = props.urls || [props.url];
+      props.tileUrlFunction = function(tileCoord, pixelRatio, projection) {
+        var min = 0;
+        var max = urls.length - 1;
+        var idx = Math.floor(Math.random() * (max - min + 1)) + min;
+        var x, y, z;
+        z = tileCoord[0];
+        x = tileCoord[1];
+        y = tileCoord[2] + (1 << z);
+        return urls[idx] + z + '/' + x + '/' + y + '.' + props.format;
+      };
+      delete props.urls;
+      delete props.url;
+    }
     return new ol.source[config.type](props);
   }
   generateLayerFromConfig(config) {
