@@ -23,4 +23,11 @@ describe('util', function() {
     assert.equal(color[3], input.a);
   });
 
+  it('gives back correct time info', function() {
+    var dim = Util.getTimeInfo({Dimension: [{name: 'time', values: '1995-01-01/2016-12-31/PT5M'}]});
+    assert.equal(dim, '1995-01-01/2016-12-31/PT5M');
+    dim = Util.getTimeInfo({Dimension: [{name: 'altitude', values: '2010'}]});
+    assert.equal(dim, undefined);
+  });
+
 });

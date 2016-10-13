@@ -11,7 +11,7 @@
  */
 
 import ol from 'openlayers';
-import {doGET, doPOST} from '../util.js';
+import {doGET, doPOST, getTimeInfo} from '../util.js';
 import {Jsonix} from 'jsonix';
 import URL from 'url-parse';
 import {XSD_1_0} from 'w3c-schemas/lib/XSD_1_0.js';
@@ -24,6 +24,7 @@ import {GML_3_1_1} from 'ogc-schemas/lib/GML_3_1_1.js';
 import {WFS_1_1_0} from 'ogc-schemas/lib/WFS_1_1_0.js';
 
 const wfsFormat = new ol.format.WFS();
+const geojsonFormat = new ol.format.GeoJSON();
 const xmlSerializer = new XMLSerializer();
 const wfsContext = new Jsonix.Context([OWS_1_0_0, Filter_1_1_0, SMIL_2_0, SMIL_2_0_Language, XLink_1_0, GML_3_1_1, WFS_1_1_0]);
 const wfsUnmarshaller = wfsContext.createUnmarshaller();
@@ -37,6 +38,37 @@ const proj4326 = new ol.proj.Projection({
 ol.proj.addEquivalentProjections([ol.proj.get('EPSG:4326'), proj4326]);
 
 class WFSService {
+  createLayer(layer, url, titleObj) {
+    return new ol.layer.Vector({
+      title: titleObj.title,
+      emptyTitle: titleObj.empty,
+      id: layer.Name,
+      name: layer.Name,
+      isWFST: true,
+      timeInfo: getTimeInfo(layer),
+      isRemovable: true,
+      isSelectable: true,
+      popupInfo: '#AllAttributes',
+      source: new ol.source.Vector({
+        wrapX: false,
+        url: function(extent) {
+          var urlObj = new URL(url);
+          urlObj.set('query', {
+            service: 'WFS',
+            request: 'GetFeature',
+            version: '1.1.0',
+            typename: layer.Name,
+            outputFormat: 'application/json',
+            srsname: 'EPSG:3857',
+            bbox: extent.join(',') + ',EPSG:3857'
+          });
+          return urlObj.toString();
+        },
+        format: geojsonFormat,
+        strategy: ol.loadingstrategy.bbox
+      })
+    });
+  }
   parseCapabilities(xmlhttp) {
     var layers = [];
     var info = wfsUnmarshaller.unmarshalDocument(xmlhttp.responseXML).value;

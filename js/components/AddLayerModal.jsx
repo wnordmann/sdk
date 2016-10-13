@@ -78,8 +78,6 @@ const messages = defineMessages({
   }
 });
 
-const geojsonFormat = new ol.format.GeoJSON();
-
 /**
  * Modal window to add layers from a WMS or WFS service.
  */
@@ -159,84 +157,13 @@ class AddLayerModal extends React.Component {
       return {empty: false, title: layer.Title};
     }
   }
-  _getDimensionInfo(layer) {
-    if (layer.Dimension) {
-      for (var i = 0, ii = layer.Dimension.length; i < ii; ++i) {
-        var dimension = layer.Dimension[i];
-        if (dimension.name === 'time') {
-          return dimension.values;
-        }
-      }
-    }
-  }
-  _getLegendUrl(layer) {
-    if (layer.Style && layer.Style.length === 1) {
-      if (layer.Style[0].LegendURL && layer.Style[0].LegendURL.length >= 1) {
-        return layer.Style[0].LegendURL[0].OnlineResource;
-      }
-    }
-  }
   _onLayerClick(layer) {
     var map = this.props.map;
-    var EX_GeographicBoundingBox = layer.EX_GeographicBoundingBox;
     var olLayer, titleObj = this._getLayerTitle(layer);
-    var timeInfo = this._getDimensionInfo(layer);
     if (this.props.asVector) {
-      var me = this;
-      olLayer = new ol.layer.Vector({
-        title: titleObj.title,
-        emptyTitle: titleObj.empty,
-        id: layer.Name,
-        name: layer.Name,
-        isWFST: true,
-        timeInfo: timeInfo,
-        isRemovable: true,
-        isSelectable: true,
-        popupInfo: '#AllAttributes',
-        source: new ol.source.Vector({
-          wrapX: false,
-          url: function(extent) {
-            var urlObj = new URL(me._getUrl().replace('wms', 'wfs'));
-            urlObj.set('query', {
-              service: 'WFS',
-              request: 'GetFeature',
-              version: '1.1.0',
-              typename: layer.Name,
-              outputFormat: 'application/json',
-              srsname: 'EPSG:3857',
-              bbox: extent.join(',') + ',EPSG:3857'
-            });
-            return urlObj.toString();
-          },
-          format: geojsonFormat,
-          strategy: ol.loadingstrategy.tile(ol.tilegrid.createXYZ({
-            maxZoom: 19
-          }))
-        })
-      });
+      olLayer = WFSService.createLayer(layer, this._getUrl().replace('wms', 'wfs'), titleObj);
     } else {
-      olLayer = new ol.layer.Tile({
-        title: titleObj.title,
-        emptyTitle: titleObj.empty,
-        id: layer.Name,
-        name: layer.Name,
-        legendUrl: this._getLegendUrl(layer),
-        isRemovable: true,
-        isSelectable: true,
-        isWFST: true,
-        timeInfo: timeInfo,
-        type: layer.Layer ? 'base' : undefined,
-        EX_GeographicBoundingBox: EX_GeographicBoundingBox,
-        popupInfo: '#AllAttributes',
-        source: new ol.source.TileWMS({
-          url: this._getUrl(),
-          wrapX: layer.Layer ? true : false,
-          params: {
-            LAYERS: layer.Name
-          },
-          serverType: 'geoserver'
-        })
-      });
+      olLayer = WMSService.createLayer(layer, this._getUrl(), titleObj);
     }
     this._getStyleName.call(this, olLayer);
     this._getWfsInfo.call(this, layer, olLayer, this.close, this);

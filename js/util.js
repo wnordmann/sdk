@@ -11,6 +11,16 @@
  */
 
 export default {
+  getTimeInfo(layer) {
+    if (layer.Dimension) {
+      for (var i = 0, ii = layer.Dimension.length; i < ii; ++i) {
+        var dimension = layer.Dimension[i];
+        if (dimension.name === 'time') {
+          return dimension.values;
+        }
+      }
+    }
+  },
   rgbToHex(rgb) {
     rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
     return (rgb && rgb.length === 4) ? '#' +
@@ -29,6 +39,16 @@ export default {
   transformColor(color) {
     var colorObj = color.rgb ? color.rgb : color;
     return [colorObj.r, colorObj.g, colorObj.b, colorObj.a];
+  },
+  doJSONP(url, success, scope) {
+    var cbname = 'fn' + Date.now();
+    var script = document.createElement('script');
+    script.src = url.replace('__cbname__', cbname);
+    window[cbname] = function(jsonData) {
+      success.call(scope, jsonData);
+      delete window[cbname];
+    };
+    document.head.appendChild(script);
   },
   doGET(url, success, failure, scope) {
     var xmlhttp = new XMLHttpRequest();

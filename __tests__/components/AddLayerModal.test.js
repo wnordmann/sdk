@@ -73,22 +73,6 @@ describe('AddLayerModal', function() {
     }, 500);
   });
 
-  it('gives back correct dimension info', function(done) {
-    var container = document.createElement('div');
-    var url = 'http://localhost:8080/geoserver/wms';
-    var modal = ReactDOM.render((
-      <AddLayerModal map={map} allowUserInput={true} url={url} intl={intl} />
-    ), container);
-    var dim = modal._getDimensionInfo({Dimension: [{name: 'time', values: '1995-01-01/2016-12-31/PT5M'}]});
-    assert.equal(dim, '1995-01-01/2016-12-31/PT5M');
-    dim = modal._getDimensionInfo({Dimension: [{name: 'altitude', values: '2010'}]});
-    assert.equal(dim, undefined);
-    window.setTimeout(function() {
-      ReactDOM.unmountComponentAtNode(container);
-      done();
-    }, 500);
-  });
-
   it('returns the correct url if no url input field', function(done) {
     var container = document.createElement('div');
     var url = 'http://localhost:8080/geoserver/wms';

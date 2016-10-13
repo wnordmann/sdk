@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {doGET} from '../util.js';
+import {doGET, getTimeInfo} from '../util.js';
 import URL from 'url-parse';
 import ol from 'openlayers';
 import SLDService from './SLDService';
@@ -35,6 +35,37 @@ class WMSService {
     }, function(xmlhttp) {
       onFailure.call(this, xmlhttp);
     }, this);
+  }
+  createLayer(layer, url, titleObj) {
+    var getLegendUrl = function(layer) {
+      if (layer.Style && layer.Style.length === 1) {
+        if (layer.Style[0].LegendURL && layer.Style[0].LegendURL.length >= 1) {
+          return layer.Style[0].LegendURL[0].OnlineResource;
+        }
+      }
+    };
+    return new ol.layer.Tile({
+      title: titleObj.title,
+      emptyTitle: titleObj.empty,
+      id: layer.Name,
+      name: layer.Name,
+      legendUrl: getLegendUrl(layer),
+      isRemovable: true,
+      isSelectable: true,
+      isWFST: true,
+      timeInfo: getTimeInfo(layer),
+      type: layer.Layer ? 'base' : undefined,
+      EX_GeographicBoundingBox: layer.EX_GeographicBoundingBox,
+      popupInfo: '#AllAttributes',
+      source: new ol.source.TileWMS({
+        url: url,
+        wrapX: layer.Layer ? true : false,
+        params: {
+          LAYERS: layer.Name
+        },
+        serverType: 'geoserver'
+      })
+    });
   }
   getStyles(url, layer, onSuccess, onFailure) {
     var urlObj = new URL(url);
