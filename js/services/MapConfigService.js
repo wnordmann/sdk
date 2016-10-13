@@ -152,6 +152,12 @@ class MapConfigService {
           urls: source.getUrls()
         };
       }
+    } else if (source instanceof ol.source.TileArcGISRest) {
+      config.type = 'TileArcGISRest';
+      config.properties = {
+        urls: source.getUrls(),
+        params: source.getParams()
+      };
     }
     return config;
   }

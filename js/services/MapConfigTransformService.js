@@ -43,7 +43,7 @@ class MapConfigTransformService {
           type: 'TileArcGISRest',
           properties: {
             crossOrigin: 'anonymous',
-            url: source.url,
+            urls: [source.url],
             params: {
               LAYERS: layer.layerid,
               FORMAT: layer.format

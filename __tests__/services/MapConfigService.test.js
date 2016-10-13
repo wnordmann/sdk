@@ -189,6 +189,18 @@ describe('MapConfigService', function() {
     assert.equal(JSON.stringify(json), JSON.stringify(expected));
   });
 
+  it('creates and serializes TileArcGISRest source properly', function() {
+    var config = {'type':'TileArcGISRest','properties':{'urls':['http://cga6.cga.harvard.edu/arcgis/rest/services/darmc/roman/MapServer'],'params':{'LAYERS':'show:0','FORMAT':'png'}}};
+    var source = MapConfigService.generateSourceFromConfig(config);
+    assert.equal(source instanceof ol.source.TileArcGISRest, true);
+    assert.equal(source.getUrls()[0], 'http://cga6.cga.harvard.edu/arcgis/rest/services/darmc/roman/MapServer');
+    assert.equal(source.getParams().LAYERS, 'show:0');
+    assert.equal(source.getParams().FORMAT, 'png');
+    var json = MapConfigService.getSourceConfig(source);
+    var expected = {'type':'TileArcGISRest','properties':{'urls':['http://cga6.cga.harvard.edu/arcgis/rest/services/darmc/roman/MapServer'],'params':{'LAYERS':'show:0','FORMAT':'png'}}};
+    assert.equal(JSON.stringify(json), JSON.stringify(expected));
+  });
+
   it('returns the correct layer config for group layer (and vice versa)', function() {
     var layer = new ol.layer.Group({
       layers: [
