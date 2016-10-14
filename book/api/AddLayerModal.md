@@ -14,14 +14,6 @@ type: `bool`
 defaultValue: `false`
 
 
-### `asVector`
-
-Should we add layers as vector? Will use WFS GetCapabilities.
-
-type: `bool`
-defaultValue: `false`
-
-
 ### `className`
 
 Css class name to apply on the dialog.
@@ -43,16 +35,16 @@ The ol3 map to upload to.
 type: `instanceOf ol.Map`
 
 
+### `sources`
+
+List of sources to use for this dialog.
+
+type: `arrayOf shape`
+
+
 ### `srsName`
 
 The srs name that the map's view is in.
-
-type: `string`
-
-
-### `url` (required)
-
-url that will be used to retrieve layers from (WMS or WFS).
 
 type: `string`
 
