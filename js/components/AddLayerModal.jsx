@@ -49,6 +49,11 @@ const services = {
 };
 
 const messages = defineMessages({
+  servertypelabel: {
+    id: 'addwmslayermodal.servertypelabel',
+    description: 'Label for the combo for server type',
+    defaultMessage: 'Type'
+  },
   newservername: {
     id: 'addwmslayermodal.newservername',
     description: 'Title for new server name text field',
@@ -387,7 +392,7 @@ class AddLayerModal extends React.Component {
           {selectOptions}
         </SelectField><IconButton key='refresh' tooltip={formatMessage(messages.refresh)} onTouchTap={this._refreshService.bind(this)}><RefreshIcon /></IconButton><br/>
         <Dialog open={this.state.newModalOpen} actions={newActions} autoScrollBodyContent={true} onRequestClose={this.closeNewServer.bind(this)} modal={true} title={formatMessage(messages.newservermodaltitle)}>
-          <SelectField value={this.state.newType} onChange={this._onTypeChange.bind(this)}>{typeOptions}</SelectField><br/>
+          <SelectField floatingLabelText={formatMessage(messages.servertypelabel)} value={this.state.newType} onChange={this._onTypeChange.bind(this)}>{typeOptions}</SelectField><br/>
           <TextField ref='newservername' floatingLabelText={formatMessage(messages.newservername)} /><br/>
           <TextField ref='newserverurl' floatingLabelText={formatMessage(messages.newserverurl)} />
         </Dialog>
