@@ -20,7 +20,7 @@ const wmtsGetFeatureInfoFormats = {
 };
 
 class WMTSService {
-  getFeatureInfo(layer, coordinate, view, infoFormat, onSuccess) {
+  getFeatureInfoUrl(layer, coordinate, view, infoFormat) {
     var resolution = view.getResolution();
     var source = layer.getSource();
     var tilegrid = source.getTileGrid();
@@ -64,7 +64,11 @@ class WMTSService {
       i: tileI,
       j: tileJ
     });
-    doGET(urlObj.toString(), function(response) {
+    return urlObj.toString();
+  }
+  getFeatureInfo(layer, coordinate, view, infoFormat, onSuccess) {
+    var url = this.getFeatureInfoUrl(layer, coordinate, view, infoFormat);
+    doGET(url, function(response) {
       var result = {};
       if (infoFormat === 'text/plain' || infoFormat === 'text/html') {
         if (response.responseText.trim() !== 'no features were found') {
