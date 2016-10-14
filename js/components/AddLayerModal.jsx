@@ -15,26 +15,69 @@ import ol from 'openlayers';
 import Dialog from 'material-ui/Dialog';
 import Snackbar from 'material-ui/Snackbar';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import IconButton from 'material-ui/IconButton';
+import RefreshIcon from 'material-ui/svg-icons/navigation/refresh';
 import pureRender from 'pure-render-decorator';
 import TextField from 'material-ui/TextField';
 import Button from './Button.jsx';
+import MenuItem from 'material-ui/MenuItem';
+import SelectField from 'material-ui/SelectField';
 import {List, ListItem} from 'material-ui/List';
 import Checkbox from 'material-ui/Checkbox';
 import FolderIcon from 'material-ui/svg-icons/file/folder-open';
 import LayerIcon from 'material-ui/svg-icons/maps/layers';
-import URL from 'url-parse';
 import RESTService from '../services/RESTService.js';
 import WMSService from '../services/WMSService.js';
 import WFSService from '../services/WFSService.js';
+import ArcGISRestService from '../services/ArcGISRestService.js';
+
 import classNames from 'classnames';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import './AddLayerModal.css';
 
+// TODO add more types
+const addNewTypes = [
+  'WMS',
+  'WFS',
+  'ArcGISRest'
+];
+
+const services = {
+  'WMS': WMSService,
+  'WFS': WFSService,
+  'ArcGISRest': ArcGISRestService
+};
+
 const messages = defineMessages({
+  newservername: {
+    id: 'addwmslayermodal.newservername',
+    description: 'Title for new server name text field',
+    defaultMessage: 'Name'
+  },
+  newserverurl: {
+    id: 'addwmslayermodal.newserverurl',
+    description: 'Title for new server url text field',
+    defaultMessage: 'URL'
+  },
+  newservermodaltitle: {
+    id: 'addwmslayermodal.newservermodaltitle',
+    description: 'Modal title for add new server',
+    defaultMessage: 'Add Server'
+  },
+  addserverbutton: {
+    id: 'addwmslayermodal.addserverbutton',
+    description: 'Text for add server button',
+    defaultMessage: 'Add'
+  },
+  refresh: {
+    id: 'addwmslayermodal.refresh',
+    description: 'Refresh tooltip',
+    defaultMessage: 'Refresh Layers'
+  },
   title: {
     id: 'addwmslayermodal.title',
     description: 'Title for the modal Add layer dialog',
-    defaultMessage: 'Add Layer from OGC:{serviceType}'
+    defaultMessage: 'Add Layers'
   },
   nolayertitle: {
     id: 'addwmslayermodal.nolayertitle',
@@ -86,6 +129,10 @@ class AddLayerModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      sources: this.props.sources.slice(),
+      newType: addNewTypes[0],
+      newModalOpen: false,
+      source: 0,
       filter: null,
       error: false,
       errorOpen: false,
@@ -101,7 +148,10 @@ class AddLayerModal extends React.Component {
       this._request.abort();
     }
   }
-  _getCaps(url) {
+  _getCaps() {
+    var source = this.state.sources[this.state.source];
+    var url = source.url;
+    var service = services[source.type];
     var me = this;
     const {formatMessage} = this.props.intl;
     var failureCb = function(xmlhttp) {
@@ -116,11 +166,7 @@ class AddLayerModal extends React.Component {
       delete me._request;
       me.setState({layerInfo: layerInfo});
     };
-    if (this.props.asVector) {
-      me._request = WFSService.getCapabilities(url, successCb, failureCb);
-    } else {
-      me._request = WMSService.getCapabilities(url, successCb, failureCb);
-    }
+    me._request = service.getCapabilities(url, successCb, failureCb);
   }
   _setError(msg) {
     this.setState({
@@ -131,7 +177,7 @@ class AddLayerModal extends React.Component {
     });
   }
   _getStyleName(olLayer) {
-    var url = this._getUrl();
+    var url = this.state.sources[this.state.source].url;
     RESTService.getStyleName(url, olLayer, function(styleName) {
       olLayer.set('styleName', styleName);
     }, function() {
@@ -139,8 +185,9 @@ class AddLayerModal extends React.Component {
   }
   _getWfsInfo(layer, olLayer, success, scope) {
     var me = this;
+    var url = this.state.sources[this.state.source].url;
     // do a WFS DescribeFeatureType request to get wfsInfo
-    WFSService.describeFeatureType(me._getUrl(), layer.Name, function(wfsInfo) {
+    WFSService.describeFeatureType(url, layer.Name, function(wfsInfo) {
       olLayer.set('wfsInfo', wfsInfo);
       success.call(scope);
     }, function() {
@@ -159,14 +206,15 @@ class AddLayerModal extends React.Component {
   }
   _onLayerClick(layer) {
     var map = this.props.map;
-    var olLayer, titleObj = this._getLayerTitle(layer);
-    if (this.props.asVector) {
-      olLayer = WFSService.createLayer(layer, this._getUrl().replace('wms', 'wfs'), titleObj);
-    } else {
-      olLayer = WMSService.createLayer(layer, this._getUrl(), titleObj);
+    var titleObj = this._getLayerTitle(layer);
+    var source = this.state.sources[this.state.source];
+    var url = source.url;
+    var service = services[source.type];
+    var olLayer = service.createLayer(layer, url, titleObj);
+    if (source.type === 'WMS' || source.type === 'WFS') {
+      this._getStyleName.call(this, olLayer);
+      this._getWfsInfo.call(this, layer, olLayer, this.close, this);
     }
-    this._getStyleName.call(this, olLayer);
-    this._getWfsInfo.call(this, layer, olLayer, this.close, this);
     if (olLayer.get('type') === 'base') {
       var foundGroup = false;
       map.getLayers().forEach(function(lyr) {
@@ -185,19 +233,8 @@ class AddLayerModal extends React.Component {
       map.addLayer(olLayer);
     }
   }
-  _getUrl() {
-    var url;
-    if (this.refs.url) {
-      url = this.refs.url.getValue();
-    } else {
-      url = this.props.url;
-    }
-    var urlObj = new URL(url);
-    return urlObj.toString();
-  }
   _connect() {
-    var url = this.refs.url.getValue();
-    this._getCaps(url);
+    this._getCaps();
   }
   _getLayersMarkup(layer) {
     var filter = this.state.filter;
@@ -260,7 +297,7 @@ class AddLayerModal extends React.Component {
     }
   }
   open() {
-    this._getCaps(this.props.url);
+    this._getCaps();
     this.setState({open: true});
   }
   close() {
@@ -279,7 +316,48 @@ class AddLayerModal extends React.Component {
   _onFilterChange(proxy, value) {
     this.setState({filter: value});
   }
+  _onTypeChange(evt, idx, value) {
+    this.setState({newType: value});
+  }
+  _onSourceChange(evt, idx, value) {
+    if (value === 'new') {
+      this.setState({newModalOpen: true});
+    } else {
+      this.setState({source: value}, function() {
+        this._refreshService();
+      }, this);
+    }
+  }
+  closeNewServer() {
+    this.setState({newModalOpen: false});
+  }
+  _refreshService() {
+    this._getCaps();
+  }
+  addServer() {
+    var name = this.refs.newservername.getValue();
+    var url = this.refs.newserverurl.getValue();
+    var serverType = this.state.newType;
+    var sources = this.state.sources.slice();
+    sources.push({
+      title: name,
+      type: serverType,
+      url: url
+    });
+    this.setState({source: sources.length - 1, newModalOpen: false, sources: sources}, function() {
+      this._refreshService();
+    }, this);
+  }
   render() {
+    var selectOptions = this.state.sources.map(function(source, idx) {
+      return (<MenuItem key={idx} value={idx} primaryText={source.title} />);
+    });
+    var typeOptions = addNewTypes.map(function(newType) {
+      return (<MenuItem key={newType} value={newType} primaryText={newType} />);
+    });
+    if (this.props.allowUserInput) {
+      selectOptions.push(<MenuItem key='new' value='new' primaryText='Add New Server' />);
+    }
     this._checkedLayers = [];
     const {formatMessage} = this.props.intl;
     var layers;
@@ -298,24 +376,25 @@ class AddLayerModal extends React.Component {
         onRequestClose={this._handleRequestClose.bind(this)}
       />);
     }
-    var input;
-    var serviceType = this.props.asVector ? 'WFS' : 'WMS';
-    if (this.props.allowUserInput) {
-      input = (
-        <div>
-          <TextField style={{width: '512px'}} floatingLabelText={formatMessage(messages.inputfieldlabel, {serviceType: serviceType})} defaultValue={this.props.url} ref='url' />
-          <Button style={{position: 'absolute', 'top': -14, right: -190}} label={formatMessage(messages.connectbutton)} onTouchTap={this._connect.bind(this)} disableTouchRipple={true}/>
-        </div>
-      );
-    }
     var actions = [
       <Button buttonType='Flat' primary={true} label={formatMessage(messages.addbutton)} onTouchTap={this.addLayers.bind(this)} />,
       <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
     ];
+    var newActions = [
+      <Button buttonType='Flat' primary={true} label={formatMessage(messages.addserverbutton)} onTouchTap={this.addServer.bind(this)} />,
+      <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.closeNewServer.bind(this)} />
+    ];
     return (
-      <Dialog className={classNames('sdk-component add-layer-modal', this.props.className)}  actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title, {serviceType: serviceType})} open={this.state.open} onRequestClose={this.close.bind(this)}>
+      <Dialog className={classNames('sdk-component add-layer-modal', this.props.className)}  actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title)} open={this.state.open} onRequestClose={this.close.bind(this)}>
+        <SelectField value={this.state.source} onChange={this._onSourceChange.bind(this)}>
+          {selectOptions}
+        </SelectField><IconButton key='refresh' tooltip={formatMessage(messages.refresh)} onTouchTap={this._refreshService.bind(this)}><RefreshIcon /></IconButton><br/>
+        <Dialog open={this.state.newModalOpen} actions={newActions} autoScrollBodyContent={true} onRequestClose={this.closeNewServer.bind(this)} modal={true} title={formatMessage(messages.newservermodaltitle)}>
+          <SelectField value={this.state.newType} onChange={this._onTypeChange.bind(this)}>{typeOptions}</SelectField><br/>
+          <TextField ref='newservername' floatingLabelText={formatMessage(messages.newservername)} /><br/>
+          <TextField ref='newserverurl' floatingLabelText={formatMessage(messages.newserverurl)} />
+        </Dialog>
         <TextField floatingLabelText={formatMessage(messages.filtertitle)} onChange={this._onFilterChange.bind(this)} />
-        {input}
         {layers}
         {error}
       </Dialog>
@@ -333,13 +412,13 @@ AddLayerModal.propTypes = {
    */
   className: React.PropTypes.string,
   /**
-   * url that will be used to retrieve layers from (WMS or WFS).
+   * List of sources to use for this dialog.
    */
-  url: React.PropTypes.string.isRequired,
-  /**
-   * Should we add layers as vector? Will use WFS GetCapabilities.
-   */
-  asVector: React.PropTypes.bool,
+  sources: React.PropTypes.arrayOf(React.PropTypes.shape({
+    title: React.PropTypes.string.isRequired,
+    type: React.PropTypes.string.isRequired,
+    url: React.PropTypes.string.isRequired
+  })),
   /**
    * Should be user be able to provide their own url?
    */
@@ -355,7 +434,6 @@ AddLayerModal.propTypes = {
 };
 
 AddLayerModal.defaultProps = {
-  asVector: false,
   allowUserInput: false
 };
 

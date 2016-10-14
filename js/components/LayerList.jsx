@@ -172,7 +172,7 @@ class LayerList extends React.Component {
       addLayer = (
           <article className="layer-list-add">
           <Toolbar><ToolbarGroup><RaisedButton icon={<NoteAdd />} label={formatMessage(messages.addlayertext)} onTouchTap={this._showAddLayer.bind(this)} disableTouchRipple={true}/></ToolbarGroup></Toolbar>
-          <AddLayerModal srsName={this.props.map.getView().getProjection().getCode()} allowUserInput={this.props.addLayer.allowUserInput} asVector={this.props.addLayer.asVector} map={this.props.map} url={this.props.addLayer.url} ref='addlayermodal'/>
+          <AddLayerModal srsName={this.props.map.getView().getProjection().getCode()} allowUserInput={this.props.addLayer.allowUserInput} sources={this.props.addLayer.sources} map={this.props.map} ref='addlayermodal'/>
           </article>
       );
     }
@@ -250,15 +250,15 @@ LayerList.propTypes = {
    */
   showOnStart: React.PropTypes.bool,
   /**
-   * Should we allow adding layers through WMS or WFS GetCapabilities?
-   * Object with keys url (string, required), allowUserInput (boolean, optional) and asVector (boolean, optional).
-   * If asVector is true, layers will be retrieved from WFS and added as vector.
-   * If allowUserInput is true, the user will be able to provide a url through an input.
+   * Should we allow adding layers?
    */
   addLayer: React.PropTypes.shape({
-    url: React.PropTypes.string.isRequired,
-    allowUserInput: React.PropTypes.bool,
-    asVector: React.PropTypes.bool
+    sources: React.PropTypes.arrayOf(React.PropTypes.shape({
+      title: React.PropTypes.string.isRequired,
+      type: React.PropTypes.string.isRequired,
+      url: React.PropTypes.string.isRequired
+    })),
+    allowUserInput: React.PropTypes.bool
   }),
   /**
    * Css class name to apply on the root element of this component.

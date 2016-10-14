@@ -46,7 +46,7 @@ describe('AddLayerModal', function() {
     var container = document.createElement('div');
     var url = 'http://localhost:8080/geoserver/wms';
     var modal = ReactDOM.render((
-      <AddLayerModal map={map} allowUserInput={true} url={url} intl={intl} />
+      <AddLayerModal map={map} allowUserInput={true} sources={[{url: url, type: 'WMS', title: 'My WMS'}]} intl={intl} />
     ), container);
     modal._setError('Error');
     assert.equal(modal.state.layerInfo, null);
@@ -60,7 +60,7 @@ describe('AddLayerModal', function() {
     var container = document.createElement('div');
     var url = 'http://localhost:8080/geoserver/wms';
     var modal = ReactDOM.render((
-      <AddLayerModal map={map} allowUserInput={true} url={url} intl={intl} />
+      <AddLayerModal map={map} allowUserInput={true} sources={[{url: url, type: 'WMS', title: 'My WMS'}]} intl={intl} />
     ), container);
     var title = modal._getLayerTitle({Title: ''});
     assert.equal(title.empty, true);
@@ -77,9 +77,9 @@ describe('AddLayerModal', function() {
     var container = document.createElement('div');
     var url = 'http://localhost:8080/geoserver/wms';
     var modal = ReactDOM.render((
-      <AddLayerModal map={map} allowUserInput={false} url={url} intl={intl} />
+      <AddLayerModal map={map} allowUserInput={false} sources={[{url: url, type: 'WMS', title: 'My WMS'}]} intl={intl} />
     ), container);
-    var result = modal._getUrl();
+    var result = modal.state.sources[modal.state.source].url;
     assert.equal(result, url);
     window.setTimeout(function() {
       ReactDOM.unmountComponentAtNode(container);
