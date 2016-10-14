@@ -233,9 +233,6 @@ class AddLayerModal extends React.Component {
       map.addLayer(olLayer);
     }
   }
-  _connect() {
-    this._getCaps();
-  }
   _getLayersMarkup(layer) {
     var filter = this.state.filter;
     var childList;
