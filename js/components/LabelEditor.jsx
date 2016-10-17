@@ -143,7 +143,7 @@ LabelEditor.defaultProps = {
       b: 0,
       a: 1
     },
-    hex: '000000'
+    hex: '#000000'
   }
 };
 

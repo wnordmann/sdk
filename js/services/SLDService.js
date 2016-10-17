@@ -192,7 +192,7 @@ class SLDService {
     var fillColor = {};
     for (var i = 0, ii = fillObj.cssParameter.length; i < ii; ++i) {
       if (fillObj.cssParameter[i].name === 'fill') {
-        fillColor.hex = fillObj.cssParameter[i].content[0].replace('#', '');
+        fillColor.hex = fillObj.cssParameter[i].content[0];
         fillColor.rgb = hexToRgb(fillColor.hex);
       } else if (fillObj.cssParameter[i].name === 'fill-opacity') {
         fillColor.rgb = Object.assign(fillColor.rgb, {a :parseFloat(fillObj.cssParameter[i].content[0])});
@@ -206,7 +206,7 @@ class SLDService {
       for (var i = 0, ii = strokeObj.cssParameter.length; i < ii; ++i) {
         if (strokeObj.cssParameter[i].name === 'stroke') {
           stroke.strokeColor = {
-            hex: strokeObj.cssParameter[i].content[0].replace('#', ''),
+            hex: strokeObj.cssParameter[i].content[0],
             rgb: hexToRgb(strokeObj.cssParameter[i].content[0])
           };
         } else if (strokeObj.cssParameter[i].name === 'stroke-opacity') {
@@ -222,7 +222,7 @@ class SLDService {
     return {
       cssParameter: [{
         name: 'fill',
-        content: ['#' + styleState.fillColor.hex]
+        content: [styleState.fillColor.hex]
       }, {
         name: 'fill-opacity',
         content: [String(styleState.fillColor.rgb.a)]
@@ -234,7 +234,7 @@ class SLDService {
     if (styleState.strokeColor) {
       cssParameters.push({
         name: 'stroke',
-        content: ['#' + styleState.strokeColor.hex]
+        content: [styleState.strokeColor.hex]
       }, {
         name: 'stroke-opacity',
         content: [String(styleState.strokeColor.rgb.a)]
@@ -333,7 +333,7 @@ class SLDService {
         fill: styleState.fontColor ? {
           cssParameter: [{
             name: 'fill',
-            content: ['#' + styleState.fontColor.hex]
+            content: [styleState.fontColor.hex]
           }]
         } : undefined,
         font: styleState.fontSize ? {

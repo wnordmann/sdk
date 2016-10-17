@@ -78,7 +78,7 @@ FillEditor.defaultProps = {
       b: 0,
       a: 0.5
     },
-    hex: 'FF0000'
+    hex: '#FF0000'
   }
 };
 
