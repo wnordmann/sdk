@@ -130,6 +130,9 @@ class SLDService {
     if (labelInfo.TYPE_NAME === 'Filter_1_0_0.PropertyNameType') {
       result.labelAttribute = labelInfo.content[0];
     }
+    if (textObj.vendorOption) {
+      result.vendorOption = textObj.vendorOption;
+    }
     if (textObj.font) {
       for (var i = 0, ii = textObj.font.cssParameter.length; i < ii; ++i) {
         var param = textObj.font.cssParameter[i];
@@ -349,7 +352,8 @@ class SLDService {
               content: [styleState.labelAttribute]
             }
           }]
-        }
+        },
+        vendorOption: styleState.vendorOption
       }
     };
   }
