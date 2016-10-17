@@ -13,27 +13,36 @@
 import {doGET, doPOST} from '../util.js';
 
 class RESTService {
-  getStyleName(url, layer, onSuccess, onFailure) {
+  _getStyleNameUrl(url, layer) {
     var id = layer.get('id').split(':').pop();
-    url = url.replace(/wms|ows|wfs/g, 'rest/layers/' + id + '.json');
-    doGET(url, function(xmlhttp) {
-      var styleInfo = JSON.parse(xmlhttp.responseText);
-      var styleName = styleInfo.layer.defaultStyle.name;
-      if (styleName.indexOf(':') === -1) {
-        // look for workspace in JSON output
-        if (styleInfo.layer.defaultStyle.workspace) {
-          styleName = styleInfo.layer.defaultStyle.workspace + ':' + styleInfo.layer.defaultStyle.name;
-        }
+    return url.replace(/wms|ows|wfs/g, 'rest/layers/' + id + '.json');
+  }
+  _parseStyleName(jsonData) {
+    var styleName = jsonData.layer.defaultStyle.name;
+    if (styleName.indexOf(':') === -1) {
+      // look for workspace in JSON output
+      if (jsonData.layer.defaultStyle.workspace) {
+        styleName = jsonData.layer.defaultStyle.workspace + ':' + jsonData.layer.defaultStyle.name;
       }
+    }
+    return styleName;
+  }
+  getStyleName(url, layer, onSuccess, onFailure) {
+    url = this._getStyleNameUrl(url, layer);
+    doGET(url, function(xmlhttp) {
+      var styleName = this._parseStyleName(JSON.parse(xmlhttp.responseText));
       onSuccess.call(this, styleName);
     }, function(xmlhttp) {
       onFailure.call(this, xmlhttp);
     }, this);
   }
+  _createStylePayload(styleName) {
+    return  '<style><name>' + styleName + '</name><filename>' + styleName + '.sld</filename></style>';
+  }
   createStyle(url, layer, sld, onSuccess, onFailure) {
     var styleName = 'web_sdk_style_' + Math.floor(100000 + Math.random() * 900000);
     var createUrl = url.replace(/wms|ows|wfs/g, 'rest/styles');
-    doPOST(createUrl, '<style><name>' + styleName + '</name><filename>' + styleName + '.sld</filename></style>', function(xmlhttp) {
+    doPOST(createUrl, this._createStylePayload(styleName), function(xmlhttp) {
       layer.set('styleName', styleName);
       this.updateStyle(url, layer, sld, onSuccess, onFailure);
     }, function(xmlhttp) {
@@ -45,18 +54,20 @@ class RESTService {
       }
     }, this);
   }
-  updateStyle(url, layer, sld, onSuccess, onFailure) {
+  _getUpdateStyleUrl(url, layer) {
     var styleName = layer.get('styleName');
     if (styleName.indexOf(':') !== -1) {
       var styleInfo = styleName.split(':');
       var workspace = styleInfo[0];
       var name = styleInfo[1];
       // workspaces styles
-      url = url.replace(/wms|ows|wfs/g, 'rest/workspaces/' + workspace + '/styles/' + name);
+      return url.replace(/wms|ows|wfs/g, 'rest/workspaces/' + workspace + '/styles/' + name);
     } else {
-      url = url.replace(/wms|ows|wfs/g, 'rest/styles/' + layer.get('styleName'));
+      return url.replace(/wms|ows|wfs/g, 'rest/styles/' + layer.get('styleName'));
     }
-    doPOST(url, sld, function(xmlhttp) {
+  }
+  updateStyle(url, layer, sld, onSuccess, onFailure) {
+    doPOST(this._getUpdateStyleUrl(url, layer), sld, function(xmlhttp) {
       onSuccess.call(this, xmlhttp);
     }, function(xmlhttp) {
       onFailure.call(this, xmlhttp);
