@@ -59,7 +59,6 @@ describe('LayerStore', function() {
     assert.equal(layer !== undefined, true);
     layer = LayerStore.findLayer('level4');
     assert.equal(layer !== undefined, false);
-    LayerStore.unbindMap();
   });
 
   it('fires change when layer gets added / removed on the map', function() {
@@ -76,7 +75,6 @@ describe('LayerStore', function() {
     map.getLayers().pop();
     assert.equal(count, 2);
     assert.equal(LayerStore.getState().flatLayers.length, 1);
-    LayerStore.unbindMap();
   });
 
   it('listens to the app dispatcher', function() {
@@ -86,7 +84,6 @@ describe('LayerStore', function() {
     assert.equal(LayerStore.findLayer('1'), vector);
     LayerActions.removeLayer(vector);
     assert.equal(LayerStore.findLayer('1'), undefined);
-    LayerStore.unbindMap();
   });
 
 });
