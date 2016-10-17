@@ -34,6 +34,14 @@ class LayerStore extends EventEmitter {
       this._map.getLayers().on('remove', this._onRemove, this);
     }
   }
+  unbindMap() {
+    var layers = this._map.getLayers().getArray();
+    for (var i = 0, ii = layers.length; i < ii; ++i) {
+      this._unbindLayer(layers[i]);
+    }
+    this._map.getLayers().un('add', this._onAdd, this);
+    this._map.getLayers().un('remove', this._onRemove, this);
+  }
   _bindLayer(layer) {
     // TODO should we listen to more generic change event?
     layer.on('change:wfsInfo', this.emitChange, this);
