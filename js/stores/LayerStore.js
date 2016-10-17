@@ -41,6 +41,7 @@ class LayerStore extends EventEmitter {
     }
     this._map.getLayers().un('add', this._onAdd, this);
     this._map.getLayers().un('remove', this._onRemove, this);
+    delete this._map;
   }
   _bindLayer(layer) {
     // TODO should we listen to more generic change event?
