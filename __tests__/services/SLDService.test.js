@@ -113,4 +113,14 @@ describe('SLDService', function() {
     expect(sld).xml.to.equal(sld2);
   });
 
+  it('deals with optional values in createTextSymbolizer', function() {
+    var error = false;
+    try {
+      SLDService.createTextSymbolizer({labelAttribute: 'NAME'});
+    } catch (e) {
+      error = true;
+    }
+    assert.equal(error, false);
+  });
+
 });

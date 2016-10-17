@@ -327,18 +327,18 @@ class SLDService {
         namespaceURI: sldNamespace
       },
       value: {
-        fill: {
+        fill: styleState.fontColor ? {
           cssParameter: [{
             name: 'fill',
             content: ['#' + styleState.fontColor.hex]
           }]
-        },
-        font: {
+        } : undefined,
+        font: styleState.fontSize ? {
           cssParameter: [{
             name: 'font-size',
             content: [String(styleState.fontSize)]
           }]
-        },
+        } : undefined,
         label: {
           content: [{
             name: {
