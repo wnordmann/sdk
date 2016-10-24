@@ -14,12 +14,15 @@
  * Transforms GXP style map config to our internal format.
  */
 class MapConfigTransformService {
-  transform(data) {
+  transform(data, opt_proxy) {
     var i, ii, layers = [];
     var groups = {};
     for (i = 0, ii = data.map.layers.length; i < ii; ++i) {
       var layer = data.map.layers[i];
       var source = data.sources[layer.source];
+      if (opt_proxy) {
+        source.url = opt_proxy + source.url;
+      }
       var layerConfig = {
         properties: {
           isRemovable: true,

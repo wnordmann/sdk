@@ -80,5 +80,13 @@ describe('MapConfigTransfrormService', function() {
     var expected = {'layers':[{'properties':{'isRemovable':true,'visible':true,'title':'Roman and Medieval Civilization','id':'  Roman and Medieval Civilization','name':'  Roman and Medieval Civilization'},'type':'Tile','source':{'type':'TileArcGISRest','properties':{'crossOrigin':'anonymous','urls':['http://cga6.cga.harvard.edu/arcgis/rest/services/darmc/roman/MapServer'],'params':{'LAYERS':'show:0','FORMAT':'png'}}}}],'view':{'center':[4263719.1382864,5532513.4852863],'projection':'EPSG:102113','zoom':3}};
     assert.equal(JSON.stringify(result), JSON.stringify(expected));
   });
+  describe('has proxy', function() {
+    it('transforms MapBox source correctly', function() {
+      var config = {'sources':{'1':{'ptype':'gxp_wmscsource','projection':'EPSG:102113', 'url': 'http://demo.geonode.org/geoserver/wms'}},'map':{'projection':'EPSG:102113','layers':[{'source':'1','name':'Demo','title':'Demo','visibility':true,'opacity':1,'group':'','fixed':false,'selected':true}],'center':[0,0],'zoom':3}};
+      var result = MapConfigTransformService.transform(config, 'http://proxy.com/?url=');
+      var expected = {'layers':[{'properties':{'isRemovable':true,'visible':true,'title':'Demo','id':'Demo','name':'Demo','popupInfo':'#AllAttributes'},'type':'Tile','source':{'type':'TileWMS','properties':{'crossOrigin':'anonymous','params':{'LAYERS':'Demo','TILED':'TRUE'},'url':'http://proxy.com/?url=http://demo.geonode.org/geoserver/wms'}}}],'view':{'center':[0,0],'projection':'EPSG:102113','zoom':3}};
+      assert.equal(JSON.stringify(result), JSON.stringify(expected));
+    });
+  });
 
 });
