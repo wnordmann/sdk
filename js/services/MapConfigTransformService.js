@@ -20,8 +20,9 @@ class MapConfigTransformService {
     for (i = 0, ii = data.map.layers.length; i < ii; ++i) {
       var layer = data.map.layers[i];
       var source = data.sources[layer.source];
+      var url = source.url;
       if (opt_proxy) {
-        source.url = opt_proxy + source.url;
+        url = opt_proxy + source.url;
       }
       var layerConfig = {
         properties: {
@@ -46,7 +47,7 @@ class MapConfigTransformService {
           type: 'TileArcGISRest',
           properties: {
             crossOrigin: 'anonymous',
-            urls: [source.url],
+            urls: [url],
             params: {
               LAYERS: layer.layerid,
               FORMAT: layer.format
@@ -81,7 +82,7 @@ class MapConfigTransformService {
           properties: {
             crossOrigin: 'anonymous',
             params: params,
-            url: source.url
+            url: url
           }
         };
       } else if (source.ptype === 'gxp_mapboxsource') {

@@ -81,10 +81,16 @@ describe('MapConfigTransfrormService', function() {
     assert.equal(JSON.stringify(result), JSON.stringify(expected));
   });
   describe('has proxy', function() {
-    it('transforms MapBox source correctly', function() {
+    it('transforms WMS source correctly', function() {
       var config = {'sources':{'1':{'ptype':'gxp_wmscsource','projection':'EPSG:102113', 'url': 'http://demo.geonode.org/geoserver/wms'}},'map':{'projection':'EPSG:102113','layers':[{'source':'1','name':'Demo','title':'Demo','visibility':true,'opacity':1,'group':'','fixed':false,'selected':true}],'center':[0,0],'zoom':3}};
       var result = MapConfigTransformService.transform(config, 'http://proxy.com/?url=');
       var expected = {'layers':[{'properties':{'isRemovable':true,'visible':true,'title':'Demo','id':'Demo','name':'Demo','popupInfo':'#AllAttributes'},'type':'Tile','source':{'type':'TileWMS','properties':{'crossOrigin':'anonymous','params':{'LAYERS':'Demo','TILED':'TRUE'},'url':'http://proxy.com/?url=http://demo.geonode.org/geoserver/wms'}}}],'view':{'center':[0,0],'projection':'EPSG:102113','zoom':3}};
+      assert.equal(JSON.stringify(result), JSON.stringify(expected));
+    });
+    it('transforms WMS source with multiple layers of the same source correctly', function() {
+      var config = {'sources':{'1':{'ptype':'gxp_wmscsource','projection':'EPSG:102113', 'url': 'http://demo.geonode.org/geoserver/wms'}},'map':{'projection':'EPSG:102113','layers':[{'source':'1','name':'secondlayer','title':'Second Demo','visibility':true,'opacity':1,'group':'','fixed':false,'selected':true},{'source':'1','name':'Demo','title':'Demo','visibility':true,'opacity':1,'group':'','fixed':false,'selected':true}],'center':[0,0],'zoom':3}};
+      var result = MapConfigTransformService.transform(config, 'http://proxy.com/?url=');
+      var expected = {'layers':[{'properties':{'isRemovable':true,'visible':true,'title':'Second Demo','id':'secondlayer','name':'secondlayer','popupInfo':'#AllAttributes'},'type':'Tile','source':{'type':'TileWMS','properties':{'crossOrigin':'anonymous','params':{'LAYERS':'secondlayer','TILED':'TRUE'},'url':'http://proxy.com/?url=http://demo.geonode.org/geoserver/wms'}}},{'properties':{'isRemovable':true,'visible':true,'title':'Demo','id':'Demo','name':'Demo','popupInfo':'#AllAttributes'},'type':'Tile','source':{'type':'TileWMS','properties':{'crossOrigin':'anonymous','params':{'LAYERS':'Demo','TILED':'TRUE'},'url':'http://proxy.com/?url=http://demo.geonode.org/geoserver/wms'}}}],'view':{'center':[0,0],'projection':'EPSG:102113','zoom':3}};
       assert.equal(JSON.stringify(result), JSON.stringify(expected));
     });
   });
