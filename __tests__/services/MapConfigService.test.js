@@ -208,7 +208,7 @@ describe('MapConfigService', function() {
     assert.equal(source.getApiKey(), 'foo');
     assert.equal(source.getImagerySet(), 'AerialWithLabels');
     var json = MapConfigService.getSourceConfig(source);
-    var expected = {"type":"BingMaps","properties":{"key":"foo","imagerySet":"AerialWithLabels"}};
+    var expected = {'type':'BingMaps','properties':{'key':'foo','imagerySet':'AerialWithLabels'}};
     assert.equal(JSON.stringify(json), JSON.stringify(expected));
   });
 
