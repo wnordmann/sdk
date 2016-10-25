@@ -140,7 +140,11 @@ class MapConfigService {
         attributions: attributions
       };
     } else if (source instanceof ol.source.BingMaps) {
-      // TODO add when https://github.com/openlayers/ol3/pull/5955 is in a release
+      config.type = 'BingMaps';
+      config.properties = {
+        key: source.getApiKey(),
+        imagerySet: source.getImagerySet()
+      };
     } else if (source instanceof ol.source.XYZ) {
       if (source.get('originalType') === 'TMS') {
         config.type = 'TMS';

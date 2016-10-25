@@ -201,6 +201,17 @@ describe('MapConfigService', function() {
     assert.equal(JSON.stringify(json), JSON.stringify(expected));
   });
 
+  it('creates and serializes BingMaps source properly', function() {
+    var config = {'type':'BingMaps','properties':{'key': 'foo','imagerySet': 'AerialWithLabels'}};
+    var source = MapConfigService.generateSourceFromConfig(config);
+    assert.equal(source instanceof ol.source.BingMaps, true);
+    assert.equal(source.getApiKey(), 'foo');
+    assert.equal(source.getImagerySet(), 'AerialWithLabels');
+    var json = MapConfigService.getSourceConfig(source);
+    var expected = {"type":"BingMaps","properties":{"key":"foo","imagerySet":"AerialWithLabels"}};
+    assert.equal(JSON.stringify(json), JSON.stringify(expected));
+  });
+
   it('returns the correct layer config for group layer (and vice versa)', function() {
     var layer = new ol.layer.Group({
       layers: [
