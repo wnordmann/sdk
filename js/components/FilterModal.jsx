@@ -77,6 +77,9 @@ class FilterModal extends React.Component {
     this.setState({open: true});
   }
   close() {
+    if (this.props.onModalClose) {
+      this.props.onModalClose.call();
+    }
     this.setState({open: false});
   }
   _setStyleFunction() {

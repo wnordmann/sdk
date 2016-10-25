@@ -197,12 +197,6 @@ class LayerListItem extends React.Component {
       this.refs.stylemodal.getWrappedInstance().open();
     }
   }
-  _onCloseModal() {
-    if (this.props.onModalClose) {
-      this.props.onModalClose.call();
-    }
-    this.refs.filtermodal.getWrappedInstance().close();
-  }
   _modifyLatLonBBOX(bbox) {
     bbox[0] = Math.max(-180, bbox[0]);
     bbox[1] = Math.max(-85, bbox[1]);
@@ -300,7 +294,7 @@ class LayerListItem extends React.Component {
     var labelModal, filterModal, styleModal;
     if (this.props.layer instanceof ol.layer.Vector) {
       labelModal = (<LabelModal {...this.props} layer={this.props.layer} ref='labelmodal' />);
-      filterModal = (<FilterModal {...this.props} layer={this.props.layer} onHide={this._onCloseModal.bind(this)} ref='filtermodal' />);
+      filterModal = (<FilterModal {...this.props} layer={this.props.layer} ref='filtermodal' />);
     }
     if (canStyle) {
       styleModal = (<StyleModal {...this.props} layer={this.props.layer} ref='stylemodal' />);
