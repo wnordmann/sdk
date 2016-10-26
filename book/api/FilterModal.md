@@ -26,3 +26,10 @@ vector layer to filter features on.
 
 type: `instanceOf ol.layer.Vector`
 
+
+### `onModalClose`
+
+Called when the modal is closed.
+
+type: `func`
+
