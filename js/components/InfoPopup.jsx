@@ -153,7 +153,7 @@ class InfoPopup extends React.Component {
     return (<Table key={this._count}>
       <TableHeader className='popup-table-header' style={{'backgroundColor':'white'}} displaySelectAll={false} adjustForCheckbox={false}>
         <TableRow style={{'backgroundColor':'white'}}>
-          <TableHeaderColumn colSpan="2" tooltip={fid} style={{fontSize: 14, color: 'rgba(0, 0, 0, 0.87)', textAlign: 'center'}}>
+          <TableHeaderColumn colSpan="2" tooltip={fid} style={{whiteSpace: 'normal', paddingRight: 48, fontSize: 14, color: 'rgba(0, 0, 0, 0.87)', textAlign: 'center'}}>
             {layer.get('title')}
           </TableHeaderColumn>
         </TableRow>
