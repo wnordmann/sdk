@@ -1,6 +1,6 @@
 {
   "name": "boundless-sdk",
-  "version": "0.9.6",
+  "version": "0.9.7",
   "description": "SDK for OpenLayers 3 and React plus Flux",
   "main": "index.js",
   "repository": {
@@ -54,6 +54,7 @@
     "lodash.uniqueid": "^3.0.0",
     "material-ui": "0.15.4",
     "moment": "^2.13.0",
+    "npm-run-all": "^1.2.11",
     "ogc-schemas": "^2.6.0",
     "ol3-cesium": "3.9.4",
     "openlayers": "3.19.0",
@@ -93,7 +94,6 @@
     "mocha-lcov-reporter": "^1.2.0",
     "mochify": "^2.10.0",
     "mochify-istanbul": "^2.4.1",
-    "npm-run-all": "^1.2.11",
     "phantomjs-polyfill-object-assign": "0.0.2",
     "phantomjs-prebuilt": "^2.1.7",
     "raf": "^3.2.0",
