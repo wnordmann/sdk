@@ -78,6 +78,26 @@ describe('FeatureStore', function() {
     assert.equal(config.selected.length, 2);
   });
 
+  it('clears selection if layer invisible', function() {
+    FeatureStore.addLayer(layer);
+    var config = FeatureStore._config[layer.get('id')];
+    assert.equal(config.selected.length, 0);
+    FeatureStore.setSelection(layer, [layer.getSource().getFeatures()[0]]);
+    assert.equal(config.selected.length, 1);
+    layer.setVisible(false);
+    assert.equal(config.selected.length, 0);
+  });
+
+  it('clears selection if layer invisible using toggleFeature code path', function() {
+    FeatureStore.addLayer(layer);
+    var config = FeatureStore._config[layer.get('id')];
+    assert.equal(config.selected.length, 0);
+    SelectActions.toggleFeature(layer, layer.getSource().getFeatures()[0]);
+    assert.equal(config.selected.length, 1);
+    layer.setVisible(false);
+    assert.equal(config.selected.length, 0);
+  });
+
   it('selectFeaturesInCurrentSelection works correctly', function() {
     FeatureStore.addLayer(layer);
     var config = FeatureStore._config[layer.get('id')];

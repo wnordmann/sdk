@@ -213,6 +213,10 @@ FilterModal.propTypes = {
    */
   className: React.PropTypes.string,
   /**
+   * Called when the modal is closed.
+   */
+  onModalClose: React.PropTypes.func,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired

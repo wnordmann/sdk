@@ -349,6 +349,7 @@ class FeatureStore extends EventEmitter {
     }
   }
   toggleFeature(layer, feature) {
+    this.clearOnInvsible(layer);
     // special handling for cluster features
     if (layer instanceof ol.layer.Vector && layer.getSource() instanceof ol.source.Cluster) {
       feature.selected = !feature.selected;
@@ -388,13 +389,17 @@ class FeatureStore extends EventEmitter {
       }
     }
   }
-  setSelection(layer, features, clear) {
+  clearOnInvsible(layer) {
     var id = layer.get('id');
     layer.once('change:visible', function(evt) {
       this._config[id].selected = [];
       this._clearIfCluster(layer, []);
       this.emitChange();
     }, this);
+  }
+  setSelection(layer, features, clear) {
+    var id = layer.get('id');
+    this.clearOnInvsible(layer);
     if (clear) {
       this._clearIfCluster(layer, features);
     }
