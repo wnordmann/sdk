@@ -27,6 +27,13 @@ Should we allow for labeling of features in a layer?
 type: `bool`
 
 
+### `allowRemove`
+
+Should we allow for removal of layers?
+
+type: `bool`
+
+
 ### `allowReordering`
 
 Should we show up and down buttons to allow reordering?
