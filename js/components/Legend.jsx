@@ -61,7 +61,7 @@ class Legend extends React.Component {
   }
   _onChange() {
     // TODO apply nesting to this component's structure
-    var flatLayers = LayerStore.getState().flatLayers.slice();
+    var flatLayers = LayerStore.getState().flatLayers.slice().reverse();
     this.setState({flatLayers: flatLayers});
   }
   getStyles() {
