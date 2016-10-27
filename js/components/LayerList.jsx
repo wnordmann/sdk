@@ -89,9 +89,13 @@ class LayerList extends React.Component {
   }
   renderLayers(layers, group) {
     var me = this;
-    var layerNodes = layers.map(function(lyr) {
-      return me.getLayerNode(lyr, group);
-    });
+    var layerNodes = [];
+    for (var i = 0, ii = layers.length; i < ii; ++i) {
+      var lyr = layers[i];
+      if (!this.props.filter || this.props.filter(lyr) === true) {
+        layerNodes.push(me.getLayerNode(lyr, group));
+      }
+    }
     return layerNodes;
   }
   _showPanel(evt) {
@@ -268,6 +272,10 @@ LayerList.propTypes = {
    * Position of the tooltip.
    */
   tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left']),
+  /**
+   * A filter function to filter out some of the layers by returning false.
+   */
+  filter: React.PropTypes.func,
   /**
   * i18n message strings. Provided through the application through context.
   */
