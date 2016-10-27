@@ -120,7 +120,7 @@ class LoadingPanel extends React.Component {
     if (this.state.show && !this.state.forceHide) {
       return (
         <div className={classNames('sdk-component loading-panel', this.props.className)}>
-          <CircularProgress size={1.5} />
+          <CircularProgress size={60} thickness={7} />
         </div>
       );
     } else {
