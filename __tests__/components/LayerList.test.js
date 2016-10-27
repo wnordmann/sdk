@@ -60,4 +60,17 @@ describe('LayerList', function() {
     ReactDOM.unmountComponentAtNode(container);
   });
 
+  it('does not generate a list item for our layer if filter', function() {
+    var container = document.createElement('div');
+    var filter = function(lyr) {
+      return false;
+    };
+    ReactDOM.render((
+      <LayerList filter={filter} intl={intl} map={map}/>
+    ), container);
+    var items = container.querySelectorAll('.layer-list-item');
+    assert.equal(items.length, 0);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
 });
