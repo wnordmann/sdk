@@ -230,6 +230,10 @@ LayerList.propTypes = {
    */
   allowEditing: React.PropTypes.bool,
   /**
+   * Should we allow for removal of layers?
+   */
+  allowRemove: React.PropTypes.bool,
+  /**
    * Should we show the contents of layer groups?
    */
   showGroupContent: React.PropTypes.bool,
@@ -288,6 +292,7 @@ LayerList.defaultProps = {
   allowEditing: false,
   allowFiltering: false,
   allowLabeling: false,
+  allowRemove: true,
   allowStyling: false,
   showGroupContent: true,
   showDownload: false,

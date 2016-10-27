@@ -274,7 +274,7 @@ class LayerListItem extends React.Component {
       reorderDown = (<IconButton className='layer-list-item-movedown' style={iconStyle} onTouchTap={this._moveDown.bind(this)} tooltip={formatMessage(messages.reorderdownbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><MoveDownIcon /></IconButton>);
     }
     var remove;
-    if (layer.get('type') !== 'base' && layer.get('isRemovable') === true) {
+    if (this.props.allowRemove && layer.get('type') !== 'base' && layer.get('isRemovable') === true) {
       remove = (<IconButton style={iconStyle} className='layer-list-item-remove' onTouchTap={this._remove.bind(this)} tooltip={formatMessage(messages.removebuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><DeleteIcon /></IconButton>);
     }
     var edit;
@@ -356,6 +356,10 @@ LayerListItem.propTypes = {
    * Should we allow for filtering of features in a layer?
    */
   allowFiltering: React.PropTypes.bool,
+  /**
+   * Should we allow for removal of layers?
+   */
+  allowRemove: React.PropTypes.bool,
   /**
    * Should we allow editing of features in a vector layer?
    */
