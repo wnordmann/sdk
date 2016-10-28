@@ -24,6 +24,7 @@ import LinearProgress from 'material-ui/LinearProgress';
 import Snackbar from 'material-ui/Snackbar';
 import TextField from 'material-ui/TextField';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import PrintIcon from 'material-ui/svg-icons/action/print';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 
@@ -132,6 +133,10 @@ class QGISPrint extends React.Component {
     });
   }
   _onClick(layout, event) {
+    this.setState({open: true, layoutName: layout.name, layout: layout});
+  }
+  _onPrintButtonClick() {
+    var layout = this.props.layouts[0];
     this.setState({open: true, layoutName: layout.name, layout: layout});
   }
   _elementLoaded() {
@@ -357,14 +362,23 @@ class QGISPrint extends React.Component {
         </Dialog>
       );
     }
-    return (
-      <span className={classNames('sdk-component qgis-print', this.props.className)}>
-        <IconMenu anchorOrigin={{horizontal: 'left', vertical: 'top'}} targetOrigin={{horizontal: 'left', vertical: 'top'}} iconButtonElement={<Button label={formatMessage(messages.printmenutext)} />} value={this.state.layoutName}>
-          {listitems}
-        </IconMenu>
-        {dialog}
-      </span>
-    );
+    if (this.props.menu === false) {
+      return (
+        <span className={classNames('sdk-component qgis-print', this.props.className)}>
+          <Button onTouchTap={this._onPrintButtonClick.bind(this)} tooltip={formatMessage(messages.printbuttontitle)} mini={true} buttonType='Action'><PrintIcon/></Button>
+          {dialog}
+        </span>
+      );
+    } else {
+      return (
+        <span className={classNames('sdk-component qgis-print', this.props.className)}>
+          <IconMenu anchorOrigin={{horizontal: 'left', vertical: 'top'}} targetOrigin={{horizontal: 'left', vertical: 'top'}} iconButtonElement={<Button label={formatMessage(messages.printmenutext)} />} value={this.state.layoutName}>
+            {listitems}
+          </IconMenu>
+          {dialog}
+        </span>
+      );
+    }
   }
 }
 
@@ -420,12 +434,17 @@ QGISPrint.propTypes = {
    */
   style: React.PropTypes.object,
   /**
+   * Should we display as a menu? If not, we display as a button but there can only be 1 print layout then.
+   */
+  menu: React.PropTypes.bool,
+  /**
    * i18n message strings. Provided through the application through context.
    */
   intl: intlShape.isRequired
 };
 
 QGISPrint.defaultProps = {
+  menu: true,
   thumbnailPath: '../../resources/print/',
   resolutions: [72, 150, 300]
 };
