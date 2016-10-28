@@ -170,12 +170,16 @@ class InfoPopup extends React.Component {
   }
   _fetchData(evt, popupTexts, cb) {
     var map = this.props.map;
+    this._cursor = map.getTarget().style.cursor;
+    var me = this;
+    map.getTarget().style.cursor = 'wait';
     var allLayers = this._getLayers();
     var len = allLayers.length;
     var finishedQueries = 0;
     var finishedQuery = function() {
       finishedQueries++;
       if (len === finishedQueries) {
+        map.getTarget().style.cursor = me._cursor;
         cb();
       }
     };
@@ -188,7 +192,6 @@ class InfoPopup extends React.Component {
     };
     const {formatMessage} = this.props.intl;
     var popupDef;
-    var me = this;
     this._noFeaturesFound = false;
     var onReady = function(response) {
       var features = response.features;
