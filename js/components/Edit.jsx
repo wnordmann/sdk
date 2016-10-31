@@ -345,7 +345,6 @@ class Edit extends React.Component {
     };
   }
   render() {
-    const buttonStyle = this.props.buttonStyle;
     const {formatMessage} = this.props.intl;
     const styles = this.getStyles();
     var options = [], i, ii;
@@ -355,9 +354,9 @@ class Edit extends React.Component {
     }
     var button;
     if (this.state.enable === true) {
-      button = (<Button tooltip={formatMessage(messages.enabletitle)} style={buttonStyle} disabled={this.state.layers.length === 0} label={formatMessage(messages.enable)} onTouchTap={this._enableEditMode.bind(this)} />);
+      button = (<Button tooltip={formatMessage(messages.enabletitle)} disabled={this.state.layers.length === 0} label={formatMessage(messages.enable)} onTouchTap={this._enableEditMode.bind(this)} />);
     } else {
-      button = (<Button tooltip={formatMessage(messages.disabletitle)}style={buttonStyle} disabled={this.state.layers.length === 0} label={formatMessage(messages.disable)} onTouchTap={this.disableEditMode.bind(this)} />);
+      button = (<Button tooltip={formatMessage(messages.disabletitle)} disabled={this.state.layers.length === 0} label={formatMessage(messages.disable)} onTouchTap={this.disableEditMode.bind(this)} />);
     }
     var attributeFormItems;
     if (this.state.attributes !== null) {
@@ -381,7 +380,7 @@ class Edit extends React.Component {
           {options}
         </SelectField>
         <Toolbar>
-          <Button tooltip={formatMessage(messages.newlayertitle)} style={buttonStyle} label={formatMessage(messages.newlayer)} onTouchTap={this._showModal.bind(this)} />
+          <Button tooltip={formatMessage(messages.newlayertitle)} label={formatMessage(messages.newlayer)} onTouchTap={this._showModal.bind(this)} />
           {button}
         </Toolbar>
         <Dialog open={this.state.attributeOpen} actions={attributeActions} autoScrollBodyContent={true} onRequestClose={this.closeAttributes.bind(this)} modal={true} title={formatMessage(messages.newfeaturemodaltitle)}>
@@ -427,10 +426,6 @@ Edit.propTypes = {
    */
   pointRadius: React.PropTypes.number,
   /**
-   * Style for the buttons in the toolbar.
-   */
-  buttonStyle: React.PropTypes.object,
-  /**
    * Style config for root div.
    */
   style: React.PropTypes.object,
@@ -445,9 +440,6 @@ Edit.propTypes = {
 };
 
 Edit.defaultProps = {
-  buttonStyle: {
-    margin: '10px 12px'
-  },
   style: {
     padding: 10
   },
