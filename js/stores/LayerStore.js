@@ -121,53 +121,26 @@ export default _LayerStore;
 
 AppDispatcher.register((payload) => {
   let action = payload.action;
-  let layers, index, layerArray, i;
+  let layers, layerArray;
   switch (action.type) {
     case LayerConstants.REMOVE_LAYER:
       layers = _LayerStore.getMap().getLayers();
       layers.remove(action.layer);
       break;
-    case LayerConstants.MOVE_LAYER_UP:
+    case LayerConstants.MOVE_LAYER:
       if (action.group) {
         layers = action.group.getLayers();
       } else {
         layers = _LayerStore.getMap().getLayers();
       }
       layerArray = layers.getArray();
-      index = layerArray.indexOf(action.layer);
-      var topMost = true;
-      for (i = layerArray.length - 1; i > index; i--) {
-        if (layerArray[i].get('title') !== null) {
-          topMost = false;
-          break;
-        }
-      }
-      if (!topMost) {
-        var next = layers.item(index + 1);
-        layers.removeAt(index);
-        layers.insertAt(index + 1, action.layer);
-        layers.setAt(index, next);
-      }
-      break;
-    case LayerConstants.MOVE_LAYER_DOWN:
-      if (action.group) {
-        layers = action.group.getLayers();
+      var layer2 = layerArray[action.hoverIndex - 1];
+      if (action.dragIndex < action.hoverIndex) {
+        layers.remove(action.layer);
+        layers.insertAt(action.dragIndex, action.layer);
       } else {
-        layers = _LayerStore.getMap().getLayers();
-      }
-      layerArray = layers.getArray();
-      index = layerArray.indexOf(action.layer);
-      var bottomMost = true;
-      for (i = index - 1; i >= 0 ; i--) {
-        if (layerArray[i].get('title') !== null && layerArray[i].get('type') !== 'base-group') {
-          bottomMost = false;
-        }
-      }
-      if (!bottomMost) {
-        var prev = layers.item(index - 1);
-        layers.removeAt(index);
-        layers.insertAt(index - 1, action.layer);
-        layers.setAt(index, prev);
+        layers.remove(layer2);
+        layers.insertAt(action.hoverIndex, layer2);
       }
       break;
     default:

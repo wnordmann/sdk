@@ -57,7 +57,7 @@ describe('LayerListItem', function() {
   it('generates a list item for our layer but no zoom in for base layer', function() {
     var container = document.createElement('div');
     ReactDOM.render((
-      <LayerListItem intl={intl} title={layer.get('title')} map={map} layer={layer} />
+      <LayerListItem index={0} moveLayer={function() {}} intl={intl} title={layer.get('title')} map={map} layer={layer} />
     ), container);
     var zoomIn = container.querySelector('.layer-list-item-zoom');
     assert.equal(zoomIn, undefined);
@@ -67,7 +67,7 @@ describe('LayerListItem', function() {
   it('generates a list item for our layer with zoom in for overlay', function() {
     var container = document.createElement('div');
     ReactDOM.render((
-      <LayerListItem intl={intl} title={overlay.get('title')} map={map} layer={overlay} />
+      <LayerListItem index={0} moveLayer={function() {}} intl={intl} title={overlay.get('title')} map={map} layer={overlay} />
     ), container);
     var zoomIn = container.querySelector('layer-list-item-zoom');
     assert.equal(zoomIn !== undefined, true);
@@ -77,7 +77,7 @@ describe('LayerListItem', function() {
   it('modifies lat lon extent for EPSG:3857', function() {
     var container = document.createElement('div');
     var item = ReactDOM.render((
-      <LayerListItem intl={intl} title={overlay.get('title')} map={map} layer={overlay} />
+      <LayerListItem index={0} moveLayer={function() {}} intl={intl} title={overlay.get('title')} map={map} layer={overlay} />
     ), container);
     var bbox = [-170, -90, 170, 90];
     item._modifyLatLonBBOX(bbox);

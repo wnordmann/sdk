@@ -12,6 +12,9 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import HTML5Backend from 'react-dnd-html5-backend';
+import {DragDropContext} from 'react-dnd';
+import LayerActions from '../actions/LayerActions.js';
 import ol from 'openlayers';
 import classNames from 'classnames';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -29,7 +32,6 @@ import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import './LayerList.css';
-
 
 const messages = defineMessages({
   layertitle: {
@@ -93,7 +95,7 @@ class LayerList extends React.Component {
     for (var i = 0, ii = layers.length; i < ii; ++i) {
       var lyr = layers[i];
       if (!this.props.filter || this.props.filter(lyr) === true) {
-        layerNodes.push(me.getLayerNode(lyr, group));
+        layerNodes.push(me.getLayerNode(lyr, group, (ii - i)));
       }
     }
     return layerNodes;
@@ -131,7 +133,7 @@ class LayerList extends React.Component {
   _onModalClose() {
     this._modalOpen = false;
   }
-  getLayerNode(lyr, group) {
+  getLayerNode(lyr, group, idx) {
     if (lyr.get('id') === undefined) {
       lyr.set('id', LayerIdService.generateId());
     }
@@ -139,11 +141,11 @@ class LayerList extends React.Component {
       if (lyr instanceof ol.layer.Group) {
         var children = this.props.showGroupContent ? this.renderLayerGroup(lyr) : [];
         return (
-          <LayerListItem {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('id')} layer={lyr} nestedItems={children} title={lyr.get('title')} disableTouchRipple={true}/>
+          <LayerListItem index={idx} moveLayer={this.moveLayer.bind(this)} {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('id')} layer={lyr} nestedItems={children} title={lyr.get('title')} disableTouchRipple={true}/>
         );
       } else {
         return (
-          <LayerListItem {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('id')} layer={lyr} group={group} title={lyr.get('title')} disableTouchRipple={true}/>
+          <LayerListItem index={idx} moveLayer={this.moveLayer.bind(this)} {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('id')} layer={lyr} group={group} title={lyr.get('title')} disableTouchRipple={true}/>
         );
       }
     }
@@ -159,6 +161,9 @@ class LayerList extends React.Component {
         background: rawTheme.palette.primary1Color
       })
     };
+  }
+  moveLayer(dragIndex, hoverIndex, layer, group) {
+    LayerActions.moveLayer(dragIndex, hoverIndex, layer, group);
   }
   render() {
     const {formatMessage} = this.props.intl;
@@ -309,4 +314,4 @@ LayerList.childContextTypes = {
   muiTheme: React.PropTypes.object.isRequired
 };
 
-export default injectIntl(LayerList);
+export default injectIntl(DragDropContext(HTML5Backend)(LayerList));

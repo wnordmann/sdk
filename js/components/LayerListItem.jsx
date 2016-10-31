@@ -11,6 +11,8 @@
  */
 
 import React from 'react';
+import ReactDOM from 'react-dom';
+import {DragSource, DropTarget} from 'react-dnd';
 import ol from 'openlayers';
 import FilterModal from './FilterModal.jsx';
 import classNames from 'classnames';
@@ -28,13 +30,90 @@ import ZoomInIcon from 'material-ui/svg-icons/action/zoom-in';
 import FilterIcon from 'material-ui/svg-icons/content/filter-list';
 import LabelIcon from 'material-ui/svg-icons/content/text-format';
 import StyleIcon from 'material-ui/svg-icons/image/brush';
-import MoveUpIcon from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
-import MoveDownIcon from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
+
+const layerListItemSource = {
+  canDrag(props, monitor) {
+    return (props.allowReordering && props.layer.get('type') !== 'base' && props.layer.get('type') !== 'base-group');
+  },
+  beginDrag(props) {
+    return {
+      index: props.index,
+      layer: props.layer,
+      group: props.group
+    };
+  }
+};
+
+const layerListItemTarget = {
+  hover(props, monitor, component) {
+    if (props.layer.get('type') === 'base' || props.layer.get('type') === 'base-group') {
+      return;
+    }
+    var sourceItem = monitor.getItem();
+    const dragIndex = sourceItem.index;
+    const hoverIndex = props.index;
+    // Don't replace items with themselves
+    if (dragIndex === hoverIndex) {
+      return;
+    }
+
+    // Determine rectangle on screen
+    var comp = ReactDOM.findDOMNode(component);
+    if (!comp) {
+      return;
+    }
+    const hoverBoundingRect = comp.getBoundingClientRect();
+
+    // Get vertical middle
+    const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+
+    // Determine mouse position
+    const clientOffset = monitor.getClientOffset();
+
+    // Get pixels to the top
+    const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+
+    // Only perform the move when the mouse has crossed half of the items height
+    // When dragging downwards, only move when the cursor is below 50%
+    // When dragging upwards, only move when the cursor is above 50%
+
+    // Dragging downwards
+    if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+      return;
+    }
+
+    // Dragging upwards
+    if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+      return;
+    }
+
+    // Time to actually perform the action
+    props.moveLayer(dragIndex, hoverIndex, sourceItem.layer, sourceItem.group);
+
+    // Note: we're mutating the monitor item here!
+    // Generally it's better to avoid mutations,
+    // but it's good here for the sake of performance
+    // to avoid expensive index searches.
+    monitor.getItem().index = hoverIndex;
+  }
+};
+
+function collect(connect, monitor) {
+  return {
+    connectDragSource: connect.dragSource()
+  };
+}
+
+function collectDrop(connect, monitor) {
+  return {
+    connectDropTarget: connect.dropTarget()
+  };
+}
 
 const messages = defineMessages({
   zoombuttonlabel: {
@@ -61,16 +140,6 @@ const messages = defineMessages({
     id: 'layerlist.stylingbuttonlabel',
     description: 'Tooltip for the style layer button',
     defaultMessage: 'Edit layer style'
-  },
-  reorderupbuttonlabel: {
-    id: 'layerlist.reorderupbuttonlabel',
-    description: 'Tooltip for the reorder up button',
-    defaultMessage: 'Move layer up'
-  },
-  reorderdownbuttonlabel: {
-    id: 'layerlist.reorderdownbuttonlabel',
-    description: 'Tooltip for the reorder down button',
-    defaultMessage: 'Move layer down'
   },
   removebuttonlabel: {
     id: 'layerlist.removebuttonlabel',
@@ -113,9 +182,6 @@ class LayerListItem extends React.Component {
         extension: 'gpx'
       }
     };
-    props.layer.on('change:visible', function(evt) {
-      this.setState({checked: evt.target.getVisible()});
-    }, this);
     this.state = {
       checked: props.layer.getVisible()
     };
@@ -220,12 +286,6 @@ class LayerListItem extends React.Component {
       map.getSize()
     );
   }
-  _moveUp() {
-    LayerActions.moveLayerUp(this.props.layer, this.props.group);
-  }
-  _moveDown() {
-    LayerActions.moveLayerDown(this.props.layer, this.props.group);
-  }
   _remove() {
     LayerActions.removeLayer(this.props.layer);
   }
@@ -236,6 +296,7 @@ class LayerListItem extends React.Component {
     this.props.layer.setOpacity(value);
   }
   render() {
+    const {connectDragSource, connectDropTarget} = this.props;
     const layer = this.props.layer;
     const source = layer.getSource ? layer.getSource() : undefined;
     const iconStyle = {'paddingTop':'0px', 'paddingBottom':'0px'};
@@ -268,11 +329,6 @@ class LayerListItem extends React.Component {
     if (canStyle) {
       styling = (<IconButton style={iconStyle} className='layer-list-item-style' onTouchTap={this._style.bind(this)} tooltip={formatMessage(messages.stylingbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><StyleIcon /></IconButton>);
     }
-    var reorderUp, reorderDown;
-    if (layer.get('type') !== 'base' && layer.get('type') !== 'base-group' && this.props.allowReordering) {
-      reorderUp = (<IconButton style={iconStyle} className='layer-list-item-moveup' onTouchTap={this._moveUp.bind(this)} tooltip={formatMessage(messages.reorderupbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><MoveUpIcon /></IconButton>);
-      reorderDown = (<IconButton className='layer-list-item-movedown' style={iconStyle} onTouchTap={this._moveDown.bind(this)} tooltip={formatMessage(messages.reorderdownbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><MoveDownIcon /></IconButton>);
-    }
     var remove;
     if (this.props.allowRemove && layer.get('type') !== 'base' && layer.get('isRemovable') === true) {
       remove = (<IconButton style={iconStyle} className='layer-list-item-remove' onTouchTap={this._remove.bind(this)} tooltip={formatMessage(messages.removebuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><DeleteIcon /></IconButton>);
@@ -282,7 +338,7 @@ class LayerListItem extends React.Component {
       edit = (<IconButton style={iconStyle} onTouchTap={this._edit.bind(this)} className='layer-list-item-edit' tooltip={formatMessage(messages.editbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><EditIcon /></IconButton>);
     }
     var buttonPadding
-    if (zoomTo || download || filter || label || styling || reorderUp || reorderDown || remove || edit) {
+    if (zoomTo || download || filter || label || styling || remove || edit) {
       buttonPadding = (<div style={{'display':'inline-block','width':'26px'}} />);
     }
     var input;
@@ -299,31 +355,35 @@ class LayerListItem extends React.Component {
     if (canStyle) {
       styleModal = (<StyleModal {...this.props} layer={this.props.layer} ref='stylemodal' />);
     }
-    return (
-      <ListItem className={classNames({'sdk-component': true, 'layer-list-item': true}, this.props.className)} innerDivStyle={{'paddingTop':'8px','paddingBottom':'8px'}} autoGenerateNestedIndicator={false} primaryText={input ? undefined : this.props.title} nestedItems={this.props.nestedItems} nestedListStyle={{'marginLeft':'40px'}} initiallyOpen={true} disableTouchRipple={true}>
-        {input}
-        {opacity}
-        {buttonPadding}
-        {zoomTo}
-        {download}
-        {filter}
-        {label}
-        {styling}
-        {reorderUp}
-        {reorderDown}
-        {remove}
-        {edit}
-        <span>
-          {filterModal}
-          {labelModal}
-          {styleModal}
-        </span>
-      </ListItem>
-    );
+    return connectDragSource(connectDropTarget(
+      <div>
+        <ListItem className={classNames({'sdk-component': true, 'layer-list-item': true}, this.props.className)} innerDivStyle={{'paddingTop':'8px','paddingBottom':'8px'}} autoGenerateNestedIndicator={false} primaryText={input ? undefined : this.props.title} nestedItems={this.props.nestedItems} nestedListStyle={{'marginLeft':'40px'}} initiallyOpen={true} disableTouchRipple={true}>
+          {input}
+          {opacity}
+          {buttonPadding}
+          {zoomTo}
+          {download}
+          {filter}
+          {label}
+          {styling}
+          {remove}
+          {edit}
+          <span>
+            {filterModal}
+            {labelModal}
+            {styleModal}
+          </span>
+        </ListItem>
+      </div>
+    ));
   }
 }
 
 LayerListItem.propTypes = {
+  connectDragSource: React.PropTypes.func.isRequired,
+  connectDropTarget: React.PropTypes.func.isRequired,
+  moveLayer: React.PropTypes.func.isRequired,
+  index: React.PropTypes.number.isRequired,
   /**
    * The map in which the layer of this item resides.
    */
@@ -349,7 +409,7 @@ LayerListItem.propTypes = {
    */
   showZoomTo: React.PropTypes.bool,
   /**
-   * Should we show up and down buttons to allow reordering?
+   * Should we show allow reordering?
    */
   allowReordering: React.PropTypes.bool,
   /**
@@ -402,8 +462,17 @@ LayerListItem.propTypes = {
   intl: intlShape.isRequired
 };
 
+LayerListItem.defaultProps = {
+  connectDragSource: function(a) {
+    return a;
+  },
+  connectDropTarget: function(a) {
+    return a;
+  }
+};
+
 LayerListItem.childContextTypes = {
   muiTheme: React.PropTypes.object.isRequired
 };
 
-export default injectIntl(LayerListItem);
+export default injectIntl(DropTarget('layerlistitem', layerListItemTarget, collectDrop)(DragSource('layerlistitem', layerListItemSource, collect)(LayerListItem)));
