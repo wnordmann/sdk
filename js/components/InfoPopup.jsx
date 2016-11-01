@@ -238,6 +238,7 @@ class InfoPopup extends React.Component {
       }
     }
     if (called === false) {
+      map.getTarget().style.cursor = me._cursor;
       cb();
     }
   }
