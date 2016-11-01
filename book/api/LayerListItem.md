@@ -36,7 +36,7 @@ type: `bool`
 
 ### `allowReordering`
 
-Should we show up and down buttons to allow reordering?
+Should we show allow reordering?
 
 type: `bool`
 
@@ -55,6 +55,22 @@ Css class name to apply on the root element of this component.
 type: `string`
 
 
+### `connectDragSource` (required)
+
+type: `func`
+defaultValue: `function(a) {
+  return a;
+}`
+
+
+### `connectDropTarget` (required)
+
+type: `func`
+defaultValue: `function(a) {
+  return a;
+}`
+
+
 ### `downloadFormat`
 
 The feature format to serialize in for downloads.
@@ -67,6 +83,11 @@ type: `enum ('GeoJSON'|'KML'|'GPX')`
 The group layer to which this item might belong.
 
 type: `instanceOf ol.layer.Group`
+
+
+### `index` (required)
+
+type: `number`
 
 
 ### `intl`
@@ -88,6 +109,11 @@ type: `instanceOf ol.layer.Base`
 The map in which the layer of this item resides.
 
 type: `instanceOf ol.Map`
+
+
+### `moveLayer` (required)
+
+type: `func`
 
 
 ### `nestedItems`
