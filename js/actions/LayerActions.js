@@ -20,16 +20,11 @@ export default {
       layer: layer
     });
   },
-  moveLayerDown: (layer, group) => {
+  moveLayer: (dragIndex, hoverIndex, layer, group) => {
     AppDispatcher.handleAction({
-      type: LayerConstants.MOVE_LAYER_DOWN,
-      layer: layer,
-      group: group
-    });
-  },
-  moveLayerUp: (layer, group) => {
-    AppDispatcher.handleAction({
-      type: LayerConstants.MOVE_LAYER_UP,
+      type: LayerConstants.MOVE_LAYER,
+      dragIndex: dragIndex,
+      hoverIndex: hoverIndex,
       layer: layer,
       group: group
     });
