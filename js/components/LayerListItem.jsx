@@ -32,6 +32,7 @@ import LabelIcon from 'material-ui/svg-icons/content/text-format';
 import StyleIcon from 'material-ui/svg-icons/image/brush';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
+import WMSLegend from './WMSLegend.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
@@ -355,10 +356,16 @@ class LayerListItem extends React.Component {
     if (canStyle) {
       styleModal = (<StyleModal {...this.props} layer={this.props.layer} ref='stylemodal' />);
     }
+    var legend;
+    if (this.props.includeLegend && this.props.layer.getVisible() && ((this.props.layer instanceof ol.layer.Tile && this.props.layer.getSource() instanceof ol.source.TileWMS) ||
+      (this.props.layer instanceof ol.layer.Image && this.props.layer.getSource() instanceof ol.source.ImageWMS))) {
+      legend = <WMSLegend layer={this.props.layer} />;
+    }
     return connectDragSource(connectDropTarget(
       <div>
         <ListItem className={classNames({'sdk-component': true, 'layer-list-item': true}, this.props.className)} innerDivStyle={{'paddingTop':'8px','paddingBottom':'8px'}} autoGenerateNestedIndicator={false} primaryText={input ? undefined : this.props.title} nestedItems={this.props.nestedItems} nestedListStyle={{'marginLeft':'40px'}} initiallyOpen={true} disableTouchRipple={true}>
           {input}
+          {legend}
           {opacity}
           {buttonPadding}
           {zoomTo}
@@ -436,6 +443,10 @@ LayerListItem.propTypes = {
    * Should we show a download button?
    */
   showDownload: React.PropTypes.bool,
+  /**
+   * Should we include the legend in the layer list?
+   */
+  includeLegend: React.PropTypes.bool,
   /**
    * The nested items to show for this item.
    */

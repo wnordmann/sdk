@@ -247,6 +247,10 @@ LayerList.propTypes = {
    */
   showDownload: React.PropTypes.bool,
   /**
+   * Should we include the legend in the layer list?
+   */
+  includeLegend: React.PropTypes.bool,
+  /**
    * The feature format to serialize in for downloads.
    */
   downloadFormat: React.PropTypes.oneOf(['GeoJSON', 'KML', 'GPX']),
@@ -302,6 +306,7 @@ LayerList.defaultProps = {
   showGroupContent: true,
   showDownload: false,
   downloadFormat: 'GeoJSON',
+  includeLegend: false,
   showOpacity: false,
   showOnStart: false
 };
