@@ -3,9 +3,9 @@ var path = require('path');
 var components = 'js/components/';
 
 var files = [{
-  module: 'fixed-data-table',
-  cssPath: 'dist',
-  cssFile: 'fixed-data-table.css'
+  module: 'react-table',
+  cssPath: '../',
+  cssFile: 'react-table.css'
 }, {
   module: 'c3-windows',
   cssPath: '',

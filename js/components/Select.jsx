@@ -92,25 +92,14 @@ class Select extends React.Component {
           }, this);
           SelectActions.selectFeatures(lyr, selected, true);
         } else {
-          var state = FeatureStore.getState(lyr);
-          if (state && state.originalFeatures && FeatureStore.pagingDone(lyr)) {
-            for (var i = 0, ii = state.originalFeatures.length; i < ii; ++i) {
-              var f = state.originalFeatures[i];
-              var geom = f.getGeometry();
-              if (geom && geom.intersectsExtent(box)) {
-                selected = this._handleSelection(f, selected);
-              }
+          var me = this;
+          WFSService.bboxFilter(lyr, this.props.map.getView(), box, function(features) {
+            for (var i = 0, ii = features.length; i < ii; ++i) {
+              selected = me._handleSelection(features[i], selected);
             }
+            FeatureStore.appendFeatures(lyr, selected);
             SelectActions.selectFeatures(lyr, selected, true);
-          } else {
-            var me = this;
-            WFSService.bboxFilter(lyr, this.props.map.getView(), box, function(features) {
-              for (var i = 0, ii = features.length; i < ii; ++i) {
-                selected = me._handleSelection(features[i], selected);
-              }
-              SelectActions.selectFeatures(lyr, selected, true);
-            });
-          }
+          });
         }
       }
     }, this);

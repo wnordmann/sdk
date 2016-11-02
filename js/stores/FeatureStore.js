@@ -20,7 +20,7 @@ import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LayerStore from './LayerStore.js';
 import WFSService from '../services/WFSService.js';
 
-const maxFeatures = 500;
+const maxFeatures = 100;
 
 class FeatureStore extends EventEmitter {
   constructor() {
@@ -85,7 +85,6 @@ class FeatureStore extends EventEmitter {
     this._layers = {};
     this._schema = {};
     this._config = {};
-    this.addChangeListener(this._updateSelect.bind(this));
   }
   _getLayer(feature) {
     for (var key in this._config) {
@@ -138,42 +137,21 @@ class FeatureStore extends EventEmitter {
   }
   addFeature(layer, feature) {
     var id = layer.get('id');
-    this._config[id].features.push(feature);
-    this._config[id].originalFeatures.push(feature);
+    this._config[id].features.addFeature(feature);
     this.emitChange();
   }
   removeFeature(layer, feature) {
     var id = layer.get('id');
-    var i, ii, idx = -1;
-    for (i = 0, ii = this._config[id].features.length; i < ii; ++i) {
-      if (this._config[id].features[i] === feature) {
-        idx = i;
-        break;
-      }
-    }
-    if (idx !== -1) {
-      this._config[id].features.splice(idx, 1);
-    }
-    idx = -1;
-    for (i = 0, ii = this._config[id].originalFeatures.length; i < ii; ++i) {
-      if (this._config[id].originalFeatures[i] === feature) {
-        idx = i;
-        break;
-      }
-    }
-    if (idx !== -1) {
-      this._config[id].originalFeatures.splice(idx, 1);
-    }
-    idx = -1;
-    for (i = 0, ii = this._config[id].selected.length; i < ii; ++i) {
-      if (this._config[id].selected[i] === feature) {
-        idx = i;
-        break;
-      }
-    }
+    var idx = this._config[id].selected.indexOf(feature);
     if (idx !== -1) {
       this._config[id].selected.splice(idx, 1);
+      this._updateSelect();
     }
+    idx = this._config[id].filter.indexOf(feature);
+    if (idx !== -1) {
+      this._config[id].filter.splice(idx, 1);
+    }
+    this._config[id].features.removeFeature(feature);
     this.emitChange();
   }
   removeLayer(layer) {
@@ -183,22 +161,24 @@ class FeatureStore extends EventEmitter {
     delete this._config[id];
     this.emitChange();
   }
+  getFeaturesPerPage(layer, page) {
+    var id = layer.get('id');
+    var features = this._config[id].features.getFeatures();
+    return features.slice(page * maxFeatures, page * maxFeatures + maxFeatures);
+  }
   addLayer(layer, filter) {
     var id = layer.get('id');
     if (!this._config[id]) {
       this._config[id] = {
-        features: [],
-        originalFeatures: [],
-        selected: []
+        features: new ol.source.Vector({useSpatialIndex: false}),
+        selected: [],
+        filter: []
       };
     }
-    var me = this;
     if (layer instanceof ol.layer.Tile) {
-      // TODO show failure to the user?
-      var loadNext = function() {
-        me.loadNextPage(layer, loadNext, loadNext);
-      };
-      this.loadFeatures(layer, 0, loadNext, loadNext);
+      WFSService.getNumberOfFeatures(layer, function(count) {
+        layer.set('numberOfFeatures', count);
+      });
     }
     if (!this._layers[id]) {
       this._layers[id] = layer;
@@ -210,46 +190,16 @@ class FeatureStore extends EventEmitter {
       this.restoreOriginalFeatures(layer);
     }
   }
-  _appendFeatures(layer, features) {
+  appendFeatures(layer, features) {
     if (features.length > 0) {
       var id = layer.get('id');
-      this._config[id].features = this._config[id].features.concat(features);
-      this._config[id].originalFeatures = this._config[id].originalFeatures.concat(features);
+      this._config[id].features.addFeatures(features);
     }
   }
   _setFeatures(layer, features) {
     var id = layer.get('id');
-    if (!this._config[id]) {
-      this._config[id] = {};
-    }
-    if (!this._config[id].selected) {
-      this._config[id].selected = [];
-    }
-    this._config[id].features = features;
-    this._config[id].originalFeatures = features.slice();
-  }
-  pagingDone(layer) {
-    var id = layer.get('id');
-    if (!this._pageInfo[id]) {
-      return false;
-    } else {
-      var startIndex = this._pageInfo[id].startIndex;
-      return !(startIndex < layer.get('numberOfFeatures') && !this._pageInfo[id][startIndex]);
-    }
-  }
-  loadNextPage(layer, onSuccess, onFailure) {
-    var id = layer.get('id');
-    if (!this._pageInfo[id]) {
-      this._pageInfo[id] = {
-        startIndex: maxFeatures
-      };
-    }
-    var startIndex = this._pageInfo[id].startIndex;
-    if (startIndex < layer.get('numberOfFeatures') && !this._pageInfo[id][startIndex]) {
-      this._pageInfo[id][startIndex] = true;
-      this._pageInfo[id].startIndex += maxFeatures;
-      this.loadFeatures(layer, startIndex, onSuccess, onFailure);
-    }
+    this._config[id].features.clear();
+    this._config[id].features.addFeatures(features);
   }
   loadFeatures(layer, startIndex, onSuccess, onFailure, scope) {
     var srsName = this._map.getView().getProjection().getCode();
@@ -258,7 +208,7 @@ class FeatureStore extends EventEmitter {
       if (startIndex === 0) {
         me._setFeatures(layer, features);
       } else {
-        me._appendFeatures(layer, features);
+        me.appendFeatures(layer, features);
       }
       me.emitChange();
       if (onSuccess) {
@@ -269,7 +219,7 @@ class FeatureStore extends EventEmitter {
       if (startIndex === 0) {
         me._setFeatures(layer, []);
       } else {
-        me._appendFeatures(layer, []);
+        me.appendFeatures(layer, []);
       }
       me.emitChange();
       if (onFailure) {
@@ -277,9 +227,6 @@ class FeatureStore extends EventEmitter {
       }
     };
     WFSService.loadFeatures(layer, startIndex, maxFeatures, srsName, success, failure);
-    WFSService.getNumberOfFeatures(layer, function(count) {
-      layer.set('numberOfFeatures', count);
-    });
   }
   bindLayer(layer) {
     var source = layer.getSource();
@@ -314,6 +261,7 @@ class FeatureStore extends EventEmitter {
       this._config[id] = {};
     }
     this._config[id].selected = [];
+    this._updateSelect();
     if (filter === true) {
       this.setSelectedAsFilter(layer);
     } else {
@@ -335,12 +283,17 @@ class FeatureStore extends EventEmitter {
         selected.splice(idx, 1);
       }
     }
+    if (remove.length > 0) {
+      this._updateSelect();
+    }
     this.emitChange();
-    return selected;
+    return selected.count;
   }
   _updateSelect() {
     var selectedFeatures = this._select.getFeatures();
-    selectedFeatures.clear();
+    if (selectedFeatures.getLength() > 0) {
+      selectedFeatures.clear();
+    }
     var state = this._config;
     for (var key in state) {
       for (var i = 0, ii = state[key].selected.length; i < ii; ++i) {
@@ -363,6 +316,7 @@ class FeatureStore extends EventEmitter {
     } else {
       this._config[id].selected.splice(idx, 1);
     }
+    this._updateSelect();
     this.emitChange();
   }
   _clearIfCluster(layer, features) {
@@ -395,6 +349,7 @@ class FeatureStore extends EventEmitter {
       this._config[id].selected = [];
       this._clearIfCluster(layer, []);
       this.emitChange();
+      this._updateSelect();
     }, this);
   }
   setSelection(layer, features, clear) {
@@ -406,17 +361,23 @@ class FeatureStore extends EventEmitter {
     if (!this._config[id]) {
       this._config[id] = {};
     }
-    var filter = this._config[id].selected === this._config[id].features;
+    var filter = this._config[id].selected === this._config[id].filter;
     if (clear === true) {
       this._config[id].selected = features;
+      this._updateSelect();
       if (filter === true) {
-        this._config[id].features = features;
+        this._config[id].filter = features;
       }
     } else {
+      var needChange = false;
       for (var i = 0, ii = features.length; i < ii; ++i) {
         if (this._config[id].selected.indexOf(features[i]) === -1) {
+          needChange = true;
           this._config[id].selected.push(features[i]);
         }
+      }
+      if (needChange) {
+        this._updateSelect();
       }
     }
     // cluster layers need to get redrawn
@@ -427,10 +388,7 @@ class FeatureStore extends EventEmitter {
   }
   setFilter(layer, filter) {
     var id = layer.get('id');
-    if (!this._config[id]) {
-      this._config[id] = {};
-    }
-    this._config[id].features = filter;
+    this._config[id].filter = filter;
     this.emitChange();
   }
   setSelectedAsFilter(layer) {
@@ -439,16 +397,14 @@ class FeatureStore extends EventEmitter {
   }
   restoreOriginalFeatures(layer) {
     var id = layer.get('id');
-    if (this._config[id]) {
-      this._config[id].features = this._config[id].originalFeatures;
-      this.emitChange();
-    }
+    this._config[id].filter = [];
+    this.emitChange();
   }
   getSchema(layer) {
     var id = layer.get('id');
-    if (!this._schema[id] && this._config[id] && this._config[id].originalFeatures.length > 0) {
+    if (!this._schema[id] && this._config[id] && this._config[id].features.getFeatures().length > 0) {
       var schema = {};
-      var feature = this._config[id].originalFeatures[0];
+      var feature = this._config[id].features.getFeatures()[0];
       if (!feature) {
         var wfsInfo = layer.get('wfsInfo');
         for (var i = 0, ii = wfsInfo.attributes.length; i < ii; ++i) {
@@ -466,24 +422,6 @@ class FeatureStore extends EventEmitter {
       this._schema[id] = schema;
     }
     return this._schema[id];
-  }
-  getObjectAt(layer, index) {
-    var id = layer.get('id');
-    if (this._config[id] && this._config[id].features[index]) {
-      return this._config[id].features[index].getProperties();
-    }
-  }
-  getFieldValue(layer, index, field) {
-    var config = this._config[layer.get('id')];
-    if (index >= config.features.length) {
-      this.loadNextPage(layer);
-    } else {
-      if (config.features[index]) {
-        return config.features[index].get(field);
-      } else {
-        return '';
-      }
-    }
   }
   getState(layer) {
     if (layer) {

@@ -234,7 +234,7 @@ class WFST extends React.Component {
       var found = false;
       me._select.getFeatures().clear();
       if (state) {
-        var features = state.originalFeatures;
+        var features = state.features.getFeatures();
         for (var i = 0, ii = features.length; i < ii; ++i) {
           var geom = features[i].getGeometry();
           if (geom.intersectsExtent(extent)) {
