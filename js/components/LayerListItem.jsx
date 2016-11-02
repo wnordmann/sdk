@@ -162,6 +162,9 @@ class LayerListItem extends React.Component {
   constructor(props) {
     super(props);
     if (this.props.group) {
+      this.props.layer.on('change:visible', function(evt) {
+        this.setState({checked: evt.target.getVisible()});
+      }, this);
       this.props.group.on('change:visible', function(evt) {
         this.setState({disabled: !evt.target.getVisible()});
       }, this);
