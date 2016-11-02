@@ -85,6 +85,13 @@ The group layer to which this item might belong.
 type: `instanceOf ol.layer.Group`
 
 
+### `includeLegend`
+
+Should we include the legend in the layer list?
+
+type: `bool`
+
+
 ### `index` (required)
 
 type: `number`
