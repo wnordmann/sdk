@@ -14,7 +14,7 @@
  * Transforms GXP style map config to our internal format.
  */
 class MapConfigTransformService {
-  transform(data, opt_proxy) {
+  transform(data, opt_proxy, opt_errors) {
     var i, ii, layers = [];
     var groups = {};
     for (i = 0, ii = data.map.layers.length; i < ii; ++i) {
@@ -131,6 +131,13 @@ class MapConfigTransformService {
           }
         };
       } else {
+        if (opt_errors) {
+          opt_errors.push({
+            msg: 'Unable to load layer ' + layerConfig.properties.title,
+            layer: layer,
+            source: source
+          });
+        }
         layerConfig = undefined;
       }
       if (layerConfig !== undefined) {
