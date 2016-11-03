@@ -12,8 +12,9 @@
 
 import React from 'react';
 import ol from 'openlayers';
-import Slider from 'react-slick';
+import { AutoRotatingCarousel, Slide } from 'material-auto-rotating-carousel';
 import IconMenu from 'material-ui/IconMenu';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
 import './Bookmarks.css';
@@ -81,7 +82,10 @@ class Bookmarks extends React.Component {
     }
     this.state = {
       value: null
-    }
+    };
+  }
+  getChildContext() {
+    return {muiTheme: getMuiTheme()};
   }
   componentDidMount() {
     if (this.props.showMarker) {
@@ -159,14 +163,19 @@ class Bookmarks extends React.Component {
         return {__html: bookmark.description};
       };
       var carouselChildren = this.props.bookmarks.map(function(bookmark) {
-        return (<div key={bookmark.name}><h2>{bookmark.name}</h2><p dangerouslySetInnerHTML={getHTML(bookmark)}></p></div>);
+        return (<Slide
+          key={bookmark.name}
+          media={<p dangerouslySetInnerHTML={getHTML(bookmark)}></p>}
+          title={bookmark.name}
+          subtitle=''
+        />);
       });
-      carouselChildren.unshift(<div key='intro'><h2>{this.props.introTitle}</h2><p>{this.props.introDescription}</p></div>);
+      //carouselChildren.unshift(<div key='intro'><h2>{this.props.introTitle}</h2><p>{this.props.introDescription}</p></div>);
       return (
         <div className={classNames('sdk-component story-panel', this.props.className)}>
-          <Slider {...this.props} arrows={true} afterChange={this._afterChange.bind(this)}>
+          <AutoRotatingCarousel label={this.props.introTitle} open autoplay={this.props.autoplay}>
             {carouselChildren}
-          </Slider>
+          </AutoRotatingCarousel>
         </div>
       );
     }
@@ -250,6 +259,10 @@ Bookmarks.defaultProps = {
   menu: false,
   showMarker: true,
   markerUrl: './resources/marker.png'
+};
+
+Bookmarks.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 };
 
 export default injectIntl(Bookmarks);
