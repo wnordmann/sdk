@@ -45,14 +45,17 @@ class ArcGISRestService {
       Title: jsonData.serviceDescription
     };
   }
-  getCapabilities(url, onSuccess) {
+  getCapabilitiesUrl(url) {
     var urlObj = new URL(url);
     urlObj.set('query', {
       f: 'json',
       pretty: 'false',
       callback: '__cbname__'
     });
-    doJSONP(urlObj.toString(), function(jsonData) {
+    return urlObj.toString();
+  }
+  getCapabilities(url, onSuccess) {
+    doJSONP(this.getCapabilitiesUrl(url), function(jsonData) {
       onSuccess.call(this, this.parseCapabilities(jsonData));
     }, this);
   }
