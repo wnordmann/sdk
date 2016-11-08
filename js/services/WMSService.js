@@ -22,14 +22,17 @@ const wmsGetFeatureInfoFormats = {
 };
 
 class WMSService {
-  getCapabilities(url, onSuccess, onFailure) {
+  getCapabilitiesUrl(url) {
     var urlObj = new URL(url);
     urlObj.set('query', {
       service: 'WMS',
       request: 'GetCapabilities',
       version: '1.3.0'
     });
-    return doGET(urlObj.toString(), function(xmlhttp) {
+    return urlObj.toString();
+  }
+  getCapabilities(url, onSuccess, onFailure) {
+    return doGET(this.getCapabilitiesUrl(url), function(xmlhttp) {
       var info = wmsCapsFormat.read(xmlhttp.responseText);
       onSuccess.call(this, info.Capability.Layer);
     }, function(xmlhttp) {
@@ -62,12 +65,11 @@ class WMSService {
         wrapX: layer.Layer ? true : false,
         params: {
           LAYERS: layer.Name
-        },
-        serverType: 'geoserver'
+        }
       })
     });
   }
-  getStyles(url, layer, onSuccess, onFailure) {
+  getStylesUrl(url, layer) {
     var urlObj = new URL(url);
     urlObj.set('query', {
       service: 'WMS',
@@ -75,7 +77,10 @@ class WMSService {
       layers: layer.get('name'),
       version: '1.1.1'
     });
-    return doGET(urlObj.toString(), function(xmlhttp) {
+    return urlObj.toString();
+  }
+  getStyles(url, layer, onSuccess, onFailure) {
+    return doGET(this.getStylesUrl(url, layer), function(xmlhttp) {
       var info = SLDService.parse(xmlhttp.responseText);
       onSuccess.call(this, info);
     }, function(xmlhttp) {
