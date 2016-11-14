@@ -20,8 +20,6 @@ import AppDispatcher from '../dispatchers/AppDispatcher.js';
 import LayerStore from './LayerStore.js';
 import WFSService from '../services/WFSService.js';
 
-const maxFeatures = 100;
-
 class FeatureStore extends EventEmitter {
   constructor() {
     super();
@@ -161,10 +159,10 @@ class FeatureStore extends EventEmitter {
     delete this._config[id];
     this.emitChange();
   }
-  getFeaturesPerPage(layer, page) {
+  getFeaturesPerPage(layer, page, pageSize) {
     var id = layer.get('id');
     var features = this._config[id].features.getFeatures();
-    return features.slice(page * maxFeatures, page * maxFeatures + maxFeatures);
+    return features.slice(page * pageSize, page * pageSize + pageSize);
   }
   addLayer(layer, filter) {
     var id = layer.get('id');
@@ -201,7 +199,7 @@ class FeatureStore extends EventEmitter {
     this._config[id].features.clear();
     this._config[id].features.addFeatures(features);
   }
-  loadFeatures(layer, startIndex, onSuccess, onFailure, scope) {
+  loadFeatures(layer, startIndex, pageSize, onSuccess, onFailure, scope) {
     var srsName = this._map.getView().getProjection().getCode();
     var me = this;
     var success = function(features) {
@@ -226,7 +224,7 @@ class FeatureStore extends EventEmitter {
         onFailure.call(scope, xmlhttp, exception);
       }
     };
-    WFSService.loadFeatures(layer, startIndex, maxFeatures, srsName, success, failure);
+    WFSService.loadFeatures(layer, startIndex, pageSize, srsName, success, failure);
   }
   bindLayer(layer) {
     var source = layer.getSource();

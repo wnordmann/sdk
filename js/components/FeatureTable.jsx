@@ -119,6 +119,7 @@ class FeatureTable extends React.Component {
       this._setLayer(this.props.layer);
     }
     this.state = {
+      pageSize: props.pageSize,
       pages: -1,
       active: false,
       errorOpen: false,
@@ -284,9 +285,10 @@ class FeatureTable extends React.Component {
   _onTableChange(state, instance) {
     this.setState({loading: true});
     var start = state.page * state.pageSize;
-    FeatureStore.loadFeatures(this._layer, start, function() {
+    FeatureStore.loadFeatures(this._layer, start, state.pageSize, function() {
       this.setState({
         page: state.page,
+        pageSize: state.pageSize,
         pages: Math.ceil(this._layer.get('numberOfFeatures') / state.pageSize),
         loading: false
       });
@@ -348,7 +350,7 @@ class FeatureTable extends React.Component {
         if (this._layer instanceof ol.layer.Vector) {
           data = this.state.features.getFeatures();
         } else {
-          data = FeatureStore.getFeaturesPerPage(this._layer, this.state.page);
+          data = FeatureStore.getFeaturesPerPage(this._layer, this.state.page, this.state.pageSize);
         }
       }
       table = (<ReactTable
@@ -356,9 +358,10 @@ class FeatureTable extends React.Component {
         pages={this._layer instanceof ol.layer.Vector ? undefined : this.state.pages}
         data={data}
         manual={!(this._layer instanceof ol.layer.Vector)}
-        showPageSizeOptions={false}
+        showPageSizeOptions={true}
         onChange={(this._layer instanceof ol.layer.Vector) ? undefined : this._onTableChange.bind(this)}
-        pageSize={100}
+        pageSize={this.state.pageSize}
+        tableStyle={{width: '98%'}}
         style={{height: height, overflowY: 'auto'}}
         columns={columns}
       />);
@@ -416,6 +419,10 @@ FeatureTable.propTypes = {
    */
   refreshRate: React.PropTypes.number,
   /**
+   * Number of features per page.
+   */
+  pageSize: React.PropTypes.number,
+  /**
    * Css class name to apply on the root element of this component.
    */
   className: React.PropTypes.string,
@@ -426,6 +433,7 @@ FeatureTable.propTypes = {
 };
 
 FeatureTable.defaultProps = {
+  pageSize: 20,
   pointZoom: 16,
   refreshRate: 250
 };
