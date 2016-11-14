@@ -30,6 +30,7 @@ import RESTService from '../services/RESTService.js';
 import WMSService from '../services/WMSService.js';
 import WFSService from '../services/WFSService.js';
 import ArcGISRestService from '../services/ArcGISRestService.js';
+import WMTSService from '../services/WMTSService.js';
 
 import classNames from 'classnames';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -39,13 +40,15 @@ import './AddLayerModal.css';
 const addNewTypes = [
   'WMS',
   'WFS',
-  'ArcGISRest'
+  'ArcGISRest',
+  'WMTS'
 ];
 
 const services = {
   'WMS': WMSService,
   'WFS': WFSService,
-  'ArcGISRest': ArcGISRestService
+  'ArcGISRest': ArcGISRestService,
+  'WMTS': WMTSService
 };
 
 const messages = defineMessages({
@@ -215,7 +218,7 @@ class AddLayerModal extends React.Component {
     var source = this.state.sources[this.state.source];
     var url = source.url;
     var service = services[source.type];
-    var olLayer = service.createLayer(layer, url, titleObj);
+    var olLayer = service.createLayer(layer, url, titleObj, map.getView().getProjection());
     if (source.type === 'WMS' || source.type === 'WFS') {
       this._getStyleName.call(this, olLayer);
       this._getWfsInfo.call(this, layer, olLayer, this.close, this);

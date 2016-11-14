@@ -19,7 +19,53 @@ const wmtsGetFeatureInfoFormats = {
   'application/vnd.ogc.gml': new ol.format.WFS()
 };
 
+const parser = new ol.format.WMTSCapabilities();
+
+const cache = {};
+
 class WMTSService {
+  createLayer(layer, url, titleObj, projection) {
+    // TODO more smart projection matching
+    var options = ol.source.WMTS.optionsFromCapabilities(cache[url],
+      {layer: layer.Name, matrixSet: projection.getCode()});
+    return new ol.layer.Tile({
+      title: titleObj.title,
+      emptyTitle: titleObj.empty,
+      id: layer.Name,
+      name: layer.Name,
+      isRemovable: true,
+      source: new ol.source.WMTS(options)
+    });
+  }
+  getCapabilitiesUrl(url) {
+    var urlObj = new URL(url);
+    urlObj.set('query', {
+      request: 'GetCapabilities',
+      version: '1.0.0'
+    });
+    return urlObj.toString();
+  }
+  getCapabilities(url, onSuccess) {
+    doGET(this.getCapabilitiesUrl(url), function(xmlhttp) {
+      onSuccess.call(this, this.parseCapabilities(xmlhttp, url));
+    }, undefined, this);
+  }
+  parseCapabilities(xmlhttp, url) {
+    var info = parser.read(xmlhttp.responseText);
+    cache[url] = info;
+    var layers = [];
+    for (var i = 0, ii = info.Contents.Layer.length; i < ii; ++i) {
+      var layer = info.Contents.Layer[i];
+      layers.push({
+        Name: layer.Identifier,
+        Title: layer.Title
+      });
+    }
+    return {
+      Layer: layers,
+      Title: info.ServiceIdentification.Title
+    };
+  }
   getFeatureInfoUrl(layer, coordinate, view, infoFormat) {
     var resolution = view.getResolution();
     var source = layer.getSource();
