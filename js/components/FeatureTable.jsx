@@ -328,9 +328,11 @@ class FeatureTable extends React.Component {
       />);
     }
     var me = this;
+    var sortable = this._layer instanceof ol.layer.Vector;
     var columns = [{
       id: 'selector',
       header: '',
+      sortable: sortable,
       render: function(props) {
         var selected = me.state.selected.indexOf(props.row) !== -1;
         return (<Checkbox disableTouchRipple={true} checked={selected} onCheck={me._onSelect.bind(me, props)} />);
@@ -341,6 +343,7 @@ class FeatureTable extends React.Component {
         columns.push({
           id: key,
           header: key,
+          sortable: sortable,
           render: (function(props) {
             return (<a href={props.row.get(this)}>{props.row.get(this)}</a>);
           }).bind(key)
@@ -349,6 +352,7 @@ class FeatureTable extends React.Component {
         columns.push({
           id: key,
           header: key,
+          sortable: sortable,
           accessor: (function(d) {
             return d.get(this);
           }).bind(key)
@@ -399,7 +403,7 @@ class FeatureTable extends React.Component {
             <div className='feature-table-selector'>
               <LayerSelector {...this.props} id='table-layerSelector' disabled={!this._layer} ref='layerSelector' onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList} map={this.props.map} value={id} />
             </div>
-            <div className='feature-table-filter'>
+            <div className='feature-table-filter' style={{display: this._layer instanceof ol.layer.Vector ? 'block' : 'none'}}>
               <TextField floatingLabelText={formatMessage(messages.filterlabel)} id='featuretable-filter' disabled={!this._layer} ref='filter' onChange={this._filterByText.bind(this)} hintText={formatMessage(messages.filterplaceholder)} />
               {filterHelp}
             </div>
