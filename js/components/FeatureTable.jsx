@@ -377,7 +377,7 @@ class FeatureTable extends React.Component {
         pages={this._layer instanceof ol.layer.Vector ? undefined : this.state.pages}
         data={data}
         manual={!(this._layer instanceof ol.layer.Vector)}
-        showPageSizeOptions={true}
+        showPageSizeOptions={false}
         onChange={(this._layer instanceof ol.layer.Vector) ? undefined : this._onTableChange.bind(this)}
         showPageJump={false}
         pageSize={this.state.pageSize}
