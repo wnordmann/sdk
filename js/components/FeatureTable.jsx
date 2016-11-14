@@ -16,28 +16,22 @@ import ol from 'openlayers';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import classNames from 'classnames';
 import debounce from  'debounce';
-import FixedDataTable from 'fixed-data-table';
-import './fixed-data-table.css';
+import ReactTable from 'react-table'
 import RaisedButton from './Button.jsx';
 import ActionSearch from 'material-ui/svg-icons/action/search';
 import ClearIcon from 'material-ui/svg-icons/content/clear';
-import ArrowUp from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
 import TextField from 'material-ui/TextField';
 import Checkbox from 'material-ui/Checkbox';
 import FeatureStore from '../stores/FeatureStore.js';
 import SelectActions from '../actions/SelectActions.js';
 import LayerSelector from './LayerSelector.jsx';
 import {Toolbar} from 'material-ui/Toolbar';
-import {SortHeaderCell, SortTypes} from './SortHeaderCell.jsx';
-import {LinkCell} from './LinkCell.jsx';
-import {TextCell} from './TextCell.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Snackbar from 'material-ui/Snackbar';
 import FilterService from '../services/FilterService.js';
 import FilterHelp from './FilterHelp.jsx';
+import './react-table.css';
 import './FeatureTable.css';
-
-const {Table, Column} = FixedDataTable;
 
 const messages = defineMessages({
   nodatamsg: {
@@ -75,16 +69,6 @@ const messages = defineMessages({
     description: 'Text for the clear button',
     defaultMessage: 'Clear'
   },
-  movebuttontitle: {
-    id: 'featuretable.movebuttontitle',
-    description: 'Title for the move button',
-    defaultMessage: 'Move selected to top'
-  },
-  movebuttontext: {
-    id: 'featuretable.movebuttontext',
-    description: 'Text for the move button',
-    defaultMessage: 'Move'
-  },
   onlyselected: {
     id: 'featuretable.onlyselected',
     description: 'Label for the show selected features only checkbox',
@@ -121,31 +105,29 @@ const messages = defineMessages({
  *
  * ```xml
  * <div ref='tablePanel' id='table-panel' className='feature-table'>
- *   <FeatureTable ref='table' resizeTo='table-panel' offset={[30, 30]} layer={selectedLayer} map={map} />
+ *   <FeatureTable ref='table' layer={selectedLayer} map={map} />
  * </div>
  * ```
  */
 class FeatureTable extends React.Component {
   constructor(props, context) {
     super(props);
-    this._onSortChange = this._onSortChange.bind(this);
     this._onChange = this._onChange.bind(this);
     FeatureStore.bindMap(this.props.map);
     this._selectedOnly = false;
     if (this.props.layer) {
       this._setLayer(this.props.layer);
     }
+    this._pagesLoaded = {};
     this.state = {
+      pageSize: props.pageSize,
+      pages: -1,
       active: false,
       errorOpen: false,
       error: false,
       muiTheme: context.muiTheme || getMuiTheme(),
-      gridWidth: this.props.width,
-      gridHeight: this.props.height,
-      features: [],
-      columnWidths: {},
-      selected: [],
-      colSortDirs: {},
+      features: null,
+      selected: null,
       help: false
     };
   }
@@ -155,15 +137,23 @@ class FeatureTable extends React.Component {
   componentWillMount() {
     FeatureStore.addChangeListener(this._onChange);
     this._onChange();
-    this.setDimensionsOnState = debounce(this.setDimensionsOnState, this.props.refreshRate);
+    this.setDimensionsOnState = debounce(this.setDimensionsOnState, this.props.refreshRate).bind(this);
   }
   componentDidMount() {
-    this.setDimensionsOnState();
+    this._element = ReactDOM.findDOMNode(this).parentNode;
+    this._formNode = ReactDOM.findDOMNode(this.refs.form);
     this._attachResizeEvent();
   }
   componentWillUnmount() {
     FeatureStore.removeChangeListener(this._onChange);
     global.removeEventListener('resize', this.setDimensionsOnState);
+  }
+  _attachResizeEvent() {
+    global.addEventListener('resize', this.setDimensionsOnState, false);
+  }
+  setDimensionsOnState() {
+    // force a re-render
+    this.setState({});
   }
   _setLayer(layer) {
     this._layer = layer;
@@ -176,19 +166,6 @@ class FeatureTable extends React.Component {
     //ReactDOM.findDOMNode(this.refs.filter).value = '';
     this._setLayer(layer);
   }
-  _attachResizeEvent() {
-    global.addEventListener('resize', this.setDimensionsOnState.bind(this), false);
-  }
-  setDimensionsOnState() {
-    if (this.props.resizeTo) {
-      var resizeToNode = document.getElementById(this.props.resizeTo);
-      var formNode = ReactDOM.findDOMNode(this.refs.form);
-      this.setState({
-        gridWidth: resizeToNode.offsetWidth - this.props.offset[0],
-        gridHeight: resizeToNode.offsetHeight - formNode.offsetHeight - this.props.offset[1]
-      });
-    }
-  }
   _onChange() {
     if (this._layer) {
       var state = FeatureStore.getState(this._layer);
@@ -196,50 +173,8 @@ class FeatureTable extends React.Component {
         delete this._layer;
         return;
       }
-      this._defaultSortIndexes = [];
-      var size = state.features.length;
-      for (var index = 0; index < size; index++) {
-        this._defaultSortIndexes.push(index);
-      }
-      var newState = {};
-      newState.features = state.features.slice();
-      newState.rowCount = newState.features.length;
-      if (newState.rowCount > 0) {
-        newState.errorOpen = false;
-      }
-      newState.originalFeatures = state.originalFeatures.slice();
-      newState.selected = state.selected.slice();
-      this.setState(newState);
-      // re-sort
-      if (this.state.sortIndexes && (this.state.sortIndexes.length !== state.features.length)) {
-        var columnKey = Object.keys(this.state.colSortDirs)[0];
-        this._onSortChange(columnKey, this.state.colSortDirs[columnKey]);
-      }
-    } else {
-      this.setState({rowCount: 0, features: []});
+      this.setState(state);
     }
-  }
-  _onColumnResize(width, label) {
-    var id = this._layer.get('id');
-    var columnWidths = this.state.columnWidths;
-    columnWidths[id] = columnWidths[id] || {};
-    columnWidths[id][label] = Math.max(this.props.minColumnWidth, width);
-    this.setState({columnWidths: columnWidths});
-    this._isResizing = false;
-  }
-  _transformIndex(index) {
-    return this.state.sortIndexes ? this.state.sortIndexes[index] : index;
-  }
-  _onRowClick(evt, index) {
-    if (evt.target.tagName.toLowerCase() !== 'a') {
-      var lyr = this._layer;
-      var feature = this.state.features[this._transformIndex(index)];
-      SelectActions.toggleFeature(lyr, feature);
-    }
-  }
-  _rowClassNameGetter(index) {
-    var feature = this.state.features[this._transformIndex(index)];
-    return this.state.selected.indexOf(feature) > -1 ? 'row-selected' : '';
   }
   _filter(evt) {
     this._selectedOnly = evt.target.checked;
@@ -250,14 +185,14 @@ class FeatureTable extends React.Component {
   }
   _updateStoreFilter() {
     var lyr = this._layer;
-    if (this._selectedOnly === true) {
-      FeatureStore.setSelectedAsFilter(lyr);
-    } else {
-      if (!this._filtered) {
-        FeatureStore.restoreOriginalFeatures(lyr);
+    if (!this._filtered) {
+      if (this._selectedOnly === true) {
+        FeatureStore.setSelectedAsFilter(lyr);
       } else {
-        FeatureStore.setFilter(lyr, this._filteredRows);
+        FeatureStore.restoreOriginalFeatures(lyr);
       }
+    } else {
+      FeatureStore.setFilter(lyr, this._filteredRows);
     }
   }
   _clearSelected() {
@@ -265,26 +200,6 @@ class FeatureTable extends React.Component {
       var lyr = this._layer;
       SelectActions.clear(lyr, this._selectedOnly);
     }
-  }
-  _moveSelectedToTop() {
-    var selected = this.state.selected;
-    var sortIndexes = [];
-    for (var i = 0, ii = selected.length; i < ii; ++i) {
-      var idx = this.state.features.indexOf(selected[i]);
-      sortIndexes.push(idx);
-    }
-    sortIndexes.sort(function(a, b) {
-      return a - b;
-    });
-    var size = this.state.features.length;
-    for (var index = 0; index < size; index++) {
-      if (selected.indexOf(this.state.features[index]) === -1) {
-        sortIndexes.push(index);
-      }
-    }
-    this.setState({
-      sortIndexes: sortIndexes
-    });
   }
   _zoomSelected() {
     var selected = this.state.selected;
@@ -306,7 +221,7 @@ class FeatureTable extends React.Component {
   _filterByText(evt) {
     var filterBy = evt.target.value;
     var state = FeatureStore.getState(this._layer);
-    var rows = this._selectedOnly ? state.selected : state.originalFeatures;
+    var rows = this._selectedOnly ? state.selected : state.features.getFeatures();
     var filteredRows = [];
     var queryFilter;
     if (filterBy !== '') {
@@ -342,36 +257,6 @@ class FeatureTable extends React.Component {
     this._filteredRows = filteredRows;
     FeatureStore.setFilter(this._layer, filteredRows);
   }
-  _onSortChange(columnKey, sortDir) {
-    var sortIndexes = this._defaultSortIndexes.slice();
-    sortIndexes.sort((indexA, indexB) => {
-      var valueA = FeatureStore.getFieldValue(this._layer, indexA, columnKey);
-      var valueB = FeatureStore.getFieldValue(this._layer, indexB, columnKey);
-      var sortVal = 0;
-      if (valueA > valueB) {
-        sortVal = 1;
-      }
-      if (valueA < valueB) {
-        sortVal = -1;
-      }
-      if (sortVal !== 0 && sortDir === SortTypes.ASC) {
-        sortVal = sortVal * -1;
-      }
-      return sortVal;
-    });
-    this.setState({
-      sortIndexes: sortIndexes,
-      colSortDirs: {
-        [columnKey]: sortDir
-      }
-    });
-  }
-  _getTextWidth(text, font) {
-    let element = document.createElement('canvas');
-    let context = element.getContext('2d');
-    context.font = font;
-    return context.measureText(text).width + 24;
-  }
   getStyles() {
     const muiTheme = this.state.muiTheme;
     const rawTheme = muiTheme.rawTheme;
@@ -395,14 +280,41 @@ class FeatureTable extends React.Component {
   setActive(active) {
     this.setState({active: active});
   }
+  _onSelect(props) {
+    SelectActions.toggleFeature(this._layer, props.row);
+  }
+  _onTableChange(state, instance) {
+    this.setState({loading: true});
+    var start = state.page * state.pageSize;
+    if (!this._pagesLoaded[this._layer.get('id')]) {
+      this._pagesLoaded[this._layer.get('id')] = {};
+    }
+    // only load if not already loaded
+    if (!this._pagesLoaded[this._layer.get('id')][state.page]) {
+      FeatureStore.loadFeatures(this._layer, start, state.pageSize, function() {
+        this.setState({
+          page: state.page,
+          pageSize: state.pageSize,
+          pages: Math.ceil(this._layer.get('numberOfFeatures') / state.pageSize),
+          loading: false
+        });
+        this._pagesLoaded[this._layer.get('id')][state.page] = true;
+      }, null, this);
+    } else {
+      this.setState({
+        page: state.page,
+        pageSize: state.pageSize,
+        pages: Math.ceil(this._layer.get('numberOfFeatures') / state.pageSize),
+        loading: false
+      });
+    }
+  }
   render() {
-    var {sortIndexes, colSortDirs} = this.state;
     const {formatMessage} = this.props.intl;
-    var schema, id, row;
+    var schema, id;
     if (this._layer) {
       schema = FeatureStore.getSchema(this._layer);
       id = this._layer.get('id');
-      row = FeatureStore.getObjectAt(this._layer, 0);
     }
     var error;
     if (this.state.error === true) {
@@ -415,42 +327,64 @@ class FeatureTable extends React.Component {
         onRequestClose={this._handleRequestClose.bind(this)}
       />);
     }
-    var columnNodes = [];
-    var defaultWidth;
-    if (schema && this.state.gridWidth) {
-      defaultWidth = Math.max(this.props.columnWidth, (this.state.gridWidth / Object.keys(schema).length));
-    } else {
-      defaultWidth = this.props.columnWidth;
-    }
-    if (!this.defaultColWidths) {
-      this.defaultColWidths = {};
-    }
-    if (!this.defaultColWidths[id]) {
-      this.defaultColWidths[id] = {};
-    }
-    for (var key in schema) {
-      if (!this.defaultColWidths[id][key] && row) {
-        this.defaultColWidths[id][key] = Math.max(
-          this._getTextWidth(key, '13px Helvetica Neue'),
-          this._getTextWidth(row[key], '13px Helvetica Neue')
-        );
+    var me = this;
+    var sortable = this._layer instanceof ol.layer.Vector;
+    var columns = [{
+      id: 'selector',
+      header: '',
+      sortable: sortable,
+      render: function(props) {
+        var selected = me.state.selected.indexOf(props.row) !== -1;
+        return (<Checkbox disableTouchRipple={true} checked={selected} onCheck={me._onSelect.bind(me, props)} />);
       }
-      var width = this.state.columnWidths[id] && this.state.columnWidths[id][key] ? this.state.columnWidths[id][key] : this.defaultColWidths[id][key] ? this.defaultColWidths[id][key] : defaultWidth;
-      columnNodes.push(
-        <Column
-          header={
-            <SortHeaderCell
-              onSortChange={this._onSortChange}
-              sortDir={colSortDirs[key]}>
-              {key}
-            </SortHeaderCell>
-          }
-          isResizable={true}
-          cell={(schema[key] === 'link') ? <LinkCell sortIndexes={sortIndexes} layer={this._layer} col={key} /> : <TextCell sortIndexes={sortIndexes} layer={this._layer} col={key} />}
-          key={key}
-          columnKey={key}
-          width={width} />
-        );
+    }];
+    for (var key in schema) {
+      if (schema[key] === 'link') {
+        columns.push({
+          id: key,
+          header: key,
+          sortable: sortable,
+          render: (function(props) {
+            return (<a href={props.row.get(this)}>{props.row.get(this)}</a>);
+          }).bind(key)
+        });
+      } else {
+        columns.push({
+          id: key,
+          header: key,
+          sortable: sortable,
+          accessor: (function(d) {
+            return d.get(this);
+          }).bind(key)
+        });
+      }
+    }
+    var table;
+    if (this._element && columns.length > 0 && this.state.features !== null) {
+      var height = this._element.offsetHeight - this._formNode.offsetHeight;
+      var data;
+      if (this._filtered || this._selectedOnly) {
+        data = this.state.filter;
+      } else {
+        if (this._layer instanceof ol.layer.Vector) {
+          data = this.state.features.getFeatures();
+        } else {
+          data = FeatureStore.getFeaturesPerPage(this._layer, this.state.page, this.state.pageSize);
+        }
+      }
+      table = (<ReactTable
+        loading={this.state.loading}
+        pages={this._layer instanceof ol.layer.Vector ? undefined : this.state.pages}
+        data={data}
+        manual={!(this._layer instanceof ol.layer.Vector)}
+        showPageSizeOptions={false}
+        onChange={(this._layer instanceof ol.layer.Vector) ? undefined : this._onTableChange.bind(this)}
+        showPageJump={false}
+        pageSize={this.state.pageSize}
+        tableStyle={{width: '98%'}}
+        style={{height: height, overflowY: 'auto'}}
+        columns={columns}
+      />);
     }
     const styles = this.getStyles();
     var filterHelp = this._layer ? <FilterHelp intl={this.props.intl} /> : undefined;
@@ -469,7 +403,7 @@ class FeatureTable extends React.Component {
             <div className='feature-table-selector'>
               <LayerSelector {...this.props} id='table-layerSelector' disabled={!this._layer} ref='layerSelector' onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList} map={this.props.map} value={id} />
             </div>
-            <div className='feature-table-filter'>
+            <div className='feature-table-filter' style={{display: this._layer instanceof ol.layer.Vector ? 'block' : 'none'}}>
               <TextField floatingLabelText={formatMessage(messages.filterlabel)} id='featuretable-filter' disabled={!this._layer} ref='filter' onChange={this._filterByText.bind(this)} hintText={formatMessage(messages.filterplaceholder)} />
               {filterHelp}
             </div>
@@ -478,23 +412,10 @@ class FeatureTable extends React.Component {
           <Toolbar className='feature-table-toolbar'>
             <RaisedButton disabled={!this._layer} icon={<ActionSearch />} label={formatMessage(messages.zoombuttontext)} tooltip={formatMessage(messages.zoombuttontitle)} onTouchTap={this._zoomSelected.bind(this)} disableTouchRipple={true}/>
             <RaisedButton disabled={!this._layer} icon={<ClearIcon />} label={formatMessage(messages.clearbuttontext)} tooltip={formatMessage(messages.clearbuttontitle)} onTouchTap={this._clearSelected.bind(this)} disableTouchRipple={true}/>
-            <RaisedButton disabled={!this._layer} icon={<ArrowUp />} label={formatMessage(messages.movebuttontext)} tooltip={formatMessage(messages.movebuttontitle)} onTouchTap={this._moveSelectedToTop.bind(this)} disableTouchRipple={true}/>
           </Toolbar>
           {error}
         </div>
-        <Table
-          onColumnResizeEndCallback={this._onColumnResize.bind(this)}
-          isColumnResizing={this._isResizing}
-          rowHeight={this.props.rowHeight}
-          rowClassNameGetter={this._rowClassNameGetter.bind(this)}
-          headerHeight={this.props.headerHeight}
-          onRowClick={this._onRowClick.bind(this)}
-          rowsCount={this.state.rowCount}
-          width={this.state.gridWidth}
-          height={this.state.gridHeight}
-          className='feature-table-table'>
-          {columnNodes}
-        </Table>
+        {table}
       </div>
     );
   }
@@ -510,45 +431,17 @@ FeatureTable.propTypes = {
    */
   layer: React.PropTypes.instanceOf(ol.layer.Vector),
   /**
-   * The width of the table component in pixels.
-   */
-  width: React.PropTypes.number,
-  /**
-   * The height of the table component in pixels.
-   */
-  height: React.PropTypes.number,
-  /**
-   * The height of a row in pixels.
-   */
-  rowHeight: React.PropTypes.number,
-  /**
-   * The height of the table header in pixels.
-   */
-  headerHeight: React.PropTypes.number,
-  /**
-   * The width in pixels per column.
-   */
-  columnWidth: React.PropTypes.number,
-  /**
-   * The minimum width in pixels per column.
-   */
-  minColumnWidth: React.PropTypes.number,
-  /**
    * The zoom level to zoom the map to in case of a point geometry.
    */
   pointZoom: React.PropTypes.number,
   /**
-   * The id of the container to resize the feature table to.
-   */
-  resizeTo: React.PropTypes.string,
-  /**
-   * Array with offsetX and offsetY, the number of pixels to make the table smaller than the resizeTo container.
-   */
-  offset: React.PropTypes.array,
-  /**
    * Refresh rate in ms that determines how often to resize the feature table when the window is resized.
    */
   refreshRate: React.PropTypes.number,
+  /**
+   * Number of features per page.
+   */
+  pageSize: React.PropTypes.number,
   /**
    * Css class name to apply on the root element of this component.
    */
@@ -560,14 +453,8 @@ FeatureTable.propTypes = {
 };
 
 FeatureTable.defaultProps = {
-  width: 400,
-  height: 400,
-  rowHeight: 30,
-  headerHeight: 50,
-  columnWidth: 100,
-  minColumnWidth: 10,
+  pageSize: 20,
   pointZoom: 16,
-  offset: [0, 0],
   refreshRate: 250
 };
 
@@ -579,4 +466,4 @@ FeatureTable.childContextTypes = {
   muiTheme: React.PropTypes.object.isRequired
 };
 
-export default injectIntl(FeatureTable, {withRef: true}); // withRef needed so apps can call setDimensionsOnState
+export default injectIntl(FeatureTable, {withRef: true});

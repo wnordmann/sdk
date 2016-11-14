@@ -142,7 +142,7 @@ class QueryBuilder extends React.Component {
     if (this._queryFilter === null) {
       return;
     }
-    var features = FeatureStore.getState(this._layer).originalFeatures;
+    var features = FeatureStore.getState(this._layer).features.getFeatures();
     for (var i = 0, ii = features.length; i < ii; ++i) {
       var properties = features[i].getProperties();
       if (this._queryFilter(properties)) {
@@ -150,15 +150,17 @@ class QueryBuilder extends React.Component {
         selection.push(features[i]);
       }
     }
+    var count;
     if (selectIn === true) {
-      selection = FeatureStore.selectFeaturesInCurrentSelection(this._layer, selection);
+      count = FeatureStore.selectFeaturesInCurrentSelection(this._layer, selection);
     } else {
       SelectActions.selectFeatures(this._layer, selection, true);
+      count = selection.length;
     }
     this.setState({
       showCount: true,
       open: true,
-      count: selection.length
+      count: count
     });
   }
   _addSelection() {
