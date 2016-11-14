@@ -118,6 +118,7 @@ class FeatureTable extends React.Component {
     if (this.props.layer) {
       this._setLayer(this.props.layer);
     }
+    this._pagesLoaded = {};
     this.state = {
       pageSize: props.pageSize,
       pages: -1,
@@ -285,14 +286,28 @@ class FeatureTable extends React.Component {
   _onTableChange(state, instance) {
     this.setState({loading: true});
     var start = state.page * state.pageSize;
-    FeatureStore.loadFeatures(this._layer, start, state.pageSize, function() {
+    if (!this._pagesLoaded[this._layer.get('id')]) {
+      this._pagesLoaded[this._layer.get('id')] = {};
+    }
+    // only load if not already loaded
+    if (!this._pagesLoaded[this._layer.get('id')][state.page]) {
+      FeatureStore.loadFeatures(this._layer, start, state.pageSize, function() {
+        this.setState({
+          page: state.page,
+          pageSize: state.pageSize,
+          pages: Math.ceil(this._layer.get('numberOfFeatures') / state.pageSize),
+          loading: false
+        });
+        this._pagesLoaded[this._layer.get('id')][state.page] = true;
+      }, null, this);
+    } else {
       this.setState({
         page: state.page,
         pageSize: state.pageSize,
         pages: Math.ceil(this._layer.get('numberOfFeatures') / state.pageSize),
         loading: false
       });
-    }, null, this);
+    }
   }
   render() {
     const {formatMessage} = this.props.intl;
@@ -360,6 +375,7 @@ class FeatureTable extends React.Component {
         manual={!(this._layer instanceof ol.layer.Vector)}
         showPageSizeOptions={true}
         onChange={(this._layer instanceof ol.layer.Vector) ? undefined : this._onTableChange.bind(this)}
+        showPageJump={false}
         pageSize={this.state.pageSize}
         tableStyle={{width: '98%'}}
         style={{height: height, overflowY: 'auto'}}
