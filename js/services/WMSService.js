@@ -98,7 +98,7 @@ class WMSService {
     );
     return url;
   }
-  getFeatureInfo(layer, coordinate, view, infoFormat, onSuccess) {
+  getFeatureInfo(layer, coordinate, view, infoFormat, onSuccess, onFailure) {
     doGET(this.getFeatureInfoUrl(layer, coordinate, view, infoFormat), function(response) {
       var result = {};
       if (infoFormat === 'text/plain' || infoFormat === 'text/html') {
@@ -112,7 +112,7 @@ class WMSService {
       }
       result.layer = layer;
       onSuccess.call(this, result);
-    });
+    }, onFailure);
   }
 }
 
