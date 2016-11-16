@@ -25,12 +25,13 @@ const cache = {};
 
 class WMTSService {
   createLayer(layer, url, titleObj, projection) {
-    // TODO more smart projection matching
-    var options = ol.source.WMTS.optionsFromCapabilities(cache[url],
-      {layer: layer.Name, matrixSet: projection.getCode()});
+    var caps = cache[url];
+    var options = ol.source.WMTS.optionsFromCapabilities(caps,
+      {layer: layer.Name, format: 'image/png', projection: projection.getCode()});
     return new ol.layer.Tile({
       title: titleObj.title,
       emptyTitle: titleObj.empty,
+      popupInfo: caps.OperationsMetadata.GetFeatureInfo ? '#AllAttributes' : undefined,
       id: layer.Name,
       name: layer.Name,
       isRemovable: true,
@@ -45,10 +46,12 @@ class WMTSService {
     });
     return urlObj.toString();
   }
-  getCapabilities(url, onSuccess) {
+  getCapabilities(url, onSuccess, onFailure) {
     doGET(this.getCapabilitiesUrl(url), function(xmlhttp) {
       onSuccess.call(this, this.parseCapabilities(xmlhttp, url));
-    }, undefined, this);
+    }, function(xmlhttp) {
+      onFailure.call(this, xmlhttp);
+    }, this);
   }
   parseCapabilities(xmlhttp, url) {
     var info = parser.read(xmlhttp.responseText);
@@ -112,7 +115,7 @@ class WMTSService {
     });
     return urlObj.toString();
   }
-  getFeatureInfo(layer, coordinate, view, infoFormat, onSuccess) {
+  getFeatureInfo(layer, coordinate, view, infoFormat, onSuccess, onFailure) {
     var url = this.getFeatureInfoUrl(layer, coordinate, view, infoFormat);
     doGET(url, function(response) {
       var result = {};
@@ -127,7 +130,7 @@ class WMTSService {
       }
       result.layer = layer;
       onSuccess.call(this, result);
-    });
+    }, onFailure);
   }
 }
 

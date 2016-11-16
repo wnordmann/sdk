@@ -231,7 +231,9 @@ class InfoPopup extends React.Component {
         called = true;
         var infoFormat = this.props.infoFormat;
         var callback = (infoFormat === 'text/plain' || infoFormat === 'text/html') ? onReadyAll : onReady;
-        service.getFeatureInfo(layer, evt.coordinate, view, infoFormat, callback);
+        service.getFeatureInfo(layer, evt.coordinate, view, infoFormat, callback, function() {
+          map.getTarget().style.cursor = me._cursor;
+        });
       } else if (popupDef) {
         called = true;
         service.getFeatureInfo(layer, evt.coordinate, view, 'application/json', onReady);

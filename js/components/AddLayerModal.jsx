@@ -105,7 +105,7 @@ const messages = defineMessages({
   corserror: {
     id: 'addwmslayermodal.corserror',
     description: 'Error message to show the user when an XHR request fails because of CORS or offline',
-    defaultMessage: 'Could not connect to GeoServer. Please verify that the server is online and CORS is enabled.'
+    defaultMessage: 'Could not connect to the server. Please verify that the server is online and CORS is enabled.'
   },
   inputfieldlabel: {
     id: 'addwmslayermodal.inputfieldlabel',
@@ -156,7 +156,7 @@ class AddLayerModal extends React.Component {
       this._request.abort();
     }
   }
-  _getCaps() {
+  _getCaps(onFailure) {
     var source = this.state.sources[this.state.source];
     var url = source.url;
     var service = services[source.type];
@@ -168,6 +168,9 @@ class AddLayerModal extends React.Component {
         me._setError(formatMessage(messages.corserror));
       } else {
         me._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
+      }
+      if (onFailure) {
+        onFailure();
       }
     };
     var successCb = function(layerInfo) {
@@ -336,8 +339,8 @@ class AddLayerModal extends React.Component {
   closeNewServer() {
     this.setState({newModalOpen: false});
   }
-  _refreshService() {
-    this._getCaps();
+  _refreshService(onFailure) {
+    this._getCaps(onFailure);
   }
   addServer() {
     var name = this.refs.newservername.getValue();
@@ -350,7 +353,14 @@ class AddLayerModal extends React.Component {
       url: url
     });
     this.setState({source: sources.length - 1, newModalOpen: false, sources: sources}, function() {
-      this._refreshService();
+      var me = this;
+      this._refreshService(function() {
+        var sources = me.state.sources.slice();
+        sources.splice(-1, 1);
+        me.setState({sources: sources, source: sources.length - 1}, function() {
+          me._refreshService();
+        });
+      });
     }, this);
   }
   render() {
