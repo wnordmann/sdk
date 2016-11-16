@@ -25,11 +25,9 @@ const cache = {};
 
 class WMTSService {
   createLayer(layer, url, titleObj, projection) {
-    // TODO more smart projection matching
     var caps = cache[url];
     var options = ol.source.WMTS.optionsFromCapabilities(caps,
-      {layer: layer.Name, matrixSet: projection.getCode()});
-    options.format = 'image/png';
+      {layer: layer.Name, format: 'image/png', projection: projection.getCode()});
     return new ol.layer.Tile({
       title: titleObj.title,
       emptyTitle: titleObj.empty,
