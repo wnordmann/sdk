@@ -161,13 +161,19 @@ const messages = defineMessages({
 class LayerListItem extends React.Component {
   constructor(props) {
     super(props);
+    this.props.layer.on('change:visible', function(evt) {
+      this.setState({checked: evt.target.getVisible()});
+    }, this);
     if (this.props.group) {
-      this.props.layer.on('change:visible', function(evt) {
-        this.setState({checked: evt.target.getVisible()});
-      }, this);
-      this.props.group.on('change:visible', function(evt) {
-        this.setState({disabled: !evt.target.getVisible()});
-      }, this);
+      if (this.props.group.get('type') === 'base-group') {
+        this.props.group.on('change:visible', function(evt) {
+          this.setState({disabled: !evt.target.getVisible()});
+        }, this);
+      } else {
+        this.props.group.on('change:visible', function(evt) {
+          this.setState({checked: evt.target.getVisible()});
+        }, this);
+      }
     }
     this.formats_ = {
       GeoJSON: {
@@ -231,11 +237,10 @@ class LayerListItem extends React.Component {
         } else {
           this.props.layer.getLayers().forEach(function(child) {
             child.setVisible(visible);
-              }, this);
+          }, this);
         }
       }
     }
-    this.setState({checked: visible});
   }
   _download() {
     var formatInfo = this.formats_[this.props.downloadFormat];
