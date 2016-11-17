@@ -48,7 +48,15 @@ class LayerStore extends EventEmitter {
       }
     } else {
       // change:layers on layer does not seem to work
+      this._recurseBind(layer);
+    }
+  }
+  _recurseBind(layer) {
+    if (layer instanceof ol.layer.Group) {
       layer.getLayers().on('change:length', this.emitChange, this);
+      layer.getLayers().forEach(function(child) {
+        this._recurseBind(child);
+      }, this);
     }
   }
   _onError() {
@@ -121,7 +129,7 @@ export default _LayerStore;
 
 AppDispatcher.register((payload) => {
   let action = payload.action;
-  let layers, layerArray;
+  let layers;
   switch (action.type) {
     case LayerConstants.REMOVE_LAYER:
       layers = _LayerStore.getMap().getLayers();
@@ -133,15 +141,8 @@ AppDispatcher.register((payload) => {
       } else {
         layers = _LayerStore.getMap().getLayers();
       }
-      layerArray = layers.getArray();
-      var layer2 = layerArray[action.hoverIndex - 1];
-      if (action.dragIndex < action.hoverIndex) {
-        layers.remove(action.layer);
-        layers.insertAt(action.dragIndex, action.layer);
-      } else {
-        layers.remove(layer2);
-        layers.insertAt(action.hoverIndex, layer2);
-      }
+      layers.remove(action.layer);
+      layers.insertAt(action.hoverIndex, action.layer);
       break;
     default:
       break;

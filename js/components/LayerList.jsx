@@ -12,6 +12,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import debounce from  'debounce';
 import HTML5Backend from 'react-dnd-html5-backend';
 import {DragDropContext} from 'react-dnd';
 import LayerActions from '../actions/LayerActions.js';
@@ -68,6 +69,7 @@ class LayerList extends React.Component {
     this.state = {
       muiTheme: context.muiTheme || getMuiTheme()
     };
+    this.moveLayer = debounce(this.moveLayer, 100);
   }
   getChildContext() {
     return {muiTheme: getMuiTheme()};
@@ -95,7 +97,7 @@ class LayerList extends React.Component {
     for (var i = 0, ii = layers.length; i < ii; ++i) {
       var lyr = layers[i];
       if (!this.props.filter || this.props.filter(lyr) === true) {
-        layerNodes.push(me.getLayerNode(lyr, group, (ii - i)));
+        layerNodes.push(me.getLayerNode(lyr, group, (ii - i) - 1));
       }
     }
     return layerNodes;
@@ -141,11 +143,11 @@ class LayerList extends React.Component {
       if (lyr instanceof ol.layer.Group) {
         var children = this.props.showGroupContent ? this.renderLayerGroup(lyr) : [];
         return (
-          <LayerListItem index={idx} moveLayer={this.moveLayer.bind(this)} {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('id')} layer={lyr} nestedItems={children} title={lyr.get('title')} disableTouchRipple={true}/>
+          <LayerListItem index={idx} moveLayer={this.moveLayer} {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('id')} layer={lyr} nestedItems={children} title={lyr.get('title')} disableTouchRipple={true}/>
         );
       } else {
         return (
-          <LayerListItem index={idx} moveLayer={this.moveLayer.bind(this)} {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('id')} layer={lyr} group={group} title={lyr.get('title')} disableTouchRipple={true}/>
+          <LayerListItem index={idx} moveLayer={this.moveLayer} {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('id')} layer={lyr} group={group} title={lyr.get('title')} disableTouchRipple={true}/>
         );
       }
     }
