@@ -215,17 +215,23 @@ class LayerListItem extends React.Component {
     } else {
       this.props.layer.setVisible(visible);
       if (this.props.layer instanceof ol.layer.Group) {
-        if (visible === false) {
-          this.props.layer.getLayers().forEach(function(child) {
-            if (child.getVisible() === true) {
-              this._child = child;
-            }
-            child.setVisible(visible);
-          }, this);
+        if (this.props.layer.get('type') === 'base-group') {
+          if (visible === false) {
+            this.props.layer.getLayers().forEach(function(child) {
+              if (child.getVisible() === true) {
+                this._child = child;
+              }
+              child.setVisible(visible);
+            }, this);
+          } else {
+            // restore the last visible child of the group
+            this._child.setVisible(visible);
+            delete this._child;
+          }
         } else {
-          // restore the last visible child of the group
-          this._child.setVisible(visible);
-          delete this._child;
+          this.props.layer.getLayers().forEach(function(child) {
+            child.setVisible(visible);
+              }, this);
         }
       }
     }
