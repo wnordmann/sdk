@@ -95,12 +95,6 @@ const layerListItemTarget = {
 
     // Time to actually perform the action
     props.moveLayer(dragIndex, hoverIndex, sourceItem.layer, sourceItem.group);
-
-    // Note: we're mutating the monitor item here!
-    // Generally it's better to avoid mutations,
-    // but it's good here for the sake of performance
-    // to avoid expensive index searches.
-    monitor.getItem().index = hoverIndex;
   }
 };
 
@@ -161,9 +155,6 @@ const messages = defineMessages({
 class LayerListItem extends React.Component {
   constructor(props) {
     super(props);
-    this.props.layer.on('change:visible', function(evt) {
-      this.setState({checked: evt.target.getVisible()});
-    }, this);
     if (this.props.group) {
       if (this.props.group.get('type') === 'base-group') {
         this.props.group.on('change:visible', function(evt) {
@@ -198,6 +189,15 @@ class LayerListItem extends React.Component {
   }
   getChildContext() {
     return {muiTheme: getMuiTheme()};
+  }
+  componentDidMount() {
+    this.props.layer.on('change:visible', this._changeLayerVisible, this);
+  }
+  componentWillUnmount() {
+    this.props.layer.un('change:visible', this._changeLayerVisible, this);
+  }
+  _changeLayerVisible(evt) {
+    this.setState({checked: evt.target.getVisible()});
   }
   _handleChange(event) {
     var visible = event.target.checked;
