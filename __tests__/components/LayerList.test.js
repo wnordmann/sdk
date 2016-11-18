@@ -73,4 +73,68 @@ describe('LayerList', function() {
     ReactDOM.unmountComponentAtNode(container);
   });
 
+  it('handles group layers', function() {
+    var group =  new ol.layer.Group({
+      title: 'Overlays',
+      layers: [
+        new ol.layer.Group({
+          title: 'Overlay 1',
+          layers: [
+            new ol.layer.Tile({
+              title: 'States',
+              source: new ol.source.TileWMS({
+                url: '/geoserver/wms',
+                params: {
+                  LAYERS: 'usa:states'
+                }
+              })
+            }),
+            new ol.layer.Tile({
+              title: 'Countries',
+              source: new ol.source.TileWMS({
+                url: '/geoserver/wms',
+                params: {
+                  LAYERS: 'opengeo:countries'
+                }
+              })
+            }),
+            new ol.layer.Tile({
+              title: 'DEM',
+              source: new ol.source.TileWMS({
+                url: '/geoserver/wms',
+                params: {
+                  LAYERS: 'usgs:dem'
+                }
+              })
+            })
+          ]
+        })
+      ]
+    });
+    map.removeLayer(layer);
+    map.addLayer(group);
+    var container = document.createElement('div');
+    ReactDOM.render((
+      <LayerList intl={intl} map={map}/>
+    ), container);
+    var checkboxes = container.querySelectorAll('input');
+    var checkedCount = 0;
+    var i, ii;
+    for (i = 0, ii = checkboxes.length; i < ii; ++i) {
+      if (checkboxes[i].checked) {
+        checkedCount++;
+      }
+    }
+    assert.equal(checkedCount, 5);
+    group.getLayers().item(0).setVisible(false);
+    checkedCount = 0;
+    for (i = 0, ii = checkboxes.length; i < ii; ++i) {
+      if (checkboxes[i].checked) {
+        checkedCount++;
+      }
+    }
+    assert.equal(checkedCount, 1);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
 });
