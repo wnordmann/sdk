@@ -1,6 +1,6 @@
 {
   "name": "boundless-sdk",
-  "version": "0.9.11",
+  "version": "0.9.12",
   "description": "SDK for OpenLayers 3 and React plus Flux",
   "main": "index.js",
   "repository": {
