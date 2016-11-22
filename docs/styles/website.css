@@ -1,5 +1,8 @@
 .book-header {
-  background: url("logo.png") no-repeat right !important;
+  background: url("boundless_sdk_horiz.svg") no-repeat right !important;
+  background-size: 128px 50px !important;
+  margin-right: 5px;
+  margin-top: 5px;
 }
 .fa-facebook{
  	visibility: hidden;
