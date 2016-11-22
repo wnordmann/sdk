@@ -141,3 +141,6 @@ global.WFST = WFST;
 
 import Zoom from './components/Zoom.jsx';
 global.Zoom = Zoom;
+
+import ZoomSlider from './components/ZoomSlider.jsx';
+global.ZoomSlider = ZoomSlider;
