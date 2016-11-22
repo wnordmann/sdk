@@ -1,4 +1,5 @@
 # Boundless WebSDK
+![Logo](http://boundlessgeo.github.io/sdk/book/styles/boundless_sdk_horiz.svg)
 
 [![Travis CI Status](https://secure.travis-ci.org/boundlessgeo/sdk.svg)](http://travis-ci.org/#!/boundlessgeo/sdk)
 [![Coverage Status](https://coveralls.io/repos/github/boundlessgeo/sdk/badge.svg?branch=master)](https://coveralls.io/github/boundlessgeo/sdk?branch=master)
