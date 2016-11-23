@@ -9,6 +9,7 @@
   },
   "scripts": {
     "build:babel": "NODE_ENV=release babel ./js --out-dir ./build",
+    "copy:css": "cp js/components/*.css build/components",
     "cover": "node_modules/.bin/mochify --plugin [ mochify-istanbul --report text --report lcovonly --dir ./coverage --exclude **/js/constants/* --exclude **/js/**/*.css --exclude **/__tests__/**/* ] --transform ./scripts/test-transform.js __tests__/**/*.test.js",
     "createdir:build:js": "mkdir -p dist/js",
     "createdir:build:css": "mkdir -p dist/css",
