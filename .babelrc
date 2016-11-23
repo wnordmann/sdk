@@ -1,11 +1,11 @@
 {
+  "presets": ["es2015", "stage-1", "react"],
   "ignore": [
     "node_modules/ogc-schemas/**/*.js",
     "node_modules/w3c-schemas/**/*.js"
   ],
   "plugins": [
     "transform-object-rest-spread",
-    "transform-react-jsx",
     "transform-decorators-legacy",
     ["react-intl", {
         "messagesDir": "./build/messages/",
