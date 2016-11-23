@@ -11,7 +11,7 @@
  */
 
 import URL from 'url-parse';
-import {doGET} from '../util';
+import util from '../util';
 import ol from 'openlayers';
 
 const wmtsGetFeatureInfoFormats = {
@@ -47,7 +47,7 @@ class WMTSService {
     return urlObj.toString();
   }
   getCapabilities(url, onSuccess, onFailure) {
-    doGET(this.getCapabilitiesUrl(url), function(xmlhttp) {
+    util.doGET(this.getCapabilitiesUrl(url), function(xmlhttp) {
       onSuccess.call(this, this.parseCapabilities(xmlhttp, url));
     }, function(xmlhttp) {
       onFailure.call(this, xmlhttp);
@@ -117,7 +117,7 @@ class WMTSService {
   }
   getFeatureInfo(layer, coordinate, view, infoFormat, onSuccess, onFailure) {
     var url = this.getFeatureInfoUrl(layer, coordinate, view, infoFormat);
-    doGET(url, function(response) {
+    util.doGET(url, function(response) {
       var result = {};
       if (infoFormat === 'text/plain' || infoFormat === 'text/html') {
         if (response.responseText.trim() !== 'no features were found') {

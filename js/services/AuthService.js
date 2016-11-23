@@ -11,7 +11,7 @@
  */
 
 import LoginActions from '../actions/LoginActions';
-import {doGET, doPOST} from '../util';
+import util from '../util';
 
 class AuthService {
   login(url, user, pwd, onSuccess, onFailure) {
@@ -25,7 +25,7 @@ class AuthService {
     var failure = function(xmlhttp) {
       onFailure.call(this, xmlhttp);
     };
-    doPOST(url, data, success, failure, this, contentType);
+    util.doPOST(url, data, success, failure, this, contentType);
   }
   logoff() {
     document.cookie = 'JSESSIONID=; path=/geoserver; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
@@ -42,7 +42,7 @@ class AuthService {
       }
       onFailure.call();
     };
-    return doGET(url, success, failure, this);
+    return util.doGET(url, success, failure, this);
   }
 }
 

@@ -11,7 +11,7 @@
  */
 
 import ol from 'openlayers';
-import {transformColor} from '../util';
+import util from '../util';
 
 class OpenLayersService {
   createStyle(styleState, geometryType) {
@@ -19,13 +19,13 @@ class OpenLayersService {
     var radius = parseFloat(styleState.symbolSize) / 2;
     if (styleState.hasFill !== false && styleState.fillColor) {
       fill = new ol.style.Fill({
-        color: transformColor(styleState.fillColor)
+        color: util.transformColor(styleState.fillColor)
       });
     }
     var stroke;
     if (styleState.hasStroke !== false && styleState.strokeColor) {
       stroke = new ol.style.Stroke({
-        color: transformColor(styleState.strokeColor),
+        color: util.transformColor(styleState.strokeColor),
         width: styleState.strokeWidth
       });
     }
@@ -34,7 +34,7 @@ class OpenLayersService {
       text = new ol.style.Text({
         font: styleState.fontSize + 'px Calibri,sans-serif',
         fill: new ol.style.Fill({
-          color: transformColor(styleState.fontColor)
+          color: util.transformColor(styleState.fontColor)
         })
       });
     }

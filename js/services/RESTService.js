@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {doGET, doPOST} from '../util';
+import util from '../util';
 
 class RESTService {
   _getStyleNameUrl(url, layer) {
@@ -29,7 +29,7 @@ class RESTService {
   }
   getStyleName(url, layer, onSuccess, onFailure) {
     url = this._getStyleNameUrl(url, layer);
-    doGET(url, function(xmlhttp) {
+    util.doGET(url, function(xmlhttp) {
       var styleName = this._parseStyleName(JSON.parse(xmlhttp.responseText));
       onSuccess.call(this, styleName);
     }, function(xmlhttp) {
@@ -42,7 +42,7 @@ class RESTService {
   createStyle(url, layer, sld, onSuccess, onFailure) {
     var styleName = 'web_sdk_style_' + Math.floor(100000 + Math.random() * 900000);
     var createUrl = url.replace(/wms|ows|wfs/g, 'rest/styles');
-    doPOST(createUrl, this._createStylePayload(styleName), function(xmlhttp) {
+    util.doPOST(createUrl, this._createStylePayload(styleName), function(xmlhttp) {
       layer.set('styleName', styleName);
       this.updateStyle(url, layer, sld, onSuccess, onFailure);
     }, function(xmlhttp) {
@@ -67,7 +67,7 @@ class RESTService {
     }
   }
   updateStyle(url, layer, sld, onSuccess, onFailure) {
-    doPOST(this._getUpdateStyleUrl(url, layer), sld, function(xmlhttp) {
+    util.doPOST(this._getUpdateStyleUrl(url, layer), sld, function(xmlhttp) {
       onSuccess.call(this, xmlhttp);
     }, function(xmlhttp) {
       onFailure.call(this, xmlhttp);

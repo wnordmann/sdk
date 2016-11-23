@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {doJSONP} from '../util';
+import util from '../util';
 import ol from 'openlayers';
 import URL from 'url-parse';
 
@@ -55,7 +55,7 @@ class ArcGISRestService {
     return urlObj.toString();
   }
   getCapabilities(url, onSuccess) {
-    doJSONP(this.getCapabilitiesUrl(url), function(jsonData) {
+    util.doJSONP(this.getCapabilitiesUrl(url), function(jsonData) {
       onSuccess.call(this, this.parseCapabilities(jsonData));
     }, this);
   }

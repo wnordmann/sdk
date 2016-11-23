@@ -17,7 +17,7 @@ import Button from './Button';
 import classNames from 'classnames';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
-import {transformColor} from '../util';
+import util from '../util';
 import LabelEditor from './LabelEditor';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
@@ -99,7 +99,7 @@ class LabelModal extends React.Component {
         text: value,
         font: me._labelState.fontSize + 'px Calibri,sans-serif',
         fill: new ol.style.Fill({
-          color: transformColor(me._labelState.fontColor)
+          color: util.transformColor(me._labelState.fontColor)
         })
       });
       var modifyStyle = function(s) {

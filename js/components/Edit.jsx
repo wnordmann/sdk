@@ -24,7 +24,7 @@ import SelectField from 'material-ui/SelectField';
 import {Toolbar} from 'material-ui/Toolbar';
 import Button from './Button';
 import ol from 'openlayers';
-import {transformColor} from '../util';
+import util from '../util';
 import ColorPicker from 'react-color';
 import classNames from 'classnames';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -207,10 +207,10 @@ class Edit extends React.Component {
     }
   }
   _onChangeStroke(color) {
-    this._strokeColor = transformColor(color);
+    this._strokeColor = util.transformColor(color);
   }
   _onChangeFill(color) {
-    this._fillColor = transformColor(color);
+    this._fillColor = util.transformColor(color);
   }
   _generateId() {
     return ID_PREFIX + this.state.layers.length;
