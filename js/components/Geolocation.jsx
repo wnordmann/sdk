@@ -17,7 +17,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import classNames from 'classnames';
 import pureRender from 'pure-render-decorator';
 import Snackbar from 'material-ui/Snackbar';
-import Button from './Button.jsx';
+import Button from './Button';
 import MyLocation from 'material-ui/svg-icons/maps/my-location';
 
 const messages = defineMessages({

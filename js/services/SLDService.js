@@ -11,11 +11,11 @@
  */
 
 import {Jsonix} from 'jsonix';
-import {XLink_1_0} from 'w3c-schemas/lib/XLink_1_0.js';
-import {Filter_1_0_0} from 'ogc-schemas/lib/Filter_1_0_0.js';
-import {GML_2_1_2} from 'ogc-schemas/lib/GML_2_1_2.js';
-import {SLD_1_0_0} from 'ogc-schemas/lib/SLD_1_0_0_GeoServer.js';
-import {hexToRgb} from '../util.js';
+import {XLink_1_0} from 'w3c-schemas/lib/XLink_1_0';
+import {Filter_1_0_0} from 'ogc-schemas/lib/Filter_1_0_0';
+import {GML_2_1_2} from 'ogc-schemas/lib/GML_2_1_2';
+import {SLD_1_0_0} from 'ogc-schemas/lib/SLD_1_0_0_GeoServer';
+import {hexToRgb} from '../util';
 
 const sldNamespace = 'http://www.opengis.net/sld';
 const ogcNamespace = 'http://www.opengis.net/ogc';

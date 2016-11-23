@@ -17,19 +17,19 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import classNames from 'classnames';
 import debounce from  'debounce';
 import ReactTable from 'react-table'
-import RaisedButton from './Button.jsx';
+import RaisedButton from './Button';
 import ActionSearch from 'material-ui/svg-icons/action/search';
 import ClearIcon from 'material-ui/svg-icons/content/clear';
 import TextField from 'material-ui/TextField';
 import Checkbox from 'material-ui/Checkbox';
-import FeatureStore from '../stores/FeatureStore.js';
-import SelectActions from '../actions/SelectActions.js';
-import LayerSelector from './LayerSelector.jsx';
+import FeatureStore from '../stores/FeatureStore';
+import SelectActions from '../actions/SelectActions';
+import LayerSelector from './LayerSelector';
 import {Toolbar} from 'material-ui/Toolbar';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Snackbar from 'material-ui/Snackbar';
-import FilterService from '../services/FilterService.js';
-import FilterHelp from './FilterHelp.jsx';
+import FilterService from '../services/FilterService';
+import FilterHelp from './FilterHelp';
 import './react-table.css';
 import './FeatureTable.css';
 

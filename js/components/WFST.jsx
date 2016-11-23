@@ -15,19 +15,19 @@ import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import classNames from 'classnames';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import LayerConstants from '../constants/LayerConstants.js';
-import AppDispatcher from '../dispatchers/AppDispatcher.js';
-import LayerSelector from './LayerSelector.jsx';
-import FeatureStore from '../stores/FeatureStore.js';
-import ToolUtil from '../toolutil.js';
-import RaisedButton from './Button.jsx';
+import LayerConstants from '../constants/LayerConstants';
+import AppDispatcher from '../dispatchers/AppDispatcher';
+import LayerSelector from './LayerSelector';
+import FeatureStore from '../stores/FeatureStore';
+import ToolUtil from '../toolutil';
+import RaisedButton from './Button';
 import DrawIcon from 'material-ui/svg-icons/image/brush';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import Snackbar from 'material-ui/Snackbar';
 import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import pureRender from 'pure-render-decorator';
-import EditForm from './EditForm.jsx';
-import WFSService from '../services/WFSService.js';
+import EditForm from './EditForm';
+import WFSService from '../services/WFSService';
 
 var SelectFeature = function(handleEvent, scope) {
   this._scope = scope;

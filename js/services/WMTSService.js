@@ -11,7 +11,7 @@
  */
 
 import URL from 'url-parse';
-import {doGET} from '../util.js';
+import {doGET} from '../util';
 import ol from 'openlayers';
 
 const wmtsGetFeatureInfoFormats = {

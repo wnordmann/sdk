@@ -10,8 +10,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import LoginActions from '../actions/LoginActions.js';
-import {doGET, doPOST} from '../util.js';
+import LoginActions from '../actions/LoginActions';
+import {doGET, doPOST} from '../util';
 
 class AuthService {
   login(url, user, pwd, onSuccess, onFailure) {

@@ -13,7 +13,7 @@
 import React from 'react';
 import ol from 'openlayers';
 import 'blueimp-canvas-to-blob';
-import RaisedButton from './Button.jsx';
+import RaisedButton from './Button';
 import classNames from 'classnames';
 import CameraIcon from 'material-ui/svg-icons/image/camera-alt';
 import FileSaver from 'browser-filesaver';

@@ -13,12 +13,12 @@
 import React from 'react';
 import ol from 'openlayers';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import LayerStore from '../stores/LayerStore.js';
+import LayerStore from '../stores/LayerStore';
 import classNames from 'classnames';
 import pureRender from 'pure-render-decorator';
 import {List, ListItem} from 'material-ui/List';
-import WMSLegend from './WMSLegend.jsx';
-import Label from './Label.jsx';
+import WMSLegend from './WMSLegend';
+import Label from './Label';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import './Legend.css';
 

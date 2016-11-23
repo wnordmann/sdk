@@ -13,10 +13,10 @@
 import React from 'react';
 import ol from 'openlayers';
 import classNames from 'classnames';
-import RaisedButton from './Button.jsx';
+import RaisedButton from './Button';
 import {ToolbarGroup} from 'material-ui/Toolbar';
 import Snackbar from 'material-ui/Snackbar';
-import MapConfigService from '../services/MapConfigService.js';
+import MapConfigService from '../services/MapConfigService';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';

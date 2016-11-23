@@ -12,8 +12,8 @@
 
 import React from 'react';
 import ol from 'openlayers';
-import LayerStore from '../stores/LayerStore.js';
-import Button from './Button.jsx';
+import LayerStore from '../stores/LayerStore';
+import Button from './Button';
 import classNames from 'classnames';
 import Dialog from 'material-ui/Dialog';
 import SelectField from 'material-ui/SelectField';

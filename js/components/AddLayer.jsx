@@ -13,13 +13,13 @@
 import React from 'react';
 import ol from 'openlayers';
 import Snackbar from 'material-ui/Snackbar';
-import Button from './Button.jsx';
+import Button from './Button';
 import UploadIcon from 'material-ui/svg-icons/file/file-upload';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Dialog from 'material-ui/Dialog';
 import Dropzone from 'react-dropzone';
 import {GridList, GridTile} from 'material-ui/GridList';
-import {transformColor} from '../util.js';
+import {transformColor} from '../util';
 import ColorPicker from 'react-color';
 import classNames from 'classnames';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';

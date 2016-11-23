@@ -11,8 +11,8 @@
  */
 
 import ol from 'openlayers';
-import LayerIdService from './LayerIdService.js';
-import WFSService from './WFSService.js';
+import LayerIdService from './LayerIdService';
+import WFSService from './WFSService';
 
 class MapConfigService {
   generateSourceFromConfig(config) {

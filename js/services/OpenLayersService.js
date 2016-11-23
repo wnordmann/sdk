@@ -11,7 +11,7 @@
  */
 
 import ol from 'openlayers';
-import {transformColor} from '../util.js';
+import {transformColor} from '../util';
 
 class OpenLayersService {
   createStyle(styleState, geometryType) {

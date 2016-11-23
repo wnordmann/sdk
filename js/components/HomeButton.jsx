@@ -15,7 +15,7 @@ import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import classNames from 'classnames';
-import Button from './Button.jsx';
+import Button from './Button';
 import HomeIcon from 'material-ui/svg-icons/maps/zoom-out-map';
 import pureRender from 'pure-render-decorator';
 

@@ -12,14 +12,14 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import LayerStore from '../stores/LayerStore.js';
+import LayerStore from '../stores/LayerStore';
 import ol from 'openlayers';
 import classNames from 'classnames';
-import AppDispatcher from '../dispatchers/AppDispatcher.js';
-import ToolUtil from '../toolutil.js';
-import ToolConstants from '../constants/ToolConstants.js';
-import WMSService from '../services/WMSService.js';
-import WMTSService from '../services/WMTSService.js';
+import AppDispatcher from '../dispatchers/AppDispatcher';
+import ToolUtil from '../toolutil';
+import ToolConstants from '../constants/ToolConstants';
+import WMSService from '../services/WMSService';
+import WMTSService from '../services/WMTSService';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import IconButton from 'material-ui/IconButton';
 import CloserIcon from 'material-ui/svg-icons/navigation/close';

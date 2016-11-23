@@ -16,7 +16,7 @@ import MenuItem from 'material-ui/MenuItem';
 import classNames from 'classnames';
 import SelectField from 'material-ui/SelectField';
 import TextField from 'material-ui/TextField';
-import Label from './Label.jsx';
+import Label from './Label';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';

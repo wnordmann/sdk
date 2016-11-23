@@ -13,12 +13,12 @@
 import React from 'react';
 import ol from 'openlayers';
 import Dialog from 'material-ui/Dialog';
-import Button from './Button.jsx';
+import Button from './Button';
 import classNames from 'classnames';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
-import {transformColor} from '../util.js';
-import LabelEditor from './LabelEditor.jsx';
+import {transformColor} from '../util';
+import LabelEditor from './LabelEditor';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const messages = defineMessages({

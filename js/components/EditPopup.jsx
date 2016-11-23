@@ -13,13 +13,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
-import AppDispatcher from '../dispatchers/AppDispatcher.js';
-import ToolUtil from '../toolutil.js';
+import AppDispatcher from '../dispatchers/AppDispatcher';
+import ToolUtil from '../toolutil';
 import {injectIntl, intlShape} from 'react-intl';
 import IconButton from 'material-ui/IconButton';
 import CloserIcon from 'material-ui/svg-icons/navigation/close';
 import classNames from 'classnames';
-import EditForm from './EditForm.jsx';
+import EditForm from './EditForm';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import './BasePopup.css';
 

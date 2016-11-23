@@ -13,11 +13,11 @@
 import React from 'react';
 import ol from 'openlayers';
 import classNames from 'classnames';
-import {rgbToHex} from '../util.js';
+import {rgbToHex} from '../util';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import URL from 'url-parse';
-import AppDispatcher from '../dispatchers/AppDispatcher.js';
-import LayerConstants from '../constants/LayerConstants.js';
+import AppDispatcher from '../dispatchers/AppDispatcher';
+import LayerConstants from '../constants/LayerConstants';
 import pureRender from 'pure-render-decorator';
 
 /**

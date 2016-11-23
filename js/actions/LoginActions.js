@@ -10,8 +10,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import LoginConstants from '../constants/LoginConstants.js';
-import AppDispatcher from '../dispatchers/AppDispatcher.js';
+import LoginConstants from '../constants/LoginConstants';
+import AppDispatcher from '../dispatchers/AppDispatcher';
 
 export default {
   login: (user, pwd, failure, scope) => {

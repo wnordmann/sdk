@@ -11,9 +11,9 @@
  */
 
 import React from 'react';
-import AppDispatcher from '../dispatchers/AppDispatcher.js';
-import GeocodingConstants from '../constants/GeocodingConstants.js';
-import GeocodingActions from '../actions/GeocodingActions.js';
+import AppDispatcher from '../dispatchers/AppDispatcher';
+import GeocodingConstants from '../constants/GeocodingConstants';
+import GeocodingActions from '../actions/GeocodingActions';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import classNames from 'classnames';
 import TextField from 'material-ui/TextField';

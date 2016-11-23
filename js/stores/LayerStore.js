@@ -14,8 +14,8 @@
 
 import {EventEmitter} from 'events';
 import ol from 'openlayers';
-import AppDispatcher from '../dispatchers/AppDispatcher.js';
-import LayerConstants from '../constants/LayerConstants.js';
+import AppDispatcher from '../dispatchers/AppDispatcher';
+import LayerConstants from '../constants/LayerConstants';
 
 let config = {
   layers: []

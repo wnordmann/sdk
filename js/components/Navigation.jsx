@@ -11,9 +11,9 @@
  */
 
 import React from 'react';
-import AppDispatcher from '../dispatchers/AppDispatcher.js';
-import ToolUtil from '../toolutil.js';
-import RaisedButton from './Button.jsx';
+import AppDispatcher from '../dispatchers/AppDispatcher';
+import ToolUtil from '../toolutil';
+import RaisedButton from './Button';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import classNames from 'classnames';
 import pureRender from 'pure-render-decorator';

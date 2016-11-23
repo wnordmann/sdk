@@ -17,10 +17,10 @@ import './Measure.css';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import classNames from 'classnames';
-import RaisedButton from './Button.jsx';
+import RaisedButton from './Button';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import AppDispatcher from '../dispatchers/AppDispatcher.js';
-import ToolUtil from '../toolutil.js';
+import AppDispatcher from '../dispatchers/AppDispatcher';
+import ToolUtil from '../toolutil';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
 

@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {doJSONP} from '../util.js';
+import {doJSONP} from '../util';
 import ol from 'openlayers';
 import URL from 'url-parse';
 

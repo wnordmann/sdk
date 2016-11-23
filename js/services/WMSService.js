@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {doGET, getTimeInfo} from '../util.js';
+import {doGET, getTimeInfo} from '../util';
 import URL from 'url-parse';
 import ol from 'openlayers';
 import SLDService from './SLDService';

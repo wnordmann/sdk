@@ -10,8 +10,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import GeocodingConstants from '../constants/GeocodingConstants.js';
-import AppDispatcher from '../dispatchers/AppDispatcher.js';
+import GeocodingConstants from '../constants/GeocodingConstants';
+import AppDispatcher from '../dispatchers/AppDispatcher';
 
 export default {
   showSearchResult: (results) => {

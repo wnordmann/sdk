@@ -10,8 +10,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import SelectConstants from '../constants/SelectConstants.js';
-import AppDispatcher from '../dispatchers/AppDispatcher.js';
+import SelectConstants from '../constants/SelectConstants';
+import AppDispatcher from '../dispatchers/AppDispatcher';
 
 export default {
   toggleFeature: (layer, feature) => {
