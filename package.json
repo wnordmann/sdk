@@ -1,5 +1,5 @@
 {
-  "name": "boundless-sdk",
+  "name": "boundless-sdk-build",
   "version": "0.9.13",
   "description": "SDK for OpenLayers 3 and React plus Flux",
   "main": "index.js",
@@ -8,8 +8,12 @@
     "url": "https://github.com/boundlessgeo/sdk.git"
   },
   "scripts": {
-    "build:babel": "NODE_ENV=release babel ./js --out-dir ./build",
-    "copy:css": "cp js/components/*.css build/components",
+    "build:babel": "NODE_ENV=release babel ./js --out-dir ./release",
+    "build:copy-files": "babel-node ./scripts/copy-files.js",
+    "build:copy:css": "cp js/components/*.css release/components",
+    "build:copy:locale": "mkdir release/locale && cp locale/en.js release/locale/en.js",
+    "clean:build": "rimraf release",
+    "release-new": "npm run clean:build && npm run build:babel && npm run build:copy-files && npm run build:copy:css && npm run build:copy:locale",
     "cover": "node_modules/.bin/mochify --plugin [ mochify-istanbul --report text --report lcovonly --dir ./coverage --exclude **/js/constants/* --exclude **/js/**/*.css --exclude **/__tests__/**/* ] --transform ./scripts/test-transform.js __tests__/**/*.test.js",
     "createdir:build:js": "mkdir -p dist/js",
     "createdir:build:css": "mkdir -p dist/css",
@@ -115,6 +119,7 @@
     "react-docgen": "^2.2.0",
     "sinon": "^1.12.2",
     "react-tap-event-plugin": "^2.0.0",
+    "rimraf": "^2.5.3",
     "through": "^2.3.8",
     "watchify": "^3.2.0"
   },
