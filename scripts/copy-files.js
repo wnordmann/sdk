@@ -69,6 +69,11 @@ function createPackageFile() {
       homepage,
       peerDependencies,
       dependencies,
+      browserify: {
+        'transform': [
+          'cssify'
+        ]
+      }
     };
 
     return new Promise((resolve) => {
