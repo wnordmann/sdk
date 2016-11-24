@@ -13,13 +13,13 @@
 import React from 'react';
 import ol from 'openlayers';
 import Snackbar from 'material-ui/Snackbar';
-import Button from './Button.jsx';
+import Button from './Button';
 import UploadIcon from 'material-ui/svg-icons/file/file-upload';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Dialog from 'material-ui/Dialog';
 import Dropzone from 'react-dropzone';
 import {GridList, GridTile} from 'material-ui/GridList';
-import {transformColor} from '../util.js';
+import util from '../util';
 import ColorPicker from 'react-color';
 import classNames from 'classnames';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -163,8 +163,8 @@ class AddLayer extends React.Component {
             var features = format.readFeatures(text, {dataProjection: crs,
               featureProjection: map.getView().getProjection()});
             if (features && features.length > 0) {
-              var fill = new ol.style.Fill({color: transformColor(me.state.fillColor)});
-              var stroke = new ol.style.Stroke({color: transformColor(me.state.strokeColor), width: me.props.strokeWidth});
+              var fill = new ol.style.Fill({color: util.transformColor(me.state.fillColor)});
+              var stroke = new ol.style.Stroke({color: util.transformColor(me.state.strokeColor), width: me.props.strokeWidth});
               var style = new ol.style.Style({
                 ill: fill,
                 stroke: stroke,

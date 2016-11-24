@@ -16,11 +16,11 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Snackbar from 'material-ui/Snackbar';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import classNames from 'classnames';
-import Button from './Button.jsx';
+import Button from './Button';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import SaveIcon from 'material-ui/svg-icons/content/save';
 import TextField from 'material-ui/TextField';
-import WFSService from '../services/WFSService.js';
+import WFSService from '../services/WFSService';
 
 const messages = defineMessages({
   deletefeature: {

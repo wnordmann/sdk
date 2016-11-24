@@ -13,14 +13,14 @@
 import React from 'react';
 import ol from 'openlayers';
 import classNames from 'classnames';
-import ToolActions from '../actions/ToolActions.js';
-import TimeService from '../services/TimeService.js';
+import ToolActions from '../actions/ToolActions';
+import TimeService from '../services/TimeService';
 import IconButton from 'material-ui/IconButton';
 import PlayIcon from 'material-ui/svg-icons/av/play-arrow';
 import PauseIcon from 'material-ui/svg-icons/av/pause';
 import Slider from 'material-ui/Slider';
 import DatePicker from 'material-ui/DatePicker';
-import LayerStore from '../stores/LayerStore.js';
+import LayerStore from '../stores/LayerStore';
 import {injectIntl, intlShape} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';

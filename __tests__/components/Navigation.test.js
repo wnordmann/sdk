@@ -1,12 +1,11 @@
 /* global describe, it */
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var TestUtils = require('react-addons-test-utils');
-var assert = require('chai').assert;
-var intl = require('../mock-i18n.js');
-
-var Navigation = require('../../js/components/Navigation.jsx');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {assert} from 'chai';
+import intl from '../mock-i18n';
+import TestUtils from 'react-addons-test-utils';
+import Navigation from '../../js/components/Navigation';
 
 var tapDataInjector = function(x, y) {
   return {

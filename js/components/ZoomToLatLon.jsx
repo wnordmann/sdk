@@ -5,7 +5,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import Dialog from 'material-ui/Dialog';
-import Button from './Button.jsx';
+import Button from './Button';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import classNames from 'classnames';
 import pureRender from 'pure-render-decorator';

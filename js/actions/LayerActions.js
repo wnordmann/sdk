@@ -10,8 +10,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import LayerConstants from '../constants/LayerConstants.js';
-import AppDispatcher from '../dispatchers/AppDispatcher.js';
+import LayerConstants from '../constants/LayerConstants';
+import AppDispatcher from '../dispatchers/AppDispatcher';
 
 export default {
   removeLayer: (layer) => {

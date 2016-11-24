@@ -16,15 +16,15 @@ import ReactDOM from 'react-dom';
 import Dialog from 'material-ui/Dialog';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import TextField from 'material-ui/TextField';
-import AppDispatcher from '../dispatchers/AppDispatcher.js';
-import ToolUtil from '../toolutil.js';
-import LayerConstants from '../constants/LayerConstants.js';
+import AppDispatcher from '../dispatchers/AppDispatcher';
+import ToolUtil from '../toolutil';
+import LayerConstants from '../constants/LayerConstants';
 import MenuItem from 'material-ui/MenuItem';
 import SelectField from 'material-ui/SelectField';
 import {Toolbar} from 'material-ui/Toolbar';
-import Button from './Button.jsx';
+import Button from './Button';
 import ol from 'openlayers';
-import {transformColor} from '../util.js';
+import util from '../util';
 import ColorPicker from 'react-color';
 import classNames from 'classnames';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -207,10 +207,10 @@ class Edit extends React.Component {
     }
   }
   _onChangeStroke(color) {
-    this._strokeColor = transformColor(color);
+    this._strokeColor = util.transformColor(color);
   }
   _onChangeFill(color) {
-    this._fillColor = transformColor(color);
+    this._fillColor = util.transformColor(color);
   }
   _generateId() {
     return ID_PREFIX + this.state.layers.length;

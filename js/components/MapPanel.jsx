@@ -13,7 +13,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
-import LayerStore from '../stores/LayerStore.js';
+import LayerStore from '../stores/LayerStore';
 import Snackbar from 'material-ui/Snackbar';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';

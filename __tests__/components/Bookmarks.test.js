@@ -1,15 +1,15 @@
 /* global afterEach, beforeEach, describe, it */
 
-var TestUtils = require('react-addons-test-utils');
-var React = require('react');
-var ReactDOM = require('react-dom');
-var assert = require('chai').assert;
-var raf = require('raf');
-raf.polyfill();
-var ol = require('openlayers');
-var intl = require('../mock-i18n.js');
+import TestUtils from 'react-addons-test-utils';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {assert} from 'chai';
+import raf from 'raf';
+import  ol from 'openlayers';
+import intl from '../mock-i18n';
+import Bookmarks from '../../js/components/Bookmarks';
 
-var Bookmarks = require('../../js/components/Bookmarks.jsx');
+raf.polyfill();
 
 describe('Bookmarks', function() {
   var target, map;

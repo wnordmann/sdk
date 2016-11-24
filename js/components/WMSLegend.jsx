@@ -13,11 +13,11 @@
 import React from 'react';
 import ol from 'openlayers';
 import classNames from 'classnames';
-import {rgbToHex} from '../util.js';
+import util from '../util';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import URL from 'url-parse';
-import AppDispatcher from '../dispatchers/AppDispatcher.js';
-import LayerConstants from '../constants/LayerConstants.js';
+import AppDispatcher from '../dispatchers/AppDispatcher';
+import LayerConstants from '../constants/LayerConstants';
 import pureRender from 'pure-render-decorator';
 
 /**
@@ -56,7 +56,7 @@ class WMSLegend extends React.Component {
     var wmsUrl = source.getUrls()[0];
     var url = new URL(wmsUrl);
     var textColor = this.state.muiTheme.rawTheme.palette.textColor;
-    var options = 'fontColor:' + rgbToHex(textColor).replace('#', '0x') + ';';
+    var options = 'fontColor:' + util.rgbToHex(textColor).replace('#', '0x') + ';';
     for (var key in this.props.options) {
       options += key + ':' + this.props.options[key] + ';';
     }

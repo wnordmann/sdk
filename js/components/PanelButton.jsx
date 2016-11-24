@@ -13,7 +13,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import Button from './Button.jsx';
+import Button from './Button';
 import pureRender from 'pure-render-decorator';
 
 /**

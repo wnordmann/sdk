@@ -11,9 +11,9 @@
  */
 
 import ol from 'openlayers';
-import ToolConstants from './constants/ToolConstants.js';
-import AppDispatcher from './dispatchers/AppDispatcher.js';
-import ToolActions from './actions/ToolActions.js';
+import ToolConstants from './constants/ToolConstants';
+import AppDispatcher from './dispatchers/AppDispatcher';
+import ToolActions from './actions/ToolActions';
 
 export default {
   activate(tool, interactions) {

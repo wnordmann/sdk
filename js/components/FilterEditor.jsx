@@ -13,7 +13,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import TextField from 'material-ui/TextField';
-import FilterService from '../services/FilterService.js';
+import FilterService from '../services/FilterService';
 import pureRender from 'pure-render-decorator';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';

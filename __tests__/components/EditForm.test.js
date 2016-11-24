@@ -1,15 +1,15 @@
 /* global afterEach, beforeEach, describe, it */
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var assert = require('chai').assert;
-var intl = require('../mock-i18n.js');
-var raf = require('raf');
-raf.polyfill();
-var ol = require('openlayers');
-require('phantomjs-polyfill-object-assign');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {assert} from 'chai';
+import intl from '../mock-i18n';
+import raf from 'raf';
+import ol from 'openlayers';
+import 'phantomjs-polyfill-object-assign';
+import EditForm from '../../js/components/EditForm';
 
-var EditForm = require('../../js/components/EditForm.jsx');
+raf.polyfill();
 
 describe('EditForm', function() {
 

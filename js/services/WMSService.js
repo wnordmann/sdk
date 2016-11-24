@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {doGET, getTimeInfo} from '../util.js';
+import util from '../util';
 import URL from 'url-parse';
 import ol from 'openlayers';
 import SLDService from './SLDService';
@@ -32,7 +32,7 @@ class WMSService {
     return urlObj.toString();
   }
   getCapabilities(url, onSuccess, onFailure) {
-    return doGET(this.getCapabilitiesUrl(url), function(xmlhttp) {
+    return util.doGET(this.getCapabilitiesUrl(url), function(xmlhttp) {
       var info = wmsCapsFormat.read(xmlhttp.responseText);
       onSuccess.call(this, info.Capability.Layer);
     }, function(xmlhttp) {
@@ -56,7 +56,7 @@ class WMSService {
       isRemovable: true,
       isSelectable: true,
       isWFST: true,
-      timeInfo: getTimeInfo(layer),
+      timeInfo: util.getTimeInfo(layer),
       type: layer.Layer ? 'base' : undefined,
       EX_GeographicBoundingBox: layer.EX_GeographicBoundingBox,
       popupInfo: '#AllAttributes',
@@ -80,7 +80,7 @@ class WMSService {
     return urlObj.toString();
   }
   getStyles(url, layer, onSuccess, onFailure) {
-    return doGET(this.getStylesUrl(url, layer), function(xmlhttp) {
+    return util.doGET(this.getStylesUrl(url, layer), function(xmlhttp) {
       var info = SLDService.parse(xmlhttp.responseText);
       onSuccess.call(this, info);
     }, function(xmlhttp) {
@@ -99,7 +99,7 @@ class WMSService {
     return url;
   }
   getFeatureInfo(layer, coordinate, view, infoFormat, onSuccess, onFailure) {
-    doGET(this.getFeatureInfoUrl(layer, coordinate, view, infoFormat), function(response) {
+    util.doGET(this.getFeatureInfoUrl(layer, coordinate, view, infoFormat), function(response) {
       var result = {};
       if (infoFormat === 'text/plain' || infoFormat === 'text/html') {
         if (response.responseText.trim() !== 'no features were found') {

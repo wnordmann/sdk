@@ -1,11 +1,11 @@
 /* global beforeEach, describe, it */
 
-var assert = require('chai').assert;
-var raf = require('raf');
-raf.polyfill();
-var ol = require('openlayers');
+import {assert} from 'chai';
+import raf from 'raf';
+import ol from 'openlayers';
+import RESTService from '../../js/services/RESTService';
 
-var RESTService = require('../../js/services/RESTService.js');
+raf.polyfill();
 
 describe('RESTService', function() {
 

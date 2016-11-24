@@ -10,8 +10,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import ToolConstants from '../constants/ToolConstants.js';
-import AppDispatcher from '../dispatchers/AppDispatcher.js';
+import ToolConstants from '../constants/ToolConstants';
+import AppDispatcher from '../dispatchers/AppDispatcher';
 
 export default {
   showPopup: (feature, layer) => {

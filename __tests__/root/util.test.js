@@ -1,7 +1,7 @@
 /* global describe, it */
 
-var assert = require('chai').assert;
-var Util = require('../../js/util.js');
+import {assert} from 'chai';
+import Util from '../../js/util';
 
 describe('util', function() {
 

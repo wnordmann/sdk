@@ -14,7 +14,7 @@ import React from 'react';
 import classNames from 'classnames';
 import ColorPicker from 'react-color';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
-import Label from './Label.jsx';
+import Label from './Label';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({

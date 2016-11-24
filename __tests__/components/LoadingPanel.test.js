@@ -1,13 +1,13 @@
 /* global afterEach, beforeEach, describe, it */
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var assert = require('chai').assert;
-var raf = require('raf');
-raf.polyfill();
-var ol = require('openlayers');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {assert} from 'chai';
+import raf from 'raf';
+import ol from 'openlayers';
+import LoadingPanel from '../../js/components/LoadingPanel';
 
-var LoadingPanel = require('../../js/components/LoadingPanel.jsx');
+raf.polyfill();
 
 describe('LoadingPanel', function() {
   var target, map, layer;

@@ -11,11 +11,11 @@
  */
 
 import {Jsonix} from 'jsonix';
-import {XLink_1_0} from 'w3c-schemas/lib/XLink_1_0.js';
-import {Filter_1_0_0} from 'ogc-schemas/lib/Filter_1_0_0.js';
-import {GML_2_1_2} from 'ogc-schemas/lib/GML_2_1_2.js';
-import {SLD_1_0_0} from 'ogc-schemas/lib/SLD_1_0_0_GeoServer.js';
-import {hexToRgb} from '../util.js';
+import {XLink_1_0} from 'w3c-schemas/lib/XLink_1_0';
+import {Filter_1_0_0} from 'ogc-schemas/lib/Filter_1_0_0';
+import {GML_2_1_2} from 'ogc-schemas/lib/GML_2_1_2';
+import {SLD_1_0_0} from 'ogc-schemas/lib/SLD_1_0_0_GeoServer';
+import util from '../util';
 
 const sldNamespace = 'http://www.opengis.net/sld';
 const ogcNamespace = 'http://www.opengis.net/ogc';
@@ -193,7 +193,7 @@ class SLDService {
     for (var i = 0, ii = fillObj.cssParameter.length; i < ii; ++i) {
       if (fillObj.cssParameter[i].name === 'fill') {
         fillColor.hex = fillObj.cssParameter[i].content[0];
-        fillColor.rgb = hexToRgb(fillColor.hex);
+        fillColor.rgb = util.hexToRgb(fillColor.hex);
       } else if (fillObj.cssParameter[i].name === 'fill-opacity') {
         fillColor.rgb = Object.assign(fillColor.rgb, {a :parseFloat(fillObj.cssParameter[i].content[0])});
       }
@@ -207,7 +207,7 @@ class SLDService {
         if (strokeObj.cssParameter[i].name === 'stroke') {
           stroke.strokeColor = {
             hex: strokeObj.cssParameter[i].content[0],
-            rgb: hexToRgb(strokeObj.cssParameter[i].content[0])
+            rgb: util.hexToRgb(strokeObj.cssParameter[i].content[0])
           };
         } else if (strokeObj.cssParameter[i].name === 'stroke-opacity') {
           stroke.strokeColor.rgb = Object.assign(stroke.strokeColor.rgb, {a :parseFloat(strokeObj.cssParameter[i].content[0])});

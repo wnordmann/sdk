@@ -14,12 +14,12 @@ import React from 'react';
 import classNames from 'classnames';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
-import Button from './Button.jsx';
+import Button from './Button';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import LoginModal from './LoginModal.jsx';
-import AppDispatcher from '../dispatchers/AppDispatcher.js';
-import LoginConstants from '../constants/LoginConstants.js';
-import AuthService from '../services/AuthService.js';
+import LoginModal from './LoginModal';
+import AppDispatcher from '../dispatchers/AppDispatcher';
+import LoginConstants from '../constants/LoginConstants';
+import AuthService from '../services/AuthService';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
 

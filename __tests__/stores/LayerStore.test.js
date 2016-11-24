@@ -1,12 +1,12 @@
 /* global beforeEach, afterEach, describe, it */
 
-var assert = require('chai').assert;
-var raf = require('raf');
-raf.polyfill();
-var ol = require('openlayers');
+import {assert} from 'chai';
+import raf from 'raf';
+import ol from 'openlayers';
+import LayerStore from '../../js/stores/LayerStore';
+import LayerActions from '../../js/actions/LayerActions';
 
-var LayerStore = require('../../js/stores/LayerStore.js');
-var LayerActions = require('../../js/actions/LayerActions.js');
+raf.polyfill();
 
 describe('LayerStore', function() {
 

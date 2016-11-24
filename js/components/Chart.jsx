@@ -11,7 +11,7 @@
  */
 
 import React from 'react';
-import FeatureStore from '../stores/FeatureStore.js';
+import FeatureStore from '../stores/FeatureStore';
 import c3 from 'c3-windows';
 import './c3.min.css';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';

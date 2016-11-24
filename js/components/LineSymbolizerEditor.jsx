@@ -13,7 +13,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import {intlShape, injectIntl} from 'react-intl';
-import StrokeEditor from './StrokeEditor.jsx';
+import StrokeEditor from './StrokeEditor';
 import pureRender from 'pure-render-decorator';
 
 /**

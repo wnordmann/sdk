@@ -1,14 +1,11 @@
 /* global describe, it */
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var assert = require('chai').assert;
-var raf = require('raf');
-raf.polyfill();
-var intl = require('../mock-i18n.js');
-require('phantomjs-polyfill-object-assign');
-
-var FillEditor = require('../../js/components/FillEditor.jsx');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {assert} from 'chai';
+import intl from '../mock-i18n';
+import 'phantomjs-polyfill-object-assign';
+import FillEditor from '../../js/components/FillEditor';
 
 describe('FillEditor', function() {
 

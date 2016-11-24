@@ -14,11 +14,11 @@
 
 import {EventEmitter} from 'events';
 import ol from 'openlayers';
-import SelectConstants from '../constants/SelectConstants.js';
-import LayerConstants from '../constants/LayerConstants.js';
-import AppDispatcher from '../dispatchers/AppDispatcher.js';
-import LayerStore from './LayerStore.js';
-import WFSService from '../services/WFSService.js';
+import SelectConstants from '../constants/SelectConstants';
+import LayerConstants from '../constants/LayerConstants';
+import AppDispatcher from '../dispatchers/AppDispatcher';
+import LayerStore from './LayerStore';
+import WFSService from '../services/WFSService';
 
 class FeatureStore extends EventEmitter {
   constructor() {

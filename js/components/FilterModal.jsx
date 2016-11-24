@@ -13,14 +13,14 @@
 import React from 'react';
 import ol from 'openlayers';
 import classNames from 'classnames';
-import FilterService from '../services/FilterService.js';
+import FilterService from '../services/FilterService';
 import Dialog from 'material-ui/Dialog';
-import Button from './Button.jsx';
+import Button from './Button';
 import {List, ListItem} from 'material-ui/List';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import TextField from 'material-ui/TextField';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import FilterHelp from './FilterHelp.jsx';
+import FilterHelp from './FilterHelp';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
 

@@ -14,12 +14,12 @@
 import React from 'react';
 import ol from 'openlayers';
 import classNames from 'classnames';
-import SelectActions from '../actions/SelectActions.js';
-import AppDispatcher from '../dispatchers/AppDispatcher.js';
-import ToolUtil from '../toolutil.js';
-import WFSService from '../services/WFSService.js';
-import FeatureStore from '../stores/FeatureStore.js';
-import RaisedButton from './Button.jsx';
+import SelectActions from '../actions/SelectActions';
+import AppDispatcher from '../dispatchers/AppDispatcher';
+import ToolUtil from '../toolutil';
+import WFSService from '../services/WFSService';
+import FeatureStore from '../stores/FeatureStore';
+import RaisedButton from './Button';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 

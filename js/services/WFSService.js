@@ -11,17 +11,17 @@
  */
 
 import ol from 'openlayers';
-import {doGET, doPOST, getTimeInfo} from '../util.js';
+import util from '../util';
 import {Jsonix} from 'jsonix';
 import URL from 'url-parse';
-import {XSD_1_0} from 'w3c-schemas/lib/XSD_1_0.js';
-import {XLink_1_0} from 'w3c-schemas/lib/XLink_1_0.js';
-import {OWS_1_0_0} from 'ogc-schemas/lib/OWS_1_0_0.js';
-import {Filter_1_1_0} from 'ogc-schemas/lib/Filter_1_1_0.js';
-import {SMIL_2_0} from 'ogc-schemas/lib/SMIL_2_0.js';
-import {SMIL_2_0_Language} from 'ogc-schemas/lib/SMIL_2_0_Language.js';
-import {GML_3_1_1} from 'ogc-schemas/lib/GML_3_1_1.js';
-import {WFS_1_1_0} from 'ogc-schemas/lib/WFS_1_1_0.js';
+import {XSD_1_0} from 'w3c-schemas/lib/XSD_1_0';
+import {XLink_1_0} from 'w3c-schemas/lib/XLink_1_0';
+import {OWS_1_0_0} from 'ogc-schemas/lib/OWS_1_0_0';
+import {Filter_1_1_0} from 'ogc-schemas/lib/Filter_1_1_0';
+import {SMIL_2_0} from 'ogc-schemas/lib/SMIL_2_0';
+import {SMIL_2_0_Language} from 'ogc-schemas/lib/SMIL_2_0_Language';
+import {GML_3_1_1} from 'ogc-schemas/lib/GML_3_1_1';
+import {WFS_1_1_0} from 'ogc-schemas/lib/WFS_1_1_0';
 
 const wfsFormat = new ol.format.WFS();
 const geojsonFormat = new ol.format.GeoJSON();
@@ -45,7 +45,7 @@ class WFSService {
       id: layer.Name,
       name: layer.Name,
       isWFST: true,
-      timeInfo: getTimeInfo(layer),
+      timeInfo: util.getTimeInfo(layer),
       isRemovable: true,
       isSelectable: true,
       popupInfo: '#AllAttributes',
@@ -106,7 +106,7 @@ class WFSService {
     return urlObj.toString();
   }
   getCapabilities(url, onSuccess, onFailure) {
-    return doGET(this.getCapabilitiesUrl(url), function(xmlhttp) {
+    return util.doGET(this.getCapabilitiesUrl(url), function(xmlhttp) {
       var info = this.parseCapabilities(xmlhttp);
       onSuccess.call(this, {Title: info.title, Layer: info.layers});
     }, function(xmlhttp) {
@@ -122,7 +122,7 @@ class WFSService {
       version: '1.0.0',
       typename: layerName
     });
-    doGET(dftUrl.toString(), function(xmlhttp) {
+    util.doGET(dftUrl.toString(), function(xmlhttp) {
       if (xmlhttp.responseText.indexOf('ServiceExceptionReport') === -1) {
         var schema = xsdUnmarshaller.unmarshalString(xmlhttp.responseText).value;
         var element = schema.complexType[0].complexContent.extension.sequence.element;
@@ -170,7 +170,7 @@ class WFSService {
       featureTypes: [wfsInfo.featureType]
     });
     var payload = xmlSerializer.serializeToString(payloadNode);
-    doPOST(url, payload, function(xmlhttp) {
+    util.doPOST(url, payload, function(xmlhttp) {
       var data = xmlhttp.responseXML;
       if (data !== null) {
         this.readResponse(data, xmlhttp, function(data) {
@@ -195,7 +195,7 @@ class WFSService {
         featureTypes: [wfsInfo.featureType]
       });
       var hits = xmlSerializer.serializeToString(hitsNode);
-      doPOST(url, hits, function(xmlhttp) {
+      util.doPOST(url, hits, function(xmlhttp) {
         var info = wfsFormat.readFeatureCollectionMetadata(xmlhttp.responseXML);
         callback.call(this, info.numberOfFeatures);
       });
@@ -213,7 +213,7 @@ class WFSService {
       typename: wfsInfo.featureType,
       bbox: extent.join(',') + ',' + srs
     });
-    return doGET(url.toString(), function(xmlhttp) {
+    return util.doGET(url.toString(), function(xmlhttp) {
       var features = wfsFormat.readFeatures(xmlhttp.responseXML);
       onSuccess.call(this, features);
     }, onFailure);
@@ -233,7 +233,7 @@ class WFSService {
     return url.toString();
   }
   distanceWithin(layer, view, coord, onSuccess, onFailure) {
-    return doGET(this.generateDistanceWithinUrl(layer, view, coord), function(xmlhttp) {
+    return util.doGET(this.generateDistanceWithinUrl(layer, view, coord), function(xmlhttp) {
       var features = wfsFormat.readFeatures(xmlhttp.responseXML);
       if (features.length > 0) {
         onSuccess.call(this, features[0]);
@@ -261,7 +261,7 @@ class WFSService {
   }
   deleteFeature(layer, feature, onSuccess, onFailure) {
     var wfsInfo = layer.get('wfsInfo');
-    return doPOST(wfsInfo.url, this.getDeletePayload(wfsInfo, feature),
+    return util.doPOST(wfsInfo.url, this.getDeletePayload(wfsInfo, feature),
       function(xmlhttp) {
         this.handleDeleteResponse(xmlhttp, onSuccess, onFailure);
       },
@@ -324,7 +324,7 @@ class WFSService {
   }
   updateFeature(layer, view, feature, values, onSuccess, onFailure) {
     var wfsInfo = layer.get('wfsInfo');
-    return doPOST(wfsInfo.url, this.getUpdatePayload(wfsInfo, view, feature, values),
+    return util.doPOST(wfsInfo.url, this.getUpdatePayload(wfsInfo, view, feature, values),
       function(xmlhttp) {
         this.handleUpdateResponse(xmlhttp, onSuccess, onFailure);
       },
@@ -356,7 +356,7 @@ class WFSService {
   }
   insertFeature(layer, view, feature, onSuccess, onFailure) {
     var wfsInfo = layer.get('wfsInfo');
-    return doPOST(wfsInfo.url, this.getInsertPayload(wfsInfo, view, feature),
+    return util.doPOST(wfsInfo.url, this.getInsertPayload(wfsInfo, view, feature),
       function(xmlhttp) {
         this.handleInsertResponse(xmlhttp, onSuccess, onFailure);
       },

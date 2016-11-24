@@ -1,18 +1,17 @@
 /* global afterEach, beforeEach, describe, it */
 
-var React = require('react');
-var TestUtils = require('react-addons-test-utils');
-var ReactDOM = require('react-dom');
-var assert = require('chai').assert;
-var raf = require('raf');
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
+import ReactDOM from 'react-dom';
+import {assert} from 'chai';
+import raf from 'raf';
+import ol from 'openlayers';
+import intl from '../mock-i18n';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+import AddLayer from '../../js/components/AddLayer';
+
 raf.polyfill();
-var ol = require('openlayers');
-var intl = require('../mock-i18n.js');
-var injectTapEventPlugin = require('react-tap-event-plugin');
-
 injectTapEventPlugin();
-
-var AddLayer = require('../../js/components/AddLayer.jsx');
 
 var tapDataInjector = function(x, y) {
   return {

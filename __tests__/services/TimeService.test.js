@@ -1,8 +1,7 @@
 /* global describe, it */
 
-var assert = require('chai').assert;
-
-var TimeService = require('../../js/services/TimeService.js');
+import {assert} from 'chai';
+import TimeService from '../../js/services/TimeService';
 
 describe('TimeService', function() {
 

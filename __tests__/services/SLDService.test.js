@@ -1,15 +1,13 @@
 /* global beforeEach, describe, it */
 
-var assert = require('chai').assert;
-var expect  = require('chai').expect;
-var chai    = require('chai');
-var chaiXml = require('chai-xml');
-var raf = require('raf');
+import {assert, expect} from 'chai';
+import chai from 'chai';
+import chaiXml from 'chai-xml';
+import raf from 'raf';
+import ol from 'openlayers';
+import SLDService from '../../js/services/SLDService';
+
 raf.polyfill();
-var ol = require('openlayers');
-
-var SLDService = require('../../js/services/SLDService.js');
-
 chai.use(chaiXml);
 
 describe('SLDService', function() {

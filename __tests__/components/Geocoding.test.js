@@ -1,11 +1,10 @@
 /* global describe, it */
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var assert = require('chai').assert;
-var intl = require('../mock-i18n.js');
-
-var Geocoding = require('../../js/components/Geocoding.jsx');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {assert} from 'chai';
+import intl from '../mock-i18n';
+import Geocoding from '../../js/components/Geocoding';
 
 describe('Geocoding', function() {
 

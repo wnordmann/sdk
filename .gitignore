@@ -1,6 +1,7 @@
 node_modules
 npm-debug.log
 tmp
+release
 build
 js/components/c3.min.css
 js/components/slick.css

@@ -14,8 +14,8 @@ import React from 'react';
 import classNames from 'classnames';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import Checkbox from 'material-ui/Checkbox';
-import FillEditor from './FillEditor.jsx';
-import StrokeEditor from './StrokeEditor.jsx';
+import FillEditor from './FillEditor';
+import StrokeEditor from './StrokeEditor';
 import Paper from 'material-ui/Paper';
 import pureRender from 'pure-render-decorator';
 
