@@ -1,11 +1,11 @@
 /* global beforeEach, describe, it */
 
-var assert = require('chai').assert;
-var raf = require('raf');
-raf.polyfill();
-var ol = require('openlayers');
+import {assert} from 'chai';
+import raf from 'raf';
+import ol from 'openlayers';
+import WFSService from '../../js/services/WFSService';
 
-var WFSService = require('../../js/services/WFSService.js');
+raf.polyfill();
 
 describe('WFSService', function() {
 

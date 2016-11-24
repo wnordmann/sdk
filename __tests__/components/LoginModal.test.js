@@ -1,11 +1,10 @@
 /* global describe, it */
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var assert = require('chai').assert;
-var intl = require('../mock-i18n.js');
-
-var LoginModal = require('../../js/components/LoginModal.jsx');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {assert} from 'chai';
+import intl from '../mock-i18n';
+import LoginModal from '../../js/components/LoginModal';
 
 describe('LoginModal', function() {
 

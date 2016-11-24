@@ -1,10 +1,9 @@
 /* global describe, it */
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var assert = require('chai').assert;
-
-var Button = require('../../js/components/Button.jsx');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {assert} from 'chai';
+import Button from '../../js/components/Button';
 
 describe('Button', function() {
 

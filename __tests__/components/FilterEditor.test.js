@@ -1,13 +1,14 @@
 /* global describe, it */
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var assert = require('chai').assert;
-var raf = require('raf');
-raf.polyfill();
-var intl = require('../mock-i18n.js');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {assert} from 'chai';
+import raf from 'raf';
+import ol from 'openlayers';
+import intl from '../mock-i18n';
+import FilterEditor from '../../js/components/FilterEditor';
 
-var FilterEditor = require('../../js/components/FilterEditor.jsx');
+raf.polyfill();
 
 describe('FilterEditor', function() {
 

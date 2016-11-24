@@ -1,11 +1,11 @@
 /* global describe, it, beforeEach, afterEach */
 
-var assert = require('chai').assert;
-var raf = require('raf');
-raf.polyfill();
-var ol = require('openlayers');
+import {assert} from 'chai';
+import raf from 'raf';
+import ol from 'openlayers';
+import MapConfigTransformService from '../../js/services/MapConfigTransformService';
 
-var MapConfigTransformService = require('../../js/services/MapConfigTransformService.js');
+raf.polyfill();
 
 describe('MapConfigTransfrormService', function() {
 

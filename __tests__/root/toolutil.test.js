@@ -1,15 +1,15 @@
 /* global afterEach, beforeEach, describe, it */
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var assert = require('chai').assert;
-var raf = require('raf');
-raf.polyfill();
-var ol = require('openlayers');
-var intl = require('../mock-i18n.js');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {assert} from 'chai';
+import raf from 'raf';
+import ol from 'openlayers';
+import intl from '../mock-i18n';
+import AppDispatcher from '../../js/dispatchers/AppDispatcher';
+import ToolUtil from '../../js/toolutil';
 
-var AppDispatcher = require('../../js/dispatchers/AppDispatcher.js');
-var ToolUtil = require('../../js/toolutil.js');
+raf.polyfill();
 
 class MyTool extends React.Component {
   constructor(props) {

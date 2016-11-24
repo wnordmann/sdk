@@ -1,11 +1,11 @@
 /* global beforeEach, describe, it */
 
-var assert = require('chai').assert;
-var raf = require('raf');
-raf.polyfill();
-var ol = require('openlayers');
+import {assert} from 'chai';
+import raf from 'raf';
+import ol from 'openlayers';
+import FilterService from '../../js/services/FilterService';
 
-var FilterService = require('../../js/services/FilterService.js');
+raf.polyfill();
 
 describe('FilterService', function() {
 

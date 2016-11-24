@@ -1,11 +1,11 @@
 /* global describe, it */
 
-var assert = require('chai').assert;
-var raf = require('raf');
-raf.polyfill();
-var ol = require('openlayers');
+import {assert} from 'chai';
+import raf from 'raf';
+import ol from 'openlayers';
+import ArcGISRestService from '../../js/services/ArcGISRestService';
 
-var ArcGISRestService = require('../../js/services/ArcGISRestService.js');
+raf.polyfill();
 
 describe('ArcGISRestService', function() {
 
