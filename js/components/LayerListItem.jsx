@@ -302,7 +302,7 @@ class LayerListItem extends React.Component {
     );
   }
   _remove() {
-    LayerActions.removeLayer(this.props.layer);
+    LayerActions.removeLayer(this.props.layer, this.props.group);
   }
   _edit() {
     LayerActions.editLayer(this.props.layer);
