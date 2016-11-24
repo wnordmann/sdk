@@ -1,6 +1,6 @@
 {
   "name": "boundless-sdk-build",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "SDK for OpenLayers 3 and React plus Flux",
   "main": "index.js",
   "repository": {
@@ -11,7 +11,7 @@
     "build:babel": "NODE_ENV=release babel ./js --out-dir ./release",
     "build:copy-files": "babel-node ./scripts/copy-files.js",
     "build:copy:css": "cp js/components/*.css release/components",
-    "build:copy:locale": "mkdir release/locale && cp locale/en.js release/locale/en.js",
+    "build:copy:locale": "mkdir release/locale && NODE_ENV=release babel locale/en.js > release/locale/en.js",
     "clean:build": "rimraf release",
     "release-new": "npm run clean:build && npm run build:babel && npm run build:copy-files && npm run build:copy:css && npm run build:copy:locale",
     "cover": "node_modules/.bin/mochify --plugin [ mochify-istanbul --report text --report lcovonly --dir ./coverage --exclude **/js/constants/* --exclude **/js/**/*.css --exclude **/__tests__/**/* ] --transform ./scripts/test-transform.js __tests__/**/*.test.js",
