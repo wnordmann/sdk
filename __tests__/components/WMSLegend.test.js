@@ -5,7 +5,6 @@ import ReactDOM from 'react-dom';
 import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
-import intl from '../mock-i18n';
 import parse from 'url-parse';
 import WMSLegend from '../../js/components/WMSLegend';
 
