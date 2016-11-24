@@ -109,9 +109,12 @@
     "phantomjs-polyfill-object-assign": "0.0.2",
     "phantomjs-prebuilt": "^2.1.7",
     "raf": "^3.2.0",
-    "react-addons-test-utils": "^15.0.0",
+    "react": "^15.4.0",
+    "react-addons-test-utils": "^15.4.0",
+    "react-dom": "^15.4.0",
     "react-docgen": "^2.2.0",
     "sinon": "^1.12.2",
+    "react-tap-event-plugin": "^2.0.0",
     "through": "^2.3.8",
     "watchify": "^3.2.0"
   },
