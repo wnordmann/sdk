@@ -14,10 +14,11 @@ import LayerConstants from '../constants/LayerConstants';
 import AppDispatcher from '../dispatchers/AppDispatcher';
 
 export default {
-  removeLayer: (layer) => {
+  removeLayer: (layer, group) => {
     AppDispatcher.handleAction({
       type: LayerConstants.REMOVE_LAYER,
-      layer: layer
+      layer: layer,
+      group: group
     });
   },
   moveLayer: (dragIndex, hoverIndex, layer, group) => {

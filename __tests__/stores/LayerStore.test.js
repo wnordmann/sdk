@@ -107,4 +107,26 @@ describe('LayerStore', function() {
     assert.equal(idx, 0);
   });
 
+  it('removes layers from a group', function() {
+    LayerStore.bindMap(map);
+    // test remove layer from subgroup
+    var length = level2.getLayers().getLength();
+    assert.equal(length, 2);
+    LayerActions.removeLayer(level3a, level2);
+    length = level2.getLayers().getLength();
+    assert.equal(length, 1);
+    // test remove subgroup
+    length = level1.getLayers().getLength();
+    assert.equal(length, 1);
+    LayerActions.removeLayer(level2, level1);
+    length = level1.getLayers().getLength();
+    assert.equal(length, 0);
+    // test remove group
+    length = map.getLayers().getLength();
+    assert.equal(length, 1);
+    LayerActions.removeLayer(level1);
+    length = map.getLayers().getLength();
+    assert.equal(length, 0);
+  });
+
 });

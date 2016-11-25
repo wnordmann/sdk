@@ -132,7 +132,11 @@ AppDispatcher.register((payload) => {
   let layers;
   switch (action.type) {
     case LayerConstants.REMOVE_LAYER:
-      layers = _LayerStore.getMap().getLayers();
+      if (action.group) {
+        layers = action.group.getLayers();
+      } else {
+        layers = _LayerStore.getMap().getLayers();
+      }
       layers.remove(action.layer);
       break;
     case LayerConstants.MOVE_LAYER:
