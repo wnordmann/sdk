@@ -1,6 +1,6 @@
 {
   "name": "boundless-sdk-build",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "description": "SDK for OpenLayers 3 and React plus Flux",
   "main": "index.js",
   "repository": {
@@ -96,7 +96,7 @@
     "clean-css": "^3.4.6",
     "coveralls": "^2.11.14",
     "cssify": "^0.8.0",
-    "dr-frankenstyle-win": "0.2.12",
+    "dr-frankenstyle-win": "0.2.13",
     "envify": "3.4.0",
     "es6-promise": "^3.0.2",
     "eslint": "1.9.0",
