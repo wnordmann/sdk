@@ -25,3 +25,12 @@ If you run into this error: Error: EMFILE, open 'sdk/node_modules/react/package.
 ## Code Style
 
 All components (js/components) should have the top level class `sdk-component`, as well as a class matching their name (in all lowercase, dash-delimited).
+
+## Releasing
+Update the version number in package.json, commit, push, and tag the release on github. Run:
+
+    npm run release
+
+then go into release subdirectory and run
+
+    npm publish
