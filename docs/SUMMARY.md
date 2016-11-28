@@ -1,6 +1,6 @@
 # Summary
 
-Boundless Web SDK
+Boundless SDK
 
 * [Getting started](getting_started.md)
 * [QGIS Web Application Builder](wab.md)

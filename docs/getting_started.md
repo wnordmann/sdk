@@ -8,7 +8,7 @@ Make sure g++ is installed on your system.
 
 ## Node version manager (nvm)
 Install the node version manager from https://github.com/creationix/nvm
-For the Web SDK, you should be using node 6.0.0 so:
+For the SDK, you should be using node 6.0.0 so:
 
 ```
 nvm install 6.0.0
@@ -124,8 +124,8 @@ $ npm run package
 
 You will be prompted for a destination file path and file name for the zip file, for instance ```~/myapp.zip```.
 
-## Using Boundless Web SDK from npm
-The following packages are relevant for the Boundless Web SDK:
+## Using Boundless SDK from npm
+The following packages are relevant for the Boundless SDK:
 
 * ```boundless-sdk```, the main package containing the components 
 * ```boundless-sdk-tools```, package containing debug server

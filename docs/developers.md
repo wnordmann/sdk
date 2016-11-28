@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The Web SDK is based on EcmaScript 6 (ES6). It uses babelify to translate to ES5.
+The SDK is based on EcmaScript 6 (ES6). It uses babelify to translate to ES5.
 It is based on OpenLayers 3, React 15 and Flux.
 For the user interface, material-ui React components are used. See http://www.material-ui.com for more information.
 For internationalization, Yahoo's react-intl (v2) is used.
@@ -144,7 +144,7 @@ By using import statements to css files, browserify bundles up the css (but wonâ
 
 ## Debug server
 
-Can be used by any Web SDK application. In ```package.json```:
+Can be used by any SDK application. In ```package.json```:
 
 ```
   "sdk-debug-server": "git+https://github.com/bartvde/sdk-debug-server.git"

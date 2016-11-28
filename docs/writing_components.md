@@ -1,7 +1,7 @@
 # Creating application components
 
 ## Introduction
-This tutorial will show how to add additional functionality in the form of components to applications built using the Boundless Web SDK.
+This tutorial will show how to add additional functionality in the form of components to applications built using the Boundless SDK.
 
 Three examples will be shown:
 
@@ -26,7 +26,7 @@ npm i
 npm start
 ```
 
-Verify in the browser that the application is running successfully by navigating to http://localhost:3000/, replacing localhost with the name of the host where the Web SDK is being served.
+Verify in the browser that the application is running successfully by navigating to http://localhost:3000/, replacing localhost with the name of the host where the SDK is being served.
 
 ## Add a toolbar
 The first step is adding a toolbar so we have a container to put in our new MapTool. Open up app.jsx and add an import statement for the toolbar:
