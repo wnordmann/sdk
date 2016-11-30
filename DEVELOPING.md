@@ -34,3 +34,30 @@ Update the version number in package.json, commit, push, and tag the release on 
 then go into release subdirectory and run
 
     npm publish
+
+## Linking to a github directory of the sdk in an app
+Go to the directory of your sdk git checkout and type:
+
+    npm run release
+    cd release
+    npm link
+
+Go to the node_modules/react directory of that subdirectory and type:
+
+    npm link
+
+Go to the node_modules/openlayers directory of that subdirectory and type:
+
+    npm link
+
+In your sdk app type:
+
+    npm link boundless-sdk
+    npm link react
+    npm link openlayers
+
+In your sdk git checkout run:
+
+    npm start
+
+to keep updating the release js files with babel --watch when the source files change.
