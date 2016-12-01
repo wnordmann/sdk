@@ -115,9 +115,6 @@ class FeatureTable extends React.Component {
     this._onChange = this._onChange.bind(this);
     FeatureStore.bindMap(this.props.map);
     this._selectedOnly = false;
-    if (this.props.layer) {
-      this._setLayer(this.props.layer);
-    }
     this._pagesLoaded = {};
     this.state = {
       pageSize: props.pageSize,
@@ -143,6 +140,9 @@ class FeatureTable extends React.Component {
     this._element = ReactDOM.findDOMNode(this).parentNode;
     this._formNode = ReactDOM.findDOMNode(this.refs.form);
     this._attachResizeEvent();
+    if (this.props.layer) {
+      this._setLayer(this.props.layer);
+    }
   }
   componentWillUnmount() {
     FeatureStore.removeChangeListener(this._onChange);
@@ -400,7 +400,7 @@ class FeatureTable extends React.Component {
         />
         <div ref='form'>
           <div className='feature-table-options'>
-            <div className='feature-table-selector'>
+            <div className='feature-table-selector' style={{display: this.props.layer ? 'none' : 'block'}}>
               <LayerSelector {...this.props} id='table-layerSelector' disabled={!this._layer} ref='layerSelector' onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList} map={this.props.map} value={id} />
             </div>
             <div className='feature-table-filter' style={{display: this._layer instanceof ol.layer.Vector ? 'block' : 'none'}}>
@@ -429,7 +429,7 @@ FeatureTable.propTypes = {
   /**
    * The layer to use initially for loading the table.
    */
-  layer: React.PropTypes.instanceOf(ol.layer.Vector),
+  layer: React.PropTypes.instanceOf(ol.layer.Layer),
   /**
    * The zoom level to zoom the map to in case of a point geometry.
    */

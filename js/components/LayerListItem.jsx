@@ -14,6 +14,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {DragSource, DropTarget} from 'react-dnd';
 import ol from 'openlayers';
+import Dialog from 'material-ui/Dialog';
+import Button from './Button';
+import FeatureTable from './FeatureTable';
 import FilterModal from './FilterModal';
 import classNames from 'classnames';
 import LabelModal from './LabelModal';
@@ -32,6 +35,7 @@ import LabelIcon from 'material-ui/svg-icons/content/text-format';
 import StyleIcon from 'material-ui/svg-icons/image/brush';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
+import TableIcon from 'material-ui/svg-icons/action/view-list';
 import WMSLegend from './WMSLegend';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -111,6 +115,16 @@ function collectDrop(connect, monitor) {
 }
 
 const messages = defineMessages({
+  closebutton: {
+    id: 'layerlist.closebutton',
+    description: 'Text for close button',
+    defaultMessage: 'Close'
+  },
+  tablemodaltitle: {
+    id: 'layerlist.tablemodaltitle',
+    description: 'Title for the table modal',
+    defaultMessage: 'Table'
+  },
   zoombuttonlabel: {
     id: 'layerlist.zoombuttonlabel',
     description: 'Tooltip for the zoom to layer button',
@@ -145,6 +159,11 @@ const messages = defineMessages({
     id: 'layerlist.editbuttonlabel',
     description: 'Tooltip for the edit layer button',
     defaultMessage: 'Edit layer'
+  },
+  tablebuttonlabel: {
+    id: 'layerlist.tablebuttonlabel',
+    description: 'Tooltip for the table button',
+    defaultMessage: 'Show table'
   }
 });
 
@@ -184,6 +203,7 @@ class LayerListItem extends React.Component {
       }
     };
     this.state = {
+      tableOpen: false,
       checked: props.layer.getVisible()
     };
   }
@@ -285,6 +305,16 @@ class LayerListItem extends React.Component {
     bbox[3] = Math.min(85, bbox[3]);
     return bbox;
   }
+  _showTable() {
+    this.setState({
+      tableOpen: true
+    });
+  }
+  _closeTable() {
+    this.setState({
+      tableOpen: false
+    });
+  }
   _zoomTo() {
     var map = this.props.map;
     var view = map.getView();
@@ -321,6 +351,10 @@ class LayerListItem extends React.Component {
     if (this.props.showOpacity && source && layer.get('type') !== 'base') {
       var val = layer.getOpacity();
       opacity = (<Slider style={{width: '200px', 'marginLeft':'21px', 'marginTop':'4px', 'marginBottom':'0px'}} defaultValue={val} onChange={this._changeOpacity.bind(this)} />);
+    }
+    var table;
+    if (this.props.showTable) {
+      table = <IconButton className='layer-list-item-table' style={iconStyle} onTouchTap={this._showTable.bind(this)} tooltip={formatMessage(messages.tablebuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><TableIcon /></IconButton>;
     }
     var zoomTo;
     // TODO add titles back for icon buttons
@@ -362,13 +396,23 @@ class LayerListItem extends React.Component {
     } else {
       input = (<Checkbox checked={this.state.checked} label={this.props.title} labelStyle={this.props.layer.get('emptyTitle') ? {fontStyle: 'italic'} : undefined} onCheck={this._handleChange.bind(this)} disableTouchRipple={true}/>);
     }
-    var labelModal, filterModal, styleModal;
+    var tableModal, labelModal, filterModal, styleModal;
     if (this.props.layer instanceof ol.layer.Vector) {
       labelModal = (<LabelModal {...this.props} layer={this.props.layer} ref='labelmodal' />);
       filterModal = (<FilterModal {...this.props} layer={this.props.layer} ref='filtermodal' />);
     }
     if (canStyle) {
       styleModal = (<StyleModal {...this.props} layer={this.props.layer} ref='stylemodal' />);
+    }
+    if (this.props.showTable) {
+      var actions = [
+        <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this._closeTable.bind(this)} />
+      ];
+      tableModal = (
+        <Dialog actions={actions} title={formatMessage(messages.tablemodaltitle)} open={this.state.tableOpen} onRequestClose={this._closeTable.bind(this)}>
+          <FeatureTable map={this.props.map} layer={this.props.layer} />
+        </Dialog>
+      );
     }
     var legend;
     if (this.props.includeLegend && this.props.layer.getVisible() && ((this.props.layer instanceof ol.layer.Tile && this.props.layer.getSource() instanceof ol.source.TileWMS) ||
@@ -383,6 +427,7 @@ class LayerListItem extends React.Component {
           {opacity}
           {buttonPadding}
           {zoomTo}
+          {table}
           {download}
           {filter}
           {label}
@@ -393,6 +438,7 @@ class LayerListItem extends React.Component {
             {filterModal}
             {labelModal}
             {styleModal}
+            {tableModal}
           </span>
         </ListItem>
       </div>
@@ -425,6 +471,10 @@ LayerListItem.propTypes = {
    * The title to show for the layer.
    */
   title: React.PropTypes.string.isRequired,
+  /**
+   * Should we show a button that can open up the feature table?
+   */
+  showTable:  React.PropTypes.bool,
   /**
    * Should we show a zoom to button for the layer?
    */
