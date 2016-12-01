@@ -158,6 +158,13 @@ Should we show an opacity slider for the layer?
 type: `bool`
 
 
+### `showTable`
+
+Should we show a button that can open up the feature table?
+
+type: `bool`
+
+
 ### `showZoomTo`
 
 Should we show a zoom to button for the layer?
