@@ -10,10 +10,72 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
+var sourceIdx;
+
 /**
  * Transforms GXP style map config to our internal format.
  */
 class MapConfigTransformService {
+  _writeLayer(config, sources, layers, group) {
+    var layerConfig = {
+      source: '' + sourceIdx,
+      name: config.properties.name,
+      title: config.properties.title,
+      visibility: config.properties.visible
+    };
+    if (group) {
+      layerConfig.group = group;
+    }
+    layers.push(layerConfig);
+    if (config.source.type === 'TileWMS') {
+      layerConfig.capability = {
+        queryable: config.properties.isSelectable,
+        styles: [{
+          name: config.properties.styleName,
+          legend: {
+            href: config.properties.legendUrl
+          }
+        }],
+        llbbox: config.properties.EX_GeographicBoundingBox
+      };
+      sources[sourceIdx] = {
+        ptype: 'gxp_wmscsource',
+        url: config.source.url
+      };
+      sourceIdx++;
+    } else if (config.source.type === 'OSM') {
+      sources[sourceIdx] = {
+        ptype: 'gxp_osmsource'
+      };
+      sourceIdx++;
+    }
+  }
+  write(data) {
+    var viewConfig = data.view;
+    var layerConfig = data.layers;
+    var layers = [];
+    var sources = {};
+    sourceIdx = 0;
+    for (var i = 0, ii = layerConfig.length; i < ii; ++i) {
+      if (layerConfig[i].type === 'Group') {
+        for (var j = 0, jj = layerConfig[i].children.length; j < jj; ++j) {
+          var config = layerConfig[i].children[j];
+          this._writeLayer(config, sources, layers, layerConfig[i].properties.name);
+        }
+      } else {
+        this._writeLayer(layerConfig[i], sources, layers);
+      }
+    }
+    var result = {};
+    result.map = {
+      sources: sources,
+      layers: layers,
+      center: viewConfig.center,
+      projection: viewConfig.projection,
+      zoom: viewConfig.zoom
+    };
+    return result;
+  }
   transform(data, opt_proxy, opt_errors) {
     var i, ii, layers = [];
     var groups = {};
@@ -149,6 +211,7 @@ class MapConfigTransformService {
             groups[layer.group] = {
               type: 'Group',
               properties: {
+                name: layer.group,
                 title: layer.group === 'background' ? 'Base Maps' : layer.group,
                 type: layer.group === 'background' ? 'base-group' : undefined
               },
