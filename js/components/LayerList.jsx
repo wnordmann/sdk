@@ -216,6 +216,10 @@ LayerList.propTypes = {
    */
   showZoomTo: React.PropTypes.bool,
   /**
+   * Should we show a button that can open up the feature table?
+   */
+  showTable:  React.PropTypes.bool,
+  /**
    * Should we allow for reordering of layers?
    */
   allowReordering: React.PropTypes.bool,
@@ -299,6 +303,7 @@ LayerList.propTypes = {
 
 LayerList.defaultProps = {
   showZoomTo: false,
+  showTable: false,
   allowReordering: false,
   allowEditing: false,
   allowFiltering: false,
