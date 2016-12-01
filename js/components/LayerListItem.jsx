@@ -353,7 +353,7 @@ class LayerListItem extends React.Component {
       opacity = (<Slider style={{width: '200px', 'marginLeft':'21px', 'marginTop':'4px', 'marginBottom':'0px'}} defaultValue={val} onChange={this._changeOpacity.bind(this)} />);
     }
     var table;
-    if (this.props.showTable) {
+    if (this.props.showTable && (this.props.layer instanceof ol.layer.Vector || this.props.layer.get('wfsInfo') !== undefined)) {
       table = <IconButton className='layer-list-item-table' style={iconStyle} onTouchTap={this._showTable.bind(this)} tooltip={formatMessage(messages.tablebuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><TableIcon /></IconButton>;
     }
     var zoomTo;
