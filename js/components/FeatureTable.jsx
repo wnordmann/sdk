@@ -44,6 +44,11 @@ const messages = defineMessages({
     description: 'Error message to show when filtering fails',
     defaultMessage: 'There was an error filtering your features. ({msg})'
   },
+  loaderrormsg: {
+    id: 'featuretable.loaderrormsg',
+    description: 'Error message to show when loading fails',
+    defaultMessage: 'There was an error loading your features. ({msg})'
+  },
   layerlabel: {
     id: 'featuretable.layerlabel',
     description: 'Label for the layer select',
@@ -219,6 +224,7 @@ class FeatureTable extends React.Component {
     }
   }
   _filterByText(evt) {
+    const {formatMessage} = this.props.intl;
     var filterBy = evt.target.value;
     var state = FeatureStore.getState(this._layer);
     var rows = this._selectedOnly ? state.selected : state.features.getFeatures();
@@ -231,7 +237,7 @@ class FeatureTable extends React.Component {
         this.setState({
           errorOpen: true,
           error: true,
-          msg: e.message
+          msg: formatMessage(messages.errormsg, {msg: e.message})
         });
         queryFilter = null;
       }
@@ -284,6 +290,7 @@ class FeatureTable extends React.Component {
     SelectActions.toggleFeature(this._layer, props.row);
   }
   _onTableChange(state, instance) {
+    const {formatMessage} = this.props.intl;
     this.setState({loading: true});
     var start = state.page * state.pageSize;
     if (!this._pagesLoaded[this._layer.get('id')]) {
@@ -299,7 +306,14 @@ class FeatureTable extends React.Component {
           loading: false
         });
         this._pagesLoaded[this._layer.get('id')][state.page] = true;
-      }, null, this);
+      }, function(xmlhttp, msg) {
+        this.setState({
+          error: true,
+          errorOpen: true,
+          msg: formatMessage(messages.loaderrormsg, {msg: msg || (xmlhttp.status + ' ' + xmlhttp.statusText)}),
+          loading: false
+        });
+      }, this);
     } else {
       this.setState({
         page: state.page,
@@ -323,7 +337,7 @@ class FeatureTable extends React.Component {
         style={{transitionProperty : 'none'}}
         bodyStyle={{lineHeight: '24px', height: 'auto'}}
         open={this.state.errorOpen}
-        message={formatMessage(messages.errormsg, {msg: this.state.msg})}
+        message={this.state.msg}
         onRequestClose={this._handleRequestClose.bind(this)}
       />);
     }
