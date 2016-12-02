@@ -134,11 +134,28 @@ class SLDService {
     if (textObj.vendorOption) {
       result.vendorOption = textObj.vendorOption;
     }
+    if (textObj.labelPlacement) {
+      if (textObj.labelPlacement.pointPlacement) {
+        var anchorPoint = textObj.labelPlacement.pointPlacement.anchorPoint;
+        var displacement = textObj.labelPlacement.pointPlacement.displacement;
+        result.labelPlacement = {
+          type: 'POINT',
+          anchorPoint: [anchorPoint.anchorPointX.content[0], anchorPoint.anchorPointY.content[0]],
+          displacement: [displacement.displacementX.content[0], displacement.displacementY.content[0]]
+        };
+      }
+    }
     if (textObj.font && textObj.font.cssParameter) {
       for (var i = 0, ii = textObj.font.cssParameter.length; i < ii; ++i) {
         var param = textObj.font.cssParameter[i];
         if (param.name === 'font-size') {
           result.fontSize = param.content[0];
+        } else if (param.name === 'font-family') {
+          result.fontFamily = param.content[0];
+        } else if (param.name === 'font-style') {
+          result.fontStyle = param.content[0];
+        } else if (param.name === 'font-weight') {
+          result.fontWeight = param.content[0];
         }
       }
     }
@@ -336,7 +353,32 @@ class SLDService {
     return result;
   }
   createTextSymbolizer(styleState) {
-    return {
+    var cssParameter = [];
+    if (styleState.fontFamily) {
+      cssParameter.push({
+        name: 'font-family',
+        content: [styleState.fontFamily]
+      });
+    }
+    if (styleState.fontSize) {
+      cssParameter.push({
+        name: 'font-size',
+        content: [String(styleState.fontSize)]
+      });
+    }
+    if (styleState.fontStyle) {
+      cssParameter.push({
+        name: 'font-style',
+        content: [styleState.fontStyle]
+      });
+    }
+    if (styleState.fontWeight) {
+      cssParameter.push({
+        name: 'font-weight',
+        content: [styleState.fontWeight]
+      });
+    }
+    var result = {
       name: {
         localPart: 'TextSymbolizer',
         namespaceURI: sldNamespace
@@ -348,11 +390,8 @@ class SLDService {
             content: [styleState.fontColor.hex]
           }]
         } : undefined,
-        font: styleState.fontSize ? {
-          cssParameter: [{
-            name: 'font-size',
-            content: [String(styleState.fontSize)]
-          }]
+        font: cssParameter.length > 0 ? {
+          cssParameter: cssParameter
         } : undefined,
         label: {
           content: [{
@@ -368,6 +407,31 @@ class SLDService {
         vendorOption: styleState.vendorOption
       }
     };
+    if (styleState.labelPlacement) {
+      if (styleState.labelPlacement.type === 'POINT') {
+        result.value.labelPlacement = {
+          pointPlacement: {
+            anchorPoint: {
+              anchorPointX: {
+                content: [String(styleState.labelPlacement.anchorPoint[0])]
+              },
+              anchorPointY: {
+                content: [String(styleState.labelPlacement.anchorPoint[1])]
+              }
+            },
+            displacement: {
+              displacementX: {
+                content: [String(styleState.labelPlacement.displacement[0])]
+              },
+              displacementY: {
+                content: [String(styleState.labelPlacement.displacement[1])]
+              }
+            }
+          }
+        };
+      }
+    }
+    return result;
   }
   expressionToFilter(expression) {
     // TODO handle more
