@@ -134,7 +134,7 @@ class SLDService {
     if (textObj.vendorOption) {
       result.vendorOption = textObj.vendorOption;
     }
-    if (textObj.font) {
+    if (textObj.font && textObj.font.cssParameter) {
       for (var i = 0, ii = textObj.font.cssParameter.length; i < ii; ++i) {
         var param = textObj.font.cssParameter[i];
         if (param.name === 'font-size') {
