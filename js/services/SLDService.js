@@ -53,6 +53,7 @@ class SLDService {
     result.layerName = layer.name;
     var namedStyleOrUserStyle = layer.namedStyleOrUserStyle[0];
     result.styleName = namedStyleOrUserStyle.name;
+    result.styleTitle = namedStyleOrUserStyle.title;
     var featureTypeStyle = namedStyleOrUserStyle.featureTypeStyle[0];
     result.featureTypeStyleName = featureTypeStyle.name;
     for (var i = 0, ii = featureTypeStyle.rule.length; i < ii; ++i) {
@@ -133,11 +134,28 @@ class SLDService {
     if (textObj.vendorOption) {
       result.vendorOption = textObj.vendorOption;
     }
-    if (textObj.font) {
+    if (textObj.labelPlacement) {
+      if (textObj.labelPlacement.pointPlacement) {
+        var anchorPoint = textObj.labelPlacement.pointPlacement.anchorPoint;
+        var displacement = textObj.labelPlacement.pointPlacement.displacement;
+        result.labelPlacement = {
+          type: 'POINT',
+          anchorPoint: [anchorPoint.anchorPointX.content[0], anchorPoint.anchorPointY.content[0]],
+          displacement: [displacement.displacementX.content[0], displacement.displacementY.content[0]]
+        };
+      }
+    }
+    if (textObj.font && textObj.font.cssParameter) {
       for (var i = 0, ii = textObj.font.cssParameter.length; i < ii; ++i) {
         var param = textObj.font.cssParameter[i];
         if (param.name === 'font-size') {
           result.fontSize = param.content[0];
+        } else if (param.name === 'font-family') {
+          result.fontFamily = param.content[0];
+        } else if (param.name === 'font-style') {
+          result.fontStyle = param.content[0];
+        } else if (param.name === 'font-weight') {
+          result.fontWeight = param.content[0];
         }
       }
     }
@@ -219,14 +237,18 @@ class SLDService {
     return stroke;
   }
   createFill(styleState) {
-    return {
-      cssParameter: [{
-        name: 'fill',
-        content: [styleState.fillColor.hex]
-      }, {
+    var cssParameter = [{
+      name: 'fill',
+      content: [styleState.fillColor.hex]
+    }];
+    if (styleState.fillColor.rgb.a !== undefined) {
+      cssParameter.push({
         name: 'fill-opacity',
         content: [String(styleState.fillColor.rgb.a)]
-      }]
+      });
+    }
+    return {
+      cssParameter: cssParameter
     };
   }
   createStroke(styleState) {
@@ -235,10 +257,13 @@ class SLDService {
       cssParameters.push({
         name: 'stroke',
         content: [styleState.strokeColor.hex]
-      }, {
-        name: 'stroke-opacity',
-        content: [String(styleState.strokeColor.rgb.a)]
       });
+      if (styleState.strokeColor.rgb.a !== undefined) {
+        cssParameters.push({
+          name: 'stroke-opacity',
+          content: [String(styleState.strokeColor.rgb.a)]
+        });
+      }
     }
     if (styleState.strokeWidth !== undefined) {
       cssParameters.push({
@@ -246,9 +271,13 @@ class SLDService {
         content: [String(styleState.strokeWidth)]
       });
     }
-    return {
-      cssParameter: cssParameters
-    };
+    if (cssParameters.length > 0) {
+      return {
+        cssParameter: cssParameters
+      };
+    } else {
+      return undefined;
+    }
   }
   createPolygonSymbolizer(styleState) {
     return {
@@ -307,15 +336,15 @@ class SLDService {
       value: {
         graphic: {
           externalGraphicOrMark: graphicOrMark,
-          rotation: {
-            content: styleState.rotation !== undefined ? [styleState.rotation] : undefined
-          },
           size: {
             content: [styleState.symbolSize]
           }
         }
       }
     };
+    if (styleState.rotation !== undefined) {
+      result.value.graphic.rotation = [styleState.rotation];
+    }
     if (styleState.externalGraphic && styleState.opacity !== undefined) {
       result.value.graphic.opacity = {
         content: ['' + styleState.opacity]
@@ -324,7 +353,32 @@ class SLDService {
     return result;
   }
   createTextSymbolizer(styleState) {
-    return {
+    var cssParameter = [];
+    if (styleState.fontFamily) {
+      cssParameter.push({
+        name: 'font-family',
+        content: [styleState.fontFamily]
+      });
+    }
+    if (styleState.fontSize) {
+      cssParameter.push({
+        name: 'font-size',
+        content: [String(styleState.fontSize)]
+      });
+    }
+    if (styleState.fontStyle) {
+      cssParameter.push({
+        name: 'font-style',
+        content: [styleState.fontStyle]
+      });
+    }
+    if (styleState.fontWeight) {
+      cssParameter.push({
+        name: 'font-weight',
+        content: [styleState.fontWeight]
+      });
+    }
+    var result = {
       name: {
         localPart: 'TextSymbolizer',
         namespaceURI: sldNamespace
@@ -336,11 +390,8 @@ class SLDService {
             content: [styleState.fontColor.hex]
           }]
         } : undefined,
-        font: styleState.fontSize ? {
-          cssParameter: [{
-            name: 'font-size',
-            content: [String(styleState.fontSize)]
-          }]
+        font: cssParameter.length > 0 ? {
+          cssParameter: cssParameter
         } : undefined,
         label: {
           content: [{
@@ -356,6 +407,31 @@ class SLDService {
         vendorOption: styleState.vendorOption
       }
     };
+    if (styleState.labelPlacement) {
+      if (styleState.labelPlacement.type === 'POINT') {
+        result.value.labelPlacement = {
+          pointPlacement: {
+            anchorPoint: {
+              anchorPointX: {
+                content: [String(styleState.labelPlacement.anchorPoint[0])]
+              },
+              anchorPointY: {
+                content: [String(styleState.labelPlacement.anchorPoint[1])]
+              }
+            },
+            displacement: {
+              displacementX: {
+                content: [String(styleState.labelPlacement.displacement[0])]
+              },
+              displacementY: {
+                content: [String(styleState.labelPlacement.displacement[1])]
+              }
+            }
+          }
+        };
+      }
+    }
+    return result;
   }
   expressionToFilter(expression) {
     // TODO handle more
@@ -463,6 +539,7 @@ class SLDService {
         namedStyleOrUserStyle: [{
           TYPE_NAME: 'SLD_1_0_0.UserStyle',
           name: styleInfo ? styleInfo.styleName : undefined,
+          title: styleInfo ? styleInfo.styleTitle : undefined,
           featureTypeStyle: [{
             name: styleInfo ? styleInfo.featureTypeStyleName : undefined,
             rule: ruleContainer
