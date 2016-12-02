@@ -161,16 +161,17 @@ class WFSService {
   loadFeatures(layer, startIndex, maxFeatures, srsName, onSuccess, onFailure) {
     var wfsInfo = layer.get('wfsInfo');
     var url = wfsInfo.url;
-    var payloadNode = wfsFormat.writeGetFeature({
-      maxFeatures: maxFeatures,
-      srsName: 'EPSG:4326',
-      featureNS: wfsInfo.featureNS,
+    var urlObj = new URL(url);
+    urlObj.set('query', {
+      service: 'WFS',
+      request: 'GetFeature',
       startIndex: startIndex,
-      featurePrefix:  wfsInfo.featurePrefix,
-      featureTypes: [wfsInfo.featureType]
+      maxFeatures: maxFeatures,
+      version: '1.1.0',
+      typename: wfsInfo.featureType,
+      srsname: 'EPSG:4326'
     });
-    var payload = xmlSerializer.serializeToString(payloadNode);
-    util.doPOST(url, payload, function(xmlhttp) {
+    util.doGET(urlObj.toString(), function(xmlhttp) {
       var data = xmlhttp.responseXML;
       if (data !== null) {
         this.readResponse(data, xmlhttp, function(data) {
@@ -188,14 +189,15 @@ class WFSService {
     if (layer.get('numberOfFeatures') === undefined) {
       var wfsInfo = layer.get('wfsInfo');
       var url = wfsInfo.url;
-      var hitsNode = wfsFormat.writeGetFeature({
+      var urlObj = new URL(url);
+      urlObj.set('query', {
+        service: 'WFS',
+        request: 'GetFeature',
         resultType: 'hits',
-        featureNS: wfsInfo.featureNS,
-        featurePrefix:  wfsInfo.featurePrefix,
-        featureTypes: [wfsInfo.featureType]
+        version: '1.1.0',
+        typename: wfsInfo.featureType
       });
-      var hits = xmlSerializer.serializeToString(hitsNode);
-      util.doPOST(url, hits, function(xmlhttp) {
+      util.doGET(urlObj.toString(), function(xmlhttp) {
         var info = wfsFormat.readFeatureCollectionMetadata(xmlhttp.responseXML);
         callback.call(this, info.numberOfFeatures);
       });
