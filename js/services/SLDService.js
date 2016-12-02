@@ -53,6 +53,7 @@ class SLDService {
     result.layerName = layer.name;
     var namedStyleOrUserStyle = layer.namedStyleOrUserStyle[0];
     result.styleName = namedStyleOrUserStyle.name;
+    result.styleTitle = namedStyleOrUserStyle.title;
     var featureTypeStyle = namedStyleOrUserStyle.featureTypeStyle[0];
     result.featureTypeStyleName = featureTypeStyle.name;
     for (var i = 0, ii = featureTypeStyle.rule.length; i < ii; ++i) {
@@ -219,14 +220,18 @@ class SLDService {
     return stroke;
   }
   createFill(styleState) {
-    return {
-      cssParameter: [{
-        name: 'fill',
-        content: [styleState.fillColor.hex]
-      }, {
+    var cssParameter = [{
+      name: 'fill',
+      content: [styleState.fillColor.hex]
+    }];
+    if (styleState.fillColor.rgb.a !== undefined) {
+      cssParameter.push({
         name: 'fill-opacity',
         content: [String(styleState.fillColor.rgb.a)]
-      }]
+      });
+    }
+    return {
+      cssParameter: cssParameter
     };
   }
   createStroke(styleState) {
@@ -246,9 +251,13 @@ class SLDService {
         content: [String(styleState.strokeWidth)]
       });
     }
-    return {
-      cssParameter: cssParameters
-    };
+    if (cssParameters.length > 0) {
+      return {
+        cssParameter: cssParameters
+      };
+    } else {
+      return undefined;
+    }
   }
   createPolygonSymbolizer(styleState) {
     return {
@@ -307,15 +316,15 @@ class SLDService {
       value: {
         graphic: {
           externalGraphicOrMark: graphicOrMark,
-          rotation: {
-            content: styleState.rotation !== undefined ? [styleState.rotation] : undefined
-          },
           size: {
             content: [styleState.symbolSize]
           }
         }
       }
     };
+    if (styleState.rotation !== undefined) {
+      result.value.graphic.rotation = [styleState.rotation];
+    }
     if (styleState.externalGraphic && styleState.opacity !== undefined) {
       result.value.graphic.opacity = {
         content: ['' + styleState.opacity]
@@ -463,6 +472,7 @@ class SLDService {
         namedStyleOrUserStyle: [{
           TYPE_NAME: 'SLD_1_0_0.UserStyle',
           name: styleInfo ? styleInfo.styleName : undefined,
+          title: styleInfo ? styleInfo.styleTitle : undefined,
           featureTypeStyle: [{
             name: styleInfo ? styleInfo.featureTypeStyleName : undefined,
             rule: ruleContainer
