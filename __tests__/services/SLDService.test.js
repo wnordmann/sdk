@@ -111,17 +111,24 @@ describe('SLDService', function() {
     expect(sld).xml.to.equal(sld2);
   });
 
-  it('rountrips SLD Cook Book: Simple Point', function() {
+  it('roundtrips SLD Cook Book: Simple Point', function() {
     var sld = '<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"><sld:NamedLayer><sld:Name>Simple Point</sld:Name><sld:UserStyle><sld:Title>SLD Cook Book: Simple Point</sld:Title><sld:FeatureTypeStyle><sld:Rule><sld:PointSymbolizer><sld:Graphic><sld:Mark><sld:WellKnownName>circle</sld:WellKnownName><sld:Fill><sld:CssParameter name="fill">#FF0000</sld:CssParameter></sld:Fill></sld:Mark><sld:Size>6</sld:Size></sld:Graphic></sld:PointSymbolizer></sld:Rule></sld:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>';
     var info = SLDService.parse(sld);
     var sld2 = SLDService.createSLD(new ol.layer.Layer({id: 'Simple Point', styleInfo: info}), 'Point', info.rules);
     expect(sld).xml.to.equal(sld2);
   });
 
-  it('rountrips GeoServer SLD Cook Book: Simple point with stroke', function() {
+  it('roundtrips GeoServer SLD Cook Book: Simple point with stroke', function() {
     var sld = '<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"><sld:NamedLayer><sld:Name>Simple point with stroke</sld:Name><sld:UserStyle><sld:Title>GeoServer SLD Cook Book: Simple point with stroke</sld:Title><sld:FeatureTypeStyle><sld:Rule><sld:PointSymbolizer><sld:Graphic><sld:Mark><sld:WellKnownName>circle</sld:WellKnownName><sld:Fill><sld:CssParameter name="fill">#FF0000</sld:CssParameter></sld:Fill><sld:Stroke><sld:CssParameter name="stroke">#000000</sld:CssParameter><sld:CssParameter name="stroke-width">2</sld:CssParameter></sld:Stroke></sld:Mark><sld:Size>6</sld:Size></sld:Graphic></sld:PointSymbolizer></sld:Rule></sld:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>';
     var info = SLDService.parse(sld);
     var sld2 = SLDService.createSLD(new ol.layer.Layer({id: 'Simple point with stroke', styleInfo: info}), 'Point', info.rules);
+    expect(sld).xml.to.equal(sld2);
+  });
+
+  it('roundtrips GeoServer SLD Cook Book: Rotated square', function() {
+    var sld = '<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"><sld:NamedLayer><sld:Name>Rotated square</sld:Name><sld:UserStyle><sld:Title>GeoServer SLD Cook Book: Rotated square</sld:Title><sld:FeatureTypeStyle><sld:Rule><sld:PointSymbolizer><sld:Graphic><sld:Mark><sld:WellKnownName>square</sld:WellKnownName><sld:Fill><sld:CssParameter name="fill">#009900</sld:CssParameter></sld:Fill></sld:Mark><sld:Size>12</sld:Size><sld:Rotation>45</sld:Rotation></sld:Graphic></sld:PointSymbolizer></sld:Rule></sld:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>';
+    var info = SLDService.parse(sld);
+    var sld2 = SLDService.createSLD(new ol.layer.Layer({id: 'Rotated square', styleInfo: info}), 'Point', info.rules);
     expect(sld).xml.to.equal(sld2);
   });
 
