@@ -240,10 +240,13 @@ class SLDService {
       cssParameters.push({
         name: 'stroke',
         content: [styleState.strokeColor.hex]
-      }, {
-        name: 'stroke-opacity',
-        content: [String(styleState.strokeColor.rgb.a)]
       });
+      if (styleState.strokeColor.rgb.a !== undefined) {
+        cssParameters.push({
+          name: 'stroke-opacity',
+          content: [String(styleState.strokeColor.rgb.a)]
+        });
+      }
     }
     if (styleState.strokeWidth !== undefined) {
       cssParameters.push({
