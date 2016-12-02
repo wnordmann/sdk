@@ -17,6 +17,7 @@ var sourceIdx;
  */
 class MapConfigTransformService {
   _writeLayer(config, sources, layers, group) {
+    var key;
     var layerConfig = {
       name: config.properties.name,
       title: config.properties.title,
@@ -35,7 +36,7 @@ class MapConfigTransformService {
       };
     } else if (config.source.type === 'BingMaps') {
       var hasBing = false;
-      for (var key in sources) {
+      for (key in sources) {
         if (sources[key].ptype == 'gxp_bingsource' && sources[key].apiKey === config.source.properties.key) {
           hasBing = true;
           break;
@@ -50,10 +51,19 @@ class MapConfigTransformService {
       }
     } else if (config.source.type === 'TMS') {
       if (config.source.properties.urls[0].indexOf('tiles.mapbox.com/v1/mapbox') !== -1) {
-        sourceIdx++;
-        sources[sourceIdx] = {
-          ptype: 'gxp_mapboxsource'
-        };
+        var hasMapBox = false;
+        for (key in sources) {
+          if (sources[key].ptype == 'gxp_mapboxsource') {
+            hasMapBox = true;
+            break;
+          }
+        }
+        if (!hasMapBox) {
+          sourceIdx++;
+          sources[sourceIdx] = {
+            ptype: 'gxp_mapboxsource'
+          };
+        }
       }
     } else if (config.source.type === 'TileWMS') {
       layerConfig.capability = {
@@ -66,16 +76,34 @@ class MapConfigTransformService {
         }],
         llbbox: config.properties.EX_GeographicBoundingBox
       };
-      sourceIdx++;
-      sources[sourceIdx] = {
-        ptype: 'gxp_wmscsource',
-        url: config.source.url
-      };
+      var hasWMSC = false;
+      for (key in sources) {
+        if (sources[key].ptype == 'gxp_wmscsource' && sources[key].url === config.source.url) {
+          hasWMSC = true;
+          break;
+        }
+      }
+      if (!hasWMSC) {
+        sourceIdx++;
+        sources[sourceIdx] = {
+          ptype: 'gxp_wmscsource',
+          url: config.source.url
+        };
+      }
     } else if (config.source.type === 'OSM') {
-      sourceIdx++;
-      sources[sourceIdx] = {
-        ptype: 'gxp_osmsource'
-      };
+      var hasOSM = false;
+      for (key in sources) {
+        if (sources[key].ptype == 'gxp_osmsource') {
+          hasOSM = true;
+          break;
+        }
+      }
+      if (!hasOSM) {
+        sourceIdx++;
+        sources[sourceIdx] = {
+          ptype: 'gxp_osmsource'
+        };
+      }
     }
     layerConfig.source = '' + sourceIdx;
   }
