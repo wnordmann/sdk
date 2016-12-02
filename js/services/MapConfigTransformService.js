@@ -18,7 +18,6 @@ var sourceIdx;
 class MapConfigTransformService {
   _writeLayer(config, sources, layers, group) {
     var layerConfig = {
-      source: '' + sourceIdx,
       name: config.properties.name,
       title: config.properties.title,
       visibility: config.properties.visible
@@ -27,7 +26,29 @@ class MapConfigTransformService {
       layerConfig.group = group;
     }
     layers.push(layerConfig);
-    if (config.source.type === 'TileWMS') {
+    if (config.source.type === 'BingMaps') {
+      var hasBing = false;
+      for (var key in sources) {
+        if (sources[key].ptype == 'gxp_bingsource' && sources[key].apiKey === config.source.properties.key) {
+          hasBing = true;
+          break;
+        }
+      }
+      if (!hasBing) {
+        sourceIdx++;
+        sources[sourceIdx] = {
+          ptype: 'gxp_bingsource',
+          apiKey: config.source.properties.key
+        };
+      }
+    } else if (config.source.type === 'TMS') {
+      if (config.source.properties.urls[0].indexOf('tiles.mapbox.com/v1/mapbox') !== -1) {
+        sourceIdx++;
+        sources[sourceIdx] = {
+          ptype: 'gxp_mapboxsource'
+        };
+      }
+    } else if (config.source.type === 'TileWMS') {
       layerConfig.capability = {
         queryable: config.properties.isSelectable,
         styles: [{
@@ -38,24 +59,25 @@ class MapConfigTransformService {
         }],
         llbbox: config.properties.EX_GeographicBoundingBox
       };
+      sourceIdx++;
       sources[sourceIdx] = {
         ptype: 'gxp_wmscsource',
         url: config.source.url
       };
-      sourceIdx++;
     } else if (config.source.type === 'OSM') {
+      sourceIdx++;
       sources[sourceIdx] = {
         ptype: 'gxp_osmsource'
       };
-      sourceIdx++;
     }
+    layerConfig.source = '' + sourceIdx;
   }
   write(data) {
     var viewConfig = data.view;
     var layerConfig = data.layers;
     var layers = [];
     var sources = {};
-    sourceIdx = 0;
+    sourceIdx = -1;
     for (var i = 0, ii = layerConfig.length; i < ii; ++i) {
       if (layerConfig[i].type === 'Group') {
         for (var j = 0, jj = layerConfig[i].children.length; j < jj; ++j) {
