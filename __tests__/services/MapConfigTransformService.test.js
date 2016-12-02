@@ -83,11 +83,14 @@ describe('MapConfigTransfrormService', function() {
     assert.equal(JSON.stringify(output), JSON.stringify(expectedFromWrite));
   });
 
-  it('transforms ArcGIS Rest source correctly', function() {
-    var config = {'sources':{'arcgisrest':{'ptype':'gxp_arcrestsource','url':'http://cga6.cga.harvard.edu/arcgis/rest/services/darmc/roman/MapServer','projecti  on':'EPSG:102113','id':'arcgisrest'}}, 'map':{'projection':'EPSG:102113','layers':[{'source':'arcgisrest','name':'  Roman and Medieval Civilization','title':'Roman and Medieval Civilization','tiled':true,'visibility':true,'layerid':'show:0','format':'png','opacity':1,'group':'','fixed':true,'selected':true}],'center':[4263719.1382864,5532513.4852863],'zoom':3}};
+  it('transforms ArcGIS Rest source correctly (two-way)', function() {
+    var config = {'sources':{'arcgisrest':{'ptype':'gxp_arcrestsource','url':'http://cga6.cga.harvard.edu/arcgis/rest/services/darmc/roman/MapServer','projection':'EPSG:102113','id':'arcgisrest'}}, 'map':{'projection':'EPSG:102113','layers':[{'source':'arcgisrest','name':'Roman and Medieval Civilization','title':'Roman and Medieval Civilization','tiled':true,'visibility':true,'layerid':'show:0','format':'png','opacity':1,'group':'','fixed':true,'selected':true}],'center':[4263719.1382864,5532513.4852863],'zoom':3}};
     var result = MapConfigTransformService.transform(config);
-    var expected = {'layers':[{'properties':{'isRemovable':true,'visible':true,'title':'Roman and Medieval Civilization','id':'  Roman and Medieval Civilization','name':'  Roman and Medieval Civilization'},'type':'Tile','source':{'type':'TileArcGISRest','properties':{'crossOrigin':'anonymous','urls':['http://cga6.cga.harvard.edu/arcgis/rest/services/darmc/roman/MapServer'],'params':{'LAYERS':'show:0','FORMAT':'png'}}}}],'view':{'center':[4263719.1382864,5532513.4852863],'projection':'EPSG:102113','zoom':3}};
+    var expected = {'layers':[{'properties':{'isRemovable':true,'visible':true,'title':'Roman and Medieval Civilization','id':'Roman and Medieval Civilization','name':'Roman and Medieval Civilization'},'type':'Tile','source':{'type':'TileArcGISRest','properties':{'crossOrigin':'anonymous','urls':['http://cga6.cga.harvard.edu/arcgis/rest/services/darmc/roman/MapServer'],'params':{'LAYERS':'show:0','FORMAT':'png'}}}}],'view':{'center':[4263719.1382864,5532513.4852863],'projection':'EPSG:102113','zoom':3}};
     assert.equal(JSON.stringify(result), JSON.stringify(expected));
+    var output = MapConfigTransformService.write(result);
+    var expectedFromWrite = {'map':{'sources':{'0':{'url':'http://cga6.cga.harvard.edu/arcgis/rest/services/darmc/roman/MapServer','ptype':'gxp_arcrestsource'}},'layers':[{'name':'Roman and Medieval Civilization','title':'Roman and Medieval Civilization','visibility':true,'layerid':'show:0','source':'0'}],'center':[4263719.1382864,5532513.4852863],'projection':'EPSG:102113','zoom':3}};
+    assert.equal(JSON.stringify(output), JSON.stringify(expectedFromWrite));
   });
   describe('has proxy', function() {
     it('transforms WMS source correctly', function() {

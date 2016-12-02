@@ -26,7 +26,14 @@ class MapConfigTransformService {
       layerConfig.group = group;
     }
     layers.push(layerConfig);
-    if (config.source.type === 'BingMaps') {
+    if (config.source.type === 'TileArcGISRest') {
+      layerConfig.layerid = config.source.properties.params.LAYERS;
+      sourceIdx++;
+      sources[sourceIdx] = {
+        url: config.source.properties.urls[0],
+        ptype: 'gxp_arcrestsource'
+      };
+    } else if (config.source.type === 'BingMaps') {
       var hasBing = false;
       for (var key in sources) {
         if (sources[key].ptype == 'gxp_bingsource' && sources[key].apiKey === config.source.properties.key) {
