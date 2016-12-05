@@ -47,17 +47,24 @@ const comparisonOps = {
 
 class SLDService {
   parse(sld) {
-    var result = {rules: []};
+    var result = {};
     var info = unmarshaller.unmarshalString(sld).value;
     var layer = info.namedLayerOrUserLayer[0];
     result.layerName = layer.name;
     var namedStyleOrUserStyle = layer.namedStyleOrUserStyle[0];
     result.styleName = namedStyleOrUserStyle.name;
     result.styleTitle = namedStyleOrUserStyle.title;
-    var featureTypeStyle = namedStyleOrUserStyle.featureTypeStyle[0];
-    result.featureTypeStyleName = featureTypeStyle.name;
-    for (var i = 0, ii = featureTypeStyle.rule.length; i < ii; ++i) {
-      result.rules.push(this.parseRule(featureTypeStyle.rule[i]));
+    result.featureTypeStyles = [];
+    for (var i = 0, ii = namedStyleOrUserStyle.featureTypeStyle.length; i < ii; ++i) {
+      var featureTypeStyle = namedStyleOrUserStyle.featureTypeStyle[i];
+      var fts = {
+        rules: [],
+        featureTypeStyleName: featureTypeStyle.name
+      };
+      for (var j = 0, jj = featureTypeStyle.rule.length; j < jj; ++j) {
+        fts.rules.push(this.parseRule(featureTypeStyle.rule[j]));
+      }
+      result.featureTypeStyles.push(fts);
     }
     return result;
   }
@@ -236,6 +243,8 @@ class SLDService {
           stroke.strokeColor.rgb = Object.assign(stroke.strokeColor.rgb, {a :parseFloat(strokeObj.cssParameter[i].content[0])});
         } else if (strokeObj.cssParameter[i].name === 'stroke-width') {
           stroke.strokeWidth = parseFloat(strokeObj.cssParameter[i].content[0]);
+        } else if (strokeObj.cssParameter[i].name === 'stroke-linecap') {
+          stroke.strokeLineCap = strokeObj.cssParameter[i].content[0];
         }
       }
     }
@@ -274,6 +283,12 @@ class SLDService {
       cssParameters.push({
         name: 'stroke-width',
         content: [String(styleState.strokeWidth)]
+      });
+    }
+    if (styleState.strokeLineCap !== undefined) {
+      cssParameters.push({
+        name: 'stroke-linecap',
+        content: [styleState.strokeLineCap]
       });
     }
     if (cssParameters.length > 0) {
@@ -533,7 +548,7 @@ class SLDService {
       filter: filter
     };
   }
-  createSLD(layer, geometryType, rules) {
+  createSLD(layer, geometryType, featureTypeStyles) {
     var layerName = layer.get('id');
     var styleInfo = layer.get('styleInfo');
     var result = {
@@ -542,7 +557,6 @@ class SLDService {
         localPart: 'StyledLayerDescriptor'
       }
     };
-    var ruleContainer = [];
     result.value = {
       version: '1.0.0',
       namedLayerOrUserLayer: [{
@@ -552,17 +566,21 @@ class SLDService {
           TYPE_NAME: 'SLD_1_0_0.UserStyle',
           name: styleInfo ? styleInfo.styleName : undefined,
           title: styleInfo ? styleInfo.styleTitle : undefined,
-          featureTypeStyle: [{
-            name: styleInfo ? styleInfo.featureTypeStyleName : undefined,
-            rule: ruleContainer
-          }]
+          featureTypeStyle: []
         }]
       }]
     };
-    for (var i = 0, ii = rules.length; i < ii; ++i) {
-      var rule = rules[i].name;
-      var style = rules[i];
-      ruleContainer.push(this.createRule(rule, style.title, geometryType, style));
+    for (var i = 0, ii = featureTypeStyles.length; i < ii; ++i) {
+      var ruleContainer = [];
+      result.value.namedLayerOrUserLayer[0].namedStyleOrUserStyle[0].featureTypeStyle.push({
+        name: featureTypeStyles[i].featureTypeStyleName,
+        rule: ruleContainer
+      });
+      for (var j = 0, jj = featureTypeStyles[i].rules.length; j < jj; ++j) {
+        var rule = featureTypeStyles[i].rules[j].name;
+        var style = featureTypeStyles[i].rules[j];
+        ruleContainer.push(this.createRule(rule, style.title, geometryType, style));
+      }
     }
     return marshaller.marshalString(result);
   }
