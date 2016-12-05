@@ -243,6 +243,8 @@ class SLDService {
           stroke.strokeColor.rgb = Object.assign(stroke.strokeColor.rgb, {a :parseFloat(strokeObj.cssParameter[i].content[0])});
         } else if (strokeObj.cssParameter[i].name === 'stroke-width') {
           stroke.strokeWidth = parseFloat(strokeObj.cssParameter[i].content[0]);
+        } else if (strokeObj.cssParameter[i].name === 'stroke-dasharray') {
+          stroke.strokeDashArray = strokeObj.cssParameter[i].content[0];
         } else if (strokeObj.cssParameter[i].name === 'stroke-linecap') {
           stroke.strokeLineCap = strokeObj.cssParameter[i].content[0];
         }
@@ -283,6 +285,12 @@ class SLDService {
       cssParameters.push({
         name: 'stroke-width',
         content: [String(styleState.strokeWidth)]
+      });
+    }
+    if (styleState.strokeDashArray !== undefined) {
+      cssParameters.push({
+        name: 'stroke-dasharray',
+        content: [styleState.strokeDashArray]
       });
     }
     if (styleState.strokeLineCap !== undefined) {
