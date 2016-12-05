@@ -65,6 +65,8 @@ class SLDService {
     var rule = {};
     rule.name = ruleObj.name;
     rule.title = ruleObj.title;
+    rule.minScaleDenominator = ruleObj.minScaleDenominator;
+    rule.maxScaleDenominator = ruleObj.maxScaleDenominator;
     for (var i = 0, ii = ruleObj.symbolizer.length; i < ii; ++i) {
       // TODO does it make sense to keep symbolizers separate?
       Object.assign(rule, this.parseSymbolizer(ruleObj.symbolizer[i]));
@@ -526,6 +528,8 @@ class SLDService {
       name: name,
       title: title,
       symbolizer: symbolizer,
+      minScaleDenominator: styleState.minScaleDenominator,
+      maxScaleDenominator: styleState.maxScaleDenominator,
       filter: filter
     };
   }

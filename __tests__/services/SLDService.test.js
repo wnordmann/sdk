@@ -174,6 +174,14 @@ describe('SLDService', function() {
     expect(sld).xml.to.equal(sld2);
   });
 
+  it('roundtrips GeoServer SLD Cook Book: Zoom-based point', function() {
+    var sld = '<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"><sld:NamedLayer><sld:Name>Zoom-based point</sld:Name><sld:UserStyle><sld:Title>GeoServer SLD Cook Book: Zoom-based point</sld:Title><sld:FeatureTypeStyle><sld:Rule><sld:Name>Large</sld:Name><sld:MaxScaleDenominator>160000000</sld:MaxScaleDenominator><sld:PointSymbolizer><sld:Graphic><sld:Mark><sld:WellKnownName>circle</sld:WellKnownName><sld:Fill><sld:CssParameter name="fill">#CC3300</sld:CssParameter></sld:Fill></sld:Mark><sld:Size>12</sld:Size></sld:Graphic></sld:PointSymbolizer></sld:Rule><sld:Rule><sld:Name>Medium</sld:Name><sld:MinScaleDenominator>160000000</sld:MinScaleDenominator><sld:MaxScaleDenominator>320000000</sld:MaxScaleDenominator><sld:PointSymbolizer><sld:Graphic><sld:Mark><sld:WellKnownName>circle</sld:WellKnownName><sld:Fill><sld:CssParameter name="fill">#CC3300</sld:CssParameter></sld:Fill></sld:Mark><sld:Size>8</sld:Size></sld:Graphic></sld:PointSymbolizer></sld:Rule><sld:Rule><sld:Name>Small</sld:Name><sld:MinScaleDenominator>320000000</sld:MinScaleDenominator><sld:PointSymbolizer><sld:Graphic><sld:Mark><sld:WellKnownName>circle</sld:WellKnownName><sld:Fill><sld:CssParameter name="fill">#CC3300</sld:CssParameter></sld:Fill></sld:Mark><sld:Size>4</sld:Size></sld:Graphic></sld:PointSymbolizer></sld:Rule></sld:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>';
+    var info = SLDService.parse(sld);
+    var sld2 = SLDService.createSLD(new ol.layer.Layer({id: 'Zoom-based point', styleInfo: info}), 'Point', info.rules);
+    expect(sld).xml.to.equal(sld2);
+  });
+
+
   it('roundtrips vendor options in TextSymbolizer', function() {
     var sld = '<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"><sld:NamedLayer><sld:Name>ne:populated_places</sld:Name><sld:UserStyle><sld:Name>populated_places</sld:Name><sld:FeatureTypeStyle><sld:Name>name</sld:Name><sld:Rule><sld:Name>Untitled 1</sld:Name><sld:TextSymbolizer><sld:Label><ogc:PropertyName>NAME</ogc:PropertyName></sld:Label><sld:VendorOption name="conflictResolution">true</sld:VendorOption><sld:VendorOption name="group">yes</sld:VendorOption></sld:TextSymbolizer></sld:Rule></sld:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>';
     var info = SLDService.parse(sld);
