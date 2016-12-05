@@ -555,7 +555,7 @@ class SLDService {
         }]
       }]
     };
-    for (var i = rules.length - 1; i >= 0; --i) {
+    for (var i = 0, ii = rules.length; i < ii; ++i) {
       var rule = rules[i].name;
       var style = rules[i];
       ruleContainer.push(this.createRule(rule, style.title, geometryType, style));
