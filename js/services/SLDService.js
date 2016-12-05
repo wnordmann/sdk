@@ -74,9 +74,9 @@ class SLDService {
     rule.title = ruleObj.title;
     rule.minScaleDenominator = ruleObj.minScaleDenominator;
     rule.maxScaleDenominator = ruleObj.maxScaleDenominator;
+    rule.symbolizers = [];
     for (var i = 0, ii = ruleObj.symbolizer.length; i < ii; ++i) {
-      // TODO does it make sense to keep symbolizers separate?
-      Object.assign(rule, this.parseSymbolizer(ruleObj.symbolizer[i]));
+      rule.symbolizers.push(this.parseSymbolizer(ruleObj.symbolizer[i]));
     }
     if (ruleObj.filter) {
       rule.expression = this.filterToExpression(ruleObj.filter);
@@ -206,7 +206,8 @@ class SLDService {
     return result;
   }
   parseLineSymbolizer(lineObj) {
-    return this.parseStroke(lineObj.stroke);
+    var result = this.parseStroke(lineObj.stroke);
+    return result;
   }
   parsePolygonSymbolizer(polyObj) {
     var result = {};
@@ -536,16 +537,30 @@ class SLDService {
     if (styleState.expression) {
       filter = this.expressionToFilter(styleState.expression);
     }
-    var symbolizer = [];
+    var symbolizer = [], i, ii;
     if (geometryType === 'Polygon') {
-      symbolizer.push(this.createPolygonSymbolizer(styleState));
+      for (i = 0, ii = styleState.symbolizers.length; i < ii; ++i) {
+        if (styleState.symbolizers[i].labelAttribute === undefined) {
+          symbolizer.push(this.createPolygonSymbolizer(styleState.symbolizers[i]));
+        }
+      }
     } else if (geometryType === 'LineString') {
-      symbolizer.push(this.createLineSymbolizer(styleState));
+      for (i = 0, ii = styleState.symbolizers.length; i < ii; ++i) {
+        if (styleState.symbolizers[i].labelAttribute === undefined) {
+          symbolizer.push(this.createLineSymbolizer(styleState.symbolizers[i]));
+        }
+      }
     } else if (geometryType === 'Point') {
-      symbolizer.push(this.createPointSymbolizer(styleState));
+      for (i = 0, ii = styleState.symbolizers.length; i < ii; ++i) {
+        if (styleState.symbolizers[i].labelAttribute === undefined) {
+          symbolizer.push(this.createPointSymbolizer(styleState.symbolizers[i]));
+        }
+      }
     }
-    if (styleState.labelAttribute) {
-      symbolizer.push(this.createTextSymbolizer(styleState));
+    for (i = 0, ii = styleState.symbolizers.length; i < ii; ++i) {
+      if (styleState.symbolizers[i].labelAttribute) {
+        symbolizer.push(this.createTextSymbolizer(styleState.symbolizers[i]));
+      }
     }
     return {
       name: name,
