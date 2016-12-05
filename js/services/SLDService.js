@@ -143,6 +143,9 @@ class SLDService {
           anchorPoint: [anchorPoint.anchorPointX.content[0], anchorPoint.anchorPointY.content[0]],
           displacement: [displacement.displacementX.content[0], displacement.displacementY.content[0]]
         };
+        if (textObj.labelPlacement.pointPlacement.rotation !== undefined) {
+          result.labelPlacement.rotation = textObj.labelPlacement.pointPlacement.rotation.content[0];
+        }
       }
     }
     if (textObj.font && textObj.font.cssParameter) {
@@ -429,6 +432,11 @@ class SLDService {
             }
           }
         };
+        if (styleState.labelPlacement.rotation !== undefined) {
+          result.value.labelPlacement.pointPlacement.rotation = {
+            content: [String(styleState.labelPlacement.rotation)]
+          };
+        }
       }
     }
     return result;
