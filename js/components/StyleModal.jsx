@@ -103,7 +103,8 @@ class StyleModal extends React.Component {
   }
   open() {
     if (this.props.layer.get('styleInfo')) {
-      var rules = this.props.layer.get('styleInfo').rules;
+      // only support for a single featureTypeStyle now
+      var rules = this.props.layer.get('styleInfo').featureTypeStyles[0].rules;
       for (var i = 0, ii = rules.length; i < ii; ++i) {
         if (rules[i].name === undefined) {
           rules[i].name = 'Untitled ' + (i + 1);
@@ -139,7 +140,9 @@ class StyleModal extends React.Component {
   }
   _generateSLD() {
     var me = this;
-    var sld = SLDService.createSLD(this.props.layer, this.state.geometryType, this.state.rules);
+    var sld = SLDService.createSLD(this.props.layer, this.state.geometryType, [{
+      rules: this.state.rules
+    }]);
     if (!(this._sld && this._sld === sld)) {
       var url = this.props.layer.getSource().getUrls()[0];
       if (this.props.layer.get('styleName')) {
@@ -181,7 +184,8 @@ class StyleModal extends React.Component {
   }
   _onChange(state) {
     var rule = this.state.rule;
-    var styleState = this._getRuleByName(rule);
+    // TODO support more symbolizers
+    var styleState = this._getRuleByName(rule).symbolizers[0];
     Object.assign(styleState, state);
     this._setStyle();
   }
@@ -238,8 +242,12 @@ class StyleModal extends React.Component {
     });
     // TODO see if we can do with a single rule editor
     var ruleEditors = this.state.rules.map(function(rule, key) {
-      var symbol = this._getRuleByName(rule.name);
-      return (<RuleEditor {...this.props} geometryType={this.state.geometryType} visible={rule.name === this.state.rule} key={key} initialState={symbol} onChange={this._onChange.bind(this)} attributes={this.state.attributes} />)
+      // only support a single symbolizer for now
+      var ruleObj = this._getRuleByName(rule.name);
+      if (ruleObj.symbolizers && ruleObj.symbolizers.length > 0) {
+        var symbol = ruleObj.symbolizers[0];
+        return (<RuleEditor {...this.props} geometryType={this.state.geometryType} visible={rule.name === this.state.rule} key={key} initialState={symbol} onChange={this._onChange.bind(this)} attributes={this.state.attributes} />)
+      }
     }, this);
     var actions = [
       <RaisedButton label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
