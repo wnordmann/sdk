@@ -236,10 +236,6 @@ LayerList.propTypes = {
    */
   allowStyling: React.PropTypes.bool,
   /**
-   * Should we use GeoServer REST for modification of styles. If false, SLD_BODY will be used.
-   */
-  useRESTForStyling: React.PropTypes.bool,
-  /**
    * Should we allow for editing of features in a vector layer?
    * This does require having a WFST component in your application.
    */
@@ -306,7 +302,6 @@ LayerList.propTypes = {
 };
 
 LayerList.defaultProps = {
-  useRESTForStyling: false,
   showZoomTo: false,
   showTable: false,
   allowReordering: false,
