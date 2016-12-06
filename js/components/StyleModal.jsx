@@ -17,7 +17,7 @@ import Dialog from 'material-ui/Dialog';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import LayerActions from '../actions/LayerActions';
-import RaisedButton from 'material-ui/RaisedButton';
+import Button from './Button';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import pureRender from 'pure-render-decorator';
 import RuleEditor from './RuleEditor';
@@ -42,6 +42,11 @@ const messages = defineMessages({
     id: 'stylemodal.closebutton',
     description: 'Text for the close button',
     defaultMessage: 'Close'
+  },
+  savebutton: {
+    id: 'stylemodal.savebutton',
+    description: 'Text for the save button',
+    defaultMessage: 'Save'
   },
   addrulebutton: {
     id: 'stylemodal.addrulebutton',
@@ -138,28 +143,35 @@ class StyleModal extends React.Component {
       this._generateSLD();
     }
   }
-  _generateSLD() {
+  _saveStyle() {
     var me = this;
     var sld = SLDService.createSLD(this.props.layer, this.state.geometryType, [{
       rules: this.state.rules
     }]);
+    var url = this.props.layer.getSource().getUrls()[0];
+    if (this.props.layer.get('styleName')) {
+      RESTService.updateStyle(url, this.props.layer, sld, function(xmlhttp) {
+        me.close();
+      }, function(xmlhttp) {
+        me.setState({error: true, errorOpen: true, msg: xmlhttp.status + ' ' + xmlhttp.statusText});
+      });
+    } else {
+      RESTService.createStyle(url, this.props.layer, sld, function(xmlhttp) {
+        me.props.layer.getSource().updateParams({'STYLES': me.props.layer.get('styleName'), '_olSalt': Math.random()});
+        LayerActions.styleLayer(me.props.layer);
+        me.close();
+      }, function(xmlhttp) {
+        me.setState({error: true, errorOpen: true, msg: xmlhttp.status + ' ' + xmlhttp.statusText});
+      });
+    }
+  }
+  _generateSLD() {
+    var sld = SLDService.createSLD(this.props.layer, this.state.geometryType, [{
+      rules: this.state.rules
+    }]);
     if (!(this._sld && this._sld === sld)) {
-      var url = this.props.layer.getSource().getUrls()[0];
-      if (this.props.layer.get('styleName')) {
-        RESTService.updateStyle(url, this.props.layer, sld, function(xmlhttp) {
-          me.props.layer.getSource().updateParams({'_olSalt': Math.random()});
-          LayerActions.styleLayer(me.props.layer);
-        }, function(xmlhttp) {
-          me.setState({error: true, errorOpen: true, msg: xmlhttp.status + ' ' + xmlhttp.statusText});
-        });
-      } else {
-        RESTService.createStyle(url, this.props.layer, sld, function(xmlhttp) {
-          me.props.layer.getSource().updateParams({'STYLES': me.props.layer.get('styleName'), '_olSalt': Math.random()});
-          LayerActions.styleLayer(me.props.layer);
-        }, function(xmlhttp) {
-          me.setState({error: true, errorOpen: true, msg: xmlhttp.status + ' ' + xmlhttp.statusText});
-        });
-      }
+      this.props.layer.getSource().updateParams({'SLD_BODY': sld});
+      LayerActions.styleLayer(this.props.layer);
     }
   }
   _setStyleVector() {
@@ -250,15 +262,16 @@ class StyleModal extends React.Component {
       }
     }, this);
     var actions = [
-      <RaisedButton label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
+      <Button buttonType='Flat' primary={true} label={formatMessage(messages.savebutton)} onTouchTap={this._saveStyle.bind(this)} />,
+      <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
     ];
     return (
       <Dialog className={classNames('sdk-component style-modal', this.props.className)} actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} open={this.state.open} onRequestClose={this.close.bind(this)}>
         <SelectField floatingLabelText={formatMessage(messages.rulelabel)} value={this.state.rule} onChange={this._onRuleChange.bind(this)}>
           {ruleItems}
         </SelectField>
-        <RaisedButton label={formatMessage(messages.addrulebutton)} onTouchTap={this._addRule.bind(this)} />
-        <RaisedButton label={formatMessage(messages.removerulebutton)} onTouchTap={this._removeRule.bind(this)} />
+        <Button label={formatMessage(messages.addrulebutton)} onTouchTap={this._addRule.bind(this)} />
+        <Button label={formatMessage(messages.removerulebutton)} onTouchTap={this._removeRule.bind(this)} />
         {ruleEditors}
         {error}
       </Dialog>

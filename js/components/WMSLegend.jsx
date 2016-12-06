@@ -71,6 +71,7 @@ class WMSLegend extends React.Component {
       width: this.props.width,
       legend_options: options,
       layer: params.LAYERS,
+      sld_body: params.SLD_BODY,
       '_olSalt': this.state.salt,
       style: params.STYLES ? params.STYLES : ''
     });
