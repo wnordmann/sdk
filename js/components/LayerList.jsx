@@ -197,6 +197,7 @@ class LayerList extends React.Component {
           </List>
           {addLayer}
         </div>
+        {this.props.children}
       </div>
     );
   }
