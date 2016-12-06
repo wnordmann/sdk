@@ -144,21 +144,26 @@ class StyleModal extends React.Component {
       rules: this.state.rules
     }]);
     if (!(this._sld && this._sld === sld)) {
-      var url = this.props.layer.getSource().getUrls()[0];
-      if (this.props.layer.get('styleName')) {
-        RESTService.updateStyle(url, this.props.layer, sld, function(xmlhttp) {
-          me.props.layer.getSource().updateParams({'_olSalt': Math.random()});
-          LayerActions.styleLayer(me.props.layer);
-        }, function(xmlhttp) {
-          me.setState({error: true, errorOpen: true, msg: xmlhttp.status + ' ' + xmlhttp.statusText});
-        });
+      if (this.props.useRESTForStyling) {
+        var url = this.props.layer.getSource().getUrls()[0];
+        if (this.props.layer.get('styleName')) {
+          RESTService.updateStyle(url, this.props.layer, sld, function(xmlhttp) {
+            me.props.layer.getSource().updateParams({'_olSalt': Math.random()});
+            LayerActions.styleLayer(me.props.layer);
+          }, function(xmlhttp) {
+            me.setState({error: true, errorOpen: true, msg: xmlhttp.status + ' ' + xmlhttp.statusText});
+          });
+        } else {
+          RESTService.createStyle(url, this.props.layer, sld, function(xmlhttp) {
+            me.props.layer.getSource().updateParams({'STYLES': me.props.layer.get('styleName'), '_olSalt': Math.random()});
+            LayerActions.styleLayer(me.props.layer);
+          }, function(xmlhttp) {
+            me.setState({error: true, errorOpen: true, msg: xmlhttp.status + ' ' + xmlhttp.statusText});
+          });
+        }
       } else {
-        RESTService.createStyle(url, this.props.layer, sld, function(xmlhttp) {
-          me.props.layer.getSource().updateParams({'STYLES': me.props.layer.get('styleName'), '_olSalt': Math.random()});
-          LayerActions.styleLayer(me.props.layer);
-        }, function(xmlhttp) {
-          me.setState({error: true, errorOpen: true, msg: xmlhttp.status + ' ' + xmlhttp.statusText});
-        });
+        me.props.layer.getSource().updateParams({'SLD_BODY': sld, '_olSalt': Math.random()});
+        LayerActions.styleLayer(me.props.layer);
       }
     }
   }
@@ -275,6 +280,10 @@ StyleModal.propTypes = {
    * Css class name to apply on the root element of this component.
    */
   className: React.PropTypes.string,
+  /**
+   * Should we use GeoServer REST for modifying styles. If false, SLD_BODY will be used.
+   */
+  useRESTForStyling: React.PropTypes.bool,
   /**
    * i18n message strings. Provided through the application through context.
    */

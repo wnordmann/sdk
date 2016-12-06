@@ -504,6 +504,10 @@ LayerListItem.propTypes = {
    */
   allowStyling: React.PropTypes.bool,
   /**
+   * Should we use GeoServer REST for modification of styles. If false, SLD_BODY will be used.
+   */
+  useRESTForStyling: React.PropTypes.bool,
+  /**
    * Should we show a download button?
    */
   showDownload: React.PropTypes.bool,
