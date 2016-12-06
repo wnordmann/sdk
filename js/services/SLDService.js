@@ -253,6 +253,8 @@ class SLDService {
           stroke.strokeWidth = parseFloat(strokeObj.cssParameter[i].content[0]);
         } else if (strokeObj.cssParameter[i].name === 'stroke-dasharray') {
           stroke.strokeDashArray = strokeObj.cssParameter[i].content[0];
+        } else if (strokeObj.cssParameter[i].name === 'stroke-dashoffset') {
+          stroke.strokeDashOffset = strokeObj.cssParameter[i].content[0];
         } else if (strokeObj.cssParameter[i].name === 'stroke-linecap') {
           stroke.strokeLineCap = strokeObj.cssParameter[i].content[0];
         }
@@ -306,6 +308,12 @@ class SLDService {
       cssParameters.push({
         name: 'stroke-dasharray',
         content: [styleState.strokeDashArray]
+      });
+    }
+    if (styleState.strokeDashOffset !== undefined) {
+      cssParameters.push({
+        name: 'stroke-dashoffset',
+        content: [styleState.strokeDashOffset]
       });
     }
     if (styleState.strokeLineCap !== undefined) {
