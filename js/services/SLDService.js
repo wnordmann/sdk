@@ -257,7 +257,8 @@ class SLDService {
           stroke.strokeLineCap = strokeObj.cssParameter[i].content[0];
         }
       }
-    } else if (strokeObj.graphicStroke) {
+    }
+    if (strokeObj.graphicStroke) {
       stroke.graphic = this._parseGraphic(strokeObj.graphicStroke.graphic);
     }
     return stroke;
@@ -313,19 +314,19 @@ class SLDService {
         content: [styleState.strokeLineCap]
       });
     }
-    if (cssParameters.length > 0) {
-      return {
-        cssParameter: cssParameters
-      };
-    } else if (graphic) {
-      return {
-        graphicStroke: {
+    var result;
+    if (cssParameters.length > 0 || graphic) {
+      result = {};
+      if (cssParameters.length > 0) {
+        result.cssParameter = cssParameters;
+      }
+      if (graphic) {
+        result.graphicStroke = {
           graphic: graphic
-        }
-      };
-    } else {
-      return undefined;
+        };
+      }
     }
+    return result;
   }
   createPolygonSymbolizer(styleState) {
     var result = {
