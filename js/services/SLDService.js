@@ -176,18 +176,18 @@ class SLDService {
     }
     return result;
   }
-  parsePointSymbolizer(pointObj) {
+  _parseGraphic(graphic) {
     var result = {};
-    if (pointObj.graphic.opacity) {
-      result.opacity = parseFloat(pointObj.graphic.opacity.content[0]);
+    if (graphic.opacity) {
+      result.opacity = parseFloat(graphic.opacity.content[0]);
     }
-    if (pointObj.graphic.rotation) {
-      result.rotation = pointObj.graphic.rotation.content[0];
+    if (graphic.rotation) {
+      result.rotation = graphic.rotation.content[0];
     }
-    if (pointObj.graphic.size) {
-      result.symbolSize = pointObj.graphic.size.content[0];
+    if (graphic.size) {
+      result.symbolSize = graphic.size.content[0];
     }
-    var externalGraphicOrMark = pointObj.graphic.externalGraphicOrMark[0];
+    var externalGraphicOrMark = graphic.externalGraphicOrMark[0];
     if (externalGraphicOrMark.TYPE_NAME === 'SLD_1_0_0.ExternalGraphic') {
       result.externalGraphic = externalGraphicOrMark.onlineResource.href;
     } else {
@@ -204,6 +204,9 @@ class SLDService {
       }
     }
     return result;
+  }
+  parsePointSymbolizer(pointObj) {
+    return this._parseGraphic(pointObj.graphic);
   }
   parseLineSymbolizer(lineObj) {
     var result = this.parseStroke(lineObj.stroke);
@@ -250,6 +253,8 @@ class SLDService {
           stroke.strokeLineCap = strokeObj.cssParameter[i].content[0];
         }
       }
+    } else if (strokeObj.graphicStroke) {
+      stroke.graphic = this._parseGraphic(strokeObj.graphicStroke.graphic);
     }
     return stroke;
   }
@@ -269,6 +274,10 @@ class SLDService {
     };
   }
   createStroke(styleState) {
+    var graphic;
+    if (styleState.graphic) {
+      graphic = this._createGraphic(styleState.graphic);
+    }
     var cssParameters = [];
     if (styleState.strokeColor) {
       cssParameters.push({
@@ -303,6 +312,12 @@ class SLDService {
     if (cssParameters.length > 0) {
       return {
         cssParameter: cssParameters
+      };
+    } else if (graphic) {
+      return {
+        graphicStroke: {
+          graphic: graphic
+        }
       };
     } else {
       return undefined;
@@ -341,7 +356,7 @@ class SLDService {
     }
     return format || 'image/png';
   }
-  createPointSymbolizer(styleState) {
+  _createGraphic(styleState) {
     var graphicOrMark;
     if (styleState.externalGraphic) {
       graphicOrMark = [{
@@ -358,28 +373,31 @@ class SLDService {
       }];
     }
     var result = {
+      externalGraphicOrMark: graphicOrMark,
+      size: {
+        content: [styleState.symbolSize]
+      }
+    };
+    if (styleState.rotation !== undefined) {
+      result.rotation = [styleState.rotation];
+    }
+    if (styleState.externalGraphic && styleState.opacity !== undefined) {
+      result.opacity = {
+        content: ['' + styleState.opacity]
+      };
+    }
+    return result;
+  }
+  createPointSymbolizer(styleState) {
+    return {
       name: {
         localPart: 'PointSymbolizer',
         namespaceURI: sldNamespace
       },
       value: {
-        graphic: {
-          externalGraphicOrMark: graphicOrMark,
-          size: {
-            content: [styleState.symbolSize]
-          }
-        }
+        graphic: this._createGraphic(styleState)
       }
     };
-    if (styleState.rotation !== undefined) {
-      result.value.graphic.rotation = [styleState.rotation];
-    }
-    if (styleState.externalGraphic && styleState.opacity !== undefined) {
-      result.value.graphic.opacity = {
-        content: ['' + styleState.opacity]
-      };
-    }
-    return result;
   }
   createTextSymbolizer(styleState) {
     var cssParameter = [];
