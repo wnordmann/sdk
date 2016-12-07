@@ -245,6 +245,13 @@ describe('SLDService', function() {
     expect(sld).xml.to.equal(sld2);
   });
 
+  it('roundtrips GeoServer SLD Cook Book: Optimized label placement', function() {
+    var sld = '<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"><sld:NamedLayer><sld:Name>Optimized label placement</sld:Name><sld:UserStyle><sld:Title>SLD Cook Book: Optimized label placement</sld:Title><sld:FeatureTypeStyle><sld:Rule><sld:LineSymbolizer><sld:Stroke><sld:CssParameter name="stroke">#FF0000</sld:CssParameter></sld:Stroke></sld:LineSymbolizer><sld:TextSymbolizer><sld:Label><ogc:PropertyName>name</ogc:PropertyName></sld:Label><sld:LabelPlacement><sld:LinePlacement/></sld:LabelPlacement><sld:Fill><sld:CssParameter name="fill">#000000</sld:CssParameter></sld:Fill><sld:VendorOption name="followLine">true</sld:VendorOption><sld:VendorOption name="maxAngleDelta">90</sld:VendorOption><sld:VendorOption name="maxDisplacement">400</sld:VendorOption><sld:VendorOption name="repeat">150</sld:VendorOption></sld:TextSymbolizer></sld:Rule></sld:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>';
+    var info = SLDService.parse(sld);
+    var sld2 = SLDService.createSLD(new ol.layer.Layer({id: 'Optimized label placement', styleInfo: info}), 'LineString', info.featureTypeStyles);
+    expect(sld).xml.to.equal(sld2);
+  });
+
   it('roundtrips vendor options in TextSymbolizer', function() {
     var sld = '<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"><sld:NamedLayer><sld:Name>ne:populated_places</sld:Name><sld:UserStyle><sld:Name>populated_places</sld:Name><sld:FeatureTypeStyle><sld:Name>name</sld:Name><sld:Rule><sld:Name>Untitled 1</sld:Name><sld:TextSymbolizer><sld:Label><ogc:PropertyName>NAME</ogc:PropertyName></sld:Label><sld:VendorOption name="conflictResolution">true</sld:VendorOption><sld:VendorOption name="group">yes</sld:VendorOption></sld:TextSymbolizer></sld:Rule></sld:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>';
     var info = SLDService.parse(sld);
