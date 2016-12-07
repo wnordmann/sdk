@@ -159,6 +159,10 @@ class SLDService {
         if (textObj.labelPlacement.pointPlacement.rotation !== undefined) {
           result.labelPlacement.rotation = textObj.labelPlacement.pointPlacement.rotation.content[0];
         }
+      } else if (textObj.labelPlacement.linePlacement) {
+        result.labelPlacement = {
+          type: 'LINE'
+        };
       }
     }
     if (textObj.font && textObj.font.cssParameter) {
@@ -513,6 +517,10 @@ class SLDService {
             content: [String(styleState.labelPlacement.rotation)]
           };
         }
+      } else if (styleState.labelPlacement.type === 'LINE') {
+        result.value.labelPlacement = {
+          linePlacement: {}
+        };
       }
     }
     return result;
