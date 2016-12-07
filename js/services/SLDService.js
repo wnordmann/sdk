@@ -148,10 +148,14 @@ class SLDService {
         var anchorPoint = textObj.labelPlacement.pointPlacement.anchorPoint;
         var displacement = textObj.labelPlacement.pointPlacement.displacement;
         result.labelPlacement = {
-          type: 'POINT',
-          anchorPoint: [anchorPoint.anchorPointX.content[0], anchorPoint.anchorPointY.content[0]],
-          displacement: [displacement.displacementX.content[0], displacement.displacementY.content[0]]
+          type: 'POINT'
         };
+        if (anchorPoint) {
+          result.labelPlacement.anchorPoint = [anchorPoint.anchorPointX.content[0], anchorPoint.anchorPointY.content[0]];
+        }
+        if (displacement) {
+          result.labelPlacement.displacement = [displacement.displacementX.content[0], displacement.displacementY.content[0]];
+        }
         if (textObj.labelPlacement.pointPlacement.rotation !== undefined) {
           result.labelPlacement.rotation = textObj.labelPlacement.pointPlacement.rotation.content[0];
         }
@@ -324,7 +328,7 @@ class SLDService {
     }
   }
   createPolygonSymbolizer(styleState) {
-    return {
+    var result = {
       name: {
         localPart: 'PolygonSymbolizer',
         namespaceURI: sldNamespace
@@ -334,17 +338,27 @@ class SLDService {
         stroke: styleState.hasStroke !== false ? this.createStroke(styleState) : undefined
       }
     };
+    if (result.value.fill || result.value.stroke) {
+      return result;
+    } else {
+      return undefined;
+    }
   }
   createLineSymbolizer(styleState) {
-    return {
-      name: {
-        localPart: 'LineSymbolizer',
-        namespaceURI: sldNamespace
-      },
-      value: {
-        stroke: this.createStroke(styleState)
-      }
-    };
+    var stroke = this.createStroke(styleState);
+    if (stroke) {
+      return {
+        name: {
+          localPart: 'LineSymbolizer',
+          namespaceURI: sldNamespace
+        },
+        value: {
+          stroke: stroke
+        }
+      };
+    } else {
+      return undefined;
+    }
   }
   _getGraphicFormat(href) {
     var format;
@@ -364,13 +378,15 @@ class SLDService {
         onlineResource: {href: styleState.externalGraphic},
         format: this._getGraphicFormat(styleState.externalGraphic)
       }];
-    } else {
+    } else if (styleState.symbolType) {
       graphicOrMark = [{
         TYPE_NAME: 'SLD_1_0_0.Mark',
         fill: styleState.hasFill !== false && styleState.fillColor ? this.createFill(styleState) : undefined,
         stroke: styleState.hasStroke !== false ? this.createStroke(styleState) : undefined,
         wellKnownName: [styleState.symbolType]
       }];
+    } else {
+      return undefined;
     }
     var result = {
       externalGraphicOrMark: graphicOrMark,
@@ -389,15 +405,20 @@ class SLDService {
     return result;
   }
   createPointSymbolizer(styleState) {
-    return {
-      name: {
-        localPart: 'PointSymbolizer',
-        namespaceURI: sldNamespace
-      },
-      value: {
-        graphic: this._createGraphic(styleState)
-      }
-    };
+    var graphic = this._createGraphic(styleState);
+    if (graphic) {
+      return {
+        name: {
+          localPart: 'PointSymbolizer',
+          namespaceURI: sldNamespace
+        },
+        value: {
+          graphic: graphic
+        }
+      };
+    } else {
+      return undefined;
+    }
   }
   createTextSymbolizer(styleState) {
     var cssParameter = [];
@@ -465,17 +486,19 @@ class SLDService {
               anchorPointY: {
                 content: [String(styleState.labelPlacement.anchorPoint[1])]
               }
-            },
-            displacement: {
-              displacementX: {
-                content: [String(styleState.labelPlacement.displacement[0])]
-              },
-              displacementY: {
-                content: [String(styleState.labelPlacement.displacement[1])]
-              }
             }
           }
         };
+        if (styleState.labelPlacement.displacement) {
+          result.value.labelPlacement.pointPlacement.displacement = {
+            displacementX: {
+              content: [String(styleState.labelPlacement.displacement[0])]
+            },
+            displacementY: {
+              content: [String(styleState.labelPlacement.displacement[1])]
+            }
+          };
+        }
         if (styleState.labelPlacement.rotation !== undefined) {
           result.value.labelPlacement.pointPlacement.rotation = {
             content: [String(styleState.labelPlacement.rotation)]
@@ -558,20 +581,23 @@ class SLDService {
     var symbolizer = [], i, ii;
     if (geometryType === 'Polygon') {
       for (i = 0, ii = styleState.symbolizers.length; i < ii; ++i) {
-        if (styleState.symbolizers[i].labelAttribute === undefined) {
-          symbolizer.push(this.createPolygonSymbolizer(styleState.symbolizers[i]));
+        var poly = this.createPolygonSymbolizer(styleState.symbolizers[i]);
+        if (poly) {
+          symbolizer.push(poly);
         }
       }
     } else if (geometryType === 'LineString') {
       for (i = 0, ii = styleState.symbolizers.length; i < ii; ++i) {
-        if (styleState.symbolizers[i].labelAttribute === undefined) {
-          symbolizer.push(this.createLineSymbolizer(styleState.symbolizers[i]));
+        var line = this.createLineSymbolizer(styleState.symbolizers[i]);
+        if (line) {
+          symbolizer.push(line);
         }
       }
     } else if (geometryType === 'Point') {
       for (i = 0, ii = styleState.symbolizers.length; i < ii; ++i) {
-        if (styleState.symbolizers[i].labelAttribute === undefined) {
-          symbolizer.push(this.createPointSymbolizer(styleState.symbolizers[i]));
+        var point = this.createPointSymbolizer(styleState.symbolizers[i]);
+        if (point) {
+          symbolizer.push(point);
         }
       }
     }
