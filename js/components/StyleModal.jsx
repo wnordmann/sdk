@@ -197,7 +197,8 @@ class StyleModal extends React.Component {
   _onChange(state) {
     var rule = this.state.rule;
     // TODO support more symbolizers
-    var styleState = this._getRuleByName(rule).symbolizers[0];
+    var symbolizers = this._getRuleByName(rule).symbolizers;
+    var styleState = symbolizers[0];
     Object.assign(styleState, state);
     this._setStyle();
   }
