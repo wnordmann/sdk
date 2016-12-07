@@ -217,6 +217,91 @@ describe('SLDService', function() {
     expect(sld).xml.to.equal(sld2);
   });
 
+  it('roundtrips GeoServer SLD Cook Book: Dash/Space line', function() {
+    var sld = '<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"><sld:NamedLayer><sld:Name>Dash - symbol and space</sld:Name><sld:UserStyle><sld:Title>SLD Cook Book: Dash/Space line</sld:Title><sld:FeatureTypeStyle><sld:Rule><sld:LineSymbolizer><sld:Stroke><sld:GraphicStroke><sld:Graphic><sld:Mark><sld:WellKnownName>circle</sld:WellKnownName><sld:Fill><sld:CssParameter name="fill">#666666</sld:CssParameter></sld:Fill><sld:Stroke><sld:CssParameter name="stroke">#333333</sld:CssParameter><sld:CssParameter name="stroke-width">1</sld:CssParameter></sld:Stroke></sld:Mark><sld:Size>4</sld:Size></sld:Graphic></sld:GraphicStroke><sld:CssParameter name="stroke-dasharray">4 6</sld:CssParameter></sld:Stroke></sld:LineSymbolizer></sld:Rule></sld:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>';
+    var info = SLDService.parse(sld);
+    var sld2 = SLDService.createSLD(new ol.layer.Layer({id: 'Dash - symbol and space', styleInfo: info}), 'LineString', info.featureTypeStyles);
+    expect(sld).xml.to.equal(sld2);
+  });
+
+  it('roundtrips GeoServer SLD Cook Book: Dash/Symbol line', function() {
+    var sld = '<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"><sld:NamedLayer><sld:Name>Dash - symbol</sld:Name><sld:UserStyle><sld:Title>SLD Cook Book: Dash/Symbol line</sld:Title><sld:FeatureTypeStyle><sld:Rule><sld:LineSymbolizer><sld:Stroke><sld:CssParameter name="stroke">#0000FF</sld:CssParameter><sld:CssParameter name="stroke-width">1</sld:CssParameter><sld:CssParameter name="stroke-dasharray">10 10</sld:CssParameter></sld:Stroke></sld:LineSymbolizer><sld:LineSymbolizer><sld:Stroke><sld:GraphicStroke><sld:Graphic><sld:Mark><sld:WellKnownName>circle</sld:WellKnownName><sld:Stroke><sld:CssParameter name="stroke">#000033</sld:CssParameter><sld:CssParameter name="stroke-width">1</sld:CssParameter></sld:Stroke></sld:Mark><sld:Size>5</sld:Size></sld:Graphic></sld:GraphicStroke><sld:CssParameter name="stroke-dasharray">5 15</sld:CssParameter><sld:CssParameter name="stroke-dashoffset">7.5</sld:CssParameter></sld:Stroke></sld:LineSymbolizer></sld:Rule></sld:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>';
+    var info = SLDService.parse(sld);
+    var sld2 = SLDService.createSLD(new ol.layer.Layer({id: 'Dash - symbol', styleInfo: info}), 'LineString', info.featureTypeStyles);
+    expect(sld).xml.to.equal(sld2);
+  });
+
+  it('roundtrips GeoServer SLD Cook Book: Line with default label', function() {
+    var sld = '<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"><sld:NamedLayer><sld:Name>Line with default label</sld:Name><sld:UserStyle><sld:Title>SLD Cook Book: Line with default label</sld:Title><sld:FeatureTypeStyle><sld:Rule><sld:LineSymbolizer><sld:Stroke><sld:CssParameter name="stroke">#FF0000</sld:CssParameter></sld:Stroke></sld:LineSymbolizer><sld:TextSymbolizer><sld:Label><ogc:PropertyName>name</ogc:PropertyName></sld:Label><sld:Fill><sld:CssParameter name="fill">#000000</sld:CssParameter></sld:Fill></sld:TextSymbolizer></sld:Rule></sld:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>';
+    var info = SLDService.parse(sld);
+    var sld2 = SLDService.createSLD(new ol.layer.Layer({id: 'Line with default label', styleInfo: info}), 'LineString', info.featureTypeStyles);
+    expect(sld).xml.to.equal(sld2);
+  });
+
+  it('roundtrips GeoServer SLD Cook Book: Label following line', function() {
+    var sld = '<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"><sld:NamedLayer><sld:Name>Label following line</sld:Name><sld:UserStyle><sld:Title>SLD Cook Book: Label following line</sld:Title><sld:FeatureTypeStyle><sld:Rule><sld:LineSymbolizer><sld:Stroke><sld:CssParameter name="stroke">#FF0000</sld:CssParameter></sld:Stroke></sld:LineSymbolizer><sld:TextSymbolizer><sld:Label><ogc:PropertyName>name</ogc:PropertyName></sld:Label><sld:LabelPlacement><sld:LinePlacement/></sld:LabelPlacement><sld:Fill><sld:CssParameter name="fill">#000000</sld:CssParameter></sld:Fill><sld:VendorOption name="followLine">true</sld:VendorOption></sld:TextSymbolizer></sld:Rule></sld:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>';
+    var info = SLDService.parse(sld);
+    var sld2 = SLDService.createSLD(new ol.layer.Layer({id: 'Label following line', styleInfo: info}), 'LineString', info.featureTypeStyles);
+    expect(sld).xml.to.equal(sld2);
+  });
+
+  it('roundtrips GeoServer SLD Cook Book: Optimized label placement', function() {
+    var sld = '<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"><sld:NamedLayer><sld:Name>Optimized label placement</sld:Name><sld:UserStyle><sld:Title>SLD Cook Book: Optimized label placement</sld:Title><sld:FeatureTypeStyle><sld:Rule><sld:LineSymbolizer><sld:Stroke><sld:CssParameter name="stroke">#FF0000</sld:CssParameter></sld:Stroke></sld:LineSymbolizer><sld:TextSymbolizer><sld:Label><ogc:PropertyName>name</ogc:PropertyName></sld:Label><sld:LabelPlacement><sld:LinePlacement/></sld:LabelPlacement><sld:Fill><sld:CssParameter name="fill">#000000</sld:CssParameter></sld:Fill><sld:VendorOption name="followLine">true</sld:VendorOption><sld:VendorOption name="maxAngleDelta">90</sld:VendorOption><sld:VendorOption name="maxDisplacement">400</sld:VendorOption><sld:VendorOption name="repeat">150</sld:VendorOption></sld:TextSymbolizer></sld:Rule></sld:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>';
+    var info = SLDService.parse(sld);
+    var sld2 = SLDService.createSLD(new ol.layer.Layer({id: 'Optimized label placement', styleInfo: info}), 'LineString', info.featureTypeStyles);
+    expect(sld).xml.to.equal(sld2);
+  });
+
+  it('roundtrips GeoServer SLD Cook Book: Optimized and styled label', function() {
+    var sld = '<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"><sld:NamedLayer><sld:Name>Optimized and styled label</sld:Name><sld:UserStyle><sld:Title>SLD Cook Book: Optimized and styled label</sld:Title><sld:FeatureTypeStyle><sld:Rule><sld:LineSymbolizer><sld:Stroke><sld:CssParameter name="stroke">#FF0000</sld:CssParameter></sld:Stroke></sld:LineSymbolizer><sld:TextSymbolizer><sld:Label><ogc:PropertyName>name</ogc:PropertyName></sld:Label><sld:Font><sld:CssParameter name="font-family">Arial</sld:CssParameter><sld:CssParameter name="font-size">10</sld:CssParameter><sld:CssParameter name="font-style">normal</sld:CssParameter><sld:CssParameter name="font-weight">bold</sld:CssParameter></sld:Font><sld:LabelPlacement><sld:LinePlacement/></sld:LabelPlacement><sld:Fill><sld:CssParameter name="fill">#000000</sld:CssParameter></sld:Fill><sld:VendorOption name="followLine">true</sld:VendorOption><sld:VendorOption name="maxAngleDelta">90</sld:VendorOption><sld:VendorOption name="maxDisplacement">400</sld:VendorOption><sld:VendorOption name="repeat">150</sld:VendorOption></sld:TextSymbolizer></sld:Rule></sld:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>';
+    var info = SLDService.parse(sld);
+    var sld2 = SLDService.createSLD(new ol.layer.Layer({id: 'Optimized and styled label', styleInfo: info}), 'LineString', info.featureTypeStyles);
+    expect(sld).xml.to.equal(sld2);
+  });
+
+  it('roundtrips GeoServer SLD Cook Book: Attribute-based line', function() {
+    var sld = '<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"><sld:NamedLayer><sld:Name>Attribute-based line</sld:Name><sld:UserStyle><sld:Title>SLD Cook Book: Attribute-based line</sld:Title><sld:FeatureTypeStyle><sld:Rule><sld:Name>local-road</sld:Name><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>type</ogc:PropertyName><ogc:Literal>local-road</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter><sld:LineSymbolizer><sld:Stroke><sld:CssParameter name="stroke">#009933</sld:CssParameter><sld:CssParameter name="stroke-width">2</sld:CssParameter></sld:Stroke></sld:LineSymbolizer></sld:Rule></sld:FeatureTypeStyle><sld:FeatureTypeStyle><sld:Rule><sld:Name>secondary</sld:Name><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>type</ogc:PropertyName><ogc:Literal>secondary</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter><sld:LineSymbolizer><sld:Stroke><sld:CssParameter name="stroke">#0055CC</sld:CssParameter><sld:CssParameter name="stroke-width">3</sld:CssParameter></sld:Stroke></sld:LineSymbolizer></sld:Rule></sld:FeatureTypeStyle><sld:FeatureTypeStyle><sld:Rule><sld:Name>highway</sld:Name><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>type</ogc:PropertyName><ogc:Literal>highway</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter><sld:LineSymbolizer><sld:Stroke><sld:CssParameter name="stroke">#FF0000</sld:CssParameter><sld:CssParameter name="stroke-width">6</sld:CssParameter></sld:Stroke></sld:LineSymbolizer></sld:Rule></sld:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>';
+    var info = SLDService.parse(sld);
+    var sld2 = SLDService.createSLD(new ol.layer.Layer({id: 'Attribute-based line', styleInfo: info}), 'LineString', info.featureTypeStyles);
+    expect(sld).xml.to.equal(sld2);
+  });
+
+  it('roundtrips GeoServer SLD Cook Book: Zoom-based line', function() {
+    var sld = '<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"><sld:NamedLayer><sld:Name>Zoom-based line</sld:Name><sld:UserStyle><sld:Title>SLD Cook Book: Zoom-based line</sld:Title><sld:FeatureTypeStyle><sld:Rule><sld:Name>Large</sld:Name><sld:MaxScaleDenominator>180000000</sld:MaxScaleDenominator><sld:LineSymbolizer><sld:Stroke><sld:CssParameter name="stroke">#009933</sld:CssParameter><sld:CssParameter name="stroke-width">6</sld:CssParameter></sld:Stroke></sld:LineSymbolizer></sld:Rule><sld:Rule><sld:Name>Medium</sld:Name><sld:MinScaleDenominator>180000000</sld:MinScaleDenominator><sld:MaxScaleDenominator>360000000</sld:MaxScaleDenominator><sld:LineSymbolizer><sld:Stroke><sld:CssParameter name="stroke">#009933</sld:CssParameter><sld:CssParameter name="stroke-width">4</sld:CssParameter></sld:Stroke></sld:LineSymbolizer></sld:Rule><sld:Rule><sld:Name>Small</sld:Name><sld:MinScaleDenominator>360000000</sld:MinScaleDenominator><sld:LineSymbolizer><sld:Stroke><sld:CssParameter name="stroke">#009933</sld:CssParameter><sld:CssParameter name="stroke-width">2</sld:CssParameter></sld:Stroke></sld:LineSymbolizer></sld:Rule></sld:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>';
+    var info = SLDService.parse(sld);
+    var sld2 = SLDService.createSLD(new ol.layer.Layer({id: 'Zoom-based line', styleInfo: info}), 'LineString', info.featureTypeStyles);
+    expect(sld).xml.to.equal(sld2);
+  });
+
+  it('roundtrips GeoServer SLD Cook Book: Simple polygon', function() {
+    var sld = '<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"><sld:NamedLayer><sld:Name>Simple polygon</sld:Name><sld:UserStyle><sld:Title>SLD Cook Book: Simple polygon</sld:Title><sld:FeatureTypeStyle><sld:Rule><sld:PolygonSymbolizer><sld:Fill><sld:CssParameter name="fill">#000080</sld:CssParameter></sld:Fill></sld:PolygonSymbolizer></sld:Rule></sld:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>';
+    var info = SLDService.parse(sld);
+    var sld2 = SLDService.createSLD(new ol.layer.Layer({id: 'Simple polygon', styleInfo: info}), 'Polygon', info.featureTypeStyles);
+    expect(sld).xml.to.equal(sld2);
+  });
+
+  it('roundtrips GeoServer SLD Cook Book: Simple polygon with stroke', function() {
+    var sld = '<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"><sld:NamedLayer><sld:Name>Simple polygon with stroke</sld:Name><sld:UserStyle><sld:Title>SLD Cook Book: Simple polygon with stroke</sld:Title><sld:FeatureTypeStyle><sld:Rule><sld:PolygonSymbolizer><sld:Fill><sld:CssParameter name="fill">#000080</sld:CssParameter></sld:Fill><sld:Stroke><sld:CssParameter name="stroke">#FFFFFF</sld:CssParameter><sld:CssParameter name="stroke-width">2</sld:CssParameter></sld:Stroke></sld:PolygonSymbolizer></sld:Rule></sld:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>';
+    var info = SLDService.parse(sld);
+    var sld2 = SLDService.createSLD(new ol.layer.Layer({id: 'Simple polygon with stroke', styleInfo: info}), 'Polygon', info.featureTypeStyles);
+    expect(sld).xml.to.equal(sld2);
+  });
+
+  it('roundtrips GeoServer SLD Cook Book: Transparent polygon', function() {
+    var sld = '<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"><sld:NamedLayer><sld:Name>Transparent polygon</sld:Name><sld:UserStyle><sld:Title>SLD Cook Book: Transparent polygon</sld:Title><sld:FeatureTypeStyle><sld:Rule><sld:PolygonSymbolizer><sld:Fill><sld:CssParameter name="fill">#000080</sld:CssParameter><sld:CssParameter name="fill-opacity">0.5</sld:CssParameter></sld:Fill><sld:Stroke><sld:CssParameter name="stroke">#FFFFFF</sld:CssParameter><sld:CssParameter name="stroke-width">2</sld:CssParameter></sld:Stroke></sld:PolygonSymbolizer></sld:Rule></sld:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>';
+    var info = SLDService.parse(sld);
+    var sld2 = SLDService.createSLD(new ol.layer.Layer({id: 'Transparent polygon', styleInfo: info}), 'Polygon', info.featureTypeStyles);
+    expect(sld).xml.to.equal(sld2);
+  });
+
+  // TODO uncomment PerpendicularOffset, needs fix for https://github.com/highsource/ogc-schemas/issues/185
+  it('roundtrips GeoServer SLD Cook Book: Offset line', function() {
+    var sld = '<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"><sld:NamedLayer><sld:Name>Dashed line</sld:Name><sld:UserStyle><sld:Title>SLD Cook Book: Offset line</sld:Title><sld:FeatureTypeStyle><sld:Rule><sld:PolygonSymbolizer><sld:Stroke><sld:CssParameter name="stroke">#000000</sld:CssParameter><sld:CssParameter name="stroke-width">2</sld:CssParameter></sld:Stroke></sld:PolygonSymbolizer><sld:LineSymbolizer><sld:Stroke><sld:CssParameter name="stroke">#AAAAAA</sld:CssParameter><sld:CssParameter name="stroke-width">3</sld:CssParameter></sld:Stroke><!--<sld:PerpendicularOffset>-2</sld:PerpendicularOffset>--></sld:LineSymbolizer></sld:Rule></sld:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>';
+    var info = SLDService.parse(sld);
+    var sld2 = SLDService.createSLD(new ol.layer.Layer({id: 'Dashed line', styleInfo: info}), undefined, info.featureTypeStyles);
+    expect(sld).xml.to.equal(sld2);
+  });
+
   it('roundtrips vendor options in TextSymbolizer', function() {
     var sld = '<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"><sld:NamedLayer><sld:Name>ne:populated_places</sld:Name><sld:UserStyle><sld:Name>populated_places</sld:Name><sld:FeatureTypeStyle><sld:Name>name</sld:Name><sld:Rule><sld:Name>Untitled 1</sld:Name><sld:TextSymbolizer><sld:Label><ogc:PropertyName>NAME</ogc:PropertyName></sld:Label><sld:VendorOption name="conflictResolution">true</sld:VendorOption><sld:VendorOption name="group">yes</sld:VendorOption></sld:TextSymbolizer></sld:Rule></sld:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>';
     var info = SLDService.parse(sld);

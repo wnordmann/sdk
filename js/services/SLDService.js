@@ -159,6 +159,10 @@ class SLDService {
         if (textObj.labelPlacement.pointPlacement.rotation !== undefined) {
           result.labelPlacement.rotation = textObj.labelPlacement.pointPlacement.rotation.content[0];
         }
+      } else if (textObj.labelPlacement.linePlacement) {
+        result.labelPlacement = {
+          type: 'LINE'
+        };
       }
     }
     if (textObj.font && textObj.font.cssParameter) {
@@ -210,14 +214,19 @@ class SLDService {
     return result;
   }
   parsePointSymbolizer(pointObj) {
-    return this._parseGraphic(pointObj.graphic);
+    var result = this._parseGraphic(pointObj.graphic);
+    result.type = 'Point';
+    return result;
   }
   parseLineSymbolizer(lineObj) {
     var result = this.parseStroke(lineObj.stroke);
+    result.type = 'LineString';
     return result;
   }
   parsePolygonSymbolizer(polyObj) {
-    var result = {};
+    var result = {
+      type: 'Polygon'
+    };
     if (polyObj.fill) {
       result.fillColor = this.parseFill(polyObj.fill);
     }
@@ -253,11 +262,14 @@ class SLDService {
           stroke.strokeWidth = parseFloat(strokeObj.cssParameter[i].content[0]);
         } else if (strokeObj.cssParameter[i].name === 'stroke-dasharray') {
           stroke.strokeDashArray = strokeObj.cssParameter[i].content[0];
+        } else if (strokeObj.cssParameter[i].name === 'stroke-dashoffset') {
+          stroke.strokeDashOffset = strokeObj.cssParameter[i].content[0];
         } else if (strokeObj.cssParameter[i].name === 'stroke-linecap') {
           stroke.strokeLineCap = strokeObj.cssParameter[i].content[0];
         }
       }
-    } else if (strokeObj.graphicStroke) {
+    }
+    if (strokeObj.graphicStroke) {
       stroke.graphic = this._parseGraphic(strokeObj.graphicStroke.graphic);
     }
     return stroke;
@@ -307,25 +319,31 @@ class SLDService {
         content: [styleState.strokeDashArray]
       });
     }
+    if (styleState.strokeDashOffset !== undefined) {
+      cssParameters.push({
+        name: 'stroke-dashoffset',
+        content: [styleState.strokeDashOffset]
+      });
+    }
     if (styleState.strokeLineCap !== undefined) {
       cssParameters.push({
         name: 'stroke-linecap',
         content: [styleState.strokeLineCap]
       });
     }
-    if (cssParameters.length > 0) {
-      return {
-        cssParameter: cssParameters
-      };
-    } else if (graphic) {
-      return {
-        graphicStroke: {
+    var result;
+    if (cssParameters.length > 0 || graphic) {
+      result = {};
+      if (cssParameters.length > 0) {
+        result.cssParameter = cssParameters;
+      }
+      if (graphic) {
+        result.graphicStroke = {
           graphic: graphic
-        }
-      };
-    } else {
-      return undefined;
+        };
+      }
     }
+    return result;
   }
   createPolygonSymbolizer(styleState) {
     var result = {
@@ -334,7 +352,7 @@ class SLDService {
         namespaceURI: sldNamespace
       },
       value: {
-        fill: styleState.hasFill !== false ? this.createFill(styleState) : undefined,
+        fill: styleState.fillColor && styleState.hasFill !== false ? this.createFill(styleState) : undefined,
         stroke: styleState.hasStroke !== false ? this.createStroke(styleState) : undefined
       }
     };
@@ -504,6 +522,10 @@ class SLDService {
             content: [String(styleState.labelPlacement.rotation)]
           };
         }
+      } else if (styleState.labelPlacement.type === 'LINE') {
+        result.value.labelPlacement = {
+          linePlacement: {}
+        };
       }
     }
     return result;
@@ -578,26 +600,27 @@ class SLDService {
     if (styleState.expression) {
       filter = this.expressionToFilter(styleState.expression);
     }
-    var symbolizer = [], i, ii;
-    if (geometryType === 'Polygon') {
+    var symbolizer = [], i, ii, sym;
+    var functionByGeomType = {
+      'Point': this.createPointSymbolizer,
+      'LineString': this.createLineSymbolizer,
+      'Polygon': this.createPolygonSymbolizer
+    };
+    if (geometryType !== undefined) {
       for (i = 0, ii = styleState.symbolizers.length; i < ii; ++i) {
-        var poly = this.createPolygonSymbolizer(styleState.symbolizers[i]);
-        if (poly) {
-          symbolizer.push(poly);
+        sym = functionByGeomType[geometryType].call(this, styleState.symbolizers[i]);
+        if (sym) {
+          symbolizer.push(sym);
         }
       }
-    } else if (geometryType === 'LineString') {
+    } else {
       for (i = 0, ii = styleState.symbolizers.length; i < ii; ++i) {
-        var line = this.createLineSymbolizer(styleState.symbolizers[i]);
-        if (line) {
-          symbolizer.push(line);
-        }
-      }
-    } else if (geometryType === 'Point') {
-      for (i = 0, ii = styleState.symbolizers.length; i < ii; ++i) {
-        var point = this.createPointSymbolizer(styleState.symbolizers[i]);
-        if (point) {
-          symbolizer.push(point);
+        var symbol = styleState.symbolizers[i];
+        if (symbol.type) {
+          sym = functionByGeomType[symbol.type].call(this, styleState.symbolizers[i]);
+          if (sym) {
+            symbolizer.push(sym);
+          }
         }
       }
     }
