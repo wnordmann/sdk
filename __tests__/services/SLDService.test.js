@@ -266,6 +266,13 @@ describe('SLDService', function() {
     expect(sld).xml.to.equal(sld2);
   });
 
+  it('roundtrips GeoServer SLD Cook Book: Zoom-based line', function() {
+    var sld = '<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"><sld:NamedLayer><sld:Name>Zoom-based line</sld:Name><sld:UserStyle><sld:Title>SLD Cook Book: Zoom-based line</sld:Title><sld:FeatureTypeStyle><sld:Rule><sld:Name>Large</sld:Name><sld:MaxScaleDenominator>180000000</sld:MaxScaleDenominator><sld:LineSymbolizer><sld:Stroke><sld:CssParameter name="stroke">#009933</sld:CssParameter><sld:CssParameter name="stroke-width">6</sld:CssParameter></sld:Stroke></sld:LineSymbolizer></sld:Rule><sld:Rule><sld:Name>Medium</sld:Name><sld:MinScaleDenominator>180000000</sld:MinScaleDenominator><sld:MaxScaleDenominator>360000000</sld:MaxScaleDenominator><sld:LineSymbolizer><sld:Stroke><sld:CssParameter name="stroke">#009933</sld:CssParameter><sld:CssParameter name="stroke-width">4</sld:CssParameter></sld:Stroke></sld:LineSymbolizer></sld:Rule><sld:Rule><sld:Name>Small</sld:Name><sld:MinScaleDenominator>360000000</sld:MinScaleDenominator><sld:LineSymbolizer><sld:Stroke><sld:CssParameter name="stroke">#009933</sld:CssParameter><sld:CssParameter name="stroke-width">2</sld:CssParameter></sld:Stroke></sld:LineSymbolizer></sld:Rule></sld:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>';
+    var info = SLDService.parse(sld);
+    var sld2 = SLDService.createSLD(new ol.layer.Layer({id: 'Zoom-based line', styleInfo: info}), 'LineString', info.featureTypeStyles);
+    expect(sld).xml.to.equal(sld2);
+  });
+
   it('roundtrips vendor options in TextSymbolizer', function() {
     var sld = '<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"><sld:NamedLayer><sld:Name>ne:populated_places</sld:Name><sld:UserStyle><sld:Name>populated_places</sld:Name><sld:FeatureTypeStyle><sld:Name>name</sld:Name><sld:Rule><sld:Name>Untitled 1</sld:Name><sld:TextSymbolizer><sld:Label><ogc:PropertyName>NAME</ogc:PropertyName></sld:Label><sld:VendorOption name="conflictResolution">true</sld:VendorOption><sld:VendorOption name="group">yes</sld:VendorOption></sld:TextSymbolizer></sld:Rule></sld:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>';
     var info = SLDService.parse(sld);
