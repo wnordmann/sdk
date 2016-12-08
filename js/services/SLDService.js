@@ -523,15 +523,15 @@ class SLDService {
     if (styleState.halo) {
       result.value.halo = {
         fill: {
-         cssParameter: [{
-           name: 'fill',
-           content: [styleState.halo.fill.hex]
-         }]
-       },
-       radius: {
-         content: [styleState.halo.radius]
-       }
-     };
+          cssParameter: [{
+            name: 'fill',
+            content: [styleState.halo.fill.hex]
+          }]
+        },
+        radius: {
+          content: [styleState.halo.radius]
+        }
+      };
     }
     if (styleState.labelPlacement) {
       if (styleState.labelPlacement.type === 'POINT') {
