@@ -137,4 +137,15 @@ describe('LayerList', function() {
     ReactDOM.unmountComponentAtNode(container);
   });
 
+  it('does include the children inside the div', function() {
+    var container = document.createElement('div');
+    ReactDOM.render((
+      <LayerList intl={intl} map={map}>
+        <h1 className="children-header">Children Header</h1>
+      </LayerList>
+    ), container);
+    var items = container.querySelectorAll('.children-header');
+    assert.equal(items.length, 1);
+    ReactDOM.unmountComponentAtNode(container);
+  });
 });
