@@ -243,6 +243,7 @@ class AddLayerModal extends React.Component {
     } else {
       map.addLayer(olLayer);
     }
+    return olLayer;
   }
   _getLayersMarkup(layer) {
     var filter = this.state.filter;
@@ -312,8 +313,21 @@ class AddLayerModal extends React.Component {
     this.setState({open: false});
   }
   addLayers() {
+    var doZoom = false;
+    var initial = ol.extent.createEmpty();
+    var finalExtent;
     for (var i = 0, ii = this._checkedLayers.length; i < ii; ++i) {
-      this._onLayerClick(this._checkedLayers[i]);
+      var layer = this._onLayerClick(this._checkedLayers[i]);
+      var extent = layer.get('EX_GeographicBoundingBox');
+      if (extent) {
+        finalExtent = ol.extent.extend(initial, extent);
+        doZoom = true;
+      }
+    }
+    if (doZoom) {
+      var map = this.props.map;
+      var view = map.getView();
+      map.getView().fit(ol.proj.transformExtent(finalExtent, 'EPSG:4326', view.getProjection()), map.getSize());
     }
   }
   _handleRequestClose() {
