@@ -180,7 +180,13 @@ class SLDService {
       }
     }
     if (textObj.fill) {
-      result.fontColor = this.parseFill(textObj.fill);
+      result.fontColor = this.parseFill(textObj.fill).fillColor;
+    }
+    if (textObj.halo) {
+      result.halo = {
+        fill: this.parseFill(textObj.halo.fill).fillColor,
+        radius: textObj.halo.radius.content[0]
+      };
     }
     return result;
   }
@@ -204,7 +210,7 @@ class SLDService {
       }
       var fill = externalGraphicOrMark.fill;
       if (fill) {
-        result.fillColor = this.parseFill(fill);
+        result.fillColor = this.parseFill(fill).fillColor;
       }
       var stroke = externalGraphicOrMark.stroke;
       if (stroke) {
@@ -228,7 +234,12 @@ class SLDService {
       type: 'Polygon'
     };
     if (polyObj.fill) {
-      result.fillColor = this.parseFill(polyObj.fill);
+      var fill = this.parseFill(polyObj.fill);
+      if (fill.fillColor) {
+        result.fillColor = fill.fillColor;
+      } else if (fill.graphicFill) {
+        result.graphicFill = fill.graphicFill;
+      }
     }
     if (polyObj.stroke) {
       Object.assign(result, this.parseStroke(polyObj.stroke));
@@ -236,16 +247,24 @@ class SLDService {
     return result;
   }
   parseFill(fillObj) {
-    var fillColor = {};
-    for (var i = 0, ii = fillObj.cssParameter.length; i < ii; ++i) {
-      if (fillObj.cssParameter[i].name === 'fill') {
-        fillColor.hex = fillObj.cssParameter[i].content[0];
-        fillColor.rgb = util.hexToRgb(fillColor.hex);
-      } else if (fillObj.cssParameter[i].name === 'fill-opacity') {
-        fillColor.rgb = Object.assign(fillColor.rgb, {a :parseFloat(fillObj.cssParameter[i].content[0])});
+    if (fillObj.graphicFill) {
+      return {
+        graphicFill: this._parseGraphic(fillObj.graphicFill.graphic)
+      };
+    } else {
+      var fillColor = {};
+      for (var i = 0, ii = fillObj.cssParameter.length; i < ii; ++i) {
+        if (fillObj.cssParameter[i].name === 'fill') {
+          fillColor.hex = fillObj.cssParameter[i].content[0];
+          fillColor.rgb = util.hexToRgb(fillColor.hex);
+        } else if (fillObj.cssParameter[i].name === 'fill-opacity') {
+          fillColor.rgb = Object.assign(fillColor.rgb, {a :parseFloat(fillObj.cssParameter[i].content[0])});
+        }
       }
+      return {
+        fillColor: fillColor
+      };
     }
-    return fillColor;
   }
   parseStroke(strokeObj) {
     var stroke = {};
@@ -275,19 +294,27 @@ class SLDService {
     return stroke;
   }
   createFill(styleState) {
-    var cssParameter = [{
-      name: 'fill',
-      content: [styleState.fillColor.hex]
-    }];
-    if (styleState.fillColor.rgb.a !== undefined) {
-      cssParameter.push({
-        name: 'fill-opacity',
-        content: [String(styleState.fillColor.rgb.a)]
-      });
+    if (styleState.graphicFill) {
+      return {
+        graphicFill: {
+          graphic: this._createGraphic(styleState.graphicFill)
+        }
+      };
+    } else {
+      var cssParameter = [{
+        name: 'fill',
+        content: [styleState.fillColor.hex]
+      }];
+      if (styleState.fillColor.rgb.a !== undefined) {
+        cssParameter.push({
+          name: 'fill-opacity',
+          content: [String(styleState.fillColor.rgb.a)]
+        });
+      }
+      return {
+        cssParameter: cssParameter
+      };
     }
-    return {
-      cssParameter: cssParameter
-    };
   }
   createStroke(styleState) {
     var graphic;
@@ -352,7 +379,7 @@ class SLDService {
         namespaceURI: sldNamespace
       },
       value: {
-        fill: styleState.fillColor && styleState.hasFill !== false ? this.createFill(styleState) : undefined,
+        fill: (styleState.fillColor || styleState.graphicFill) && styleState.hasFill !== false ? this.createFill(styleState) : undefined,
         stroke: styleState.hasStroke !== false ? this.createStroke(styleState) : undefined
       }
     };
@@ -493,6 +520,19 @@ class SLDService {
         vendorOption: styleState.vendorOption
       }
     };
+    if (styleState.halo) {
+      result.value.halo = {
+        fill: {
+          cssParameter: [{
+            name: 'fill',
+            content: [styleState.halo.fill.hex]
+          }]
+        },
+        radius: {
+          content: [styleState.halo.radius]
+        }
+      };
+    }
     if (styleState.labelPlacement) {
       if (styleState.labelPlacement.type === 'POINT') {
         result.value.labelPlacement = {
