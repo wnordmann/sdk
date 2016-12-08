@@ -182,6 +182,12 @@ class SLDService {
     if (textObj.fill) {
       result.fontColor = this.parseFill(textObj.fill).fillColor;
     }
+    if (textObj.halo) {
+      result.halo = {
+        fill: this.parseFill(textObj.halo.fill).fillColor,
+        radius: textObj.halo.radius.content[0]
+      };
+    }
     return result;
   }
   _parseGraphic(graphic) {
@@ -514,6 +520,19 @@ class SLDService {
         vendorOption: styleState.vendorOption
       }
     };
+    if (styleState.halo) {
+      result.value.halo = {
+        fill: {
+         cssParameter: [{
+           name: 'fill',
+           content: [styleState.halo.fill.hex]
+         }]
+       },
+       radius: {
+         content: [styleState.halo.radius]
+       }
+     };
+    }
     if (styleState.labelPlacement) {
       if (styleState.labelPlacement.type === 'POINT') {
         result.value.labelPlacement = {
