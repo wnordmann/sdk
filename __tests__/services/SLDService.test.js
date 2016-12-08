@@ -302,6 +302,13 @@ describe('SLDService', function() {
     expect(sld).xml.to.equal(sld2);
   });
 
+  it('roundtrips GeoServer SLD Cook Book: Graphic fill', function() {
+    var sld = '<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"><sld:NamedLayer><sld:Name>Graphic fill</sld:Name><sld:UserStyle><sld:Title>SLD Cook Book: Graphic fill</sld:Title><sld:FeatureTypeStyle><sld:Rule><sld:PolygonSymbolizer><sld:Fill><sld:GraphicFill><sld:Graphic><sld:ExternalGraphic><sld:OnlineResource xlink:href="colorblocks.png"/><sld:Format>image/png</sld:Format></sld:ExternalGraphic><sld:Size>93</sld:Size></sld:Graphic></sld:GraphicFill></sld:Fill></sld:PolygonSymbolizer></sld:Rule></sld:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>';
+    var info = SLDService.parse(sld);
+    var sld2 = SLDService.createSLD(new ol.layer.Layer({id: 'Graphic fill', styleInfo: info}), undefined, info.featureTypeStyles);
+    expect(sld).xml.to.equal(sld2);
+  });
+
   it('roundtrips vendor options in TextSymbolizer', function() {
     var sld = '<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"><sld:NamedLayer><sld:Name>ne:populated_places</sld:Name><sld:UserStyle><sld:Name>populated_places</sld:Name><sld:FeatureTypeStyle><sld:Name>name</sld:Name><sld:Rule><sld:Name>Untitled 1</sld:Name><sld:TextSymbolizer><sld:Label><ogc:PropertyName>NAME</ogc:PropertyName></sld:Label><sld:VendorOption name="conflictResolution">true</sld:VendorOption><sld:VendorOption name="group">yes</sld:VendorOption></sld:TextSymbolizer></sld:Rule></sld:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>';
     var info = SLDService.parse(sld);
