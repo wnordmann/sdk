@@ -340,6 +340,9 @@ class LayerListItem extends React.Component {
   _changeOpacity(evt, value) {
     this.props.layer.setOpacity(value);
   }
+  _onTableUpdate() {
+    this.refs.tablemodal.forceUpdate();
+  }
   render() {
     const {connectDragSource, connectDropTarget} = this.props;
     const layer = this.props.layer;
@@ -409,8 +412,8 @@ class LayerListItem extends React.Component {
         <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this._closeTable.bind(this)} />
       ];
       tableModal = (
-        <Dialog actions={actions} title={formatMessage(messages.tablemodaltitle)} open={this.state.tableOpen} onRequestClose={this._closeTable.bind(this)}>
-          <FeatureTable map={this.props.map} layer={this.props.layer} />
+        <Dialog ref='tablemodal' actions={actions} title={formatMessage(messages.tablemodaltitle)} open={this.state.tableOpen} onRequestClose={this._closeTable.bind(this)}>
+          <FeatureTable height={400} onUpdate={this._onTableUpdate.bind(this)} map={this.props.map} layer={this.props.layer} />
         </Dialog>
       );
     }
