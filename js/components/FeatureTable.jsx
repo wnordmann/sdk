@@ -17,6 +17,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import classNames from 'classnames';
 import debounce from  'debounce';
 import ReactTable from 'react-table'
+import {Card, CardHeader, CardText} from 'material-ui/Card';
 import RaisedButton from './Button';
 import ActionSearch from 'material-ui/svg-icons/action/search';
 import ClearIcon from 'material-ui/svg-icons/content/clear';
@@ -34,6 +35,11 @@ import './react-table.css';
 import './FeatureTable.css';
 
 const messages = defineMessages({
+  optionslabel: {
+    id: 'featuretable.optionslabel',
+    description: 'Label for the collapsble options',
+    defaultMessage: 'Options'
+  },
   nodatamsg: {
     id: 'featuretable.nodatamsg',
     description: 'Message to display if there are no layers with data',
@@ -122,6 +128,7 @@ class FeatureTable extends React.Component {
     this._selectedOnly = false;
     this._pagesLoaded = {};
     this.state = {
+      expanded: !this.props.height,
       pageSize: props.pageSize,
       pages: -1,
       active: false,
@@ -147,6 +154,9 @@ class FeatureTable extends React.Component {
     this._attachResizeEvent();
     if (this.props.layer) {
       this._setLayer(this.props.layer);
+      if (this.props.onUpdate) {
+        this.props.onUpdate();
+      }
     }
   }
   componentWillUnmount() {
@@ -323,6 +333,16 @@ class FeatureTable extends React.Component {
       });
     }
   }
+  _onExpandChange(expanded) {
+    var me = this;
+    window.setTimeout(function() {
+      me.setState({expanded: expanded}, function() {
+        if (me.props.onUpdate) {
+          me.props.onUpdate();
+        }
+      });
+    });
+  }
   render() {
     const {formatMessage} = this.props.intl;
     var schema, id;
@@ -375,7 +395,10 @@ class FeatureTable extends React.Component {
     }
     var table;
     if (this._element && columns.length > 0 && this.state.features !== null) {
-      var height = this._element.offsetHeight - this._formNode.offsetHeight;
+      var height = this.props.height ? this.props.height : this._element.offsetHeight - this._formNode.offsetHeight;
+      if (this.state.expanded && this.props.height) {
+        height = this.props.height - this._formNode.offsetHeight;
+      }
       var data;
       if (this._filtered || this._selectedOnly) {
         data = this.state.filter;
@@ -412,23 +435,26 @@ class FeatureTable extends React.Component {
           message={formatMessage(messages.nodatamsg)}
           onRequestClose={this._handleRequestCloseActive.bind(this)}
         />
-        <div ref='form'>
-          <div className='feature-table-options'>
-            <div className='feature-table-selector' style={{display: this.props.layer ? 'none' : 'block'}}>
-              <LayerSelector {...this.props} id='table-layerSelector' disabled={!this._layer} ref='layerSelector' onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList} map={this.props.map} value={id} />
+        <Card initiallyExpanded={!this.props.height} onExpandChange={this._onExpandChange.bind(this)} ref='form'>
+          <CardHeader title={formatMessage(messages.optionslabel)} actAsExpander={true} showExpandableButton={true} />
+          <CardText expandable={true}>
+            <div className='feature-table-options'>
+              <div className='feature-table-selector' style={{display: this.props.layer ? 'none' : 'block'}}>
+                <LayerSelector {...this.props} id='table-layerSelector' disabled={!this._layer} ref='layerSelector' onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList} map={this.props.map} value={id} />
+              </div>
+              <div className='feature-table-filter' style={{display: this._layer instanceof ol.layer.Vector ? 'block' : 'none'}}>
+                <TextField floatingLabelText={formatMessage(messages.filterlabel)} id='featuretable-filter' disabled={!this._layer} ref='filter' onChange={this._filterByText.bind(this)} hintText={formatMessage(messages.filterplaceholder)} />
+                {filterHelp}
+              </div>
+              <Checkbox label={formatMessage(messages.onlyselected)} id='featuretable-onlyselected' disabled={!this._layer} checked={this._selectedOnly} onCheck={this._filter.bind(this)} disableTouchRipple={true}/>
             </div>
-            <div className='feature-table-filter' style={{display: this._layer instanceof ol.layer.Vector ? 'block' : 'none'}}>
-              <TextField floatingLabelText={formatMessage(messages.filterlabel)} id='featuretable-filter' disabled={!this._layer} ref='filter' onChange={this._filterByText.bind(this)} hintText={formatMessage(messages.filterplaceholder)} />
-              {filterHelp}
-            </div>
-            <Checkbox label={formatMessage(messages.onlyselected)} id='featuretable-onlyselected' disabled={!this._layer} checked={this._selectedOnly} onCheck={this._filter.bind(this)} disableTouchRipple={true}/>
-          </div>
-          <Toolbar className='feature-table-toolbar'>
-            <RaisedButton disabled={!this._layer} icon={<ActionSearch />} label={formatMessage(messages.zoombuttontext)} tooltip={formatMessage(messages.zoombuttontitle)} onTouchTap={this._zoomSelected.bind(this)} disableTouchRipple={true}/>
-            <RaisedButton disabled={!this._layer} icon={<ClearIcon />} label={formatMessage(messages.clearbuttontext)} tooltip={formatMessage(messages.clearbuttontitle)} onTouchTap={this._clearSelected.bind(this)} disableTouchRipple={true}/>
-          </Toolbar>
+            <Toolbar className='feature-table-toolbar'>
+              <RaisedButton disabled={!this._layer} icon={<ActionSearch />} label={formatMessage(messages.zoombuttontext)} tooltip={formatMessage(messages.zoombuttontitle)} onTouchTap={this._zoomSelected.bind(this)} disableTouchRipple={true}/>
+              <RaisedButton disabled={!this._layer} icon={<ClearIcon />} label={formatMessage(messages.clearbuttontext)} tooltip={formatMessage(messages.clearbuttontitle)} onTouchTap={this._clearSelected.bind(this)} disableTouchRipple={true}/>
+            </Toolbar>
+          </CardText>
           {error}
-        </div>
+        </Card>
         {table}
       </div>
     );
@@ -463,7 +489,15 @@ FeatureTable.propTypes = {
   /**
    * i18n message strings. Provided through the application through context.
    */
-  intl: intlShape.isRequired
+  intl: intlShape.isRequired,
+  /**
+   * Optional fixed height in pixels.
+   */
+  height: React.PropTypes.number,
+  /**
+   * Callback that gets called when the height needs updating of the parent container.
+   */
+  onUpdate: React.PropTypes.func
 };
 
 FeatureTable.defaultProps = {

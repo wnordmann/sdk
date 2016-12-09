@@ -297,6 +297,10 @@ LayerList.propTypes = {
    */
   filter: React.PropTypes.func,
   /**
+   * Child nodes
+   */
+  children: React.PropTypes.node,
+  /**
   * i18n message strings. Provided through the application through context.
   */
   intl: intlShape.isRequired
