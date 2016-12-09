@@ -60,7 +60,9 @@ class MapConfigService {
   generateLayerFromConfig(config) {
     var type = config.type;
     var layerConfig = config.properties || {};
-    layerConfig.id = LayerIdService.generateId();
+    if (layerConfig.id === undefined) {
+      layerConfig.id = LayerIdService.generateId();
+    }
     if (type === 'Group') {
       layerConfig.layers = [];
       for (var i = 0, ii = config.children.length; i < ii; ++i) {
@@ -72,7 +74,7 @@ class MapConfigService {
     if (sourceConfig) {
       var source = this.generateSourceFromConfig(sourceConfig);
       if (source instanceof ol.source.TileWMS && !layer.get('wfsInfo')) {
-        WFSService.describeFeatureType(sourceConfig.properties.url, layerConfig.name, function(wfsInfo) {
+        WFSService.describeFeatureType(sourceConfig.properties.urls[0], layerConfig.name, function(wfsInfo) {
           this.set('wfsInfo', wfsInfo);
         }, function() {
           this.set('isSelectable', false);
@@ -232,6 +234,7 @@ class MapConfigService {
       projection: view.getProjection().getCode(),
       center: view.getCenter(),
       resolution: view.getResolution(),
+      zoom: view.getZoom(),
       rotation: view.getRotation()
     };
     return config;

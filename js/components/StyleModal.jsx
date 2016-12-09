@@ -170,7 +170,7 @@ class StyleModal extends React.Component {
       rules: this.state.rules
     }]);
     if (!(this._sld && this._sld === sld)) {
-      this.props.layer.getSource().updateParams({'SLD_BODY': sld});
+      this.props.layer.getSource().updateParams({'SLD_BODY': sld, 'TILED': false});
       LayerActions.styleLayer(this.props.layer);
     }
   }

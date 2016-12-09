@@ -12,6 +12,9 @@
 
 var sourceIdx;
 
+const baseMapTitle = 'Base Maps';
+const gxpGroup = 'background';
+
 /**
  * Transforms GXP style map config to our internal format.
  */
@@ -26,7 +29,10 @@ class MapConfigTransformService {
     if (group) {
       layerConfig.group = group;
     }
-    layers.push(layerConfig);
+    // skip XYZ for now
+    if (config.source.type !== 'XYZ') {
+      layers.push(layerConfig);
+    }
     if (config.source.type === 'TileArcGISRest') {
       layerConfig.layerid = config.source.properties.params.LAYERS;
       sourceIdx++;
@@ -66,6 +72,12 @@ class MapConfigTransformService {
         }
       }
     } else if (config.source.type === 'TileWMS') {
+      if (config.source.properties.params.SLD_BODY) {
+        layerConfig.params = {
+          TILED: 'false',
+          SLD_BODY: config.source.properties.params.SLD_BODY
+        };
+      }
       layerConfig.capability = {
         queryable: config.properties.isSelectable,
         styles: [{
@@ -87,7 +99,7 @@ class MapConfigTransformService {
         sourceIdx++;
         sources[sourceIdx] = {
           ptype: 'gxp_wmscsource',
-          url: config.source.url
+          url: config.source.properties.urls[0]
         };
       }
     } else if (config.source.type === 'OSM') {
@@ -117,15 +129,16 @@ class MapConfigTransformService {
       if (layerConfig[i].type === 'Group') {
         for (var j = 0, jj = layerConfig[i].children.length; j < jj; ++j) {
           var config = layerConfig[i].children[j];
-          this._writeLayer(config, sources, layers, layerConfig[i].properties.name);
+          this._writeLayer(config, sources, layers, layerConfig[i].properties.title.replace(baseMapTitle, gxpGroup));
         }
       } else {
         this._writeLayer(layerConfig[i], sources, layers);
       }
     }
-    var result = {};
+    var result = {
+      sources: sources
+    };
     result.map = {
-      sources: sources,
       layers: layers,
       center: viewConfig.center,
       projection: viewConfig.projection,
@@ -183,10 +196,11 @@ class MapConfigTransformService {
           layerConfig.properties.EX_GeographicBoundingBox = layer.capability.llbbox;
         }
         layerConfig.type = 'Tile';
-        var params = {
-          LAYERS: layer.name,
-          TILED: 'TRUE'
-        };
+        var params = layer.params || {};
+        params.LAYERS = layer.name;
+        if (params.TILED === undefined) {
+          params.TILED = 'TRUE';
+        }
         if (layer.styles) {
           params.STYLES = layer.styles;
         }
@@ -201,7 +215,7 @@ class MapConfigTransformService {
           properties: {
             crossOrigin: 'anonymous',
             params: params,
-            url: url
+            urls: [url]
           }
         };
       } else if (source.ptype === 'gxp_mapboxsource') {
@@ -261,7 +275,7 @@ class MapConfigTransformService {
       }
       if (layerConfig !== undefined) {
         if (layer.group) {
-          if (layer.group === 'background') {
+          if (layer.group === gxpGroup) {
             layerConfig.properties.type = 'base';
           }
           if (!groups[layer.group]) {
@@ -269,8 +283,8 @@ class MapConfigTransformService {
               type: 'Group',
               properties: {
                 name: layer.group,
-                title: layer.group === 'background' ? 'Base Maps' : layer.group,
-                type: layer.group === 'background' ? 'base-group' : undefined
+                title: layer.group === gxpGroup ? baseMapTitle : layer.group,
+                type: layer.group === gxpGroup ? 'base-group' : undefined
               },
               children: []
             };
