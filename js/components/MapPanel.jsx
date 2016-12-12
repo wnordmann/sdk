@@ -51,21 +51,25 @@ class MapPanel extends React.Component {
       map.on('moveend', this._updatePermalink, this);
       // restore the view state when navigating through the history, see
       // https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onpopstate
-      var me = this;
-      global.addEventListener('popstate', function(event) {
-        if (event.state === null) {
-          return;
-        }
-        var view = me.props.map.getView();
-        view.setCenter(event.state.center);
-        view.setResolution(event.state.resolution);
-        view.setRotation(event.state.rotation);
-        me._shouldUpdate = false;
-      });
+      this._onPopState = this._onPopState.bind(this);
+      global.addEventListener('popstate', this._onPopState);
     }
   }
   componentWillUnmount() {
     LayerStore.removeErrorListener(this._onErrorCb);
+    if (this.props.useHistory) {
+      global.removeEventListener('popstate', this._onPopState);
+    }
+  }
+  _onPopState(event) {
+    if (event.state === null) {
+      return;
+    }
+    var view = this.props.map.getView();
+    view.setCenter(event.state.center);
+    view.setResolution(event.state.resolution);
+    view.setRotation(event.state.rotation);
+    this._shouldUpdate = false;
   }
   _updatePermalink() {
     if (!this._shouldUpdate) {
