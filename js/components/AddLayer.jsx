@@ -106,6 +106,42 @@ const messages = defineMessages({
  */
 @pureRender
 class AddLayer extends React.Component {
+  static propTypes = {
+    /**
+     * The ol3 map instance to add to.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * Css class name to apply on the button.
+     */
+    className: React.PropTypes.string,
+    /**
+     * The stroke width in pixels used in the style for the uploaded data.
+     */
+    strokeWidth: React.PropTypes.number,
+    /**
+     * The point radius used for the circle style.
+     */
+    pointRadius: React.PropTypes.number,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static defaultProps = {
+    strokeWidth: 2,
+    pointRadius: 7
+  };
+
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props, context) {
     super(props);
     this._formats = {
@@ -289,41 +325,5 @@ class AddLayer extends React.Component {
     );
   }
 }
-
-AddLayer.propTypes = {
-  /**
-   * The ol3 map instance to add to.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * Css class name to apply on the button.
-   */
-  className: React.PropTypes.string,
-  /**
-   * The stroke width in pixels used in the style for the uploaded data.
-   */
-  strokeWidth: React.PropTypes.number,
-  /**
-   * The point radius used for the circle style.
-   */
-  pointRadius: React.PropTypes.number,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-AddLayer.defaultProps = {
-  strokeWidth: 2,
-  pointRadius: 7
-};
-
-AddLayer.contextTypes = {
-  muiTheme: React.PropTypes.object
-};
-
-AddLayer.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default injectIntl(AddLayer);

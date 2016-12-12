@@ -21,6 +21,59 @@ import pureRender from 'pure-render-decorator';
  */
 @pureRender
 class PanelButton extends React.Component {
+  static propTypes = {
+    /**
+     * Style for the button.
+     */
+    style: React.PropTypes.object,
+    /**
+     * Should we expand on startup of the application?
+     */
+    showExpandedOnStartup: React.PropTypes.bool,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * Css class name to apply on the button.
+     */
+    buttonClassName: React.PropTypes.string,
+    /**
+     * Css class name to apply on the content div.
+     */
+    contentClassName: React.PropTypes.string,
+    /**
+     * Content to show in the div when the button is clicked.
+     */
+    content: React.PropTypes.node.isRequired,
+    /**
+     * Icon to use on the button.
+     */
+    icon: React.PropTypes.node.isRequired,
+    /**
+     * Tooltip to show on the button.
+     */
+    buttonTitle: React.PropTypes.string,
+    /**
+     * Position of the tooltip.
+     */
+    tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left'])
+  };
+
+  static defaultProps = {
+    showExpandedOnStartup: false,
+    buttonClassName: 'panelbutton',
+    contentClassName: 'panel-button-panel'
+  };
+
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props, context) {
     super(props);
     this.state = {
@@ -63,58 +116,5 @@ class PanelButton extends React.Component {
     );
   }
 }
-
-PanelButton.propTypes = {
-  /**
-   * Style for the button.
-   */
-  style: React.PropTypes.object,
-  /**
-   * Should we expand on startup of the application?
-   */
-  showExpandedOnStartup: React.PropTypes.bool,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * Css class name to apply on the button.
-   */
-  buttonClassName: React.PropTypes.string,
-  /**
-   * Css class name to apply on the content div.
-   */
-  contentClassName: React.PropTypes.string,
-  /**
-   * Content to show in the div when the button is clicked.
-   */
-  content: React.PropTypes.node.isRequired,
-  /**
-   * Icon to use on the button.
-   */
-  icon: React.PropTypes.node.isRequired,
-  /**
-   * Tooltip to show on the button.
-   */
-  buttonTitle: React.PropTypes.string,
-  /**
-   * Position of the tooltip.
-   */
-  tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left'])
-};
-
-PanelButton.defaultProps = {
-  showExpandedOnStartup: false,
-  buttonClassName: 'panelbutton',
-  contentClassName: 'panel-button-panel'
-};
-
-PanelButton.contextTypes = {
-  muiTheme: React.PropTypes.object
-};
-
-PanelButton.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default PanelButton;

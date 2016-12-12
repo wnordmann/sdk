@@ -45,6 +45,29 @@ const messages = defineMessages({
  */
 @pureRender
 class Login extends React.Component {
+  static propTypes = {
+    /**
+     * Url to geoserver login endpoint.
+     */
+    url: React.PropTypes.string,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static defaultProps = {
+    url: '/geoserver/app/api/login'
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -114,28 +137,5 @@ class Login extends React.Component {
     }
   }
 }
-
-Login.propTypes = {
-  /**
-   * Url to geoserver login endpoint.
-   */
-  url: React.PropTypes.string,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-Login.defaultProps = {
-  url: '/geoserver/app/api/login'
-};
-
-Login.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default injectIntl(Login);

@@ -49,6 +49,29 @@ const messages = defineMessages({
  */
 @pureRender
 class Geolocation extends React.Component {
+  static propTypes = {
+    /**
+     * The ol3 map for which to change its view's center.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * Style for the button.
+     */
+    style: React.PropTypes.object,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
   constructor(props, context) {
     super(props);
     this.state = {
@@ -152,28 +175,5 @@ class Geolocation extends React.Component {
     }
   }
 }
-
-Geolocation.propTypes = {
-  /**
-   * The ol3 map for which to change its view's center.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * Style for the button.
-   */
-  style: React.PropTypes.object,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-Geolocation.contextTypes = {
-  muiTheme: React.PropTypes.object
-};
 
 export default injectIntl(Geolocation);

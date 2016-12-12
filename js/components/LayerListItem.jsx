@@ -173,6 +173,110 @@ const messages = defineMessages({
  */
 @pureRender
 class LayerListItem extends React.Component {
+  static propTypes = {
+    connectDragSource: React.PropTypes.func.isRequired,
+    connectDropTarget: React.PropTypes.func.isRequired,
+    moveLayer: React.PropTypes.func.isRequired,
+    index: React.PropTypes.number.isRequired,
+    /**
+     * The map in which the layer of this item resides.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * The layer associated with this item.
+     */
+    layer: React.PropTypes.instanceOf(ol.layer.Base).isRequired,
+    /**
+     * The group layer to which this item might belong.
+     */
+    group: React.PropTypes.instanceOf(ol.layer.Group),
+    /**
+     * The feature format to serialize in for downloads.
+     */
+    downloadFormat: React.PropTypes.oneOf(['GeoJSON', 'KML', 'GPX']),
+    /**
+     * The title to show for the layer.
+     */
+    title: React.PropTypes.string.isRequired,
+    /**
+     * Should we show a button that can open up the feature table?
+     */
+    showTable: React.PropTypes.bool,
+    /**
+     * Should we show a zoom to button for the layer?
+     */
+    showZoomTo: React.PropTypes.bool,
+    /**
+     * Should we show allow reordering?
+     */
+    allowReordering: React.PropTypes.bool,
+    /**
+     * Should we allow for filtering of features in a layer?
+     */
+    allowFiltering: React.PropTypes.bool,
+    /**
+     * Should we allow for removal of layers?
+     */
+    allowRemove: React.PropTypes.bool,
+    /**
+     * Should we allow editing of features in a vector layer?
+     */
+    allowEditing: React.PropTypes.bool,
+    /**
+     * Should we allow for labeling of features in a layer?
+     */
+    allowLabeling: React.PropTypes.bool,
+    /**
+     * Should we allow for styling of features in a vector layer?
+     */
+    allowStyling: React.PropTypes.bool,
+    /**
+     * Should we show a download button?
+     */
+    showDownload: React.PropTypes.bool,
+    /**
+     * Should we include the legend in the layer list?
+     */
+    includeLegend: React.PropTypes.bool,
+    /**
+     * The nested items to show for this item.
+     */
+    nestedItems: React.PropTypes.array,
+    /**
+     * Should we show an opacity slider for the layer?
+     */
+    showOpacity: React.PropTypes.bool,
+    /**
+     * Called when a modal is opened by this layer list item.
+     */
+    onModalOpen: React.PropTypes.func,
+    /**
+     * Called when a modal is closed by this layer list item.
+     */
+    onModalClose: React.PropTypes.func,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static defaultProps = {
+    connectDragSource: function(a) {
+      return a;
+    },
+    connectDropTarget: function(a) {
+      return a;
+    }
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props) {
     super(props);
     if (this.props.group) {
@@ -455,109 +559,5 @@ class LayerListItem extends React.Component {
     ));
   }
 }
-
-LayerListItem.propTypes = {
-  connectDragSource: React.PropTypes.func.isRequired,
-  connectDropTarget: React.PropTypes.func.isRequired,
-  moveLayer: React.PropTypes.func.isRequired,
-  index: React.PropTypes.number.isRequired,
-  /**
-   * The map in which the layer of this item resides.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * The layer associated with this item.
-   */
-  layer: React.PropTypes.instanceOf(ol.layer.Base).isRequired,
-  /**
-   * The group layer to which this item might belong.
-   */
-  group: React.PropTypes.instanceOf(ol.layer.Group),
-  /**
-   * The feature format to serialize in for downloads.
-   */
-  downloadFormat: React.PropTypes.oneOf(['GeoJSON', 'KML', 'GPX']),
-  /**
-   * The title to show for the layer.
-   */
-  title: React.PropTypes.string.isRequired,
-  /**
-   * Should we show a button that can open up the feature table?
-   */
-  showTable:  React.PropTypes.bool,
-  /**
-   * Should we show a zoom to button for the layer?
-   */
-  showZoomTo: React.PropTypes.bool,
-  /**
-   * Should we show allow reordering?
-   */
-  allowReordering: React.PropTypes.bool,
-  /**
-   * Should we allow for filtering of features in a layer?
-   */
-  allowFiltering: React.PropTypes.bool,
-  /**
-   * Should we allow for removal of layers?
-   */
-  allowRemove: React.PropTypes.bool,
-  /**
-   * Should we allow editing of features in a vector layer?
-   */
-  allowEditing: React.PropTypes.bool,
-  /**
-   * Should we allow for labeling of features in a layer?
-   */
-  allowLabeling: React.PropTypes.bool,
-  /**
-   * Should we allow for styling of features in a vector layer?
-   */
-  allowStyling: React.PropTypes.bool,
-  /**
-   * Should we show a download button?
-   */
-  showDownload: React.PropTypes.bool,
-  /**
-   * Should we include the legend in the layer list?
-   */
-  includeLegend: React.PropTypes.bool,
-  /**
-   * The nested items to show for this item.
-   */
-  nestedItems: React.PropTypes.array,
-  /**
-   * Should we show an opacity slider for the layer?
-   */
-  showOpacity: React.PropTypes.bool,
-  /**
-   * Called when a modal is opened by this layer list item.
-   */
-  onModalOpen: React.PropTypes.func,
-  /**
-   * Called when a modal is closed by this layer list item.
-   */
-  onModalClose: React.PropTypes.func,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-LayerListItem.defaultProps = {
-  connectDragSource: function(a) {
-    return a;
-  },
-  connectDropTarget: function(a) {
-    return a;
-  }
-};
-
-LayerListItem.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default injectIntl(DropTarget('layerlistitem', layerListItemTarget, collectDrop)(DragSource('layerlistitem', layerListItemSource, collect)(LayerListItem)));

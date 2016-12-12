@@ -38,6 +38,37 @@ const messages = defineMessages({
  */
 @pureRender
 class HomeButton extends React.Component {
+  static propTypes = {
+    /**
+     * The ol3 map for whose view the initial center and zoom should be restored.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * Position of the tooltip.
+     */
+    tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left']),
+    /**
+     * Extent to fit on the map on pressing this button. If not set, the initial extent of the map will be used.
+     */
+    extent: React.PropTypes.arrayOf(React.PropTypes.number),
+    /**
+     * Style for the button.
+     */
+    style: React.PropTypes.object,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
   constructor(props, context) {
     super(props);
     if (!this.props.extent) {
@@ -85,36 +116,5 @@ class HomeButton extends React.Component {
     );
   }
 }
-
-HomeButton.propTypes = {
-  /**
-   * The ol3 map for whose view the initial center and zoom should be restored.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * Position of the tooltip.
-   */
-  tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left']),
-  /**
-   * Extent to fit on the map on pressing this button. If not set, the initial extent of the map will be used.
-   */
-  extent: React.PropTypes.arrayOf(React.PropTypes.number),
-  /**
-   * Style for the button.
-   */
-  style: React.PropTypes.object,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-HomeButton.contextTypes = {
-  muiTheme: React.PropTypes.object
-};
 
 export default injectIntl(HomeButton);

@@ -54,6 +54,41 @@ const messages = defineMessages({
  */
 @pureRender
 class Globe extends React.Component {
+  static propTypes = {
+    /**
+     * Resolution at which to hide the scalebar in 3D mode
+     */
+    hideScalebar: React.PropTypes.number,
+    /**
+     * Position of the tooltip.
+     */
+    tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left']),
+    /**
+     * The ol3 map instance to work on.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * Style for the button.
+     */
+    style: React.PropTypes.object,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static defaultProps = {
+    hideScalebar: 78271
+  };
+
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
   constructor(props, context) {
     super(props);
     this.state = {
@@ -131,40 +166,5 @@ class Globe extends React.Component {
     );
   }
 }
-
-Globe.propTypes = {
-  /**
-   * Resolution at which to hide the scalebar in 3D mode
-   */
-  hideScalebar: React.PropTypes.number,
-  /**
-   * Position of the tooltip.
-   */
-  tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left']),
-  /**
-   * The ol3 map instance to work on.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * Style for the button.
-   */
-  style: React.PropTypes.object,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-Globe.defaultProps = {
-  hideScalebar: 78271
-};
-
-Globe.contextTypes = {
-  muiTheme: React.PropTypes.object
-};
 
 export default injectIntl(Globe);

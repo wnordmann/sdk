@@ -42,6 +42,42 @@ const messages = defineMessages({
  */
 @pureRender
 class GeocodingResults extends React.Component {
+  static propTypes = {
+    /**
+     * The ol3 map on whose view to perform the center action.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * The zoom level used when centering the view on a geocoding result.
+     */
+    zoom: React.PropTypes.number,
+    /**
+     * Url to the marker image to use for bookmark position.
+     */
+    markerUrl: React.PropTypes.string,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static defaultProps = {
+    zoom: 10,
+    markerUrl: './resources/marker.png'
+  };
+
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props, context) {
     super(props);
     var me = this;
@@ -152,41 +188,5 @@ class GeocodingResults extends React.Component {
     );
   }
 }
-
-GeocodingResults.propTypes = {
-  /**
-   * The ol3 map on whose view to perform the center action.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * The zoom level used when centering the view on a geocoding result.
-   */
-  zoom: React.PropTypes.number,
-  /**
-   * Url to the marker image to use for bookmark position.
-   */
-  markerUrl: React.PropTypes.string,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-GeocodingResults.defaultProps = {
-  zoom: 10,
-  markerUrl: './resources/marker.png'
-};
-
-GeocodingResults.contextTypes = {
-  muiTheme: React.PropTypes.object
-};
-
-GeocodingResults.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default injectIntl(GeocodingResults);

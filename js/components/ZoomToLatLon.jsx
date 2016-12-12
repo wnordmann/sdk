@@ -114,6 +114,29 @@ const messages = defineMessages({
  */
 @pureRender
 class ZoomToLatLon extends React.Component {
+  static propTypes = {
+    /**
+     * The map onto which to zoom.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * The zoom level used when centering the view.
+     */
+    zoom: React.PropTypes.number,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static defaultProps = {
+    zoom: 14
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -212,28 +235,5 @@ class ZoomToLatLon extends React.Component {
     );
   }
 }
-
-ZoomToLatLon.propTypes = {
-  /**
-   * The map onto which to zoom.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * The zoom level used when centering the view.
-   */
-  zoom: React.PropTypes.number,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-ZoomToLatLon.defaultProps = {
-  zoom: 14
-};
 
 export default injectIntl(ZoomToLatLon);

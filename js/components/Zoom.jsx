@@ -44,6 +44,54 @@ const messages = defineMessages({
  */
 @pureRender
 class Zoom extends React.Component {
+  static propTypes = {
+    /**
+     * Animation duration in milliseconds.
+     */
+    duration: React.PropTypes.number,
+    /**
+     * The zoom delta applied on each click.
+     */
+    delta: React.PropTypes.number,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * Style for the buttons.
+     */
+    style: React.PropTypes.object,
+    /**
+     * The ol3 map to use for zooming.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * Tooltip to show for zoom in button.
+     */
+    zoomInTipLabel: React.PropTypes.string,
+    /**
+     * Tooltip to show for zoom out button.
+     */
+    zoomOutTipLabel: React.PropTypes.string,
+    /**
+     * Position of the tooltip.
+     */
+    tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left']),
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static defaultProps = {
+    delta: 1,
+    duration: 250
+  };
+
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
   constructor(props, context) {
     super(props);
     this.state = {
@@ -92,53 +140,5 @@ class Zoom extends React.Component {
     );
   }
 }
-
-Zoom.propTypes = {
-  /**
-   * Animation duration in milliseconds.
-   */
-  duration: React.PropTypes.number,
-  /**
-   * The zoom delta applied on each click.
-   */
-  delta: React.PropTypes.number,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * Style for the buttons.
-   */
-  style: React.PropTypes.object,
-  /**
-   * The ol3 map to use for zooming.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * Tooltip to show for zoom in button.
-   */
-  zoomInTipLabel: React.PropTypes.string,
-  /**
-   * Tooltip to show for zoom out button.
-   */
-  zoomOutTipLabel: React.PropTypes.string,
-  /**
-   * Position of the tooltip.
-   */
-  tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left']),
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-Zoom.defaultProps = {
-  delta: 1,
-  duration: 250
-};
-
-Zoom.contextTypes = {
-  muiTheme: React.PropTypes.object
-};
 
 export default injectIntl(Zoom);

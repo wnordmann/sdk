@@ -49,6 +49,55 @@ const messages = defineMessages({
  */
 @pureRender
 class LabelEditor extends React.Component {
+  static propTypes = {
+    /**
+     * List of attributes.
+     */
+    attributes: React.PropTypes.array.isRequired,
+    /**
+     * Callback that is called when a change is made.
+     */
+    onChange: React.PropTypes.func.isRequired,
+    /**
+     * Initial font color.
+     */
+    initialFontColor: React.PropTypes.object,
+    /**
+     * Initial font size.
+     */
+    initialFontSize: React.PropTypes.string,
+    /**
+     * Initial label attribute.
+     */
+    initialLabelAttribute: React.PropTypes.string,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+    * i18n message strings. Provided through the application through context.
+    */
+    intl: intlShape.isRequired
+  };
+
+  static defaultProps = {
+    initialLabelAttribute: null,
+    initialFontSize: '12',
+    initialFontColor: {
+      rgb: {
+        r: 0,
+        g: 0,
+        b: 0,
+        a: 1
+      },
+      hex: '#000000'
+    }
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -101,54 +150,5 @@ class LabelEditor extends React.Component {
     );
   }
 }
-
-LabelEditor.propTypes = {
-  /**
-   * List of attributes.
-   */
-  attributes: React.PropTypes.array.isRequired,
-  /**
-   * Callback that is called when a change is made.
-   */
-  onChange: React.PropTypes.func.isRequired,
-  /**
-   * Initial font color.
-   */
-  initialFontColor: React.PropTypes.object,
-  /**
-   * Initial font size.
-   */
-  initialFontSize: React.PropTypes.string,
-  /**
-   * Initial label attribute.
-   */
-  initialLabelAttribute: React.PropTypes.string,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-  * i18n message strings. Provided through the application through context.
-  */
-  intl: intlShape.isRequired
-};
-
-LabelEditor.defaultProps = {
-  initialLabelAttribute: null,
-  initialFontSize: '12',
-  initialFontColor: {
-    rgb: {
-      r: 0,
-      g: 0,
-      b: 0,
-      a: 1
-    },
-    hex: '#000000'
-  }
-};
-
-LabelEditor.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default injectIntl(LabelEditor);

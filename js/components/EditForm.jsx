@@ -61,6 +61,49 @@ const messages = defineMessages({
 });
 
 class EditForm extends React.Component {
+  static propTypes = {
+    /**
+     * The ol3 map.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * The feature whose values to display and edit.
+     */
+    feature: React.PropTypes.instanceOf(ol.Feature).isRequired,
+    /**
+     * The layer from which the feature comes.
+     */
+    layer: React.PropTypes.instanceOf(ol.layer.Base).isRequired,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * Callback function for successfull geometry update
+     */
+    onGeometryUpdate: React.PropTypes.func,
+    /**
+     * Callback function for successfull delete
+     */
+    onDeleteSuccess: React.PropTypes.func,
+    /**
+     * Callback function for successfull update
+     */
+    onSuccess: React.PropTypes.func,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props, context) {
     super(props);
     this.state = {
@@ -209,48 +252,5 @@ class EditForm extends React.Component {
     );
   }
 }
-
-EditForm.propTypes = {
-  /**
-   * The ol3 map.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * The feature whose values to display and edit.
-   */
-  feature: React.PropTypes.instanceOf(ol.Feature).isRequired,
-  /**
-   * The layer from which the feature comes.
-   */
-  layer: React.PropTypes.instanceOf(ol.layer.Base).isRequired,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * Callback function for successfull geometry update
-   */
-  onGeometryUpdate: React.PropTypes.func,
-  /**
-   * Callback function for successfull delete
-   */
-  onDeleteSuccess: React.PropTypes.func,
-  /**
-   * Callback function for successfull update
-   */
-  onSuccess: React.PropTypes.func,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-EditForm.contextTypes = {
-  muiTheme: React.PropTypes.object
-};
-
-EditForm.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default injectIntl(EditForm, {withRef: true});

@@ -37,6 +37,25 @@ const messages = defineMessages({
  */
 @pureRender
 class PolygonSymbolizerEditor extends React.Component {
+  static propTypes = {
+    /**
+     * Callback that is called when a change is made.
+     */
+    onChange: React.PropTypes.func.isRequired,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * Initial state for the polygon symbolizer.
+     */
+    initialState: React.PropTypes.object,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -72,24 +91,5 @@ class PolygonSymbolizerEditor extends React.Component {
     );
   }
 }
-
-PolygonSymbolizerEditor.propTypes = {
-  /**
-   * Callback that is called when a change is made.
-   */
-  onChange: React.PropTypes.func.isRequired,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * Initial state for the polygon symbolizer.
-   */
-  initialState: React.PropTypes.object,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
 
 export default injectIntl(PolygonSymbolizerEditor);

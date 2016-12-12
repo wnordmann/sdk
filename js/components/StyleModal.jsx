@@ -80,6 +80,25 @@ const messages = defineMessages({
  */
 @pureRender
 class StyleModal extends React.Component {
+  static propTypes = {
+    /**
+     * The layer associated with the style modal.
+     */
+    layer: React.PropTypes.instanceOf(ol.layer.Base).isRequired,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props) {
     super(props);
     this._styleCache = {};
@@ -279,24 +298,5 @@ class StyleModal extends React.Component {
     );
   }
 }
-
-StyleModal.propTypes = {
-  /**
-   * The layer associated with the style modal.
-   */
-  layer: React.PropTypes.instanceOf(ol.layer.Base).isRequired,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-StyleModal.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default injectIntl(StyleModal, {withRef: true});

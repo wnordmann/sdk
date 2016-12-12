@@ -30,6 +30,41 @@ const messages = defineMessages({
  * A div that can render the OpenLayers map object. It will also take care of notifying the user of load errors.
  */
 class MapPanel extends React.Component {
+  static propTypes = {
+    /**
+     * The map to use for this map panel.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * Identifier of the map div.
+     */
+    id: React.PropTypes.string,
+    /**
+     * Css class name to apply on the map div.
+     */
+    className: React.PropTypes.string,
+    /**
+     * Extent to fit on the map initially.
+     */
+    extent: React.PropTypes.arrayOf(React.PropTypes.number),
+    /**
+     * Use the back and forward buttons of the browser for navigation history.
+     */
+    useHistory: React.PropTypes.bool,
+    /**
+     * Any children the MapPanel might have.
+     */
+    children: React.PropTypes.node,
+    /**
+    * i18n message strings. Provided through the application through context.
+    */
+    intl: intlShape.isRequired
+  };
+
+  static defaultProps = {
+    useHistory: true
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -135,40 +170,5 @@ class MapPanel extends React.Component {
     );
   }
 }
-
-MapPanel.propTypes = {
-  /**
-   * The map to use for this map panel.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * Identifier of the map div.
-   */
-  id: React.PropTypes.string,
-  /**
-   * Css class name to apply on the map div.
-   */
-  className: React.PropTypes.string,
-  /**
-   * Extent to fit on the map initially.
-   */
-  extent: React.PropTypes.arrayOf(React.PropTypes.number),
-  /**
-   * Use the back and forward buttons of the browser for navigation history.
-   */
-  useHistory: React.PropTypes.bool,
-  /**
-   * Any children the MapPanel might have.
-   */
-  children: React.PropTypes.node,
-  /**
-  * i18n message strings. Provided through the application through context.
-  */
-  intl: intlShape.isRequired
-};
-
-MapPanel.defaultProps = {
-  useHistory: true
-};
 
 export default injectIntl(MapPanel);

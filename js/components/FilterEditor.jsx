@@ -41,6 +41,33 @@ const messages = defineMessages({
  */
 @pureRender
 class FilterEditor extends React.Component {
+  static propTypes = {
+    /**
+     * Callback that is called when a change is made.
+     */
+    onChange: React.PropTypes.func.isRequired,
+    /**
+     * Initial expression.
+     */
+    initialExpression: React.PropTypes.string,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static defaultProps = {
+    initialExpression: null
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -78,33 +105,5 @@ class FilterEditor extends React.Component {
     );
   }
 }
-
-FilterEditor.propTypes = {
-  /**
-   * Callback that is called when a change is made.
-   */
-  onChange: React.PropTypes.func.isRequired,
-  /**
-   * Initial expression.
-   */
-  initialExpression: React.PropTypes.string,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-FilterEditor.defaultProps = {
-  initialFilter: null,
-  initialExpression: null
-};
-
-FilterEditor.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default injectIntl(FilterEditor);

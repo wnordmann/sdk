@@ -37,6 +37,29 @@ const messages = defineMessages({
  */
 @pureRender
 class Geocoding extends React.Component {
+  static propTypes = {
+    /**
+     * The maximum number of results to return on a search.
+     */
+    maxResults: React.PropTypes.number,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static defaultProps = {
+    maxResults: 5
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props) {
     super(props);
     var me = this;
@@ -83,28 +106,5 @@ class Geocoding extends React.Component {
     );
   }
 }
-
-Geocoding.propTypes = {
-  /**
-   * The maximum number of results to return on a search.
-   */
-  maxResults: React.PropTypes.number,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-Geocoding.defaultProps = {
-  maxResults: 5
-};
-
-Geocoding.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default injectIntl(Geocoding);

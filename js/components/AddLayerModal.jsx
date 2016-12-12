@@ -134,6 +134,45 @@ const messages = defineMessages({
  */
 @pureRender
 class AddLayerModal extends React.Component {
+  static propTypes = {
+    /**
+     * The ol3 map to upload to.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * Css class name to apply on the dialog.
+     */
+    className: React.PropTypes.string,
+    /**
+     * List of sources to use for this dialog.
+     */
+    sources: React.PropTypes.arrayOf(React.PropTypes.shape({
+      title: React.PropTypes.string.isRequired,
+      type: React.PropTypes.string.isRequired,
+      url: React.PropTypes.string.isRequired
+    })),
+    /**
+     * Should be user be able to provide their own url?
+     */
+    allowUserInput: React.PropTypes.bool,
+    /**
+     * The srs name that the map's view is in.
+     */
+    srsName: React.PropTypes.string,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static defaultProps = {
+    allowUserInput: false
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -430,44 +469,5 @@ class AddLayerModal extends React.Component {
     );
   }
 }
-
-AddLayerModal.propTypes = {
-  /**
-   * The ol3 map to upload to.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * Css class name to apply on the dialog.
-   */
-  className: React.PropTypes.string,
-  /**
-   * List of sources to use for this dialog.
-   */
-  sources: React.PropTypes.arrayOf(React.PropTypes.shape({
-    title: React.PropTypes.string.isRequired,
-    type: React.PropTypes.string.isRequired,
-    url: React.PropTypes.string.isRequired
-  })),
-  /**
-   * Should be user be able to provide their own url?
-   */
-  allowUserInput: React.PropTypes.bool,
-  /**
-   * The srs name that the map's view is in.
-   */
-  srsName: React.PropTypes.string,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-AddLayerModal.defaultProps = {
-  allowUserInput: false
-};
-
-AddLayerModal.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default injectIntl(AddLayerModal, {withRef: true});

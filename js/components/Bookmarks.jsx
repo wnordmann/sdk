@@ -45,7 +45,7 @@ const messages = defineMessages({
  *    extent: [258703.71361629796, 6248811.5276565505, 259816.90852423065, 6250503.271278702]
  * }];
  *
- * class BookmarkApp extends App {
+ * class BookmarkApp extends React.Component {
  *   render() {
  *     return (
  *       <div id='content'>
@@ -64,6 +64,85 @@ const messages = defineMessages({
  */
 @pureRender
 class Bookmarks extends React.Component {
+  static propTypes = {
+    /**
+     * The ol3 map instance on whose view we should navigate.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * Css class name to apply on the menu or the div.
+     */
+    className: React.PropTypes.string,
+    /**
+     * The bookmark data. An array of objects with name (string, required), description (string, required) and extent (array of number, required) keys.
+     * The extent should be in the view projection.
+     */
+    bookmarks: React.PropTypes.arrayOf(React.PropTypes.shape({
+      name: React.PropTypes.string.isRequired,
+      description: React.PropTypes.string.isRequired,
+      extent: React.PropTypes.arrayOf(React.PropTypes.number).isRequired
+    })).isRequired,
+    /**
+     * Should we show indicators? These are dots to navigate the bookmark pages.
+     */
+    dots: React.PropTypes.bool,
+    /**
+     * Should the scroller auto scroll?
+     */
+    autoplay: React.PropTypes.bool,
+    /**
+     * delay between each auto scoll in ms.
+     */
+    autoplaySpeed: React.PropTypes.number,
+    /**
+     * Should we animate the pan and zoom operation?
+     */
+    animatePanZoom: React.PropTypes.bool,
+    /**
+     * The duration of the animation in milleseconds. Only relevant if animatePanZoom is true.
+     */
+    animationDuration: React.PropTypes.number,
+    /**
+     * The title on the introduction (first) page of the bookmarks.
+     */
+    introTitle: React.PropTypes.string,
+    /**
+     * The description of the introduction (first) page of the bookmarks.
+     */
+    introDescription: React.PropTypes.string,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired,
+    /**
+     * Display as a menu drop down list.
+     */
+    menu: React.PropTypes.bool,
+    /**
+     * Should we display a marker for the bookmark? Default is true.
+     */
+    showMarker: React.PropTypes.bool,
+    /**
+     * Url to the marker image to use for bookmark position.
+     */
+    markerUrl: React.PropTypes.string
+  };
+
+  static defaultProps = {
+    style: {
+      margin: '10px 12px'
+    },
+    dots: true,
+    autoplay: false,
+    animatePanZoom: true,
+    introTitle: '',
+    introDescription: '',
+    animationDuration: 500,
+    menu: false,
+    showMarker: true,
+    markerUrl: './resources/marker.png'
+  };
+
   constructor(props) {
     super(props);
     var view = this.props.map.getView();
@@ -172,84 +251,5 @@ class Bookmarks extends React.Component {
     }
   }
 }
-
-Bookmarks.propTypes = {
-  /**
-   * The ol3 map instance on whose view we should navigate.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * Css class name to apply on the menu or the div.
-   */
-  className: React.PropTypes.string,
-  /**
-   * The bookmark data. An array of objects with name (string, required), description (string, required) and extent (array of number, required) keys.
-   * The extent should be in the view projection.
-   */
-  bookmarks: React.PropTypes.arrayOf(React.PropTypes.shape({
-    name: React.PropTypes.string.isRequired,
-    description: React.PropTypes.string.isRequired,
-    extent: React.PropTypes.arrayOf(React.PropTypes.number).isRequired
-  })).isRequired,
-  /**
-   * Should we show indicators? These are dots to navigate the bookmark pages.
-   */
-  dots: React.PropTypes.bool,
-  /**
-   * Should the scroller auto scroll?
-   */
-  autoplay: React.PropTypes.bool,
-  /**
-   * delay between each auto scoll in ms.
-   */
-  autoplaySpeed: React.PropTypes.number,
-  /**
-   * Should we animate the pan and zoom operation?
-   */
-  animatePanZoom: React.PropTypes.bool,
-  /**
-   * The duration of the animation in milleseconds. Only relevant if animatePanZoom is true.
-   */
-  animationDuration: React.PropTypes.number,
-  /**
-   * The title on the introduction (first) page of the bookmarks.
-   */
-  introTitle: React.PropTypes.string,
-  /**
-   * The description of the introduction (first) page of the bookmarks.
-   */
-  introDescription: React.PropTypes.string,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired,
-  /**
-   * Display as a menu drop down list.
-   */
-  menu: React.PropTypes.bool,
-  /**
-   * Should we display a marker for the bookmark? Default is true.
-   */
-  showMarker: React.PropTypes.bool,
-  /**
-   * Url to the marker image to use for bookmark position.
-   */
-  markerUrl: React.PropTypes.string
-};
-
-Bookmarks.defaultProps = {
-  style: {
-    margin: '10px 12px'
-  },
-  dots: true,
-  autoplay: false,
-  animatePanZoom: true,
-  introTitle: '',
-  introDescription: '',
-  animationDuration: 500,
-  menu: false,
-  showMarker: true,
-  markerUrl: './resources/marker.png'
-};
 
 export default injectIntl(Bookmarks);

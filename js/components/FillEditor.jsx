@@ -30,6 +30,37 @@ const messages = defineMessages({
  */
 @pureRender
 class FillEditor extends React.Component {
+  static propTypes = {
+    /**
+     * Callback that is called when a change is made.
+     */
+    onChange: React.PropTypes.func.isRequired,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * Initial fill color.
+     */
+    initialFillColor: React.PropTypes.object,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static defaultProps = {
+    initialFillColor: {
+      rgb: {
+        r: 255,
+        g: 0,
+        b: 0,
+        a: 0.5
+      },
+      hex: '#FF0000'
+    }
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -50,36 +81,5 @@ class FillEditor extends React.Component {
     );
   }
 }
-
-FillEditor.propTypes = {
-  /**
-   * Callback that is called when a change is made.
-   */
-  onChange: React.PropTypes.func.isRequired,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * Initial fill color.
-   */
-  initialFillColor: React.PropTypes.object,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-FillEditor.defaultProps = {
-  initialFillColor: {
-    rgb: {
-      r: 255,
-      g: 0,
-      b: 0,
-      a: 0.5
-    },
-    hex: '#FF0000'
-  }
-};
 
 export default injectIntl(FillEditor);

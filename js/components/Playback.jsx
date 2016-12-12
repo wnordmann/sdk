@@ -44,6 +44,51 @@ import pureRender from 'pure-render-decorator';
  */
 @pureRender
 class Playback extends React.Component {
+  static propTypes = {
+    /**
+     * The map whose time-enabled layers should be filtered. Time-enabled layers are layers that have a timeInfo property.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * The minimum date to use for the slider field and the date picker.
+     */
+    minDate: React.PropTypes.number,
+    /**
+     * The maximum date to use for the slider field and the date picker.
+     */
+    maxDate: React.PropTypes.number,
+    /**
+     * The time, in milliseconds, to wait in each position of the slider. Positions are defined by dividing the slider range by the number of intervals defined in the numIntervals parameter.
+     */
+    interval: React.PropTypes.number,
+    /**
+     * The number of intervals into which the full range of the slider is divided.
+     */
+    numIntervals: React.PropTypes.number,
+    /**
+     * Should the playback tool start playing automatically?
+     */
+    autoPlay: React.PropTypes.bool,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static defaultProps = {
+    interval: 500,
+    numIntervals: 100,
+    autoPlay: false
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props) {
     super(props);
     LayerStore.bindMap(this.props.map);
@@ -229,50 +274,5 @@ class Playback extends React.Component {
     );
   }
 }
-
-Playback.propTypes = {
-  /**
-   * The map whose time-enabled layers should be filtered. Time-enabled layers are layers that have a timeInfo property.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * The minimum date to use for the slider field and the date picker.
-   */
-  minDate: React.PropTypes.number,
-  /**
-   * The maximum date to use for the slider field and the date picker.
-   */
-  maxDate: React.PropTypes.number,
-  /**
-   * The time, in milliseconds, to wait in each position of the slider. Positions are defined by dividing the slider range by the number of intervals defined in the numIntervals parameter.
-   */
-  interval: React.PropTypes.number,
-  /**
-   * The number of intervals into which the full range of the slider is divided.
-   */
-  numIntervals: React.PropTypes.number,
-  /**
-   * Should the playback tool start playing automatically?
-   */
-  autoPlay: React.PropTypes.bool,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-Playback.defaultProps = {
-  interval: 500,
-  numIntervals: 100,
-  autoPlay: false
-};
-
-Playback.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default injectIntl(Playback);

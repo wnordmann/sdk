@@ -31,6 +31,25 @@ import './BasePopup.css';
  * ```
  */
 class EditPopup extends React.Component {
+  static propTypes = {
+    /**
+     * The ol3 map to register for singleClick.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props) {
     super(props);
     this._dispatchToken = ToolUtil.register(this);
@@ -136,24 +155,5 @@ class EditPopup extends React.Component {
     );
   }
 }
-
-EditPopup.propTypes = {
-  /**
-   * The ol3 map to register for singleClick.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-EditPopup.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default injectIntl(EditPopup);

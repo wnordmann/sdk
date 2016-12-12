@@ -121,6 +121,64 @@ const messages = defineMessages({
  * ```
  */
 class FeatureTable extends React.Component {
+  static propTypes = {
+    /**
+     * The ol3 map in which the source for the table resides.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * The layer to use initially for loading the table.
+     */
+    layer: React.PropTypes.instanceOf(ol.layer.Layer),
+    /**
+     * The zoom level to zoom the map to in case of a point geometry.
+     */
+    pointZoom: React.PropTypes.number,
+    /**
+     * Refresh rate in ms that determines how often to resize the feature table when the window is resized.
+     */
+    refreshRate: React.PropTypes.number,
+    /**
+     * Number of features per page.
+     */
+    pageSize: React.PropTypes.number,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired,
+    /**
+     * Optional fixed height in pixels.
+     */
+    height: React.PropTypes.number,
+    /**
+     * Should we allow for sorting the data?
+     */
+    sortable: React.PropTypes.bool,
+    /**
+     * Callback that gets called when the height needs updating of the parent container.
+     */
+    onUpdate: React.PropTypes.func
+  };
+
+  static defaultProps = {
+    pageSize: 20,
+    pointZoom: 16,
+    sortable: true,
+    refreshRate: 250
+  };
+
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props, context) {
     super(props);
     this._onChange = this._onChange.bind(this);
@@ -446,63 +504,5 @@ class FeatureTable extends React.Component {
     );
   }
 }
-
-FeatureTable.propTypes = {
-  /**
-   * The ol3 map in which the source for the table resides.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * The layer to use initially for loading the table.
-   */
-  layer: React.PropTypes.instanceOf(ol.layer.Layer),
-  /**
-   * The zoom level to zoom the map to in case of a point geometry.
-   */
-  pointZoom: React.PropTypes.number,
-  /**
-   * Refresh rate in ms that determines how often to resize the feature table when the window is resized.
-   */
-  refreshRate: React.PropTypes.number,
-  /**
-   * Number of features per page.
-   */
-  pageSize: React.PropTypes.number,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired,
-  /**
-   * Optional fixed height in pixels.
-   */
-  height: React.PropTypes.number,
-  /**
-   * Should we allow for sorting the data?
-   */
-  sortable: React.PropTypes.bool,
-  /**
-   * Callback that gets called when the height needs updating of the parent container.
-   */
-  onUpdate: React.PropTypes.func
-};
-
-FeatureTable.defaultProps = {
-  pageSize: 20,
-  pointZoom: 16,
-  sortable: true,
-  refreshRate: 250
-};
-
-FeatureTable.contextTypes = {
-  muiTheme: React.PropTypes.object
-};
-
-FeatureTable.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default injectIntl(FeatureTable, {withRef: true});

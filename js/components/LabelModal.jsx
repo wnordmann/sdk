@@ -49,6 +49,25 @@ const messages = defineMessages({
  */
 @pureRender
 class LabelModal extends React.Component {
+  static propTypes = {
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * The layer associated with the style modal.
+     */
+    layer: React.PropTypes.instanceOf(ol.layer.Vector).isRequired,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -158,24 +177,5 @@ class LabelModal extends React.Component {
     );
   }
 }
-
-LabelModal.propTypes = {
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * The layer associated with the style modal.
-   */
-  layer: React.PropTypes.instanceOf(ol.layer.Vector).isRequired,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-LabelModal.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default injectIntl(LabelModal, {withRef: true});

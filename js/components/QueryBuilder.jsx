@@ -94,6 +94,29 @@ const messages = defineMessages({
  */
 @pureRender
 class QueryBuilder extends React.Component {
+  static propTypes = {
+    /**
+     * The ol3 map whose layers can be used for the querybuilder.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string
+  };
+
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props, context) {
     super(props);
     FeatureStore.bindMap(this.props.map);
@@ -212,28 +235,5 @@ class QueryBuilder extends React.Component {
     );
   }
 }
-
-QueryBuilder.propTypes = {
-  /**
-   * The ol3 map whose layers can be used for the querybuilder.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string
-};
-
-QueryBuilder.contextTypes = {
-  muiTheme: React.PropTypes.object
-};
-
-QueryBuilder.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default injectIntl(QueryBuilder);

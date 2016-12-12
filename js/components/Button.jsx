@@ -11,6 +11,78 @@ import pureRender from 'pure-render-decorator';
  */
 @pureRender
 class Button extends React.Component {
+  static propTypes = {
+    /**
+     * Type of button.
+     */
+    buttonType: React.PropTypes.oneOf(['Raised', 'Flat', 'Action']),
+    /**
+     * Position of the tooltip.
+     */
+    tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left']),
+    /**
+     * Should this button be disabled?
+     */
+    disabled: React.PropTypes.bool,
+    /**
+     * Css class name to apply on the span.
+     */
+    className: React.PropTypes.string,
+    /**
+     * The tooltip to show for this button.
+     */
+    tooltip: React.PropTypes.string,
+    /**
+     * Background color.
+     */
+    backgroundColor: React.PropTypes.string,
+    /**
+     * Function to execute when the button is clicked.
+     */
+    onTouchTap: React.PropTypes.func,
+    /**
+     * Style config object.
+     */
+    style: React.PropTypes.object,
+    /**
+     * Child components.
+     */
+    children: React.PropTypes.node,
+    /**
+     * Should this button be mini? Only applies to certain button types.
+     */
+    mini: React.PropTypes.bool,
+    /**
+     * Optional icon.
+     */
+    icon: React.PropTypes.node,
+    /**
+     * Label to show on the button.
+     */
+    label: React.PropTypes.string,
+    /**
+     * Should we use the primary state?
+     */
+    primary: React.PropTypes.bool,
+    /**
+     * Should we use the secondary state?
+     */
+    secondary: React.PropTypes.bool,
+    /**
+     * Icon style config object.
+     */
+    iconStyle: React.PropTypes.object
+  };
+
+  static defaultProps = {
+    buttonType: 'Raised',
+    tooltipPosition: 'bottom'
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   getChildContext() {
     return {muiTheme: getMuiTheme()};
   }
@@ -37,77 +109,5 @@ class Button extends React.Component {
     );
   }
 }
-
-Button.propTypes = {
-  /**
-   * Type of button.
-   */
-  buttonType: React.PropTypes.oneOf(['Raised', 'Flat', 'Action']),
-  /**
-   * Position of the tooltip.
-   */
-  tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left']),
-  /**
-   * Should this button be disabled?
-   */
-  disabled: React.PropTypes.bool,
-  /**
-   * Css class name to apply on the span.
-   */
-  className: React.PropTypes.string,
-  /**
-   * The tooltip to show for this button.
-   */
-  tooltip: React.PropTypes.string,
-  /**
-   * Background color.
-   */
-  backgroundColor: React.PropTypes.string,
-  /**
-   * Function to execute when the button is clicked.
-   */
-  onTouchTap: React.PropTypes.func,
-  /**
-   * Style config object.
-   */
-  style: React.PropTypes.object,
-  /**
-   * Child components.
-   */
-  children: React.PropTypes.node,
-  /**
-   * Should this button be mini? Only applies to certain button types.
-   */
-  mini: React.PropTypes.bool,
-  /**
-   * Optional icon.
-   */
-  icon: React.PropTypes.node,
-  /**
-   * Label to show on the button.
-   */
-  label: React.PropTypes.string,
-  /**
-   * Should we use the primary state?
-   */
-  primary: React.PropTypes.bool,
-  /**
-   * Should we use the secondary state?
-   */
-  secondary: React.PropTypes.bool,
-  /**
-   * Icon style config object.
-   */
-  iconStyle: React.PropTypes.object
-};
-
-Button.defaultProps = {
-  buttonType: 'Raised',
-  tooltipPosition: 'bottom'
-};
-
-Button.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default Button;

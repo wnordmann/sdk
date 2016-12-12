@@ -62,6 +62,29 @@ const messages = defineMessages({
  */
 @pureRender
 class FilterModal extends React.Component {
+  static propTypes = {
+    /**
+     * vector layer to filter features on.
+     */
+    layer: React.PropTypes.instanceOf(ol.layer.Vector).isRequired,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * Called when the modal is closed.
+     */
+    onModalClose: React.PropTypes.func,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -202,28 +225,5 @@ class FilterModal extends React.Component {
     );
   }
 }
-
-FilterModal.propTypes = {
-  /**
-   * vector layer to filter features on.
-   */
-  layer: React.PropTypes.instanceOf(ol.layer.Vector).isRequired,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * Called when the modal is closed.
-   */
-  onModalClose: React.PropTypes.func,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-FilterModal.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default injectIntl(FilterModal, {withRef: true});
