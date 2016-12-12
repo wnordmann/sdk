@@ -36,6 +36,29 @@ const messages = defineMessages({
  */
 @pureRender
 class Navigation extends React.Component {
+  static propTypes = {
+    /**
+     * Should the button have the secondary state initially (pressed)?
+     */
+    secondary: React.PropTypes.bool,
+    /**
+     * The toggleGroup to use. When this tool is activated, all other tools in the same toggleGroup will be deactivated.
+     */
+    toggleGroup: React.PropTypes.string,
+    /**
+     * Identifier to use for this tool. Can be used to group tools together.
+     */
+    toolId: React.PropTypes.string,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
   constructor(props) {
     super(props);
     this._dispatchToken = ToolUtil.register(this);
@@ -66,28 +89,5 @@ class Navigation extends React.Component {
     );
   }
 }
-
-Navigation.propTypes = {
-  /**
-   * Should the button have the secondary state initially (pressed)?
-   */
-  secondary: React.PropTypes.bool,
-  /**
-   * The toggleGroup to use. When this tool is activated, all other tools in the same toggleGroup will be deactivated.
-   */
-  toggleGroup: React.PropTypes.string,
-  /**
-   * Identifier to use for this tool. Can be used to group tools together.
-   */
-  toolId: React.PropTypes.string,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
 
 export default injectIntl(Navigation);

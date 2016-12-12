@@ -37,6 +37,46 @@ const messages = defineMessages({
  */
 @pureRender
 class StrokeEditor extends React.Component {
+  static propTypes = {
+    /**
+     * Callback that is called when a change is made.
+     */
+    onChange: React.PropTypes.func.isRequired,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * Initial stroke color.
+     */
+    initialStrokeColor: React.PropTypes.object,
+    /**
+     * Initial stroke width.
+     */
+    initialStrokeWidth: React.PropTypes.number,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static defaultProps = {
+    initialStrokeColor: {
+      rgb: {
+        r: 0,
+        g: 0,
+        b: 0,
+        a: 1
+      },
+      hex: '#000000'
+    },
+    initialStrokeWidth: 1
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -70,45 +110,5 @@ class StrokeEditor extends React.Component {
     );
   }
 }
-
-StrokeEditor.propTypes = {
-  /**
-   * Callback that is called when a change is made.
-   */
-  onChange: React.PropTypes.func.isRequired,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * Initial stroke color.
-   */
-  initialStrokeColor: React.PropTypes.object,
-  /**
-   * Initial stroke width.
-   */
-  initialStrokeWidth: React.PropTypes.number,
-  /**
-  * i18n message strings. Provided through the application through context.
-  */
-  intl: intlShape.isRequired
-};
-
-StrokeEditor.defaultProps = {
-  initialStrokeColor: {
-    rgb: {
-      r: 0,
-      g: 0,
-      b: 0,
-      a: 1
-    },
-    hex: '#000000'
-  },
-  initialStrokeWidth: 1
-};
-
-StrokeEditor.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default injectIntl(StrokeEditor);

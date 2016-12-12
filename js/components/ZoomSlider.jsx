@@ -9,6 +9,21 @@ import pureRender from 'pure-render-decorator';
  */
 @pureRender
 export default class ZoomSlider extends React.Component {
+  static propTypes = {
+    /**
+     * Refresh rate in ms for handling changes from the slider.
+     */
+    refreshRate: React.PropTypes.number,
+    /**
+     * The map to use.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired
+  };
+
+  static defaultProps = {
+    refreshRate: 100
+  };
+
   constructor(props) {
     super(props);
     this.state = {};
@@ -48,18 +63,3 @@ export default class ZoomSlider extends React.Component {
     );
   }
 }
-
-ZoomSlider.propTypes = {
-  /**
-   * Refresh rate in ms for handling changes from the slider.
-   */
-  refreshRate: React.PropTypes.number,
-  /**
-   * The map to use.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired
-};
-
-ZoomSlider.defaultProps = {
-  refreshRate: 100
-};

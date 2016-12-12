@@ -25,6 +25,49 @@ import pureRender from 'pure-render-decorator';
  */
 @pureRender
 class WMSLegend extends React.Component {
+  static propTypes = {
+    /**
+     * The layer that has a WMS source.
+     */
+    layer: React.PropTypes.instanceOf(ol.layer.Layer).isRequired,
+    /**
+     * The height in pixels of the WMS GetLegendGraphic call.
+     */
+    height: React.PropTypes.number,
+    /**
+     * The width in pixels of the WMS GetLegendGraphic call.
+     */
+    width: React.PropTypes.number,
+    /**
+     * Options to send as LEGEND_OPTIONS parameter.
+     */
+    options: React.PropTypes.object,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * The format to use for the WMS GetLegendGraphic call.
+     */
+    format: React.PropTypes.string
+  };
+
+  static defaultProps = {
+    height: 20,
+    width: 20,
+    options: {
+      forceLabels: 'on',
+      fontAntiAliasing: true,
+      fontSize: 11,
+      fontName: 'Arial'
+    },
+    format: 'image/png'
+  };
+
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
   constructor(props, context) {
     super(props);
     this.state = {
@@ -79,48 +122,5 @@ class WMSLegend extends React.Component {
     return (<img className={classNames('sdk-component wms-legend', this.props.className)} src={legendUrl} />);
   }
 }
-
-WMSLegend.propTypes = {
-  /**
-   * The layer that has a WMS source.
-   */
-  layer: React.PropTypes.instanceOf(ol.layer.Layer).isRequired,
-  /**
-   * The height in pixels of the WMS GetLegendGraphic call.
-   */
-  height: React.PropTypes.number,
-  /**
-   * The width in pixels of the WMS GetLegendGraphic call.
-   */
-  width: React.PropTypes.number,
-  /**
-   * Options to send as LEGEND_OPTIONS parameter.
-   */
-  options: React.PropTypes.object,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * The format to use for the WMS GetLegendGraphic call.
-   */
-  format: React.PropTypes.string
-};
-
-WMSLegend.defaultProps = {
-  height: 20,
-  width: 20,
-  options: {
-    forceLabels: 'on',
-    fontAntiAliasing: true,
-    fontSize: 11,
-    fontName: 'Arial'
-  },
-  format: 'image/png'
-};
-
-WMSLegend.contextTypes = {
-  muiTheme: React.PropTypes.object
-};
 
 export default WMSLegend;

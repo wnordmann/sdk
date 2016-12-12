@@ -64,6 +64,50 @@ const messages = defineMessages({
  */
 @pureRender
 class QGISLegend extends React.Component {
+  static propTypes = {
+    /**
+     * The map from which to extract the layers.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * The base path (relative url) to use for finding the artefacts.
+     */
+    legendBasePath: React.PropTypes.string,
+    /**
+     * The label and image to use per layer. The object is keyed by layer name currently. For example: {'swamp': [['', '4_0.png']]}.
+     */
+    legendData: React.PropTypes.object.isRequired,
+    /**
+     * Style for the button.
+     */
+    style: React.PropTypes.object,
+    /**
+     * Should we expand on startup of the application?
+     */
+    showExpandedOnStartup: React.PropTypes.bool,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static defaultProps = {
+    legendBasePath: './legend/',
+    showExpandedOnStartup: false
+  };
+
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props, context) {
     super(props);
     LayerStore.bindMap(this.props.map);
@@ -132,49 +176,5 @@ class QGISLegend extends React.Component {
     );
   }
 }
-
-QGISLegend.propTypes = {
-  /**
-   * The map from which to extract the layers.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * The base path (relative url) to use for finding the artefacts.
-   */
-  legendBasePath: React.PropTypes.string,
-  /**
-   * The label and image to use per layer. The object is keyed by layer name currently. For example: {'swamp': [['', '4_0.png']]}.
-   */
-  legendData: React.PropTypes.object.isRequired,
-  /**
-   * Style for the button.
-   */
-  style: React.PropTypes.object,
-  /**
-   * Should we expand on startup of the application?
-   */
-  showExpandedOnStartup: React.PropTypes.bool,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-QGISLegend.defaultProps = {
-  legendBasePath: './legend/',
-  showExpandedOnStartup: false
-};
-
-QGISLegend.contextTypes = {
-  muiTheme: React.PropTypes.object
-};
-
-QGISLegend.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default injectIntl(QGISLegend);

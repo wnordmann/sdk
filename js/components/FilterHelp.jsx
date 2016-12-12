@@ -185,6 +185,38 @@ const messages = defineMessages({
  * Help dialog for filter fields.
  */
 class FilterHelp extends React.Component {
+  static propTypes = {
+    /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
+     * Mono style config.
+     */
+    monoStyle: React.PropTypes.object,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static defaultProps = {
+    style: {
+      padding: '12px',
+      margin: '36px',
+      maxWidth: '600px'
+    },
+    monoStyle: {
+      fontWeight: 'bold',
+      display: 'inline-block',
+      minWidth: '80px'
+    }
+  };
+
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
   constructor(props, context) {
     super(props);
     this.state = {
@@ -256,37 +288,5 @@ class FilterHelp extends React.Component {
     );
   }
 }
-
-FilterHelp.propTypes = {
-  /**
-   * Style config.
-   */
-  style: React.PropTypes.object,
-  /**
-   * Mono style config.
-   */
-  monoStyle: React.PropTypes.object,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-FilterHelp.defaultProps = {
-  style: {
-    padding: '12px',
-    margin: '36px',
-    maxWidth: '600px'
-  },
-  monoStyle: {
-    fontWeight: 'bold',
-    display: 'inline-block',
-    minWidth: '80px'
-  }
-};
-
-FilterHelp.contextTypes = {
-  muiTheme: React.PropTypes.object
-};
 
 export default injectIntl(FilterHelp);

@@ -42,6 +42,21 @@ const messages = defineMessages({
  */
 @pureRender
 class ImageExport extends React.Component {
+  static propTypes = {
+    /**
+     * The ol3 map to export as PNG.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
   constructor(props) {
     super(props);
   }
@@ -62,20 +77,5 @@ class ImageExport extends React.Component {
     );
   }
 }
-
-ImageExport.propTypes = {
-  /**
-   * The ol3 map to export as PNG.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
 
 export default injectIntl(ImageExport);

@@ -70,6 +70,21 @@ const messages = defineMessages({
  */
 @pureRender
 class LoginModal extends React.Component {
+  static propTypes = {
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -138,20 +153,5 @@ class LoginModal extends React.Component {
     );
   }
 }
-
-LoginModal.propTypes = {
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-LoginModal.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default injectIntl(LoginModal, {withRef: true});

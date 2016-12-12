@@ -30,6 +30,21 @@ import './LoadingPanel.css';
  */
 @pureRender
 class LoadingPanel extends React.Component {
+  static propTypes = {
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * Map for whose layers to listen to load events.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -128,20 +143,5 @@ class LoadingPanel extends React.Component {
     }
   }
 }
-
-LoadingPanel.propTypes = {
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * Map for whose layers to listen to load events.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired
-}
-
-LoadingPanel.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default LoadingPanel;

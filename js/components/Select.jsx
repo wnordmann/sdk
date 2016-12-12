@@ -45,6 +45,29 @@ const messages = defineMessages({
  */
 @pureRender
 class Select extends React.Component {
+  static propTypes = {
+    /**
+     * The map onto which to activate and deactivate the interactions.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * The toggleGroup to use. When this tool is activated, all other tools in the same toggleGroup will be deactivated.
+     */
+    toggleGroup: React.PropTypes.string,
+    /**
+     * Identifier to use for this tool. Can be used to group tools together.
+     */
+    toolId: React.PropTypes.string,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
   constructor(props) {
     super(props);
     this._dispatchToken = ToolUtil.register(this);
@@ -133,28 +156,5 @@ class Select extends React.Component {
     );
   }
 }
-
-Select.propTypes = {
-  /**
-   * The map onto which to activate and deactivate the interactions.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * The toggleGroup to use. When this tool is activated, all other tools in the same toggleGroup will be deactivated.
-   */
-  toggleGroup: React.PropTypes.string,
-  /**
-   * Identifier to use for this tool. Can be used to group tools together.
-   */
-  toolId: React.PropTypes.string,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
 
 export default injectIntl(Select);

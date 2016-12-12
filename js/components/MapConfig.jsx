@@ -75,6 +75,33 @@ const localStorageKey = 'web-sdk-map-config';
  */
 @pureRender
 class MapConfig extends React.Component {
+  static propTypes = {
+    /**
+     * The ol3 map to save the layers from.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * Are we the last child of the toolbar?
+     */
+    lastChild: React.PropTypes.bool,
+    /**
+     * Are we the first child of the toolbar?
+     */
+    firstChild: React.PropTypes.bool,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -141,32 +168,5 @@ class MapConfig extends React.Component {
     );
   }
 }
-
-MapConfig.propTypes = {
-  /**
-   * The ol3 map to save the layers from.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * Are we the last child of the toolbar?
-   */
-  lastChild: React.PropTypes.bool,
-  /**
-   * Are we the first child of the toolbar?
-   */
-  firstChild: React.PropTypes.bool,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-MapConfig.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default injectIntl(MapConfig);

@@ -160,6 +160,57 @@ const messages = defineMessages({
  */
 @pureRender
 class Edit extends React.Component {
+  static propTypes = {
+    /**
+     * The map onto which to activate and deactivate the interactions.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * The toggleGroup to use. When this tool is activated, all other tools in the same toggleGroup will be deactivated.
+     */
+    toggleGroup: React.PropTypes.string,
+    /**
+     * Identifier to use for this tool. Can be used to group tools together.
+     */
+    toolId: React.PropTypes.string,
+    /**
+     * The stroke width in pixels used in the style for the created features.
+     */
+    strokeWidth: React.PropTypes.number,
+    /**
+     * The point radius used for the circle style.
+     */
+    pointRadius: React.PropTypes.number,
+    /**
+     * Style config for root div.
+     */
+    style: React.PropTypes.object,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static defaultProps = {
+    style: {
+      padding: 10
+    },
+    strokeWidth: 2,
+    pointRadius: 7
+  };
+
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props, context) {
     super(props);
     this._dispatchToken = ToolUtil.register(this);
@@ -403,56 +454,5 @@ class Edit extends React.Component {
     );
   }
 }
-
-Edit.propTypes = {
-  /**
-   * The map onto which to activate and deactivate the interactions.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * The toggleGroup to use. When this tool is activated, all other tools in the same toggleGroup will be deactivated.
-   */
-  toggleGroup: React.PropTypes.string,
-  /**
-   * Identifier to use for this tool. Can be used to group tools together.
-   */
-  toolId: React.PropTypes.string,
-  /**
-   * The stroke width in pixels used in the style for the created features.
-   */
-  strokeWidth: React.PropTypes.number,
-  /**
-   * The point radius used for the circle style.
-   */
-  pointRadius: React.PropTypes.number,
-  /**
-   * Style config for root div.
-   */
-  style: React.PropTypes.object,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-Edit.defaultProps = {
-  style: {
-    padding: 10
-  },
-  strokeWidth: 2,
-  pointRadius: 7
-};
-
-Edit.contextTypes = {
-  muiTheme: React.PropTypes.object
-};
-
-Edit.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default injectIntl(Edit, {withRef: true});

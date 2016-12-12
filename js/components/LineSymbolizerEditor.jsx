@@ -21,6 +21,25 @@ import pureRender from 'pure-render-decorator';
  */
 @pureRender
 class LineSymbolizerEditor extends React.Component {
+  static propTypes = {
+    /**
+     * Callback that is called when a change is made.
+     */
+    onChange: React.PropTypes.func.isRequired,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * Initial state for the line symbolizer.
+     */
+    initialState: React.PropTypes.object,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
   render() {
     return (
       <div className={classNames('sdk-component line-symbolizer-editor', this.props.className)}>
@@ -29,24 +48,5 @@ class LineSymbolizerEditor extends React.Component {
     );
   }
 }
-
-LineSymbolizerEditor.propTypes = {
-  /**
-   * Callback that is called when a change is made.
-   */
-  onChange: React.PropTypes.func.isRequired,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * Initial state for the line symbolizer.
-   */
-  initialState: React.PropTypes.object,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
 
 export default injectIntl(LineSymbolizerEditor);

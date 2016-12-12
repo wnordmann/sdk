@@ -14,6 +14,17 @@ import React from 'react';
 import Typography from 'material-ui/styles/typography';
 
 class Label extends React.Component {
+  static propTypes = {
+    /**
+     * Custom style
+     */
+    style: React.PropTypes.object,
+    /**
+     * Child nodes
+     */
+    children: React.PropTypes.node
+  };
+
   constructor(props) {
     super(props);
   }
@@ -32,16 +43,5 @@ class Label extends React.Component {
     return (<div style={Object.assign({}, baseStyle, style)}>{this.props.children}</div>);
   }
 }
-
-Label.propTypes = {
-  /**
-   * Custom style
-   */
-  style: React.PropTypes.object,
-  /**
-   * Child nodes
-   */
-  children: React.PropTypes.node
-};
 
 export default Label;

@@ -40,6 +40,33 @@ const messages = defineMessages({
  */
 @pureRender
 class Legend extends React.Component {
+  static propTypes = {
+    /**
+     * Options to send to the WMS legend. See WMSLegend component.
+     */
+    wmsOptions: React.PropTypes.object,
+    /**
+     * The map whose layers should show up in this legend component.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props, context) {
     super(props);
     this.state = {
@@ -97,32 +124,5 @@ class Legend extends React.Component {
     );
   }
 }
-
-Legend.propTypes = {
-  /**
-   * Options to send to the WMS legend. See WMSLegend component.
-   */
-  wmsOptions: React.PropTypes.object,
-  /**
-   * The map whose layers should show up in this legend component.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-Legend.contextTypes = {
-  muiTheme: React.PropTypes.object
-};
-
-Legend.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default injectIntl(Legend);

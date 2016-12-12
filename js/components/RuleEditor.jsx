@@ -52,6 +52,41 @@ const messages = defineMessages({
  */
 @pureRender
 class RuleEditor extends React.Component {
+  static propTypes = {
+    /**
+     * Are we visible or not?
+     */
+    visible: React.PropTypes.bool,
+    /**
+     * List of attributes.
+     */
+    attributes: React.PropTypes.array,
+    /**
+     * Initial state.
+     */
+    initialState: React.PropTypes.object,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * Callback that is called when a change is made.
+     */
+    onChange: React.PropTypes.func.isRequired,
+    /**
+     * The geometry type.
+     */
+    geometryType: React.PropTypes.oneOf(['Polygon', 'LineString', 'Point']),
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props) {
     super(props);
     var title = this.props.initialState ? this.props.initialState.title : undefined;
@@ -126,40 +161,5 @@ class RuleEditor extends React.Component {
     }
   }
 }
-
-RuleEditor.propTypes = {
-  /**
-   * Are we visible or not?
-   */
-  visible: React.PropTypes.bool,
-  /**
-   * List of attributes.
-   */
-  attributes: React.PropTypes.array,
-  /**
-   * Initial state.
-   */
-  initialState: React.PropTypes.object,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * Callback that is called when a change is made.
-   */
-  onChange: React.PropTypes.func.isRequired,
-  /**
-   * The geometry type.
-   */
-  geometryType: React.PropTypes.oneOf(['Polygon', 'LineString', 'Point']),
-  /**
-  * i18n message strings. Provided through the application through context.
-  */
-  intl: intlShape.isRequired
-};
-
-RuleEditor.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default injectIntl(RuleEditor);

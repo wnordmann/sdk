@@ -38,6 +38,37 @@ const messages = defineMessages({
  */
 @pureRender
 class LayerSelector extends React.Component {
+  static propTypes = {
+    /**
+     * The map from which to extract the layers.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * A filter function to filter out some of the layers by returning false.
+     */
+    filter: React.PropTypes.func,
+    /**
+     * The default value of the layer selector, i.e. the layer to select by default.
+     */
+    value: React.PropTypes.string,
+    /**
+     * Change callback function.
+     */
+    onChange: React.PropTypes.func.isRequired,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props) {
     super(props);
     LayerStore.bindMap(this.props.map);
@@ -102,36 +133,5 @@ class LayerSelector extends React.Component {
     );
   }
 }
-
-LayerSelector.propTypes = {
-  /**
-   * The map from which to extract the layers.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * A filter function to filter out some of the layers by returning false.
-   */
-  filter: React.PropTypes.func,
-  /**
-   * The default value of the layer selector, i.e. the layer to select by default.
-   */
-  value: React.PropTypes.string,
-  /**
-   * Change callback function.
-   */
-  onChange: React.PropTypes.func.isRequired,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-LayerSelector.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default injectIntl(LayerSelector);

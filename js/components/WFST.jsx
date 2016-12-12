@@ -109,6 +109,60 @@ const messages = defineMessages({
  */
 @pureRender
 class WFST extends React.Component {
+  static propTypes = {
+    /**
+     * The ol3 map whose layers can be used for the WFS-T tool.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * The toggleGroup to use. When this tool is activated, all other tools in the same toggleGroup will be deactivated.
+     */
+    toggleGroup: React.PropTypes.string,
+    /**
+     * Identifier to use for this tool. Can be used to group tools together.
+     */
+    toolId: React.PropTypes.string,
+    /**
+     * Show a layer selector for the user to choose from?
+     */
+    layerSelector: React.PropTypes.bool,
+    /**
+     * Should this component be visible from the start?
+     */
+    visible: React.PropTypes.bool,
+    /**
+     * Buffer to put around clicked point to find the feature clicked. This is in the units of the coordinate reference system of the map.
+     */
+    pointBuffer: React.PropTypes.number,
+    /**
+     * Should we display an edit form for editing feature attributes on select?
+     */
+    showEditForm: React.PropTypes.bool,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static defaultProps = {
+    showEditForm: false,
+    layerSelector: true,
+    visible: true,
+    pointBuffer: 0.5
+  };
+
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props, context) {
     super(props);
     this._dispatchToken2 = ToolUtil.register(this);
@@ -459,59 +513,5 @@ class WFST extends React.Component {
     }
   }
 }
-
-WFST.propTypes = {
-  /**
-   * The ol3 map whose layers can be used for the WFS-T tool.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * The toggleGroup to use. When this tool is activated, all other tools in the same toggleGroup will be deactivated.
-   */
-  toggleGroup: React.PropTypes.string,
-  /**
-   * Identifier to use for this tool. Can be used to group tools together.
-   */
-  toolId: React.PropTypes.string,
-  /**
-   * Show a layer selector for the user to choose from?
-   */
-  layerSelector: React.PropTypes.bool,
-  /**
-   * Should this component be visible from the start?
-   */
-  visible: React.PropTypes.bool,
-  /**
-   * Buffer to put around clicked point to find the feature clicked. This is in the units of the coordinate reference system of the map.
-   */
-  pointBuffer: React.PropTypes.number,
-  /**
-   * Should we display an edit form for editing feature attributes on select?
-   */
-  showEditForm: React.PropTypes.bool,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-WFST.defaultProps = {
-  showEditForm: false,
-  layerSelector: true,
-  visible: true,
-  pointBuffer: 0.5
-};
-
-WFST.contextTypes = {
-  muiTheme: React.PropTypes.object
-};
-
-WFST.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default injectIntl(WFST, {withRef: true});

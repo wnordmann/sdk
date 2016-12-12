@@ -63,6 +63,134 @@ const messages = defineMessages({
  */
 @pureRender
 class LayerList extends React.Component {
+  static propTypes = {
+    /**
+     * The map whose layers should show up in this layer list.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * Style for the button.
+     */
+    style: React.PropTypes.object,
+    /**
+     * Should we show a button that allows the user to zoom to the layer's extent?
+     */
+    showZoomTo: React.PropTypes.bool,
+    /**
+     * Should we show a button that can open up the feature table?
+     */
+    showTable: React.PropTypes.bool,
+    /**
+     * Should we allow for reordering of layers?
+     */
+    allowReordering: React.PropTypes.bool,
+    /**
+     * Should we allow for filtering of features in a layer?
+     */
+    allowFiltering: React.PropTypes.bool,
+    /**
+     * Should we allow for labeling of features in a layer?
+     */
+    allowLabeling: React.PropTypes.bool,
+    /**
+     * Should we allow for styling of features in a vector layer?
+     */
+    allowStyling: React.PropTypes.bool,
+    /**
+     * Should we allow for editing of features in a vector layer?
+     * This does require having a WFST component in your application.
+     */
+    allowEditing: React.PropTypes.bool,
+    /**
+     * Should we allow for removal of layers?
+     */
+    allowRemove: React.PropTypes.bool,
+    /**
+     * Should we show the contents of layer groups?
+     */
+    showGroupContent: React.PropTypes.bool,
+    /**
+     * Should we show a download button for layers?
+     */
+    showDownload: React.PropTypes.bool,
+    /**
+     * Should we include the legend in the layer list?
+     */
+    includeLegend: React.PropTypes.bool,
+    /**
+     * The feature format to serialize in for downloads.
+     */
+    downloadFormat: React.PropTypes.oneOf(['GeoJSON', 'KML', 'GPX']),
+    /**
+     * Should we show an opacity slider for layers?
+     */
+    showOpacity: React.PropTypes.bool,
+    /**
+     * Text to show on top of layers.
+     */
+    tipLabel: React.PropTypes.string,
+    /**
+     * Should we show this component on start of the application?
+     */
+    showOnStart: React.PropTypes.bool,
+    /**
+     * Should we allow adding layers?
+     */
+    addLayer: React.PropTypes.shape({
+      sources: React.PropTypes.arrayOf(React.PropTypes.shape({
+        title: React.PropTypes.string.isRequired,
+        type: React.PropTypes.string.isRequired,
+        url: React.PropTypes.string.isRequired
+      })),
+      allowUserInput: React.PropTypes.bool
+    }),
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * Position of the tooltip.
+     */
+    tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left']),
+    /**
+     * A filter function to filter out some of the layers by returning false.
+     */
+    filter: React.PropTypes.func,
+    /**
+     * Child nodes
+     */
+    children: React.PropTypes.node,
+    /**
+    * i18n message strings. Provided through the application through context.
+    */
+    intl: intlShape.isRequired
+  };
+
+  static defaultProps = {
+    showZoomTo: false,
+    showTable: false,
+    allowReordering: false,
+    allowEditing: false,
+    allowFiltering: false,
+    allowLabeling: false,
+    allowRemove: true,
+    allowStyling: false,
+    showGroupContent: true,
+    showDownload: false,
+    downloadFormat: 'GeoJSON',
+    includeLegend: false,
+    showOpacity: false,
+    showOnStart: false
+  };
+
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props, context) {
     super(props);
     LayerStore.bindMap(this.props.map);
@@ -202,133 +330,5 @@ class LayerList extends React.Component {
     );
   }
 }
-
-LayerList.propTypes = {
-  /**
-   * The map whose layers should show up in this layer list.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * Style for the button.
-   */
-  style: React.PropTypes.object,
-  /**
-   * Should we show a button that allows the user to zoom to the layer's extent?
-   */
-  showZoomTo: React.PropTypes.bool,
-  /**
-   * Should we show a button that can open up the feature table?
-   */
-  showTable:  React.PropTypes.bool,
-  /**
-   * Should we allow for reordering of layers?
-   */
-  allowReordering: React.PropTypes.bool,
-  /**
-   * Should we allow for filtering of features in a layer?
-   */
-  allowFiltering: React.PropTypes.bool,
-  /**
-   * Should we allow for labeling of features in a layer?
-   */
-  allowLabeling: React.PropTypes.bool,
-  /**
-   * Should we allow for styling of features in a vector layer?
-   */
-  allowStyling: React.PropTypes.bool,
-  /**
-   * Should we allow for editing of features in a vector layer?
-   * This does require having a WFST component in your application.
-   */
-  allowEditing: React.PropTypes.bool,
-  /**
-   * Should we allow for removal of layers?
-   */
-  allowRemove: React.PropTypes.bool,
-  /**
-   * Should we show the contents of layer groups?
-   */
-  showGroupContent: React.PropTypes.bool,
-  /**
-   * Should we show a download button for layers?
-   */
-  showDownload: React.PropTypes.bool,
-  /**
-   * Should we include the legend in the layer list?
-   */
-  includeLegend: React.PropTypes.bool,
-  /**
-   * The feature format to serialize in for downloads.
-   */
-  downloadFormat: React.PropTypes.oneOf(['GeoJSON', 'KML', 'GPX']),
-  /**
-   * Should we show an opacity slider for layers?
-   */
-  showOpacity: React.PropTypes.bool,
-  /**
-   * Text to show on top of layers.
-   */
-  tipLabel: React.PropTypes.string,
-  /**
-   * Should we show this component on start of the application?
-   */
-  showOnStart: React.PropTypes.bool,
-  /**
-   * Should we allow adding layers?
-   */
-  addLayer: React.PropTypes.shape({
-    sources: React.PropTypes.arrayOf(React.PropTypes.shape({
-      title: React.PropTypes.string.isRequired,
-      type: React.PropTypes.string.isRequired,
-      url: React.PropTypes.string.isRequired
-    })),
-    allowUserInput: React.PropTypes.bool
-  }),
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * Position of the tooltip.
-   */
-  tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left']),
-  /**
-   * A filter function to filter out some of the layers by returning false.
-   */
-  filter: React.PropTypes.func,
-  /**
-   * Child nodes
-   */
-  children: React.PropTypes.node,
-  /**
-  * i18n message strings. Provided through the application through context.
-  */
-  intl: intlShape.isRequired
-};
-
-LayerList.defaultProps = {
-  showZoomTo: false,
-  showTable: false,
-  allowReordering: false,
-  allowEditing: false,
-  allowFiltering: false,
-  allowLabeling: false,
-  allowRemove: true,
-  allowStyling: false,
-  showGroupContent: true,
-  showDownload: false,
-  downloadFormat: 'GeoJSON',
-  includeLegend: false,
-  showOpacity: false,
-  showOnStart: false
-};
-
-LayerList.contextTypes = {
-  muiTheme: React.PropTypes.object
-};
-
-LayerList.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-};
 
 export default injectIntl(DragDropContext(HTML5Backend)(LayerList));

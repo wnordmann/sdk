@@ -38,6 +38,46 @@ const messages = defineMessages({
  */
 @pureRender
 class Rotate extends React.Component {
+  static propTypes = {
+    /**
+     * Animation duration in milliseconds.
+     */
+    duration: React.PropTypes.number,
+    /**
+     * Style for the buttons.
+     */
+    style: React.PropTypes.object,
+    /**
+     * The ol3 map to use.
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * Should we hide the button if not rotated?
+     */
+    autoHide: React.PropTypes.bool,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * Position of the tooltip.
+     */
+    tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left']),
+    /**
+     * i18n message strings. Provided through the application through context.
+     */
+    intl: intlShape.isRequired
+  };
+
+  static defaultProps = {
+    autoHide: true,
+    duration: 250
+  };
+
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
   constructor(props, context) {
     super(props);
     this.state = {
@@ -100,45 +140,5 @@ class Rotate extends React.Component {
     }
   }
 }
-
-Rotate.propTypes = {
-  /**
-   * Animation duration in milliseconds.
-   */
-  duration: React.PropTypes.number,
-  /**
-   * Style for the buttons.
-   */
-  style: React.PropTypes.object,
-  /**
-   * The ol3 map to use.
-   */
-  map: React.PropTypes.instanceOf(ol.Map).isRequired,
-  /**
-   * Should we hide the button if not rotated?
-   */
-  autoHide: React.PropTypes.bool,
-  /**
-   * Css class name to apply on the root element of this component.
-   */
-  className: React.PropTypes.string,
-  /**
-   * Position of the tooltip.
-   */
-  tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left']),
-  /**
-   * i18n message strings. Provided through the application through context.
-   */
-  intl: intlShape.isRequired
-};
-
-Rotate.defaultProps = {
-  autoHide: true,
-  duration: 250
-};
-
-Rotate.contextTypes = {
-  muiTheme: React.PropTypes.object
-};
 
 export default injectIntl(Rotate);
