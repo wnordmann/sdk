@@ -199,7 +199,7 @@ class FeatureStore extends EventEmitter {
     this._config[id].features.clear();
     this._config[id].features.addFeatures(features);
   }
-  loadFeatures(layer, startIndex, pageSize, onSuccess, onFailure, scope) {
+  loadFeatures(layer, startIndex, pageSize, sortingInfo, onSuccess, onFailure, scope) {
     var srsName = this._map.getView().getProjection().getCode();
     var me = this;
     var success = function(features) {
@@ -224,7 +224,7 @@ class FeatureStore extends EventEmitter {
         onFailure.call(scope, xmlhttp, exception);
       }
     };
-    WFSService.loadFeatures(layer, startIndex, pageSize, srsName, success, failure);
+    WFSService.loadFeatures(layer, startIndex, pageSize, sortingInfo, srsName, success, failure);
   }
   bindLayer(layer) {
     var source = layer.getSource();
