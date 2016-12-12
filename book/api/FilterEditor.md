@@ -21,11 +21,6 @@ type: `string`
 defaultValue: `null`
 
 
-### `initialFilter`
-
-defaultValue: `null`
-
-
 ### `intl`
 
 i18n message strings. Provided through the application through context.
