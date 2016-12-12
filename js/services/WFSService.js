@@ -158,11 +158,11 @@ class WFSService {
       onFailure.call(scope || this);
     }, this);
   }
-  loadFeatures(layer, startIndex, maxFeatures, srsName, onSuccess, onFailure) {
+  loadFeatures(layer, startIndex, maxFeatures, sortingInfo, srsName, onSuccess, onFailure) {
     var wfsInfo = layer.get('wfsInfo');
     var url = wfsInfo.url;
     var urlObj = new URL(url);
-    urlObj.set('query', {
+    var params = {
       service: 'WFS',
       request: 'GetFeature',
       startIndex: startIndex,
@@ -170,7 +170,11 @@ class WFSService {
       version: '1.1.0',
       typename: wfsInfo.featureType,
       srsname: 'EPSG:4326'
-    });
+    };
+    if (sortingInfo.length === 1) {
+      params.sortBy = sortingInfo[0].id + ' ' + (sortingInfo[0].asc ? 'A' : 'D');
+    }
+    urlObj.set('query', params);
     util.doGET(urlObj.toString(), function(xmlhttp) {
       var data = xmlhttp.responseXML;
       if (data !== null) {

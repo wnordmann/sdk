@@ -303,35 +303,21 @@ class FeatureTable extends React.Component {
     const {formatMessage} = this.props.intl;
     this.setState({loading: true});
     var start = state.page * state.pageSize;
-    if (!this._pagesLoaded[this._layer.get('id')]) {
-      this._pagesLoaded[this._layer.get('id')] = {};
-    }
-    // only load if not already loaded
-    if (!this._pagesLoaded[this._layer.get('id')][state.page]) {
-      FeatureStore.loadFeatures(this._layer, start, state.pageSize, function() {
-        this.setState({
-          page: state.page,
-          pageSize: state.pageSize,
-          pages: Math.ceil(this._layer.get('numberOfFeatures') / state.pageSize),
-          loading: false
-        });
-        this._pagesLoaded[this._layer.get('id')][state.page] = true;
-      }, function(xmlhttp, msg) {
-        this.setState({
-          error: true,
-          errorOpen: true,
-          msg: formatMessage(messages.loaderrormsg, {msg: msg || (xmlhttp.status + ' ' + xmlhttp.statusText)}),
-          loading: false
-        });
-      }, this);
-    } else {
+    FeatureStore.loadFeatures(this._layer, start, state.pageSize, state.sorting, function() {
       this.setState({
         page: state.page,
         pageSize: state.pageSize,
         pages: Math.ceil(this._layer.get('numberOfFeatures') / state.pageSize),
         loading: false
       });
-    }
+    }, function(xmlhttp, msg) {
+      this.setState({
+        error: true,
+        errorOpen: true,
+        msg: formatMessage(messages.loaderrormsg, {msg: msg || (xmlhttp.status + ' ' + xmlhttp.statusText)}),
+        loading: false
+      });
+    }, this);
   }
   _onExpandChange(expanded) {
     var me = this;
@@ -362,7 +348,7 @@ class FeatureTable extends React.Component {
       />);
     }
     var me = this;
-    var sortable = this._layer instanceof ol.layer.Vector;
+    var sortable = this.props.sortable;
     var columns = [{
       id: 'selector',
       header: '',
@@ -495,6 +481,10 @@ FeatureTable.propTypes = {
    */
   height: React.PropTypes.number,
   /**
+   * Should we allow for sorting the data?
+   */
+  sortable: React.PropTypes.bool,
+  /**
    * Callback that gets called when the height needs updating of the parent container.
    */
   onUpdate: React.PropTypes.func
@@ -503,6 +493,7 @@ FeatureTable.propTypes = {
 FeatureTable.defaultProps = {
   pageSize: 20,
   pointZoom: 16,
+  sortable: true,
   refreshRate: 250
 };
 
