@@ -22,6 +22,7 @@ import classNames from 'classnames';
 import LabelModal from './LabelModal';
 import StyleModal from './StyleModal';
 import LayerActions from '../actions/LayerActions';
+import SLDService from '../services/SLDService';
 import WMSService from '../services/WMSService';
 import Slider from 'material-ui/Slider';
 import Checkbox from 'material-ui/Checkbox';
@@ -289,11 +290,17 @@ class LayerListItem extends React.Component {
   }
   _style() {
     if (!this.props.layer.get('styleInfo')) {
-      var me = this;
-      WMSService.getStyles(this.props.layer.get('wfsInfo').url, this.props.layer, function(info) {
-        me.props.layer.set('styleInfo', info);
-        me.refs.stylemodal.getWrappedInstance().open();
-      }, undefined);
+      var sld_body = this.props.layer.getSource().getParams().SLD_BODY;
+      if (sld_body) {
+        this.props.layer.set('styleInfo', SLDService.parse(sld_body));
+        this.refs.stylemodal.getWrappedInstance().open();
+      } else {
+        var me = this;
+        WMSService.getStyles(this.props.layer.get('wfsInfo').url, this.props.layer, function(info) {
+          me.props.layer.set('styleInfo', info);
+          me.refs.stylemodal.getWrappedInstance().open();
+        }, undefined);
+      }
     } else {
       this.refs.stylemodal.getWrappedInstance().open();
     }
