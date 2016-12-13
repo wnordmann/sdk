@@ -28,7 +28,6 @@ import Slider from 'material-ui/Slider';
 import Checkbox from 'material-ui/Checkbox';
 import {ListItem} from 'material-ui/List';
 import {RadioButton} from 'material-ui/RadioButton';
-import IconButton from 'material-ui/IconButton';
 import DownloadIcon from 'material-ui/svg-icons/file/file-download';
 import ZoomInIcon from 'material-ui/svg-icons/action/zoom-in';
 import FilterIcon from 'material-ui/svg-icons/content/filter-list';
@@ -459,7 +458,6 @@ class LayerListItem extends React.Component {
     const layer = this.props.layer;
     const source = layer.getSource ? layer.getSource() : undefined;
     const iconStyle = {'paddingTop':'0px', 'paddingBottom':'0px'};
-    const tooltipStyle = {'top':'22px'};
     const {formatMessage} = this.props.intl;
     var opacity;
     if (this.props.showOpacity && source && layer.get('type') !== 'base') {
@@ -468,40 +466,39 @@ class LayerListItem extends React.Component {
     }
     var table;
     if (this.props.showTable && (this.props.layer instanceof ol.layer.Vector || this.props.layer.get('wfsInfo') !== undefined)) {
-      table = <IconButton className='layer-list-item-table' style={iconStyle} onTouchTap={this._showTable.bind(this)} tooltip={formatMessage(messages.tablebuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><TableIcon /></IconButton>;
+      table = (<Button className='layer-list-item-table' onTouchTap={this._showTable.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.tablebuttonlabel)}><TableIcon /></Button>);
     }
     var zoomTo;
-    // TODO add titles back for icon buttons
     if (layer.get('type') !== 'base' && layer.get('type') !== 'base-group' && ((source && source.getExtent) || layer.get('EX_GeographicBoundingBox')) && this.props.showZoomTo) {
-      zoomTo = <IconButton className='layer-list-item-zoom' style={iconStyle} onTouchTap={this._zoomTo.bind(this)} tooltip={formatMessage(messages.zoombuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><ZoomInIcon /></IconButton>;
+      zoomTo = (<Button className='layer-list-item-zoom' onTouchTap={this._zoomTo.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.zoombuttonlabel)}><ZoomInIcon /></Button>);
     }
     var download;
     if (layer instanceof ol.layer.Vector && this.props.showDownload) {
-      download = (<IconButton className='layer-list-item-download' style={iconStyle} onTouchTap={this._download.bind(this)} tooltip={formatMessage(messages.downloadbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><DownloadIcon /></IconButton>);
+      download = (<Button className='layer-list-item-download' onTouchTap={this._download.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.downloadbuttonlabel)}><DownloadIcon /></Button>);
     }
     var filter;
     if (layer instanceof ol.layer.Vector && this.props.allowFiltering) {
-      filter = (<IconButton style={iconStyle} className='layer-list-item-filter' onTouchTap={this._filter.bind(this)} tooltip={formatMessage(messages.filterbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><FilterIcon /></IconButton>);
+      filter = (<Button className='layer-list-item-filter' onTouchTap={this._filter.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.filterbuttonlabel)}><FilterIcon /></Button>);
     }
     var label;
     if (layer instanceof ol.layer.Vector && this.props.allowLabeling) {
-      label = (<IconButton style={iconStyle} className='layer-list-item-label' onTouchTap={this._label.bind(this)} tooltip={formatMessage(messages.labelbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><LabelIcon /></IconButton>);
+      label = (<Button className='layer-list-item-label' onTouchTap={this._label.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.labelbuttonlabel)} ><LabelIcon /></Button>);
     }
     var styling;
     var canStyle = layer.get('wfsInfo') && this.props.allowStyling;
     if (canStyle) {
-      styling = (<IconButton style={iconStyle} className='layer-list-item-style' onTouchTap={this._style.bind(this)} tooltip={formatMessage(messages.stylingbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><StyleIcon /></IconButton>);
+      styling = (<Button className='layer-list-item-style' onTouchTap={this._style.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.stylingbuttonlabel)} ><StyleIcon /></Button>);
     }
     var remove;
     if (this.props.allowRemove && layer.get('type') !== 'base' && layer.get('isRemovable') === true) {
-      remove = (<IconButton style={iconStyle} className='layer-list-item-remove' onTouchTap={this._remove.bind(this)} tooltip={formatMessage(messages.removebuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><DeleteIcon /></IconButton>);
+      remove = (<Button className='layer-list-item-remove' onTouchTap={this._remove.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.removebuttonlabel)} ><DeleteIcon /></Button>);
     }
     var edit;
     if (this.props.allowEditing && layer.get('isWFST') === true) {
-      edit = (<IconButton style={iconStyle} onTouchTap={this._edit.bind(this)} className='layer-list-item-edit' tooltip={formatMessage(messages.editbuttonlabel)} tooltipPosition={'bottom-right'} tooltipStyles={tooltipStyle} disableTouchRipple={true}><EditIcon /></IconButton>);
+      edit = (<Button className='layer-list-item-edit' onTouchTap={this._edit.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.editbuttonlabel)} ><EditIcon /></Button>);
     }
-    var buttonPadding
-    if (zoomTo || download || filter || label || styling || remove || edit) {
+    var buttonPadding;
+    if (zoomTo || download || filter || label || styling || remove || edit || table) {
       buttonPadding = (<div style={{'display':'inline-block','width':'26px'}} />);
     }
     var input;

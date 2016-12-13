@@ -21,7 +21,7 @@ import ToolConstants from '../constants/ToolConstants';
 import WMSService from '../services/WMSService';
 import WMTSService from '../services/WMTSService';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-import IconButton from 'material-ui/IconButton';
+import Button from './Button';
 import CloserIcon from 'material-ui/svg-icons/navigation/close';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -370,7 +370,7 @@ class InfoPopup extends React.Component {
     }
     return (
       <div className={classNames('sdk-component info-popup', this.props.className)}>
-        <IconButton style={{'position':'absolute', 'right':'10px', 'top':'10px', 'zIndex':'1000'}} ref="popupCloser" onTouchTap={this.setVisible.bind(this, false)}><CloserIcon /></IconButton>
+        <Button buttonType='Icon' buttonStyle={{float: 'right'}} style={{'position':'absolute', 'right':'10px', 'top':'10px', 'zIndex':'1000'}} ref="popupCloser" onTouchTap={this.setVisible.bind(this, false)}><CloserIcon /></Button>
         {contentDiv}
       </div>
     );
