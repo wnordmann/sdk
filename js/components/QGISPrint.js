@@ -172,14 +172,14 @@ class QGISPrint extends React.Component {
     intl: intlShape.isRequired
   };
 
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   static defaultProps = {
     menu: true,
     thumbnailPath: '../../resources/print/',
     resolutions: [72, 150, 300]
-  };
-
-  static childContextTypes = {
-    muiTheme: React.PropTypes.object.isRequired
   };
 
   constructor(props) {

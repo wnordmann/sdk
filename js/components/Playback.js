@@ -79,14 +79,14 @@ class Playback extends React.Component {
     intl: intlShape.isRequired
   };
 
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   static defaultProps = {
     interval: 500,
     numIntervals: 100,
     autoPlay: false
-  };
-
-  static childContextTypes = {
-    muiTheme: React.PropTypes.object.isRequired
   };
 
   constructor(props) {

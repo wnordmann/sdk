@@ -60,12 +60,12 @@ class FilterEditor extends React.Component {
     intl: intlShape.isRequired
   };
 
-  static defaultProps = {
-    initialExpression: null
-  };
-
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
+  };
+
+  static defaultProps = {
+    initialExpression: null
   };
 
   constructor(props) {

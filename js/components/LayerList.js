@@ -166,6 +166,14 @@ class LayerList extends React.Component {
     intl: intlShape.isRequired
   };
 
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   static defaultProps = {
     showZoomTo: false,
     showTable: false,
@@ -181,14 +189,6 @@ class LayerList extends React.Component {
     includeLegend: false,
     showOpacity: false,
     showOnStart: false
-  };
-
-  static contextTypes = {
-    muiTheme: React.PropTypes.object
-  };
-
-  static childContextTypes = {
-    muiTheme: React.PropTypes.object.isRequired
   };
 
   constructor(props, context) {

@@ -90,12 +90,12 @@ class Measure extends React.Component {
     intl: intlShape.isRequired
   };
 
-  static defaultProps = {
-    geodesic: true
-  };
-
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
+  };
+
+  static defaultProps = {
+    geodesic: true
   };
 
   constructor(props) {

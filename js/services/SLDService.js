@@ -679,7 +679,7 @@ class SLDService {
     };
   }
   createSLD(layer, geometryType, featureTypeStyles) {
-    var layerName = layer.get('id');
+    var layerName = layer.get('name');
     var styleInfo = layer.get('styleInfo');
     var result = {
       name: {

@@ -86,13 +86,13 @@ class InfoPopup extends React.Component {
     intl: intlShape.isRequired
   };
 
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   static defaultProps = {
     hover: false,
     infoFormat: 'text/plain'
-  };
-
-  static childContextTypes = {
-    muiTheme: React.PropTypes.object.isRequired
   };
 
   constructor(props) {

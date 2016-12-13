@@ -81,12 +81,12 @@ class Globe extends React.Component {
     intl: intlShape.isRequired
   };
 
-  static defaultProps = {
-    hideScalebar: 78271
-  };
-
   static contextTypes = {
     muiTheme: React.PropTypes.object
+  };
+
+  static defaultProps = {
+    hideScalebar: 78271
   };
 
   constructor(props, context) {

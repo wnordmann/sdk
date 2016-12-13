@@ -12,7 +12,7 @@ describe('RESTService', function() {
   var layer, url;
   beforeEach(function() {
     layer = new ol.layer.Tile({
-      id: 'states'
+      name: 'states'
     });
     url = 'http://demo.boundlessgeo.com/geoserver/wms';
   });

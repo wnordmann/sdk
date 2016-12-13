@@ -200,6 +200,10 @@ class FilterHelp extends React.Component {
     intl: intlShape.isRequired
   };
 
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
   static defaultProps = {
     style: {
       padding: '12px',
@@ -211,10 +215,6 @@ class FilterHelp extends React.Component {
       display: 'inline-block',
       minWidth: '80px'
     }
-  };
-
-  static contextTypes = {
-    muiTheme: React.PropTypes.object
   };
 
   constructor(props, context) {

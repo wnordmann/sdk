@@ -65,17 +65,17 @@ class GeocodingResults extends React.Component {
     intl: intlShape.isRequired
   };
 
-  static defaultProps = {
-    zoom: 10,
-    markerUrl: './resources/marker.png'
-  };
-
   static contextTypes = {
     muiTheme: React.PropTypes.object
   };
 
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
+  };
+
+  static defaultProps = {
+    zoom: 10,
+    markerUrl: './resources/marker.png'
   };
 
   constructor(props, context) {

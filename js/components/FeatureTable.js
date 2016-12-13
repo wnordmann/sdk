@@ -164,19 +164,19 @@ class FeatureTable extends React.Component {
     onUpdate: React.PropTypes.func
   };
 
-  static defaultProps = {
-    pageSize: 20,
-    pointZoom: 16,
-    sortable: true,
-    refreshRate: 250
-  };
-
   static contextTypes = {
     muiTheme: React.PropTypes.object
   };
 
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
+  };
+
+  static defaultProps = {
+    pageSize: 20,
+    pointZoom: 16,
+    sortable: true,
+    refreshRate: 250
   };
 
   constructor(props, context) {

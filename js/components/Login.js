@@ -60,12 +60,12 @@ class Login extends React.Component {
     intl: intlShape.isRequired
   };
 
-  static defaultProps = {
-    url: '/geoserver/app/api/login'
-  };
-
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
+  };
+
+  static defaultProps = {
+    url: '/geoserver/app/api/login'
   };
 
   constructor(props) {

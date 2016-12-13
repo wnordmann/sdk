@@ -264,6 +264,10 @@ class LayerListItem extends React.Component {
     intl: intlShape.isRequired
   };
 
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   static defaultProps = {
     connectDragSource: function(a) {
       return a;
@@ -271,10 +275,6 @@ class LayerListItem extends React.Component {
     connectDropTarget: function(a) {
       return a;
     }
-  };
-
-  static childContextTypes = {
-    muiTheme: React.PropTypes.object.isRequired
   };
 
   constructor(props) {
