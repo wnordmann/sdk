@@ -15,7 +15,6 @@ import ol from 'openlayers';
 import Dialog from 'material-ui/Dialog';
 import Snackbar from 'material-ui/Snackbar';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import IconButton from 'material-ui/IconButton';
 import RefreshIcon from 'material-ui/svg-icons/navigation/refresh';
 import pureRender from 'pure-render-decorator';
 import TextField from 'material-ui/TextField';
@@ -456,7 +455,7 @@ class AddLayerModal extends React.Component {
       <Dialog className={classNames('sdk-component add-layer-modal', this.props.className)}  actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title)} open={this.state.open} onRequestClose={this.close.bind(this)}>
         <SelectField value={this.state.source} onChange={this._onSourceChange.bind(this)}>
           {selectOptions}
-        </SelectField><IconButton key='refresh' tooltip={formatMessage(messages.refresh)} onTouchTap={this._refreshService.bind(this)}><RefreshIcon /></IconButton><br/>
+        </SelectField><Button buttonType='Icon' key='refresh' tooltip={formatMessage(messages.refresh)} onTouchTap={this._refreshService.bind(this)}><RefreshIcon /></Button><br/>
         <Dialog open={this.state.newModalOpen} actions={newActions} autoScrollBodyContent={true} onRequestClose={this.closeNewServer.bind(this)} modal={true} title={formatMessage(messages.newservermodaltitle)}>
           <SelectField floatingLabelText={formatMessage(messages.servertypelabel)} value={this.state.newType} onChange={this._onTypeChange.bind(this)}>{typeOptions}</SelectField><br/>
           <TextField ref='newservername' floatingLabelText={formatMessage(messages.newservername)} /><br/>

@@ -2,6 +2,7 @@ import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
+import IconButton from 'material-ui/IconButton';
 import classNames from 'classnames';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
@@ -15,7 +16,7 @@ class Button extends React.Component {
     /**
      * Type of button.
      */
-    buttonType: React.PropTypes.oneOf(['Raised', 'Flat', 'Action']),
+    buttonType: React.PropTypes.oneOf(['Raised', 'Flat', 'Action', 'Icon']),
     /**
      * Position of the tooltip.
      */
@@ -41,9 +42,13 @@ class Button extends React.Component {
      */
     onTouchTap: React.PropTypes.func,
     /**
-     * Style config object.
+     * Style config object for the button.
      */
     style: React.PropTypes.object,
+    /**
+     * Style config object for the wrapping span element.
+     */
+    buttonStyle: React.PropTypes.object,
     /**
      * Child components.
      */
@@ -87,13 +92,15 @@ class Button extends React.Component {
     return {muiTheme: getMuiTheme()};
   }
   render() {
-    var button, buttonStyle;
+    var button, buttonStyle = Object.assign({}, this.props.buttonStyle);
     if (this.props.buttonType === 'Action') {
       button = (<FloatingActionButton iconStyle={this.props.iconStyle} backgroundColor={this.props.backgroundColor} onTouchTap={this.props.onTouchTap} style={this.props.style} children={this.props.children} mini={this.props.mini}  />);
     } else if (this.props.buttonType === 'Flat') {
       button = (<FlatButton disableTouchRipple={true} secondary={this.props.secondary} primary={this.props.primary} onTouchTap={this.props.onTouchTap} icon={this.props.icon} children={this.props.children} label={this.props.label} />);
+    } else if (this.props.buttonType === 'Icon') {
+      button = (<IconButton disableTouchRipple={true} onTouchTap={this.props.onTouchTap} style={this.props.style} children={this.props.children}></IconButton>);
     } else {
-      buttonStyle = {margin: '10px 12px'};
+      buttonStyle.margin = '10px 12px';
       button = (<RaisedButton disableTouchRipple={true} disabled={this.props.disabled} style={this.props.style} secondary={this.props.secondary} onTouchTap={this.props.onTouchTap} icon={this.props.icon} children={this.props.children} label={this.props.label} />);
     }
     var className = {

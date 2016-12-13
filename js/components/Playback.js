@@ -15,7 +15,7 @@ import ol from 'openlayers';
 import classNames from 'classnames';
 import ToolActions from '../actions/ToolActions';
 import TimeService from '../services/TimeService';
-import IconButton from 'material-ui/IconButton';
+import Button from './Button';
 import PlayIcon from 'material-ui/svg-icons/av/play-arrow';
 import PauseIcon from 'material-ui/svg-icons/av/pause';
 import Slider from 'material-ui/Slider';
@@ -255,7 +255,7 @@ class Playback extends React.Component {
     }
     var controls;
     if (this.state.date !== undefined) {
-      controls = [(<IconButton key='play' style={{'float': 'left'}} onTouchTap={this._playPause.bind(this)}>{buttonIcon}</IconButton>)];
+      controls = [(<Button buttonType='Icon' key='play' style={{'float': 'left'}} onTouchTap={this._playPause.bind(this)}>{buttonIcon}</Button>)];
       this._refreshTimeLayers();
       if (this.state.dates) {
         controls.push(<Slider step={1} key='slider' style={{width: 200, 'float': 'left', marginTop: 8}} min={0} max={this.state.dates.length - 1} value={this.state.dateStep} onChange={this._onRangeChangeValues.bind(this)} />,

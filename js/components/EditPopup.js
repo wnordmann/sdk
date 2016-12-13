@@ -16,7 +16,7 @@ import ol from 'openlayers';
 import AppDispatcher from '../dispatchers/AppDispatcher';
 import ToolUtil from '../toolutil';
 import {injectIntl, intlShape} from 'react-intl';
-import IconButton from 'material-ui/IconButton';
+import Button from './Button';
 import CloserIcon from 'material-ui/svg-icons/navigation/close';
 import classNames from 'classnames';
 import EditForm from './EditForm';
@@ -147,7 +147,7 @@ class EditPopup extends React.Component {
     }
     return (
       <div className={classNames('sdk-component edit-popup', this.props.className)}>
-        <IconButton style={{float: 'right'}} ref="popupCloser" onTouchTap={this.setVisible.bind(this, false)}><CloserIcon /></IconButton>
+        <Button buttonType='Icon' buttonStyle={{float: 'right'}} ref="popupCloser" onTouchTap={this.setVisible.bind(this, false)}><CloserIcon /></Button>
         <div className='popup-content' ref='content'>
           {editForm}
         </div>
