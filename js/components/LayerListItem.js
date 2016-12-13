@@ -497,8 +497,8 @@ class LayerListItem extends React.Component {
     if (this.props.allowEditing && layer.get('isWFST') === true) {
       edit = (<Button className='layer-list-item-edit' onTouchTap={this._edit.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.editbuttonlabel)} ><EditIcon /></Button>);
     }
-    var buttonPadding
-    if (zoomTo || download || filter || label || styling || remove || edit) {
+    var buttonPadding;
+    if (zoomTo || download || filter || label || styling || remove || edit || table) {
       buttonPadding = (<div style={{'display':'inline-block','width':'26px'}} />);
     }
     var input;
