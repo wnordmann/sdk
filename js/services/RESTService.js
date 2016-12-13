@@ -14,7 +14,7 @@ import util from '../util';
 
 class RESTService {
   _getStyleNameUrl(url, layer) {
-    var id = layer.get('id').split(':').pop();
+    var id = layer.get('name').split(':').pop();
     return url.replace(/wms|ows|wfs/g, 'rest/layers/' + id + '.json');
   }
   _parseStyleName(jsonData) {

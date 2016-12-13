@@ -83,13 +83,13 @@ class Zoom extends React.Component {
     intl: intlShape.isRequired
   };
 
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
   static defaultProps = {
     delta: 1,
     duration: 250
-  };
-
-  static contextTypes = {
-    muiTheme: React.PropTypes.object
   };
 
   constructor(props, context) {

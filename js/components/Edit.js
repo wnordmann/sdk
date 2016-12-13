@@ -195,20 +195,20 @@ class Edit extends React.Component {
     intl: intlShape.isRequired
   };
 
-  static defaultProps = {
-    style: {
-      padding: 10
-    },
-    strokeWidth: 2,
-    pointRadius: 7
-  };
-
   static contextTypes = {
     muiTheme: React.PropTypes.object
   };
 
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
+  };
+
+  static defaultProps = {
+    style: {
+      padding: 10
+    },
+    strokeWidth: 2,
+    pointRadius: 7
   };
 
   constructor(props, context) {

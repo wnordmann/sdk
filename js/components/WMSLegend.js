@@ -52,6 +52,10 @@ class WMSLegend extends React.Component {
     format: React.PropTypes.string
   };
 
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
   static defaultProps = {
     height: 20,
     width: 20,
@@ -62,10 +66,6 @@ class WMSLegend extends React.Component {
       fontName: 'Arial'
     },
     format: 'image/png'
-  };
-
-  static contextTypes = {
-    muiTheme: React.PropTypes.object
   };
 
   constructor(props, context) {

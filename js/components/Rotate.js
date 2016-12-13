@@ -69,13 +69,13 @@ class Rotate extends React.Component {
     intl: intlShape.isRequired
   };
 
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
   static defaultProps = {
     autoHide: true,
     duration: 250
-  };
-
-  static contextTypes = {
-    muiTheme: React.PropTypes.object
   };
 
   constructor(props, context) {

@@ -60,18 +60,18 @@ class PanelButton extends React.Component {
     tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left'])
   };
 
-  static defaultProps = {
-    showExpandedOnStartup: false,
-    buttonClassName: 'panelbutton',
-    contentClassName: 'panel-button-panel'
-  };
-
   static contextTypes = {
     muiTheme: React.PropTypes.object
   };
 
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
+  };
+
+  static defaultProps = {
+    showExpandedOnStartup: false,
+    buttonClassName: 'panelbutton',
+    contentClassName: 'panel-button-panel'
   };
 
   constructor(props, context) {

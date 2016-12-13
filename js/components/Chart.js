@@ -111,16 +111,16 @@ class Chart extends React.Component {
     intl: intlShape.isRequired
   };
 
-  static defaultProps = {
-    combo: false
-  };
-
   static contextTypes = {
     muiTheme: React.PropTypes.object
   };
 
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
+  };
+
+  static defaultProps = {
+    combo: false
   };
 
   constructor(props, context) {

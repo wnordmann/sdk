@@ -60,6 +60,10 @@ class StrokeEditor extends React.Component {
     intl: intlShape.isRequired
   };
 
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   static defaultProps = {
     initialStrokeColor: {
       rgb: {
@@ -71,10 +75,6 @@ class StrokeEditor extends React.Component {
       hex: '#000000'
     },
     initialStrokeWidth: 1
-  };
-
-  static childContextTypes = {
-    muiTheme: React.PropTypes.object.isRequired
   };
 
   constructor(props) {

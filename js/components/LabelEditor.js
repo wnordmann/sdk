@@ -80,6 +80,10 @@ class LabelEditor extends React.Component {
     intl: intlShape.isRequired
   };
 
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   static defaultProps = {
     initialLabelAttribute: null,
     initialFontSize: '12',
@@ -92,10 +96,6 @@ class LabelEditor extends React.Component {
       },
       hex: '#000000'
     }
-  };
-
-  static childContextTypes = {
-    muiTheme: React.PropTypes.object.isRequired
   };
 
   constructor(props) {

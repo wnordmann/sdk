@@ -148,19 +148,19 @@ class WFST extends React.Component {
     intl: intlShape.isRequired
   };
 
-  static defaultProps = {
-    showEditForm: false,
-    layerSelector: true,
-    visible: true,
-    pointBuffer: 0.5
-  };
-
   static contextTypes = {
     muiTheme: React.PropTypes.object
   };
 
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
+  };
+
+  static defaultProps = {
+    showEditForm: false,
+    layerSelector: true,
+    visible: true,
+    pointBuffer: 0.5
   };
 
   constructor(props, context) {

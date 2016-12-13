@@ -165,12 +165,12 @@ class AddLayerModal extends React.Component {
     intl: intlShape.isRequired
   };
 
-  static defaultProps = {
-    allowUserInput: false
-  };
-
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
+  };
+
+  static defaultProps = {
+    allowUserInput: false
   };
 
   constructor(props) {

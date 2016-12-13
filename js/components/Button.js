@@ -74,13 +74,13 @@ class Button extends React.Component {
     iconStyle: React.PropTypes.object
   };
 
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   static defaultProps = {
     buttonType: 'Raised',
     tooltipPosition: 'bottom'
-  };
-
-  static childContextTypes = {
-    muiTheme: React.PropTypes.object.isRequired
   };
 
   getChildContext() {

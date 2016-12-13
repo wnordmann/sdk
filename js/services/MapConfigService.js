@@ -60,9 +60,7 @@ class MapConfigService {
   generateLayerFromConfig(config) {
     var type = config.type;
     var layerConfig = config.properties || {};
-    if (layerConfig.id === undefined) {
-      layerConfig.id = LayerIdService.generateId();
-    }
+    layerConfig.id = LayerIdService.generateId();
     if (type === 'Group') {
       layerConfig.layers = [];
       for (var i = 0, ii = config.children.length; i < ii; ++i) {

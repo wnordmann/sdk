@@ -129,17 +129,17 @@ class AddLayer extends React.Component {
     intl: intlShape.isRequired
   };
 
-  static defaultProps = {
-    strokeWidth: 2,
-    pointRadius: 7
-  };
-
   static contextTypes = {
     muiTheme: React.PropTypes.object
   };
 
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
+  };
+
+  static defaultProps = {
+    strokeWidth: 2,
+    pointRadius: 7
   };
 
   constructor(props, context) {

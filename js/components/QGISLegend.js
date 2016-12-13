@@ -95,17 +95,17 @@ class QGISLegend extends React.Component {
     intl: intlShape.isRequired
   };
 
-  static defaultProps = {
-    legendBasePath: './legend/',
-    showExpandedOnStartup: false
-  };
-
   static contextTypes = {
     muiTheme: React.PropTypes.object
   };
 
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
+  };
+
+  static defaultProps = {
+    legendBasePath: './legend/',
+    showExpandedOnStartup: false
   };
 
   constructor(props, context) {

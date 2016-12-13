@@ -52,12 +52,12 @@ class Geocoding extends React.Component {
     intl: intlShape.isRequired
   };
 
-  static defaultProps = {
-    maxResults: 5
-  };
-
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
+  };
+
+  static defaultProps = {
+    maxResults: 5
   };
 
   constructor(props) {
