@@ -45,102 +45,102 @@ import {Tabs, Tab} from 'material-ui/Tabs';
 global.Tabs = Tabs;
 global.Tab = Tab;
 
-import AddLayer from './components/AddLayer.jsx';
+import AddLayer from './components/AddLayer';
 global.AddLayer = AddLayer;
 
-import Bookmarks from './components/Bookmarks.jsx';
+import Bookmarks from './components/Bookmarks';
 global.Bookmarks = Bookmarks;
 
-import Button from './components/Button.jsx';
+import Button from './components/Button';
 global.Button = Button;
 
-import Chart from './components/Chart.jsx';
+import Chart from './components/Chart';
 global.Chart = Chart;
 
-import Edit from './components/Edit.jsx';
+import Edit from './components/Edit';
 global.Edit = Edit;
 
-import EditPopup from './components/EditPopup.jsx';
+import EditPopup from './components/EditPopup';
 global.EditPopup = EditPopup;
 
-import FeatureTable from './components/FeatureTable.jsx';
+import FeatureTable from './components/FeatureTable';
 global.FeatureTable = FeatureTable;
 
-import Geocoding from './components/Geocoding.jsx';
+import Geocoding from './components/Geocoding';
 global.Geocoding = Geocoding;
 
-import GeocodingResults from './components/GeocodingResults.jsx';
+import GeocodingResults from './components/GeocodingResults';
 global.GeocodingResults = GeocodingResults;
 
-import Geolocation from './components/Geolocation.jsx';
+import Geolocation from './components/Geolocation';
 global.Geolocation = Geolocation;
 
-import Globe from './components/Globe.jsx';
+import Globe from './components/Globe';
 global.Globe = Globe;
 
-import HomeButton from './components/HomeButton.jsx';
+import HomeButton from './components/HomeButton';
 global.HomeButton = HomeButton;
 
-import ImageExport from './components/ImageExport.jsx';
+import ImageExport from './components/ImageExport';
 global.ImageExport = ImageExport;
 
-import InfoPopup from './components/InfoPopup.jsx';
+import InfoPopup from './components/InfoPopup';
 global.InfoPopup = InfoPopup;
 
-import LayerList from './components/LayerList.jsx';
+import LayerList from './components/LayerList';
 global.LayerList = LayerList;
 
-import LoadingPanel from './components/LoadingPanel.jsx';
+import LoadingPanel from './components/LoadingPanel';
 global.LoadingPanel = LoadingPanel;
 
-import Login from './components/Login.jsx';
+import Login from './components/Login';
 global.Login = Login;
 
-import MapConfig from './components/MapConfig.jsx';
+import MapConfig from './components/MapConfig';
 global.MapConfig = MapConfig;
 
 
-import MapConfigTransformService from './services/MapConfigTransformService.js';
+import MapConfigTransformService from './services/MapConfigTransformService';
 global.MapConfigTransformService = MapConfigTransformService;
 
-import MapConfigService from './services/MapConfigService.js';
+import MapConfigService from './services/MapConfigService';
 global.MapConfigService = MapConfigService;
 
-import MapPanel from './components/MapPanel.jsx';
+import MapPanel from './components/MapPanel';
 global.MapPanel = MapPanel;
 
-import Measure from './components/Measure.jsx';
+import Measure from './components/Measure';
 global.Measure = Measure;
 
-import Navigation from './components/Navigation.jsx';
+import Navigation from './components/Navigation';
 global.Navigation = Navigation;
 
-import Playback from './components/Playback.jsx';
+import Playback from './components/Playback';
 global.Playback = Playback;
 
-import QGISLegend from './components/QGISLegend.jsx';
+import QGISLegend from './components/QGISLegend';
 global.QGISLegend = QGISLegend;
 
-import QGISPrint from './components/QGISPrint.jsx';
+import QGISPrint from './components/QGISPrint';
 global.QGISPrint = QGISPrint;
 
-import QueryBuilder from './components/QueryBuilder.jsx';
+import QueryBuilder from './components/QueryBuilder';
 global.QueryBuilder = QueryBuilder;
 
-import Rotate from './components/Rotate.jsx';
+import Rotate from './components/Rotate';
 global.Rotate = Rotate;
 
-import Select from './components/Select.jsx';
+import Select from './components/Select';
 global.Select = Select;
 
-import ToolActions from './actions/ToolActions.js';
+import ToolActions from './actions/ToolActions';
 global.ToolActions = ToolActions;
 
-import WFST from './components/WFST.jsx';
+import WFST from './components/WFST';
 global.WFST = WFST;
 
-import Zoom from './components/Zoom.jsx';
+import Zoom from './components/Zoom';
 global.Zoom = Zoom;
 
-import ZoomSlider from './components/ZoomSlider.jsx';
+import ZoomSlider from './components/ZoomSlider';
 global.ZoomSlider = ZoomSlider;
