@@ -13,11 +13,18 @@ Background color.
 type: `string`
 
 
+### `buttonStyle`
+
+Style config object for the wrapping span element.
+
+type: `object`
+
+
 ### `buttonType`
 
 Type of button.
 
-type: `enum ('Raised'|'Flat'|'Action')`
+type: `enum ('Raised'|'Flat'|'Action'|'Icon')`
 defaultValue: `'Raised'`
 
 
@@ -93,7 +100,7 @@ type: `bool`
 
 ### `style`
 
-Style config object.
+Style config object for the button.
 
 type: `object`
 
