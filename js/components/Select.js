@@ -42,6 +42,8 @@ const messages = defineMessages({
  * ```xml
  * <Select toggleGroup='navigation' map={map}/>
  * ```
+ *
+ * ![Select](../Select.png)
  */
 @pureRender
 class Select extends React.Component {
@@ -63,7 +65,7 @@ class Select extends React.Component {
      */
     className: React.PropTypes.string,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

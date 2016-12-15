@@ -45,14 +45,18 @@ function generatePropDefaultValue(value) {
 }
 
 function generateProp(propName, prop) {
-  return (
-    '### `' + propName + '`' + (prop.required ? ' (required)' : '') + '\n' +
-    '\n' +
-    (prop.description ? prop.description + '\n\n' : '') +
-    (prop.type ? generatePropType(prop.type) : '') +
-    (prop.defaultValue ? generatePropDefaultValue(prop.defaultValue) : '') +
-    '\n'
-  );
+  if (prop.description && prop.description.indexOf('@ignore') !== -1) {
+    return '';
+  } else {
+    return (
+      '### `' + propName + '`' + (prop.required ? ' (required)' : '') + '\n' +
+      '\n' +
+      (prop.description ? prop.description + '\n\n' : '') +
+      (prop.type ? generatePropType(prop.type) : '') +
+      (prop.defaultValue ? generatePropDefaultValue(prop.defaultValue) : '') +
+      '\n'
+    );
+  }
 }
 
 function generateProps(props) {

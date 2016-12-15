@@ -129,13 +129,19 @@ const messages = defineMessages({
 });
 
 /**
- * Modal window to add layers from a WMS or WFS service.
+ * Modal window to add layers from a WMS, WFS, WMTS or ArcGIS REST service.
+ *
+ * ```xml
+ * <AddLayerModal map={map} allowUserInput={true} sources={[{url: '/geoserver/wms', type: 'WMS', title: 'Local GeoServer'}]} />
+ * ```
+ *
+ * ![Add Layer Modal](../AddLayerModal.png)
  */
 @pureRender
 class AddLayerModal extends React.Component {
   static propTypes = {
     /**
-     * The ol3 map to upload to.
+     * The ol3 map to add layers to.
      */
     map: React.PropTypes.instanceOf(ol.Map).isRequired,
     /**
@@ -143,7 +149,7 @@ class AddLayerModal extends React.Component {
      */
     className: React.PropTypes.string,
     /**
-     * List of sources to use for this dialog.
+     * List of sources to use for this dialog. Entries have a title, type and url property. Type can be one of: WMS, WFS, WMTS or ArcGISRest.
      */
     sources: React.PropTypes.arrayOf(React.PropTypes.shape({
       title: React.PropTypes.string.isRequired,
@@ -155,11 +161,7 @@ class AddLayerModal extends React.Component {
      */
     allowUserInput: React.PropTypes.bool,
     /**
-     * The srs name that the map's view is in.
-     */
-    srsName: React.PropTypes.string,
-    /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

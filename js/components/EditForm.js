@@ -60,6 +60,15 @@ const messages = defineMessages({
   }
 });
 
+/**
+ * Form to allow editing of the attributes of a feature.
+ *
+ * ```xml
+ * <EditForm map={this.props.map} onGeometryUpdate={this._onGeomUpdate.bind(this)} onSuccess={this._onSuccess.bind(this)} onDeleteSuccess={this._onDeleteSuccess.bind(this)} feature={this.state.feature} layer={this.state.layer} />
+ * ```
+ *
+ * ![Edit Form](../EditForm.png)
+ */
 class EditForm extends React.Component {
   static propTypes = {
     /**
@@ -91,7 +100,7 @@ class EditForm extends React.Component {
      */
     onSuccess: React.PropTypes.func,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

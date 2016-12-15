@@ -167,7 +167,7 @@ class QGISPrint extends React.Component {
      */
     menu: React.PropTypes.bool,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

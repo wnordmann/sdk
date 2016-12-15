@@ -76,7 +76,11 @@ const messages = defineMessages({
 });
 
 /**
- * A modal for editing the style of a vector layer.
+ * A modal for editing the style of a layer.
+ *
+ * ```xml
+ * <StyleModal layer={this.props.layer} />
+ * ```
  */
 @pureRender
 class StyleModal extends React.Component {
@@ -90,7 +94,7 @@ class StyleModal extends React.Component {
      */
     className: React.PropTypes.string,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

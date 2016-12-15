@@ -45,7 +45,11 @@ const messages = defineMessages({
 });
 
 /**
- * A modal window for applying labels to a vector layer.
+ * A modal window for applying labels to a vector layer. Only works for local vector layers currently.
+ *
+ * ```xml
+ * <LabelModal layer={this.props.layer} />
+ * ```
  */
 @pureRender
 class LabelModal extends React.Component {
@@ -59,7 +63,7 @@ class LabelModal extends React.Component {
      */
     layer: React.PropTypes.instanceOf(ol.layer.Vector).isRequired,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

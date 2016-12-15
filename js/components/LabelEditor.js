@@ -46,6 +46,10 @@ const messages = defineMessages({
 
 /**
  * Editor for label properties. Can edit the label attribute, fontSize and fontColor.
+ *
+ * ```xml
+ * <LabelEditor attributes={this.props.attributes} onChange={this.props.onChange} />
+ * ```
  */
 @pureRender
 class LabelEditor extends React.Component {
@@ -75,7 +79,7 @@ class LabelEditor extends React.Component {
      */
     className: React.PropTypes.string,
     /**
-    * i18n message strings. Provided through the application through context.
+    * @ignore
     */
     intl: intlShape.isRequired
   };

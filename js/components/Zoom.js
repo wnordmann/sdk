@@ -36,11 +36,11 @@ const messages = defineMessages({
 /**
  * Two buttons to zoom in and out.
  *
- * ```html
- * <div id='zoom-buttons'>
- *   <Zoom map={map} />
- * </div>
+ * ```xml
+ * <Zoom map={map} />
  * ```
+ *
+ * ![Zoom](../Zoom.png)
  */
 @pureRender
 class Zoom extends React.Component {
@@ -78,7 +78,7 @@ class Zoom extends React.Component {
      */
     tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left']),
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

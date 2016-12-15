@@ -33,7 +33,11 @@ const messages = defineMessages({
 });
 
 /**
- * Style editor for a polygon symbolizer.
+ * Style editor for a polygon symbolizer. Currently limited to fill and stroke. Used by the Rule Editor.
+ *
+ * ```xml
+ * <PolygonSymbolizerEditor onChange={this.props.onChange} initialState={this.props.initialState} />
+ * ```
  */
 @pureRender
 class PolygonSymbolizerEditor extends React.Component {
@@ -51,7 +55,7 @@ class PolygonSymbolizerEditor extends React.Component {
      */
     initialState: React.PropTypes.object,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

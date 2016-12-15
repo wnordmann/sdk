@@ -34,6 +34,10 @@ const messages = defineMessages({
 
 /**
  * Style editor for stroke properties (color and width).
+ *
+ * ```xml
+ * <StrokeEditor onChange={this.props.onChange} initialStrokeColor={this.props.initialState.strokeColor} initialStrokeWidth={5} />
+ * ```
  */
 @pureRender
 class StrokeEditor extends React.Component {
@@ -55,7 +59,7 @@ class StrokeEditor extends React.Component {
      */
     initialStrokeWidth: React.PropTypes.number,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

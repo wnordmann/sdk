@@ -28,13 +28,13 @@ const messages = defineMessages({
 });
 
 /**
- * Two buttons to zoom in and out.
+ * A button that shows the rotation of the map and allows to reset it.
  *
- * ```html
- * <div id='zoom-buttons'>
- *   <Zoom map={map} />
- * </div>
+ * ```xml
+ * <Rotate map={map} />
  * ```
+ *
+ * ![Rotate](../Rotate.png)
  */
 @pureRender
 class Rotate extends React.Component {

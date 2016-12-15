@@ -169,13 +169,27 @@ const messages = defineMessages({
 
 /**
  * An item in the LayerList component.
+ *
+ * ![Layer List Item](../LayerListItem.png)
  */
 @pureRender
 class LayerListItem extends React.Component {
   static propTypes = {
+    /**
+     * @ignore
+     */
     connectDragSource: React.PropTypes.func.isRequired,
+    /**
+     * @ignore
+     */
     connectDropTarget: React.PropTypes.func.isRequired,
+    /**
+     * @ignore
+     */
     moveLayer: React.PropTypes.func.isRequired,
+    /**
+     * @ignore
+     */
     index: React.PropTypes.number.isRequired,
     /**
      * The map in which the layer of this item resides.
@@ -258,7 +272,7 @@ class LayerListItem extends React.Component {
      */
     className: React.PropTypes.string,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

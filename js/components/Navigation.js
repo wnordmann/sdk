@@ -32,7 +32,14 @@ const messages = defineMessages({
 });
 
 /**
- * Navigation button that allows to get the map back into navigation (zoom, pan) mode.
+ * Navigation button that allows to get the map back into navigation (zoom, pan, info popup) mode.
+ *
+ * ```xml
+ * <Navigation secondary={true} toggleGroup='navigation' toolId='nav' />
+ * ```
+ *
+ * ![Navigation](../Navigation.png)
+ * ![Navigation Active](../NavigationActive.png)
  */
 @pureRender
 class Navigation extends React.Component {
@@ -54,7 +61,7 @@ class Navigation extends React.Component {
      */
     className: React.PropTypes.string,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

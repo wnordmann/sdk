@@ -60,6 +60,9 @@ const wgs84Sphere = new ol.Sphere(6378137);
  * ```xml
  * <Measure toggleGroup='navigation' map={map}/>
  * ```
+ *
+ * ![Measure](../Measure.png)
+ * ![MeasureOpen](../MeasureOpen.png)
  */
 @pureRender
 class Measure extends React.Component {
@@ -85,7 +88,7 @@ class Measure extends React.Component {
      */
     className: React.PropTypes.string,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

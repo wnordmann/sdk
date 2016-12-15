@@ -44,12 +44,8 @@ const messages = defineMessages({
  * <script src="./resources/ol3-cesium/Cesium.js" type="text/javascript" charset="utf-8"></script>
  * ```
  *
- * ```html
- * <div ref='map' id='map'>
- *   <div id='globe-button' className='ol-unselectable ol-control'>
- *     <Globe map={map} />
- *   </div>
- * </div>
+ * ```xml
+ * <Globe map={map} />
  * ```
  */
 @pureRender
@@ -76,7 +72,7 @@ class Globe extends React.Component {
      */
     className: React.PropTypes.string,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

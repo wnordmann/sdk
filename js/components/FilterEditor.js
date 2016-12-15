@@ -37,7 +37,11 @@ const messages = defineMessages({
 });
 
 /**
- * Editor for a single filter using FilterService. Can for instance be used in a style dialog.
+ * Editor for a single filter. Used by the RuleEditor.
+ *
+ * ```xml
+ * <FilterEditor onChange={this._onChange.bind(this)} initialExpression={expression} />
+ * ```
  */
 @pureRender
 class FilterEditor extends React.Component {
@@ -55,7 +59,7 @@ class FilterEditor extends React.Component {
      */
     className: React.PropTypes.string,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

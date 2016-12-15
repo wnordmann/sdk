@@ -56,10 +56,8 @@ const messages = defineMessages({
  * };
  * ```
  *
- * ```html
- * <div id='legend'>
- *   <QGISLegend map={map} legendBasePath='./resources/legend/' legendData={legendData} pullRight/>
- * </div>
+ * ```xml
+ * <QGISLegend map={map} legendBasePath='./resources/legend/' legendData={legendData} pullRight/>
  * ```
  */
 @pureRender
@@ -90,7 +88,7 @@ class QGISLegend extends React.Component {
      */
     className: React.PropTypes.string,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

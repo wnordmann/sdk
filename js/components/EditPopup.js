@@ -27,7 +27,7 @@ import './BasePopup.css';
  * Popup that can be used for feature editing (attribute form).
  *
  * ```xml
- * <div id='popup' className='ol-popup'><EditPopup map={map} /></div>
+ * <EditPopup map={map} />
  * ```
  */
 class EditPopup extends React.Component {
@@ -41,7 +41,7 @@ class EditPopup extends React.Component {
      */
     className: React.PropTypes.string,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

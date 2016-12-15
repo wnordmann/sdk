@@ -32,34 +32,10 @@ const messages = defineMessages({
 
 /**
  * Adds the ability to retrieve spatial bookmarks.
- * A spatial bookmark consists of a name, an extent and a description.
+ * A spatial bookmark consists of a name, an extent and a description. Extent needs to be in the view projection.
  *
- * ```javascript
- * var bookmarks = [{
- *   name: 'Le Grenier Pain',
- *   description: '<b>Address: </b>38 rue des Abbesses<br><b>Telephone:</b> 33 (0)1 46 06 41 81<br><a href=""http://www.legrenierapain.com"">Website</a>',
- *   extent: [259562.7661267497, 6254560.095662868, 260675.9610346824, 6256252.988234103]
- * }, {
- *   name: 'Poilne',
- *   description: '<b>Address: </b>8 rue du Cherche-Midi<br><b>Telephone:</b> 33 (0)1 45 48 42 59<br><a href=""http://www.poilane.fr"">Website</a>',
- *    extent: [258703.71361629796, 6248811.5276565505, 259816.90852423065, 6250503.271278702]
- * }];
- *
- * class BookmarkApp extends React.Component {
- *   render() {
- *     return (
- *       <div id='content'>
- *         <div ref='map' id='map'>
- *           <div id='bookmarks-panel'>
- *             <Bookmarks introTitle='Paris bakeries' introDescription='Explore the best bakeries of the capital of France' map={map} bookmarks={bookmarks} />
- *           </div>
- *         </div>
- *       </div>
- *     );
- *   }
- * }
- *
- * ReactDOM.render(<IntlProvider locale='en' messages={enMessages}><BookmarkApp map={map} /></IntlProvider>, document.getElementById('main'));
+ * ```xml
+ * <Bookmarks introTitle='Paris bakeries' introDescription='Explore the best bakeries of the capital of France' map={map} bookmarks={[{name: 'foo1', description: 'description1', extent: [259562, 6254560, 260675, 6256252]}, {name: 'foo2', description: 'description2', extent: [258703, 6248811, 259816, 6250503]}]} />
  * ```
  */
 @pureRender
@@ -91,7 +67,7 @@ class Bookmarks extends React.Component {
      */
     autoplay: React.PropTypes.bool,
     /**
-     * delay between each auto scoll in ms.
+     * Delay between each auto scoll in ms.
      */
     autoplaySpeed: React.PropTypes.number,
     /**
@@ -111,7 +87,7 @@ class Bookmarks extends React.Component {
      */
     introDescription: React.PropTypes.string,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired,
     /**
@@ -119,7 +95,7 @@ class Bookmarks extends React.Component {
      */
     menu: React.PropTypes.bool,
     /**
-     * Should we display a marker for the bookmark? Default is true.
+     * Should we display a marker for the bookmark?
      */
     showMarker: React.PropTypes.bool,
     /**

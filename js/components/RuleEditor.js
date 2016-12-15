@@ -48,7 +48,11 @@ const messages = defineMessages({
 });
 
 /**
- * Editor for a style rule. This means editing symbolizer properties and filter.
+ * Editor for a style rule. This means editing symbolizer properties and filter. Used by the Style Modal.
+ *
+ * ```xml
+ * <RuleEditor geometryType={this.state.geometryType} visible={rule.name === this.state.rule} key={key} initialState={symbol} onChange={this._onChange.bind(this)} attributes={this.state.attributes} />
+ * ```
  */
 @pureRender
 class RuleEditor extends React.Component {
@@ -78,7 +82,7 @@ class RuleEditor extends React.Component {
      */
     geometryType: React.PropTypes.oneOf(['Polygon', 'LineString', 'Point']),
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

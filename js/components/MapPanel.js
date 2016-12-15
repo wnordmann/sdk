@@ -28,6 +28,11 @@ const messages = defineMessages({
 
 /**
  * A div that can render the OpenLayers map object. It will also take care of notifying the user of load errors.
+ * It can also provide integration with the browser's back and forward button for extent history navigation.
+ *
+ * ```xml
+ * <MapPanel id='map' map={map} />
+ * ```
  */
 class MapPanel extends React.Component {
   static propTypes = {
@@ -52,11 +57,11 @@ class MapPanel extends React.Component {
      */
     useHistory: React.PropTypes.bool,
     /**
-     * Any children the MapPanel might have.
+     * @ignore
      */
     children: React.PropTypes.node,
     /**
-    * i18n message strings. Provided through the application through context.
+    * @ignore
     */
     intl: intlShape.isRequired
   };

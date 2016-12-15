@@ -42,6 +42,10 @@ const messages = defineMessages({
  * ```xml
  * <Login />
  * ```
+ *
+ * ![Login](../Login.png)
+ * ![Login Logged In](../LoginLoggedIn.png)
+ * ![Login Logout](../LoginLogout.png)
  */
 @pureRender
 class Login extends React.Component {
@@ -55,7 +59,7 @@ class Login extends React.Component {
      */
     className: React.PropTypes.string,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };
