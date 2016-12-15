@@ -54,13 +54,13 @@ const messages = defineMessages({
 const ALL_ATTRS = '#AllAttributes';
 
 /**
- * Popup to show feature info. This can be through WMS GetFeatureInfo or local vector data.
+ * Popup to show feature info. This can be through WMS / WMTS GetFeatureInfo or local vector data.
  *
- * ```html
- * <div id='popup' className='ol-popup'>
- *   <InfoPopup toggleGroup='navigation' map={map} />
- * </div>
+ * ```xml
+ * <InfoPopup toggleGroup='navigation' map={map} />
  * ```
+ *
+ * ![Info Popup](../InfoPopup.png)
  */
 class InfoPopup extends React.Component {
   static propTypes = {
@@ -81,7 +81,7 @@ class InfoPopup extends React.Component {
      */
     className: React.PropTypes.string,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

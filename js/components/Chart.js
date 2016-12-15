@@ -66,7 +66,7 @@ const messages = defineMessages({
  * ```
  *
  * ```xml
- * <div  id='chart-panel'><Chart ref='chartPanel' combo={true} charts={charts}/></div>
+ * <Chart ref='chartPanel' combo={true} charts={charts}/>
  * ```
  */
 class Chart extends React.Component {
@@ -106,7 +106,7 @@ class Chart extends React.Component {
      */
     container: React.PropTypes.string,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

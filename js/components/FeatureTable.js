@@ -115,10 +115,10 @@ const messages = defineMessages({
  * ```
  *
  * ```xml
- * <div ref='tablePanel' id='table-panel' className='feature-table'>
- *   <FeatureTable ref='table' layer={selectedLayer} map={map} />
- * </div>
+ * <FeatureTable ref='table' layer={selectedLayer} map={map} />
  * ```
+ *
+ * ![Feature Table](../FeatureTable.png)
  */
 class FeatureTable extends React.Component {
   static propTypes = {
@@ -147,7 +147,7 @@ class FeatureTable extends React.Component {
      */
     className: React.PropTypes.string,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired,
     /**

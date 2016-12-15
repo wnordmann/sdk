@@ -18,6 +18,10 @@ import pureRender from 'pure-render-decorator';
 
 /**
  * A component that shows a panel on click of a button.
+ *
+ * ```xml
+ * <PanelButton className='legenddiv' contentClassName='legendcontent' buttonClassName='legend-button' icon={<LegendIcon />} tooltipPosition='top-left' buttonTitle='Show legend' map={map} content={<Legend map={map} />}/>
+ * ```
  */
 @pureRender
 class PanelButton extends React.Component {

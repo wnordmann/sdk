@@ -40,12 +40,15 @@ const messages = defineMessages({
 
 /**
  * Enable geolocation which uses the current position of the user in the map.
+ * Can show the current position on the map, and also track the position.
  *
  * ```xml
- * <div id='geolocation-control' className='ol-unselectable ol-control'>
- *   <Geolocation map={map} />
- * </div>
+ * <Geolocation map={map} />
  * ```
+ * ![Geolocation button](../Geolocation.png)
+ * ![Geolocation tracking mode](../Geolocation_tracking.png)
+ * ![Geolocation marker](../Geolocation_marker.png)
+ *
  */
 @pureRender
 class Geolocation extends React.Component {
@@ -63,7 +66,7 @@ class Geolocation extends React.Component {
      */
     className: React.PropTypes.string,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

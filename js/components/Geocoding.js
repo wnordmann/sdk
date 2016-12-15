@@ -32,7 +32,7 @@ const messages = defineMessages({
  * Input field to search for placenames using a geocoding service (OSM nominatim).
  *
  * ```xml
- * <div id='geocoding' className='pull-right'><Geocoding /></div>
+ * <Geocoding maxResult={50} />
  * ```
  */
 @pureRender
@@ -47,7 +47,7 @@ class Geocoding extends React.Component {
      */
     className: React.PropTypes.string,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

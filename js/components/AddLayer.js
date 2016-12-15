@@ -124,7 +124,7 @@ class AddLayer extends React.Component {
      */
     pointRadius: React.PropTypes.number,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

@@ -100,7 +100,7 @@ class QueryBuilder extends React.Component {
      */
     map: React.PropTypes.instanceOf(ol.Map).isRequired,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired,
     /**

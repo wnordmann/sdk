@@ -35,6 +35,13 @@ const messages = defineMessages({
 
 /**
  * A combobox to select a layer.
+ *
+ * ```xml
+ * <LayerSelector map={map} onChange={this._onChange.bind(this)} />
+ * ```
+ *
+ * ![Layer Selector](../LayerSelector.png)
+ * ![Opened Layer Selector](../LayerSelectorOpen.png)
  */
 @pureRender
 class LayerSelector extends React.Component {
@@ -60,7 +67,7 @@ class LayerSelector extends React.Component {
      */
     className: React.PropTypes.string,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

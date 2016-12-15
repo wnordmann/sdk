@@ -22,6 +22,10 @@ import pureRender from 'pure-render-decorator';
 
 /**
  * Legend component for layers with a WMS source (tiled or untiled).
+ *
+ * ```xml
+ * <WMSLegend  className='legend-list-img' layer={layer} />
+ * ```
  */
 @pureRender
 class WMSLegend extends React.Component {

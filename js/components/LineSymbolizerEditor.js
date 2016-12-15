@@ -17,7 +17,11 @@ import StrokeEditor from './StrokeEditor';
 import pureRender from 'pure-render-decorator';
 
 /**
- * Style editor for a line symbolizer.
+ * Style editor for a line symbolizer. Can edit stroke properties.
+ *
+ * ```xml
+ * <LineSymbolizerEditor onChange={this._onChange.bind(this)} />
+ * ```
  */
 @pureRender
 class LineSymbolizerEditor extends React.Component {
@@ -35,7 +39,7 @@ class LineSymbolizerEditor extends React.Component {
      */
     initialState: React.PropTypes.object,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

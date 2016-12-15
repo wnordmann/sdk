@@ -66,7 +66,9 @@ const messages = defineMessages({
 });
 
 /**
- * Modal window for login to GeoServer.
+ * Modal window for login to GeoServer. Used by the Login component.
+ *
+ * ![LoginModal](../LoginModal.png)
  */
 @pureRender
 class LoginModal extends React.Component {
@@ -76,7 +78,7 @@ class LoginModal extends React.Component {
      */
     className: React.PropTypes.string,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

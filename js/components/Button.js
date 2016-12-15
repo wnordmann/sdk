@@ -9,6 +9,10 @@ import pureRender from 'pure-render-decorator';
 
 /**
  * Button with built-in tooltip.
+ *
+ * ```xml
+ * <Button buttonType='Flat' label='Close' tooltip='Close dialog' onTouchTap={this.close.bind(this)} />
+ * ```
  */
 @pureRender
 class Button extends React.Component {
@@ -50,7 +54,7 @@ class Button extends React.Component {
      */
     buttonStyle: React.PropTypes.object,
     /**
-     * Child components.
+     * @ignore
      */
     children: React.PropTypes.node,
     /**
@@ -98,7 +102,7 @@ class Button extends React.Component {
     } else if (this.props.buttonType === 'Flat') {
       button = (<FlatButton disableTouchRipple={true} secondary={this.props.secondary} primary={this.props.primary} onTouchTap={this.props.onTouchTap} icon={this.props.icon} children={this.props.children} label={this.props.label} />);
     } else if (this.props.buttonType === 'Icon') {
-      button = (<IconButton disableTouchRipple={true} onTouchTap={this.props.onTouchTap} style={this.props.style} children={this.props.children}></IconButton>);
+      button = (<IconButton disableTouchRipple={true} onTouchTap={this.props.onTouchTap} style={this.props.style} children={this.props.children}/>);
     } else {
       buttonStyle.margin = '10px 12px';
       button = (<RaisedButton disableTouchRipple={true} disabled={this.props.disabled} style={this.props.style} secondary={this.props.secondary} onTouchTap={this.props.onTouchTap} icon={this.props.icon} children={this.props.children} label={this.props.label} />);

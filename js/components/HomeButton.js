@@ -30,11 +30,11 @@ const messages = defineMessages({
 /**
  * A button to go back to the initial extent of the map.
  *
- * ```html
- * <div id='home-button'>
- *   <HomeButton map={map} />
- * </div>
+ * ```xml
+ * <HomeButton map={map} />
  * ```
+ *
+ * ![Home Button](../HomeButton.png)
  */
 @pureRender
 class HomeButton extends React.Component {
@@ -60,7 +60,7 @@ class HomeButton extends React.Component {
      */
     className: React.PropTypes.string,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

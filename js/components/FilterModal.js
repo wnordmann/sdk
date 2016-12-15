@@ -58,7 +58,11 @@ const messages = defineMessages({
 });
 
 /**
- * Modal for building filters to filter a vector layer.
+ * Modal for building filters to filter the features of a local vector layer.
+ *
+ * ```xml
+ * <FilterModal layer={myLayer} />
+ * ```
  */
 @pureRender
 class FilterModal extends React.Component {
@@ -76,7 +80,7 @@ class FilterModal extends React.Component {
      */
     onModalClose: React.PropTypes.func,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

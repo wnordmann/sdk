@@ -27,6 +27,10 @@ const messages = defineMessages({
 
 /**
  * Style editor for fill color.
+ *
+ * ```xml
+ * <FillEditor onChange={this._onChange.bind(this)} initialFillColor={{rgb: {r: 0, g: 255, b: 0, a: 0.5}, hex: '#00FF00'}}/>
+ * ```
  */
 @pureRender
 class FillEditor extends React.Component {
@@ -44,7 +48,7 @@ class FillEditor extends React.Component {
      */
     initialFillColor: React.PropTypes.object,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

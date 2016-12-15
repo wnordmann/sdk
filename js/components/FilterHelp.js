@@ -183,6 +183,10 @@ const messages = defineMessages({
 
 /**
  * Help dialog for filter fields.
+ *
+ * ```xml
+ * <FilterHelp />
+ * ```
  */
 class FilterHelp extends React.Component {
   static propTypes = {
@@ -195,7 +199,7 @@ class FilterHelp extends React.Component {
      */
     monoStyle: React.PropTypes.object,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

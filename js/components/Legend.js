@@ -36,7 +36,13 @@ const messages = defineMessages({
 });
 
 /**
- * Legend component that can show legend graphic for multiple layer and source types dynamically.
+ * Legend component that can show legend graphic for WMS layers only currently.
+ *
+ * ```xml
+ * <Legend map={map} />
+ * ```
+ *
+ * ![Legend](../Legend.png)
  */
 @pureRender
 class Legend extends React.Component {
@@ -54,7 +60,7 @@ class Legend extends React.Component {
      */
     className: React.PropTypes.string,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

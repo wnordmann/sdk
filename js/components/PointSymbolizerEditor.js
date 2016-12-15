@@ -71,7 +71,11 @@ const symboltypes = [
 ];
 
 /**
- * Style editor for a point symbolizer.
+ * Style editor for a point symbolizer. Can edit symbol type, stroke and fill. Is used by the Rule Editor.
+ *
+ * ```xml
+ * <PointSymbolizerEditor onChange={this.props.onChange} initialState={this.props.initialState} />
+ * ```
  */
 @pureRender
 class PointSymbolizerEditor extends React.Component {
@@ -89,7 +93,7 @@ class PointSymbolizerEditor extends React.Component {
      */
     initialState: React.PropTypes.object,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

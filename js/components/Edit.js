@@ -155,7 +155,7 @@ const messages = defineMessages({
  * A component that allows creating new features, so drawing their geometries and setting feature attributes through a form.
  *
  * ```xml
- * <div ref='editToolPanel' className='edit-tool-panel'><Edit toggleGroup='navigation' map={map} /></div>
+ * <Edit toggleGroup='navigation' map={map} />
  * ```
  */
 @pureRender
@@ -190,7 +190,7 @@ class Edit extends React.Component {
      */
     className: React.PropTypes.string,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

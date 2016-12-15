@@ -28,18 +28,8 @@ import pureRender from 'pure-render-decorator';
 /**
  * Adds a slider to the map that can be used to select a given date, and modifies the visibility of layers and features depending on their timestamp and the current time.
  *
- * ```javascript
- * class PlaybackApp extends App {
- *   render() {
- *     return (
- *       <div id='content'>
- *         <div ref='map' id='map'>
- *           <div id='timeline'><Playback map={map} minDate={324511200000} maxDate={1385938800000} /></div>
- *         </div>
- *       </div>
- *     );
- *   }
- * }
+ * ```xml
+ * <Playback map={map} minDate={324511200000} maxDate={1385938800000} />
  * ```
  */
 @pureRender
@@ -74,7 +64,7 @@ class Playback extends React.Component {
      */
     className: React.PropTypes.string,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

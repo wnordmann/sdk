@@ -72,6 +72,8 @@ const localStorageKey = 'web-sdk-map-config';
  * ```xml
  * <MapConfig map={map} />
  * ```
+ *
+ * ![MapConfig](../MapConfig.png)
  */
 @pureRender
 class MapConfig extends React.Component {
@@ -93,7 +95,7 @@ class MapConfig extends React.Component {
      */
     firstChild: React.PropTypes.bool,
     /**
-     * i18n message strings. Provided through the application through context.
+     * @ignore
      */
     intl: intlShape.isRequired
   };

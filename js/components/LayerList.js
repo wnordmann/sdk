@@ -55,11 +55,11 @@ const messages = defineMessages({
 /**
  * A list of layers in the map. Allows setting visibility and opacity.
  *
- * ```html
- * <div id='layerlist'>
- *   <LayerList allowFiltering={true} showOpacity={true} showDownload={true} showGroupContent={true} showZoomTo={true} allowReordering={true} map={map} />
- * </div>
+ * ```xml
+ * <LayerList allowFiltering={true} showOpacity={true} showDownload={true} showGroupContent={true} showZoomTo={true} allowReordering={true} map={map} />
  * ```
+ *
+ * ![Layer List](../LayerList.png)
  */
 @pureRender
 class LayerList extends React.Component {
@@ -157,11 +157,11 @@ class LayerList extends React.Component {
      */
     filter: React.PropTypes.func,
     /**
-     * Child nodes
+     * @ignore
      */
     children: React.PropTypes.node,
     /**
-    * i18n message strings. Provided through the application through context.
+    * @ignore
     */
     intl: intlShape.isRequired
   };
