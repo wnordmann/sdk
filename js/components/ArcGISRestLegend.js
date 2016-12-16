@@ -13,6 +13,7 @@
 import React from 'react';
 import ol from 'openlayers';
 import classNames from 'classnames';
+import {ListItem} from 'material-ui/List';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import ArcGISRestService from '../services/ArcGISRestService';
 import pureRender from 'pure-render-decorator';
@@ -64,8 +65,9 @@ class ArcGISRestLegend extends React.Component {
       for (var i = 0, ii = layers.length; i < ii; ++i) {
         if (layers[i].layerId === id) {
           for (var j = 0, jj = layers[i].legend.length; j < jj; ++j) {
+            var label = layers[i].legend[j].label;
             markup.push(
-              <img key={id + '-' + j} src={'data:' + layers[i].legend[j].contentType + ';base64,' + layers[i].legend[j].imageData} />
+<ListItem disabled={true} key={id + '-' + j} primaryText={label} leftIcon={<img style={{width:'auto', height: 'auto'}} src={'data:' + layers[i].legend[j].contentType + ';base64,' + layers[i].legend[j].imageData} />} />
             );
           }
           break;
