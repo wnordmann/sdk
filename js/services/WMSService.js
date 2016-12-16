@@ -98,7 +98,8 @@ class WMSService {
     );
     return url;
   }
-  getFeatureInfo(layer, coordinate, view, infoFormat, onSuccess, onFailure) {
+  getFeatureInfo(layer, coordinate, map, infoFormat, onSuccess, onFailure) {
+    var view = map.getView();
     util.doGET(this.getFeatureInfoUrl(layer, coordinate, view, infoFormat), function(response) {
       var result = {};
       if (infoFormat === 'text/plain' || infoFormat === 'text/html') {

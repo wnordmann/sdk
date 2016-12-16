@@ -20,6 +20,7 @@ import ToolUtil from '../toolutil';
 import ToolConstants from '../constants/ToolConstants';
 import WMSService from '../services/WMSService';
 import WMTSService from '../services/WMTSService';
+import ArcGISRestService from '../services/ArcGISRestService';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import Button from './Button';
 import CloserIcon from 'material-ui/svg-icons/navigation/close';
@@ -104,9 +105,6 @@ class InfoPopup extends React.Component {
     } else {
       this.props.map.on('singleclick', this._onMapClick, this);
     }
-    this._formats = {};
-    this._formats['application/json'] = new ol.format.GeoJSON();
-    this._formats['application/vnd.ogc.gml'] = new ol.format.WMSGetFeatureInfo();
     this.active = true;
     this._count = 0;
     this.state = {
@@ -156,7 +154,7 @@ class InfoPopup extends React.Component {
     var layers = [];
     for (var i = 0, ii = state.flatLayers.length; i < ii; ++i) {
       var layer = state.flatLayers[i];
-      if (layer instanceof ol.layer.Tile && layer.getVisible() && (layer.getSource() instanceof ol.source.TileWMS || layer.getSource() instanceof ol.source.WMTS) && layer.get('popupInfo') && layer.get('popupInfo') !== '') {
+      if (layer instanceof ol.layer.Tile && layer.getVisible() && (layer.getSource() instanceof ol.source.TileArcGISRest || layer.getSource() instanceof ol.source.TileWMS || layer.getSource() instanceof ol.source.WMTS) && layer.get('popupInfo') && layer.get('popupInfo') !== '') {
         layers.push(layer);
       }
     }
@@ -215,7 +213,6 @@ class InfoPopup extends React.Component {
         cb();
       }
     };
-    var view = map.getView();
     var onReadyAll = function(response) {
       if (response !== false && response.text) {
         popupTexts.push(response.text);
@@ -258,17 +255,24 @@ class InfoPopup extends React.Component {
       var layer = allLayers[i];
       popupDef = layer.get('popupInfo');
       var source = layer.getSource();
-      var service = source instanceof ol.source.TileWMS ? WMSService : WMTSService;
+      var service;
+      if (source instanceof ol.source.TileWMS) {
+        service = WMSService;
+      } else if (source instanceof ol.source.TileArcGISRest) {
+        service = ArcGISRestService;
+      } else {
+        service = WMTSService;
+      }
       if (popupDef === ALL_ATTRS) {
         called = true;
         var infoFormat = this.props.infoFormat;
         var callback = (infoFormat === 'text/plain' || infoFormat === 'text/html') ? onReadyAll : onReady;
-        service.getFeatureInfo(layer, evt.coordinate, view, infoFormat, callback, function() {
+        service.getFeatureInfo(layer, evt.coordinate, map, infoFormat, callback, function() {
           map.getTarget().style.cursor = me._cursor;
         });
       } else if (popupDef) {
         called = true;
-        service.getFeatureInfo(layer, evt.coordinate, view, 'application/json', onReady);
+        service.getFeatureInfo(layer, evt.coordinate, map, 'application/json', onReady);
       }
     }
     if (called === false) {

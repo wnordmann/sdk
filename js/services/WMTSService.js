@@ -115,7 +115,8 @@ class WMTSService {
     });
     return urlObj.toString();
   }
-  getFeatureInfo(layer, coordinate, view, infoFormat, onSuccess, onFailure) {
+  getFeatureInfo(layer, coordinate, map, infoFormat, onSuccess, onFailure) {
+    var view = map.getView();
     var url = this.getFeatureInfoUrl(layer, coordinate, view, infoFormat);
     util.doGET(url, function(response) {
       var result = {};
