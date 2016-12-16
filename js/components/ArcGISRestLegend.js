@@ -60,7 +60,7 @@ class ArcGISRestLegend extends React.Component {
   render() {
     var markup = [];
     if (this.state.legendInfo) {
-      var id = this.props.layer.get('id');
+      var id = this.props.layer.get('name');
       var layers = this.state.legendInfo.layers;
       for (var i = 0, ii = layers.length; i < ii; ++i) {
         if (layers[i].layerId === id) {
