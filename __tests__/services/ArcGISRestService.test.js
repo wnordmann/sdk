@@ -1,4 +1,4 @@
-/* global describe, it */
+/* global describe, it, beforeEach, afterEach */
 
 import {assert} from 'chai';
 import raf from 'raf';
