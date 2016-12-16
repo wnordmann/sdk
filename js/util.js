@@ -41,7 +41,12 @@ export default {
     return [colorObj.r, colorObj.g, colorObj.b, colorObj.a];
   },
   doJSONP(url, success, scope) {
-    var cbname = 'fn' + Date.now();
+    function getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min)) + min;
+    }
+    var cbname = 'fn' + Date.now() + getRandomInt(1, 10000);
     var script = document.createElement('script');
     script.src = url.replace('__cbname__', cbname);
     window[cbname] = function(jsonData) {

@@ -295,13 +295,13 @@ class AddLayerModal extends React.Component {
       childList = children;
     }
     var onCheck;
-    if (layer.Name) {
+    if (layer.Name !== undefined) {
       onCheck = this._onCheck.bind(this, layer);
     }
     var icon;
     if (layer.Layer) {
       icon = <FolderIcon />;
-    } else if (layer.Name) {
+    } else if (layer.Name !== undefined) {
       icon = <LayerIcon />;
     }
     var layerTitle = this._getLayerTitle(layer);

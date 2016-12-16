@@ -18,6 +18,7 @@ import classNames from 'classnames';
 import pureRender from 'pure-render-decorator';
 import {List, ListItem} from 'material-ui/List';
 import WMSLegend from './WMSLegend';
+import ArcGISRestLegend from './ArcGISRestLegend';
 import Label from './Label';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import './Legend.css';
@@ -115,9 +116,14 @@ class Legend extends React.Component {
       var layer = this.state.flatLayers[i];
       if (layer.getVisible()) {
         if ((layer instanceof ol.layer.Tile && layer.getSource() instanceof ol.source.TileWMS) ||
-          (layer instanceof ol.layer.Image && layer.getSource() instanceof ol.source.ImageWMS)) {
+          (layer instanceof ol.layer.Image && layer.getSource() instanceof ol.source.ImageWMS) ||
+          (layer instanceof ol.layer.Tile && layer.getSource() instanceof ol.source.TileArcGISRest)) {
           var primaryText = layer.get('emptyTitle') ? (<div className='layer-title-empty'>{layer.get('title')}</div>) : layer.get('title');
-          legends.push(<ListItem key={'legend-' + layer.get('id')} disableTouchRipple={true}><div>{primaryText}</div><WMSLegend  className='legend-list-img' {...this.props.wmsOptions} layer={layer} /></ListItem>);
+          if (layer.getSource() instanceof ol.source.TileWMS || layer.getSource() instanceof ol.source.ImageWMS) {
+            legends.push(<ListItem key={'legend-' + layer.get('id')} disableTouchRipple={true}><div>{primaryText}</div><WMSLegend  className='legend-list-img' {...this.props.wmsOptions} layer={layer} /></ListItem>);
+          } else if (layer.getSource() instanceof ol.source.TileArcGISRest) {
+            legends.push(<ListItem key={'legend-' + layer.get('id')} disableTouchRipple={true}><div>{primaryText}</div><ArcGISRestLegend className='legend-list-img' layer={layer} /></ListItem>);
+          }
         }
       }
     }
