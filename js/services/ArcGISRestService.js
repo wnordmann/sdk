@@ -77,7 +77,7 @@ class ArcGISRestService {
       onSuccess.call(this, jsonData);
     }, this);
   }
-  getFeatureInfo(layer, coordinate, map, infoFormat, onSuccess, onFailure) {
+  getFeatureInfoUrl(layer, coordinate, map) {
     var view = map.getView();
     var urlObj = new URL(layer.getSource().getUrls()[0] + '/identify');
     urlObj.set('query', {
@@ -92,15 +92,23 @@ class ArcGISRestService {
       callback: '__cbname__',
       pretty: 'false'
     });
-    util.doJSONP(urlObj.toString(), function(jsonData) {
-      var response = {layer: layer, features: []};
-      for (var i = 0, ii = jsonData.results.length; i < ii; ++i) {
-        var feature = format.readFeature(jsonData.results[i]);
-        if (feature) {
-          response.features.push(feature);
-        }
+    return urlObj.toString();
+  }
+  parseGetFeatureInfo(layer, jsonData) {
+    var response = {layer: layer, features: []};
+    for (var i = 0, ii = jsonData.results.length; i < ii; ++i) {
+      var feature = format.readFeature(jsonData.results[i]);
+      if (feature) {
+        response.features.push(feature);
       }
-      onSuccess.call(this, response);
+    }
+    return response;
+  }
+  getFeatureInfo(layer, coordinate, map, infoFormat, onSuccess, onFailure) {
+    var url = this.getFeatureInfoUrl(layer, coordinate, map);
+    var me = this;
+    util.doJSONP(url, function(jsonData) {
+      onSuccess.call(me, me.parseGetFeatureInfo(layer, jsonData));
     });
   }
 }
