@@ -59,6 +59,20 @@ class ArcGISRestService {
       onSuccess.call(this, this.parseCapabilities(jsonData));
     }, this);
   }
+  getLegendUrl(url) {
+    var urlObj = new URL(url + '/legend');
+    urlObj.set('query', {
+      f: 'json',
+      pretty: 'false',
+      callback: '__cbname__'
+    });
+    return urlObj.toString();
+  }
+  getLegend(url, onSuccess) {
+    util.doJSONP(this.getLegendUrl(url), function(jsonData) {
+      onSuccess.call(this, jsonData);
+    }, this);
+  }
 }
 
 export default new ArcGISRestService();
