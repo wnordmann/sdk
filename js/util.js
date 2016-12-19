@@ -10,7 +10,15 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
+import ol from 'openlayers';
+
 export default {
+  getResolutionForScale(scale, units) {
+    var dpi = 25.4 / 0.28;
+    var mpu = ol.proj.METERS_PER_UNIT[units];
+    var inchesPerMeter = 39.37;
+    return parseFloat(scale) / (mpu * inchesPerMeter * dpi);
+  },
   getTimeInfo(layer) {
     if (layer.Dimension) {
       for (var i = 0, ii = layer.Dimension.length; i < ii; ++i) {

@@ -272,6 +272,14 @@ class LayerListItem extends React.Component {
      */
     className: React.PropTypes.string,
     /**
+     * Style config for when label is out of scale.
+     */
+    labelStyleOutOfScale: React.PropTypes.object,
+    /**
+     * Should we handle resolution changes to show when a layer is in or out of scale?
+     */
+    handleResolutionChange: React.PropTypes.bool,
+    /**
      * @ignore
      */
     intl: intlShape.isRequired
@@ -330,12 +338,21 @@ class LayerListItem extends React.Component {
   }
   componentDidMount() {
     this.props.layer.on('change:visible', this._changeLayerVisible, this);
+    if (this.props.handleResolutionChange) {
+      this.props.map.getView().on('change:resolution', this._changeResolution, this);
+    }
   }
   componentWillUnmount() {
     this.props.layer.un('change:visible', this._changeLayerVisible, this);
+    if (this.props.handleResolutionChange) {
+      this.props.map.getView().un('change:resolution', this._changeResolution, this);
+    }
   }
   _changeLayerVisible(evt) {
     this.setState({checked: evt.target.getVisible()});
+  }
+  _changeResolution() {
+    this.setState({resolution: this.props.map.getView().getResolution()});
   }
   _handleChange(event) {
     var visible = event.target.checked;
@@ -467,6 +484,12 @@ class LayerListItem extends React.Component {
   _onTableUpdate() {
     this.refs.tablemodal.forceUpdate();
   }
+  calculateInRange() {
+    var layer = this.props.layer;
+    var map = this.props.map;
+    var resolution = map.getView().getResolution();
+    return (resolution >= layer.getMinResolution() && resolution < layer.getMaxResolution());
+  }
   render() {
     const {connectDragSource, connectDropTarget} = this.props;
     const layer = this.props.layer;
@@ -519,7 +542,15 @@ class LayerListItem extends React.Component {
     if (layer.get('type') === 'base') {
       input = (<RadioButton disabled={this.state.disabled} checked={this.state.checked} label={this.props.title} value={this.props.title} onCheck={this._handleChange.bind(this)} disableTouchRipple={true}/>);
     } else {
-      input = (<Checkbox checked={this.state.checked} label={this.props.title} labelStyle={this.props.layer.get('emptyTitle') ? {fontStyle: 'italic'} : undefined} onCheck={this._handleChange.bind(this)} disableTouchRipple={true}/>);
+      var labelStyle;
+      if (this.props.handleResolutionChange && this.props.layer.get('type') !== 'base-group' && !this.calculateInRange()) {
+        labelStyle = this.props.labelStyleOutOfScale;
+      }
+      if (this.props.layer.get('emptyTitle')) {
+        labelStyle = labelStyle || {};
+        labelStyle.fontStyle = 'italic';
+      }
+      input = (<Checkbox checked={this.state.checked} label={this.props.title} labelStyle={labelStyle} onCheck={this._handleChange.bind(this)} disableTouchRipple={true}/>);
     }
     var tableModal, labelModal, filterModal, styleModal;
     if (this.props.layer instanceof ol.layer.Vector) {

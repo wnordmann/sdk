@@ -157,6 +157,14 @@ class LayerList extends React.Component {
      */
     filter: React.PropTypes.func,
     /**
+     * Style config for when label is out of scale.
+     */
+    labelStyleOutOfScale: React.PropTypes.object,
+    /**
+     * Should we handle resolution changes to show when a layer is in or out of scale?
+     */
+    handleResolutionChange: React.PropTypes.bool,
+    /**
      * @ignore
      */
     children: React.PropTypes.node,
@@ -175,6 +183,10 @@ class LayerList extends React.Component {
   };
 
   static defaultProps = {
+    handleResolutionChange: true,
+    labelStyleOutOfScale: {
+      color: '#BBBBBB'
+    },
     showZoomTo: false,
     showTable: false,
     allowReordering: false,

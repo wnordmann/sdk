@@ -22,6 +22,8 @@ class ArcGISRestService {
       title: titleObj.title,
       emptyTitle: titleObj.empty,
       id: layer.Name,
+      minResolution: layer.MinResolution,
+      maxResolution: layer.MaxResolution,
       name: layer.Name,
       isRemovable: true,
       popupInfo: layer.Queryable ? '#AllAttributes' : undefined,
@@ -39,6 +41,9 @@ class ArcGISRestService {
     for (var i = 0, ii = jsonData.layers.length; i < ii; ++i) {
       var layer = {};
       var esriLayer = jsonData.layers[i];
+      // TODO use units of the view
+      layer.MaxResolution = esriLayer.minScale !== 0 ?  util.getResolutionForScale(esriLayer.minScale, 'm') : undefined;
+      layer.MinResolution = esriLayer.maxScale !== 0 ? util.getResolutionForScale(esriLayer.maxScale, 'm') : undefined;
       layer.Name = String(esriLayer.id);
       layer.Queryable = jsonData.capabilities && jsonData.capabilities.indexOf('Query') !== -1;
       layer.Title = esriLayer.name;
