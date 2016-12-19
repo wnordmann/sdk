@@ -39,7 +39,7 @@ class ArcGISRestService {
     for (var i = 0, ii = jsonData.layers.length; i < ii; ++i) {
       var layer = {};
       var esriLayer = jsonData.layers[i];
-      layer.Name = esriLayer.id;
+      layer.Name = String(esriLayer.id);
       layer.Queryable = jsonData.capabilities && jsonData.capabilities.indexOf('Query') !== -1;
       layer.Title = esriLayer.name;
       layers.push(layer);
