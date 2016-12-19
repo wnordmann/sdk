@@ -117,7 +117,7 @@ class ArcGISRestService {
       onSuccess.call(me, me.parseGetFeatureInfo(layer, jsonData));
     });
   }
-  loadFeatures(layer, startIndex, pageSize, sortingInfo, srsName, success, failure) {
+  getLoadFeaturesUrl(layer, startIndex, pageSize, sortingInfo, srsName) {
     var urlObj = new URL(layer.getSource().getUrls()[0] + '/' + layer.get('name') + '/query');
     var params = {
       where: 'OBJECTID >= ' + startIndex + ' AND OBJECTID < ' + (startIndex + pageSize),
@@ -130,7 +130,10 @@ class ArcGISRestService {
       params.orderByFields = sortingInfo[0].id + ' ' + (sortingInfo[0].asc ? 'ASC' : 'DESC');
     }
     urlObj.set('query', params);
-    util.doJSONP(urlObj.toString(), function(jsonData) {
+    return urlObj.toString();
+  }
+  loadFeatures(layer, startIndex, pageSize, sortingInfo, srsName, success, failure) {
+    util.doJSONP(this.getLoadFeaturesUrl(layer, startIndex, pageSize, sortingInfo, srsName), function(jsonData) {
       if (jsonData.error) {
         failure.call(this, {status: jsonData.error.code, statusText: jsonData.error.message}, jsonData.error.details.join(' '));
       } else {
@@ -138,18 +141,21 @@ class ArcGISRestService {
       }
     }, failure, this);
   }
+  getNumberOfFeaturesUrl(layer) {
+    var urlObj = new URL(layer.getSource().getUrls()[0] + '/' + layer.get('name') + '/query');
+    var params = {
+      where: '1=1',
+      f: 'json',
+      callback: '__cbname__',
+      pretty: 'false',
+      returnCountOnly: true
+    };
+    urlObj.set('query', params);
+    return urlObj.toString();
+  }
   getNumberOfFeatures(layer, callback) {
     if (layer.get('numberOfFeatures') === undefined) {
-      var urlObj = new URL(layer.getSource().getUrls()[0] + '/' + layer.get('name') + '/query');
-      var params = {
-        where: '1=1',
-        f: 'json',
-        callback: '__cbname__',
-        pretty: 'false',
-        returnCountOnly: true
-      };
-      urlObj.set('query', params);
-      util.doJSONP(urlObj.toString(), function(jsonData) {
+      util.doJSONP(this.getNumberOfFeaturesUrl(layer), function(jsonData) {
         callback.call(this, jsonData.count);
       }, undefined, this);
     }
