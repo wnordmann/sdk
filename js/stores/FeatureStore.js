@@ -19,6 +19,7 @@ import LayerConstants from '../constants/LayerConstants';
 import AppDispatcher from '../dispatchers/AppDispatcher';
 import LayerStore from './LayerStore';
 import WFSService from '../services/WFSService';
+import ArcGISRestService from '../services/ArcGISRestService';
 
 class FeatureStore extends EventEmitter {
   constructor() {
@@ -174,9 +175,15 @@ class FeatureStore extends EventEmitter {
       };
     }
     if (layer instanceof ol.layer.Tile) {
-      WFSService.getNumberOfFeatures(layer, function(count) {
-        layer.set('numberOfFeatures', count);
-      });
+      if (layer.getSource() instanceof ol.source.TileArcGISRest) {
+        ArcGISRestService.getNumberOfFeatures(layer, function(count) {
+          layer.set('numberOfFeatures', count);
+        });
+      } else {
+        WFSService.getNumberOfFeatures(layer, function(count) {
+          layer.set('numberOfFeatures', count);
+        });
+      }
     }
     if (!this._layers[id]) {
       this._layers[id] = layer;
@@ -224,7 +231,11 @@ class FeatureStore extends EventEmitter {
         onFailure.call(scope, xmlhttp, exception);
       }
     };
-    WFSService.loadFeatures(layer, startIndex, pageSize, sortingInfo, srsName, success, failure);
+    if (layer.getSource() instanceof ol.source.TileArcGISRest) {
+      ArcGISRestService.loadFeatures(layer, startIndex, pageSize, sortingInfo, srsName, success, failure);
+    } else {
+      WFSService.loadFeatures(layer, startIndex, pageSize, sortingInfo, srsName, success, failure);
+    }
   }
   bindLayer(layer) {
     var source = layer.getSource();

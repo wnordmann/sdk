@@ -26,6 +26,7 @@ class ArcGISRestService {
       maxResolution: layer.MaxResolution,
       name: layer.Name,
       isRemovable: true,
+      wfsInfo: layer.Queryable,
       popupInfo: layer.Queryable ? '#AllAttributes' : undefined,
       source: new ol.source.TileArcGISRest({
         urls: [url],
@@ -115,6 +116,40 @@ class ArcGISRestService {
     util.doJSONP(url, function(jsonData) {
       onSuccess.call(me, me.parseGetFeatureInfo(layer, jsonData));
     });
+  }
+  loadFeatures(layer, startIndex, pageSize, sortingInfo, srsName, success, failure) {
+    var urlObj = new URL(layer.getSource().getUrls()[0] + '/' + layer.get('name') + '/query');
+    var params = {
+      where: 'OBJECTID >= ' + startIndex + ' AND OBJECTID < ' + (startIndex + pageSize),
+      f: 'json',
+      callback: '__cbname__',
+      pretty: 'false',
+      outSR: srsName.split(':')[1]
+    };
+    if (sortingInfo.length === 1) {
+      params.orderByFields = sortingInfo[0].id + ' ' + (sortingInfo[0].asc ? 'ASC' : 'DESC');
+    }
+    urlObj.set('query', params);
+    util.doJSONP(urlObj.toString(), function(jsonData) {
+      var features = format.readFeatures(jsonData);
+      success.call(this, features);
+    }, failure, this);
+  }
+  getNumberOfFeatures(layer, callback) {
+    if (layer.get('numberOfFeatures') === undefined) {
+      var urlObj = new URL(layer.getSource().getUrls()[0] + '/' + layer.get('name') + '/query');
+      var params = {
+        where: '1=1',
+        f: 'json',
+        callback: '__cbname__',
+        pretty: 'false',
+        returnCountOnly: true
+      };
+      urlObj.set('query', params);
+      util.doJSONP(urlObj.toString(), function(jsonData) {
+        callback.call(this, jsonData.count);
+      }, undefined, this);
+    }
   }
 }
 
