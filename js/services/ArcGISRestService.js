@@ -22,8 +22,11 @@ class ArcGISRestService {
       title: titleObj.title,
       emptyTitle: titleObj.empty,
       id: layer.Name,
+      minResolution: layer.MinResolution,
+      maxResolution: layer.MaxResolution,
       name: layer.Name,
       isRemovable: true,
+      wfsInfo: layer.Queryable,
       popupInfo: layer.Queryable ? '#AllAttributes' : undefined,
       source: new ol.source.TileArcGISRest({
         urls: [url],
@@ -39,7 +42,10 @@ class ArcGISRestService {
     for (var i = 0, ii = jsonData.layers.length; i < ii; ++i) {
       var layer = {};
       var esriLayer = jsonData.layers[i];
-      layer.Name = esriLayer.id;
+      // TODO use units of the view
+      layer.MaxResolution = esriLayer.minScale !== 0 ?  util.getResolutionForScale(esriLayer.minScale, 'm') : undefined;
+      layer.MinResolution = esriLayer.maxScale !== 0 ? util.getResolutionForScale(esriLayer.maxScale, 'm') : undefined;
+      layer.Name = String(esriLayer.id);
       layer.Queryable = jsonData.capabilities && jsonData.capabilities.indexOf('Query') !== -1;
       layer.Title = esriLayer.name;
       layers.push(layer);
@@ -58,10 +64,10 @@ class ArcGISRestService {
     });
     return urlObj.toString();
   }
-  getCapabilities(url, onSuccess) {
+  getCapabilities(url, onSuccess, onFailure) {
     util.doJSONP(this.getCapabilitiesUrl(url), function(jsonData) {
       onSuccess.call(this, this.parseCapabilities(jsonData));
-    }, this);
+    }, onFailure, this);
   }
   getLegendUrl(url) {
     var urlObj = new URL(url + '/legend');
@@ -75,7 +81,7 @@ class ArcGISRestService {
   getLegend(url, onSuccess) {
     util.doJSONP(this.getLegendUrl(url), function(jsonData) {
       onSuccess.call(this, jsonData);
-    }, this);
+    }, undefined, this);
   }
   getFeatureInfoUrl(layer, coordinate, map) {
     var view = map.getView();
@@ -110,6 +116,49 @@ class ArcGISRestService {
     util.doJSONP(url, function(jsonData) {
       onSuccess.call(me, me.parseGetFeatureInfo(layer, jsonData));
     });
+  }
+  getLoadFeaturesUrl(layer, startIndex, pageSize, sortingInfo, srsName) {
+    var urlObj = new URL(layer.getSource().getUrls()[0] + '/' + layer.get('name') + '/query');
+    var params = {
+      where: 'OBJECTID >= ' + startIndex + ' AND OBJECTID < ' + (startIndex + pageSize),
+      f: 'json',
+      callback: '__cbname__',
+      pretty: 'false',
+      outSR: srsName.split(':')[1]
+    };
+    if (sortingInfo.length === 1) {
+      params.orderByFields = sortingInfo[0].id + ' ' + (sortingInfo[0].asc ? 'ASC' : 'DESC');
+    }
+    urlObj.set('query', params);
+    return urlObj.toString();
+  }
+  loadFeatures(layer, startIndex, pageSize, sortingInfo, srsName, success, failure) {
+    util.doJSONP(this.getLoadFeaturesUrl(layer, startIndex, pageSize, sortingInfo, srsName), function(jsonData) {
+      if (jsonData.error) {
+        failure.call(this, {status: jsonData.error.code, statusText: jsonData.error.message}, jsonData.error.details.join(' '));
+      } else {
+        success.call(this, format.readFeatures(jsonData));
+      }
+    }, failure, this);
+  }
+  getNumberOfFeaturesUrl(layer) {
+    var urlObj = new URL(layer.getSource().getUrls()[0] + '/' + layer.get('name') + '/query');
+    var params = {
+      where: '1=1',
+      f: 'json',
+      callback: '__cbname__',
+      pretty: 'false',
+      returnCountOnly: true
+    };
+    urlObj.set('query', params);
+    return urlObj.toString();
+  }
+  getNumberOfFeatures(layer, callback) {
+    if (layer.get('numberOfFeatures') === undefined) {
+      util.doJSONP(this.getNumberOfFeaturesUrl(layer), function(jsonData) {
+        callback.call(this, jsonData.count);
+      }, undefined, this);
+    }
   }
 }
 

@@ -97,4 +97,14 @@ describe('ArcGISRestService', function() {
     assert.equal(url, 'http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Demographics/ESRI_Population_World/MapServer/legend?f=json&pretty=false&callback=__cbname__');
   });
 
+  it('creates correct get feature url', function() {
+    var url = ArcGISRestService.getLoadFeaturesUrl(layer, 0, 20, [{id: 'FOO', asc: false}], 'EPSG:3857');
+    assert.equal(url, 'http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Demographics/ESRI_Population_World/MapServer/undefined/query?where=OBJECTID%20%3E%3D%200%20AND%20OBJECTID%20%3C%2020&f=json&callback=__cbname__&pretty=false&outSR=3857&orderByFields=FOO%20DESC');
+  });
+
+  it('creates correct number of features url', function() {
+    var url = ArcGISRestService.getNumberOfFeaturesUrl(layer);
+    assert.equal(url, 'http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Demographics/ESRI_Population_World/MapServer/undefined/query?where=1%3D1&f=json&callback=__cbname__&pretty=false&returnCountOnly=true');
+  });
+
 });

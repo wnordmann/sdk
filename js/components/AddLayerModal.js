@@ -104,7 +104,7 @@ const messages = defineMessages({
   corserror: {
     id: 'addwmslayermodal.corserror',
     description: 'Error message to show the user when an XHR request fails because of CORS or offline',
-    defaultMessage: 'Could not connect to the server. Please verify that the server is online and CORS is enabled.'
+    defaultMessage: 'Could not connect to the server. Please verify that the server is online and/or CORS is enabled.'
   },
   inputfieldlabel: {
     id: 'addwmslayermodal.inputfieldlabel',
@@ -204,7 +204,7 @@ class AddLayerModal extends React.Component {
     const {formatMessage} = this.props.intl;
     var failureCb = function(xmlhttp) {
       delete me._request;
-      if (xmlhttp.status === 0) {
+      if (!xmlhttp || xmlhttp.status === 0) {
         me._setError(formatMessage(messages.corserror));
       } else {
         me._setError(xmlhttp.status + ' ' + xmlhttp.statusText);

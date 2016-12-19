@@ -10,7 +10,15 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
+import ol from 'openlayers';
+
 export default {
+  getResolutionForScale(scale, units) {
+    var dpi = 25.4 / 0.28;
+    var mpu = ol.proj.METERS_PER_UNIT[units];
+    var inchesPerMeter = 39.37;
+    return parseFloat(scale) / (mpu * inchesPerMeter * dpi);
+  },
   getTimeInfo(layer) {
     if (layer.Dimension) {
       for (var i = 0, ii = layer.Dimension.length; i < ii; ++i) {
@@ -40,7 +48,7 @@ export default {
     var colorObj = color.rgb ? color.rgb : color;
     return [colorObj.r, colorObj.g, colorObj.b, colorObj.a];
   },
-  doJSONP(url, success, scope) {
+  doJSONP(url, success, failure, scope) {
     function getRandomInt(min, max) {
       min = Math.ceil(min);
       max = Math.floor(max);
@@ -48,6 +56,11 @@ export default {
     }
     var cbname = 'fn' + Date.now() + getRandomInt(1, 10000);
     var script = document.createElement('script');
+    script.onerror = function() {
+      if (failure) {
+        failure.call(scope);
+      }
+    };
     script.src = url.replace('__cbname__', cbname);
     window[cbname] = function(jsonData) {
       success.call(scope, jsonData);
