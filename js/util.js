@@ -48,7 +48,7 @@ export default {
     var colorObj = color.rgb ? color.rgb : color;
     return [colorObj.r, colorObj.g, colorObj.b, colorObj.a];
   },
-  doJSONP(url, success, scope) {
+  doJSONP(url, success, failure, scope) {
     function getRandomInt(min, max) {
       min = Math.ceil(min);
       max = Math.floor(max);
@@ -56,6 +56,11 @@ export default {
     }
     var cbname = 'fn' + Date.now() + getRandomInt(1, 10000);
     var script = document.createElement('script');
+    script.onerror = function() {
+      if (failure) {
+        failure.call(scope);
+      }
+    };
     script.src = url.replace('__cbname__', cbname);
     window[cbname] = function(jsonData) {
       success.call(scope, jsonData);

@@ -63,10 +63,10 @@ class ArcGISRestService {
     });
     return urlObj.toString();
   }
-  getCapabilities(url, onSuccess) {
+  getCapabilities(url, onSuccess, onFailure) {
     util.doJSONP(this.getCapabilitiesUrl(url), function(jsonData) {
       onSuccess.call(this, this.parseCapabilities(jsonData));
-    }, this);
+    }, onFailure, this);
   }
   getLegendUrl(url) {
     var urlObj = new URL(url + '/legend');
@@ -80,7 +80,7 @@ class ArcGISRestService {
   getLegend(url, onSuccess) {
     util.doJSONP(this.getLegendUrl(url), function(jsonData) {
       onSuccess.call(this, jsonData);
-    }, this);
+    }, undefined, this);
   }
   getFeatureInfoUrl(layer, coordinate, map) {
     var view = map.getView();
