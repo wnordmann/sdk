@@ -131,8 +131,11 @@ class ArcGISRestService {
     }
     urlObj.set('query', params);
     util.doJSONP(urlObj.toString(), function(jsonData) {
-      var features = format.readFeatures(jsonData);
-      success.call(this, features);
+      if (jsonData.error) {
+        failure.call(this, {status: jsonData.error.code, statusText: jsonData.error.message}, jsonData.error.details.join(' '));
+      } else {
+        success.call(this, format.readFeatures(jsonData));
+      }
     }, failure, this);
   }
   getNumberOfFeatures(layer, callback) {
