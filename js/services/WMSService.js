@@ -39,7 +39,7 @@ class WMSService {
       onFailure.call(this, xmlhttp);
     }, this);
   }
-  createLayer(layer, url, titleObj) {
+  createLayer(layer, url, titleObj, projection) {
     var getLegendUrl = function(layer) {
       if (layer.Style && layer.Style.length === 1) {
         if (layer.Style[0].LegendURL && layer.Style[0].LegendURL.length >= 1) {
@@ -47,12 +47,15 @@ class WMSService {
         }
       }
     };
+    var units = projection.getUnits();
     return new ol.layer.Tile({
       title: titleObj.title,
       emptyTitle: titleObj.empty,
       id: layer.Name,
       name: layer.Name,
       legendUrl: getLegendUrl(layer),
+      minResolution: layer.MinScaleDenominator > 0 ? util.getResolutionForScale(layer.MinScaleDenominator, units) : undefined,
+      maxResolution: layer.MaxScaleDenominator > 0 ? util.getResolutionForScale(layer.MaxScaleDenominator, units) : undefined,
       isRemovable: true,
       isSelectable: true,
       isWFST: true,

@@ -34,7 +34,7 @@ describe('WMSService', function() {
       title: 'My Layer',
       empty: false
     };
-    var lyr = WMSService.createLayer(layer, url, titleObj);
+    var lyr = WMSService.createLayer(layer, url, titleObj, ol.proj.get('EPSG:3857'));
     assert.equal(lyr instanceof ol.layer.Tile, true);
     assert.equal(lyr.get('title'), titleObj.title);
     assert.equal(lyr.get('id'), layer.Name);

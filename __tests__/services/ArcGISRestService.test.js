@@ -71,7 +71,7 @@ describe('ArcGISRestService', function() {
       title: 'Foo layer',
       empty: false
     };
-    var lyr = ArcGISRestService.createLayer(layer, url, titleObj);
+    var lyr = ArcGISRestService.createLayer(layer, url, titleObj, ol.proj.get('EPSG:3857'));
     assert.equal(lyr.get('title'), titleObj.title);
     assert.equal(lyr.get('name'), layer.Name);
     var source = lyr.getSource();
