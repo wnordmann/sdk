@@ -243,7 +243,7 @@ class WFSService {
       var features = wfsFormat.readFeatures(xmlhttp.responseXML);
       if (features.length > 0) {
         onSuccess.call(this, features[0]);
-      } else {
+      } else if (onFailure) {
         onFailure.call(this);
       }
     }, onFailure);
