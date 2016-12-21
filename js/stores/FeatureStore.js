@@ -175,14 +175,19 @@ class FeatureStore extends EventEmitter {
       };
     }
     if (layer instanceof ol.layer.Tile) {
-      if (layer.getSource() instanceof ol.source.TileArcGISRest) {
-        ArcGISRestService.getNumberOfFeatures(layer, function(count) {
-          layer.set('numberOfFeatures', count);
-        });
-      } else {
-        WFSService.getNumberOfFeatures(layer, function(count) {
-          layer.set('numberOfFeatures', count);
-        });
+      if (!layer.get('numberOfFeatures') && !layer.get('loading')) {
+        layer.set('loading', true);
+        if (layer.getSource() instanceof ol.source.TileArcGISRest) {
+          ArcGISRestService.getNumberOfFeatures(layer, function(count) {
+            layer.set('numberOfFeatures', count);
+            layer.set('loading', false);
+          });
+        } else {
+          WFSService.getNumberOfFeatures(layer, function(count) {
+            layer.set('numberOfFeatures', count);
+            layer.set('loading', false);
+          });
+        }
       }
     }
     if (!this._layers[id]) {
