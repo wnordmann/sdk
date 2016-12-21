@@ -116,6 +116,9 @@ class MapConfigTransformService {
           ptype: 'gxp_osmsource'
         };
       }
+      if (!layerConfig.name) {
+        layerConfig.name = 'mapnik';
+      }
     }
     layerConfig.source = '' + sourceIdx;
   }
