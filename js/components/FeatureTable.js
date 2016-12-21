@@ -232,12 +232,23 @@ class FeatureTable extends React.Component {
     this._layer = layer;
     if (layer !== null) {
       FeatureStore.addLayer(layer, this._selectedOnly);
+      if (!this._layer.get('numberOfFeatures')) {
+        this._layer.once('change:numberOfFeatures', function() {
+          this.setState({
+            pages: Math.ceil(this._layer.get('numberOfFeatures') / this.state.pageSize)
+          });
+        }, this);
+      }
     }
   }
   _onLayerSelectChange(layer) {
     // TODO add clearing filter back
     //ReactDOM.findDOMNode(this.refs.filter).value = '';
     this._setLayer(layer);
+    if (this.refs.table) {
+      // start on first page
+      this.refs.table.setPage(0);
+    }
   }
   _onChange() {
     if (this._layer) {
@@ -365,7 +376,7 @@ class FeatureTable extends React.Component {
       this.setState({
         page: state.page,
         pageSize: state.pageSize,
-        pages: Math.ceil(this._layer.get('numberOfFeatures') / state.pageSize),
+        pages: this._layer.get('numberOfFeatures') ? Math.ceil(this._layer.get('numberOfFeatures') / state.pageSize) : undefined,
         loading: false
       });
     }, function(xmlhttp, msg) {
@@ -454,6 +465,7 @@ class FeatureTable extends React.Component {
         }
       }
       table = (<ReactTable
+        ref='table'
         loading={this.state.loading}
         pages={this._layer instanceof ol.layer.Vector ? undefined : this.state.pages}
         data={data}
