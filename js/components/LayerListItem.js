@@ -37,6 +37,7 @@ import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import TableIcon from 'material-ui/svg-icons/action/view-list';
 import WMSLegend from './WMSLegend';
+import ArcGISRestLegend from './ArcGISRestLegend';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
@@ -485,6 +486,9 @@ class LayerListItem extends React.Component {
     this.refs.tablemodal.forceUpdate();
   }
   calculateInRange() {
+    if (!this.props.handleResolutionChange) {
+      return true;
+    }
     var layer = this.props.layer;
     var map = this.props.map;
     var resolution = map.getView().getResolution();
@@ -571,9 +575,14 @@ class LayerListItem extends React.Component {
       );
     }
     var legend;
-    if (this.props.includeLegend && this.props.layer.getVisible() && ((this.props.layer instanceof ol.layer.Tile && this.props.layer.getSource() instanceof ol.source.TileWMS) ||
-      (this.props.layer instanceof ol.layer.Image && this.props.layer.getSource() instanceof ol.source.ImageWMS))) {
-      legend = <WMSLegend layer={this.props.layer} />;
+    if (this.props.includeLegend && this.props.layer.getVisible() && this.calculateInRange()) {
+      if ((this.props.layer instanceof ol.layer.Tile && this.props.layer.getSource() instanceof ol.source.TileWMS) ||
+      (this.props.layer instanceof ol.layer.Image && this.props.layer.getSource() instanceof ol.source.ImageWMS)) {
+        legend = <WMSLegend layer={this.props.layer} />;
+      }
+      if (this.props.layer instanceof ol.layer.Tile && this.props.layer.getSource() instanceof ol.source.TileArcGISRest) {
+        legend = <ArcGISRestLegend layer={this.props.layer} />;
+      }
     }
     return connectDragSource(connectDropTarget(
       <div>
