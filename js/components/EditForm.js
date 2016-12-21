@@ -242,7 +242,8 @@ class EditForm extends React.Component {
       var keys = layer.get('wfsInfo').attributes;
       for (var i = 0, ii = keys.length; i < ii; ++i) {
         var key = keys[i];
-        inputs.push(<TextField floatingLabelText={key} key={key} id={key} onChange={this._onChangeField.bind(this)} value={this.state.values[key]} />);
+        var value = this.state.values[key] || '';
+        inputs.push(<TextField floatingLabelText={key} key={key} id={key} onChange={this._onChangeField.bind(this)} value={value} />);
       }
     }
     // saveButton and deleteButton refs are needed for EditPopup code

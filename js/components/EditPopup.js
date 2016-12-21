@@ -13,12 +13,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
+import LayerStore from '../stores/LayerStore';
 import AppDispatcher from '../dispatchers/AppDispatcher';
 import ToolUtil from '../toolutil';
 import {injectIntl, intlShape} from 'react-intl';
 import Button from './Button';
 import CloserIcon from 'material-ui/svg-icons/navigation/close';
 import classNames from 'classnames';
+import WFSService from '../services/WFSService';
 import EditForm from './EditForm';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import './BasePopup.css';
@@ -81,29 +83,52 @@ class EditPopup extends React.Component {
     this.active = false;
     // it is intentional not to call deactivate on ToolUtil here
   }
+  _getLayers() {
+    var state = LayerStore.getState();
+    var layers = [];
+    for (var i = 0, ii = state.flatLayers.length; i < ii; ++i) {
+      var layer = state.flatLayers[i];
+      if (layer instanceof ol.layer.Tile && layer.getVisible() && (layer.getSource() instanceof ol.source.TileWMS && layer.get('popupInfo'))) {
+        layers.push(layer);
+      }
+    }
+    return layers;
+  }
   _onMapClick(evt) {
     if (this.active) {
       var map = this.props.map;
       var pixel = map.getEventPixel(evt.originalEvent);
       var coord = evt.coordinate;
       var me = this;
-      var cont = false;
+      var found = false;
       map.forEachFeatureAtPixel(pixel, function(feature, layer) {
         if (feature) {
           if (layer !== null && layer.get('isWFST')) {
-            cont = true;
+            found = true;
             me.setState({
               feature: feature,
               layer: layer
+            }, function() {
+              me.setVisible(true);
+              me.overlayPopup.setPosition(coord);
             });
           }
         }
       });
-      if (cont === true) {
-        me.setVisible(true);
-        me.overlayPopup.setPosition(coord);
-      } else {
-        me.setVisible(false);
+      if (!found) {
+        // try WFS queries
+        var layers = this._getLayers();
+        for (var i = 0, ii = layers.length; i < ii; ++i) {
+          WFSService.distanceWithin(layers[i], map.getView(), coord, (function(feature) {
+            me.setState({
+              feature: feature,
+              layer: this
+            }, function() {
+              me.setVisible(true);
+              me.overlayPopup.setPosition(coord);
+            });
+          }).bind(layers[i]));
+        }
       }
     }
   }
@@ -124,14 +149,14 @@ class EditPopup extends React.Component {
     var editForm = this.refs.editForm;
     if (editForm) {
       var formInstance = editForm.getWrappedInstance();
-      var saveButton = ReactDOM.findDOMNode(formInstance.refs.saveButton);
+      var saveButton = ReactDOM.findDOMNode(formInstance.refs.saveButton).querySelector('button');
       if (saveButton && saveButton.onclick === null) {
         saveButton.onclick = function() {
           formInstance.save();
           return false;
         };
       }
-      var deleteButton = ReactDOM.findDOMNode(formInstance.refs.deleteButton);
+      var deleteButton = ReactDOM.findDOMNode(formInstance.refs.deleteButton).querySelector('button');
       if (deleteButton && deleteButton.onclick === null) {
         deleteButton.onclick = function() {
           formInstance.deleteFeature();
