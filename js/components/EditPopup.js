@@ -100,8 +100,8 @@ class EditPopup extends React.Component {
         }
       });
       if (cont === true) {
-        me.overlayPopup.setPosition(coord);
         me.setVisible(true);
+        me.overlayPopup.setPosition(coord);
       } else {
         me.setVisible(false);
       }
