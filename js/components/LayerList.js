@@ -24,11 +24,13 @@ import LayerStore from '../stores/LayerStore';
 import LayerListItem from './LayerListItem';
 import Label from './Label';
 import AddLayerModal from './AddLayerModal';
+import BaseMapModal from './BaseMapModal';
 import RaisedButton from 'material-ui/RaisedButton';
 import Button from './Button';
 import NoteAdd from 'material-ui/svg-icons/action/note-add';
 import {List} from 'material-ui/List';
 import LayersIcon from 'material-ui/svg-icons/maps/layers';
+import BaseMapIcon from 'material-ui/svg-icons/maps/satellite';
 import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
@@ -48,7 +50,12 @@ const messages = defineMessages({
   addlayertext: {
     id: 'layerlist.addlayertext',
     description: 'Text for Add layers button',
-    defaultMessage: ' Add Layer '
+    defaultMessage: ' Add Layer'
+  },
+  addbasemaptext: {
+    id: 'layerlist.addbasemaptext',
+    description: 'Text for Add BaseMap button',
+    defaultMessage: ' BaseMap'
   }
 });
 
@@ -133,6 +140,19 @@ class LayerList extends React.Component {
      * Should we show this component on start of the application?
      */
     showOnStart: React.PropTypes.bool,
+    /**
+     * Should we allow adding base maps from a selector modal?
+     */
+    addBaseMap: React.PropTypes.shape({
+      tileServices: React.PropTypes.arrayOf(React.PropTypes.shape({
+        name: React.PropTypes.string.isRequired,
+        description: React.PropTypes.string.isRequired,
+        endpoint: React.PropTypes.string.isRequired,
+        standard: React.PropTypes.string.isRequired,
+        attribution: React.PropTypes.string,
+        thumbnail: React.PropTypes.string.isRequired
+      }))
+    }),
     /**
      * Should we allow adding layers?
      */
@@ -295,6 +315,9 @@ class LayerList extends React.Component {
   _showAddLayer() {
     this.refs.addlayermodal.getWrappedInstance().open();
   }
+  _showAddBaseMap() {
+    this.refs.addbasemapmodal.getWrappedInstance().open();
+  }
   getStyles() {
     const muiTheme = this.state.muiTheme;
     const rawTheme = muiTheme.rawTheme;
@@ -319,11 +342,24 @@ class LayerList extends React.Component {
     };
     var tipLabel = this.props.tipLabel ? (<div className='layer-list-header'><Label>{this.props.tipLabel}</Label></div>) : undefined;
     var addLayer;
-    if (this.props.addLayer) {
+    if (this.props.addLayer || this.props.addBaseMap) {
+      var layerAdd, baseAdd, layerModal, baseModal;
+      if (this.props.addLayer) {
+        layerAdd = <RaisedButton icon={<NoteAdd />} label={formatMessage(messages.addlayertext)} onTouchTap={this._showAddLayer.bind(this)} disableTouchRipple={true}/>;
+        layerModal = <AddLayerModal srsName={this.props.map.getView().getProjection().getCode()} allowUserInput={this.props.addLayer.allowUserInput} sources={this.props.addLayer.sources} map={this.props.map} ref='addlayermodal'/>;
+      }
+      if (this.props.addBaseMap) {
+        baseAdd = <RaisedButton icon={<BaseMapIcon />} label={formatMessage(messages.addbasemaptext)} onTouchTap={this._showAddBaseMap.bind(this)} disableTouchRipple={true}/>;
+        baseModal = <BaseMapModal tileServices={this.props.addBaseMap.tileServices} map={this.props.map} ref='addbasemapmodal' />;
+      }
       addLayer = (
           <article className="layer-list-add">
-          <Toolbar><ToolbarGroup><RaisedButton icon={<NoteAdd />} label={formatMessage(messages.addlayertext)} onTouchTap={this._showAddLayer.bind(this)} disableTouchRipple={true}/></ToolbarGroup></Toolbar>
-          <AddLayerModal srsName={this.props.map.getView().getProjection().getCode()} allowUserInput={this.props.addLayer.allowUserInput} sources={this.props.addLayer.sources} map={this.props.map} ref='addlayermodal'/>
+          <Toolbar><ToolbarGroup>
+            {layerAdd}
+            {baseAdd}
+          </ToolbarGroup></Toolbar>
+          {layerModal}
+          {baseModal}
           </article>
       );
     }
