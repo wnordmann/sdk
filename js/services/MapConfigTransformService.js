@@ -22,18 +22,33 @@ class MapConfigTransformService {
   _writeLayer(config, sources, layers, group) {
     var key;
     var layerConfig = {
-      name: config.properties.name,
       title: config.properties.title,
       visibility: config.properties.visible
     };
+    if (config.properties.name) {
+      layerConfig.name = config.properties.name;
+    }
     if (group) {
       layerConfig.group = group;
     }
-    // skip XYZ for now
-    if (config.source.type !== 'XYZ') {
-      layers.push(layerConfig);
-    }
-    if (config.source.type === 'TileArcGISRest') {
+    layers.push(layerConfig);
+    if (config.source.type === 'XYZ') {
+      layerConfig.type = 'XYZ';
+      var options;
+      if (config.source.properties.attributions && config.source.properties.attributions.length > 0) {
+        options = {attribution: config.source.properties.attributions[0]};
+      }
+      layerConfig.args = [
+        config.properties.title, config.source.properties.urls[0]
+      ];
+      if (options) {
+        layerConfig.args.push(options);
+      }
+      sourceIdx++;
+      sources[sourceIdx] = {
+        ptype: 'gxp_olsource'
+      };
+    } else if (config.source.type === 'TileArcGISRest') {
       layerConfig.layerid = config.source.properties.params.LAYERS;
       sourceIdx++;
       sources[sourceIdx] = {
