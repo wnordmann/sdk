@@ -543,7 +543,7 @@ class LayerListItem extends React.Component {
       buttonPadding = (<div style={{'display':'inline-block','width':'26px'}} />);
     }
     var input;
-    if (layer.get('type') === 'base') {
+    if (layer.get('type') === 'base' && this.props.group && this.props.group.get('type') === 'base-group') {
       input = (<RadioButton disabled={this.state.disabled} checked={this.state.checked} label={this.props.title} value={this.props.title} onCheck={this._handleChange.bind(this)} disableTouchRipple={true}/>);
     } else {
       var labelStyle;
