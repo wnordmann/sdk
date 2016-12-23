@@ -92,6 +92,17 @@ describe('MapConfigTransfrormService', function() {
     var expectedFromWrite = {'sources':{'0':{'url':'http://cga6.cga.harvard.edu/arcgis/rest/services/darmc/roman/MapServer','ptype':'gxp_arcrestsource'}},'map':{'layers':[{'name':'Roman and Medieval Civilization','title':'Roman and Medieval Civilization','visibility':true,'layerid':'show:0','source':'0'}],'center':[4263719.1382864,5532513.4852863],'projection':'EPSG:102113','zoom':3}};
     assert.equal(JSON.stringify(output), JSON.stringify(expectedFromWrite));
   });
+
+  it('transforms XYZ source correctly (two-way)', function() {
+    var config = {'sources':{'0':{'ptype':'gxp_olsource'}}, 'map':{'projection':'EPSG:102113','layers':[{'source':'0','title':'CartoDB light','type':'OpenLayers.Layer.XYZ','args':['CartoDB Light','http://s.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',{'attribution':'&copy; foo'}]}],'center':[4263719.1382864,5532513.4852863],'zoom':3}};
+    var result = MapConfigTransformService.transform(config);
+    var expected = {'layers':[{'properties':{'isRemovable':true,'title':'CartoDB light'},'type':'Tile','title':'CartoDB Light','source':{'type':'XYZ','properties':{'urls':['http://s.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'],'attributions':['&copy; foo']}}}],'view':{'center':[4263719.1382864,5532513.4852863],'projection':'EPSG:102113','zoom':3}};
+    assert.equal(JSON.stringify(result), JSON.stringify(expected));
+    var output = MapConfigTransformService.write(result);
+    var expectedFromWrite = {'sources':{'0':{'ptype':'gxp_olsource'}},'map':{'layers':[{'title':'CartoDB light','type':'OpenLayers.Layer.XYZ','args':['CartoDB light','http://s.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',{'attribution':'&copy; foo'}],'source':'0'}],'center':[4263719.1382864,5532513.4852863],'projection':'EPSG:102113','zoom':3}};
+    assert.equal(JSON.stringify(output), JSON.stringify(expectedFromWrite));
+  });
+
   describe('has proxy', function() {
     it('transforms WMS source correctly', function() {
       var config = {'sources':{'1':{'ptype':'gxp_wmscsource','projection':'EPSG:102113', 'url': 'http://demo.geonode.org/geoserver/wms'}},'map':{'projection':'EPSG:102113','layers':[{'source':'1','name':'Demo','title':'Demo','visibility':true,'opacity':1,'group':'','fixed':false,'selected':true}],'center':[0,0],'zoom':3}};

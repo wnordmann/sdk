@@ -21,19 +21,18 @@ const gxpGroup = 'background';
 class MapConfigTransformService {
   _writeLayer(config, sources, layers, group) {
     var key;
-    var layerConfig = {
-      title: config.properties.title,
-      visibility: config.properties.visible
-    };
+    var layerConfig = {};
     if (config.properties.name) {
       layerConfig.name = config.properties.name;
     }
+    layerConfig.title = config.properties.title;
+    layerConfig.visibility = config.properties.visible;
     if (group) {
       layerConfig.group = group;
     }
     layers.push(layerConfig);
     if (config.source.type === 'XYZ') {
-      layerConfig.type = 'XYZ';
+      layerConfig.type = 'OpenLayers.Layer.XYZ';
       var options;
       if (config.source.properties.attributions && config.source.properties.attributions.length > 0) {
         options = {attribution: config.source.properties.attributions[0]};
@@ -183,7 +182,19 @@ class MapConfigTransformService {
           name: layer.name
         }
       };
-      if (source.ptype === 'gxp_osmsource') {
+      if (source.ptype === 'gxp_olsource' && layer.type === 'OpenLayers.Layer.XYZ') {
+        layerConfig.type = 'Tile';
+        layerConfig.title = layer.args[0];
+        layerConfig.source = {
+          type: 'XYZ',
+          properties: {
+            urls: [layer.args[1]]
+          }
+        };
+        if (layer.args.length === 3 && layer.args[2].attribution) {
+          layerConfig.source.properties.attributions = [layer.args[2].attribution];
+        }
+      } else if (source.ptype === 'gxp_osmsource') {
         layerConfig.type = 'Tile';
         layerConfig.source = {
           type: 'OSM',
