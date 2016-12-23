@@ -43,7 +43,7 @@ class BaseMapModal extends React.Component {
     tileServices: React.PropTypes.arrayOf(React.PropTypes.shape({
       name: React.PropTypes.string.isRequired,
       description: React.PropTypes.string.isRequired,
-      endpoint: React.PropTypes.string.isRequired,
+      endpoint: React.PropTypes.string,
       standard: React.PropTypes.string.isRequired,
       attribution: React.PropTypes.string,
       thumbnail: React.PropTypes.string.isRequired
@@ -60,6 +60,11 @@ class BaseMapModal extends React.Component {
 
   static defaultProps = {
     tileServices: [{
+      name: 'osm',
+      description: 'OSM Streets',
+      standard: 'OSM',
+      thumbnail: 'https://a.tile.openstreetmap.org/0/0/0.png'
+    }, {
       name: 'light_all',
       description: 'CartoDB light',
       endpoint: 'http://s.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
@@ -67,19 +72,19 @@ class BaseMapModal extends React.Component {
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
       thumbnail: 'http://s.basemaps.cartocdn.com/light_all/0/0/0.png'
     }, {
-      name: 'World_Imagery',
-      description: 'ESRI world imagery',
-      endpoint: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-      standard: 'XYZ',
-      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
-      thumbnail: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/0/0/0'
-    }, {
       name: 'dark_all',
       description: 'CartoDB dark',
       endpoint: 'http://s.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
       standard: 'XYZ',
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
       thumbnail: 'http://s.basemaps.cartocdn.com/dark_all/0/0/0.png'
+    }, {
+      name: 'World_Imagery',
+      description: 'ESRI world imagery',
+      endpoint: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+      standard: 'XYZ',
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+      thumbnail: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/0/0/0'
     }]
   };
 
@@ -88,7 +93,6 @@ class BaseMapModal extends React.Component {
     this.state = {
       open: false
     };
-    this._added = [];
   }
   getChildContext() {
     return {muiTheme: getMuiTheme()};
@@ -107,29 +111,21 @@ class BaseMapModal extends React.Component {
           new ol.Attribution({html: config.attribution})
         ] : undefined
       });
+    } else if (config.standard === 'OSM') {
+      return new ol.source.OSM();
     }
   }
-  _createLayer(name) {
-    var config;
-    for (var i = 0, ii = this.props.tileServices.length; i < ii; ++i) {
-      if (this.props.tileServices[i].name === name) {
-        config = this.props.tileServices[i];
-        break;
-      }
-    }
+  _createLayer(config) {
     return new ol.layer.Tile({
       type: 'base',
       title: config.description,
       source: this._createSource(config)
     });
   }
-  _tileClick(name) {
-    if (this._added.indexOf(name) !== -1) {
-      return;
-    }
+  _tileClick(tileService) {
     var foundGroup = false;
     var map = this.props.map;
-    var olLayer = this._createLayer(name);
+    var olLayer = this._createLayer(tileService);
     map.getLayers().forEach(function(lyr) {
       if (foundGroup === false && lyr.get('type') === 'base-group') {
         foundGroup = true;
@@ -140,9 +136,14 @@ class BaseMapModal extends React.Component {
       }
     });
     if (foundGroup === false) {
-      map.addLayer(olLayer);
+      // look for a layer with type base and replace that
+      map.getLayers().forEach(function(lyr) {
+        if (lyr.get('type') === 'base') {
+          map.removeLayer(lyr);
+        }
+      });
+      map.getLayers().insertAt(0, olLayer);
     }
-    this._added.push(name);
   }
   render() {
     const {formatMessage} = this.props.intl;
@@ -152,7 +153,7 @@ class BaseMapModal extends React.Component {
     return (<Dialog autoScrollBodyContent={true} actions={actions} title={formatMessage(messages.title)} modal={true} open={this.state.open} onRequestClose={this.close.bind(this)}>
       <GridList cols={3} cellHeight={120}>
         {this.props.tileServices.map((tileService) => (
-          <GridTile style={{cursor: 'pointer'}} onTouchTap={this._tileClick.bind(this, tileService.name)}
+          <GridTile style={{cursor: 'pointer'}} onTouchTap={this._tileClick.bind(this, tileService)}
             key={tileService.name}
             title={tileService.description}>
             <img src={tileService.thumbnail} />
