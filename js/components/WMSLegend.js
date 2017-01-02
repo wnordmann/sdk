@@ -109,7 +109,7 @@ class WMSLegend extends React.Component {
     }
     options = options.slice(0, -1);
     // TODO split up LAYERS param if needed
-    url.set('query', {
+    var query = {
       service: 'WMS',
       request: 'GetLegendGraphic',
       transparent: true,
@@ -118,10 +118,13 @@ class WMSLegend extends React.Component {
       width: this.props.width,
       legend_options: options,
       layer: params.LAYERS,
-      sld_body: params.SLD_BODY,
       '_olSalt': this.state.salt,
       style: params.STYLES ? params.STYLES : ''
-    });
+    };
+    if (params.SLD_BODY) {
+      query.sld_body = params.SLD_BODY;
+    }
+    url.set('query', query);
     var legendUrl = (!this.state.dynamic && params.STYLES === undefined && params.SLD_BODY === undefined && layer.get('legendUrl')) ? layer.get('legendUrl') : url.toString();
     return (<img className={classNames('sdk-component wms-legend', this.props.className)} src={legendUrl} />);
   }
