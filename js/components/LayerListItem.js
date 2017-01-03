@@ -301,17 +301,6 @@ class LayerListItem extends React.Component {
 
   constructor(props) {
     super(props);
-    if (this.props.group) {
-      if (this.props.group.get('type') === 'base-group') {
-        this.props.group.on('change:visible', function(evt) {
-          this.setState({disabled: !evt.target.getVisible()});
-        }, this);
-      } else {
-        this.props.group.on('change:visible', function(evt) {
-          this.setState({checked: evt.target.getVisible()});
-        }, this);
-      }
-    }
     this.formats_ = {
       GeoJSON: {
         format: new ol.format.GeoJSON(),
@@ -338,16 +327,29 @@ class LayerListItem extends React.Component {
     return {muiTheme: getMuiTheme()};
   }
   componentDidMount() {
+    if (this.props.group) {
+      if (this.props.group.get('type') !== 'base-group') {
+        this.props.group.on('change:visible', this._changeGroupVisible, this);
+      }
+    }
     this.props.layer.on('change:visible', this._changeLayerVisible, this);
     if (this.props.handleResolutionChange) {
       this.props.map.getView().on('change:resolution', this._changeResolution, this);
     }
   }
   componentWillUnmount() {
+    if (this.props.group) {
+      if (this.props.group.get('type') !== 'base-group') {
+        this.props.group.un('change:visible', this._changeGroupVisible, this);
+      }
+    }
     this.props.layer.un('change:visible', this._changeLayerVisible, this);
     if (this.props.handleResolutionChange) {
       this.props.map.getView().un('change:resolution', this._changeResolution, this);
     }
+  }
+  _changeGroupVisible(evt) {
+    this.setState({checked: evt.target.getVisible()});
   }
   _changeLayerVisible(evt) {
     this.setState({checked: evt.target.getVisible()});
@@ -377,20 +379,7 @@ class LayerListItem extends React.Component {
     } else {
       this.props.layer.setVisible(visible);
       if (this.props.layer instanceof ol.layer.Group) {
-        if (this.props.layer.get('type') === 'base-group') {
-          if (visible === false) {
-            this.props.layer.getLayers().forEach(function(child) {
-              if (child.getVisible() === true) {
-                this._child = child;
-              }
-              child.setVisible(visible);
-            }, this);
-          } else {
-            // restore the last visible child of the group
-            this._child.setVisible(visible);
-            delete this._child;
-          }
-        } else {
+        if (this.props.layer.get('type') !== 'base-group') {
           this.props.layer.getLayers().forEach(function(child) {
             child.setVisible(visible);
           }, this);
@@ -538,15 +527,10 @@ class LayerListItem extends React.Component {
     if (this.props.allowEditing && layer.get('isWFST') === true) {
       edit = (<Button className='layer-list-item-edit' onTouchTap={this._edit.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.editbuttonlabel)} ><EditIcon /></Button>);
     }
-    var buttonPadding;
-    if (zoomTo || download || filter || label || styling || remove || edit || table) {
-      buttonPadding = (<div style={{'display':'inline-block','width':'26px'}} />);
-    }
-    var input;
+    var input, labelStyle;
     if (layer.get('type') === 'base' && this.props.group && this.props.group.get('type') === 'base-group') {
       input = (<RadioButton disabled={this.state.disabled} checked={this.state.checked} label={this.props.title} value={this.props.title} onCheck={this._handleChange.bind(this)} disableTouchRipple={true}/>);
     } else {
-      var labelStyle;
       if (this.props.handleResolutionChange && this.props.layer.get('type') !== 'base-group' && !this.calculateInRange()) {
         labelStyle = this.props.labelStyleOutOfScale;
       }
@@ -554,7 +538,6 @@ class LayerListItem extends React.Component {
         labelStyle = labelStyle || {};
         labelStyle.fontStyle = 'italic';
       }
-      input = (<Checkbox checked={this.state.checked} label={this.props.title} labelStyle={labelStyle} onCheck={this._handleChange.bind(this)} disableTouchRipple={true}/>);
     }
     var tableModal, labelModal, filterModal, styleModal;
     if (this.props.layer instanceof ol.layer.Vector) {
@@ -584,13 +567,18 @@ class LayerListItem extends React.Component {
         legend = <ArcGISRestLegend layer={this.props.layer} />;
       }
     }
+    var leftCheckbox;
+    if (!input) {
+      leftCheckbox = <Checkbox checked={this.state.checked} onCheck={this._handleChange.bind(this)} />;
+    }
     return connectDragSource(connectDropTarget(
       <div>
-        <ListItem className={classNames({'sdk-component': true, 'layer-list-item': true}, this.props.className)} innerDivStyle={{'paddingTop':'8px','paddingBottom':'8px'}} autoGenerateNestedIndicator={false} primaryText={input ? undefined : this.props.title} nestedItems={this.props.nestedItems} nestedListStyle={{'marginLeft':'40px'}} initiallyOpen={true} disableTouchRipple={true}>
+        <ListItem className={classNames({'sdk-component': true, 'layer-list-item': true}, this.props.className)} autoGenerateNestedIndicator={true} primaryTogglesNestedList={false} leftCheckbox={leftCheckbox} primaryText={input ? undefined : this.props.title} nestedItems={this.props.nestedItems} nestedListStyle={{'marginLeft':'40px'}} initiallyOpen={true}>
           {input}
+        </ListItem>
+        <div style={{paddingLeft: 72}}>
           {legend}
           {opacity}
-          {buttonPadding}
           {zoomTo}
           {table}
           {download}
@@ -605,7 +593,7 @@ class LayerListItem extends React.Component {
             {styleModal}
             {tableModal}
           </span>
-        </ListItem>
+        </div>
       </div>
     ));
   }
