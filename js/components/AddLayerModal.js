@@ -166,6 +166,10 @@ class AddLayerModal extends React.Component {
     intl: intlShape.isRequired
   };
 
+  static contextTypes = {
+    proxy: React.PropTypes.string
+  };
+
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
   };
@@ -174,8 +178,9 @@ class AddLayerModal extends React.Component {
     allowUserInput: false
   };
 
-  constructor(props) {
+  constructor(props, context) {
     super(props);
+    this._proxy = context.proxy;
     this.state = {
       sources: this.props.sources.slice(),
       newType: addNewTypes[0],
@@ -217,7 +222,7 @@ class AddLayerModal extends React.Component {
       delete me._request;
       me.setState({layerInfo: layerInfo});
     };
-    me._request = service.getCapabilities(url, successCb, failureCb);
+    me._request = service.getCapabilities(url, successCb, failureCb, this._proxy);
   }
   _setError(msg) {
     this.setState({
