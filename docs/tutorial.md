@@ -185,6 +185,11 @@ var map = new ol.Map({
 });
 
 class MyApp extends React.Component {
+  getChildContext() {
+    return {
+      muiTheme: getMuiTheme()
+    };
+  }
   render() {
     return (
        <div id='content'>
@@ -196,6 +201,10 @@ class MyApp extends React.Component {
     );
   }
 }
+
+MyApp.childContextTypes = {
+  muiTheme: React.PropTypes.object
+};
 
 ReactDOM.render(<IntlProvider locale='en' messages={enMessages}><MyApp /></IntlProvider>, document.getElementById('main'));
 ```
@@ -248,7 +257,7 @@ Again, we will start by adding an ```import``` statement to import our component
 
 ```javascript
 import AddLayer from 'boundless-sdk/js/components/AddLayer.jsx';
-import Toolbar from 'material-ui/lib/toolbar/toolbar';
+import Toolbar from 'material-ui/Toolbar/Toolbar';
 ```
 
 In the ```render``` function of our application, we need to add a toolbar to accommodate for the button of the upload component:
@@ -287,7 +296,7 @@ import MapPanel from 'boundless-sdk/js/components/MapPanel.jsx';
 import FeatureTable from 'boundless-sdk/js/components/FeatureTable.jsx';
 import LayerList from 'boundless-sdk/js/components/LayerList.jsx';
 import AddLayer from 'boundless-sdk/js/components/AddLayer.jsx';
-import Toolbar from 'material-ui/lib/toolbar/toolbar';
+import Toolbar from 'material-ui/Toolbar/Toolbar';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import enLocaleData from 'react-intl/locale-data/en.js';
 import enMessages from 'boundless-sdk/locale/en.js';
@@ -345,6 +354,11 @@ var map = new ol.Map({
 });
 
 class MyApp extends React.Component {
+  getChildContext() {
+    return {
+      muiTheme: getMuiTheme()
+    };
+  }
   render() {
     return (
        <div id='content'>
@@ -357,6 +371,10 @@ class MyApp extends React.Component {
     );
   }
 }
+
+MyApp.childContextTypes = {
+  muiTheme: React.PropTypes.object
+};
 
 ReactDOM.render(<IntlProvider locale='en' messages={enMessages}><MyApp /></IntlProvider>, document.getElementById('main'));
 ```
