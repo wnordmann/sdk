@@ -141,6 +141,10 @@ class LayerList extends React.Component {
      */
     showOnStart: React.PropTypes.bool,
     /**
+     * Should groups be collapsible?
+     */
+    collapsible: React.PropTypes.bool,
+    /**
      * Should we allow adding base maps from a selector modal?
      */
     addBaseMap: React.PropTypes.shape({
@@ -220,7 +224,8 @@ class LayerList extends React.Component {
     downloadFormat: 'GeoJSON',
     includeLegend: false,
     showOpacity: false,
-    showOnStart: false
+    showOnStart: false,
+    collapsible: true
   };
 
   constructor(props, context) {

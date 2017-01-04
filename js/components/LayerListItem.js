@@ -253,6 +253,10 @@ class LayerListItem extends React.Component {
      */
     includeLegend: React.PropTypes.bool,
     /**
+     * Should groups be collapsible?
+     */
+    collapsible: React.PropTypes.bool,
+    /**
      * The nested items to show for this item.
      */
     nestedItems: React.PropTypes.array,
@@ -301,23 +305,6 @@ class LayerListItem extends React.Component {
 
   constructor(props) {
     super(props);
-    this.formats_ = {
-      GeoJSON: {
-        format: new ol.format.GeoJSON(),
-        mimeType: 'text/json',
-        extension: 'geojson'
-      },
-      KML: {
-        format: new ol.format.KML(),
-        mimeType: 'application/vnd.google-earth.kml+xml',
-        extension: 'kml'
-      },
-      GPX: {
-        format: new ol.format.GPX(),
-        mimeType: 'application/gpx+xml',
-        extension: 'gpx'
-      }
-    };
     this.state = {
       tableOpen: false,
       checked: props.layer.getVisible()
@@ -348,6 +335,23 @@ class LayerListItem extends React.Component {
       this.props.map.getView().un('change:resolution', this._changeResolution, this);
     }
   }
+  static formats = {
+    GeoJSON: {
+      format: new ol.format.GeoJSON(),
+      mimeType: 'text/json',
+      extension: 'geojson'
+    },
+    KML: {
+      format: new ol.format.KML(),
+      mimeType: 'application/vnd.google-earth.kml+xml',
+      extension: 'kml'
+    },
+    GPX: {
+      format: new ol.format.GPX(),
+      mimeType: 'application/gpx+xml',
+      extension: 'gpx'
+    }
+  };
   _changeGroupVisible(evt) {
     this.setState({checked: evt.target.getVisible()});
   }
@@ -388,7 +392,7 @@ class LayerListItem extends React.Component {
     }
   }
   _download() {
-    var formatInfo = this.formats_[this.props.downloadFormat];
+    var formatInfo = this.formats[this.props.downloadFormat];
     var format = formatInfo.format;
     var layer = this.props.layer;
     var source = layer.getSource();
@@ -573,7 +577,7 @@ class LayerListItem extends React.Component {
     }
     return connectDragSource(connectDropTarget(
       <div>
-        <ListItem className={classNames({'sdk-component': true, 'layer-list-item': true}, this.props.className)} autoGenerateNestedIndicator={true} primaryTogglesNestedList={false} leftCheckbox={leftCheckbox} primaryText={input ? undefined : this.props.title} nestedItems={this.props.nestedItems} nestedListStyle={{'marginLeft':'40px'}} initiallyOpen={true}>
+        <ListItem className={classNames({'sdk-component': true, 'layer-list-item': true}, this.props.className)} autoGenerateNestedIndicator={this.props.collapsible} primaryTogglesNestedList={false} leftCheckbox={leftCheckbox} primaryText={input ? undefined : this.props.title} nestedItems={this.props.nestedItems} nestedListStyle={{'marginLeft':'40px'}} initiallyOpen={true}>
           {input}
         </ListItem>
         <div style={{paddingLeft: 72}}>

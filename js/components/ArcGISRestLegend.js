@@ -54,8 +54,13 @@ class ArcGISRestLegend extends React.Component {
     var url = source.getUrls()[0];
     var me = this;
     ArcGISRestService.getLegend(url, function(jsonData) {
-      me.setState({legendInfo: jsonData});
+      if (me._unmounted !== true) {
+        me.setState({legendInfo: jsonData});
+      }
     });
+  }
+  componentWillUnmount() {
+    this._unmounted = true;
   }
   render() {
     var markup = [];
