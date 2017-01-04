@@ -22,17 +22,22 @@ const wmsGetFeatureInfoFormats = {
 };
 
 class WMSService {
-  getCapabilitiesUrl(url) {
+  getCapabilitiesUrl(url, opt_proxy) {
     var urlObj = new URL(url);
     urlObj.set('query', {
       service: 'WMS',
       request: 'GetCapabilities',
       version: '1.3.0'
     });
-    return urlObj.toString();
+    var newUrl = urlObj.toString();
+    if (opt_proxy) {
+      return opt_proxy + encodeURIComponent(newUrl);
+    } else {
+      return newUrl;
+    }
   }
-  getCapabilities(url, onSuccess, onFailure) {
-    return util.doGET(this.getCapabilitiesUrl(url), function(xmlhttp) {
+  getCapabilities(url, onSuccess, onFailure, opt_proxy) {
+    return util.doGET(this.getCapabilitiesUrl(url, opt_proxy), function(xmlhttp) {
       var info = wmsCapsFormat.read(xmlhttp.responseText);
       onSuccess.call(this, info.Capability.Layer);
     }, function(xmlhttp) {
