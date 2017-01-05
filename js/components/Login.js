@@ -64,6 +64,10 @@ class Login extends React.Component {
     intl: intlShape.isRequired
   };
 
+  static contextTypes = {
+    proxy: React.PropTypes.string
+  };
+
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
   };
@@ -72,8 +76,9 @@ class Login extends React.Component {
     url: '/geoserver/app/api/login'
   };
 
-  constructor(props) {
+  constructor(props, context) {
     super(props);
+    this._proxy = context.proxy;
     this.state = {
       user: null
     };
@@ -100,7 +105,7 @@ class Login extends React.Component {
     }, function() {
       delete me._request;
       me.setState({user: null});
-    });
+    }, this._proxy);
   }
   componentWillUnmount() {
     AppDispatcher.unregister(this._dispatchToken);
@@ -115,7 +120,7 @@ class Login extends React.Component {
     }, function(xmlhttp) {
       me.setState({user: null});
       failureCb.call(scope, xmlhttp);
-    });
+    }, this._proxy);
   }
   _showLoginDialog() {
     this.refs.loginmodal.getWrappedInstance().open();
