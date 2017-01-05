@@ -72,7 +72,11 @@ describe('WMSService', function() {
     });
     view.setResolution(9783.93962050256);
     var url = WMSService.getFeatureInfoUrl(layer, [-12355128.377959318, 4862617.991389772], view, 'application/vnd.ogc.gml');
-    assert.equal(url, 'http://demo.boundlessgeo.com/geoserver/ows/?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&FORMAT=image%2Fpng&TRANSPARENT=true&QUERY_LAYERS=usa%3Astates&LAYERS=usa%3Astates&INFO_FORMAT=application%2Fvnd.ogc.gml&I=17&J=14&WIDTH=256&HEIGHT=256&CRS=EPSG%3A3857&STYLES=&BBOX=-12523442.714243278%2C2504688.542848654%2C-10018754.171394622%2C5009377.08569731');
+    var expected = 'http://demo.boundlessgeo.com/geoserver/ows/?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&FORMAT=image%2Fpng&TRANSPARENT=true&QUERY_LAYERS=usa%3Astates&LAYERS=usa%3Astates&INFO_FORMAT=application%2Fvnd.ogc.gml&I=17&J=14&WIDTH=256&HEIGHT=256&CRS=EPSG%3A3857&STYLES=&BBOX=-12523442.714243278%2C2504688.542848654%2C-10018754.171394622%2C5009377.08569731';
+    assert.equal(url, expected);
+    var proxy = 'http://proxy/?url=';
+    url = WMSService.getFeatureInfoUrl(layer, [-12355128.377959318, 4862617.991389772], view, 'application/vnd.ogc.gml', proxy);
+    assert.equal(url, proxy + encodeURIComponent(expected));
   });
 
 });

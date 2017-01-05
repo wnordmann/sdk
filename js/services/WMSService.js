@@ -90,7 +90,7 @@ class WMSService {
       onFailure.call(this, xmlhttp);
     }, this);
   }
-  getFeatureInfoUrl(layer, coordinate, view, infoFormat) {
+  getFeatureInfoUrl(layer, coordinate, view, infoFormat, opt_proxy) {
     var resolution = view.getResolution(), projection = view.getProjection();
     var url = layer.getSource().getGetFeatureInfoUrl(
       coordinate,
@@ -99,11 +99,11 @@ class WMSService {
         'INFO_FORMAT': infoFormat
       }
     );
-    return url;
+    return util.getProxiedUrl(url, opt_proxy);
   }
-  getFeatureInfo(layer, coordinate, map, infoFormat, onSuccess, onFailure) {
+  getFeatureInfo(layer, coordinate, map, infoFormat, onSuccess, onFailure, opt_proxy) {
     var view = map.getView();
-    util.doGET(this.getFeatureInfoUrl(layer, coordinate, view, infoFormat), function(response) {
+    util.doGET(this.getFeatureInfoUrl(layer, coordinate, view, infoFormat, opt_proxy), function(response) {
       var result = {};
       if (infoFormat === 'text/plain' || infoFormat === 'text/html') {
         if (response.responseText.trim() !== 'no features were found') {

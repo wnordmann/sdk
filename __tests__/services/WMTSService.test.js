@@ -46,7 +46,11 @@ describe('WMTSService', function() {
 
   it('creates the correct GetFeatureInfo url', function() {
     var url = WMTSService.getFeatureInfoUrl(layer, [-12355128.377959318, 4862617.991389772], view, 'application/vnd.ogc.gml');
-    assert.equal(url, 'http://demo.boundlessgeo.com/geoserver/gwc/service/wmts?service=WMTS&request=GetFeatureInfo&version=1.0.0&layer=usa%3Astates&infoformat=application%2Fvnd.ogc.gml&style=&format=image%2Fpng&tilecol=3&tilerow=6&tilematrix=EPSG%3A900913%3A4&tilematrixset=EPSG%3A900913&i=17&j=15');
+    var expected = 'http://demo.boundlessgeo.com/geoserver/gwc/service/wmts?service=WMTS&request=GetFeatureInfo&version=1.0.0&layer=usa%3Astates&infoformat=application%2Fvnd.ogc.gml&style=&format=image%2Fpng&tilecol=3&tilerow=6&tilematrix=EPSG%3A900913%3A4&tilematrixset=EPSG%3A900913&i=17&j=15';
+    assert.equal(url, expected);
+    var proxy = 'http://proxy/?url=';
+    url = WMTSService.getFeatureInfoUrl(layer, [-12355128.377959318, 4862617.991389772], view, 'application/vnd.ogc.gml', proxy);
+    assert.equal(url, proxy + encodeURIComponent(expected));
   });
 
   it('generates the correct url for GetCapabilities', function() {

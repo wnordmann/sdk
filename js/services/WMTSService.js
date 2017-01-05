@@ -72,7 +72,7 @@ class WMTSService {
       Title: info.ServiceIdentification.Title
     };
   }
-  getFeatureInfoUrl(layer, coordinate, view, infoFormat) {
+  getFeatureInfoUrl(layer, coordinate, view, infoFormat, opt_proxy) {
     var resolution = view.getResolution();
     var source = layer.getSource();
     var tilegrid = source.getTileGrid();
@@ -116,11 +116,11 @@ class WMTSService {
       i: tileI,
       j: tileJ
     });
-    return urlObj.toString();
+    return util.getProxiedUrl(urlObj.toString(), opt_proxy);
   }
-  getFeatureInfo(layer, coordinate, map, infoFormat, onSuccess, onFailure) {
+  getFeatureInfo(layer, coordinate, map, infoFormat, onSuccess, onFailure, opt_proxy) {
     var view = map.getView();
-    var url = this.getFeatureInfoUrl(layer, coordinate, view, infoFormat);
+    var url = this.getFeatureInfoUrl(layer, coordinate, view, infoFormat, opt_proxy);
     util.doGET(url, function(response) {
       var result = {};
       if (infoFormat === 'text/plain' || infoFormat === 'text/html') {

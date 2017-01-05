@@ -111,7 +111,7 @@ class ArcGISRestService {
     }
     return response;
   }
-  getFeatureInfo(layer, coordinate, map, infoFormat, onSuccess, onFailure) {
+  getFeatureInfo(layer, coordinate, map, infoFormat, onSuccess, onFailure, opt_proxy) {
     var url = this.getFeatureInfoUrl(layer, coordinate, map);
     var me = this;
     util.doJSONP(url, function(jsonData) {
