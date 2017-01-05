@@ -237,7 +237,7 @@ class AddLayerModal extends React.Component {
     RESTService.getStyleName(url, olLayer, function(styleName) {
       olLayer.set('styleName', styleName);
     }, function() {
-    });
+    }, this._proxy);
   }
   _getWfsInfo(layer, olLayer, success, scope) {
     var me = this;

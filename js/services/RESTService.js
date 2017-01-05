@@ -13,9 +13,9 @@
 import util from '../util';
 
 class RESTService {
-  _getStyleNameUrl(url, layer) {
+  _getStyleNameUrl(url, layer, opt_proxy) {
     var id = layer.get('name').split(':').pop();
-    return url.replace(/wms|ows|wfs/g, 'rest/layers/' + id + '.json');
+    return util.getProxiedUrl(url.replace(/wms|ows|wfs/g, 'rest/layers/' + id + '.json'), opt_proxy);
   }
   _parseStyleName(jsonData) {
     var styleName = jsonData.layer.defaultStyle.name;
@@ -27,8 +27,8 @@ class RESTService {
     }
     return styleName;
   }
-  getStyleName(url, layer, onSuccess, onFailure) {
-    url = this._getStyleNameUrl(url, layer);
+  getStyleName(url, layer, onSuccess, onFailure, opt_proxy) {
+    url = this._getStyleNameUrl(url, layer, opt_proxy);
     util.doGET(url, function(xmlhttp) {
       var styleName = this._parseStyleName(JSON.parse(xmlhttp.responseText));
       onSuccess.call(this, styleName);

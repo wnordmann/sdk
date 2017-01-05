@@ -19,7 +19,11 @@ describe('RESTService', function() {
 
   it('creates the correct url for get style name', function() {
     var styleUrl = RESTService._getStyleNameUrl(url, layer);
-    assert.equal(styleUrl, 'http://demo.boundlessgeo.com/geoserver/rest/layers/states.json');
+    var expected = 'http://demo.boundlessgeo.com/geoserver/rest/layers/states.json';
+    assert.equal(styleUrl, expected);
+    var proxy = 'http://proxy/?url=';
+    styleUrl = RESTService._getStyleNameUrl(url, layer, proxy);
+    assert.equal(styleUrl, proxy + encodeURIComponent(expected));
   });
 
   it('parses the style name', function() {
