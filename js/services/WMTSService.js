@@ -24,10 +24,13 @@ const parser = new ol.format.WMTSCapabilities();
 const cache = {};
 
 class WMTSService {
-  createLayer(layer, url, titleObj, projection) {
+  createLayer(layer, url, titleObj, projection, opt_proxy) {
     var caps = cache[url];
     var options = ol.source.WMTS.optionsFromCapabilities(caps,
       {layer: layer.Name, format: 'image/png', projection: projection.getCode()});
+    for (var i = 0, ii = options.urls.length; i < ii; ++i) {
+      options.urls[i] = util.getProxiedUrl(options.urls[i], opt_proxy);
+    }
     return new ol.layer.Tile({
       title: titleObj.title,
       emptyTitle: titleObj.empty,
@@ -38,16 +41,16 @@ class WMTSService {
       source: new ol.source.WMTS(options)
     });
   }
-  getCapabilitiesUrl(url) {
+  getCapabilitiesUrl(url, opt_proxy) {
     var urlObj = new URL(url);
     urlObj.set('query', {
       request: 'GetCapabilities',
       version: '1.0.0'
     });
-    return urlObj.toString();
+    return util.getProxiedUrl(urlObj.toString(), opt_proxy);
   }
-  getCapabilities(url, onSuccess, onFailure) {
-    util.doGET(this.getCapabilitiesUrl(url), function(xmlhttp) {
+  getCapabilities(url, onSuccess, onFailure, opt_proxy) {
+    util.doGET(this.getCapabilitiesUrl(url, opt_proxy), function(xmlhttp) {
       onSuccess.call(this, this.parseCapabilities(xmlhttp, url));
     }, function(xmlhttp) {
       onFailure.call(this, xmlhttp);
@@ -69,7 +72,7 @@ class WMTSService {
       Title: info.ServiceIdentification.Title
     };
   }
-  getFeatureInfoUrl(layer, coordinate, view, infoFormat) {
+  getFeatureInfoUrl(layer, coordinate, view, infoFormat, opt_proxy) {
     var resolution = view.getResolution();
     var source = layer.getSource();
     var tilegrid = source.getTileGrid();
@@ -113,11 +116,11 @@ class WMTSService {
       i: tileI,
       j: tileJ
     });
-    return urlObj.toString();
+    return util.getProxiedUrl(urlObj.toString(), opt_proxy);
   }
-  getFeatureInfo(layer, coordinate, map, infoFormat, onSuccess, onFailure) {
+  getFeatureInfo(layer, coordinate, map, infoFormat, onSuccess, onFailure, opt_proxy) {
     var view = map.getView();
-    var url = this.getFeatureInfoUrl(layer, coordinate, view, infoFormat);
+    var url = this.getFeatureInfoUrl(layer, coordinate, view, infoFormat, opt_proxy);
     util.doGET(url, function(response) {
       var result = {};
       if (infoFormat === 'text/plain' || infoFormat === 'text/html') {

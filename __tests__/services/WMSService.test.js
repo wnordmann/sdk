@@ -12,11 +12,17 @@ describe('WMSService', function() {
   it('uses correct GetCapabilities url', function() {
     var url = WMSService.getCapabilitiesUrl('http://localhost/geoserver/ows');
     assert.equal(url, 'http://localhost/geoserver/ows?service=WMS&request=GetCapabilities&version=1.3.0');
+    url = WMSService.getCapabilitiesUrl('http://localhost/geoserver/ows', 'http://proxy/?url=');
+    assert.equal(url, 'http://proxy/?url=http%3A%2F%2Flocalhost%2Fgeoserver%2Fows%3Fservice%3DWMS%26request%3DGetCapabilities%26version%3D1.3.0');
   });
 
   it('uses correct GetStyles url', function() {
     var url = WMSService.getStylesUrl('http://localhost/geoserver/ows', new ol.layer.Tile({name: 'foo'}));
-    assert.equal(url, 'http://localhost/geoserver/ows?service=WMS&request=GetStyles&layers=foo&version=1.1.1');
+    var expected = 'http://localhost/geoserver/ows?service=WMS&request=GetStyles&layers=foo&version=1.1.1';
+    assert.equal(url, expected);
+    var proxy = 'http://proxy/?url=';
+    url = WMSService.getStylesUrl('http://localhost/geoserver/ows', new ol.layer.Tile({name: 'foo'}), proxy);
+    assert.equal(url, proxy + encodeURIComponent(expected));
   });
 
   it('creates correct layer', function() {
@@ -48,6 +54,10 @@ describe('WMSService', function() {
     assert.equal(source instanceof ol.source.TileWMS, true);
     assert.equal(source.getUrls()[0], url);
     assert.equal(source.getParams().LAYERS, layer.Name);
+    var proxy = 'http://proxy/?url=';
+    lyr = WMSService.createLayer(layer, url, titleObj, ol.proj.get('EPSG:3857'), proxy);
+    source = lyr.getSource();
+    assert.equal(source.getUrls()[0], proxy + encodeURIComponent(url));
   });
 
   it('creates correct GetFeatureInfo url', function() {
@@ -62,7 +72,11 @@ describe('WMSService', function() {
     });
     view.setResolution(9783.93962050256);
     var url = WMSService.getFeatureInfoUrl(layer, [-12355128.377959318, 4862617.991389772], view, 'application/vnd.ogc.gml');
-    assert.equal(url, 'http://demo.boundlessgeo.com/geoserver/ows/?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&FORMAT=image%2Fpng&TRANSPARENT=true&QUERY_LAYERS=usa%3Astates&LAYERS=usa%3Astates&INFO_FORMAT=application%2Fvnd.ogc.gml&I=17&J=14&WIDTH=256&HEIGHT=256&CRS=EPSG%3A3857&STYLES=&BBOX=-12523442.714243278%2C2504688.542848654%2C-10018754.171394622%2C5009377.08569731');
+    var expected = 'http://demo.boundlessgeo.com/geoserver/ows/?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&FORMAT=image%2Fpng&TRANSPARENT=true&QUERY_LAYERS=usa%3Astates&LAYERS=usa%3Astates&INFO_FORMAT=application%2Fvnd.ogc.gml&I=17&J=14&WIDTH=256&HEIGHT=256&CRS=EPSG%3A3857&STYLES=&BBOX=-12523442.714243278%2C2504688.542848654%2C-10018754.171394622%2C5009377.08569731';
+    assert.equal(url, expected);
+    var proxy = 'http://proxy/?url=';
+    url = WMSService.getFeatureInfoUrl(layer, [-12355128.377959318, 4862617.991389772], view, 'application/vnd.ogc.gml', proxy);
+    assert.equal(url, proxy + encodeURIComponent(expected));
   });
 
 });

@@ -46,12 +46,19 @@ describe('WMTSService', function() {
 
   it('creates the correct GetFeatureInfo url', function() {
     var url = WMTSService.getFeatureInfoUrl(layer, [-12355128.377959318, 4862617.991389772], view, 'application/vnd.ogc.gml');
-    assert.equal(url, 'http://demo.boundlessgeo.com/geoserver/gwc/service/wmts?service=WMTS&request=GetFeatureInfo&version=1.0.0&layer=usa%3Astates&infoformat=application%2Fvnd.ogc.gml&style=&format=image%2Fpng&tilecol=3&tilerow=6&tilematrix=EPSG%3A900913%3A4&tilematrixset=EPSG%3A900913&i=17&j=15');
+    var expected = 'http://demo.boundlessgeo.com/geoserver/gwc/service/wmts?service=WMTS&request=GetFeatureInfo&version=1.0.0&layer=usa%3Astates&infoformat=application%2Fvnd.ogc.gml&style=&format=image%2Fpng&tilecol=3&tilerow=6&tilematrix=EPSG%3A900913%3A4&tilematrixset=EPSG%3A900913&i=17&j=15';
+    assert.equal(url, expected);
+    var proxy = 'http://proxy/?url=';
+    url = WMTSService.getFeatureInfoUrl(layer, [-12355128.377959318, 4862617.991389772], view, 'application/vnd.ogc.gml', proxy);
+    assert.equal(url, proxy + encodeURIComponent(expected));
   });
 
   it('generates the correct url for GetCapabilities', function() {
     var url = 'http://demo.boundlessgeo.com/geoserver/gwc/service/wmts';
     assert.equal(WMTSService.getCapabilitiesUrl(url), url + '?request=GetCapabilities&version=1.0.0');
+    var proxy = 'http://proxy/?url=';
+    var caps = WMTSService.getCapabilitiesUrl(url, proxy);
+    assert.equal(caps, proxy + encodeURIComponent(url + '?request=GetCapabilities&version=1.0.0'));
   });
 
   it('parses response correctly and can create layer', function() {
@@ -69,6 +76,11 @@ describe('WMTSService', function() {
     assert.equal(source instanceof ol.source.WMTS, true);
     // png even if jpeg is the first one
     assert.equal(source.getFormat(), 'image/png');
+    assert.equal(source.getUrls()[0], 'http://localhost:8080/geoserver/gwc/service/wmts?');
+    var proxy = 'http://proxy/?url=';
+    layer = WMTSService.createLayer(info.Layer[0], url, {title: 'Digital elevation model', isEmpty: false}, ol.proj.get('EPSG:4326'), proxy);
+    source = layer.getSource();
+    assert.equal(source.getUrls()[0], 'http://proxy/?url=http%3A%2F%2Flocalhost%3A8080%2Fgeoserver%2Fgwc%2Fservice%2Fwmts%3F');
   });
 
 });

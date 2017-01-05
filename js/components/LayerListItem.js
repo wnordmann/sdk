@@ -290,6 +290,10 @@ class LayerListItem extends React.Component {
     intl: intlShape.isRequired
   };
 
+  static contextTypes = {
+    proxy: React.PropTypes.string
+  };
+
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
   };
@@ -303,8 +307,9 @@ class LayerListItem extends React.Component {
     }
   };
 
-  constructor(props) {
+  constructor(props, context) {
     super(props);
+    this._proxy = context.proxy;
     this.state = {
       tableOpen: false,
       checked: props.layer.getVisible()
@@ -427,7 +432,7 @@ class LayerListItem extends React.Component {
         WMSService.getStyles(this.props.layer.get('wfsInfo').url, this.props.layer, function(info) {
           me.props.layer.set('styleInfo', info);
           me.refs.stylemodal.getWrappedInstance().open();
-        }, undefined);
+        }, undefined, this._proxy);
       }
     } else {
       this.refs.stylemodal.getWrappedInstance().open();

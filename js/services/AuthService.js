@@ -14,7 +14,7 @@ import LoginActions from '../actions/LoginActions';
 import util from '../util';
 
 class AuthService {
-  login(url, user, pwd, onSuccess, onFailure) {
+  login(url, user, pwd, onSuccess, onFailure, opt_proxy) {
     var contentType = 'application/x-www-form-urlencoded';
     var data = 'username=' + user + '&password=' + pwd;
     var success = function(xmlhttp) {
@@ -25,13 +25,13 @@ class AuthService {
     var failure = function(xmlhttp) {
       onFailure.call(this, xmlhttp);
     };
-    util.doPOST(url, data, success, failure, this, contentType);
+    util.doPOST(util.getProxiedUrl(url, opt_proxy), data, success, failure, this, contentType);
   }
   logoff() {
     document.cookie = 'JSESSIONID=; path=/geoserver; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     LoginActions.logout();
   }
-  getStatus(url, onSuccess, onFailure) {
+  getStatus(url, onSuccess, onFailure, opt_proxy) {
     var success = function(xmlhttp) {
       var response = JSON.parse(xmlhttp.responseText);
       onSuccess.call(this, response.user);
@@ -42,7 +42,7 @@ class AuthService {
       }
       onFailure.call();
     };
-    return util.doGET(url, success, failure, this);
+    return util.doGET(util.getProxiedUrl(url, opt_proxy), success, failure, this);
   }
 }
 

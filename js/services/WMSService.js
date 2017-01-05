@@ -29,12 +29,7 @@ class WMSService {
       request: 'GetCapabilities',
       version: '1.3.0'
     });
-    var newUrl = urlObj.toString();
-    if (opt_proxy) {
-      return opt_proxy + encodeURIComponent(newUrl);
-    } else {
-      return newUrl;
-    }
+    return util.getProxiedUrl(urlObj.toString(), opt_proxy);
   }
   getCapabilities(url, onSuccess, onFailure, opt_proxy) {
     return util.doGET(this.getCapabilitiesUrl(url, opt_proxy), function(xmlhttp) {
@@ -44,11 +39,11 @@ class WMSService {
       onFailure.call(this, xmlhttp);
     }, this);
   }
-  createLayer(layer, url, titleObj, projection) {
+  createLayer(layer, url, titleObj, projection, opt_proxy) {
     var getLegendUrl = function(layer) {
       if (layer.Style && layer.Style.length === 1) {
         if (layer.Style[0].LegendURL && layer.Style[0].LegendURL.length >= 1) {
-          return layer.Style[0].LegendURL[0].OnlineResource;
+          return util.getProxiedUrl(layer.Style[0].LegendURL[0].OnlineResource, opt_proxy);
         }
       }
     };
@@ -69,7 +64,7 @@ class WMSService {
       EX_GeographicBoundingBox: layer.EX_GeographicBoundingBox,
       popupInfo: '#AllAttributes',
       source: new ol.source.TileWMS({
-        url: url,
+        url: util.getProxiedUrl(url, opt_proxy),
         wrapX: layer.Layer ? true : false,
         params: {
           LAYERS: layer.Name
@@ -77,7 +72,7 @@ class WMSService {
       })
     });
   }
-  getStylesUrl(url, layer) {
+  getStylesUrl(url, layer, opt_proxy) {
     var urlObj = new URL(url);
     urlObj.set('query', {
       service: 'WMS',
@@ -85,17 +80,17 @@ class WMSService {
       layers: layer.get('name'),
       version: '1.1.1'
     });
-    return urlObj.toString();
+    return util.getProxiedUrl(urlObj.toString(), opt_proxy);
   }
-  getStyles(url, layer, onSuccess, onFailure) {
-    return util.doGET(this.getStylesUrl(url, layer), function(xmlhttp) {
+  getStyles(url, layer, onSuccess, onFailure, opt_proxy) {
+    return util.doGET(this.getStylesUrl(url, layer, opt_proxy), function(xmlhttp) {
       var info = SLDService.parse(xmlhttp.responseText);
       onSuccess.call(this, info);
     }, function(xmlhttp) {
       onFailure.call(this, xmlhttp);
     }, this);
   }
-  getFeatureInfoUrl(layer, coordinate, view, infoFormat) {
+  getFeatureInfoUrl(layer, coordinate, view, infoFormat, opt_proxy) {
     var resolution = view.getResolution(), projection = view.getProjection();
     var url = layer.getSource().getGetFeatureInfoUrl(
       coordinate,
@@ -104,11 +99,11 @@ class WMSService {
         'INFO_FORMAT': infoFormat
       }
     );
-    return url;
+    return util.getProxiedUrl(url, opt_proxy);
   }
-  getFeatureInfo(layer, coordinate, map, infoFormat, onSuccess, onFailure) {
+  getFeatureInfo(layer, coordinate, map, infoFormat, onSuccess, onFailure, opt_proxy) {
     var view = map.getView();
-    util.doGET(this.getFeatureInfoUrl(layer, coordinate, view, infoFormat), function(response) {
+    util.doGET(this.getFeatureInfoUrl(layer, coordinate, view, infoFormat, opt_proxy), function(response) {
       var result = {};
       if (infoFormat === 'text/plain' || infoFormat === 'text/html') {
         if (response.responseText.trim() !== 'no features were found') {

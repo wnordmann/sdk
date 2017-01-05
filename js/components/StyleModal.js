@@ -99,12 +99,17 @@ class StyleModal extends React.Component {
     intl: intlShape.isRequired
   };
 
+  static contextTypes = {
+    proxy: React.PropTypes.string
+  };
+
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
   };
 
-  constructor(props) {
+  constructor(props, context) {
     super(props);
+    this._proxy = context.proxy;
     this._styleCache = {};
     this._ruleCounter = 1;
     this.state = {
@@ -177,7 +182,7 @@ class StyleModal extends React.Component {
         me.close();
       }, function(xmlhttp) {
         me.setState({error: true, errorOpen: true, msg: xmlhttp.status + ' ' + xmlhttp.statusText});
-      });
+      }, this._proxy);
     } else {
       RESTService.createStyle(url, this.props.layer, sld, function(xmlhttp) {
         me.props.layer.getSource().updateParams({'STYLES': me.props.layer.get('styleName'), '_olSalt': Math.random()});
@@ -185,7 +190,7 @@ class StyleModal extends React.Component {
         me.close();
       }, function(xmlhttp) {
         me.setState({error: true, errorOpen: true, msg: xmlhttp.status + ' ' + xmlhttp.statusText});
-      });
+      }, this._proxy);
     }
   }
   _generateSLD() {
