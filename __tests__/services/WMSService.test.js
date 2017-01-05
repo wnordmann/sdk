@@ -18,7 +18,11 @@ describe('WMSService', function() {
 
   it('uses correct GetStyles url', function() {
     var url = WMSService.getStylesUrl('http://localhost/geoserver/ows', new ol.layer.Tile({name: 'foo'}));
-    assert.equal(url, 'http://localhost/geoserver/ows?service=WMS&request=GetStyles&layers=foo&version=1.1.1');
+    var expected = 'http://localhost/geoserver/ows?service=WMS&request=GetStyles&layers=foo&version=1.1.1';
+    assert.equal(url, expected);
+    var proxy = 'http://proxy/?url=';
+    url = WMSService.getStylesUrl('http://localhost/geoserver/ows', new ol.layer.Tile({name: 'foo'}), proxy);
+    assert.equal(url, proxy + encodeURIComponent(expected));
   });
 
   it('creates correct layer', function() {

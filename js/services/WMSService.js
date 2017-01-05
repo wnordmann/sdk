@@ -72,7 +72,7 @@ class WMSService {
       })
     });
   }
-  getStylesUrl(url, layer) {
+  getStylesUrl(url, layer, opt_proxy) {
     var urlObj = new URL(url);
     urlObj.set('query', {
       service: 'WMS',
@@ -80,10 +80,10 @@ class WMSService {
       layers: layer.get('name'),
       version: '1.1.1'
     });
-    return urlObj.toString();
+    return util.getProxiedUrl(urlObj.toString(), opt_proxy);
   }
-  getStyles(url, layer, onSuccess, onFailure) {
-    return util.doGET(this.getStylesUrl(url, layer), function(xmlhttp) {
+  getStyles(url, layer, onSuccess, onFailure, opt_proxy) {
+    return util.doGET(this.getStylesUrl(url, layer, opt_proxy), function(xmlhttp) {
       var info = SLDService.parse(xmlhttp.responseText);
       onSuccess.call(this, info);
     }, function(xmlhttp) {
