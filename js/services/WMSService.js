@@ -29,12 +29,7 @@ class WMSService {
       request: 'GetCapabilities',
       version: '1.3.0'
     });
-    var newUrl = urlObj.toString();
-    if (opt_proxy) {
-      return opt_proxy + encodeURIComponent(newUrl);
-    } else {
-      return newUrl;
-    }
+    return util.getProxiedUrl(urlObj.toString(), opt_proxy);
   }
   getCapabilities(url, onSuccess, onFailure, opt_proxy) {
     return util.doGET(this.getCapabilitiesUrl(url, opt_proxy), function(xmlhttp) {
@@ -44,11 +39,11 @@ class WMSService {
       onFailure.call(this, xmlhttp);
     }, this);
   }
-  createLayer(layer, url, titleObj, projection) {
+  createLayer(layer, url, titleObj, projection, opt_proxy) {
     var getLegendUrl = function(layer) {
       if (layer.Style && layer.Style.length === 1) {
         if (layer.Style[0].LegendURL && layer.Style[0].LegendURL.length >= 1) {
-          return layer.Style[0].LegendURL[0].OnlineResource;
+          return util.getProxiedUrl(layer.Style[0].LegendURL[0].OnlineResource, opt_proxy);
         }
       }
     };
@@ -69,7 +64,7 @@ class WMSService {
       EX_GeographicBoundingBox: layer.EX_GeographicBoundingBox,
       popupInfo: '#AllAttributes',
       source: new ol.source.TileWMS({
-        url: url,
+        url: util.getProxiedUrl(url, opt_proxy),
         wrapX: layer.Layer ? true : false,
         params: {
           LAYERS: layer.Name

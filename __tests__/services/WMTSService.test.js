@@ -52,6 +52,9 @@ describe('WMTSService', function() {
   it('generates the correct url for GetCapabilities', function() {
     var url = 'http://demo.boundlessgeo.com/geoserver/gwc/service/wmts';
     assert.equal(WMTSService.getCapabilitiesUrl(url), url + '?request=GetCapabilities&version=1.0.0');
+    var proxy = 'http://proxy/?url=';
+    var caps = WMTSService.getCapabilitiesUrl(url, proxy);
+    assert.equal(caps, proxy + encodeURIComponent(url + '?request=GetCapabilities&version=1.0.0'));
   });
 
   it('parses response correctly and can create layer', function() {
@@ -69,6 +72,11 @@ describe('WMTSService', function() {
     assert.equal(source instanceof ol.source.WMTS, true);
     // png even if jpeg is the first one
     assert.equal(source.getFormat(), 'image/png');
+    assert.equal(source.getUrls()[0], 'http://localhost:8080/geoserver/gwc/service/wmts?');
+    var proxy = 'http://proxy/?url=';
+    layer = WMTSService.createLayer(info.Layer[0], url, {title: 'Digital elevation model', isEmpty: false}, ol.proj.get('EPSG:4326'), proxy);
+    source = layer.getSource();
+    assert.equal(source.getUrls()[0], 'http://proxy/?url=http%3A%2F%2Flocalhost%3A8080%2Fgeoserver%2Fgwc%2Fservice%2Fwmts%3F');
   });
 
 });

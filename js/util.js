@@ -13,6 +13,13 @@
 import ol from 'openlayers';
 
 export default {
+  getProxiedUrl(url, opt_proxy) {
+    if (opt_proxy) {
+      return opt_proxy + encodeURIComponent(url);
+    } else {
+      return url;
+    }
+  },
   getResolutionForScale(scale, units) {
     var dpi = 25.4 / 0.28;
     var mpu = ol.proj.METERS_PER_UNIT[units];

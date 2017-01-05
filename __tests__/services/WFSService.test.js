@@ -100,7 +100,11 @@ describe('WFSService', function() {
 
   it('uses correct GetCapabilities url', function() {
     var url = WFSService.getCapabilitiesUrl(layer.get('wfsInfo').url);
-    assert.equal(url, 'http://localhost/geoserver?service=WFS&version=1.1.0&request=GetCapabilities');
+    var expected = 'http://localhost/geoserver?service=WFS&version=1.1.0&request=GetCapabilities'
+    assert.equal(url, expected);
+    var proxy = 'http://proxy/?url=';
+    url = WFSService.getCapabilitiesUrl(layer.get('wfsInfo').url, proxy);
+    assert.equal(url, proxy + encodeURIComponent(expected));
   });
 
   it('handles parsing of GetCapabilities', function() {
@@ -114,6 +118,33 @@ describe('WFSService', function() {
     assert.equal(result.layers[0].EX_GeographicBoundingBox[0], -157.99118261729797);
     assert.equal(result.layers[0].Abstract, 'Area of dense human habitation.');
     assert.equal(result.title, 'Training WFS');
+  });
+
+  it('creates correct layer', function() {
+    var layer = {
+      Name: 'bar'
+    };
+    var url = 'http://localhost/geoserver/ows';
+    var titleObj = {
+      title: 'My Layer',
+      empty: false
+    };
+    var lyr = WFSService.createLayer(layer, url, titleObj, ol.proj.get('EPSG:3857'));
+    assert.equal(lyr instanceof ol.layer.Vector, true);
+    assert.equal(lyr.get('title'), titleObj.title);
+    assert.equal(lyr.get('id'), layer.Name);
+    assert.equal(lyr.get('popupInfo'), '#AllAttributes');
+    assert.equal(lyr.get('isWFST'), true);
+    var source = lyr.getSource();
+    assert.equal(source instanceof ol.source.Vector, true);
+    assert.equal(source.getFormat() instanceof ol.format.GeoJSON, true);
+    var wfsUrl = source.getUrl()([-180, -90, 180, 90]);
+    assert.equal(wfsUrl, 'http://localhost/geoserver/ows?service=WFS&request=GetFeature&version=1.1.0&typename=bar&outputFormat=application%2Fjson&srsname=EPSG%3A3857&bbox=-180%2C-90%2C180%2C90%2CEPSG%3A3857');
+    var proxy = 'http://proxy/?url=';
+    lyr = WFSService.createLayer(layer, url, titleObj, ol.proj.get('EPSG:3857'), proxy);
+    source = lyr.getSource();
+    wfsUrl = source.getUrl()([-180, -90, 180, 90]);
+    assert.equal(wfsUrl, 'http://proxy/?url=http%3A%2F%2Flocalhost%2Fgeoserver%2Fows%3Fservice%3DWFS%26request%3DGetFeature%26version%3D1.1.0%26typename%3Dbar%26outputFormat%3Dapplication%252Fjson%26srsname%3DEPSG%253A3857%26bbox%3D-180%252C-90%252C180%252C90%252CEPSG%253A3857');
   });
 
 });

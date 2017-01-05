@@ -38,7 +38,7 @@ const proj4326 = new ol.proj.Projection({
 ol.proj.addEquivalentProjections([ol.proj.get('EPSG:4326'), proj4326]);
 
 class WFSService {
-  createLayer(layer, url, titleObj) {
+  createLayer(layer, url, titleObj, projection, opt_proxy) {
     return new ol.layer.Vector({
       title: titleObj.title,
       emptyTitle: titleObj.empty,
@@ -59,10 +59,10 @@ class WFSService {
             version: '1.1.0',
             typename: layer.Name,
             outputFormat: 'application/json',
-            srsname: 'EPSG:3857',
-            bbox: extent.join(',') + ',EPSG:3857'
+            srsname: projection.getCode(),
+            bbox: extent.join(',') + ',' + projection.getCode()
           });
-          return urlObj.toString();
+          return util.getProxiedUrl(urlObj.toString(), opt_proxy);
         },
         format: geojsonFormat,
         strategy: ol.loadingstrategy.bbox
@@ -96,17 +96,17 @@ class WFSService {
       title: info.serviceIdentification.title
     };
   }
-  getCapabilitiesUrl(url) {
+  getCapabilitiesUrl(url, opt_proxy) {
     var urlObj = new URL(url);
     urlObj.set('query', {
       service: 'WFS',
       version: '1.1.0',
       request: 'GetCapabilities'
     });
-    return urlObj.toString();
+    return util.getProxiedUrl(urlObj.toString(), opt_proxy);
   }
-  getCapabilities(url, onSuccess, onFailure) {
-    return util.doGET(this.getCapabilitiesUrl(url), function(xmlhttp) {
+  getCapabilities(url, onSuccess, onFailure, opt_proxy) {
+    return util.doGET(this.getCapabilitiesUrl(url, opt_proxy), function(xmlhttp) {
       var info = this.parseCapabilities(xmlhttp);
       onSuccess.call(this, {Title: info.title, Layer: info.layers});
     }, function(xmlhttp) {

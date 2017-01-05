@@ -266,7 +266,7 @@ class AddLayerModal extends React.Component {
     var source = this.state.sources[this.state.source];
     var url = source.url;
     var service = services[source.type];
-    var olLayer = service.createLayer(layer, url, titleObj, map.getView().getProjection());
+    var olLayer = service.createLayer(layer, url, titleObj, map.getView().getProjection(), this._proxy);
     if (source.type === 'WMS' || source.type === 'WFS') {
       this._getStyleName.call(this, olLayer);
       this._getWfsInfo.call(this, layer, olLayer, this.close, this);

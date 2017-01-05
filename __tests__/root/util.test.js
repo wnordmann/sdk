@@ -5,6 +5,12 @@ import Util from '../../js/util';
 
 describe('util', function() {
 
+  it('proxies a url', function() {
+    var url = 'http://myserver/wfs?service=WFS&request=GetCapabilities';
+    var proxiedUrl = Util.getProxiedUrl(url, 'http://proxy/?url=');
+    assert.equal(proxiedUrl, 'http://proxy/?url=http%3A%2F%2Fmyserver%2Fwfs%3Fservice%3DWFS%26request%3DGetCapabilities');
+  });
+
   it('transforms a color when rgb is present', function() {
     var input = {rgb: {r: 255, g: 0, b: 0, a:1}};
     var color = Util.transformColor(input);

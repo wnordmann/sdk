@@ -12,6 +12,8 @@ describe('WMSService', function() {
   it('uses correct GetCapabilities url', function() {
     var url = WMSService.getCapabilitiesUrl('http://localhost/geoserver/ows');
     assert.equal(url, 'http://localhost/geoserver/ows?service=WMS&request=GetCapabilities&version=1.3.0');
+    url = WMSService.getCapabilitiesUrl('http://localhost/geoserver/ows', 'http://proxy/?url=');
+    assert.equal(url, 'http://proxy/?url=http%3A%2F%2Flocalhost%2Fgeoserver%2Fows%3Fservice%3DWMS%26request%3DGetCapabilities%26version%3D1.3.0');
   });
 
   it('uses correct GetStyles url', function() {
@@ -48,6 +50,10 @@ describe('WMSService', function() {
     assert.equal(source instanceof ol.source.TileWMS, true);
     assert.equal(source.getUrls()[0], url);
     assert.equal(source.getParams().LAYERS, layer.Name);
+    var proxy = 'http://proxy/?url=';
+    lyr = WMSService.createLayer(layer, url, titleObj, ol.proj.get('EPSG:3857'), proxy);
+    source = lyr.getSource();
+    assert.equal(source.getUrls()[0], proxy + encodeURIComponent(url));
   });
 
   it('creates correct GetFeatureInfo url', function() {

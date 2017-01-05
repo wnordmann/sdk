@@ -17,7 +17,7 @@ import URL from 'url-parse';
 const format = new ol.format.EsriJSON();
 
 class ArcGISRestService {
-  createLayer(layer, url, titleObj, projection) {
+  createLayer(layer, url, titleObj, projection, opt_proxy) {
     var units = projection.getUnits();
     return new ol.layer.Tile({
       title: titleObj.title,
@@ -30,7 +30,7 @@ class ArcGISRestService {
       wfsInfo: layer.Queryable,
       popupInfo: layer.Queryable ? '#AllAttributes' : undefined,
       source: new ol.source.TileArcGISRest({
-        urls: [url],
+        urls: [util.getProxiedUrl(url, opt_proxy)],
         params: {
           LAYERS: layer.Name
         }
@@ -64,7 +64,8 @@ class ArcGISRestService {
     });
     return urlObj.toString();
   }
-  getCapabilities(url, onSuccess, onFailure) {
+  getCapabilities(url, onSuccess, onFailure, opt_proxy) {
+    // because it's JSONP we don't need to take into account opt_proxy
     util.doJSONP(this.getCapabilitiesUrl(url), function(jsonData) {
       onSuccess.call(this, this.parseCapabilities(jsonData));
     }, onFailure, this);
