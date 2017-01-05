@@ -369,6 +369,9 @@ class FeatureTable extends React.Component {
     SelectActions.toggleFeature(this._layer, props.row);
   }
   _onTableChange(state, instance) {
+    if (!this._layer) {
+      return;
+    }
     const {formatMessage} = this.props.intl;
     this.setState({loading: true});
     var start = state.page * state.pageSize;
