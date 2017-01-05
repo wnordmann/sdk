@@ -32,7 +32,7 @@ Verify in the browser that the application is running successfully by navigating
 The first step is adding a toolbar so we have a container to put in our new MapTool. Open up app.jsx and add an import statement for the toolbar:
 
 ```javascript
-import Toolbar from 'material-ui/lib/toolbar/toolbar';
+import Toolbar from 'material-ui/Toolbar/Toolbar';
 ```
 
 Add the Toolbar component to the render method:
@@ -85,18 +85,18 @@ import ol from 'openlayers';
 import ToolUtil from 'boundless-sdk/js/toolutil.js';
 import RaisedButton from 'boundless-sdk/js/components/Button.jsx';
 
-class DrawBox extends React.Component { 
-  constructor(props) { 
+class DrawBox extends React.Component {
+  constructor(props) {
     super(props);
     this._dispatchToken = ToolUtil.register(this);
     var source = new ol.source.Vector({wrapX: false});
     this._interaction = new ol.interaction.Draw({
       source: source,
       type: 'LineString',
-      geometryFunction: function(coordinates, geometry) { 
-        if (!geometry) { 
+      geometryFunction: function(coordinates, geometry) {
+        if (!geometry) {
           geometry = new ol.geom.Polygon(null);
-        } 
+        }
         var start = coordinates[0];
         var end = coordinates[1];
         geometry.setCoordinates([
@@ -104,7 +104,7 @@ class DrawBox extends React.Component {
         ]);
         return geometry;
       },
-      maxPoints: 2 
+      maxPoints: 2
     });
     this._layer = new ol.layer.Vector({
       title: null, /* to keep it out of the LayerList */
@@ -117,21 +117,21 @@ class DrawBox extends React.Component {
       zIndex: 100000
     });
     this.props.map.addLayer(this._layer);
-  } 
-  componentWillUnmount() { 
+  }
+  componentWillUnmount() {
     AppDispatcher.unregister(this._dispatchToken);
-  } 
-  activate(interactions) { 
+  }
+  activate(interactions) {
     ToolUtil.activate(this, interactions);
-  } 
-  deactivate() { 
+  }
+  deactivate() {
     ToolUtil.deactivate(this);
-  } 
-  _drawBox() { 
+  }
+  _drawBox() {
     this.activate(this._interaction);
-  } 
-  render() { 
-    return ( 
+  }
+  render() {
+    return (
       <RaisedButton {...this.props} label='Draw Box' tooltip='Click in the map and move the mouse to draw a box' onTouchTap={this._drawBox.bind(this)} />
     );
   }
