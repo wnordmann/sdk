@@ -48,6 +48,21 @@ class WMSService {
       }
     };
     var units = projection.getUnits();
+    var source = new ol.source.TileWMS({
+      url: url,
+      wrapX: layer.Layer ? true : false,
+      params: {
+        LAYERS: layer.Name
+      }
+    });
+    if (opt_proxy) {
+      source.setTileLoadFunction((function() {
+        var tileLoadFn = source.getTileLoadFunction();
+        return function(tile, src) {
+          tileLoadFn(tile, util.getProxiedUrl(src, opt_proxy));
+        };
+      })());
+    }
     return new ol.layer.Tile({
       title: titleObj.title,
       emptyTitle: titleObj.empty,
@@ -63,13 +78,7 @@ class WMSService {
       type: layer.Layer ? 'base' : undefined,
       EX_GeographicBoundingBox: layer.EX_GeographicBoundingBox,
       popupInfo: '#AllAttributes',
-      source: new ol.source.TileWMS({
-        url: util.getProxiedUrl(url, opt_proxy),
-        wrapX: layer.Layer ? true : false,
-        params: {
-          LAYERS: layer.Name
-        }
-      })
+      source: source
     });
   }
   getStylesUrl(url, layer, opt_proxy) {
