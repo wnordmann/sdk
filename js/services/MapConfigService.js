@@ -87,7 +87,7 @@ class MapConfigService {
         }, function() {
           this.set('isSelectable', false);
           this.set('wfsInfo', undefined);
-        }, layer);
+        }, layer, opt_proxy);
       }
       layer.setSource(source);
     }

@@ -250,7 +250,7 @@ class AddLayerModal extends React.Component {
       olLayer.set('isSelectable', false);
       olLayer.set('wfsInfo', undefined);
       me.close();
-    });
+    }, undefined, this._proxy);
   }
   _getLayerTitle(layer) {
     const {formatMessage} = this.props.intl;

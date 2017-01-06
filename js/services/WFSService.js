@@ -113,7 +113,7 @@ class WFSService {
       onFailure.call(this, xmlhttp);
     }, this);
   }
-  describeFeatureType(url, layerName, onSuccess, onFailure, scope) {
+  describeFeatureType(url, layerName, onSuccess, onFailure, scope, opt_proxy) {
     var dftUrl = new URL(url);
     dftUrl.set('pathname', dftUrl.pathname.replace('wms', 'wfs'));
     dftUrl.set('query', {
@@ -122,7 +122,7 @@ class WFSService {
       version: '1.0.0',
       typename: layerName
     });
-    util.doGET(dftUrl.toString(), function(xmlhttp) {
+    util.doGET(util.getProxiedUrl(dftUrl.toString(), opt_proxy), function(xmlhttp) {
       if (xmlhttp.responseText.indexOf('ServiceExceptionReport') === -1) {
         var schema = xsdUnmarshaller.unmarshalString(xmlhttp.responseText).value;
         var element = schema.complexType[0].complexContent.extension.sequence.element;
