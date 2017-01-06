@@ -163,16 +163,13 @@ class MapConfigTransformService {
     };
     return result;
   }
-  transform(data, opt_proxy, opt_errors) {
+  transform(data, opt_errors) {
     var i, ii, layers = [];
     var groups = {};
     for (i = 0, ii = data.map.layers.length; i < ii; ++i) {
       var layer = data.map.layers[i];
       var source = data.sources[layer.source];
       var url = source.url;
-      if (opt_proxy) {
-        url = opt_proxy + source.url;
-      }
       var layerConfig = {
         properties: {
           isRemovable: true,
