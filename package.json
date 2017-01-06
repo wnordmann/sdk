@@ -11,6 +11,9 @@
   "scripts": {
     "build:babel": "NODE_ENV=release babel ./js --out-dir ./release",
     "start": "babel --watch ./js --out-dir ./release",
+    "watch:all": "parallelshell 'npm run start' 'npm run watch:css'",
+    "watch:css": "onchange 'js/components/*.css' -- npm run build:copy:css",
+    "babel": "babel --watch ./js --out-dir ./release",
     "build:copy-files": "babel-node ./scripts/copy-files.js",
     "build:copy:css": "cp js/components/*.css release/components",
     "build:copy:locale": "npm run createdir:locale && npm run i18n && mkdir release/locale && NODE_ENV=release babel locale/en.js > release/locale/en.js",
@@ -111,6 +114,8 @@
     "mochify": "^2.10.0",
     "mochify-istanbul": "^2.4.1",
     "npm-run-all": "^1.2.11",
+    "onchange": "^3.2.1",
+    "parallelshell": "^2.0.0",
     "phantomjs-polyfill-find": "github:ptim/phantomjs-polyfill-find",
     "phantomjs-polyfill-object-assign": "0.0.2",
     "phantomjs-prebuilt": "^2.1.7",
