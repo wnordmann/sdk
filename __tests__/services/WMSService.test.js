@@ -54,10 +54,6 @@ describe('WMSService', function() {
     assert.equal(source instanceof ol.source.TileWMS, true);
     assert.equal(source.getUrls()[0], url);
     assert.equal(source.getParams().LAYERS, layer.Name);
-    var proxy = 'http://proxy/?url=';
-    lyr = WMSService.createLayer(layer, url, titleObj, ol.proj.get('EPSG:3857'), proxy);
-    source = lyr.getSource();
-    assert.equal(source.getUrls()[0], proxy + encodeURIComponent(url));
   });
 
   it('creates correct GetFeatureInfo url', function() {
