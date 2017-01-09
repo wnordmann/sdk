@@ -120,27 +120,44 @@ class RuleEditor extends React.Component {
     var title = this.refs.title.getValue();
     this.setState({title: title});
   }
+  _getSymbolizer() {
+    if (this.props.initialState && this.props.initialState.symbolizers && this.props.initialState.symbolizers.length > 0) {
+      return this.props.initialState.symbolizers[0];
+    }
+  }
+  _getTextSymbolizer() {
+    if (this.props.initialState) {
+      for (var i = 0, ii = this.props.initialState.symbolizers.length; i < ii; ++i) {
+        var sym = this.props.initialState.symbolizers[i];
+        if (sym.labelAttribute) {
+          return sym;
+        }
+      }
+    }
+  }
   _getTabs() {
     const {formatMessage} = this.props.intl;
     var tabs = [];
+    var symbol = this._getSymbolizer();
     if (this.props.geometryType === 'Polygon') {
       tabs.push((<Tab key='poly' value={1} label={formatMessage(messages.symbolizertitle)} disableTouchRipple={true}>
-          <PolygonSymbolizerEditor intl={this.props.intl} onChange={this.props.onChange} initialState={this.props.initialState} />
+          <PolygonSymbolizerEditor intl={this.props.intl} onChange={this.props.onChange} initialState={symbol} />
         </Tab>
       ));
     } else if (this.props.geometryType === 'LineString') {
       tabs.push((<Tab key='line' value={1} label={formatMessage(messages.symbolizertitle)} disableTouchRipple={true}>
-          <LineSymbolizerEditor intl={this.props.intl} onChange={this.props.onChange} initialState={this.props.initialState} />
+          <LineSymbolizerEditor intl={this.props.intl} onChange={this.props.onChange} initialState={symbol} />
         </Tab>
       ));
     } else if (this.props.geometryType === 'Point') {
       tabs.push((<Tab key='point' value={1} label={formatMessage(messages.symbolizertitle)} disableTouchRipple={true}>
-          <PointSymbolizerEditor intl={this.props.intl} onChange={this.props.onChange} initialState={this.props.initialState} />
+          <PointSymbolizerEditor intl={this.props.intl} onChange={this.props.onChange} initialState={symbol} />
         </Tab>
       ));
     }
+    var textSym = this._getTextSymbolizer();
     tabs.push((<Tab key='label' value={3} label={formatMessage(messages.labeltitle)} disableTouchRipple={true}>
-         <LabelEditor attributes={this.props.attributes} intl={this.props.intl} onChange={this.props.onChange} initialFontColor={this.props.initialState ? this.props.initialState.fontColor : undefined} initialFontSize={this.props.initialState ? this.props.initialState.fontSize : undefined} initialLabelAttribute={this.props.initialState ? this.props.initialState.labelAttribute : undefined} />
+         <LabelEditor attributes={this.props.attributes} intl={this.props.intl} onChange={this.props.onChange} initialFontColor={textSym ? textSym.fontColor : undefined} initialFontSize={textSym ? textSym.fontSize : undefined} initialLabelAttribute={textSym ? textSym.labelAttribute : undefined} />
        </Tab>),
       (<Tab key='filter' value={4} label={formatMessage(messages.filtertitle)} disableTouchRipple={true}>
          <FilterEditor intl={this.props.intl} onChange={this.props.onChange} initialExpression={this.props.initialState ? this.props.initialState.expression : undefined} />

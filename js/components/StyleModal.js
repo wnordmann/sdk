@@ -111,7 +111,7 @@ class StyleModal extends React.Component {
     super(props);
     this._proxy = context.proxy;
     this._styleCache = {};
-    this._ruleCounter = 1;
+    this._ruleCounter = 0;
     this.state = {
       open: false,
       error: false,
@@ -140,7 +140,7 @@ class StyleModal extends React.Component {
       var rules = this.props.layer.get('styleInfo').featureTypeStyles[0].rules;
       for (var i = 0, ii = rules.length; i < ii; ++i) {
         if (rules[i].name === undefined) {
-          rules[i].name = 'Untitled ' + (i + 1);
+          rules[i].name = rules[i].title ? rules[i].title : 'Untitled ' + (i + 1);
         }
       }
       this.setState({open: true, rule: rules[0].name, rules: rules}, function() {
@@ -238,7 +238,8 @@ class StyleModal extends React.Component {
     var rules = this.state.rules.slice();
     var name = 'Rule ' + this._ruleCounter;
     rules.push({
-      name: name
+      name: name,
+      title: name
     });
     this.setState({rule: name, rules: rules});
   }
@@ -285,10 +286,7 @@ class StyleModal extends React.Component {
     var ruleEditors = this.state.rules.map(function(rule, key) {
       // only support a single symbolizer for now
       var ruleObj = this._getRuleByName(rule.name);
-      if (ruleObj.symbolizers && ruleObj.symbolizers.length > 0) {
-        var symbol = ruleObj.symbolizers[0];
-        return (<RuleEditor {...this.props} geometryType={this.state.geometryType} visible={rule.name === this.state.rule} key={key} initialState={symbol} onChange={this._onChange.bind(this)} attributes={this.state.attributes} />)
-      }
+      return (<RuleEditor {...this.props} geometryType={this.state.geometryType} visible={rule.name === this.state.rule} key={key} initialState={ruleObj} onChange={this._onChange.bind(this)} attributes={this.state.attributes} />)
     }, this);
     var actions = [
       <Button buttonType='Flat' primary={true} label={formatMessage(messages.savebutton)} onTouchTap={this._saveStyle.bind(this)} />,

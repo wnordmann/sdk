@@ -42,7 +42,8 @@ const comparisonOps = {
   '>=': 'PropertyIsGreaterThanOrEqualTo',
   '<=': 'PropertyIsLessThanOrEqualTo',
   '>' : 'PropertyIsGreaterThan',
-  '<' : 'PropertyIsLessThan'
+  '<' : 'PropertyIsLessThan',
+  'BETWEEN': 'PropertyIsBetween'
 };
 
 class SLDService {
@@ -100,8 +101,15 @@ class SLDService {
         value = expr.value.content[0];
       }
     }
-    if (name !== undefined && value !== undefined && operator !== undefined) {
-      return name + ' ' + operator + ' ' + value;
+    if (comparisonOps[operator] === 'PropertyIsBetween') {
+      name = op.value.expression.value.content[0];
+      var lower = op.value.lowerBoundary.expression.value.content[0];
+      var upper = op.value.upperBoundary.expression.value.content[0];
+      return name + ' BETWEEN ' + lower + ' AND ' + upper;
+    } else {
+      if (name !== undefined && value !== undefined && operator !== undefined) {
+        return name + ' ' + operator + ' ' + value;
+      }
     }
   }
   parseLogicOps(logicOps) {
@@ -606,33 +614,71 @@ class SLDService {
       }
     }
     if (operator) {
-      return {
+      var result = {
         comparisonOps: {
           name: {
             namespaceURI: ogcNamespace,
             localPart: operator
+          }
+        }
+      };
+      if (operator === 'PropertyIsBetween') {
+        var values = value.split(' AND ');
+        result.comparisonOps.value = {
+          expression: {
+            name: {
+              namespaceURI: ogcNamespace,
+              localPart: 'PropertyName'
+            },
+            value: {
+              content: [property]
+            }
           },
-          value: {
-            expression: [{
-              name: {
-                namespaceURI: ogcNamespace,
-                localPart: 'PropertyName'
-              },
-              value: {
-                content: [property]
-              }
-            }, {
+          lowerBoundary: {
+            expression: {
               name: {
                 namespaceURI: ogcNamespace,
                 localPart: 'Literal'
               },
               value: {
-                content: [String(value)]
+                content: [values[0]]
               }
-            }]
+            }
+          },
+          upperBoundary: {
+            expression: {
+              name: {
+                namespaceURI: ogcNamespace,
+                localPart: 'Literal'
+              },
+              value: {
+                content: [values[1]]
+              }
+            }
           }
-        }
-      };
+        };
+      } else {
+        result.comparisonOps.value = {
+          expression: [{
+            name: {
+              namespaceURI: ogcNamespace,
+              localPart: 'PropertyName'
+            },
+            value: {
+              content: [property]
+            }
+          }, {
+            name: {
+              namespaceURI: ogcNamespace,
+              localPart: 'Literal'
+            },
+            value: {
+              content: [String(value)]
+            }
+          }]
+        };
+      }
+      return result;
     }
   }
   createRule(name, title, geometryType, styleState) {
