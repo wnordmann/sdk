@@ -494,7 +494,7 @@ class FeatureTable extends React.Component {
           message={formatMessage(messages.nodatamsg)}
           onRequestClose={this._handleRequestCloseActive.bind(this)}
         />
-        <Card initiallyExpanded={!this.props.height} onExpandChange={this._onExpandChange.bind(this)} ref='form'>
+        <Card style={styles.root} initiallyExpanded={!this.props.height} onExpandChange={this._onExpandChange.bind(this)} ref='form'>
           <CardHeader title={formatMessage(messages.optionslabel)} actAsExpander={true} showExpandableButton={true} />
           <CardText expandable={true}>
             <div className='feature-table-options'>
