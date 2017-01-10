@@ -236,9 +236,6 @@ class LayerList extends React.Component {
     };
     this.moveLayer = debounce(this.moveLayer, 100);
   }
-  getChildContext() {
-    return {muiTheme: getMuiTheme()};
-  }
   componentWillMount() {
     this._onChangeCb = this._onChange.bind(this);
     LayerStore.addChangeListener(this._onChangeCb);

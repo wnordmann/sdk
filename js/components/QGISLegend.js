@@ -114,9 +114,6 @@ class QGISLegend extends React.Component {
       visible: this.props.showExpandedOnStartup
     };
   }
-  getChildContext() {
-    return {muiTheme: getMuiTheme()};
-  }
   _hidePanel() {
     this.setState({visible: false});
   }
