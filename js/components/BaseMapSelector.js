@@ -16,7 +16,6 @@ import classNames from 'classnames';
 import Button from './Button';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import BaseMapModal from './BaseMapModal';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -57,9 +56,6 @@ class BaseMapSelector extends React.Component {
 
   constructor(props) {
     super(props);
-  }
-  getChildContext() {
-    return {muiTheme: getMuiTheme()};
   }
   _showBaseMapDialog() {
     this.refs.basemapmodal.getWrappedInstance().open();

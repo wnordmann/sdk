@@ -21,7 +21,6 @@ import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import TextField from 'material-ui/TextField';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import FilterHelp from './FilterHelp';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -96,9 +95,6 @@ class FilterModal extends React.Component {
       filters: [],
       hasError: false
     };
-  }
-  getChildContext() {
-    return {muiTheme: getMuiTheme()};
   }
   open() {
     this.setState({open: true});

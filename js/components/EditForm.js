@@ -14,7 +14,6 @@ import React from 'react';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Snackbar from 'material-ui/Snackbar';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import classNames from 'classnames';
 import Button from './Button';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
@@ -124,9 +123,6 @@ class EditForm extends React.Component {
       values: props.feature ? props.feature.getProperties() : {},
       feature: props.feature
     };
-  }
-  getChildContext() {
-    return {muiTheme: getMuiTheme()};
   }
   componentWillReceiveProps(newProps) {
     if (newProps.feature !== this.state.feature) {

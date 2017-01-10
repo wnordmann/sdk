@@ -21,7 +21,6 @@ import RaisedButton from './Button';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import AppDispatcher from '../dispatchers/AppDispatcher';
 import ToolUtil from '../toolutil';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -124,9 +123,6 @@ class Measure extends React.Component {
         color: '#FFA000'
       })
     });
-  }
-  getChildContext() {
-    return {muiTheme: getMuiTheme()};
   }
   componentDidMount() {
     var areaStyle = this._areaStyle;

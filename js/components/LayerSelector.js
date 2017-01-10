@@ -17,7 +17,6 @@ import LayerStore from '../stores/LayerStore';
 import pureRender from 'pure-render-decorator';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 const messages = defineMessages({
@@ -83,9 +82,6 @@ class LayerSelector extends React.Component {
       layers: [],
       value: this.props.value
     };
-  }
-  getChildContext() {
-    return {muiTheme: getMuiTheme()};
   }
   componentWillMount() {
     this._onChangeCb = this._onChange.bind(this);

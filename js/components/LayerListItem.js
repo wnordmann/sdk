@@ -39,7 +39,6 @@ import TableIcon from 'material-ui/svg-icons/action/view-list';
 import WMSLegend from './WMSLegend';
 import ArcGISRestLegend from './ArcGISRestLegend';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
 
 const layerListItemSource = {
@@ -314,9 +313,6 @@ class LayerListItem extends React.Component {
       tableOpen: false,
       checked: props.layer.getVisible()
     };
-  }
-  getChildContext() {
-    return {muiTheme: getMuiTheme()};
   }
   componentDidMount() {
     if (this.props.group) {

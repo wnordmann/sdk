@@ -16,7 +16,6 @@ import Dialog from 'material-ui/Dialog';
 import Button from './Button';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import {GridList, GridTile} from 'material-ui/GridList';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const messages = defineMessages({
   title: {
@@ -93,9 +92,6 @@ class BaseMapModal extends React.Component {
     this.state = {
       open: false
     };
-  }
-  getChildContext() {
-    return {muiTheme: getMuiTheme()};
   }
   close() {
     this.setState({open: false});

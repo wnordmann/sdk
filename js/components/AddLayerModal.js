@@ -32,7 +32,6 @@ import ArcGISRestService from '../services/ArcGISRestService';
 import WMTSService from '../services/WMTSService';
 
 import classNames from 'classnames';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import './AddLayerModal.css';
 
 // TODO add more types
@@ -192,9 +191,6 @@ class AddLayerModal extends React.Component {
       open: false,
       layerInfo: null
     };
-  }
-  getChildContext() {
-    return {muiTheme: getMuiTheme()};
   }
   componentWillUnmount() {
     if (this._request) {

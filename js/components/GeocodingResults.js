@@ -99,9 +99,6 @@ class GeocodingResults extends React.Component {
       muiTheme: context.muiTheme || getMuiTheme()
     };
   }
-  getChildContext() {
-    return {muiTheme: getMuiTheme()};
-  }
   componentDidMount() {
     this._layer = new ol.layer.Vector({
       title: null,

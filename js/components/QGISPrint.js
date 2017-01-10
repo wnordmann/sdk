@@ -23,7 +23,6 @@ import JSPDF from 'jspdf';
 import LinearProgress from 'material-ui/LinearProgress';
 import Snackbar from 'material-ui/Snackbar';
 import TextField from 'material-ui/TextField';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import PrintIcon from 'material-ui/svg-icons/action/print';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
@@ -194,9 +193,6 @@ class QGISPrint extends React.Component {
       errorOpen: false,
       resolution: null
     };
-  }
-  getChildContext() {
-    return {muiTheme: getMuiTheme()};
   }
   close() {
     this.setState({

@@ -24,7 +24,6 @@ import RuleEditor from './RuleEditor';
 import SLDService from '../services/SLDService';
 import OpenLayersService from '../services/OpenLayersService';
 import RESTService from '../services/RESTService';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Snackbar from 'material-ui/Snackbar';
 
 const messages = defineMessages({
@@ -123,9 +122,6 @@ class StyleModal extends React.Component {
         name: 'Rule 1'
       }]
     };
-  }
-  getChildContext() {
-    return {muiTheme: getMuiTheme()};
   }
   componentDidMount() {
     if (this.props.layer.get('wfsInfo')) {

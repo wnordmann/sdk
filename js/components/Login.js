@@ -20,7 +20,6 @@ import LoginModal from './LoginModal';
 import AppDispatcher from '../dispatchers/AppDispatcher';
 import LoginConstants from '../constants/LoginConstants';
 import AuthService from '../services/AuthService';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -93,9 +92,6 @@ class Login extends React.Component {
           break;
       }
     });
-  }
-  getChildContext() {
-    return {muiTheme: getMuiTheme()};
   }
   componentDidMount() {
     var me = this;

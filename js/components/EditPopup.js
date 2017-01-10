@@ -22,7 +22,6 @@ import CloserIcon from 'material-ui/svg-icons/navigation/close';
 import classNames from 'classnames';
 import WFSService from '../services/WFSService';
 import EditForm from './EditForm';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import './BasePopup.css';
 
 /**
@@ -61,9 +60,6 @@ class EditPopup extends React.Component {
     };
     this.props.map.on('singleclick', this._onMapClick, this);
     this.active = true;
-  }
-  getChildContext() {
-    return {muiTheme: getMuiTheme()};
   }
   componentDidMount() {
     this.overlayPopup = new ol.Overlay({
