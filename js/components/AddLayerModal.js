@@ -30,6 +30,7 @@ import WMSService from '../services/WMSService';
 import WFSService from '../services/WFSService';
 import ArcGISRestService from '../services/ArcGISRestService';
 import WMTSService from '../services/WMTSService';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 import classNames from 'classnames';
 import './AddLayerModal.css';
@@ -166,6 +167,7 @@ class AddLayerModal extends React.Component {
   };
 
   static contextTypes = {
+    muiTheme: React.PropTypes.object,
     proxy: React.PropTypes.string
   };
 
@@ -180,6 +182,7 @@ class AddLayerModal extends React.Component {
   constructor(props, context) {
     super(props);
     this._proxy = context.proxy;
+    this._muiTheme = context.muiTheme || getMuiTheme();
     this.state = {
       sources: this.props.sources.slice(),
       newType: addNewTypes[0],
@@ -191,6 +194,9 @@ class AddLayerModal extends React.Component {
       open: false,
       layerInfo: null
     };
+  }
+  getChildContext() {
+    return {muiTheme: this._muiTheme};
   }
   componentWillUnmount() {
     if (this._request) {

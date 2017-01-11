@@ -20,6 +20,7 @@ import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import SaveIcon from 'material-ui/svg-icons/content/save';
 import TextField from 'material-ui/TextField';
 import WFSService from '../services/WFSService';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const messages = defineMessages({
   deletefeature: {
