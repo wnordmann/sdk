@@ -31,6 +31,7 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Snackbar from 'material-ui/Snackbar';
 import FilterService from '../services/FilterService';
 import FilterHelp from './FilterHelp';
+import Paper from 'material-ui/Paper';
 import './react-table.css';
 import './FeatureTable.css';
 
@@ -339,16 +340,6 @@ class FeatureTable extends React.Component {
     this._filteredRows = filteredRows;
     FeatureStore.setFilter(this._layer, filteredRows);
   }
-  getStyles() {
-    const muiTheme = this.state.muiTheme;
-    const rawTheme = muiTheme.rawTheme;
-    return {
-      root: {
-        fontFamily: rawTheme.fontFamily,
-        background: rawTheme.palette.canvasColor
-      }
-    };
-  }
   _handleRequestClose() {
     this.setState({
       errorOpen: false
@@ -479,10 +470,9 @@ class FeatureTable extends React.Component {
         columns={columns}
       />);
     }
-    const styles = this.getStyles();
     var filterHelp = this._layer ? <FilterHelp intl={this.props.intl} /> : undefined;
     return (
-      <div style={styles.root} className={classNames('sdk-component feature-table', this.props.className)}>
+      <Paper className={classNames('sdk-component feature-table', this.props.className)}>
         <Snackbar
           autoHideDuration={5000}
           open={!this._layer && this.state.active}
@@ -491,7 +481,7 @@ class FeatureTable extends React.Component {
           message={formatMessage(messages.nodatamsg)}
           onRequestClose={this._handleRequestCloseActive.bind(this)}
         />
-        <Card style={styles.root} initiallyExpanded={!this.props.height} onExpandChange={this._onExpandChange.bind(this)} ref='form'>
+        <Card initiallyExpanded={!this.props.height} onExpandChange={this._onExpandChange.bind(this)} ref='form'>
           <CardHeader title={formatMessage(messages.optionslabel)} actAsExpander={true} showExpandableButton={true} />
           <CardText expandable={true}>
             <div className='feature-table-options'>
@@ -512,7 +502,7 @@ class FeatureTable extends React.Component {
           {error}
         </Card>
         {table}
-      </div>
+      </Paper>
     );
   }
 }
