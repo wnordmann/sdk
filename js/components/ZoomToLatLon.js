@@ -9,6 +9,7 @@ import Button from './Button';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import classNames from 'classnames';
 import pureRender from 'pure-render-decorator';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const messages = defineMessages({
   west: {
@@ -137,18 +138,30 @@ class ZoomToLatLon extends React.Component {
     intl: intlShape.isRequired
   };
 
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   static defaultProps = {
     zoom: 14
   };
 
-  constructor(props) {
+  constructor(props, context) {
     super(props);
+    this._muiTheme = context.muiTheme || getMuiTheme();
     this.state = {
       open: false,
       value: 1,
       londirection: 'E',
       latdirection: 'N'
     };
+  }
+  getChildContext() {
+    return {muiTheme: this._muiTheme};
   }
   openDialog() {
     this.setState({open: true});

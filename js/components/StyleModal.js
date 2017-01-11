@@ -25,6 +25,7 @@ import SLDService from '../services/SLDService';
 import OpenLayersService from '../services/OpenLayersService';
 import RESTService from '../services/RESTService';
 import Snackbar from 'material-ui/Snackbar';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const messages = defineMessages({
   title: {
@@ -99,6 +100,7 @@ class StyleModal extends React.Component {
   };
 
   static contextTypes = {
+    muiTheme: React.PropTypes.object,
     proxy: React.PropTypes.string
   };
 
@@ -108,6 +110,7 @@ class StyleModal extends React.Component {
 
   constructor(props, context) {
     super(props);
+    this._muiTheme = context.muiTheme || getMuiTheme();
     this._proxy = context.proxy;
     this._styleCache = {};
     this._ruleCounter = 0;
@@ -122,6 +125,9 @@ class StyleModal extends React.Component {
         name: 'Rule 1'
       }]
     };
+  }
+  getChildContext() {
+    return {muiTheme: this._muiTheme};
   }
   componentDidMount() {
     if (this.props.layer.get('wfsInfo')) {

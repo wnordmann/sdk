@@ -204,6 +204,9 @@ class WFST extends React.Component {
     this._selectfeature = new SelectFeature(this._selectWMS, this);
     this._dirty = {};
   }
+  getChildContext() {
+    return {muiTheme: this.state.muiTheme};
+  }
   componentWillUnmount() {
     AppDispatcher.unregister(this._dispatchToken);
     AppDispatcher.unregister(this._dispatchToken2);
