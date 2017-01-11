@@ -7,6 +7,8 @@ import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
 import Chart from '../../js/components/Chart';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 raf.polyfill();
 
@@ -57,7 +59,9 @@ describe('Chart', function() {
   it('generates the correct combo', function() {
     var container = document.createElement('div');
     ReactDOM.render((
-      <Chart intl={intl} combo={true} charts={charts} />
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <Chart intl={intl} combo={true} charts={charts} />
+      </MuiThemeProvider>
     ), container);
     var divs = container.querySelectorAll('div');
     var found = false;

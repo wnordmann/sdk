@@ -8,6 +8,8 @@ import ol from 'openlayers';
 import intl from '../mock-i18n';
 import 'phantomjs-polyfill-object-assign';
 import Edit from '../../js/components/Edit';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 raf.polyfill();
 
@@ -51,7 +53,9 @@ describe('Edit', function() {
   it('generates the correct layer selector', function() {
     var container = document.createElement('div');
     ReactDOM.render((
-      <Edit map={map} intl={intl} />
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <Edit map={map} intl={intl} />
+      </MuiThemeProvider>
     ), container);
     assert.equal(container.querySelector('.edit-layer-selector') !== null, true);
     var options = container.querySelectorAll('.edit-layer-selector-option');
