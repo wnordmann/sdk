@@ -17,6 +17,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import LayerStore from '../stores/LayerStore';
 import Button from './Button';
 import LegendIcon from 'material-ui/svg-icons/image/image';
+import Paper from 'material-ui/Paper';
 import {List, ListItem} from 'material-ui/List';
 import './QGISLegend.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -144,18 +145,8 @@ class QGISLegend extends React.Component {
       </List>
     );
   }
-  getStyles() {
-    const muiTheme = this.state.muiTheme;
-    const rawTheme = muiTheme.rawTheme;
-    return {
-      root: Object.assign(this.props.style || {}, {
-        background: rawTheme.palette.canvasColor
-      })
-    };
-  }
   render() {
     const {formatMessage} = this.props.intl;
-    const styles = this.getStyles();
     var divClass = {
       'legend': true,
       'shown': this.state.visible,
@@ -166,7 +157,7 @@ class QGISLegend extends React.Component {
     return (
       <div className={classNames(divClass, this.props.className)}>
         <Button buttonType='Action' mini={true} secondary={true} className='legendbutton' tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._togglePanel.bind(this)}><LegendIcon /></Button>
-        <div className='legend-panel' id='legend' style={styles.root}>{items}</div>
+        <Paper className='legend-panel' id='legend'>{items}</Paper>
       </div>
     );
   }

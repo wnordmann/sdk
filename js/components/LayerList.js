@@ -34,6 +34,7 @@ import BaseMapIcon from 'material-ui/svg-icons/maps/satellite';
 import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import pureRender from 'pure-render-decorator';
+import Paper from 'material-ui/Paper';
 import './LayerList.css';
 
 const messages = defineMessages({
@@ -320,21 +321,11 @@ class LayerList extends React.Component {
   _showAddBaseMap() {
     this.refs.addbasemapmodal.getWrappedInstance().open();
   }
-  getStyles() {
-    const muiTheme = this.state.muiTheme;
-    const rawTheme = muiTheme.rawTheme;
-    return {
-      root: Object.assign(this.props.style || {}, {
-        background: rawTheme.palette.canvasColor
-      })
-    };
-  }
   moveLayer(dragIndex, hoverIndex, layer, group) {
     LayerActions.moveLayer(dragIndex, hoverIndex, layer, group);
   }
   render() {
     const {formatMessage} = this.props.intl;
-    const styles = this.getStyles();
     var layers = this.state.layers.slice(0).reverse();
     var divClass = {
       'layer-switcher': true,
@@ -368,13 +359,13 @@ class LayerList extends React.Component {
     return (
       <div ref='parent' className={classNames(divClass, this.props.className)}>
         <Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={this._togglePanel.bind(this)}><LayersIcon /></Button>
-        <div className='layer-tree-panel clearfix' style={styles.root}>
+        <Paper className='layer-tree-panel'>
           {tipLabel}
           <List className='layer-list-list'>
             {this.renderLayers(layers)}
           </List>
           {addLayer}
-        </div>
+        </Paper>
         {this.props.children}
       </div>
     );
