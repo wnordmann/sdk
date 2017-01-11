@@ -7,6 +7,8 @@ import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
 import Playback from '../../js/components/Playback';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 raf.polyfill();
 
@@ -45,7 +47,9 @@ describe('Playback', function() {
   it('has the correct date value', function() {
     var container = document.createElement('div');
     ReactDOM.render((
-      <Playback minDate={500000000000} maxDate={1500000000000} intl={intl} map={map}/>
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <Playback minDate={500000000000} maxDate={1500000000000} intl={intl} map={map}/>
+      </MuiThemeProvider>
     ), container);
     assert.equal(container.querySelector('input[type=text]').value, '1985-11-05');
     ReactDOM.unmountComponentAtNode(container);

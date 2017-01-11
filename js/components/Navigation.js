@@ -17,6 +17,7 @@ import RaisedButton from './Button';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import classNames from 'classnames';
 import pureRender from 'pure-render-decorator';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const messages = defineMessages({
   buttontext: {
@@ -66,12 +67,24 @@ class Navigation extends React.Component {
     intl: intlShape.isRequired
   };
 
-  constructor(props) {
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
+  constructor(props, context) {
     super(props);
+    this._muiTheme = context.muiTheme || getMuiTheme();
     this._dispatchToken = ToolUtil.register(this);
     this.state = {
       secondary: props.secondary !== undefined ? props.secondary : false
     };
+  }
+  getChildContext() {
+    return {muiTheme: this._muiTheme};
   }
   componentWillUnmount() {
     AppDispatcher.unregister(this._dispatchToken);

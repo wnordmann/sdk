@@ -75,6 +75,10 @@ class Geolocation extends React.Component {
     muiTheme: React.PropTypes.object
   };
 
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   constructor(props, context) {
     super(props);
     this.state = {
@@ -83,6 +87,9 @@ class Geolocation extends React.Component {
       open: false,
       tracking: false
     };
+  }
+  getChildContext() {
+    return {muiTheme: this.state.muiTheme};
   }
   _geolocate() {
     if (this._geolocation) {

@@ -25,6 +25,7 @@ import Snackbar from 'material-ui/Snackbar';
 import TextField from 'material-ui/TextField';
 import PrintIcon from 'material-ui/svg-icons/action/print';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -171,6 +172,10 @@ class QGISPrint extends React.Component {
     intl: intlShape.isRequired
   };
 
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
   };
@@ -181,8 +186,9 @@ class QGISPrint extends React.Component {
     resolutions: [72, 150, 300]
   };
 
-  constructor(props) {
+  constructor(props, context) {
     super(props);
+    this._muiTheme = context.muiTheme || getMuiTheme();
     LayerStore.bindMap(this.props.map);
     this.state = {
       layout: null,
@@ -193,6 +199,9 @@ class QGISPrint extends React.Component {
       errorOpen: false,
       resolution: null
     };
+  }
+  getChildContext() {
+    return {muiTheme: this._muiTheme};
   }
   close() {
     this.setState({

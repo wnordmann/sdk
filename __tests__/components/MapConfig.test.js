@@ -7,6 +7,8 @@ import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
 import MapConfig from '../../js/components/MapConfig';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 raf.polyfill();
 
@@ -45,7 +47,9 @@ describe('MapConfig', function() {
   it('creates two buttons', function() {
     var container = document.createElement('div');
     ReactDOM.render((
-      <MapConfig intl={intl} map={map}/>
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <MapConfig intl={intl} map={map}/>
+      </MuiThemeProvider>
     ), container);
     var buttons = container.querySelectorAll('button');
     assert.equal(buttons.length, 2);

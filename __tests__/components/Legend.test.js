@@ -7,6 +7,8 @@ import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
 import 'phantomjs-polyfill-object-assign';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Legend from '../../js/components/Legend';
 
 raf.polyfill();
@@ -65,7 +67,9 @@ describe('Legend', function() {
   it('no legend img if no WMS layer visible', function() {
     var container = document.createElement('div');
     ReactDOM.render((
-      <Legend intl={intl} map={map}/>
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <Legend intl={intl} map={map}/>
+      </MuiThemeProvider>
     ), container);
     var items = container.querySelectorAll('.legend-list-img');
     assert.equal(items.length, 0);
@@ -76,7 +80,9 @@ describe('Legend', function() {
     layers[1].setVisible(true);
     var container = document.createElement('div');
     ReactDOM.render((
-      <Legend intl={intl} map={map}/>
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <Legend intl={intl} map={map}/>
+      </MuiThemeProvider>
     ), container);
     var items = container.querySelectorAll('.legend-list-img');
     assert.equal(items.length, 1);

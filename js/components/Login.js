@@ -20,6 +20,7 @@ import LoginModal from './LoginModal';
 import AppDispatcher from '../dispatchers/AppDispatcher';
 import LoginConstants from '../constants/LoginConstants';
 import AuthService from '../services/AuthService';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -64,6 +65,7 @@ class Login extends React.Component {
   };
 
   static contextTypes = {
+    muiTheme: React.PropTypes.object,
     proxy: React.PropTypes.string
   };
 
@@ -77,6 +79,7 @@ class Login extends React.Component {
 
   constructor(props, context) {
     super(props);
+    this._muiTheme = context.muiTheme || getMuiTheme();
     this._proxy = context.proxy;
     this.state = {
       user: null
@@ -92,6 +95,9 @@ class Login extends React.Component {
           break;
       }
     });
+  }
+  getChildContext() {
+    return {muiTheme: this._muiTheme};
   }
   componentDidMount() {
     var me = this;

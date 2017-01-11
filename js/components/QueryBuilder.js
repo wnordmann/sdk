@@ -126,6 +126,9 @@ class QueryBuilder extends React.Component {
       errorText: null
     };
   }
+  getChildContext() {
+    return {muiTheme: this.state.muiTheme};
+  }
   _onLayerSelectChange(layer) {
     this._layer = layer;
   }

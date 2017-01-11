@@ -6,6 +6,8 @@ import {assert} from 'chai';
 import intl from '../mock-i18n';
 import 'phantomjs-polyfill-object-assign';
 import LabelEditor from '../../js/components/LabelEditor';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 describe('LabelEditor', function() {
 
@@ -27,7 +29,9 @@ describe('LabelEditor', function() {
       assert.equal(state.labelAttribute, initialState.labelAttribute);
     };
     ReactDOM.render((
-      <LabelEditor attributes={attributes} intl={intl} onChange={onChange} initialState={initialState} />
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <LabelEditor attributes={attributes} intl={intl} onChange={onChange} initialState={initialState} />
+      </MuiThemeProvider>
     ), container);
     ReactDOM.unmountComponentAtNode(container);
   });
