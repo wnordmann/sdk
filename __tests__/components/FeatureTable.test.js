@@ -8,6 +8,8 @@ import ol from 'openlayers';
 import intl from '../mock-i18n';
 import 'phantomjs-polyfill-find';
 import 'phantomjs-polyfill-object-assign';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import FeatureTable from '../../js/components/FeatureTable';
 
 raf.polyfill();
@@ -58,7 +60,9 @@ describe('FeatureTable', function() {
   it('creates a link cell', function() {
     var container = document.createElement('div');
     ReactDOM.render((
-      <FeatureTable layer={layer} intl={intl} map={map}/>
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <FeatureTable layer={layer} intl={intl} map={map}/>
+      </MuiThemeProvider>
     ), container);
     var hyperlinks = container.querySelectorAll('a');
     assert.equal(hyperlinks.length, 4);
@@ -69,7 +73,9 @@ describe('FeatureTable', function() {
   it('renders table cells correctly', function() {
     var container = document.createElement('div');
     ReactDOM.render((
-      <FeatureTable layer={layer} intl={intl} map={map}/>
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <FeatureTable layer={layer} intl={intl} map={map}/>
+      </MuiThemeProvider>
     ), container);
     var tds = container.querySelectorAll('td');
     assert.equal(tds[1].firstChild.innerHTML, 'bar1');

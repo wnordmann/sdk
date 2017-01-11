@@ -198,9 +198,6 @@ class FeatureTable extends React.Component {
       help: false
     };
   }
-  getChildContext() {
-    return {muiTheme: getMuiTheme()};
-  }
   componentWillMount() {
     FeatureStore.addChangeListener(this._onChange);
     this._onChange();

@@ -88,7 +88,8 @@ class InfoPopup extends React.Component {
   };
 
   static contextTypes = {
-    proxy: React.PropTypes.string
+    proxy: React.PropTypes.string,
+    muiTheme: React.PropTypes.object
   };
 
   static childContextTypes = {
@@ -103,6 +104,7 @@ class InfoPopup extends React.Component {
   constructor(props, context) {
     super(props);
     this._proxy = context.proxy;
+    this._muiTheme = context.muiTheme || getMuiTheme();
     this._dispatchToken = ToolUtil.register(this);
     LayerStore.bindMap(this.props.map);
     if (this.props.hover === true) {
@@ -117,7 +119,7 @@ class InfoPopup extends React.Component {
     };
   }
   getChildContext() {
-    return {muiTheme: getMuiTheme()};
+    return {muiTheme: this._muiTheme};
   }
   componentDidMount() {
     this.overlayPopup = new ol.Overlay({

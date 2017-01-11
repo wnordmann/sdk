@@ -114,9 +114,6 @@ class QGISLegend extends React.Component {
       visible: this.props.showExpandedOnStartup
     };
   }
-  getChildContext() {
-    return {muiTheme: getMuiTheme()};
-  }
   _hidePanel() {
     this.setState({visible: false});
   }
@@ -152,7 +149,7 @@ class QGISLegend extends React.Component {
     const rawTheme = muiTheme.rawTheme;
     return {
       root: Object.assign(this.props.style || {}, {
-        background: rawTheme.palette.primary1Color
+        background: rawTheme.palette.canvasColor
       })
     };
   }
@@ -168,8 +165,8 @@ class QGISLegend extends React.Component {
     var items = this._renderItems(this.props.legendData, this.props.legendBasePath);
     return (
       <div className={classNames(divClass, this.props.className)}>
-        <Button buttonType='Action' mini={true} secondary={true} style={styles.root} className='legendbutton' tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._togglePanel.bind(this)}><LegendIcon /></Button>
-        <div className='legend-panel' id='legend'>{items}</div>
+        <Button buttonType='Action' mini={true} secondary={true} className='legendbutton' tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._togglePanel.bind(this)}><LegendIcon /></Button>
+        <div className='legend-panel' id='legend' style={styles.root}>{items}</div>
       </div>
     );
   }

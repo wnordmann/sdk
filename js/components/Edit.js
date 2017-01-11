@@ -237,9 +237,6 @@ class Edit extends React.Component {
       }
     });
   }
-  getChildContext() {
-    return {muiTheme: getMuiTheme()};
-  }
   componentWillUnmount() {
     AppDispatcher.unregister(this._dispatchToken);
   }

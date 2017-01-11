@@ -65,6 +65,7 @@ class Login extends React.Component {
   };
 
   static contextTypes = {
+    muiTheme: React.PropTypes.object,
     proxy: React.PropTypes.string
   };
 
@@ -78,6 +79,7 @@ class Login extends React.Component {
 
   constructor(props, context) {
     super(props);
+    this._muiTheme = context.muiTheme || getMuiTheme();
     this._proxy = context.proxy;
     this.state = {
       user: null
@@ -95,7 +97,7 @@ class Login extends React.Component {
     });
   }
   getChildContext() {
-    return {muiTheme: getMuiTheme()};
+    return {muiTheme: this._muiTheme};
   }
   componentDidMount() {
     var me = this;

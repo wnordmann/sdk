@@ -6,6 +6,8 @@ import {assert} from 'chai';
 import intl from '../mock-i18n';
 import 'phantomjs-polyfill-object-assign';
 import RuleEditor from '../../js/components/RuleEditor';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 describe('RuleEditor', function() {
 
@@ -16,7 +18,9 @@ describe('RuleEditor', function() {
     };
     var attributes = ['foo', 'bar'];
     ReactDOM.render((
-      <RuleEditor attributes={attributes} visible={true} onChange={onChange} intl={intl} />
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <RuleEditor attributes={attributes} visible={true} onChange={onChange} intl={intl} />
+      </MuiThemeProvider>
     ), container);
     ReactDOM.unmountComponentAtNode(container);
   });
@@ -29,7 +33,9 @@ describe('RuleEditor', function() {
     };
     var attributes = ['foo', 'bar'];
     ReactDOM.render((
-      <RuleEditor attributes={attributes} visible={false} onChange={onChange} intl={intl} />
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <RuleEditor attributes={attributes} visible={false} onChange={onChange} intl={intl} />
+      </MuiThemeProvider>
     ), container);
     assert.equal(called, false);
     ReactDOM.unmountComponentAtNode(container);

@@ -8,6 +8,8 @@ import ol from 'openlayers';
 import intl from '../mock-i18n';
 import TestUtils from 'react-addons-test-utils';
 import ImageExport from '../../js/components/ImageExport';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 raf.polyfill();
 
@@ -59,7 +61,9 @@ describe('ImageExport', function() {
   it('calls render sync on the map when pressed', function() {
     var container = document.createElement('div');
     ReactDOM.render((
-      <ImageExport intl={intl} map={map}/>
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <ImageExport intl={intl} map={map}/>
+      </MuiThemeProvider>
     ), container);
     var button = container.querySelector('button');
     var called = false;

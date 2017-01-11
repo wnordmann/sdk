@@ -162,9 +162,6 @@ class AddLayer extends React.Component {
       muiTheme: context.muiTheme || getMuiTheme()
     };
   }
-  getChildContext() {
-    return {muiTheme: getMuiTheme()};
-  }
   _showDialog() {
     this.setState({open: true});
   }

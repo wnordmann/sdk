@@ -16,7 +16,6 @@ import classNames from 'classnames';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import TextField from 'material-ui/TextField';
 import Label from './Label';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -87,9 +86,6 @@ class StrokeEditor extends React.Component {
       strokeColor: this.props.initialStrokeColor,
       strokeWidth: this.props.initialStrokeWidth
     };
-  }
-  getChildContext() {
-    return {muiTheme: getMuiTheme()};
   }
   _onChangeStrokeWidth(evt) {
     this.setState({strokeWidth: parseFloat(evt.target.value)}, function() {

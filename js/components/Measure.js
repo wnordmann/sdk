@@ -93,6 +93,10 @@ class Measure extends React.Component {
     intl: intlShape.isRequired
   };
 
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
   };
@@ -101,8 +105,9 @@ class Measure extends React.Component {
     geodesic: true
   };
 
-  constructor(props) {
+  constructor(props, context) {
     super(props);
+    this._muiTheme = context.muiTheme || getMuiTheme();
     this._dispatchToken = ToolUtil.register(this);
     this._tooltips = [];
     this.state = {
@@ -126,7 +131,7 @@ class Measure extends React.Component {
     });
   }
   getChildContext() {
-    return {muiTheme: getMuiTheme()};
+    return {muiTheme: this._muiTheme};
   }
   componentDidMount() {
     var areaStyle = this._areaStyle;

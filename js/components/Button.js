@@ -4,7 +4,6 @@ import FlatButton from 'material-ui/FlatButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import IconButton from 'material-ui/IconButton';
 import classNames from 'classnames';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
 
 /**
@@ -92,9 +91,6 @@ class Button extends React.Component {
     tooltipPosition: 'bottom'
   };
 
-  getChildContext() {
-    return {muiTheme: getMuiTheme()};
-  }
   render() {
     var button, buttonStyle = Object.assign({}, this.props.buttonStyle);
     if (this.props.buttonType === 'Action') {

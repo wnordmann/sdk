@@ -21,8 +21,8 @@ import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import TextField from 'material-ui/TextField';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import FilterHelp from './FilterHelp';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const messages = defineMessages({
   inputlabel: {
@@ -85,12 +85,17 @@ class FilterModal extends React.Component {
     intl: intlShape.isRequired
   };
 
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
   };
 
-  constructor(props) {
+  constructor(props, context) {
     super(props);
+    this._muiTheme = context.muiTheme || getMuiTheme();
     this.state = {
       open: false,
       filters: [],
@@ -98,7 +103,7 @@ class FilterModal extends React.Component {
     };
   }
   getChildContext() {
-    return {muiTheme: getMuiTheme()};
+    return {muiTheme: this._muiTheme};
   }
   open() {
     this.setState({open: true});

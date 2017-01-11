@@ -72,12 +72,17 @@ class LayerSelector extends React.Component {
     intl: intlShape.isRequired
   };
 
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
   };
 
-  constructor(props) {
+  constructor(props, context) {
     super(props);
+    this._muiTheme = context.muiTheme || getMuiTheme();
     LayerStore.bindMap(this.props.map);
     this.state = {
       layers: [],
@@ -85,7 +90,7 @@ class LayerSelector extends React.Component {
     };
   }
   getChildContext() {
-    return {muiTheme: getMuiTheme()};
+    return {muiTheme: this._muiTheme};
   }
   componentWillMount() {
     this._onChangeCb = this._onChange.bind(this);

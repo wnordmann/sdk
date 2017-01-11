@@ -9,6 +9,8 @@ import intl from '../mock-i18n';
 import TestUtils from 'react-addons-test-utils';
 import 'phantomjs-polyfill-object-assign';
 import HomeButton from '../../js/components/HomeButton';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 raf.polyfill();
 
@@ -58,7 +60,9 @@ describe('HomeButton', function() {
   it('zooms to the correct location when home button is pressed', function() {
     var container = document.createElement('div');
     ReactDOM.render((
-      <HomeButton intl={intl} map={map}/>
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <HomeButton intl={intl} map={map}/>
+      </MuiThemeProvider>
     ), container);
     var button = container.querySelector('button');
     map.getView().setZoom(5);

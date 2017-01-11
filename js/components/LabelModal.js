@@ -68,19 +68,24 @@ class LabelModal extends React.Component {
     intl: intlShape.isRequired
   };
 
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
   };
 
-  constructor(props) {
+  constructor(props, context) {
     super(props);
+    this._muiTheme = context.muiTheme || getMuiTheme();
     this.state = {
       attributes: [],
       open: false
     };
   }
   getChildContext() {
-    return {muiTheme: getMuiTheme()};
+    return {muiTheme: this._muiTheme};
   }
   componentDidMount() {
     var source = this.props.layer.getSource();

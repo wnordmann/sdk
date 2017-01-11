@@ -205,7 +205,7 @@ class WFST extends React.Component {
     this._dirty = {};
   }
   getChildContext() {
-    return {muiTheme: getMuiTheme()};
+    return {muiTheme: this.state.muiTheme};
   }
   componentWillUnmount() {
     AppDispatcher.unregister(this._dispatchToken);

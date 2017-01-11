@@ -21,6 +21,7 @@ import WFSService from '../services/WFSService';
 import FeatureStore from '../stores/FeatureStore';
 import RaisedButton from './Button';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -70,9 +71,18 @@ class Select extends React.Component {
     intl: intlShape.isRequired
   };
 
-  constructor(props) {
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
+  constructor(props, context) {
     super(props);
     this._dispatchToken = ToolUtil.register(this);
+    this._muiTheme = context.muiTheme || getMuiTheme();
     FeatureStore.bindMap(this.props.map);
     this._interactions = {
       'RECTANGLE': new ol.interaction.DragBox({
@@ -89,6 +99,9 @@ class Select extends React.Component {
       disabled: false,
       secondary: false
     };
+  }
+  getChildContext() {
+    return {muiTheme: this._muiTheme};
   }
   componentWillUnmount() {
     AppDispatcher.unregister(this._dispatchToken);

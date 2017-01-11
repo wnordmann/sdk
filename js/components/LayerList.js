@@ -236,9 +236,6 @@ class LayerList extends React.Component {
     };
     this.moveLayer = debounce(this.moveLayer, 100);
   }
-  getChildContext() {
-    return {muiTheme: getMuiTheme()};
-  }
   componentWillMount() {
     this._onChangeCb = this._onChange.bind(this);
     LayerStore.addChangeListener(this._onChangeCb);
@@ -328,7 +325,7 @@ class LayerList extends React.Component {
     const rawTheme = muiTheme.rawTheme;
     return {
       root: Object.assign(this.props.style || {}, {
-        background: rawTheme.palette.primary1Color
+        background: rawTheme.palette.canvasColor
       })
     };
   }
@@ -370,8 +367,8 @@ class LayerList extends React.Component {
     }
     return (
       <div ref='parent' className={classNames(divClass, this.props.className)}>
-        <Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} style={styles.root} className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={this._togglePanel.bind(this)}><LayersIcon /></Button>
-        <div className='layer-tree-panel clearfix'>
+        <Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={this._togglePanel.bind(this)}><LayersIcon /></Button>
+        <div className='layer-tree-panel clearfix' style={styles.root}>
           {tipLabel}
           <List className='layer-list-list'>
             {this.renderLayers(layers)}

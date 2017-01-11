@@ -16,16 +16,11 @@
   z-index: 1100;
   float: right;
 }
-.layerlistbutton button:focus, .layerlistbutton button:hover {
-  background-color: white;
-}
 .layer-list-header {
-  background-color: white;
   padding: 16px;
 }
 .layer-tree-panel {
   border: 1px solid #cccccc;
-  background-color: white;
   max-height: 450px;
   margin-right: 38px;
   overflow-y: auto;

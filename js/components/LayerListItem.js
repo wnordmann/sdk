@@ -291,6 +291,7 @@ class LayerListItem extends React.Component {
   };
 
   static contextTypes = {
+    muiTheme: React.PropTypes.object,
     proxy: React.PropTypes.string
   };
 
@@ -310,13 +311,14 @@ class LayerListItem extends React.Component {
   constructor(props, context) {
     super(props);
     this._proxy = context.proxy;
+    this._muiTheme = context.muiTheme || getMuiTheme();
     this.state = {
       tableOpen: false,
       checked: props.layer.getVisible()
     };
   }
   getChildContext() {
-    return {muiTheme: getMuiTheme()};
+    return {muiTheme: this._muiTheme};
   }
   componentDidMount() {
     if (this.props.group) {

@@ -14,9 +14,9 @@ import React from 'react';
 import ol from 'openlayers';
 import Dialog from 'material-ui/Dialog';
 import Button from './Button';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import {GridList, GridTile} from 'material-ui/GridList';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const messages = defineMessages({
   title: {
@@ -54,6 +54,10 @@ class BaseMapModal extends React.Component {
     intl: intlShape.isRequired
   };
 
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
   };
@@ -88,14 +92,15 @@ class BaseMapModal extends React.Component {
     }]
   };
 
-  constructor(props) {
+  constructor(props, context) {
     super(props);
+    this._muiTheme = context.muiTheme || getMuiTheme();
     this.state = {
       open: false
     };
   }
   getChildContext() {
-    return {muiTheme: getMuiTheme()};
+    return {muiTheme: this._muiTheme};
   }
   close() {
     this.setState({open: false});

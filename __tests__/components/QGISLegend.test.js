@@ -8,6 +8,8 @@ import ol from 'openlayers';
 import intl from '../mock-i18n';
 import 'phantomjs-polyfill-object-assign';
 import QGISLegend from '../../js/components/QGISLegend';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 raf.polyfill();
 
@@ -60,7 +62,9 @@ describe('QGISLegend', function() {
   it('generates the correct legend url', function() {
     var container = document.createElement('div');
     ReactDOM.render((
-      <QGISLegend intl={intl} legendBasePath={legendBasePath} legendData={legendData} map={map}/>
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <QGISLegend intl={intl} legendBasePath={legendBasePath} legendData={legendData} map={map}/>
+      </MuiThemeProvider>
     ), container);
     var image = container.querySelector('img');
     assert.equal(image.getAttribute('src'), './0_0.png');

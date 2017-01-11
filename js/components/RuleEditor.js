@@ -21,7 +21,6 @@ import LineSymbolizerEditor from './LineSymbolizerEditor';
 import PointSymbolizerEditor from './PointSymbolizerEditor';
 import FilterEditor from './FilterEditor';
 import TextField from 'material-ui/TextField';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
@@ -98,9 +97,6 @@ class RuleEditor extends React.Component {
       value: 1,
       title: title
     };
-  }
-  getChildContext() {
-    return {muiTheme: getMuiTheme()};
   }
   handleChange(value) {
     if (value === parseInt(value, 10)) {

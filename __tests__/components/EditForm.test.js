@@ -8,6 +8,8 @@ import raf from 'raf';
 import ol from 'openlayers';
 import 'phantomjs-polyfill-object-assign';
 import EditForm from '../../js/components/EditForm';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 raf.polyfill();
 
@@ -53,7 +55,9 @@ describe('EditForm', function() {
       source: new ol.source.Vector({})
     });
     ReactDOM.render((
-      <EditForm map={map} intl={intl} feature={feature} layer={layer} />
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <EditForm map={map} intl={intl} feature={feature} layer={layer} />
+      </MuiThemeProvider>
     ), container);
     var inputs = container.querySelectorAll('input');
     assert.equal(inputs[0].id, 'foo');

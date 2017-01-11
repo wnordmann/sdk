@@ -22,7 +22,6 @@ import Slider from 'material-ui/Slider';
 import DatePicker from 'material-ui/DatePicker';
 import LayerStore from '../stores/LayerStore';
 import {injectIntl, intlShape} from 'react-intl';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import pureRender from 'pure-render-decorator';
 
 /**
@@ -97,9 +96,6 @@ class Playback extends React.Component {
     // TODO
     this._loading = 0;
     this._loaded = 0;
-  }
-  getChildContext() {
-    return {muiTheme: getMuiTheme()};
   }
   componentDidMount() {
     this._onChangeCb = this._onChange.bind(this);

@@ -6,6 +6,8 @@ import {assert} from 'chai';
 import intl from '../mock-i18n';
 import 'phantomjs-polyfill-object-assign';
 import StrokeEditor from '../../js/components/StrokeEditor';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 describe('StrokeEditor', function() {
 
@@ -21,7 +23,9 @@ describe('StrokeEditor', function() {
       assert.equal(state.strokeWidth, initialState.strokeWidth);
     };
     ReactDOM.render((
-      <StrokeEditor intl={intl} onChange={onChange} initialState={initialState} />
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <StrokeEditor intl={intl} onChange={onChange} initialState={initialState} />
+      </MuiThemeProvider>
     ), container);
     ReactDOM.unmountComponentAtNode(container);
   });

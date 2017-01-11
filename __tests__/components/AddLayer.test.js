@@ -8,6 +8,8 @@ import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AddLayer from '../../js/components/AddLayer';
 
 raf.polyfill();
@@ -66,7 +68,9 @@ describe('AddLayer', function() {
   it('generates the correct drop zone', function(done) {
     var container = document.createElement('div');
     ReactDOM.render((
-      <AddLayer intl={intl} map={map}/>
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <AddLayer intl={intl} map={map}/>
+      </MuiThemeProvider>
     ), container);
     var button = container.querySelector('button');
     TestUtils.SimulateNative.touchStart(button, tapDataInjector(0, 0));
