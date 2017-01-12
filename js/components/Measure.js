@@ -115,27 +115,13 @@ class Measure extends React.Component {
       value: null,
       disabled: false
     };
-    this._lengthStyle = new ol.style.Style({
-      stroke: new ol.style.Stroke({
-        color: '#FFC107',
-        width: 2
-      })
-    });
-    this._areaStyle = new ol.style.Style({
-      fill: new ol.style.Fill({
-        color: 'rgba(255,213,79, 0.5)'
-      }),
-      stroke: new ol.style.Stroke({
-        color: '#FFA000'
-      })
-    });
   }
   getChildContext() {
     return {muiTheme: this._muiTheme};
   }
   componentDidMount() {
-    var areaStyle = this._areaStyle;
-    var lengthStyle = this._lengthStyle;
+    var areaStyle = Measure.areaStyle;
+    var lengthStyle = Measure.lengthStyle;
     this._layer = new ol.layer.Vector({
       title: null,
       zIndex: 1000,
@@ -150,36 +136,17 @@ class Measure extends React.Component {
       source: new ol.source.Vector({wrapX: false})
     });
     this.props.map.addLayer(this._layer);
-    this._drawStyle = new ol.style.Style({
-      fill: new ol.style.Fill({
-        color: 'rgba(255, 255, 255, 0.2)'
-      }),
-      stroke: new ol.style.Stroke({
-        color: 'rgba(0, 0, 0, 0.5)',
-        lineDash: [10, 10],
-        width: 2
-      }),
-      image: new ol.style.Circle({
-        radius: 5,
-        stroke: new ol.style.Stroke({
-          color: 'rgba(0, 0, 0, 0.7)'
-        }),
-        fill: new ol.style.Fill({
-          color: 'rgba(255, 255, 255, 0.2)'
-        })
-      })
-    });
     var source = this._layer.getSource();
     this._interactions = {
       'AREA': new ol.interaction.Draw({
         source: source,
         type: 'Polygon',
-        style: this._drawStyle
+        style: Measure.drawStyle
       }),
       'LENGTH': new ol.interaction.Draw({
         source: source,
         type: 'LineString',
-        style: this._drawStyle
+        style: Measure.drawStyle
       })
     };
     for (var key in this._interactions) {
@@ -190,6 +157,39 @@ class Measure extends React.Component {
   componentWillUnmount() {
     AppDispatcher.unregister(this._dispatchToken);
   }
+  static lengthStyle = new ol.style.Style({
+    stroke: new ol.style.Stroke({
+      color: '#FFC107',
+      width: 2
+    })
+  });
+  static areaStyle = new ol.style.Style({
+    fill: new ol.style.Fill({
+      color: 'rgba(255,213,79, 0.5)'
+    }),
+    stroke: new ol.style.Stroke({
+      color: '#FFA000'
+    })
+  });
+  static drawStyle = new ol.style.Style({
+    fill: new ol.style.Fill({
+      color: 'rgba(255, 255, 255, 0.2)'
+    }),
+    stroke: new ol.style.Stroke({
+      color: 'rgba(0, 0, 0, 0.5)',
+      lineDash: [10, 10],
+      width: 2
+    }),
+    image: new ol.style.Circle({
+      radius: 5,
+      stroke: new ol.style.Stroke({
+        color: 'rgba(0, 0, 0, 0.7)'
+      }),
+      fill: new ol.style.Fill({
+        color: 'rgba(255, 255, 255, 0.2)'
+      })
+    })
+  });
   _onDrawStart(evt) {
     this._sketch = evt.feature;
     this._createTooltip();

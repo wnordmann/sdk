@@ -84,17 +84,7 @@ class Select extends React.Component {
     this._dispatchToken = ToolUtil.register(this);
     this._muiTheme = context.muiTheme || getMuiTheme();
     FeatureStore.bindMap(this.props.map);
-    this._interactions = {
-      'RECTANGLE': new ol.interaction.DragBox({
-        condition: ol.events.condition.noModifierKeys,
-        style: new ol.style.Style({
-          stroke: new ol.style.Stroke({
-            color: [0, 0, 255, 1]
-          })
-        })
-      })
-    };
-    this._interactions.RECTANGLE.on('boxend', this._onBoxEnd, this);
+    Select.interactions.RECTANGLE.on('boxend', this._onBoxEnd, this);
     this.state = {
       disabled: false,
       secondary: false
@@ -106,6 +96,16 @@ class Select extends React.Component {
   componentWillUnmount() {
     AppDispatcher.unregister(this._dispatchToken);
   }
+  static interactions = {
+    'RECTANGLE': new ol.interaction.DragBox({
+      condition: ol.events.condition.noModifierKeys,
+      style: new ol.style.Style({
+        stroke: new ol.style.Stroke({
+          color: [0, 0, 255, 1]
+        })
+      })
+    })
+  };
   _handleSelection(feature, selected) {
     if (feature.get('features')) {
       var children = feature.get('features');
@@ -154,7 +154,7 @@ class Select extends React.Component {
   }
   _selectByRectangle() {
     if (!this.state.secondary) {
-      this.activate(this._interactions.RECTANGLE);
+      this.activate(Select.interactions.RECTANGLE);
       this.setState({secondary: !this.state.secondary});
     }
   }

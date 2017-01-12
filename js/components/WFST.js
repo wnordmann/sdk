@@ -193,8 +193,7 @@ class WFST extends React.Component {
       visible: this.props.visible
     };
     this._interactions = {};
-    this._select = new ol.interaction.Select({wrapX: false});
-    var features = this._select.getFeatures();
+    var features = WFST.select.getFeatures();
     this._modify = new ol.interaction.Modify({
       features: features,
       wrapX: false
@@ -216,6 +215,7 @@ class WFST extends React.Component {
     }
     this.deactivate();
   }
+  static select = new ol.interaction.Select({wrapX: false});
   activate(interactions) {
     ToolUtil.activate(this, interactions);
     var hasSelect = false;
@@ -233,7 +233,7 @@ class WFST extends React.Component {
   }
   deactivate() {
     ToolUtil.deactivate(this);
-    this._select.getFeatures().clear();
+    WFST.select.getFeatures().clear();
     this.setState({feature: null, modifySecondary: false, drawSecondary: false});
   }
   _onModifyStart(evt) {
@@ -242,7 +242,7 @@ class WFST extends React.Component {
     }
   }
   _onLayerSelectChange(layer) {
-    this._select.getFeatures().clear();
+    WFST.select.getFeatures().clear();
     if (layer !== null) {
       this._setLayer(layer);
     } else {
@@ -287,7 +287,7 @@ class WFST extends React.Component {
       var extent = [coord[0] - buffer, coord[1] - buffer, coord[0] + buffer, coord[1] + buffer];
       var state = FeatureStore.getState(me.state.layer);
       var found = false;
-      me._select.getFeatures().clear();
+      WFST.select.getFeatures().clear();
       if (state) {
         var features = state.features.getFeatures();
         for (var i = 0, ii = features.length; i < ii; ++i) {
@@ -295,14 +295,14 @@ class WFST extends React.Component {
           if (geom.intersectsExtent(extent)) {
             found = true;
             me.setState({feature: features[i]});
-            me._select.getFeatures().push(features[i]);
+            WFST.select.getFeatures().push(features[i]);
             break;
           }
         }
       }
       if (found === false) {
         this._request = WFSService.distanceWithin(me.state.layer, me.props.map.getView(), coord, function(feature) {
-          me._select.getFeatures().push(feature);
+          WFST.select.getFeatures().push(feature);
           me.setState({feature: feature});
           delete me._request;
         }, function() {
@@ -319,7 +319,7 @@ class WFST extends React.Component {
       this.deactivate();
       var layer = this.state.layer;
       if (layer) {
-        var interactions = [this._select, this._modify];
+        var interactions = [WFST.select, this._modify];
         if (!(layer.getSource() instanceof ol.source.Vector)) {
           interactions.push(this._selectfeature);
         }
@@ -433,7 +433,7 @@ class WFST extends React.Component {
   }
   _onDeleteSuccess() {
     const {formatMessage} = this.props.intl;
-    this._select.getFeatures().clear();
+    WFST.select.getFeatures().clear();
     var source = this.state.layer.getSource();
     if (source instanceof ol.source.Vector) {
       source.removeFeature(this.state.feature);
