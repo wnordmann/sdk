@@ -205,21 +205,11 @@ class EditForm extends React.Component {
       me._setError(msg);
     });
   }
-  getStyles() {
-    const muiTheme = this.state.muiTheme;
-    const rawTheme = muiTheme.rawTheme;
-    return {
-      root: {
-        color: rawTheme.palette.textColor
-      }
-    };
-  }
   _onChangeGeom(evt) {
     this._geomDirty = true;
     evt.target.un('change', this._onChangeGeom, this);
   }
   render() {
-    const styles = this.getStyles();
     const {formatMessage} = this.props.intl;
     var error;
     if (this.state.error === true) {
@@ -246,7 +236,7 @@ class EditForm extends React.Component {
     // saveButton and deleteButton refs are needed for EditPopup code
     return (
       <div className={classNames('sdk-component edit-form', this.props.className)}>
-        <span style={styles.root} className='edit-form-fid'>{fid}</span><br/>
+        <span className='edit-form-fid'>{fid}</span><br/>
         {inputs}<br/>
         {error}
         <div className='edit-form-submit'>

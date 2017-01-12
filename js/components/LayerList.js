@@ -359,7 +359,7 @@ class LayerList extends React.Component {
     return (
       <div ref='parent' className={classNames(divClass, this.props.className)}>
         <Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={this._togglePanel.bind(this)}><LayersIcon /></Button>
-        <Paper className='layer-tree-panel'>
+        <Paper zDepth={0} className='layer-tree-panel'>
           {tipLabel}
           <List className='layer-list-list'>
             {this.renderLayers(layers)}

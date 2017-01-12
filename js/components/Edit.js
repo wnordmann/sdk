@@ -28,6 +28,7 @@ import util from '../util';
 import ColorPicker from 'react-color';
 import classNames from 'classnames';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import Paper from 'material-ui/Paper';
 import pureRender from 'pure-render-decorator';
 
 const NEW_ATTR_PREFIX = 'new-attr-';
@@ -383,18 +384,8 @@ class Edit extends React.Component {
       attributeOpen: false
     });
   }
-  getStyles() {
-    const muiTheme = this.state.muiTheme;
-    const rawTheme = muiTheme.rawTheme;
-    return {
-      root: Object.assign(this.props.style, {
-        background: rawTheme.palette.canvasColor
-      })
-    };
-  }
   render() {
     const {formatMessage} = this.props.intl;
-    const styles = this.getStyles();
     var options = [], i, ii;
     for (i = 0, ii = this.state.layers.length; i < ii; ++i) {
       var lyr = this.state.layers[i], title = lyr.get('title'), id = lyr.get('id');
@@ -423,7 +414,7 @@ class Edit extends React.Component {
       <Button buttonType='Flat' tooltip={formatMessage(messages.closebuttontitle)} label={formatMessage(messages.closebuttontext)} onTouchTap={this.close.bind(this)} />
     ];
     return (
-      <div style={styles.root} className={classNames('sdk-component edit', this.props.className)}>
+      <Paper zDepth={0} className={classNames('sdk-component edit', this.props.className)}>
         <SelectField className='edit-layer-selector' disabled={this.state.layers.length === 0} onChange={this._onLayerChange.bind(this)} floatingLabelText={formatMessage(messages.layerlabel)} value={this._layer} ref='layer'>
           {options}
         </SelectField>
@@ -447,7 +438,7 @@ class Edit extends React.Component {
           <label>{formatMessage(messages.fillcolorlabel)}</label>
           <ColorPicker type='compact' onChangeComplete={this._onChangeFill.bind(this)} ref='fillColor' color={this._fillColor} />
        </Dialog>
-      </div>
+      </Paper>
     );
   }
 }

@@ -149,20 +149,7 @@ class Geolocation extends React.Component {
       open: false
     });
   }
-  getStyles() {
-    const muiTheme = this.state.muiTheme;
-    const rawTheme = muiTheme.rawTheme;
-    return {
-      root: Object.assign(this.props.style || {}, {
-        background: rawTheme.palette.primary1Color
-      }),
-      iconactive: {
-        color: rawTheme.palette.active1Color
-      }
-    };
-  }
   render() {
-    const styles = this.getStyles();
     const {formatMessage} = this.props.intl;
     if (this.state.error) {
       return (<Snackbar
@@ -175,12 +162,12 @@ class Geolocation extends React.Component {
       var iconStyle, tooltip = formatMessage(messages.buttontitle);
       if (this.state.tracking) {
         iconStyle = {
-          fill: styles.iconactive.color
+          fill: this.state.muiTheme.rawTheme.palette.active1Color
         };
         tooltip += ' (' + formatMessage(messages.trackingtitle) + ')';
       }
       return (
-        <Button iconStyle={iconStyle} buttonType='Action' mini={true} secondary={true} style={styles.root} className={classNames('sdk-component geolocation', this.props.className)} tooltip={tooltip} onTouchTap={this._geolocate.bind(this)}><MyLocation /></Button>
+        <Button iconStyle={iconStyle} buttonType='Action' mini={true} secondary={true} className={classNames('sdk-component geolocation', this.props.className)} tooltip={tooltip} onTouchTap={this._geolocate.bind(this)}><MyLocation /></Button>
       );
     }
   }

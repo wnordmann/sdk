@@ -12,7 +12,6 @@
 
 import React from 'react';
 import ol from 'openlayers';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Button from './Button';
 import classNames from 'classnames';
 import NorthIcon from 'material-ui/svg-icons/maps/navigation';
@@ -69,10 +68,6 @@ class Rotate extends React.Component {
     intl: intlShape.isRequired
   };
 
-  static contextTypes = {
-    muiTheme: React.PropTypes.object
-  };
-
   static defaultProps = {
     autoHide: true,
     duration: 250
@@ -81,8 +76,7 @@ class Rotate extends React.Component {
   constructor(props, context) {
     super(props);
     this.state = {
-      rotation: 0,
-      muiTheme: context.muiTheme || getMuiTheme()
+      rotation: 0
     };
   }
   componentDidMount() {
@@ -116,17 +110,7 @@ class Rotate extends React.Component {
       view.setRotation(0);
     }
   }
-  getStyles() {
-    const muiTheme = this.state.muiTheme;
-    const rawTheme = muiTheme.rawTheme;
-    return {
-      root: Object.assign(this.props.style || {}, {
-        background: rawTheme.palette.primary1Color
-      })
-    };
-  }
   render() {
-    const styles = this.getStyles();
     if (this.state.rotation === 0 && this.props.autoHide) {
       return (<article/>);
     } else {
@@ -135,7 +119,7 @@ class Rotate extends React.Component {
         transform: 'rotate(' + this.state.rotation + 'rad)'
       };
       return (
-        <Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} secondary={true} className={classNames('sdk-component rotate', this.props.className)} iconStyle={iconStyle} style={styles.root} tooltip={formatMessage(messages.rotatetitle)} onTouchTap={this._resetNorth.bind(this)}><NorthIcon /></Button>
+        <Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} secondary={true} className={classNames('sdk-component rotate', this.props.className)} iconStyle={iconStyle} tooltip={formatMessage(messages.rotatetitle)} onTouchTap={this._resetNorth.bind(this)}><NorthIcon /></Button>
       );
     }
   }

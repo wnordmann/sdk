@@ -183,7 +183,7 @@ class PointSymbolizerEditor extends React.Component {
     });
     return (
       <div className={classNames('sdk-component point-symbolizer-editor', this.props.className)}>
-        <Paper>
+        <Paper zDepth={0}>
           <SelectField style={this.state.externalGraphic ? {display: 'none'} : undefined} floatingLabelText={formatMessage(messages.symboltype)} value={this.state.symbolType} onChange={this._onChangeSymbol.bind(this)}>
             {options}
           </SelectField>
@@ -192,11 +192,11 @@ class PointSymbolizerEditor extends React.Component {
           <TextField fullWidth={true} value={this.state.externalGraphic} onChange={this._onUrlChange.bind(this)} onBlur={this._onUrlBlur.bind(this)} floatingLabelText={formatMessage(messages.externalgraphic)} />
           <Slider style={!this.state.externalGraphic ? {display: 'none'} : {width: 250}} description={formatMessage(messages.opacity)} defaultValue={this.state.opacity} onChange={this._onOpacityChange.bind(this)} />
         </Paper>
-        <Paper style={this.state.externalGraphic ? {display: 'none'} : undefined}>
+        <Paper zDepth={0} style={this.state.externalGraphic ? {display: 'none'} : undefined}>
           <Checkbox onCheck={this._onFillCheck.bind(this)} checked={this.state.hasFill} label={formatMessage(messages.filllabel)} />
           <FillEditor onChange={this.props.onChange} intl={this.props.intl} initialFillColor={this.props.initialState ? this.props.initialState.fillColor : undefined} />
         </Paper>
-        <Paper style={this.state.externalGraphic ? {display: 'none'} : undefined}>
+        <Paper zDepth={0} style={this.state.externalGraphic ? {display: 'none'} : undefined}>
           <Checkbox onCheck={this._onStrokeCheck.bind(this)} checked={this.state.hasStroke} label={formatMessage(messages.strokelabel)} />
           <StrokeEditor onChange={this.props.onChange} intl={this.props.intl} initialStrokeColor={this.props.initialState ? this.props.initialState.strokeColor : undefined} initialStrokeWidth={this.props.initialState ? this.props.initialState.strokeWidth : undefined} />
         </Paper>
