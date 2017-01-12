@@ -15,7 +15,6 @@ import ol from 'openlayers';
 import Snackbar from 'material-ui/Snackbar';
 import Button from './Button';
 import UploadIcon from 'material-ui/svg-icons/file/file-upload';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Dialog from 'material-ui/Dialog';
 import Dropzone from 'react-dropzone';
 import {GridList, GridTile} from 'material-ui/GridList';
@@ -129,14 +128,6 @@ class AddLayer extends React.Component {
     intl: intlShape.isRequired
   };
 
-  static contextTypes = {
-    muiTheme: React.PropTypes.object
-  };
-
-  static childContextTypes = {
-    muiTheme: React.PropTypes.object.isRequired
-  };
-
   static defaultProps = {
     strokeWidth: 2,
     pointRadius: 7
@@ -158,8 +149,7 @@ class AddLayer extends React.Component {
       error: false,
       errorOpen: false,
       fileName: null,
-      showProgress: false,
-      muiTheme: context.muiTheme || getMuiTheme()
+      showProgress: false
     };
   }
   _showDialog() {
@@ -261,18 +251,8 @@ class AddLayer extends React.Component {
       errorOpen: false
     });
   }
-  getStyles() {
-    const muiTheme = this.state.muiTheme;
-    const rawTheme = muiTheme.rawTheme;
-    return {
-      dialog: {
-        color: rawTheme.palette.textColor
-      }
-    };
-  }
   render() {
     const {formatMessage} = this.props.intl;
-    const styles = this.getStyles();
     var error;
     if (this.state.error === true) {
       error = (<Snackbar
@@ -314,7 +294,7 @@ class AddLayer extends React.Component {
     ];
     return (
       <Button {...this.props} className={classNames('sdk-component add-layer', this.props.className)} icon={<UploadIcon />} tooltip={formatMessage(messages.menutitle)} label={formatMessage(messages.menutext)} onTouchTap={this._showDialog.bind(this)}>
-        <Dialog style={styles.dialog} autoScrollBodyContent={true} actions={actions} open={this.state.open} onRequestClose={this._closeDialog.bind(this)} modal={true} title={formatMessage(messages.modaltitle)}>
+        <Dialog autoScrollBodyContent={true} actions={actions} open={this.state.open} onRequestClose={this._closeDialog.bind(this)} modal={true} title={formatMessage(messages.modaltitle)}>
           {error}
           {body}
         </Dialog>

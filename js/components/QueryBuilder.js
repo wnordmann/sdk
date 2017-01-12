@@ -22,6 +22,7 @@ import FilterService from '../services/FilterService';
 import FilterHelp from './FilterHelp';
 import {Toolbar} from 'material-ui/Toolbar';
 import TextField from 'material-ui/TextField';
+import Paper from 'material-ui/Paper';
 import RaisedButton from './Button';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import './QueryBuilder.css';
@@ -119,15 +120,15 @@ class QueryBuilder extends React.Component {
 
   constructor(props, context) {
     super(props);
+    this._muiTheme = context.muiTheme || getMuiTheme();
     FeatureStore.bindMap(this.props.map);
     this.state = {
-      muiTheme: context.muiTheme || getMuiTheme(),
       showCount: false,
       errorText: null
     };
   }
   getChildContext() {
-    return {muiTheme: this.state.muiTheme};
+    return {muiTheme: this._muiTheme};
   }
   _onLayerSelectChange(layer) {
     this._layer = layer;
@@ -200,17 +201,7 @@ class QueryBuilder extends React.Component {
       open: false
     });
   }
-  getStyles() {
-    const muiTheme = this.state.muiTheme;
-    const rawTheme = muiTheme.rawTheme;
-    return {
-      root: {
-        background: rawTheme.palette.canvasColor
-      }
-    };
-  }
   render() {
-    const styles = this.getStyles();
     const {formatMessage} = this.props.intl;
     var count;
     if (this.state.showCount === true) {
@@ -222,7 +213,7 @@ class QueryBuilder extends React.Component {
       />);
     }
     return (
-      <div style={styles.root} className={classNames('sdk-component query-builder', this.props.className)}>
+      <Paper zDepth={0} className={classNames('sdk-component query-builder', this.props.className)}>
         <LayerSelector {...this.props} onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /><br/>
         <TextField floatingLabelText={formatMessage(messages.filterlabel)} errorText={this.state.errorText} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} /><FilterHelp intl={this.props.intl} /><br/>
         <Toolbar>
@@ -231,7 +222,7 @@ class QueryBuilder extends React.Component {
           <RaisedButton label={formatMessage(messages.selectintext)} tooltip={formatMessage(messages.selectintitle)} onTouchTap={this._inSelection.bind(this)} />
         </Toolbar>
         {count}
-      </div>
+      </Paper>
     );
   }
 }

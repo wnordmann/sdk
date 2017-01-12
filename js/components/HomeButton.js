@@ -13,7 +13,6 @@
 import React from 'react';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import classNames from 'classnames';
 import Button from './Button';
 import HomeIcon from 'material-ui/svg-icons/maps/zoom-out-map';
@@ -65,11 +64,7 @@ class HomeButton extends React.Component {
     intl: intlShape.isRequired
   };
 
-  static contextTypes = {
-    muiTheme: React.PropTypes.object
-  };
-
-  constructor(props, context) {
+  constructor(props) {
     super(props);
     if (!this.props.extent) {
       var view = this.props.map.getView();
@@ -86,9 +81,6 @@ class HomeButton extends React.Component {
         }, this);
       }
     }
-    this.state = {
-      muiTheme: context.muiTheme || getMuiTheme()
-    };
   }
   _goHome() {
     var view = this.props.map.getView();
@@ -99,20 +91,10 @@ class HomeButton extends React.Component {
       view.setResolution(this._resolution);
     }
   }
-  getStyles() {
-    const muiTheme = this.state.muiTheme;
-    const rawTheme = muiTheme.rawTheme;
-    return {
-      root: Object.assign(this.props.style || {}, {
-        background: rawTheme.palette.primary1Color
-      })
-    };
-  }
   render() {
     const {formatMessage} = this.props.intl;
-    const styles = this.getStyles();
     return (
-      <Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} secondary={true} className={classNames('sdk-component home-button', this.props.className)} style={styles.root} tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._goHome.bind(this)} ><HomeIcon /></Button>
+      <Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} secondary={true} className={classNames('sdk-component home-button', this.props.className)} tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._goHome.bind(this)} ><HomeIcon /></Button>
     );
   }
 }

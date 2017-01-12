@@ -15,7 +15,6 @@ import React from 'react';
 import ol from 'openlayers';
 global.ol = ol;
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import ToolActions from '../actions/ToolActions';
 import classNames from 'classnames';
 import Button from './Button';
@@ -77,10 +76,6 @@ class Globe extends React.Component {
     intl: intlShape.isRequired
   };
 
-  static contextTypes = {
-    muiTheme: React.PropTypes.object
-  };
-
   static defaultProps = {
     hideScalebar: 78271
   };
@@ -88,8 +83,7 @@ class Globe extends React.Component {
   constructor(props, context) {
     super(props);
     this.state = {
-      globe: false,
-      muiTheme: context.muiTheme || getMuiTheme()
+      globe: false
     };
   }
   init() {
@@ -138,18 +132,8 @@ class Globe extends React.Component {
       scaleLine[0].style.visibility = 'inherit';
     }
   }
-  getStyles() {
-    const muiTheme = this.state.muiTheme;
-    const rawTheme = muiTheme.rawTheme;
-    return {
-      root: Object.assign(this.props.style || {}, {
-        background: rawTheme.palette.primary1Color
-      })
-    };
-  }
   render() {
     const {formatMessage} = this.props.intl;
-    const styles = this.getStyles();
     var icon, tooltip;
     icon = <GlobeIcon />;
     if (this.state.globe) {
@@ -158,7 +142,7 @@ class Globe extends React.Component {
       tooltip = formatMessage(messages.globetext);
     }
     return (
-      <Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} secondary={true} className={classNames('sdk-component globe', this.props.className)} style={styles.root} tooltip={tooltip} onTouchTap={this._toggle.bind(this)}>{icon}</Button>
+      <Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} secondary={true} className={classNames('sdk-component globe', this.props.className)} tooltip={tooltip} onTouchTap={this._toggle.bind(this)}>{icon}</Button>
     );
   }
 }

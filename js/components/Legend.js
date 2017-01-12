@@ -12,12 +12,12 @@
 
 import React from 'react';
 import ol from 'openlayers';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import LayerStore from '../stores/LayerStore';
 import classNames from 'classnames';
 import pureRender from 'pure-render-decorator';
 import {List, ListItem} from 'material-ui/List';
 import WMSLegend from './WMSLegend';
+import Paper from 'material-ui/Paper';
 import ArcGISRestLegend from './ArcGISRestLegend';
 import Label from './Label';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -66,19 +66,10 @@ class Legend extends React.Component {
     intl: intlShape.isRequired
   };
 
-  static contextTypes = {
-    muiTheme: React.PropTypes.object
-  };
-
-  static childContextTypes = {
-    muiTheme: React.PropTypes.object.isRequired
-  };
-
-  constructor(props, context) {
+  constructor(props) {
     super(props);
     this.state = {
-      flatLayers: [],
-      muiTheme: context.muiTheme || getMuiTheme()
+      flatLayers: []
     };
     LayerStore.bindMap(this.props.map);
   }
@@ -95,19 +86,8 @@ class Legend extends React.Component {
     var flatLayers = LayerStore.getState().flatLayers.slice().reverse();
     this.setState({flatLayers: flatLayers});
   }
-  getStyles() {
-    const muiTheme = this.state.muiTheme;
-    const rawTheme = muiTheme.rawTheme;
-    return {
-      root: {
-        background: rawTheme.palette.canvasColor,
-        color: rawTheme.palette.textColor
-      }
-    };
-  }
   render() {
     const {formatMessage} = this.props.intl;
-    const styles = this.getStyles();
     var legends = [];
     for (var i = 0, ii = this.state.flatLayers.length; i < ii; ++i) {
       var layer = this.state.flatLayers[i];
@@ -124,12 +104,12 @@ class Legend extends React.Component {
         }
       }
     }
-    var subHeader = legends.length === 0 ? (<div style={styles.root} className='legend-header'><Label style={styles.root}>{formatMessage(messages.emptyheader)}</Label></div>) : undefined;
+    var subHeader = legends.length === 0 ? (<Paper zDepth={0} className='legend-header'><Label>{formatMessage(messages.emptyheader)}</Label></Paper>) : undefined;
     return (
-      <div className={classNames('sdk-component legend', this.props.className)}>
+      <Paper zDepth={0} className={classNames('sdk-component legend', this.props.className)}>
         {subHeader}
         <List className='legend-list'>{legends}</List>
-      </div>
+      </Paper>
     );
   }
 }

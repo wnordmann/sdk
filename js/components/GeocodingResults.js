@@ -12,7 +12,6 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import ol from 'openlayers';
 import classNames from 'classnames';
 import AppDispatcher from '../dispatchers/AppDispatcher';
@@ -21,6 +20,8 @@ import GeocodingConstants from '../constants/GeocodingConstants';
 import GeocodingActions from '../actions/GeocodingActions';
 import pureRender from 'pure-render-decorator';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import Paper from 'material-ui/Paper';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import './GeocodingResults.css';
 
 const messages = defineMessages({
@@ -79,6 +80,7 @@ class GeocodingResults extends React.Component {
   constructor(props, context) {
     super(props);
     var me = this;
+    this._muiTheme = context.muiTheme || getMuiTheme();
     this._dispatchToken = AppDispatcher.register((payload) => {
       let action = payload.action;
       switch (action.type) {
@@ -95,12 +97,11 @@ class GeocodingResults extends React.Component {
       }
     });
     this.state = {
-      searchResults: null,
-      muiTheme: context.muiTheme || getMuiTheme()
+      searchResults: null
     };
   }
   getChildContext() {
-    return {muiTheme: this.state.muiTheme};
+    return {muiTheme: this._muiTheme};
   }
   componentDidMount() {
     this._layer = new ol.layer.Vector({
@@ -147,18 +148,7 @@ class GeocodingResults extends React.Component {
     source.addFeature(feature);
     GeocodingActions.zoomToResult(result);
   }
-  getStyles() {
-    const muiTheme = this.state.muiTheme;
-    const rawTheme = muiTheme.rawTheme;
-    return {
-      root: {
-        background: rawTheme.palette.canvasColor,
-        color: rawTheme.palette.textColor
-      }
-    };
-  }
   render() {
-    const styles = this.getStyles();
     const {formatMessage} = this.props.intl;
     var resultNodes;
     var subheader;
@@ -177,12 +167,12 @@ class GeocodingResults extends React.Component {
       }
     }
     return (
-      <div className={classNames('sdk-component geocoding-results', this.props.className)}>
-        <div style={styles.root} className='geocoding-results-header'>{subheader}</div>
+      <Paper zDepth={0} className={classNames('sdk-component geocoding-results', this.props.className)}>
+        <Paper zDepth={0} className='geocoding-results-header'>{subheader}</Paper>
         <List className='geocoding-results-list'>
          {resultNodes}
         </List>
-      </div>
+      </Paper>
     );
   }
 }

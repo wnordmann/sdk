@@ -19,6 +19,7 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
 import SelectField from 'material-ui/SelectField';
+import Paper from 'material-ui/Paper';
 import classNames from 'classnames';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import './Chart.css';
@@ -257,17 +258,7 @@ class Chart extends React.Component {
     }
     this._selectChart(undefined, undefined, value);
   }
-  getStyles() {
-    const muiTheme = this.state.muiTheme;
-    const rawTheme = muiTheme.rawTheme;
-    return {
-      root: {
-        background: rawTheme.palette.canvasColor
-      }
-    };
-  }
   render() {
-    const styles = this.getStyles();
     const {formatMessage} = this.props.intl;
     var columns = this._getColumns();
     c3.generate({
@@ -297,12 +288,12 @@ class Chart extends React.Component {
         return (<MenuItem key={idx} value={title} primaryText={title} />);
       });
       return (
-        <div style={styles.root} className={classNames('sdk-component chart', this.props.className)}>
+        <Paper zDepth={0} className={classNames('sdk-component chart', this.props.className)}>
           <SelectField fullWidth={true} value={this.state.value} onChange={this._selectChart.bind(this)}>
             {options}
           </SelectField>
           <div id='chart'></div>
-        </div>
+        </Paper>
       );
     } else {
       var listitems = this.props.charts.map(function(chart, idx) {

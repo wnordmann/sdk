@@ -472,7 +472,7 @@ class FeatureTable extends React.Component {
     }
     var filterHelp = this._layer ? <FilterHelp intl={this.props.intl} /> : undefined;
     return (
-      <Paper className={classNames('sdk-component feature-table', this.props.className)}>
+      <Paper zDepth={0} className={classNames('sdk-component feature-table', this.props.className)}>
         <Snackbar
           autoHideDuration={5000}
           open={!this._layer && this.state.active}

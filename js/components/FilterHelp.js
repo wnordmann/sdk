@@ -12,10 +12,10 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Popover from 'material-ui/Popover';
 import HelpOutline from 'material-ui/svg-icons/action/help-outline';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import Paper from 'material-ui/Paper';
 import './FilterHelp.css';
 
 const messages = defineMessages({
@@ -204,10 +204,6 @@ class FilterHelp extends React.Component {
     intl: intlShape.isRequired
   };
 
-  static contextTypes = {
-    muiTheme: React.PropTypes.object
-  };
-
   static defaultProps = {
     style: {
       padding: '12px',
@@ -221,11 +217,10 @@ class FilterHelp extends React.Component {
     }
   };
 
-  constructor(props, context) {
+  constructor(props) {
     super(props);
     this.state = {
-      help: false,
-      muiTheme: context.muiTheme || getMuiTheme()
+      help: false
     };
   }
   componentDidMount() {
@@ -234,27 +229,14 @@ class FilterHelp extends React.Component {
   _onToggleHelp() {
     this.setState({help: !this.state.help});
   }
-  getStyles() {
-    const muiTheme = this.state.muiTheme;
-    const rawTheme = muiTheme.rawTheme;
-    return {
-      root: Object.assign(this.props.style, {
-        color: rawTheme.palette.textColor
-      }),
-      mono: Object.assign(this.props.monoStyle, {
-        color: rawTheme.palette.textColor
-      })
-    };
-  }
   render() {
     const {formatMessage} = this.props.intl;
-    const styles = this.getStyles();
     var introText = formatMessage(messages.introtextprefix) + ' ';
     introText += formatMessage(messages.introtextsuffix);
     return (
       <span className='filter-help' style={this.props.style}>
         <HelpOutline ref='help' onClick={this._onToggleHelp.bind(this)}/>
-        <Popover open={this.state.help} onRequestClose={this._onToggleHelp.bind(this)} style={styles.root} anchorEl={this.helpElement} anchorOrigin={{'horizontal':'left'}}>
+        <Popover style={this.props.style} open={this.state.help} onRequestClose={this._onToggleHelp.bind(this)} anchorEl={this.helpElement} anchorOrigin={{'horizontal':'left'}}>
           <p>
             {introText}
           </p>
@@ -262,8 +244,8 @@ class FilterHelp extends React.Component {
             {formatMessage(messages.exampletext)}
           </p>
           <ul>
-            <li><div style={styles.mono}>{formatMessage(messages.example1filter)}</div><br/>{formatMessage(messages.example1description)}</li>
-            <li><div style={styles.mono}>{formatMessage(messages.example2filter)}</div><br/>{formatMessage(messages.example2description)}</li>
+            <li><Paper style={this.props.monoStyle} zDepth={0}>{formatMessage(messages.example1filter)}</Paper><br/>{formatMessage(messages.example1description)}</li>
+            <li><Paper style={this.props.monoStyle} zDepth={0}>{formatMessage(messages.example2filter)}</Paper><br/>{formatMessage(messages.example2description)}</li>
           </ul>
           <p>
             {formatMessage(messages.generalsection)}
@@ -272,17 +254,17 @@ class FilterHelp extends React.Component {
             {formatMessage(messages.operatortext)}
           </p>
           <ul>
-            <li><div style={styles.mono}>{formatMessage(messages.operator1)}</div>{formatMessage(messages.operator1description)}</li>
-            <li><div style={styles.mono}>{formatMessage(messages.operator2)}</div>{formatMessage(messages.operator2description)}</li>
-            <li><div style={styles.mono}>{formatMessage(messages.operator3)}</div>{formatMessage(messages.operator3description)}</li>
-            <li><div style={styles.mono}>{formatMessage(messages.operator4)}</div>{formatMessage(messages.operator4description)}</li>
-            <li><div style={styles.mono}>{formatMessage(messages.operator5)}</div>{formatMessage(messages.operator5description)}</li>
-            <li><div style={styles.mono}>{formatMessage(messages.operator6)}</div>{formatMessage(messages.operator6description)}</li>
-            <li><div style={styles.mono}>{formatMessage(messages.operator7)}</div>{formatMessage(messages.operator7description)}</li>
-            <li><div style={styles.mono}>{formatMessage(messages.operator8)}</div>{formatMessage(messages.operator8description)}</li>
-            <li><div style={styles.mono}>{formatMessage(messages.operator9)}</div>{formatMessage(messages.operator9description)}</li>
-            <li><div style={styles.mono}>{formatMessage(messages.operator10)}</div>{formatMessage(messages.operator10description)}</li>
-            <li><div style={styles.mono}>{formatMessage(messages.operator11)}</div>{formatMessage(messages.operator11description)}</li>
+            <li><Paper zDepth={0} style={this.props.monoStyle}>{formatMessage(messages.operator1)}</Paper>{formatMessage(messages.operator1description)}</li>
+            <li><Paper zDepth={0} style={this.props.monoStyle}>{formatMessage(messages.operator2)}</Paper>{formatMessage(messages.operator2description)}</li>
+            <li><Paper zDepth={0} style={this.props.monoStyle}>{formatMessage(messages.operator3)}</Paper>{formatMessage(messages.operator3description)}</li>
+            <li><Paper zDepth={0} style={this.props.monoStyle}>{formatMessage(messages.operator4)}</Paper>{formatMessage(messages.operator4description)}</li>
+            <li><Paper zDepth={0} style={this.props.monoStyle}>{formatMessage(messages.operator5)}</Paper>{formatMessage(messages.operator5description)}</li>
+            <li><Paper zDepth={0} style={this.props.monoStyle}>{formatMessage(messages.operator6)}</Paper>{formatMessage(messages.operator6description)}</li>
+            <li><Paper zDepth={0} style={this.props.monoStyle}>{formatMessage(messages.operator7)}</Paper>{formatMessage(messages.operator7description)}</li>
+            <li><Paper zDepth={0} style={this.props.monoStyle}>{formatMessage(messages.operator8)}</Paper>{formatMessage(messages.operator8description)}</li>
+            <li><Paper zDepth={0} style={this.props.monoStyle}>{formatMessage(messages.operator9)}</Paper>{formatMessage(messages.operator9description)}</li>
+            <li><Paper zDepth={0} style={this.props.monoStyle}>{formatMessage(messages.operator10)}</Paper>{formatMessage(messages.operator10description)}</li>
+            <li><Paper zDepth={0} style={this.props.monoStyle}>{formatMessage(messages.operator11)}</Paper>{formatMessage(messages.operator11description)}</li>
           </ul>
           <p>
             {formatMessage(messages.parantheses)}

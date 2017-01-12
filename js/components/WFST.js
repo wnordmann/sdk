@@ -28,6 +28,7 @@ import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import pureRender from 'pure-render-decorator';
 import EditForm from './EditForm';
 import WFSService from '../services/WFSService';
+import Paper from 'material-ui/Paper';
 
 var SelectFeature = function(handleEvent, scope) {
   this._scope = scope;
@@ -442,15 +443,6 @@ class WFST extends React.Component {
     }
     this.setState({error: false, info: true, open: true, msg: formatMessage(messages.deletesuccessmsg), feature: null});
   }
-  getStyles() {
-    const muiTheme = this.state.muiTheme;
-    const rawTheme = muiTheme.rawTheme;
-    return {
-      root: {
-        background: rawTheme.palette.canvasColor
-      }
-    };
-  }
   _handleRequestCloseActive() {
     this.setState({
       active: false
@@ -463,7 +455,6 @@ class WFST extends React.Component {
     if (!this.state.visible) {
       return (<article />);
     } else {
-      const styles = this.getStyles();
       const {formatMessage} = this.props.intl;
       var error;
       if (this.state.error === true || this.state.info === true) {
@@ -488,7 +479,7 @@ class WFST extends React.Component {
         editForm = (<EditForm map={this.props.map} onGeometryUpdate={this._onGeomUpdate.bind(this)} onSuccess={this._onSuccess.bind(this)} onDeleteSuccess={this._onDeleteSuccess.bind(this)} feature={this.state.feature} layer={this.state.layer} />);
       }
       return (
-        <div style={styles.root} className={classNames('sdk-component wfst', this.props.className)}>
+        <Paper zDepth={0} className={classNames('sdk-component wfst', this.props.className)}>
           <Snackbar
             autoHideDuration={5000}
             open={!this.state.layer && this.state.active}
@@ -508,7 +499,7 @@ class WFST extends React.Component {
           </Toolbar>
           {error}
           {editForm}
-        </div>
+        </Paper>
       );
     }
   }

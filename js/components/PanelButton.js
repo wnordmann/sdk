@@ -12,8 +12,8 @@
 
 import React from 'react';
 import classNames from 'classnames';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Button from './Button';
+import Paper from 'material-ui/Paper';
 import pureRender from 'pure-render-decorator';
 
 /**
@@ -64,24 +64,15 @@ class PanelButton extends React.Component {
     tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left'])
   };
 
-  static contextTypes = {
-    muiTheme: React.PropTypes.object
-  };
-
-  static childContextTypes = {
-    muiTheme: React.PropTypes.object.isRequired
-  };
-
   static defaultProps = {
     showExpandedOnStartup: false,
     buttonClassName: 'panelbutton',
     contentClassName: 'panel-button-panel'
   };
 
-  constructor(props, context) {
+  constructor(props) {
     super(props);
     this.state = {
-      muiTheme: context.muiTheme || getMuiTheme(),
       visible: this.props.showExpandedOnStartup
     };
   }
@@ -94,25 +85,15 @@ class PanelButton extends React.Component {
   _togglePanel() {
     this.setState({visible: !this.state.visible});
   }
-  getStyles() {
-    const muiTheme = this.state.muiTheme;
-    const rawTheme = muiTheme.rawTheme;
-    return {
-      root: Object.assign(this.props.style || {}, {
-        background: rawTheme.palette.primary1Color
-      })
-    };
-  }
   render() {
-    const styles = this.getStyles();
     var divClass = {
       'sdk-component': true,
       'panel-button': true
     };
     return (
       <div className={classNames(divClass, this.props.className)}>
-        <Button buttonType='Action' mini={true} secondary={true} tooltipPosition={this.props.tooltipPosition} style={styles.root} className={this.props.buttonClassName} tooltip={this.props.buttonTitle} onTouchTap={this._togglePanel.bind(this)}>{this.props.icon}</Button>
-        <div style={{display: this.state.visible ? 'block' : 'none'}} className={this.props.contentClassName}>{this.props.content}</div>
+        <Button buttonType='Action' mini={true} secondary={true} tooltipPosition={this.props.tooltipPosition} className={this.props.buttonClassName} tooltip={this.props.buttonTitle} onTouchTap={this._togglePanel.bind(this)}>{this.props.icon}</Button>
+        <Paper zDepth={0} style={{display: this.state.visible ? 'block' : 'none'}} className={this.props.contentClassName}>{this.props.content}</Paper>
       </div>
     );
   }
