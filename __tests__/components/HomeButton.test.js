@@ -14,17 +14,6 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 raf.polyfill();
 
-var tapDataInjector = function(x, y) {
-  return {
-    touches: [{
-      pageX: x,
-      pageY: y,
-      clientX: x,
-      clientY: y
-    }]
-  };
-};
-
 describe('HomeButton', function() {
   var target, map;
   var width = 360;
@@ -69,8 +58,7 @@ describe('HomeButton', function() {
     map.getView().setCenter([100, 100]);
     assert.equal(map.getView().getZoom(), 5);
     assert.equal(map.getView().getCenter()[0], 100);
-    TestUtils.SimulateNative.touchStart(button, tapDataInjector(0, 0));
-    TestUtils.SimulateNative.touchEnd(button, tapDataInjector(0, 0));
+    TestUtils.Simulate.touchTap(button);
     assert.equal(map.getView().getZoom(), 1);
     assert.equal(map.getView().getCenter()[0], 0);
     ReactDOM.unmountComponentAtNode(container);

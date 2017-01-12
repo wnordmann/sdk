@@ -12,17 +12,6 @@ import Geolocation from '../../js/components/Geolocation';
 
 raf.polyfill();
 
-var tapDataInjector = function(x, y) {
-  return {
-    touches: [{
-      pageX: x,
-      pageY: y,
-      clientX: x,
-      clientY: y
-    }]
-  };
-};
-
 describe('Geolocation', function() {
   var target, map;
   var width = 360;
@@ -61,8 +50,7 @@ describe('Geolocation', function() {
       <Geolocation intl={intl} map={map}/>
     ), container);
     var button = container.querySelector('button');
-    TestUtils.SimulateNative.touchStart(button, tapDataInjector(0, 0));
-    TestUtils.SimulateNative.touchEnd(button, tapDataInjector(0, 0));
+    TestUtils.Simulate.touchTap(button);
     assert.equal(geolocation._geolocation !== undefined, true);
     ReactDOM.unmountComponentAtNode(container);
   });

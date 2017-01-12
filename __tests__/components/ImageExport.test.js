@@ -13,17 +13,6 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 raf.polyfill();
 
-var tapDataInjector = function(x, y) {
-  return {
-    touches: [{
-      pageX: x,
-      pageY: y,
-      clientX: x,
-      clientY: y
-    }]
-  };
-};
-
 describe('ImageExport', function() {
   var target, map;
   var width = 360;
@@ -70,8 +59,7 @@ describe('ImageExport', function() {
     map.once('postcompose', function(evt) {
       called = true;
     });
-    TestUtils.SimulateNative.touchStart(button, tapDataInjector(0, 0));
-    TestUtils.SimulateNative.touchEnd(button, tapDataInjector(0, 0));
+    TestUtils.Simulate.touchTap(button);
     assert.equal(called, true);
     ReactDOM.unmountComponentAtNode(container);
   });

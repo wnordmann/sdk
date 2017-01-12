@@ -15,17 +15,6 @@ import AddLayer from '../../js/components/AddLayer';
 raf.polyfill();
 injectTapEventPlugin();
 
-var tapDataInjector = function(x, y) {
-  return {
-    touches: [{
-      pageX: x,
-      pageY: y,
-      clientX: x,
-      clientY: y
-    }]
-  };
-};
-
 describe('AddLayer', function() {
   var target, map, layer;
   var width = 360;
@@ -73,8 +62,7 @@ describe('AddLayer', function() {
       </MuiThemeProvider>
     ), container);
     var button = container.querySelector('button');
-    TestUtils.SimulateNative.touchStart(button, tapDataInjector(0, 0));
-    TestUtils.SimulateNative.touchEnd(button, tapDataInjector(0, 0));
+    TestUtils.Simulate.touchTap(button);
     var dropzones = document.querySelectorAll('div.dropzone');
     assert.equal(dropzones.length, 1);
     window.setTimeout(function() {
