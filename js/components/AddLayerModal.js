@@ -35,21 +35,6 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import classNames from 'classnames';
 import './AddLayerModal.css';
 
-// TODO add more types
-const addNewTypes = [
-  'WMS',
-  'WFS',
-  'ArcGISRest',
-  'WMTS'
-];
-
-const services = {
-  'WMS': WMSService,
-  'WFS': WFSService,
-  'ArcGISRest': ArcGISRestService,
-  'WMTS': WMTSService
-};
-
 const messages = defineMessages({
   servertypelabel: {
     id: 'addwmslayermodal.servertypelabel',
@@ -185,7 +170,7 @@ class AddLayerModal extends React.Component {
     this._muiTheme = context.muiTheme || getMuiTheme();
     this.state = {
       sources: this.props.sources.slice(),
-      newType: addNewTypes[0],
+      newType: AddLayerModal.addNewTypes[0],
       newModalOpen: false,
       source: 0,
       filter: null,
@@ -203,10 +188,22 @@ class AddLayerModal extends React.Component {
       this._request.abort();
     }
   }
+  static addNewTypes = [
+    'WMS',
+    'WFS',
+    'ArcGISRest',
+    'WMTS'
+  ];
+  static services = {
+    'WMS': WMSService,
+    'WFS': WFSService,
+    'ArcGISRest': ArcGISRestService,
+    'WMTS': WMTSService
+  };
   _getCaps(onFailure) {
     var source = this.state.sources[this.state.source];
     var url = source.url;
-    var service = services[source.type];
+    var service = AddLayerModal.services[source.type];
     var me = this;
     const {formatMessage} = this.props.intl;
     var failureCb = function(xmlhttp) {
@@ -267,7 +264,7 @@ class AddLayerModal extends React.Component {
     var titleObj = this._getLayerTitle(layer);
     var source = this.state.sources[this.state.source];
     var url = source.url;
-    var service = services[source.type];
+    var service = AddLayerModal.services[source.type];
     var olLayer = service.createLayer(layer, url, titleObj, map.getView().getProjection(), this._proxy);
     if (source.type === 'WMS' || source.type === 'WFS') {
       this._getStyleName.call(this, olLayer);
@@ -428,7 +425,7 @@ class AddLayerModal extends React.Component {
     var selectOptions = this.state.sources.map(function(source, idx) {
       return (<MenuItem key={idx} value={idx} primaryText={source.title} />);
     });
-    var typeOptions = addNewTypes.map(function(newType) {
+    var typeOptions = AddLayerModal.addNewTypes.map(function(newType) {
       return (<MenuItem key={newType} value={newType} primaryText={newType} />);
     });
     if (this.props.allowUserInput) {

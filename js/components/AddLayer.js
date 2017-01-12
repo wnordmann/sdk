@@ -135,12 +135,6 @@ class AddLayer extends React.Component {
 
   constructor(props, context) {
     super(props);
-    this._formats = {
-      'geojson': new ol.format.GeoJSON(),
-      'json': new ol.format.GeoJSON(),
-      'kml': new ol.format.KML({extractStyles: false}),
-      'gpx': new ol.format.GPX()
-    };
     this._counter = 0;
     this.state = {
       fillColor: '#452135',
@@ -152,6 +146,12 @@ class AddLayer extends React.Component {
       showProgress: false
     };
   }
+  static formats = {
+    'geojson': new ol.format.GeoJSON(),
+    'json': new ol.format.GeoJSON(),
+    'kml': new ol.format.KML({extractStyles: false}),
+    'gpx': new ol.format.GPX()
+  };
   _showDialog() {
     this.setState({open: true});
   }
@@ -174,7 +174,7 @@ class AddLayer extends React.Component {
       var filename = me.state.fileName;
       if (text && filename) {
         var ext = filename.split('.').pop().toLowerCase();
-        var format = me._formats[ext];
+        var format = AddLayer.formats[ext];
         var map = me.props.map;
         if (format) {
           try {
