@@ -24,13 +24,10 @@ const parser = new ol.format.WMTSCapabilities();
 const cache = {};
 
 class WMTSService {
-  createLayer(layer, url, titleObj, projection, opt_proxy) {
+  createLayer(layer, url, titleObj, projection) {
     var caps = cache[url];
     var options = ol.source.WMTS.optionsFromCapabilities(caps,
       {layer: layer.Name, format: 'image/png', projection: projection.getCode()});
-    for (var i = 0, ii = options.urls.length; i < ii; ++i) {
-      options.urls[i] = util.getProxiedUrl(options.urls[i], opt_proxy);
-    }
     return new ol.layer.Tile({
       title: titleObj.title,
       emptyTitle: titleObj.empty,
