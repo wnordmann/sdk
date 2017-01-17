@@ -47,11 +47,11 @@ class WMSService {
       onFailure.call(this, xmlhttp);
     }, this);
   }
-  createLayer(layer, url, titleObj, projection, opt_proxy) {
+  createLayer(layer, url, titleObj, projection) {
     var getLegendUrl = function(layer) {
       if (layer.Style && layer.Style.length === 1) {
         if (layer.Style[0].LegendURL && layer.Style[0].LegendURL.length >= 1) {
-          return util.getProxiedUrl(layer.Style[0].LegendURL[0].OnlineResource, opt_proxy);
+          return layer.Style[0].LegendURL[0].OnlineResource;
         }
       }
     };
@@ -63,14 +63,6 @@ class WMSService {
         LAYERS: layer.Name
       }
     });
-    if (opt_proxy) {
-      source.setTileLoadFunction((function() {
-        var tileLoadFn = source.getTileLoadFunction();
-        return function(tile, src) {
-          tileLoadFn(tile, util.getProxiedUrl(src, opt_proxy));
-        };
-      })());
-    }
     return new ol.layer.Tile({
       title: titleObj.title,
       emptyTitle: titleObj.empty,

@@ -77,10 +77,6 @@ describe('WMTSService', function() {
     // png even if jpeg is the first one
     assert.equal(source.getFormat(), 'image/png');
     assert.equal(source.getUrls()[0], 'http://localhost:8080/geoserver/gwc/service/wmts?');
-    var proxy = 'http://proxy/?url=';
-    layer = WMTSService.createLayer(info.Layer[0], url, {title: 'Digital elevation model', isEmpty: false}, ol.proj.get('EPSG:4326'), proxy);
-    source = layer.getSource();
-    assert.equal(source.getUrls()[0], 'http://proxy/?url=http%3A%2F%2Flocalhost%3A8080%2Fgeoserver%2Fgwc%2Fservice%2Fwmts%3F');
   });
 
 });

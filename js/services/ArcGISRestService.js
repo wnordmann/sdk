@@ -17,7 +17,7 @@ import URL from 'url-parse';
 const format = new ol.format.EsriJSON();
 
 class ArcGISRestService {
-  createLayer(layer, url, titleObj, projection, opt_proxy) {
+  createLayer(layer, url, titleObj, projection) {
     var units = projection.getUnits();
     return new ol.layer.Tile({
       title: titleObj.title,
@@ -30,7 +30,7 @@ class ArcGISRestService {
       wfsInfo: layer.Queryable,
       popupInfo: layer.Queryable ? '#AllAttributes' : undefined,
       source: new ol.source.TileArcGISRest({
-        urls: [util.getProxiedUrl(url, opt_proxy)],
+        urls: [url],
         params: {
           LAYERS: layer.Name
         }
