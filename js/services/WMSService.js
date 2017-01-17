@@ -31,10 +31,18 @@ class WMSService {
     });
     return util.getProxiedUrl(urlObj.toString(), opt_proxy);
   }
+  _getGetMapUrl(info) {
+    var dcp = info.Capability.Request.GetMap.DCPType;
+    for (var i = 0, ii = dcp.length; i < ii; ++i) {
+      if (dcp[i].HTTP && dcp[i].HTTP.Get) {
+        return dcp[i].HTTP.Get.OnlineResource;
+      }
+    }
+  }
   getCapabilities(url, onSuccess, onFailure, opt_proxy) {
     return util.doGET(this.getCapabilitiesUrl(url, opt_proxy), function(xmlhttp) {
       var info = wmsCapsFormat.read(xmlhttp.responseText);
-      onSuccess.call(this, info.Capability.Layer);
+      onSuccess.call(this, info.Capability.Layer, this._getGetMapUrl(info));
     }, function(xmlhttp) {
       onFailure.call(this, xmlhttp);
     }, this);
