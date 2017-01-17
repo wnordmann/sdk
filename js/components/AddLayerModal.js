@@ -217,8 +217,9 @@ class AddLayerModal extends React.Component {
         onFailure();
       }
     };
-    var successCb = function(layerInfo) {
+    var successCb = function(layerInfo, onlineResource) {
       delete me._request;
+      source.getMapUrl = onlineResource;
       me.setState({layerInfo: layerInfo});
     };
     me._request = service.getCapabilities(url, successCb, failureCb, this._proxy);
@@ -263,7 +264,7 @@ class AddLayerModal extends React.Component {
     var map = this.props.map;
     var titleObj = this._getLayerTitle(layer);
     var source = this.state.sources[this.state.source];
-    var url = source.url;
+    var url = source.getMapUrl || source.url;
     var service = AddLayerModal.services[source.type];
     var olLayer = service.createLayer(layer, url, titleObj, map.getView().getProjection(), this._proxy);
     if (source.type === 'WMS' || source.type === 'WFS') {
