@@ -225,6 +225,9 @@ class AddLayerModal extends React.Component {
       source.getMapUrl = onlineResource;
       me.setState({loading: false, layerInfo: layerInfo});
     };
+    if (url.indexOf('http://') === -1 && url.indexOf('https://') === -1 && url[0] !== '/') {
+      url = 'http://' + url;
+    }
     me._request = service.getCapabilities(url, successCb, failureCb, this._proxy);
   }
   _setError(msg) {
