@@ -1,5 +1,4 @@
 .layer-switcher {
-  z-index: 1100;
   position: absolute;
   top: 20px;
   right: 20px;
@@ -13,7 +12,6 @@
   display: block;
 }
 .layerlistbutton {
-  z-index: 1100;
   float: right;
 }
 .layer-list-header {
