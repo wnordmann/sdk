@@ -192,6 +192,10 @@ class MapConfigTransformService {
           layerConfig.source.properties.attributions = [layer.args[2].attribution];
         }
       } else if (source.ptype === 'gxp_osmsource') {
+        if (!layer.group) {
+          // force OSM as base layer
+          layerConfig.properties.type = 'base';
+        }
         layerConfig.type = 'Tile';
         layerConfig.source = {
           type: 'OSM',
