@@ -30,6 +30,7 @@ import WMSService from '../services/WMSService';
 import WFSService from '../services/WFSService';
 import ArcGISRestService from '../services/ArcGISRestService';
 import WMTSService from '../services/WMTSService';
+import CircularProgress from 'material-ui/CircularProgress';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 import classNames from 'classnames';
@@ -169,6 +170,7 @@ class AddLayerModal extends React.Component {
     this._proxy = context.proxy;
     this._muiTheme = context.muiTheme || getMuiTheme();
     this.state = {
+      loading: false,
       sources: this.props.sources.slice(),
       newType: AddLayerModal.addNewTypes[0],
       newModalOpen: false,
@@ -201,6 +203,7 @@ class AddLayerModal extends React.Component {
     'WMTS': WMTSService
   };
   _getCaps(onFailure) {
+    this.setState({loading: true, layerInfo: null});
     var source = this.state.sources[this.state.source];
     var url = source.url;
     var service = AddLayerModal.services[source.type];
@@ -220,12 +223,13 @@ class AddLayerModal extends React.Component {
     var successCb = function(layerInfo, onlineResource) {
       delete me._request;
       source.getMapUrl = onlineResource;
-      me.setState({layerInfo: layerInfo});
+      me.setState({loading: false, layerInfo: layerInfo});
     };
     me._request = service.getCapabilities(url, successCb, failureCb, this._proxy);
   }
   _setError(msg) {
     this.setState({
+      loading: false,
       errorOpen: true,
       error: true,
       layerInfo: null,
@@ -439,6 +443,10 @@ class AddLayerModal extends React.Component {
       var layerInfo = this._getLayersMarkup(this.state.layerInfo);
       layers = <List>{layerInfo}</List>;
     }
+    var loadingIndicator;
+    if (this.state.loading === true) {
+      loadingIndicator = (<CircularProgress size={50} thickness={3} />);
+    }
     var error;
     if (this.state.error === true) {
       error = (<Snackbar
@@ -470,6 +478,7 @@ class AddLayerModal extends React.Component {
         </Dialog>
         <TextField floatingLabelText={formatMessage(messages.filtertitle)} onChange={this._onFilterChange.bind(this)} />
         {layers}
+        {loadingIndicator}
         {error}
       </Dialog>
     );
