@@ -103,4 +103,10 @@ describe('MapConfigTransfrormService', function() {
     assert.equal(JSON.stringify(output), JSON.stringify(expectedFromWrite));
   });
 
+  it('transforms OSM as base', function() {
+    var config = {'sources': {'0': {'ptype': 'gxp_osmsource'}}, 'map': {'projection': 'EPSG:3857', 'layers': [{'opacity': 1.0, 'name': 'mapnik', 'title': 'OSM Streets', 'visibility': true, 'source': '0', 'fixed': false}]}};
+    var result = MapConfigTransformService.transform(config);
+    assert.equal(result.layers[0].properties.type, 'base');
+  });
+
 });
