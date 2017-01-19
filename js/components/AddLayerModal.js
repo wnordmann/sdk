@@ -225,9 +225,6 @@ class AddLayerModal extends React.Component {
       source.getMapUrl = onlineResource;
       me.setState({loading: false, layerInfo: layerInfo});
     };
-    if (url.indexOf('http://') === -1 && url.indexOf('https://') === -1 && url[0] !== '/') {
-      url = 'http://' + url;
-    }
     me._request = service.getCapabilities(url, successCb, failureCb, this._proxy);
   }
   _setError(msg) {
@@ -413,6 +410,9 @@ class AddLayerModal extends React.Component {
     var url = this.refs.newserverurl.getValue();
     var serverType = this.state.newType;
     var sources = this.state.sources.slice();
+    if (url.indexOf('http://') === -1 && url.indexOf('https://') === -1 && url[0] !== '/') {
+      url = 'http://' + url;
+    }
     sources.push({
       title: name,
       type: serverType,
