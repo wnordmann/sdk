@@ -60,7 +60,8 @@ class WMSService {
       url: url,
       wrapX: layer.Layer ? true : false,
       params: {
-        LAYERS: layer.Name
+        LAYERS: layer.Name,
+        TILED: true
       }
     });
     return new ol.layer.Tile({
