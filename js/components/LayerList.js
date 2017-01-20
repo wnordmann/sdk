@@ -165,7 +165,8 @@ class LayerList extends React.Component {
       sources: React.PropTypes.arrayOf(React.PropTypes.shape({
         title: React.PropTypes.string.isRequired,
         type: React.PropTypes.string.isRequired,
-        url: React.PropTypes.string.isRequired
+        url: React.PropTypes.string.isRequired,
+        properties: React.PropTypes.object
       })),
       allowUserInput: React.PropTypes.bool
     }),

@@ -237,7 +237,8 @@ class AddLayerModal extends React.Component {
     });
   }
   _getStyleName(olLayer) {
-    var url = this.state.sources[this.state.source].url;
+    var source = this.state.sources[this.state.source];
+    var url = source.properties && source.properties.restUrl ? source.properties.restUrl : source.url;
     RESTService.getStyleName(url, olLayer, function(styleName) {
       olLayer.set('styleName', styleName);
     }, function() {

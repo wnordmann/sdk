@@ -109,7 +109,7 @@ describe('MapConfigTransfrormService', function() {
     assert.equal(result.layers[0].properties.type, 'base');
   });
 
-  it('transform bbox and srs', function() {
+  it('transform bbox and srs, sets restUrl', function() {
     var config = {'sources': {'0': {'url': 'http://localhost:8080/geoserver/wms?access_token=ukWu6HOCHR224vPkAAQpovkt92EzfH', 'restUrl': '/gs/rest', 'ptype': 'gxp_wmscsource'}}, 'map': {'layers': [{'name': 'geonode:lakes', 'title': 'lakes', 'selected': true, 'visibility': true, 'srs': 'EPSG:900913', 'bbox': [-17997514.561634004, 7832753.531507975, -16274934.036978573, 11314569.49881123], 'queryable': true, 'source': '0'}], 'center': [0.0, -7.081154550627918e-10], 'units': 'm', 'maxResolution': 156543.03390625, 'maxExtent': [-20037508.34, -20037508.34, 20037508.34, 20037508.34], 'zoom': 0, 'projection': 'EPSG:900913'}};
     var result = MapConfigTransformService.transform(config);
     var llbbox = result.layers[0].properties.EX_GeographicBoundingBox;
@@ -117,6 +117,7 @@ describe('MapConfigTransfrormService', function() {
     assert.equal(llbbox[1], 57.3536776296163);
     assert.equal(llbbox[2], -146.20021993454876);
     assert.equal(llbbox[3], 70.74182851113349);
+    assert.equal(result.layers[0].properties.restUrl, '/gs/rest');
   });
 
 });
