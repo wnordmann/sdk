@@ -10,6 +10,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
+import ol from 'openlayers';
+
 var sourceIdx;
 
 const baseMapTitle = 'Base Maps';
@@ -224,6 +226,11 @@ class MapConfigTransformService {
           layerConfig.properties.styleName = layer.capability.styles[0].name;
           layerConfig.properties.legendUrl = layer.capability.styles[0].legend.href;
           layerConfig.properties.EX_GeographicBoundingBox = layer.capability.llbbox;
+        }
+        if (!layerConfig.properties.EX_GeographicBoundingBox) {
+          if (layer.bbox && layer.srs && ol.proj.get(layer.srs)) {
+            layerConfig.properties.EX_GeographicBoundingBox = ol.proj.transformExtent(layer.bbox, layer.srs, 'EPSG:4326');
+          }
         }
         layerConfig.type = 'Tile';
         var params = layer.params || {};
