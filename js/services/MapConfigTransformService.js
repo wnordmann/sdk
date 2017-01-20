@@ -24,9 +24,8 @@ class MapConfigTransformService {
   _writeLayer(config, sources, layers, group) {
     var key;
     var layerConfig = {};
-    if (config.properties.name) {
-      layerConfig.name = config.properties.name;
-    }
+    // name is mandatory
+    layerConfig.name = config.properties.name || config.properties.title.split(' ').join('_');
     layerConfig.title = config.properties.title;
     layerConfig.visibility = config.properties.visible;
     if (group) {
