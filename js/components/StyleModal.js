@@ -178,7 +178,7 @@ class StyleModal extends React.Component {
     var sld = SLDService.createSLD(this.props.layer, this.state.geometryType, [{
       rules: this.state.rules
     }]);
-    var url = this.props.layer.getSource().getUrls()[0];
+    var url = this.props.layer.get('restUrl') ? this.props.layer.get('restUrl') : this.props.layer.getSource().getUrls()[0];
     if (this.props.layer.get('styleName')) {
       RESTService.updateStyle(url, this.props.layer, sld, function(xmlhttp) {
         me.close();
