@@ -379,7 +379,7 @@ class FeatureTable extends React.Component {
         msg: formatMessage(messages.loaderrormsg, {msg: msg || (xmlhttp.status + ' ' + xmlhttp.statusText)}),
         loading: false
       });
-    }, this);
+    }, this, this._proxy);
   }
   _onExpandChange(expanded) {
     var me = this;

@@ -158,7 +158,7 @@ class WFSService {
       onFailure.call(scope || this, xmlhttp);
     }, this);
   }
-  loadFeatures(layer, startIndex, maxFeatures, sortingInfo, srsName, onSuccess, onFailure) {
+  loadFeatures(layer, startIndex, maxFeatures, sortingInfo, srsName, onSuccess, onFailure, opt_proxy) {
     var wfsInfo = layer.get('wfsInfo');
     var url = wfsInfo.url;
     var urlObj = new URL(url);
@@ -175,7 +175,7 @@ class WFSService {
       params.sortBy = sortingInfo[0].id + ' ' + (sortingInfo[0].asc ? 'A' : 'D');
     }
     urlObj.set('query', params);
-    util.doGET(urlObj.toString(), function(xmlhttp) {
+    util.doGET(util.getProxiedUrl(urlObj.toString(), opt_proxy), function(xmlhttp) {
       var data = xmlhttp.responseXML;
       if (data !== null) {
         this.readResponse(data, xmlhttp, function(data) {

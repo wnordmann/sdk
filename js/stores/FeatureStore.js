@@ -211,7 +211,7 @@ class FeatureStore extends EventEmitter {
     this._config[id].features.clear();
     this._config[id].features.addFeatures(features);
   }
-  loadFeatures(layer, startIndex, pageSize, sortingInfo, onSuccess, onFailure, scope) {
+  loadFeatures(layer, startIndex, pageSize, sortingInfo, onSuccess, onFailure, scope, opt_proxy) {
     var srsName = this._map.getView().getProjection().getCode();
     var me = this;
     var success = function(features) {
@@ -239,7 +239,7 @@ class FeatureStore extends EventEmitter {
     if (layer.getSource() instanceof ol.source.TileArcGISRest) {
       ArcGISRestService.loadFeatures(layer, startIndex, pageSize, sortingInfo, srsName, success, failure);
     } else {
-      WFSService.loadFeatures(layer, startIndex, pageSize, sortingInfo, srsName, success, failure);
+      WFSService.loadFeatures(layer, startIndex, pageSize, sortingInfo, srsName, success, failure, opt_proxy);
     }
   }
   bindLayer(layer) {
