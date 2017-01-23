@@ -152,10 +152,10 @@ class WFSService {
           url: url.replace('wms', 'wfs')
         });
       } else {
-        onFailure.call(scope || this);
+        onFailure.call(scope || this, xmlhttp);
       }
     }, function(xmlhttp) {
-      onFailure.call(scope || this);
+      onFailure.call(scope || this, xmlhttp);
     }, this);
   }
   loadFeatures(layer, startIndex, maxFeatures, sortingInfo, srsName, onSuccess, onFailure) {
@@ -183,10 +183,10 @@ class WFSService {
           onSuccess.call(this, features);
         }, onFailure);
       } else {
-        onFailure.call(this);
+        onFailure.call(this, xmlhttp);
       }
     }, function(xmlhttp) {
-      onFailure.call(this);
+      onFailure.call(this, xmlhttp);
     }, this);
   }
   getNumberOfFeatures(layer, callback) {
@@ -244,7 +244,7 @@ class WFSService {
       if (features.length > 0) {
         onSuccess.call(this, features[0]);
       } else if (onFailure) {
-        onFailure.call(this);
+        onFailure.call(this, xmlhttp);
       }
     }, onFailure);
   }
