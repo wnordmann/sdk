@@ -47,7 +47,7 @@ class WMSService {
       onFailure.call(this, xmlhttp);
     }, this);
   }
-  createLayer(layer, url, titleObj, projection) {
+  createLayer(layer, url, titleObj, projection, opt_proxy) {
     var getLegendUrl = function(layer) {
       if (layer.Style && layer.Style.length === 1) {
         if (layer.Style[0].LegendURL && layer.Style[0].LegendURL.length >= 1) {
@@ -64,6 +64,16 @@ class WMSService {
         TILED: true
       }
     });
+    if (opt_proxy) {
+      source.once('tileloaderror', function() {
+        source.setTileLoadFunction((function() {
+          var tileLoadFn = source.getTileLoadFunction();
+          return function(tile, src) {
+            tileLoadFn(tile, util.getProxiedUrl(src, opt_proxy));
+          };
+        })());
+      });
+    }
     return new ol.layer.Tile({
       title: titleObj.title,
       emptyTitle: titleObj.empty,
