@@ -11,11 +11,12 @@
  */
 
 import ol from 'openlayers';
+import util from '../util';
 import LayerIdService from './LayerIdService';
 import WFSService from './WFSService';
 
 class MapConfigService {
-  generateSourceFromConfig(config) {
+  generateSourceFromConfig(config, opt_proxy) {
     var props = config.properties || {};
     if (props.attributions) {
       var attributions = [];
@@ -28,7 +29,7 @@ class MapConfigService {
     }
     props.wrapX = false;
     if (config.type === 'Cluster') {
-      props.source = this.generateSourceFromConfig(config.source);
+      props.source = this.generateSourceFromConfig(config.source, opt_proxy);
     }
     if (config.type === 'Vector') {
       props.format = (props.format.type === 'GeoJSON') ? new ol.format.GeoJSON() : undefined;
@@ -56,6 +57,16 @@ class MapConfigService {
       return source;
     }
     var sourceObj = new ol.source[config.type](props);
+    if (opt_proxy && config.type === 'TileWMS') {
+      sourceObj.once('tileloaderror', function() {
+        sourceObj.setTileLoadFunction((function() {
+          var tileLoadFn = sourceObj.getTileLoadFunction();
+          return function(tile, src) {
+            tileLoadFn(tile, util.getProxiedUrl(src, opt_proxy));
+          };
+        })());
+      });
+    }
     return sourceObj;
   }
   generateLayerFromConfig(config, opt_proxy) {
@@ -71,7 +82,7 @@ class MapConfigService {
     var layer = new ol.layer[type](layerConfig);
     var sourceConfig = config.source;
     if (sourceConfig) {
-      var source = this.generateSourceFromConfig(sourceConfig);
+      var source = this.generateSourceFromConfig(sourceConfig, opt_proxy);
       if (source instanceof ol.source.TileWMS && !layer.get('wfsInfo')) {
         WFSService.describeFeatureType(sourceConfig.properties.urls[0], layerConfig.name, function(wfsInfo) {
           this.set('wfsInfo', wfsInfo);
