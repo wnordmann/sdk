@@ -131,7 +131,7 @@ class Bookmarks extends React.Component {
         menu: false,
         showMarker: true,
         markerUrl: './resources/marker.png',
-        wrapAround: true
+        wrapAround: true,
         width: '400px'
     };
 
