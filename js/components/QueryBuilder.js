@@ -111,7 +111,8 @@ class QueryBuilder extends React.Component {
   };
 
   static contextTypes = {
-    muiTheme: React.PropTypes.object
+    muiTheme: React.PropTypes.object,
+    proxy: React.PropTypes.string
   };
 
   static childContextTypes = {
@@ -121,7 +122,8 @@ class QueryBuilder extends React.Component {
   constructor(props, context) {
     super(props);
     this._muiTheme = context.muiTheme || getMuiTheme();
-    FeatureStore.bindMap(this.props.map);
+    this._proxy = context.proxy;
+    FeatureStore.bindMap(this.props.map, this._proxy);
     this.state = {
       showCount: false,
       errorText: null

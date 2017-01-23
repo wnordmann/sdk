@@ -94,7 +94,7 @@ class FeatureStore extends EventEmitter {
       }
     }
   }
-  bindMap(map) {
+  bindMap(map, opt_proxy) {
     if (this._map !== map) {
       this._map = map;
       var me = this;
@@ -126,7 +126,7 @@ class FeatureStore extends EventEmitter {
       var layers = LayerStore.getState().flatLayers;
       for (var i = 0, ii = layers.length; i < ii; ++i) {
         if (layers[i] instanceof ol.layer.Vector) {
-          this.addLayer(layers[i]);
+          this.addLayer(layers[i], opt_proxy);
         }
       }
     }
@@ -165,7 +165,7 @@ class FeatureStore extends EventEmitter {
     var features = this._config[id].features.getFeatures();
     return features.slice(page * pageSize, page * pageSize + pageSize);
   }
-  addLayer(layer, filter) {
+  addLayer(layer, filter, opt_proxy) {
     var id = layer.get('id');
     if (!this._config[id]) {
       this._config[id] = {
@@ -186,7 +186,7 @@ class FeatureStore extends EventEmitter {
           WFSService.getNumberOfFeatures(layer, function(count) {
             layer.set('numberOfFeatures', count);
             layer.set('loading', false);
-          });
+          }, opt_proxy);
         }
       }
     }
@@ -211,7 +211,7 @@ class FeatureStore extends EventEmitter {
     this._config[id].features.clear();
     this._config[id].features.addFeatures(features);
   }
-  loadFeatures(layer, startIndex, pageSize, sortingInfo, onSuccess, onFailure, scope) {
+  loadFeatures(layer, startIndex, pageSize, sortingInfo, onSuccess, onFailure, scope, opt_proxy) {
     var srsName = this._map.getView().getProjection().getCode();
     var me = this;
     var success = function(features) {
@@ -239,7 +239,7 @@ class FeatureStore extends EventEmitter {
     if (layer.getSource() instanceof ol.source.TileArcGISRest) {
       ArcGISRestService.loadFeatures(layer, startIndex, pageSize, sortingInfo, srsName, success, failure);
     } else {
-      WFSService.loadFeatures(layer, startIndex, pageSize, sortingInfo, srsName, success, failure);
+      WFSService.loadFeatures(layer, startIndex, pageSize, sortingInfo, srsName, success, failure, opt_proxy);
     }
   }
   bindLayer(layer) {
