@@ -1,4 +1,4 @@
-# Tutorial
+cd# Tutorial
 
 ## 1. Using the generator
 In the getting started section we have learned how to create a skeleton application with the ```web-sdk``` command.
@@ -131,6 +131,8 @@ import LayerList from 'boundless-sdk/js/components/LayerList.jsx';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import enLocaleData from 'react-intl/locale-data/en.js';
 import enMessages from 'boundless-sdk/locale/en.js';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
 
 // Needed for onTouchTap
 // Can go away when react 1.0 release
