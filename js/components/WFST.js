@@ -150,7 +150,8 @@ class WFST extends React.Component {
   };
 
   static contextTypes = {
-    muiTheme: React.PropTypes.object
+    muiTheme: React.PropTypes.object,
+    proxy: React.PropTypes.string
   };
 
   static childContextTypes = {
@@ -166,9 +167,10 @@ class WFST extends React.Component {
 
   constructor(props, context) {
     super(props);
+    this._proxy = context.proxy;
     this._dispatchToken2 = ToolUtil.register(this);
     var me = this;
-    FeatureStore.bindMap(this.props.map);
+    FeatureStore.bindMap(this.props.map, this._proxy);
     this._dispatchToken = AppDispatcher.register((payload) => {
       let action = payload.action;
       switch (action.type) {

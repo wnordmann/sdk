@@ -72,7 +72,8 @@ class Select extends React.Component {
   };
 
   static contextTypes = {
-    muiTheme: React.PropTypes.object
+    muiTheme: React.PropTypes.object,
+    proxy: React.PropTypes.string
   };
 
   static childContextTypes = {
@@ -83,7 +84,8 @@ class Select extends React.Component {
     super(props);
     this._dispatchToken = ToolUtil.register(this);
     this._muiTheme = context.muiTheme || getMuiTheme();
-    FeatureStore.bindMap(this.props.map);
+    this._proxy = context.proxy;
+    FeatureStore.bindMap(this.props.map, this._proxy);
     Select.interactions.RECTANGLE.on('boxend', this._onBoxEnd, this);
     this.state = {
       disabled: false,

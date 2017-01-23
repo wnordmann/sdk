@@ -189,7 +189,7 @@ class WFSService {
       onFailure.call(this, xmlhttp);
     }, this);
   }
-  getNumberOfFeatures(layer, callback) {
+  getNumberOfFeatures(layer, callback, opt_proxy) {
     if (layer.get('numberOfFeatures') === undefined) {
       var wfsInfo = layer.get('wfsInfo');
       var url = wfsInfo.url;
@@ -201,7 +201,7 @@ class WFSService {
         version: '1.1.0',
         typename: wfsInfo.featureType
       });
-      util.doGET(urlObj.toString(), function(xmlhttp) {
+      util.doGET(util.getProxiedUrl(urlObj.toString(), opt_proxy), function(xmlhttp) {
         var info = wfsFormat.readFeatureCollectionMetadata(xmlhttp.responseXML);
         callback.call(this, info.numberOfFeatures);
       });
