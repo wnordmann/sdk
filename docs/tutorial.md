@@ -1,4 +1,4 @@
-cd# Tutorial
+# Tutorial
 
 ## 1. Using the generator
 In the getting started section we have learned how to create a skeleton application with the ```web-sdk``` command.
