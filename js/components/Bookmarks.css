@@ -1,10 +1,10 @@
 .slick-prev:before, .slick-next:before {
   color: grey;
 }
-/*.slider-frame {
-  max-height: 450px;
-  max-width: 450px;
-}*/
+.slider-frame {
+  max-height: 400px;
+  max-width: 400px;
+}
 .story-panel {
   display: block;
   position: absolute;
