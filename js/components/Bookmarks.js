@@ -324,9 +324,8 @@ class Bookmarks extends React.Component {
                     <Carousel {...this.props}
                       decorators={Decorators}
                       arrows={true}
-                      afterChange={this._afterChange.bind(this)}
-                      framePadding="0px 20px 38px 20px"
-                      initialSlideHeight={401}>
+                      afterSlide={this._afterChange.bind(this)}
+                      framePadding="0px 20px 38px 20px">
                         {carouselChildren}
                     </Carousel>
                 </div>
