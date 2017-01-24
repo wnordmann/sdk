@@ -23,7 +23,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Carousel from 'nuka-carousel';
 
 import './Bookmarks.css';
-// import './slick.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import classNames from 'classnames';
 import pureRender from 'pure-render-decorator';
