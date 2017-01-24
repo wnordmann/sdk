@@ -16,7 +16,6 @@ import ToolUtil from '../toolutil';
 import RaisedButton from './Button';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import classNames from 'classnames';
-import pureRender from 'pure-render-decorator';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const messages = defineMessages({
@@ -42,8 +41,7 @@ const messages = defineMessages({
  * ![Navigation](../Navigation.png)
  * ![Navigation Active](../NavigationActive.png)
  */
-@pureRender
-class Navigation extends React.Component {
+class Navigation extends React.PureComponent {
   static propTypes = {
     /**
      * Should the button have the secondary state initially (pressed)?

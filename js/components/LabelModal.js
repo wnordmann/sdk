@@ -16,7 +16,6 @@ import Dialog from 'material-ui/Dialog';
 import Button from './Button';
 import classNames from 'classnames';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
-import pureRender from 'pure-render-decorator';
 import util from '../util';
 import LabelEditor from './LabelEditor';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -51,8 +50,7 @@ const messages = defineMessages({
  * <LabelModal layer={this.props.layer} />
  * ```
  */
-@pureRender
-class LabelModal extends React.Component {
+class LabelModal extends React.PureComponent {
   static propTypes = {
     /**
      * Css class name to apply on the root element of this component.

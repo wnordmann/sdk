@@ -16,7 +16,6 @@ import Dialog from 'material-ui/Dialog';
 import Snackbar from 'material-ui/Snackbar';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import RefreshIcon from 'material-ui/svg-icons/navigation/refresh';
-import pureRender from 'pure-render-decorator';
 import TextField from 'material-ui/TextField';
 import Button from './Button';
 import MenuItem from 'material-ui/MenuItem';
@@ -123,8 +122,7 @@ const messages = defineMessages({
  *
  * ![Add Layer Modal](../AddLayerModal.png)
  */
-@pureRender
-class AddLayerModal extends React.Component {
+class AddLayerModal extends React.PureComponent {
   static propTypes = {
     /**
      * The ol3 map to add layers to.

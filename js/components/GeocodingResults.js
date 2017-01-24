@@ -18,7 +18,6 @@ import AppDispatcher from '../dispatchers/AppDispatcher';
 import {List, ListItem} from 'material-ui/List';
 import GeocodingConstants from '../constants/GeocodingConstants';
 import GeocodingActions from '../actions/GeocodingActions';
-import pureRender from 'pure-render-decorator';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Paper from 'material-ui/Paper';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -39,8 +38,7 @@ const messages = defineMessages({
  * <GeocodingResults map={map} />
  * ```
  */
-@pureRender
-class GeocodingResults extends React.Component {
+class GeocodingResults extends React.PureComponent {
   static propTypes = {
     /**
      * The ol3 map on whose view to perform the center action.

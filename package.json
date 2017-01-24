@@ -69,7 +69,6 @@
     "ogc-schemas": "^2.6.0",
     "ol3-cesium": "3.9.4",
     "openlayers": "3.19.0",
-    "pure-render-decorator": "^1.1.1",
     "react-color": "2.8.0",
     "react-dnd": "^2.1.4",
     "react-dnd-html5-backend": "^2.1.2",

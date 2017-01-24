@@ -29,7 +29,6 @@ import ColorPicker from 'react-color';
 import classNames from 'classnames';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Paper from 'material-ui/Paper';
-import pureRender from 'pure-render-decorator';
 
 const NEW_ATTR_PREFIX = 'new-attr-';
 const ID_PREFIX = 'sdk-edit-';
@@ -159,8 +158,7 @@ const messages = defineMessages({
  * <Edit toggleGroup='navigation' map={map} />
  * ```
  */
-@pureRender
-class Edit extends React.Component {
+class Edit extends React.PureComponent {
   static propTypes = {
     /**
      * The map onto which to activate and deactivate the interactions.

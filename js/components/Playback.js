@@ -22,7 +22,6 @@ import Slider from 'material-ui/Slider';
 import DatePicker from 'material-ui/DatePicker';
 import LayerStore from '../stores/LayerStore';
 import {injectIntl, intlShape} from 'react-intl';
-import pureRender from 'pure-render-decorator';
 
 /**
  * Adds a slider to the map that can be used to select a given date, and modifies the visibility of layers and features depending on their timestamp and the current time.
@@ -31,8 +30,7 @@ import pureRender from 'pure-render-decorator';
  * <Playback map={map} minDate={324511200000} maxDate={1385938800000} />
  * ```
  */
-@pureRender
-class Playback extends React.Component {
+class Playback extends React.PureComponent {
   static propTypes = {
     /**
      * The map whose time-enabled layers should be filtered. Time-enabled layers are layers that have a timeInfo property.

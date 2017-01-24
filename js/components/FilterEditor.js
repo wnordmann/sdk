@@ -14,7 +14,6 @@ import React from 'react';
 import classNames from 'classnames';
 import TextField from 'material-ui/TextField';
 import FilterService from '../services/FilterService';
-import pureRender from 'pure-render-decorator';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
@@ -43,8 +42,7 @@ const messages = defineMessages({
  * <FilterEditor onChange={this._onChange.bind(this)} initialExpression={expression} />
  * ```
  */
-@pureRender
-class FilterEditor extends React.Component {
+class FilterEditor extends React.PureComponent {
   static propTypes = {
     /**
      * Callback that is called when a change is made.

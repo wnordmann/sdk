@@ -17,7 +17,6 @@ import GeocodingActions from '../actions/GeocodingActions';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import classNames from 'classnames';
 import TextField from 'material-ui/TextField';
-import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   placeholder: {
@@ -34,8 +33,7 @@ const messages = defineMessages({
  * <Geocoding maxResult={50} />
  * ```
  */
-@pureRender
-class Geocoding extends React.Component {
+class Geocoding extends React.PureComponent {
   static propTypes = {
     /**
      * The maximum number of results to return on a search.

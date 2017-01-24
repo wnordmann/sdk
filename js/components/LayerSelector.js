@@ -14,7 +14,6 @@ import React from 'react';
 import ol from 'openlayers';
 import classNames from 'classnames';
 import LayerStore from '../stores/LayerStore';
-import pureRender from 'pure-render-decorator';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -43,8 +42,7 @@ const messages = defineMessages({
  * ![Layer Selector](../LayerSelector.png)
  * ![Opened Layer Selector](../LayerSelectorOpen.png)
  */
-@pureRender
-class LayerSelector extends React.Component {
+class LayerSelector extends React.PureComponent {
   static propTypes = {
     /**
      * The map from which to extract the layers.

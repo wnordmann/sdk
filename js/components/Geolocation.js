@@ -15,7 +15,6 @@ import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import classNames from 'classnames';
-import pureRender from 'pure-render-decorator';
 import Snackbar from 'material-ui/Snackbar';
 import Button from './Button';
 import MyLocation from 'material-ui/svg-icons/maps/my-location';
@@ -50,8 +49,7 @@ const messages = defineMessages({
  * ![Geolocation marker](../Geolocation_marker.png)
  *
  */
-@pureRender
-class Geolocation extends React.Component {
+class Geolocation extends React.PureComponent {
   static propTypes = {
     /**
      * The ol3 map for which to change its view's center.

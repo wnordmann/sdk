@@ -18,7 +18,6 @@ import {ToolbarGroup} from 'material-ui/Toolbar';
 import Snackbar from 'material-ui/Snackbar';
 import MapConfigService from '../services/MapConfigService';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   savetext: {
@@ -74,8 +73,7 @@ const localStorageKey = 'web-sdk-map-config';
  *
  * ![MapConfig](../MapConfig.png)
  */
-@pureRender
-class MapConfig extends React.Component {
+class MapConfig extends React.PureComponent {
   static propTypes = {
     /**
      * The ol3 map to save the layers from.

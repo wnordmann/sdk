@@ -19,7 +19,6 @@ import ToolActions from '../actions/ToolActions';
 import classNames from 'classnames';
 import Button from './Button';
 import GlobeIcon from 'material-ui/svg-icons/action/three-d-rotation';
-import pureRender from 'pure-render-decorator';
 import olcs from 'ol3-cesium';
 
 const messages = defineMessages({
@@ -47,8 +46,7 @@ const messages = defineMessages({
  * <Globe map={map} />
  * ```
  */
-@pureRender
-class Globe extends React.Component {
+class Globe extends React.PureComponent {
   static propTypes = {
     /**
      * Resolution at which to hide the scalebar in 3D mode

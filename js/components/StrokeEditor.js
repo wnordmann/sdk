@@ -16,7 +16,6 @@ import classNames from 'classnames';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import TextField from 'material-ui/TextField';
 import Label from './Label';
-import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   strokewidthlabel: {
@@ -38,8 +37,7 @@ const messages = defineMessages({
  * <StrokeEditor onChange={this.props.onChange} initialStrokeColor={this.props.initialState.strokeColor} initialStrokeWidth={5} />
  * ```
  */
-@pureRender
-class StrokeEditor extends React.Component {
+class StrokeEditor extends React.PureComponent {
   static propTypes = {
     /**
      * Callback that is called when a change is made.

@@ -22,7 +22,6 @@ import FeatureStore from '../stores/FeatureStore';
 import RaisedButton from './Button';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   menubuttontext: {
@@ -46,8 +45,7 @@ const messages = defineMessages({
  *
  * ![Select](../Select.png)
  */
-@pureRender
-class Select extends React.Component {
+class Select extends React.PureComponent {
   static propTypes = {
     /**
      * The map onto which to activate and deactivate the interactions.

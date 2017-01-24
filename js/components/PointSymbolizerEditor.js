@@ -21,7 +21,6 @@ import SelectField from 'material-ui/SelectField';
 import Paper from 'material-ui/Paper';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
-import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   filllabel: {
@@ -77,8 +76,7 @@ const symboltypes = [
  * <PointSymbolizerEditor onChange={this.props.onChange} initialState={this.props.initialState} />
  * ```
  */
-@pureRender
-class PointSymbolizerEditor extends React.Component {
+class PointSymbolizerEditor extends React.PureComponent {
   static propTypes = {
     /**
      * Callback that is called when a change is made.

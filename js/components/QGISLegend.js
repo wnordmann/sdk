@@ -21,7 +21,6 @@ import Paper from 'material-ui/Paper';
 import {List, ListItem} from 'material-ui/List';
 import './QGISLegend.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   buttontitle: {
@@ -61,8 +60,7 @@ const messages = defineMessages({
  * <QGISLegend map={map} legendBasePath='./resources/legend/' legendData={legendData} pullRight/>
  * ```
  */
-@pureRender
-class QGISLegend extends React.Component {
+class QGISLegend extends React.PureComponent {
   static propTypes = {
     /**
      * The map from which to extract the layers.

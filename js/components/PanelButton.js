@@ -14,7 +14,6 @@ import React from 'react';
 import classNames from 'classnames';
 import Button from './Button';
 import Paper from 'material-ui/Paper';
-import pureRender from 'pure-render-decorator';
 
 /**
  * A component that shows a panel on click of a button.
@@ -23,8 +22,7 @@ import pureRender from 'pure-render-decorator';
  * <PanelButton className='legenddiv' contentClassName='legendcontent' buttonClassName='legend-button' icon={<LegendIcon />} tooltipPosition='top-left' buttonTitle='Show legend' map={map} content={<Legend map={map} />}/>
  * ```
  */
-@pureRender
-class PanelButton extends React.Component {
+class PanelButton extends React.PureComponent {
   static propTypes = {
     /**
      * Style for the button.

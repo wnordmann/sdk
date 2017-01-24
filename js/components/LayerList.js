@@ -33,7 +33,6 @@ import LayersIcon from 'material-ui/svg-icons/maps/layers';
 import BaseMapIcon from 'material-ui/svg-icons/maps/satellite';
 import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import pureRender from 'pure-render-decorator';
 import Paper from 'material-ui/Paper';
 import './LayerList.css';
 
@@ -69,8 +68,7 @@ const messages = defineMessages({
  *
  * ![Layer List](../LayerList.png)
  */
-@pureRender
-class LayerList extends React.Component {
+class LayerList extends React.PureComponent {
   static propTypes = {
     /**
      * The map whose layers should show up in this layer list.

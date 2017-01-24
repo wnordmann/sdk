@@ -16,7 +16,6 @@ import classNames from 'classnames';
 import AppDispatcher from '../dispatchers/AppDispatcher';
 import ToolConstants from '../constants/ToolConstants';
 import LayerStore from '../stores/LayerStore';
-import pureRender from 'pure-render-decorator';
 import CircularProgress from 'material-ui/CircularProgress';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import './LoadingPanel.css';
@@ -28,8 +27,7 @@ import './LoadingPanel.css';
  * <LoadingPanel map={map} />
  * ```
  */
-@pureRender
-class LoadingPanel extends React.Component {
+class LoadingPanel extends React.PureComponent {
   static propTypes = {
     /**
      * Css class name to apply on the root element of this component.

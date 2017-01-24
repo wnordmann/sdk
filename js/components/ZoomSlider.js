@@ -2,7 +2,6 @@ import React from 'react';
 import ol from 'openlayers';
 import debounce from  'debounce';
 import Slider from 'material-ui/Slider';
-import pureRender from 'pure-render-decorator';
 
 /**
  * Horizontal slider to allow zooming the map. Make sure that the containing div has a size.
@@ -11,8 +10,7 @@ import pureRender from 'pure-render-decorator';
  * <ZoomSlider map={map} />
  * ```
  */
-@pureRender
-export default class ZoomSlider extends React.Component {
+export default class ZoomSlider extends React.PureComponent {
   static propTypes = {
     /**
      * Refresh rate in ms for handling changes from the slider.

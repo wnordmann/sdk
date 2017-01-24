@@ -15,7 +15,6 @@ import ol from 'openlayers';
 import Button from './Button';
 import classNames from 'classnames';
 import NorthIcon from 'material-ui/svg-icons/maps/navigation';
-import pureRender from 'pure-render-decorator';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 const messages = defineMessages({
@@ -35,8 +34,7 @@ const messages = defineMessages({
  *
  * ![Rotate](../Rotate.png)
  */
-@pureRender
-class Rotate extends React.Component {
+class Rotate extends React.PureComponent {
   static propTypes = {
     /**
      * Animation duration in milliseconds.

@@ -18,7 +18,6 @@ import SelectField from 'material-ui/SelectField';
 import TextField from 'material-ui/TextField';
 import Label from './Label';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
-import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   attributelabel: {
@@ -50,8 +49,7 @@ const messages = defineMessages({
  * <LabelEditor attributes={this.props.attributes} onChange={this.props.onChange} />
  * ```
  */
-@pureRender
-class LabelEditor extends React.Component {
+class LabelEditor extends React.PureComponent {
   static propTypes = {
     /**
      * List of attributes.

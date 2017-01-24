@@ -19,7 +19,6 @@ import MenuItem from 'material-ui/MenuItem';
 import LayerActions from '../actions/LayerActions';
 import Button from './Button';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
-import pureRender from 'pure-render-decorator';
 import RuleEditor from './RuleEditor';
 import SLDService from '../services/SLDService';
 import OpenLayersService from '../services/OpenLayersService';
@@ -82,8 +81,7 @@ const messages = defineMessages({
  * <StyleModal layer={this.props.layer} />
  * ```
  */
-@pureRender
-class StyleModal extends React.Component {
+class StyleModal extends React.PureComponent {
   static propTypes = {
     /**
      * The layer associated with the style modal.
