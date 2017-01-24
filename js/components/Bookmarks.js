@@ -64,10 +64,7 @@ class Bookmarks extends React.Component {
             description: React.PropTypes.string.isRequired,
             extent: React.PropTypes.arrayOf(React.PropTypes.number).isRequired
         })).isRequired,
-        /**
-     * Should we show indicators? These are dots to navigate the bookmark pages.
-     */
-        dots: React.PropTypes.bool,
+
         /**
      * Should the scroller auto scroll?
      */
@@ -84,6 +81,10 @@ class Bookmarks extends React.Component {
      * The duration of the animation in milleseconds. Only relevant if animatePanZoom is true.
      */
         animationDuration: React.PropTypes.number,
+        /**
+     * Should we show indicators? These are dots to navigate the bookmark pages.
+     */
+        dots: React.PropTypes.bool,
         /**
      * The title on the introduction (first) page of the bookmarks.
      */
@@ -124,7 +125,9 @@ class Bookmarks extends React.Component {
 
     static defaultProps = {
         autoplay: false,
+        autoplayInterval: 3000,
         animatePanZoom: true,
+        dots: true,
         introTitle: '',
         introDescription: '',
         animationDuration: 500,
@@ -137,7 +140,6 @@ class Bookmarks extends React.Component {
 
     constructor(props) {
         super(props);
-        //this.props.speed = this.props.autoplaySpeed;
         var view = this.props.map.getView();
         this._center = view.getCenter();
         this._resolution = view.getResolution();
@@ -278,6 +280,10 @@ class Bookmarks extends React.Component {
     ];
 
     render() {
+        let carouselProps = Object.assign({}, this.props);
+
+        carouselProps.autoplayInterval = this.props.autoplaySpeed;
+
         const {formatMessage} = this.props.intl;
         let Decorators = this._decorator;
 
@@ -321,7 +327,7 @@ class Bookmarks extends React.Component {
             }
             return (
                 <div className={classNames('sdk-component story-panel', this.props.className)}>
-                    <Carousel {...this.props}
+                    <Carousel {...carouselProps}
                       decorators={Decorators}
                       arrows={true}
                       afterSlide={this._afterChange.bind(this)}
