@@ -67,59 +67,59 @@ class Bookmarks extends React.Component {
         /**
      * Should the scroller auto scroll?
      */
-        autoplay: React.PropTypes.bool,
-        /**
+      autoplay: React.PropTypes.bool,
+      /**
      * Delay between each auto scoll in ms.
      */
-        autoplaySpeed: React.PropTypes.number,
-        /**
+      autoplaySpeed: React.PropTypes.number,
+      /**
      * Should we animate the pan and zoom operation?
      */
-        animatePanZoom: React.PropTypes.bool,
-        /**
+      animatePanZoom: React.PropTypes.bool,
+      /**
      * The duration of the animation in milleseconds. Only relevant if animatePanZoom is true.
      */
-        animationDuration: React.PropTypes.number,
-        /**
+      animationDuration: React.PropTypes.number,
+      /**
      * Should we show indicators? These are dots to navigate the bookmark pages.
      */
-        dots: React.PropTypes.bool,
-        /**
+      dots: React.PropTypes.bool,
+      /**
      * The title on the introduction (first) page of the bookmarks.
      */
-        introTitle: React.PropTypes.string,
-        /**
+      introTitle: React.PropTypes.string,
+      /**
      * The description of the introduction (first) page of the bookmarks.
      */
-        introDescription: React.PropTypes.string,
-        /**
+      introDescription: React.PropTypes.string,
+      /**
      * @ignore
      */
-        intl: intlShape.isRequired,
-        /**
+      intl: intlShape.isRequired,
+      /**
      * Display as a menu drop down list.
      */
-        menu: React.PropTypes.bool,
-        /**
+      menu: React.PropTypes.bool,
+      /**
      * Should we display a marker for the bookmark?
      */
-        speed: React.PropTypes.number,
-        /**
-    *   Animation duration.
-    */
-        showMarker: React.PropTypes.bool,
-        /**
-     * Url to the marker image to use for bookmark position.
-     */
-        markerUrl: React.PropTypes.string,
-        /**
-     * Used to hardcode the slider width. Accepts any string dimension value such as "80%" or "500px".
-     */
-        width: React.PropTypes.string,
-        /**
-     * Sets infinite wrapAround mode. Defaults to true
-     */
-        wrapAround: React.PropTypes.bool
+      speed: React.PropTypes.number,
+      /**
+      *   Animation duration.
+      */
+      showMarker: React.PropTypes.bool,
+      /**
+      * Url to the marker image to use for bookmark position.
+      */
+      markerUrl: React.PropTypes.string,
+      /**
+      * Used to hardcode the slider width. Accepts any string dimension value such as "80%" or "500px".
+      */
+      width: React.PropTypes.string,
+      /**
+      * Sets infinite wrapAround mode. Defaults to true
+      */
+      wrapAround: React.PropTypes.bool
     };
 
     static defaultProps = {
