@@ -4,7 +4,6 @@ import FlatButton from 'material-ui/FlatButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import IconButton from 'material-ui/IconButton';
 import classNames from 'classnames';
-import pureRender from 'pure-render-decorator';
 
 /**
  * Button with built-in tooltip.
@@ -13,8 +12,7 @@ import pureRender from 'pure-render-decorator';
  * <Button buttonType='Flat' label='Close' tooltip='Close dialog' onTouchTap={this.close.bind(this)} />
  * ```
  */
-@pureRender
-class Button extends React.Component {
+class Button extends React.PureComponent {
   static propTypes = {
     /**
      * Type of button.

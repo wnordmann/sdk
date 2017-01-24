@@ -20,7 +20,6 @@ import './Bookmarks.css';
 import './slick.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import classNames from 'classnames';
-import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   dropdowntext: {
@@ -38,8 +37,7 @@ const messages = defineMessages({
  * <Bookmarks introTitle='Paris bakeries' introDescription='Explore the best bakeries of the capital of France' map={map} bookmarks={[{name: 'foo1', description: 'description1', extent: [259562, 6254560, 260675, 6256252]}, {name: 'foo2', description: 'description2', extent: [258703, 6248811, 259816, 6250503]}]} />
  * ```
  */
-@pureRender
-class Bookmarks extends React.Component {
+class Bookmarks extends React.PureComponent {
   static propTypes = {
     /**
      * The ol3 map instance on whose view we should navigate.

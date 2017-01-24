@@ -25,7 +25,6 @@ import DrawIcon from 'material-ui/svg-icons/image/brush';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import Snackbar from 'material-ui/Snackbar';
 import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
-import pureRender from 'pure-render-decorator';
 import EditForm from './EditForm';
 import WFSService from '../services/WFSService';
 import Paper from 'material-ui/Paper';
@@ -108,8 +107,7 @@ const messages = defineMessages({
  * <WFST map={map} />
  * ```
  */
-@pureRender
-class WFST extends React.Component {
+class WFST extends React.PureComponent {
   static propTypes = {
     /**
      * The ol3 map whose layers can be used for the WFS-T tool.

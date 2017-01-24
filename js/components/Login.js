@@ -21,7 +21,6 @@ import AppDispatcher from '../dispatchers/AppDispatcher';
 import LoginConstants from '../constants/LoginConstants';
 import AuthService from '../services/AuthService';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   buttontext: {
@@ -47,8 +46,7 @@ const messages = defineMessages({
  * ![Login Logged In](../LoginLoggedIn.png)
  * ![Login Logout](../LoginLogout.png)
  */
-@pureRender
-class Login extends React.Component {
+class Login extends React.PureComponent {
   static propTypes = {
     /**
      * Url to geoserver login endpoint.

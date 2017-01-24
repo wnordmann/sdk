@@ -21,7 +21,6 @@ import LineSymbolizerEditor from './LineSymbolizerEditor';
 import PointSymbolizerEditor from './PointSymbolizerEditor';
 import FilterEditor from './FilterEditor';
 import TextField from 'material-ui/TextField';
-import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   titlelabel: {
@@ -53,8 +52,7 @@ const messages = defineMessages({
  * <RuleEditor geometryType={this.state.geometryType} visible={rule.name === this.state.rule} key={key} initialState={symbol} onChange={this._onChange.bind(this)} attributes={this.state.attributes} />
  * ```
  */
-@pureRender
-class RuleEditor extends React.Component {
+class RuleEditor extends React.PureComponent {
   static propTypes = {
     /**
      * Are we visible or not?

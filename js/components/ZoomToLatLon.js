@@ -8,7 +8,6 @@ import Dialog from 'material-ui/Dialog';
 import Button from './Button';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import classNames from 'classnames';
-import pureRender from 'pure-render-decorator';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const messages = defineMessages({
@@ -117,8 +116,7 @@ const messages = defineMessages({
  * <ZoomToLatLon map={map} zoom={12} />
  * ```
  */
-@pureRender
-class ZoomToLatLon extends React.Component {
+class ZoomToLatLon extends React.PureComponent {
   static propTypes = {
     /**
      * The map onto which to zoom.

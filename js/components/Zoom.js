@@ -16,7 +16,6 @@ import classNames from 'classnames';
 import Button from './Button';
 import ZoomIn from 'material-ui/svg-icons/action/zoom-in';
 import ZoomOut from 'material-ui/svg-icons/action/zoom-out';
-import pureRender from 'pure-render-decorator';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
@@ -42,8 +41,7 @@ const messages = defineMessages({
  *
  * ![Zoom](../Zoom.png)
  */
-@pureRender
-class Zoom extends React.Component {
+class Zoom extends React.PureComponent {
   static propTypes = {
     /**
      * Animation duration in milliseconds.

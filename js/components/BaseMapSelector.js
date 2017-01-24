@@ -16,7 +16,6 @@ import classNames from 'classnames';
 import Button from './Button';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import BaseMapModal from './BaseMapModal';
-import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   buttontext: {
@@ -33,8 +32,7 @@ const messages = defineMessages({
  * <BaseMapSelector map={map} />
  * ```
  */
-@pureRender
-class BaseMapSelector extends React.Component {
+class BaseMapSelector extends React.PureComponent {
   static propTypes = {
     /**
      * The OpenLayers Map.

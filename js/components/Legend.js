@@ -14,7 +14,6 @@ import React from 'react';
 import ol from 'openlayers';
 import LayerStore from '../stores/LayerStore';
 import classNames from 'classnames';
-import pureRender from 'pure-render-decorator';
 import {List, ListItem} from 'material-ui/List';
 import WMSLegend from './WMSLegend';
 import Paper from 'material-ui/Paper';
@@ -45,8 +44,7 @@ const messages = defineMessages({
  *
  * ![Legend](../Legend.png)
  */
-@pureRender
-class Legend extends React.Component {
+class Legend extends React.PureComponent {
   static propTypes = {
     /**
      * Options to send to the WMS legend. See WMSLegend component.

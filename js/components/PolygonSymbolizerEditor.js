@@ -17,7 +17,6 @@ import Checkbox from 'material-ui/Checkbox';
 import FillEditor from './FillEditor';
 import StrokeEditor from './StrokeEditor';
 import Paper from 'material-ui/Paper';
-import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   filllabel: {
@@ -39,8 +38,7 @@ const messages = defineMessages({
  * <PolygonSymbolizerEditor onChange={this.props.onChange} initialState={this.props.initialState} />
  * ```
  */
-@pureRender
-class PolygonSymbolizerEditor extends React.Component {
+class PolygonSymbolizerEditor extends React.PureComponent {
   static propTypes = {
     /**
      * Callback that is called when a change is made.

@@ -26,7 +26,6 @@ import TextField from 'material-ui/TextField';
 import PrintIcon from 'material-ui/svg-icons/action/print';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   closebutton: {
@@ -109,8 +108,7 @@ const MM_PER_POINT = 0.352777778;
  * <QGISPrint map={map} layouts={printLayouts} />
  * ```
  */
-@pureRender
-class QGISPrint extends React.Component {
+class QGISPrint extends React.PureComponent {
   static propTypes = {
     /**
      * The ol3 map to use for printing.

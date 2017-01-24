@@ -40,7 +40,6 @@ import WMSLegend from './WMSLegend';
 import ArcGISRestLegend from './ArcGISRestLegend';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import pureRender from 'pure-render-decorator';
 
 const layerListItemSource = {
   canDrag(props, monitor) {
@@ -173,8 +172,7 @@ const messages = defineMessages({
  *
  * ![Layer List Item](../LayerListItem.png)
  */
-@pureRender
-class LayerListItem extends React.Component {
+class LayerListItem extends React.PureComponent {
   static propTypes = {
     /**
      * @ignore

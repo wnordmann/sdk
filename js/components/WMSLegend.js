@@ -18,7 +18,6 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import URL from 'url-parse';
 import AppDispatcher from '../dispatchers/AppDispatcher';
 import LayerConstants from '../constants/LayerConstants';
-import pureRender from 'pure-render-decorator';
 
 /**
  * Legend component for layers with a WMS source (tiled or untiled).
@@ -27,8 +26,7 @@ import pureRender from 'pure-render-decorator';
  * <WMSLegend  className='legend-list-img' layer={layer} />
  * ```
  */
-@pureRender
-class WMSLegend extends React.Component {
+class WMSLegend extends React.PureComponent {
   static propTypes = {
     /**
      * The layer that has a WMS source.

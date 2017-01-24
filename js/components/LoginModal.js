@@ -20,7 +20,6 @@ import LoginActions from '../actions/LoginActions';
 import Snackbar from 'material-ui/Snackbar';
 import Paper from 'material-ui/Paper';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   title: {
@@ -70,8 +69,7 @@ const messages = defineMessages({
  *
  * ![LoginModal](../LoginModal.png)
  */
-@pureRender
-class LoginModal extends React.Component {
+class LoginModal extends React.PureComponent {
   static propTypes = {
     /**
      * Css class name to apply on the root element of this component.

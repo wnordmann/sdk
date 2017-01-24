@@ -22,7 +22,6 @@ import util from '../util';
 import ColorPicker from 'react-color';
 import classNames from 'classnames';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import pureRender from 'pure-render-decorator';
 import './AddLayer.css';
 
 const ID_PREFIX = 'sdk-addlayer-';
@@ -103,8 +102,7 @@ const messages = defineMessages({
  * <AddLayer map={map} />
  * ```
  */
-@pureRender
-class AddLayer extends React.Component {
+class AddLayer extends React.PureComponent {
   static propTypes = {
     /**
      * The ol3 map instance to add to.

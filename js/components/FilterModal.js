@@ -21,7 +21,6 @@ import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import TextField from 'material-ui/TextField';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import FilterHelp from './FilterHelp';
-import pureRender from 'pure-render-decorator';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const messages = defineMessages({
@@ -64,8 +63,7 @@ const messages = defineMessages({
  * <FilterModal layer={myLayer} />
  * ```
  */
-@pureRender
-class FilterModal extends React.Component {
+class FilterModal extends React.PureComponent {
   static propTypes = {
     /**
      * vector layer to filter features on.

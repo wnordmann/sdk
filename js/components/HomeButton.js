@@ -16,7 +16,6 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import classNames from 'classnames';
 import Button from './Button';
 import HomeIcon from 'material-ui/svg-icons/maps/zoom-out-map';
-import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   buttontitle: {
@@ -35,8 +34,7 @@ const messages = defineMessages({
  *
  * ![Home Button](../HomeButton.png)
  */
-@pureRender
-class HomeButton extends React.Component {
+class HomeButton extends React.PureComponent {
   static propTypes = {
     /**
      * The ol3 map for whose view the initial center and zoom should be restored.

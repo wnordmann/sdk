@@ -15,7 +15,6 @@ import classNames from 'classnames';
 import ColorPicker from 'react-color';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import Label from './Label';
-import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   fillcolorlabel: {
@@ -32,8 +31,7 @@ const messages = defineMessages({
  * <FillEditor onChange={this._onChange.bind(this)} initialFillColor={{rgb: {r: 0, g: 255, b: 0, a: 0.5}, hex: '#00FF00'}}/>
  * ```
  */
-@pureRender
-class FillEditor extends React.Component {
+class FillEditor extends React.PureComponent {
   static propTypes = {
     /**
      * Callback that is called when a change is made.

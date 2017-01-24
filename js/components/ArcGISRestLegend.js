@@ -16,7 +16,6 @@ import classNames from 'classnames';
 import {ListItem} from 'material-ui/List';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import ArcGISRestService from '../services/ArcGISRestService';
-import pureRender from 'pure-render-decorator';
 
 /**
  * Legend component for layers with an ArcGISRest source (tiled or untiled).
@@ -25,8 +24,7 @@ import pureRender from 'pure-render-decorator';
  * <ArcGISRestLegend className='legend-list-img' layer={layer} />
  * ```
  */
-@pureRender
-class ArcGISRestLegend extends React.Component {
+class ArcGISRestLegend extends React.PureComponent {
   static propTypes = {
     /**
      * The layer that has a WMS source.

@@ -22,7 +22,6 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import AppDispatcher from '../dispatchers/AppDispatcher';
 import ToolUtil from '../toolutil';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   dropdowntext: {
@@ -64,8 +63,7 @@ const wgs84Sphere = new ol.Sphere(6378137);
  * ![Measure](../Measure.png)
  * ![MeasureOpen](../MeasureOpen.png)
  */
-@pureRender
-class Measure extends React.Component {
+class Measure extends React.PureComponent {
   static propTypes = {
     /**
      * The map onto which to activate and deactivate the interactions.

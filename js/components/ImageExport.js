@@ -18,7 +18,6 @@ import classNames from 'classnames';
 import CameraIcon from 'material-ui/svg-icons/image/camera-alt';
 import FileSaver from 'browser-filesaver';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   buttontitle: {
@@ -40,8 +39,7 @@ const messages = defineMessages({
  * <ImageExport map={map} />
  * ```
  */
-@pureRender
-class ImageExport extends React.Component {
+class ImageExport extends React.PureComponent {
   static propTypes = {
     /**
      * The ol3 map to export as PNG.

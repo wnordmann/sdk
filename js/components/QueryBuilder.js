@@ -26,7 +26,6 @@ import Paper from 'material-ui/Paper';
 import RaisedButton from './Button';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import './QueryBuilder.css';
-import pureRender from 'pure-render-decorator';
 
 const messages = defineMessages({
   layerlabel: {
@@ -93,8 +92,7 @@ const messages = defineMessages({
  * <QueryBuilder map={map} />
  * ```
  */
-@pureRender
-class QueryBuilder extends React.Component {
+class QueryBuilder extends React.PureComponent {
   static propTypes = {
     /**
      * The ol3 map whose layers can be used for the querybuilder.
