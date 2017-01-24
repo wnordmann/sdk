@@ -215,22 +215,14 @@ class FeatureStore extends EventEmitter {
     var srsName = this._map.getView().getProjection().getCode();
     var me = this;
     var success = function(features) {
-      if (startIndex === 0) {
-        me._setFeatures(layer, features);
-      } else {
-        me.appendFeatures(layer, features);
-      }
+      me.appendFeatures(layer, features);
       me.emitChange();
       if (onSuccess) {
         onSuccess.call(scope);
       }
     };
     var failure = function(xmlhttp, exception) {
-      if (startIndex === 0) {
-        me._setFeatures(layer, []);
-      } else {
-        me.appendFeatures(layer, []);
-      }
+      me.appendFeatures(layer, []);
       me.emitChange();
       if (onFailure) {
         onFailure.call(scope, xmlhttp, exception);
