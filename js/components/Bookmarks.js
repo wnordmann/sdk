@@ -312,7 +312,7 @@ class Bookmarks extends React.Component {
         return (
             <div key={bookmark.name} >
               <h2> {bookmark.name} </h2>
-              <p dangerouslySetInnerHTML={getHTML(bookmark)}></p>
+              <div dangerouslySetInnerHTML={getHTML(bookmark)} className="slider-box"></div>
             </div>
           );
       });
