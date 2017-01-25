@@ -405,7 +405,7 @@ class QGISPrint extends React.PureComponent {
         }
       }
       var selectOptions = this.props.resolutions.map(function(resolution) {
-        return (<MenuItem key={resolution} value={resolution} primaryText={resolution} />);
+        return (<MenuItem key={resolution} value={resolution} primaryText={resolution + ' dpi'} />);
       });
       var loading, error;
       if (this.state.error) {
