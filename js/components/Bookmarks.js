@@ -15,7 +15,6 @@ import ol from 'openlayers';
 import Slider from 'react-slick';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
-import SvgIcon from 'material-ui/SvgIcon';
 import ArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
 import ArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
 
