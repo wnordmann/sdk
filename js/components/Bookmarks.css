@@ -1,6 +1,3 @@
-.slick-prev:before, .slick-next:before {
-  color: grey;
-}
 .slider-frame {
   max-height: 400px;
   max-width: 400px;
