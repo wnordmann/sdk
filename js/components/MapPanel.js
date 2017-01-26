@@ -66,17 +66,21 @@ class MapPanel extends React.Component {
     intl: intlShape.isRequired
   };
 
+  static contextTypes = {
+    proxy: React.PropTypes.string
+  };
+
   static defaultProps = {
     useHistory: true
   };
 
-  constructor(props) {
+  constructor(props, context) {
     super(props);
     this.state = {
       error: false,
       open: false
     };
-    LayerStore.bindMap(this.props.map);
+    LayerStore.bindMap(this.props.map, context.proxy);
   }
   componentWillMount() {
     this._onErrorCb = this._onError.bind(this);

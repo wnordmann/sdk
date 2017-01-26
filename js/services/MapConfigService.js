@@ -13,7 +13,6 @@
 import ol from 'openlayers';
 import util from '../util';
 import LayerIdService from './LayerIdService';
-import WFSService from './WFSService';
 
 class MapConfigService {
   generateSourceFromConfig(config, opt_proxy) {
@@ -83,14 +82,6 @@ class MapConfigService {
     var sourceConfig = config.source;
     if (sourceConfig) {
       var source = this.generateSourceFromConfig(sourceConfig, opt_proxy);
-      if (source instanceof ol.source.TileWMS && !layer.get('wfsInfo')) {
-        WFSService.describeFeatureType(sourceConfig.properties.urls[0], layerConfig.name, function(wfsInfo) {
-          this.set('wfsInfo', wfsInfo);
-        }, function() {
-          this.set('isSelectable', false);
-          this.set('wfsInfo', undefined);
-        }, layer, opt_proxy);
-      }
       layer.setSource(source);
     }
     return layer;

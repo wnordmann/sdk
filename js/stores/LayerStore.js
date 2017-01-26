@@ -16,13 +16,18 @@ import {EventEmitter} from 'events';
 import ol from 'openlayers';
 import AppDispatcher from '../dispatchers/AppDispatcher';
 import LayerConstants from '../constants/LayerConstants';
+import WFSService from '../services/WFSService';
+import RESTService from '../services/RESTService';
 
 let config = {
   layers: []
 };
 
 class LayerStore extends EventEmitter {
-  bindMap(map) {
+  bindMap(map, opt_proxy) {
+    if (!this._proxy) {
+      this._proxy = opt_proxy;
+    }
     if (map !== this._map) {
       this._map = map;
       config.layers = this._map.getLayers().getArray();
@@ -41,6 +46,14 @@ class LayerStore extends EventEmitter {
     layer.on('change:visible', this.emitChange, this);
     if (!(layer instanceof ol.layer.Group)) {
       var source = layer.getSource();
+      if ((source instanceof ol.source.ImageWMS || ol.source instanceof ol.source.TileWMS) || layer.get('isWFST')) {
+        if (!layer.get('wfsInfo')) {
+          this._getWfsInfo(layer);
+        }
+        if (!layer.get('styleName')) {
+          this._getStyleName(layer);
+        }
+      }
       if (source instanceof ol.source.Tile) {
         source.on('tileloaderror', this._onError, this);
       } else if (source instanceof ol.source.Image) {
@@ -50,6 +63,24 @@ class LayerStore extends EventEmitter {
       // change:layers on layer does not seem to work
       this._recurseBind(layer);
     }
+  }
+  _getStyleName(layer) {
+    var source = layer.getSource();
+    var url = layer.get('restUrl') || source.getUrls()[0];
+    RESTService.getStyleName(url, layer, function(styleName) {
+      layer.set('styleName', styleName);
+    }, function() {
+    }, this._proxy);
+  }
+  _getWfsInfo(layer) {
+    var source = layer.getSource();
+    var url = source.getUrls()[0];
+    WFSService.describeFeatureType(url, layer.get('name'), function(wfsInfo) {
+      this.set('wfsInfo', wfsInfo);
+    }, function() {
+      this.set('isSelectable', false);
+      this.set('wfsInfo', undefined);
+    }, layer, this._proxy);
   }
   _recurseBind(layer) {
     if (layer instanceof ol.layer.Group) {
