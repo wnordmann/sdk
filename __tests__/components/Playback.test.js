@@ -51,7 +51,7 @@ describe('Playback', function() {
         <Playback minDate={500000000000} maxDate={1500000000000} intl={intl} map={map}/>
       </MuiThemeProvider>
     ), container);
-    assert.equal(container.querySelector('input[type=text]').value, '1985-11-05');
+    assert.equal(container.querySelector('input[type=text]').value.substr(0,7), '1985-11');
     ReactDOM.unmountComponentAtNode(container);
   });
 
