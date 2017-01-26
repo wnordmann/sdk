@@ -24,7 +24,6 @@ import {List, ListItem} from 'material-ui/List';
 import Checkbox from 'material-ui/Checkbox';
 import FolderIcon from 'material-ui/svg-icons/file/folder-open';
 import LayerIcon from 'material-ui/svg-icons/maps/layers';
-import RESTService from '../services/RESTService';
 import WMSService from '../services/WMSService';
 import WFSService from '../services/WFSService';
 import ArcGISRestService from '../services/ArcGISRestService';
@@ -234,27 +233,6 @@ class AddLayerModal extends React.PureComponent {
       msg: msg
     });
   }
-  _getStyleName(olLayer) {
-    var source = this.state.sources[this.state.source];
-    var url = source.properties && source.properties.restUrl ? source.properties.restUrl : source.url;
-    RESTService.getStyleName(url, olLayer, function(styleName) {
-      olLayer.set('styleName', styleName);
-    }, function() {
-    }, this._proxy);
-  }
-  _getWfsInfo(layer, olLayer, success, scope) {
-    var me = this;
-    var url = this.state.sources[this.state.source].url;
-    // do a WFS DescribeFeatureType request to get wfsInfo
-    WFSService.describeFeatureType(url, layer.Name, function(wfsInfo) {
-      olLayer.set('wfsInfo', wfsInfo);
-      success.call(scope);
-    }, function() {
-      olLayer.set('isSelectable', false);
-      olLayer.set('wfsInfo', undefined);
-      me.close();
-    }, undefined, this._proxy);
-  }
   _getLayerTitle(layer) {
     const {formatMessage} = this.props.intl;
     if (layer.Title === '') {
@@ -270,10 +248,6 @@ class AddLayerModal extends React.PureComponent {
     var url = source.getMapUrl || source.url;
     var service = AddLayerModal.services[source.type];
     var olLayer = service.createLayer(layer, url, titleObj, map.getView().getProjection(), this._proxy);
-    if (source.type === 'WMS' || source.type === 'WFS') {
-      this._getStyleName.call(this, olLayer);
-      this._getWfsInfo.call(this, layer, olLayer, this.close, this);
-    }
     if (olLayer.get('type') === 'base') {
       var foundGroup = false;
       map.getLayers().forEach(function(lyr) {

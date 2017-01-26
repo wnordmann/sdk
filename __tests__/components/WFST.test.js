@@ -26,6 +26,7 @@ describe('WFST', function() {
     document.body.appendChild(target);
     layer = new ol.layer.Tile({
       id: 'foo',
+      name: 'geonode:foo',
       isWFST: true,
       wfsInfo: {
         geometryType: 'MultiPoint',
