@@ -47,6 +47,15 @@ class WMSService {
       onFailure.call(this, xmlhttp);
     }, this);
   }
+  createLayerFromGetCaps(url, layerName, projection, callback, opt_proxy) {
+    this.getCapabilities(url, function(layerInfo, getMapUrl) {
+      for (var i = 0, ii = layerInfo.Layer.length; i < ii; ++i) {
+        if (layerInfo.Layer[i].Name === layerName) {
+          return callback.call(this, this.createLayer(layerInfo.Layer[i], getMapUrl || url, {title: layerInfo.Layer[i].Title}, projection, opt_proxy));
+        }
+      }
+    }, function() {}, opt_proxy);
+  }
   createLayer(layer, url, titleObj, projection, opt_proxy) {
     var getLegendUrl = function(layer) {
       if (layer.Style && layer.Style.length === 1) {
