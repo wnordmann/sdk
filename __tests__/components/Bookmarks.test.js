@@ -7,6 +7,9 @@ import {assert} from 'chai';
 import raf from 'raf';
 import  ol from 'openlayers';
 import intl from '../mock-i18n';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
 import Bookmarks from '../../js/components/Bookmarks';
 
 raf.polyfill();
@@ -55,18 +58,20 @@ describe('Bookmarks', function() {
   it('zooms to the next bookmark', function() {
     var container = document.createElement('div');
     ReactDOM.render((
-      <Bookmarks intl={intl} useCSS={false} map={map} bookmarks={bookmarks} />
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <Bookmarks intl={intl} useCSS={false} map={map} bookmarks={bookmarks} />
+      </MuiThemeProvider>
     ), container);
-    var button = container.querySelector('button.slick-next');
-    var prev = container.querySelector('button.slick-prev');
+    var next = container.querySelector('div.navNext');
+    var prev = container.querySelector('div.navPrev');
     assert.equal(map.getView().getZoom(), 1);
     assert.equal(map.getView().getCenter()[0], 0);
     assert.equal(map.getView().getCenter()[1], 0);
-    TestUtils.SimulateNative.click(button);
+    TestUtils.SimulateNative.click(next);
     assert.equal(map.getView().getZoom(), 14);
     assert.equal(map.getView().getCenter()[0], 260119.36358071605);
     assert.equal(map.getView().getCenter()[1], 6255406.541948485);
-    TestUtils.SimulateNative.click(button);
+    TestUtils.SimulateNative.click(next);
     assert.equal(map.getView().getZoom(), 14);
     assert.equal(map.getView().getCenter()[0], 259260.31107026432);
     assert.equal(map.getView().getCenter()[1], 6249657.399467627);

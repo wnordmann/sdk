@@ -1,7 +1,7 @@
 .slider-box {
   max-height: 300px;
   max-width: 300px;
-  overflow-x: scroll;
+  overflow: auto;
 }
 .story-panel {
   display: block;
