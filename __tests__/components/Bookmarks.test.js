@@ -81,5 +81,30 @@ describe('Bookmarks', function() {
     assert.equal(map.getView().getCenter()[1], 6255406.541948485);
     ReactDOM.unmountComponentAtNode(container);
   });
-
+  it('zooms to the next bookmark using nav dots', function() {
+    var container = document.createElement('div');
+    ReactDOM.render((
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <Bookmarks intl={intl} useCSS={false} map={map} bookmarks={bookmarks} />
+      </MuiThemeProvider>
+    ), container);
+    var buttonOne = container.querySelector('button#dots_1');
+    var buttonTwo = container.querySelector('button#dots_2');
+    assert.equal(map.getView().getZoom(), 1);
+    assert.equal(map.getView().getCenter()[0], 0);
+    assert.equal(map.getView().getCenter()[1], 0);
+    TestUtils.SimulateNative.click(buttonOne);
+    assert.equal(map.getView().getZoom(), 14);
+    assert.equal(map.getView().getCenter()[0], 260119.36358071605);
+    assert.equal(map.getView().getCenter()[1], 6255406.541948485);
+    TestUtils.SimulateNative.click(buttonTwo);
+    assert.equal(map.getView().getZoom(), 14);
+    assert.equal(map.getView().getCenter()[0], 259260.31107026432);
+    assert.equal(map.getView().getCenter()[1], 6249657.399467627);
+    TestUtils.SimulateNative.click(buttonOne);
+    assert.equal(map.getView().getZoom(), 14);
+    assert.equal(map.getView().getCenter()[0], 260119.36358071605);
+    assert.equal(map.getView().getCenter()[1], 6255406.541948485);
+    ReactDOM.unmountComponentAtNode(container);
+  });
 });
