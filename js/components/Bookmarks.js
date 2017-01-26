@@ -18,7 +18,7 @@ import ArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
 import ArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
 import RaisedButton from 'material-ui/RaisedButton';
 import Carousel from 'nuka-carousel';
-
+import Dots from './BookmarkDots.js';
 import './Bookmarks.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import classNames from 'classnames';
@@ -207,54 +207,6 @@ class Bookmarks extends React.Component {
       this.props.bookmarks[idx - 1];
     this._selectBookmark(bookmark);
   }
-  _dots = {
-    component: class dots extends React.Component {
-      render() {
-        var self = this;
-        var indexes = getIndexes(self.props.slideCount, self.props.slidesToScroll);
-        function getIndexes(count, inc) {
-          var arr = [];
-          for (var i = 0; i < count; i += inc) {
-            arr.push(i);
-          }
-          return arr;
-        }
-        function getListStyles() {
-          return {position: 'relative', margin: 0, padding: 0, top: '38px'};
-        }
-        function getListItemStyles() {
-          return {listStyleType: 'none', display: 'inline-block'};
-        }
-        function getButtonStyles(active) {
-          return {
-            border: 0,
-            background: 'transparent',
-            color: 'black',
-            cursor: 'pointer',
-            padding: 10,
-            outline: 0,
-            fontSize: 24,
-            opacity: active ? 1 : 0.5
-          };
-        }
-        return (
-          <ul style = {getListStyles()} >
-            {indexes.map(function(index) {
-              return (
-                <li style = {getListItemStyles()} key = {index} >
-                  <button
-                    style = {getButtonStyles(self.props.currentSlide === index)}
-                    onClick = {self.props.goToSlide.bind(null, index)}>
-                      &bull;
-                  </button>
-                </li>
-              )
-            })}
-          </ul>
-        );
-      }
-    }
-  }
   _decorator = [
     {
       component: class navPrev extends React.Component {
@@ -262,7 +214,6 @@ class Bookmarks extends React.Component {
           previousSlide: React.PropTypes.func.isRequired
         }
         render() {
-          //return <div onClick = {this.props.previousSlide} className='navPrev'>&lt;</div>;
           return <div onClick = {this.props.previousSlide} className='navPrev'><ArrowLeft/></div>;
         }
       },
@@ -273,14 +224,12 @@ class Bookmarks extends React.Component {
           nextSlide: React.PropTypes.func.isRequired
         }
         render() {
-          //return <div onClick = {this.props.nextSlide} className='navNext'>&gt;</div>
           return <div onClick = {this.props.nextSlide} className='navNext'><ArrowRight/></div>
         }
       },
       position: 'CenterRight'
     }
   ];
-
   render() {
     let carouselProps = Object.assign({}, this.props);
 
@@ -315,10 +264,10 @@ class Bookmarks extends React.Component {
       };
       var carouselChildren = this.props.bookmarks.map(function(bookmark) {
         return (
-            <div key={bookmark.name} >
-              <h2> {bookmark.name} </h2>
-              <div dangerouslySetInnerHTML={getHTML(bookmark)} className="slider-box"></div>
-            </div>
+          <div key={bookmark.name} >
+            <h2> {bookmark.name} </h2>
+            <div dangerouslySetInnerHTML={getHTML(bookmark)} className="slider-box"></div>
+          </div>
           );
       });
       carouselChildren.unshift(
@@ -328,18 +277,18 @@ class Bookmarks extends React.Component {
         </div>
       );
       if (this.props.dots) {
-        Decorators.push({component: this._dots.component, position: 'BottomCenter'});
+        Decorators.push({component: Dots, position: 'BottomCenter'});
       }
       return (
-          <div className = { classNames('sdk-component story-panel', this.props.className) } >
-            <Carousel { ...carouselProps }
-              decorators = { Decorators }
-              arrows = { true }
-              afterSlide = { this._afterChange.bind(this) }
-              framePadding = "0px 20px 38px 20px" >
-                { carouselChildren }
-              </Carousel>
-          </div>
+        <div className = { classNames('sdk-component story-panel', this.props.className) } >
+          <Carousel { ...carouselProps }
+            decorators = { Decorators }
+            arrows = { true }
+            afterSlide = { this._afterChange.bind(this) }
+            framePadding = "0px 20px 38px 20px" >
+              { carouselChildren }
+          </Carousel>
+        </div>
     );}
   }
 }
