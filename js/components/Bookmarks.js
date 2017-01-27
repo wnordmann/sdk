@@ -12,12 +12,14 @@
 
 import React from 'react';
 import ol from 'openlayers';
-import Slider from 'react-slick';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
+import ArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
+import ArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
 import RaisedButton from 'material-ui/RaisedButton';
+import Carousel from 'nuka-carousel';
+import Dots from './BookmarkDots.js';
 import './Bookmarks.css';
-import './slick.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import classNames from 'classnames';
 
@@ -56,10 +58,7 @@ class Bookmarks extends React.PureComponent {
       description: React.PropTypes.string.isRequired,
       extent: React.PropTypes.arrayOf(React.PropTypes.number).isRequired
     })).isRequired,
-    /**
-     * Should we show indicators? These are dots to navigate the bookmark pages.
-     */
-    dots: React.PropTypes.bool,
+
     /**
      * Should the scroller auto scroll?
      */
@@ -76,6 +75,10 @@ class Bookmarks extends React.PureComponent {
      * The duration of the animation in milleseconds. Only relevant if animatePanZoom is true.
      */
     animationDuration: React.PropTypes.number,
+    /**
+     * Should we show indicators? These are dots to navigate the bookmark pages.
+     */
+    dots: React.PropTypes.bool,
     /**
      * The title on the introduction (first) page of the bookmarks.
      */
@@ -95,26 +98,38 @@ class Bookmarks extends React.PureComponent {
     /**
      * Should we display a marker for the bookmark?
      */
+    speed: React.PropTypes.number,
+    /**
+     *   Animation duration.
+     */
     showMarker: React.PropTypes.bool,
     /**
      * Url to the marker image to use for bookmark position.
      */
-    markerUrl: React.PropTypes.string
+    markerUrl: React.PropTypes.string,
+    /**
+     * Used to hardcode the slider width. Accepts any string dimension value such as "80%" or "500px".
+     */
+    width: React.PropTypes.string,
+    /**
+     * Sets infinite wrapAround mode. Defaults to true
+     */
+    wrapAround: React.PropTypes.bool
   };
 
   static defaultProps = {
-    style: {
-      margin: '10px 12px'
-    },
-    dots: true,
     autoplay: false,
+    autoplayInterval: 3000,
     animatePanZoom: true,
+    dots: true,
     introTitle: '',
     introDescription: '',
     animationDuration: 500,
     menu: false,
     showMarker: true,
-    markerUrl: './resources/marker.png'
+    markerUrl: './resources/marker.png',
+    wrapAround: true,
+    width: '400px'
   };
 
   constructor(props) {
@@ -160,17 +175,11 @@ class Bookmarks extends React.PureComponent {
     this._selectBookmark(value);
   }
   _selectBookmark(bookmark) {
-    var map = this.props.map, view = map.getView();
+    var map = this.props.map;
+    var view = map.getView();
     if (this.props.animatePanZoom === true) {
-      var pan = ol.animation.pan({
-        duration: this.props.animationDuration,
-        source: view.getCenter()
-      });
-      var zoom = ol.animation.zoom({
-        duration: this.props.animationDuration,
-        resolution: view.getResolution(),
-        source: view.getZoom()
-      });
+      var pan = ol.animation.pan({duration: this.props.animationDuration, source: view.getCenter()});
+      var zoom = ol.animation.zoom({duration: this.props.animationDuration, resolution: view.getResolution(), source: view.getZoom()});
       map.beforeRender(pan, zoom);
     }
     var center;
@@ -186,43 +195,99 @@ class Bookmarks extends React.PureComponent {
     if (this.props.showMarker) {
       var source = this._layer.getSource();
       source.clear();
-      var feature = new ol.Feature({
-        geometry: new ol.geom.Point(center)
-      });
+      var feature = new ol.Feature({geometry: new ol.geom.Point(center)});
       source.addFeature(feature);
     }
   }
   _afterChange(idx) {
-    var bookmark = idx === 0 ? false : this.props.bookmarks[idx - 1];
+    var bookmark = idx === 0 ?
+      false :
+      this.props.bookmarks[idx - 1];
     this._selectBookmark(bookmark);
   }
+  _decorator = [
+    {
+      component: class navPrev extends React.Component {
+        static propTypes = {
+          previousSlide: React.PropTypes.func.isRequired
+        }
+        render() {
+          return <div onClick = {this.props.previousSlide} className='navPrev'><ArrowLeft/></div>;
+        }
+      },
+      position: 'CenterLeft'
+    }, {
+      component: class navNext extends React.Component {
+        static propTypes = {
+          nextSlide: React.PropTypes.func.isRequired
+        }
+        render() {
+          return <div onClick = {this.props.nextSlide} className='navNext'><ArrowRight/></div>
+        }
+      },
+      position: 'CenterRight'
+    }
+  ];
   render() {
+    let carouselProps = Object.assign({}, this.props);
+
+    carouselProps.autoplayInterval = this.props.autoplaySpeed;
+
     const {formatMessage} = this.props.intl;
+    let Decorators = this._decorator;
+
     if (this.props.menu === true) {
       var menuChildren = this.props.bookmarks.map(function(bookmark) {
-        return (<MenuItem key={bookmark.name} value={bookmark.name} primaryText={bookmark.name}/>);
+        return (
+          <MenuItem
+            key = { bookmark.name }
+            value = { bookmark.name }
+            primaryText = { bookmark.name }/>
+        );
       }, this);
       return (
-        <IconMenu anchorOrigin={{horizontal: 'left', vertical: 'top'}} targetOrigin={{horizontal: 'left', vertical: 'top'}} className={classNames('sdk-component story-panel', this.props.className)} iconButtonElement={<RaisedButton label={formatMessage(messages.dropdowntext)} />} value={this.state.value} onChange={this._handleChange.bind(this)}>
-          {menuChildren}
+        <IconMenu
+          anchorOrigin = {{horizontal: 'left',vertical: 'top'}}
+          targetOrigin = {{horizontal: 'left',vertical: 'top'}}
+          className = { classNames('sdk-component story-panel', this.props.className) }
+          iconButtonElement = { <RaisedButton label = {formatMessage(messages.dropdowntext)}/>}
+          value={this.state.value}
+          onChange={this._handleChange.bind(this)}>
+            { menuChildren }
         </IconMenu>
       );
-    } else {
+    }else {
       var getHTML = function(bookmark) {
         return {__html: bookmark.description};
       };
       var carouselChildren = this.props.bookmarks.map(function(bookmark) {
-        return (<div key={bookmark.name}><h2>{bookmark.name}</h2><p dangerouslySetInnerHTML={getHTML(bookmark)}></p></div>);
+        return (
+          <div key={bookmark.name} >
+            <h2> {bookmark.name} </h2>
+            <div dangerouslySetInnerHTML={getHTML(bookmark)} className="slider-box"></div>
+          </div>
+          );
       });
-      carouselChildren.unshift(<div key='intro'><h2>{this.props.introTitle}</h2><p>{this.props.introDescription}</p></div>);
-      return (
-        <div className={classNames('sdk-component story-panel', this.props.className)}>
-          <Slider {...this.props} arrows={true} afterChange={this._afterChange.bind(this)}>
-            {carouselChildren}
-          </Slider>
+      carouselChildren.unshift(
+        <div key = 'intro' >
+          <h2> { this.props.introTitle } </h2>
+          <p> { this.props.introDescription } </p>
         </div>
       );
-    }
+      if (this.props.dots) {
+        Decorators.push({component: Dots, position: 'BottomCenter'});
+      }
+      return (
+        <div className = { classNames('sdk-component story-panel', this.props.className) } >
+          <Carousel { ...carouselProps }
+            decorators = { Decorators }
+            arrows = { true }
+            afterSlide = { this._afterChange.bind(this) }
+            framePadding = "0px 20px 38px 20px" >
+              { carouselChildren }
+          </Carousel>
+        </div>
+    );}
   }
 }
 

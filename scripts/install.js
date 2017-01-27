@@ -10,10 +10,6 @@ var files = [{
   module: 'c3-windows',
   cssPath: '',
   cssFile: 'c3.min.css'
-}, {
-  module: 'slick-carousel-dr-frankenstyle',
-  cssPath: '',
-  cssFile: 'slick.css'
 }];
 
 for (var i = 0, ii = files.length; i < ii; ++i) {
