@@ -70,9 +70,7 @@ class LayerStore extends EventEmitter {
     }
   }
   _getStyleName(layer) {
-    var source = layer.getSource();
-    var url = layer.get('restUrl') || source.getUrls()[0];
-    RESTService.getStyleName(url, layer, function(styleName) {
+    RESTService.getStyleName(layer, function(styleName) {
       layer.set('styleName', styleName);
     }, function() {
     }, this._proxy);

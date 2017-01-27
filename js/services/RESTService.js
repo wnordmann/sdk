@@ -11,11 +11,21 @@
  */
 
 import util from '../util';
+import URL from 'url-parse';
 
 class RESTService {
-  _getStyleNameUrl(url, layer, opt_proxy) {
+  _getBaseUrl(layer) {
+    return layer.getSource().getUrls()[0].replace(/wms|ows|wfs/g, 'rest');
+  }
+  _getTrailingChar(urlObj) {
+    return urlObj.pathname.slice(-1) === '/' ? '' : '/';
+  }
+  _getStyleNameUrl(layer, opt_proxy) {
+    var url = this._getBaseUrl(layer);
+    var urlObj = new URL(url, true);
     var id = layer.get('name').split(':').pop();
-    return util.getProxiedUrl(url.replace(/wms|ows|wfs/g, 'rest/layers/' + id + '.json'), opt_proxy);
+    urlObj.set('pathname', urlObj.pathname + this._getTrailingChar(urlObj) + 'layers/' + id + '.json');
+    return util.getProxiedUrl(urlObj.toString(), opt_proxy);
   }
   _parseStyleName(jsonData) {
     var styleName = jsonData.layer.defaultStyle.name;
@@ -27,8 +37,8 @@ class RESTService {
     }
     return styleName;
   }
-  getStyleName(url, layer, onSuccess, onFailure, opt_proxy) {
-    url = this._getStyleNameUrl(url, layer, opt_proxy);
+  getStyleName(layer, onSuccess, onFailure, opt_proxy) {
+    var url = this._getStyleNameUrl(layer, opt_proxy);
     util.doGET(url, function(xmlhttp) {
       var styleName = this._parseStyleName(JSON.parse(xmlhttp.responseText));
       onSuccess.call(this, styleName);
@@ -39,10 +49,16 @@ class RESTService {
   _createStylePayload(styleName) {
     return  '<style><name>' + styleName + '</name><filename>' + styleName + '.sld</filename></style>';
   }
-  createStyle(url, layer, sld, onSuccess, onFailure, opt_proxy) {
+  _getCreateStyleUrl(layer, opt_proxy) {
+    var url = this._getBaseUrl(layer);
+    var urlObj = new URL(url, true);
+    urlObj.set('pathname', urlObj.pathname + this._getTrailingChar(urlObj) + 'styles');
+    return util.getProxiedUrl(urlObj.toString(), opt_proxy);
+  }
+  createStyle(layer, sld, onSuccess, onFailure, opt_proxy) {
+    var url = this._getCreateStyleUrl(layer, opt_proxy);
     var styleName = 'web_sdk_style_' + Math.floor(100000 + Math.random() * 900000);
-    var createUrl = url.replace(/wms|ows|wfs/g, 'rest/styles');
-    util.doPOST(util.getProxiedUrl(createUrl, opt_proxy), this._createStylePayload(styleName), function(xmlhttp) {
+    util.doPOST(url, this._createStylePayload(styleName), function(xmlhttp) {
       layer.set('styleName', styleName);
       this.updateStyle(url, layer, sld, onSuccess, onFailure);
     }, function(xmlhttp) {
@@ -54,20 +70,24 @@ class RESTService {
       }
     }, this);
   }
-  _getUpdateStyleUrl(url, layer, opt_proxy) {
+  _getUpdateStyleUrl(layer, opt_proxy) {
+    var url = this._getBaseUrl(layer);
+    var urlObj = new URL(url, true);
     var styleName = layer.get('styleName');
     if (styleName.indexOf(':') !== -1) {
       var styleInfo = styleName.split(':');
       var workspace = styleInfo[0];
       var name = styleInfo[1];
       // workspaces styles
-      return util.getProxiedUrl(url.replace(/wms|ows|wfs/g, 'rest/workspaces/' + workspace + '/styles/' + name), opt_proxy);
+      urlObj.set('pathname', urlObj.pathname + this._getTrailingChar(urlObj) + 'workspaces/' + workspace + '/styles/' + name);
+      return util.getProxiedUrl(urlObj.toString(), opt_proxy);
     } else {
-      return util.getProxiedUrl(url.replace(/wms|ows|wfs/g, 'rest/styles/' + layer.get('styleName')), opt_proxy);
+      urlObj.set('pathname', urlObj.pathname + this._getTrailingChar(urlObj) + 'styles/' + layer.get('styleName'));
+      return util.getProxiedUrl(urlObj.toString(), opt_proxy);
     }
   }
-  updateStyle(url, layer, sld, onSuccess, onFailure, opt_proxy) {
-    util.doPOST(this._getUpdateStyleUrl(url, layer, opt_proxy), sld, function(xmlhttp) {
+  updateStyle(layer, sld, onSuccess, onFailure, opt_proxy) {
+    util.doPOST(this._getUpdateStyleUrl(layer, opt_proxy), sld, function(xmlhttp) {
       onSuccess.call(this, xmlhttp);
     }, function(xmlhttp) {
       onFailure.call(this, xmlhttp);

@@ -176,15 +176,14 @@ class StyleModal extends React.PureComponent {
     var sld = SLDService.createSLD(this.props.layer, this.state.geometryType, [{
       rules: this.state.rules
     }]);
-    var url = this.props.layer.get('restUrl') ? this.props.layer.get('restUrl') : this.props.layer.getSource().getUrls()[0];
     if (this.props.layer.get('styleName')) {
-      RESTService.updateStyle(url, this.props.layer, sld, function(xmlhttp) {
+      RESTService.updateStyle(this.props.layer, sld, function(xmlhttp) {
         me.close();
       }, function(xmlhttp) {
         me.setState({error: true, errorOpen: true, msg: xmlhttp.status + ' ' + xmlhttp.statusText});
       }, this._proxy);
     } else {
-      RESTService.createStyle(url, this.props.layer, sld, function(xmlhttp) {
+      RESTService.createStyle(this.props.layer, sld, function(xmlhttp) {
         me.props.layer.getSource().updateParams({'STYLES': me.props.layer.get('styleName'), '_olSalt': Math.random()});
         LayerActions.styleLayer(me.props.layer);
         me.close();
