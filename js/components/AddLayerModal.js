@@ -22,8 +22,6 @@ import MenuItem from 'material-ui/MenuItem';
 import SelectField from 'material-ui/SelectField';
 import {List, ListItem} from 'material-ui/List';
 import Checkbox from 'material-ui/Checkbox';
-import FolderIcon from 'material-ui/svg-icons/file/folder-open';
-import LayerIcon from 'material-ui/svg-icons/maps/layers';
 import WMSService from '../services/WMSService';
 import WFSService from '../services/WFSService';
 import ArcGISRestService from '../services/ArcGISRestService';
@@ -280,12 +278,6 @@ class AddLayerModal extends React.PureComponent {
     if (layer.Name !== undefined) {
       onCheck = this._onCheck.bind(this, layer);
     }
-    var icon;
-    if (layer.Layer) {
-      icon = <FolderIcon />;
-    } else if (layer.Name !== undefined) {
-      icon = <LayerIcon />;
-    }
     var layerTitle = this._getLayerTitle(layer);
     var primaryText;
     if (layerTitle.empty) {
@@ -314,7 +306,7 @@ class AddLayerModal extends React.PureComponent {
       }
     }
     return (
-      <ListItem style={{display: displayValue}} leftCheckbox={<Checkbox onCheck={onCheck} />} rightIcon={icon} initiallyOpen={true} key={layer.Name} primaryText={primaryText} secondaryText={layer.Name} nestedItems={childList} />
+      <ListItem style={{display: displayValue}} leftCheckbox={<Checkbox onCheck={onCheck} />} initiallyOpen={true} key={layer.Name} primaryText={primaryText} secondaryText={layer.Name} nestedItems={childList} />
     );
   }
   _onCheck(layer, proxy, checked) {
