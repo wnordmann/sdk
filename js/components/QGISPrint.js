@@ -181,7 +181,7 @@ class QGISPrint extends React.PureComponent {
   static defaultProps = {
     menu: true,
     thumbnailPath: '../../resources/print/',
-    resolutions: [72, 150, 300]
+    resolutions: [72, 150]
   };
 
   constructor(props, context) {
