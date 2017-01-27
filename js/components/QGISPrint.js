@@ -243,7 +243,7 @@ class QGISPrint extends React.PureComponent {
   _paintMapInPdf() {
     var data, error;
     try {
-      data = this._canvas.toDataURL('image/png');
+      data = this._canvas.toDataURL('image/jpeg');
     } catch (e) {
       error = true;
       this.setState({loading: false, errorOpen: true, error: true, msg: e});
@@ -253,7 +253,7 @@ class QGISPrint extends React.PureComponent {
       var pdf = this._pdf;
       var mapElement = this._mapElement;
       pdf.rect(mapElement.x, mapElement.y, mapElement.width, mapElement.height);
-      pdf.addImage(data, 'png', mapElement.x, mapElement.y, mapElement.width, mapElement.height);
+      pdf.addImage(data, 'jpeg', mapElement.x, mapElement.y, mapElement.width, mapElement.height);
     }
     map.setSize(this._origSize);
     map.getView().fit(this._origExtent, this._origSize, {constrainResolution: false});
