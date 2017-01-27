@@ -68,6 +68,7 @@ class WMSService {
     var source = new ol.source.TileWMS({
       url: url,
       wrapX: layer.Layer ? true : false,
+      crossOrigin: 'anonymous',
       params: {
         LAYERS: layer.Name,
         TILED: true
