@@ -351,6 +351,7 @@ class AddLayerModal extends React.PureComponent {
       var view = map.getView();
       map.getView().fit(ol.proj.transformExtent(finalExtent, 'EPSG:4326', view.getProjection()), map.getSize());
     }
+    this.close();
   }
   _handleRequestClose() {
     this.setState({
