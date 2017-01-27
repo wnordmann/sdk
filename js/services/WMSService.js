@@ -23,12 +23,12 @@ const wmsGetFeatureInfoFormats = {
 
 class WMSService {
   getCapabilitiesUrl(url, opt_proxy) {
-    var urlObj = new URL(url);
-    urlObj.set('query', {
+    var urlObj = new URL(url, true);
+    urlObj.set('query', Object.assign(urlObj.query, {
       service: 'WMS',
       request: 'GetCapabilities',
       version: '1.3.0'
-    });
+    }));
     return util.getProxiedUrl(urlObj.toString(), opt_proxy);
   }
   _getGetMapUrl(info) {
