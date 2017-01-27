@@ -80,7 +80,8 @@ class MapPanel extends React.Component {
       error: false,
       open: false
     };
-    LayerStore.bindMap(this.props.map, context.proxy);
+    this._proxy = context.proxy;
+    LayerStore.bindMap(this.props.map, this._proxy);
   }
   componentWillMount() {
     this._onErrorCb = this._onError.bind(this);
@@ -156,7 +157,15 @@ class MapPanel extends React.Component {
     }
   }
   _onError() {
-    this.setState({open: true, error: true});
+    if (this._proxy) {
+      // ignore the first error
+      if (this.error === true) {
+        this.setState({open: true, error: true});
+      }
+    } else {
+      this.setState({open: true, error: true});
+    }
+    this._error = true;
   }
   _handleRequestClose() {
     this.setState({

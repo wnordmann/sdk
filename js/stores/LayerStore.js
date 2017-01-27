@@ -18,12 +18,17 @@ import AppDispatcher from '../dispatchers/AppDispatcher';
 import LayerConstants from '../constants/LayerConstants';
 import WFSService from '../services/WFSService';
 import RESTService from '../services/RESTService';
+import debounce from  'debounce';
 
 let config = {
   layers: []
 };
 
 class LayerStore extends EventEmitter {
+  constructor() {
+    super();
+    this._onError = debounce(this._onError, 1000);
+  }
   bindMap(map, opt_proxy) {
     if (!this._proxy) {
       this._proxy = opt_proxy;
