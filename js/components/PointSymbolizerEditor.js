@@ -107,6 +107,8 @@ class PointSymbolizerEditor extends React.PureComponent {
       externalGraphic: props.initialState ? props.initialState.externalGraphic : undefined,
       opacity: props.initialState ? props.initialState.opacity : undefined
     };
+  }
+  componentDidMount() {
     if (this.state.externalGraphic) {
       this._getImageSize(this.state.externalGraphic, function(width, height) {
         this.setState({
@@ -187,8 +189,11 @@ class PointSymbolizerEditor extends React.PureComponent {
           </SelectField>
           <TextField value={this.state.symbolSize} onChange={this._onSymbolSizeChange.bind(this)} onBlur={this._onSymbolSizeBlur.bind(this)} floatingLabelText={formatMessage(messages.symbolsize)} />
           <TextField value={this.state.rotation} onChange={this._onSymbolRotationChange.bind(this)} onBlur={this._onSymbolRotationBlur.bind(this)} floatingLabelText={formatMessage(messages.symbolrotation)} />
-          <TextField fullWidth={true} value={this.state.externalGraphic} onChange={this._onUrlChange.bind(this)} onBlur={this._onUrlBlur.bind(this)} floatingLabelText={formatMessage(messages.externalgraphic)} />
-          <Slider style={!this.state.externalGraphic ? {display: 'none'} : {width: 250}} description={formatMessage(messages.opacity)} defaultValue={this.state.opacity} onChange={this._onOpacityChange.bind(this)} />
+          <TextField fullWidth={true} defaultValue={this.state.externalGraphic} onChange={this._onUrlChange.bind(this)} onBlur={this._onUrlBlur.bind(this)} floatingLabelText={formatMessage(messages.externalgraphic)} />
+          <div style={!this.state.externalGraphic ? {display: 'none'} : {width: 250}}>
+            <label>{formatMessage(messages.opacity)}</label>
+            <Slider defaultValue={this.state.opacity} onChange={this._onOpacityChange.bind(this)} />
+          </div>
         </Paper>
         <Paper zDepth={0} style={this.state.externalGraphic ? {display: 'none'} : undefined}>
           <Checkbox onCheck={this._onFillCheck.bind(this)} checked={this.state.hasFill} label={formatMessage(messages.filllabel)} />
