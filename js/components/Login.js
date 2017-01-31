@@ -80,7 +80,8 @@ class Login extends React.PureComponent {
     this._muiTheme = context.muiTheme || getMuiTheme();
     this._proxy = context.proxy;
     this.state = {
-      user: null
+      user: null,
+      modalOpen: false
     };
     var me = this;
     this._dispatchToken = AppDispatcher.register((payload) => {
@@ -123,11 +124,14 @@ class Login extends React.PureComponent {
     }, this._proxy);
   }
   _showLoginDialog() {
-    this.refs.loginmodal.getWrappedInstance().open();
+    this.setState({modalOpen: true});
   }
   _doLogout() {
     AuthService.logoff();
     this.setState({user: null});
+  }
+  _onClose() {
+    this.setState({modalOpen: false});
   }
   render() {
     const {formatMessage} = this.props.intl;
@@ -140,7 +144,7 @@ class Login extends React.PureComponent {
     } else {
       return (
         <Button className={classNames('sdk-component login', this.props.className)} label={formatMessage(messages.buttontext)} onTouchTap={this._showLoginDialog.bind(this)}>
-          <LoginModal ref='loginmodal' {...this.props} />
+          <LoginModal close={this._onClose.bind(this)} open={this.state.modalOpen} {...this.props} />
         </Button>
       );
     }
