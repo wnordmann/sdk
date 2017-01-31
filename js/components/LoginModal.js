@@ -76,6 +76,14 @@ class LoginModal extends React.PureComponent {
      */
     className: React.PropTypes.string,
     /**
+     * Function to call when the login button is pressed. Will be passed username and password.
+     */
+    login: React.PropTypes.func,
+    /**
+     * Function to call when the close button is pressed.
+     */
+    close: React.PropTypes.func,
+    /**
      * @ignore
      */
     intl: intlShape.isRequired
@@ -109,7 +117,11 @@ class LoginModal extends React.PureComponent {
   _doLogin() {
     var username = this.refs.username.getValue();
     var pwd = this.refs.password.getValue();
-    LoginActions.login(username, pwd, this.failureCb, this);
+    if (this.props.login) {
+      this.props.login.call(this, username, pwd);
+    } else {
+      LoginActions.login(username, pwd, this.failureCb, this);
+    }
   }
   failureCb(xmlhttp) {
     const {formatMessage} = this.props.intl;
@@ -125,7 +137,11 @@ class LoginModal extends React.PureComponent {
     this.setState({open: true});
   }
   close() {
-    this.setState({open: false});
+    if (this.props.close) {
+      this.props.close.call(this);
+    } else {
+      this.setState({open: false});
+    }
   }
   _handleRequestClose() {
     this.setState({
