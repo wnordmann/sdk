@@ -15,14 +15,16 @@ import URL from 'url-parse';
 
 class RESTService {
   _getBaseUrl(layer) {
-    return layer.getSource().getUrls()[0].replace(/wms|ows|wfs/g, 'rest');
+    var url = layer.getSource().getUrls()[0];
+    var urlObj = new URL(url, true);
+    urlObj.set('pathname', urlObj.pathname.replace(/wms|ows|wfs/, 'rest'));
+    return urlObj;
   }
   _getTrailingChar(urlObj) {
     return urlObj.pathname.slice(-1) === '/' ? '' : '/';
   }
   _getStyleNameUrl(layer, opt_proxy) {
-    var url = this._getBaseUrl(layer);
-    var urlObj = new URL(url, true);
+    var urlObj = this._getBaseUrl(layer);
     var id = layer.get('name').split(':').pop();
     urlObj.set('pathname', urlObj.pathname + this._getTrailingChar(urlObj) + 'layers/' + id + '.json');
     return util.getProxiedUrl(urlObj.toString(), opt_proxy);
@@ -50,8 +52,7 @@ class RESTService {
     return  '<style><name>' + styleName + '</name><filename>' + styleName + '.sld</filename></style>';
   }
   _getCreateStyleUrl(layer, opt_proxy) {
-    var url = this._getBaseUrl(layer);
-    var urlObj = new URL(url, true);
+    var urlObj = this._getBaseUrl(layer);
     urlObj.set('pathname', urlObj.pathname + this._getTrailingChar(urlObj) + 'styles');
     return util.getProxiedUrl(urlObj.toString(), opt_proxy);
   }
@@ -71,8 +72,7 @@ class RESTService {
     }, this);
   }
   _getUpdateStyleUrl(layer, opt_proxy) {
-    var url = this._getBaseUrl(layer);
-    var urlObj = new URL(url, true);
+    var urlObj = this._getBaseUrl(layer);
     var styleName = layer.get('styleName');
     if (styleName.indexOf(':') !== -1) {
       var styleInfo = styleName.split(':');
