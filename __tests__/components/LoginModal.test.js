@@ -10,10 +10,9 @@ describe('LoginModal', function() {
 
   it('inputs for user and password generated', function(done) {
     var container = document.createElement('div');
-    var login = ReactDOM.render((
-      <LoginModal intl={intl} />
+    ReactDOM.render((
+      <LoginModal open={true} intl={intl} />
     ), container);
-    login.open();
     var inputs = document.querySelectorAll('input');
     assert.equal(inputs.length, 2);
     window.setTimeout(function() {

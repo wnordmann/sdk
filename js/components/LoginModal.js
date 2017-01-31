@@ -103,8 +103,13 @@ class LoginModal extends React.PureComponent {
     this.state = {
       error: false,
       errorOpen: false,
-      open: false
+      open: this.props.open
     };
+  }
+  componentWillReceiveProps(nextProps) {
+    if (this.state.open !== nextProps.open) {
+      this.setState({open: nextProps.open});
+    }
   }
   getChildContext() {
     return {muiTheme: this._muiTheme};
@@ -133,14 +138,9 @@ class LoginModal extends React.PureComponent {
     }
     this.setState({errorOpen: true, error: true, errorMsg: msg});
   }
-  open() {
-    this.setState({open: true});
-  }
   close() {
     if (this.props.close) {
       this.props.close.call(this);
-    } else {
-      this.setState({open: false});
     }
   }
   _handleRequestClose() {
@@ -175,4 +175,4 @@ class LoginModal extends React.PureComponent {
   }
 }
 
-export default injectIntl(LoginModal, {withRef: true});
+export default injectIntl(LoginModal);
