@@ -99,11 +99,11 @@ class StrokeEditor extends React.PureComponent {
     const {formatMessage} = this.props.intl;
     return (
       <div className={classNames('sdk-component stroke-editor', this.props.className)}>
-        <TextField className="stroke-width" defaultValue={this.state.strokeWidth} floatingLabelText={formatMessage(messages.strokewidthlabel)} onChange={this._onChangeStrokeWidth.bind(this)} /><br/>
         <div className="stroke-color">
           <Label>{formatMessage(messages.strokecolorlabel)}:</Label>
           <ColorPicker type='chrome' onChangeComplete={this._onChangeStroke.bind(this)} color={this.state.strokeColor.rgb} />
         </div>
+        <TextField className="stroke-width" defaultValue={this.state.strokeWidth} floatingLabelText={formatMessage(messages.strokewidthlabel)} onChange={this._onChangeStrokeWidth.bind(this)} /><br/>
       </div>
     );
   }
