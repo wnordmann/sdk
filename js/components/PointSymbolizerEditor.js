@@ -21,6 +21,7 @@ import SelectField from 'material-ui/SelectField';
 import Paper from 'material-ui/Paper';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
+import {GridList, GridTile} from 'material-ui/GridList'
 
 const messages = defineMessages({
   filllabel: {
@@ -196,12 +197,16 @@ class PointSymbolizerEditor extends React.PureComponent {
           </div>
         </Paper>
         <Paper zDepth={0} style={this.state.externalGraphic ? {display: 'none'} : undefined}>
-          <Checkbox onCheck={this._onFillCheck.bind(this)} checked={this.state.hasFill} label={formatMessage(messages.filllabel)} />
-          <FillEditor onChange={this.props.onChange} intl={this.props.intl} initialFillColor={this.props.initialState ? this.props.initialState.fillColor : undefined} />
-        </Paper>
-        <Paper zDepth={0} style={this.state.externalGraphic ? {display: 'none'} : undefined}>
-          <Checkbox onCheck={this._onStrokeCheck.bind(this)} checked={this.state.hasStroke} label={formatMessage(messages.strokelabel)} />
-          <StrokeEditor onChange={this.props.onChange} intl={this.props.intl} initialStrokeColor={this.props.initialState ? this.props.initialState.strokeColor : undefined} initialStrokeWidth={this.props.initialState ? this.props.initialState.strokeWidth : undefined} />
+          <GridList cellHeight='auto'>
+            <GridTile>
+              <Checkbox onCheck={this._onFillCheck.bind(this)} checked={this.state.hasFill} label={formatMessage(messages.filllabel)} />
+              <FillEditor onChange={this.props.onChange} intl={this.props.intl} initialFillColor={this.props.initialState ? this.props.initialState.fillColor : undefined} />
+            </GridTile>
+            <GridTile>
+              <Checkbox onCheck={this._onStrokeCheck.bind(this)} checked={this.state.hasStroke} label={formatMessage(messages.strokelabel)} />
+              <StrokeEditor onChange={this.props.onChange} intl={this.props.intl} initialStrokeColor={this.props.initialState ? this.props.initialState.strokeColor : undefined} initialStrokeWidth={this.props.initialState ? this.props.initialState.strokeWidth : undefined} />
+            </GridTile>
+          </GridList>
         </Paper>
       </div>
     );

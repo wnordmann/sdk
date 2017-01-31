@@ -17,6 +17,7 @@ import Checkbox from 'material-ui/Checkbox';
 import FillEditor from './FillEditor';
 import StrokeEditor from './StrokeEditor';
 import Paper from 'material-ui/Paper';
+import {GridList, GridTile} from 'material-ui/GridList';
 
 const messages = defineMessages({
   filllabel: {
@@ -80,16 +81,18 @@ class PolygonSymbolizerEditor extends React.PureComponent {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <div className={classNames('sdk-component polygon-symbolizer-editor', this.props.className)}>
-        <Paper zDepth={0}>
-          <Checkbox onCheck={this._onFillCheck.bind(this)} checked={this.state.hasFill} label={formatMessage(messages.filllabel)} />
-          <FillEditor onChange={this.props.onChange} intl={this.props.intl} initialFillColor={this.props.initialState ? this.props.initialState.fillColor : undefined} />
-        </Paper>
-        <Paper zDepth={0}>
-          <Checkbox onCheck={this._onStrokeCheck.bind(this)} checked={this.state.hasStroke} label={formatMessage(messages.strokelabel)} />
-          <StrokeEditor onChange={this.props.onChange} intl={this.props.intl} initialStrokeColor={this.props.initialState ? this.props.initialState.strokeColor : undefined} initialStrokeWidth={this.props.initialState ? this.props.initialState.strokeWidth : undefined} />
-        </Paper>
-      </div>
+      <Paper zDepth={0} className={classNames('sdk-component polygon-symbolizer-editor', this.props.className)}>
+        <GridList cellHeight='auto'>
+          <GridTile>
+            <Checkbox onCheck={this._onFillCheck.bind(this)} checked={this.state.hasFill} label={formatMessage(messages.filllabel)} />
+            <FillEditor onChange={this.props.onChange} intl={this.props.intl} initialFillColor={this.props.initialState ? this.props.initialState.fillColor : undefined} />
+          </GridTile>
+          <GridTile>
+            <Checkbox onCheck={this._onStrokeCheck.bind(this)} checked={this.state.hasStroke} label={formatMessage(messages.strokelabel)} />
+            <StrokeEditor onChange={this.props.onChange} intl={this.props.intl} initialStrokeColor={this.props.initialState ? this.props.initialState.strokeColor : undefined} initialStrokeWidth={this.props.initialState ? this.props.initialState.strokeWidth : undefined} />
+          </GridTile>
+        </GridList>
+      </Paper>
     );
   }
 }

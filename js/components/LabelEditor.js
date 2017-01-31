@@ -18,6 +18,7 @@ import SelectField from 'material-ui/SelectField';
 import TextField from 'material-ui/TextField';
 import Label from './Label';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
+import {GridList, GridTile} from 'material-ui/GridList';
 
 const messages = defineMessages({
   attributelabel: {
@@ -132,18 +133,24 @@ class LabelEditor extends React.PureComponent {
     }
     return (
       <div className={classNames('sdk-component label-editor', this.props.className)}>
-        <div className='label-value'>
-          <SelectField floatingLabelText={formatMessage(messages.attributelabel)} hintText={formatMessage(messages.emptytext)} value={this.state.labelAttribute} onChange={this._onItemChange.bind(this)}>
-            {attributeItems}
-          </SelectField>
-        </div>
-        <div className='label-size'>
-          <TextField defaultValue={this.state.fontSize} floatingLabelText={formatMessage(messages.sizelabel)} onChange={this._onChangeFontSize.bind(this)} />
-        </div>
-        <div className='label-color'>
-          <Label>{formatMessage(messages.fillcolorlabel)}:</Label>
-          <ColorPicker type='chrome' onChangeComplete={this._onChangeFill.bind(this)} color={this.state.fontColor.rgb} />
-        </div>
+        <GridList cellHeight='auto'>
+          <GridTile>
+            <div className='label-value'>
+              <SelectField floatingLabelText={formatMessage(messages.attributelabel)} hintText={formatMessage(messages.emptytext)} value={this.state.labelAttribute} onChange={this._onItemChange.bind(this)}>
+                {attributeItems}
+              </SelectField>
+            </div>
+            <div className='label-size'>
+              <TextField defaultValue={this.state.fontSize} floatingLabelText={formatMessage(messages.sizelabel)} onChange={this._onChangeFontSize.bind(this)} />
+            </div>
+          </GridTile>
+          <GridTile>
+            <div className='label-color'>
+              <Label>{formatMessage(messages.fillcolorlabel)}:</Label>
+              <ColorPicker type='chrome' onChangeComplete={this._onChangeFill.bind(this)} color={this.state.fontColor.rgb} />
+            </div>
+          </GridTile>
+        </GridList>
       </div>
     );
   }
