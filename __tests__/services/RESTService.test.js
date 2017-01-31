@@ -9,21 +9,30 @@ raf.polyfill();
 
 describe('RESTService', function() {
 
-  var layer, url;
+  var layer;
   beforeEach(function() {
     layer = new ol.layer.Tile({
-      name: 'states'
+      name: 'states',
+      source: new ol.source.TileWMS({
+        url: 'http://demo.boundlessgeo.com/geoserver/wms'
+      })
     });
-    url = 'http://demo.boundlessgeo.com/geoserver/wms';
   });
 
   it('creates the correct url for get style name', function() {
-    var styleUrl = RESTService._getStyleNameUrl(url, layer);
+    var styleUrl = RESTService._getStyleNameUrl(layer);
     var expected = 'http://demo.boundlessgeo.com/geoserver/rest/layers/states.json';
     assert.equal(styleUrl, expected);
     var proxy = 'http://proxy/?url=';
-    styleUrl = RESTService._getStyleNameUrl(url, layer, proxy);
+    styleUrl = RESTService._getStyleNameUrl(layer, proxy);
     assert.equal(styleUrl, proxy + encodeURIComponent(expected));
+  });
+
+  it('creates the correct url for get style name if custom params', function() {
+    layer.getSource().setUrl('http://localhost:8080/geoserver/wms?access_token=Qq039tZU0UhzRlK1qpVMY562jI3wAn');
+    var styleUrl = RESTService._getStyleNameUrl(layer);
+    var expected = 'http://localhost:8080/geoserver/rest/layers/states.json?access_token=Qq039tZU0UhzRlK1qpVMY562jI3wAn';
+    assert.equal(styleUrl, expected);
   });
 
   it('parses the style name', function() {
@@ -38,15 +47,44 @@ describe('RESTService', function() {
 
   it('update style url is correct', function() {
     layer.set('styleName', 'states');
-    var updateUrl = RESTService._getUpdateStyleUrl(url, layer);
+    var updateUrl = RESTService._getUpdateStyleUrl(layer);
     assert.equal(updateUrl, 'http://demo.boundlessgeo.com/geoserver/rest/styles/states');
     layer.set('styleName', 'foo:states');
-    updateUrl = RESTService._getUpdateStyleUrl(url, layer);
+    updateUrl = RESTService._getUpdateStyleUrl(layer);
     var expected = 'http://demo.boundlessgeo.com/geoserver/rest/workspaces/foo/styles/states';
     assert.equal(updateUrl, expected);
+  });
+
+  it('update style url is correct with params', function() {
+    layer.getSource().setUrl('http://localhost:8080/geoserver/wms?access_token=Qq039tZU0UhzRlK1qpVMY562jI3wAn');
+    layer.set('styleName', 'states');
+    var updateUrl = RESTService._getUpdateStyleUrl(layer);
+    assert.equal(updateUrl, 'http://localhost:8080/geoserver/rest/styles/states?access_token=Qq039tZU0UhzRlK1qpVMY562jI3wAn');
+  });
+
+  it('update style url is correct with proxy', function() {
+    layer.set('styleName', 'foo:states');
+    var expected = 'http://demo.boundlessgeo.com/geoserver/rest/workspaces/foo/styles/states';
     var proxy = 'http://proxy/?url=';
-    updateUrl = RESTService._getUpdateStyleUrl(url, layer, proxy);
+    var updateUrl = RESTService._getUpdateStyleUrl(layer, proxy);
     assert.equal(updateUrl, proxy + encodeURIComponent(expected));
+  });
+
+  it('create style url is correct', function() {
+    var url = RESTService._getCreateStyleUrl(layer);
+    assert.equal(url, 'http://demo.boundlessgeo.com/geoserver/rest/styles');
+  });
+
+  it('create style url is correct with params', function() {
+    layer.getSource().setUrl('http://localhost:8080/geoserver/wms?access_token=Qq039tZU0UhzRlK1qpVMY562jI3wAn');
+    var url = RESTService._getCreateStyleUrl(layer);
+    assert.equal(url, 'http://localhost:8080/geoserver/rest/styles?access_token=Qq039tZU0UhzRlK1qpVMY562jI3wAn');
+  });
+
+  it('create style url is correct with proxy', function() {
+    var proxy = 'http://proxy/?url=';
+    var url = RESTService._getCreateStyleUrl(layer, proxy);
+    assert.equal(url, proxy + encodeURIComponent('http://demo.boundlessgeo.com/geoserver/rest/styles'));
   });
 
   it('create style payload is correct', function() {

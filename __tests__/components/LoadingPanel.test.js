@@ -50,7 +50,7 @@ describe('LoadingPanel', function() {
   });
 
 
-  it('shows wehn tileloadstart is fired', function() {
+  it('shows when tileloadstart is fired', function() {
     var container = document.createElement('div');
     var lp = ReactDOM.render((
       <LoadingPanel map={map}/>

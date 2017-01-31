@@ -246,9 +246,6 @@ class MapConfigTransformService {
         if (layer.transparent !== undefined) {
           params.TRANSPARENT = layer.transparent;
         }
-        if (source.restUrl) {
-          layerConfig.properties.restUrl = source.restUrl;
-        }
         layerConfig.source = {
           type: 'TileWMS',
           properties: {
