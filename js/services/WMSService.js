@@ -41,14 +41,11 @@ class WMSService {
   }
   getCapabilities(url) {
     var self = this;
-    return util.fetchGet( this.getCapabilitiesUrl(url) ).then(function(xmlhttp) {
+    return util.fetchGet(this.getCapabilitiesUrl(url)).then(function(xmlhttp) {
       var info = wmsCapsFormat.read(xmlhttp);
       var mapUrl = self._getGetMapUrl(info);
       return {info, mapUrl};
-    }).catch(function(error) {
-      console.log(error);
-      return error;
-    });
+    }).catch(error => error);
   }
   createLayerFromGetCaps(url, layerName, projection, callback, opt_proxy) {
     this.getCapabilities(url, function(layerInfo, getMapUrl) {

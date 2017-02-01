@@ -14,7 +14,7 @@ import ol from 'openlayers';
 
 export default {
   getProxiedUrl(url, opt_proxy) {
-    if(opt_proxy) {
+    if (opt_proxy) {
       return opt_proxy + encodeURIComponent(url);
     } else {
       return url;
@@ -27,10 +27,10 @@ export default {
     return parseFloat(scale) / (mpu * inchesPerMeter * dpi);
   },
   getTimeInfo(layer) {
-    if(layer.Dimension) {
-      for(var i = 0, ii = layer.Dimension.length; i < ii; ++i) {
+    if (layer.Dimension) {
+      for (var i = 0, ii = layer.Dimension.length; i < ii; ++i) {
         var dimension = layer.Dimension[i];
-        if(dimension.name === 'time') {
+        if (dimension.name === 'time') {
           return dimension.values;
         }
       }
@@ -38,7 +38,7 @@ export default {
   },
   rgbToHex(rgb) {
     rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
-    return(rgb && rgb.length === 4) ? '#' +
+    return (rgb && rgb.length === 4) ? '#' +
       ('0' + parseInt(rgb[1], 10).toString(16)).slice(-2) +
       ('0' + parseInt(rgb[2], 10).toString(16)).slice(-2) +
       ('0' + parseInt(rgb[3], 10).toString(16)).slice(-2) : '';
@@ -64,7 +64,7 @@ export default {
     var cbname = 'fn' + Date.now() + getRandomInt(1, 10000);
     var script = document.createElement('script');
     script.onerror = function() {
-      if(failure) {
+      if (failure) {
         failure.call(scope);
       }
     };
@@ -78,12 +78,12 @@ export default {
   doGET(url, success, failure, scope) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
-      if(xmlhttp.readyState === 4) {
-        if(xmlhttp.status === 200) {
-          if(success) {
+      if (xmlhttp.readyState === 4) {
+        if (xmlhttp.status === 200) {
+          if (success) {
             success.call(scope, xmlhttp);
           }
-        } else if(failure) {
+        } else if (failure) {
           failure.call(scope, xmlhttp);
         }
       }
@@ -92,24 +92,19 @@ export default {
     xmlhttp.send();
     return xmlhttp;
   },
-  fetchGet(url) {
-    return fetch(url).then(function(response) {
-      return response.text();
-    }).then(function(data) {
-      return data;
-    }).catch(function() {
-      return;
-      console.log("Booo");
-    });
 
+  fetchGet(url) {
+    return fetch(url).then(response =>  response.text())
+    .then(data => data)
+    .catch(error => error);
   },
   doPOST(url, data, success, failure, scope, contentType, put) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open((put ? 'PUT' : 'POST'), url, true);
     xmlhttp.setRequestHeader('Content-Type', contentType ? contentType : 'text/xml');
     xmlhttp.onreadystatechange = function() {
-      if(xmlhttp.readyState === 4) {
-        if(xmlhttp.status === 200 || xmlhttp.status === 201) {
+      if (xmlhttp.readyState === 4) {
+        if (xmlhttp.status === 200 || xmlhttp.status === 201) {
           success.call(scope, xmlhttp);
         } else {
           failure.call(scope, xmlhttp);

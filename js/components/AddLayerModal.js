@@ -200,37 +200,22 @@ class AddLayerModal extends React.PureComponent {
     var source = this.state.sources[this.state.source];
     var url = source.url;
     var service = AddLayerModal.services[source.type];
-    var me = this;
-    const {formatMessage} = this.props.intl;
-    var failureCb = function(xmlhttp) {
-      if (!xmlhttp || xmlhttp.status === 0) {
-        me._setError(formatMessage(messages.corserror));
-      } else {
-        me._setError(xmlhttp.status + ' ' + xmlhttp.statusText);
-      }
-      if (onFailure) {
-        onFailure();
-      }
-    };
-    // var successCb = function(layerInfo, onlineResource) {
-    //   source.getMapUrl = onlineResource;
-    //   me.setState({loading: false, layerInfo: layerInfo});
-    // };
-    service.getCapabilities(url)
-      .then(function(capability){
-        source.getMapUrl = capability.mapUrl;
-        me.setState({loading: false, layerInfo: capability.info});
-      }).catch(function (error) {
-        if (!error || error.status === 0) {
-          me._setError(formatMessage(messages.corserror));
-        } else {
-          me._setError(error.status + ' ' + error.statusText);
-        }
-        if (onFailure) {
-          onFailure();
-        }
-      });
+    var self = this;
 
+    service.getCapabilities(url)
+      .then(capability => {
+        source.getMapUrl = capability.mapUrl;
+        self.setState({loading: false, layerInfo: capability.info});
+      }).catch(error => self.handleError(error));
+
+  }
+  handleError(error) {
+    const {formatMessage} = this.props.intl;
+    if (!error || error.status === 0) {
+      this._setError(formatMessage(messages.corserror));
+    } else {
+      this._setError(error.status + ' ' + error.statusText);
+    }
   }
   _setError(msg) {
     this.setState({
