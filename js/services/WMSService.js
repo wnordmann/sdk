@@ -39,13 +39,16 @@ class WMSService {
       }
     }
   }
-  getCapabilities(url, onSuccess, onFailure, opt_proxy) {
-    return util.doGET(this.getCapabilitiesUrl(url, opt_proxy), function(xmlhttp) {
-      var info = wmsCapsFormat.read(xmlhttp.responseText);
-      onSuccess.call(this, info.Capability.Layer, this._getGetMapUrl(info));
-    }, function(xmlhttp) {
-      onFailure.call(this, xmlhttp);
-    }, this);
+  getCapabilities(url) {
+    var self = this;
+    return util.fetchGet( this.getCapabilitiesUrl(url) ).then(function(xmlhttp) {
+      var info = wmsCapsFormat.read(xmlhttp);
+      var mapUrl = self._getGetMapUrl(info);
+      return {info, mapUrl};
+    }).catch(function(error) {
+      console.log(error);
+      return error;
+    });
   }
   createLayerFromGetCaps(url, layerName, projection, callback, opt_proxy) {
     this.getCapabilities(url, function(layerInfo, getMapUrl) {

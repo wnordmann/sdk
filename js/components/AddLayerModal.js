@@ -181,9 +181,7 @@ class AddLayerModal extends React.PureComponent {
     return {muiTheme: this._muiTheme};
   }
   componentWillUnmount() {
-    if (this._request) {
-      this._request.abort();
-    }
+
   }
   static addNewTypes = [
     'WMS',
@@ -205,7 +203,6 @@ class AddLayerModal extends React.PureComponent {
     var me = this;
     const {formatMessage} = this.props.intl;
     var failureCb = function(xmlhttp) {
-      delete me._request;
       if (!xmlhttp || xmlhttp.status === 0) {
         me._setError(formatMessage(messages.corserror));
       } else {
@@ -215,12 +212,25 @@ class AddLayerModal extends React.PureComponent {
         onFailure();
       }
     };
-    var successCb = function(layerInfo, onlineResource) {
-      delete me._request;
-      source.getMapUrl = onlineResource;
-      me.setState({loading: false, layerInfo: layerInfo});
-    };
-    me._request = service.getCapabilities(url, successCb, failureCb, this._proxy);
+    // var successCb = function(layerInfo, onlineResource) {
+    //   source.getMapUrl = onlineResource;
+    //   me.setState({loading: false, layerInfo: layerInfo});
+    // };
+    service.getCapabilities(url)
+      .then(function(capability){
+        source.getMapUrl = capability.mapUrl;
+        me.setState({loading: false, layerInfo: capability.info});
+      }).catch(function (error) {
+        if (!error || error.status === 0) {
+          me._setError(formatMessage(messages.corserror));
+        } else {
+          me._setError(error.status + ' ' + error.statusText);
+        }
+        if (onFailure) {
+          onFailure();
+        }
+      });
+
   }
   _setError(msg) {
     this.setState({
@@ -268,8 +278,8 @@ class AddLayerModal extends React.PureComponent {
   _getLayersMarkup(layer) {
     var filter = this.state.filter;
     var childList;
-    if (layer.Layer) {
-      var children = layer.Layer.map(function(child) {
+    if (layer.Capability.Layer) {
+      var children = layer.Capability.Layer.Layer.map(function(child) {
         return this._getLayersMarkup(child);
       }, this);
       childList = children;
