@@ -186,6 +186,7 @@ class MapConfigTransformService {
         layerConfig.source = {
           type: 'XYZ',
           properties: {
+            crossOrigin: 'anonymous',
             urls: [layer.args[1]]
           }
         };
