@@ -278,8 +278,8 @@ class AddLayerModal extends React.PureComponent {
   _getLayersMarkup(layer) {
     var filter = this.state.filter;
     var childList;
-    if (layer.Capability.Layer) {
-      var children = layer.Capability.Layer.Layer.map(function(child) {
+    if (layer.Layer) {
+      var children = layer.Layer.map(function(child) {
         return this._getLayersMarkup(child);
       }, this);
       childList = children;
@@ -419,7 +419,7 @@ class AddLayerModal extends React.PureComponent {
     const {formatMessage} = this.props.intl;
     var layers;
     if (this.state.layerInfo) {
-      var layerInfo = this._getLayersMarkup(this.state.layerInfo);
+      var layerInfo = this._getLayersMarkup(this.state.layerInfo.Capability.Layer);
       layers = <List>{layerInfo}</List>;
     }
     var loadingIndicator;
