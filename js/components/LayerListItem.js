@@ -428,11 +428,12 @@ class LayerListItem extends React.PureComponent {
         this.props.layer.set('styleInfo', SLDService.parse(sld_body));
         this.refs.stylemodal.getWrappedInstance().open();
       } else {
-        var me = this;
-        WMSService.getStyles(this.props.layer.get('wfsInfo').url, this.props.layer, function(info) {
-          me.props.layer.set('styleInfo', info);
-          me.refs.stylemodal.getWrappedInstance().open();
-        }, undefined, this._proxy);
+        var self = this;
+        WMSService.getStyles(this.props.layer.get('wfsInfo').url, this.props.layer)
+          .then(data => {
+            self.props.layer.set('styleInfo', data);
+            self.refs.stylemodal.getWrappedInstance().open();
+          });
       }
     } else {
       this.refs.stylemodal.getWrappedInstance().open();

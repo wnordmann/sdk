@@ -39,13 +39,15 @@ class WMSService {
       }
     }
   }
-  getCapabilities(url) {
+  getCapabilities(url, opt_proxy) {
     var self = this;
-    return util.fetchGet(this.getCapabilitiesUrl(url)).then(function(xmlhttp) {
-      var info = wmsCapsFormat.read(xmlhttp);
-      var mapUrl = self._getGetMapUrl(info);
-      return {info, mapUrl};
-    }).catch(error => error);
+    return util.fetchGet(this.getCapabilitiesUrl(url, opt_proxy))
+      .then(data => {
+        var info = wmsCapsFormat.read(data);
+        var mapUrl = self._getGetMapUrl(info);
+        return {info, mapUrl};
+      })
+      .catch(error => error);
   }
   createLayerFromGetCaps(url, layerName, projection, callback, opt_proxy) {
     this.getCapabilities(url, function(layerInfo, getMapUrl) {
@@ -112,13 +114,11 @@ class WMSService {
     });
     return util.getProxiedUrl(urlObj.toString(), opt_proxy);
   }
-  getStyles(url, layer, onSuccess, onFailure, opt_proxy) {
-    return util.doGET(this.getStylesUrl(url, layer, opt_proxy), function(xmlhttp) {
-      var info = SLDService.parse(xmlhttp.responseText);
-      onSuccess.call(this, info);
-    }, function(xmlhttp) {
-      onFailure.call(this, xmlhttp);
-    }, this);
+
+  getStyles(url, layer, opt_proxy) {
+    return util.fetchGet(this.getStylesUrl(url, layer, opt_proxy))
+      .then(data => SLDService.parse(data.responseText))
+      .catch(error => error);
   }
   getFeatureInfoUrl(layer, coordinate, view, infoFormat, opt_proxy) {
     var resolution = view.getResolution(), projection = view.getProjection();

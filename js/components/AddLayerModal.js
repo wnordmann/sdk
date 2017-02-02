@@ -202,7 +202,7 @@ class AddLayerModal extends React.PureComponent {
     var service = AddLayerModal.services[source.type];
     var self = this;
 
-    service.getCapabilities(url)
+    service.getCapabilities(url, this._proxy)
       .then(capability => {
         source.getMapUrl = capability.mapUrl;
         self.setState({loading: false, layerInfo: capability.info});
