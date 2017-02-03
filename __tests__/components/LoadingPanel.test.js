@@ -24,6 +24,7 @@ describe('LoadingPanel', function() {
     style.height = height + 'px';
     document.body.appendChild(target);
     layer = new ol.layer.Tile({
+      name: 'foo',
       source: new ol.source.TileWMS({
         url: '/geoserver/wms',
         params: {

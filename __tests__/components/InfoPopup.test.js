@@ -29,10 +29,12 @@ describe('InfoPopup', function() {
         source: new ol.source.OSM()
       }),
       new ol.layer.Tile({
+        name: 'x',
         visible: false,
         source: new ol.source.TileWMS({url: 'http://foo', params: {LAYERS: 'x'}})
       }),
       new ol.layer.Tile({
+        name: 'y',
         popupInfo: '#AllAttributes',
         source: new ol.source.TileWMS({url: 'http://foo', params: {LAYERS: 'y'}})
       })

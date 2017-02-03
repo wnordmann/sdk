@@ -34,6 +34,7 @@ describe('Legend', function() {
       }),
       new ol.layer.Tile({
         id: 'wms',
+        name: 'foo',
         title: 'WMS',
         visible: false,
         source: new ol.source.TileWMS({
