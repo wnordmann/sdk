@@ -11,6 +11,8 @@
  */
 
 import ol from 'openlayers';
+import 'whatwg-fetch';
+import 'es6-promise';
 
 export default {
   getProxiedUrl(url, opt_proxy) {

@@ -4,10 +4,32 @@ import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
 import WMSService from '../../js/services/WMSService';
-
+import util from '../../js/util';
+// import nock from 'nock';
+import fetchMock from 'fetch-mock';
+// import testJson from './test.json';
+// import testReq from './testReq.json';
 raf.polyfill();
 
 describe('WMSService', function() {
+
+
+  // // Mock the fetch() global to always return the same value for GET
+  // // requests to all URLs.
+  // fetchMock.get('*', {hello: 'world'});
+  //
+  // makeRequest().then(function(data) {
+  //   console.log('got data', data);
+  // });
+  it('get capabilites from a url', function() {
+    // nock('http://www.example.com')
+    //   .get('/resource')
+    //   .reply(200, 'path matched');
+    fetchMock.get('*', {hello: 'world'});
+    util.fetchGet('http://www.example.com').then(function(d) {
+      assert.equal(d, {hello: 'world'});
+    });
+  });
 
   it('uses correct GetCapabilities url', function() {
     var url = WMSService.getCapabilitiesUrl('http://localhost/geoserver/ows');

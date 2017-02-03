@@ -57,6 +57,7 @@
     "c3-windows": "^0.4.11-rc4",
     "classnames": "^2.2.5",
     "debounce": "^1.0.0",
+    "fetch-polyfill": "^0.8.2",
     "flux": "^2.0.1",
     "hint.css": "^2.4.0",
     "jison": "^0.4.17",
@@ -78,7 +79,8 @@
     "react-responsive-decorator": "0.0.1",
     "react-table": "^3.0.0",
     "url-parse": "^1.1.1",
-    "w3c-schemas": "^1.4.0"
+    "w3c-schemas": "^1.4.0",
+    "whatwg-fetch": "^2.0.2"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
@@ -102,6 +104,7 @@
     "es6-promise": "^3.0.2",
     "eslint": "1.9.0",
     "eslint-plugin-react": "3.9.0",
+    "fetch-mock": "^5.9.3",
     "gitbook-cli": "2.1.2",
     "intl": "^1.0.0",
     "licensify": "^2.2.0",
