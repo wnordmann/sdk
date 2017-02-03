@@ -165,7 +165,7 @@ class FeatureStore extends EventEmitter {
     var features = this._config[id].features.getFeatures();
     return features.slice(page * pageSize, page * pageSize + pageSize);
   }
-  addLayer(layer, filter, opt_proxy) {
+  addLayer(layer, filter, opt_proxy, opt_requestHeaders) {
     var id = layer.get('id');
     if (!this._config[id]) {
       this._config[id] = {
@@ -186,7 +186,7 @@ class FeatureStore extends EventEmitter {
           WFSService.getNumberOfFeatures(layer, function(count) {
             layer.set('numberOfFeatures', count);
             layer.set('loading', false);
-          }, opt_proxy);
+          }, opt_proxy, opt_requestHeaders);
         }
       }
     }
@@ -211,7 +211,7 @@ class FeatureStore extends EventEmitter {
     this._config[id].features.clear();
     this._config[id].features.addFeatures(features);
   }
-  loadFeatures(layer, startIndex, pageSize, sortingInfo, onSuccess, onFailure, scope, opt_proxy) {
+  loadFeatures(layer, startIndex, pageSize, sortingInfo, onSuccess, onFailure, scope, opt_proxy, opt_requestHeaders) {
     var srsName = this._map.getView().getProjection().getCode();
     var me = this;
     var success = function(features) {
@@ -231,7 +231,7 @@ class FeatureStore extends EventEmitter {
     if (layer.getSource() instanceof ol.source.TileArcGISRest) {
       ArcGISRestService.loadFeatures(layer, startIndex, pageSize, sortingInfo, srsName, success, failure);
     } else {
-      WFSService.loadFeatures(layer, startIndex, pageSize, sortingInfo, srsName, success, failure, opt_proxy);
+      WFSService.loadFeatures(layer, startIndex, pageSize, sortingInfo, srsName, success, failure, opt_proxy, opt_requestHeaders);
     }
   }
   bindLayer(layer) {

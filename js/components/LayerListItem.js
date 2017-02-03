@@ -290,7 +290,8 @@ class LayerListItem extends React.PureComponent {
 
   static contextTypes = {
     muiTheme: React.PropTypes.object,
-    proxy: React.PropTypes.string
+    proxy: React.PropTypes.string,
+    requestHeaders: React.PropTypes.object
   };
 
   static childContextTypes = {
@@ -309,6 +310,7 @@ class LayerListItem extends React.PureComponent {
   constructor(props, context) {
     super(props);
     this._proxy = context.proxy;
+    this._requestHeaders = context.requestHeaders;
     this._muiTheme = context.muiTheme || getMuiTheme();
     this.state = {
       tableOpen: false,
@@ -432,7 +434,7 @@ class LayerListItem extends React.PureComponent {
         WMSService.getStyles(this.props.layer.get('wfsInfo').url, this.props.layer, function(info) {
           me.props.layer.set('styleInfo', info);
           me.refs.stylemodal.getWrappedInstance().open();
-        }, undefined, this._proxy);
+        }, undefined, this._proxy, this._requestHeaders);
       }
     } else {
       this.refs.stylemodal.getWrappedInstance().open();

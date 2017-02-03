@@ -149,7 +149,8 @@ class WFST extends React.PureComponent {
 
   static contextTypes = {
     muiTheme: React.PropTypes.object,
-    proxy: React.PropTypes.string
+    proxy: React.PropTypes.string,
+    requestHeaders: React.PropTypes.object
   };
 
   static childContextTypes = {
@@ -166,6 +167,7 @@ class WFST extends React.PureComponent {
   constructor(props, context) {
     super(props);
     this._proxy = context.proxy;
+    this._requestHeaders = context.requestHeaders;
     this._dispatchToken2 = ToolUtil.register(this);
     var me = this;
     FeatureStore.bindMap(this.props.map, this._proxy);
@@ -307,7 +309,7 @@ class WFST extends React.PureComponent {
           delete me._request;
         }, function() {
           delete me._request;
-        });
+        }, this._proxy, this._requestHeaders);
       }
       return !found;
     } else {
@@ -370,7 +372,7 @@ class WFST extends React.PureComponent {
         feature.setGeometry(me._geom);
         delete me._geom;
         me._setError(msg || (xmlhttp.status + ' ' + xmlhttp.statusText));
-      });
+      }, this._proxy, this._requestHeaders);
     }
   }
   _onDrawEnd(evt) {
@@ -393,7 +395,7 @@ class WFST extends React.PureComponent {
       delete me._request;
       me.deactivate();
       me._setError(msg || (xmlhttp.status + ' ' + xmlhttp.statusText));
-    });
+    }, this._proxy, this._requestHeaders);
   }
   _redraw() {
     this.state.layer.getSource().updateParams({'_olSalt': Math.random()});

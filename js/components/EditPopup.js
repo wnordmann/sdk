@@ -49,6 +49,8 @@ class EditPopup extends React.Component {
   };
 
   static contextTypes = {
+    proxy: React.PropTypes.string,
+    requestHeaders: React.PropTypes.object,
     muiTheme: React.PropTypes.object
   };
 
@@ -59,6 +61,8 @@ class EditPopup extends React.Component {
   constructor(props, context) {
     super(props);
     this._muiTheme = context.muiTheme || getMuiTheme();
+    this._proxy = context.proxy;
+    this._requestHeaders = context.requestHeaders;
     this._dispatchToken = ToolUtil.register(this);
     this.state = {
       feature: null,
@@ -132,7 +136,7 @@ class EditPopup extends React.Component {
               me.setVisible(true);
               me.overlayPopup.setPosition(coord);
             });
-          }).bind(layers[i]));
+          }).bind(layers[i]), undefined, this._proxy, this._requestHeaders);
         }
       }
     }

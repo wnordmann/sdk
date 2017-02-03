@@ -75,7 +75,7 @@ export default {
     };
     document.head.appendChild(script);
   },
-  doGET(url, success, failure, scope) {
+  doGET(url, success, failure, scope, opt_requestHeaders) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
       if (xmlhttp.readyState === 4) {
@@ -89,10 +89,17 @@ export default {
       }
     };
     xmlhttp.open('GET', url, true);
+    if (opt_requestHeaders) {
+      for (var key in opt_requestHeaders) {
+        if (opt_requestHeaders.hasOwnProperty(key)) {
+          xmlhttp.setRequestHeader(key, opt_requestHeaders[key]);
+        }
+      }
+    }
     xmlhttp.send();
     return xmlhttp;
   },
-  doPOST(url, data, success, failure, scope, contentType, put) {
+  doPOST(url, data, success, failure, scope, contentType, put, opt_requestHeaders) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open((put ? 'PUT' : 'POST'), url, true);
     xmlhttp.setRequestHeader('Content-Type', contentType ? contentType : 'text/xml');
@@ -105,6 +112,13 @@ export default {
         }
       }
     };
+    if (opt_requestHeaders) {
+      for (var key in opt_requestHeaders) {
+        if (opt_requestHeaders.hasOwnProperty(key)) {
+          xmlhttp.setRequestHeader(key, opt_requestHeaders[key]);
+        }
+      }
+    }
     xmlhttp.send(data);
     return xmlhttp;
   }

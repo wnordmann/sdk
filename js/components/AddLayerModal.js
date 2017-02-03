@@ -149,7 +149,8 @@ class AddLayerModal extends React.PureComponent {
 
   static contextTypes = {
     muiTheme: React.PropTypes.object,
-    proxy: React.PropTypes.string
+    proxy: React.PropTypes.string,
+    requestHeaders: React.PropTypes.object
   };
 
   static childContextTypes = {
@@ -163,6 +164,7 @@ class AddLayerModal extends React.PureComponent {
   constructor(props, context) {
     super(props);
     this._proxy = context.proxy;
+    this._requestHeaders = context.requestHeaders;
     this._muiTheme = context.muiTheme || getMuiTheme();
     this.state = {
       loading: false,
@@ -220,7 +222,7 @@ class AddLayerModal extends React.PureComponent {
       source.getMapUrl = onlineResource;
       me.setState({loading: false, layerInfo: layerInfo});
     };
-    me._request = service.getCapabilities(url, successCb, failureCb, this._proxy);
+    me._request = service.getCapabilities(url, successCb, failureCb, this._proxy, this._requestHeaders);
   }
   _setError(msg) {
     this.setState({

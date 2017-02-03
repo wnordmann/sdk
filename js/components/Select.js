@@ -71,7 +71,8 @@ class Select extends React.PureComponent {
 
   static contextTypes = {
     muiTheme: React.PropTypes.object,
-    proxy: React.PropTypes.string
+    proxy: React.PropTypes.string,
+    requestHeaders: React.PropTypes.object
   };
 
   static childContextTypes = {
@@ -83,6 +84,7 @@ class Select extends React.PureComponent {
     this._dispatchToken = ToolUtil.register(this);
     this._muiTheme = context.muiTheme || getMuiTheme();
     this._proxy = context.proxy;
+    this._requestHeaders = context.requestHeaders;
     FeatureStore.bindMap(this.props.map, this._proxy);
     Select.interactions.RECTANGLE.on('boxend', this._onBoxEnd, this);
     this.state = {
@@ -137,7 +139,7 @@ class Select extends React.PureComponent {
             }
             FeatureStore.appendFeatures(lyr, selected);
             SelectActions.selectFeatures(lyr, selected, true);
-          });
+          }, undefined, this._proxy, this._requestHeaders);
         }
       }
     }, this);
