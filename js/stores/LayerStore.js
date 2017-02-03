@@ -54,7 +54,7 @@ class LayerStore extends EventEmitter {
     layer.on('change:visible', this.emitChange, this);
     if (!(layer instanceof ol.layer.Group)) {
       var source = layer.getSource();
-      if ((source instanceof ol.source.ImageWMS || ol.source instanceof ol.source.TileWMS) || layer.get('isWFST')) {
+      if ((source instanceof ol.source.ImageWMS || source instanceof ol.source.TileWMS) || layer.get('isWFST')) {
         if (!layer.get('wfsInfo')) {
           this._getWfsInfo(layer);
         }
