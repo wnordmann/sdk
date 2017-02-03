@@ -175,19 +175,33 @@ class MapConfigTransformService {
         properties: {
           isRemovable: true,
           visible: layer.visibility,
-          title: layer.title || layer.name.split(':').pop(),
+          title: layer.title || (layer.name ? layer.name.split(':').pop() : undefined),
           id: layer.name,
           name: layer.name
         }
       };
       if (source.ptype === 'gxp_olsource' && layer.type === 'OpenLayers.Layer.XYZ') {
         layerConfig.type = 'Tile';
-        layerConfig.title = layer.args[0];
+        layerConfig.properties.title = layer.args[0];
+        layerConfig.properties.name = layerConfig.properties.title.split(' ').join('_');
+        var xyzUrls;
+        var urlConfig = layer.args[1];
+        if (Array.isArray(urlConfig)) {
+          xyzUrls = urlConfig;
+        } else {
+          xyzUrls = [urlConfig];
+        }
+        for (var j = 0, jj = xyzUrls.length; j < jj; ++j) {
+          xyzUrls[j] = xyzUrls[j].replace(/\$/g, '');
+          if (xyzUrls[j].indexOf('cartocdn') !== -1) {
+            xyzUrls[j] = xyzUrls[j].replace('https:', 'http:');
+          }
+        }
         layerConfig.source = {
           type: 'XYZ',
           properties: {
             crossOrigin: 'anonymous',
-            urls: [layer.args[1]]
+            urls: xyzUrls
           }
         };
         if (layer.args.length === 3 && layer.args[2].attribution) {
@@ -218,7 +232,7 @@ class MapConfigTransformService {
             }
           }
         };
-      } else if (source.ptype === 'gxp_wmscsource') {
+      } else if (source.ptype === 'gxp_wmscsource' && layer.name) {
         layerConfig.properties.popupInfo = '#AllAttributes';
         if (layer.capability) {
           layerConfig.properties.isSelectable = layer.capability.queryable;
