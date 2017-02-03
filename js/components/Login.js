@@ -64,7 +64,8 @@ class Login extends React.PureComponent {
 
   static contextTypes = {
     muiTheme: React.PropTypes.object,
-    proxy: React.PropTypes.string
+    proxy: React.PropTypes.string,
+    requestHeaders: React.PropTypes.object
   };
 
   static childContextTypes = {
@@ -79,6 +80,7 @@ class Login extends React.PureComponent {
     super(props);
     this._muiTheme = context.muiTheme || getMuiTheme();
     this._proxy = context.proxy;
+    this._requestHeaders = context.requestHeaders;
     this.state = {
       user: null,
       modalOpen: false
@@ -106,7 +108,7 @@ class Login extends React.PureComponent {
     }, function() {
       delete me._request;
       me.setState({user: null});
-    }, this._proxy);
+    }, this._proxy, this._requestHeaders);
   }
   componentWillUnmount() {
     AppDispatcher.unregister(this._dispatchToken);
@@ -121,7 +123,7 @@ class Login extends React.PureComponent {
     }, function(xmlhttp) {
       me.setState({user: null});
       failureCb.call(scope, xmlhttp);
-    }, this._proxy);
+    }, this._proxy, this._requestHeaders);
   }
   _showLoginDialog() {
     this.setState({modalOpen: true});

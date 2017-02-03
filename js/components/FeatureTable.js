@@ -167,7 +167,8 @@ class FeatureTable extends React.Component {
 
   static contextTypes = {
     muiTheme: React.PropTypes.object,
-    proxy: React.PropTypes.string
+    proxy: React.PropTypes.string,
+    requestHeaders: React.PropTypes.object
   };
 
   static childContextTypes = {
@@ -184,6 +185,7 @@ class FeatureTable extends React.Component {
   constructor(props, context) {
     super(props);
     this._proxy = context.proxy;
+    this._requestHeaders = context.proxy;
     this._onChange = this._onChange.bind(this);
     FeatureStore.bindMap(this.props.map, this._proxy);
     this._selectedOnly = false;
@@ -231,7 +233,7 @@ class FeatureTable extends React.Component {
   _setLayer(layer) {
     this._layer = layer;
     if (layer !== null) {
-      FeatureStore.addLayer(layer, this._selectedOnly, this._proxy);
+      FeatureStore.addLayer(layer, this._selectedOnly, this._proxy, this._requestHeaders);
       if (!this._layer.get('numberOfFeatures')) {
         this._layer.once('change:numberOfFeatures', function() {
           this.setState({
@@ -379,7 +381,7 @@ class FeatureTable extends React.Component {
         msg: formatMessage(messages.loaderrormsg, {msg: msg || (xmlhttp.status + ' ' + xmlhttp.statusText)}),
         loading: false
       });
-    }, this, this._proxy);
+    }, this, this._proxy, this._requestHeaders);
   }
   _onExpandChange(expanded) {
     var me = this;

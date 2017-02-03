@@ -67,7 +67,8 @@ class MapPanel extends React.Component {
   };
 
   static contextTypes = {
-    proxy: React.PropTypes.string
+    proxy: React.PropTypes.string,
+    requestHeaders: React.PropTypes.object
   };
 
   static defaultProps = {
@@ -81,7 +82,8 @@ class MapPanel extends React.Component {
       open: false
     };
     this._proxy = context.proxy;
-    LayerStore.bindMap(this.props.map, this._proxy);
+    this._requestHeaders = context.requestHeaders;
+    LayerStore.bindMap(this.props.map, this._proxy, this._requestHeaders);
   }
   componentWillMount() {
     this._onErrorCb = this._onError.bind(this);

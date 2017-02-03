@@ -39,14 +39,14 @@ class RESTService {
     }
     return styleName;
   }
-  getStyleName(layer, onSuccess, onFailure, opt_proxy) {
+  getStyleName(layer, onSuccess, onFailure, opt_proxy, opt_requestHeaders) {
     var url = this._getStyleNameUrl(layer, opt_proxy);
     util.doGET(url, function(xmlhttp) {
       var styleName = this._parseStyleName(JSON.parse(xmlhttp.responseText));
       onSuccess.call(this, styleName);
     }, function(xmlhttp) {
       onFailure.call(this, xmlhttp);
-    }, this);
+    }, this, opt_requestHeaders);
   }
   _createStylePayload(styleName) {
     return  '<style><name>' + styleName + '</name><filename>' + styleName + '.sld</filename></style>';
@@ -56,7 +56,7 @@ class RESTService {
     urlObj.set('pathname', urlObj.pathname + this._getTrailingChar(urlObj) + 'styles');
     return util.getProxiedUrl(urlObj.toString(), opt_proxy);
   }
-  createStyle(layer, sld, onSuccess, onFailure, opt_proxy) {
+  createStyle(layer, sld, onSuccess, onFailure, opt_proxy, opt_requestHeaders) {
     var url = this._getCreateStyleUrl(layer, opt_proxy);
     var styleName = 'web_sdk_style_' + Math.floor(100000 + Math.random() * 900000);
     util.doPOST(url, this._createStylePayload(styleName), function(xmlhttp) {
@@ -69,7 +69,7 @@ class RESTService {
       } else {
         onFailure.call(this, xmlhttp);
       }
-    }, this);
+    }, this, undefined, false, opt_requestHeaders);
   }
   _getUpdateStyleUrl(layer, opt_proxy) {
     var urlObj = this._getBaseUrl(layer);
@@ -86,12 +86,12 @@ class RESTService {
       return util.getProxiedUrl(urlObj.toString(), opt_proxy);
     }
   }
-  updateStyle(layer, sld, onSuccess, onFailure, opt_proxy) {
+  updateStyle(layer, sld, onSuccess, onFailure, opt_proxy, opt_requestHeaders) {
     util.doPOST(this._getUpdateStyleUrl(layer, opt_proxy), sld, function(xmlhttp) {
       onSuccess.call(this, xmlhttp);
     }, function(xmlhttp) {
       onFailure.call(this, xmlhttp);
-    }, this, 'application/vnd.ogc.sld+xml; charset=UTF-8', true);
+    }, this, 'application/vnd.ogc.sld+xml; charset=UTF-8', true, opt_requestHeaders);
   }
 }
 

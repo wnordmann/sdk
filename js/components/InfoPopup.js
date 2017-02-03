@@ -89,6 +89,7 @@ class InfoPopup extends React.Component {
 
   static contextTypes = {
     proxy: React.PropTypes.string,
+    requestHeaders: React.PropTypes.object,
     muiTheme: React.PropTypes.object
   };
 
@@ -104,6 +105,7 @@ class InfoPopup extends React.Component {
   constructor(props, context) {
     super(props);
     this._proxy = context.proxy;
+    this._requestHeaders = context.requestHeaders;
     this._muiTheme = context.muiTheme || getMuiTheme();
     this._dispatchToken = ToolUtil.register(this);
     LayerStore.bindMap(this.props.map);
@@ -276,10 +278,10 @@ class InfoPopup extends React.Component {
         var callback = (infoFormat === 'text/plain' || infoFormat === 'text/html') ? onReadyAll : onReady;
         service.getFeatureInfo(layer, evt.coordinate, map, infoFormat, callback, function() {
           map.getTarget().style.cursor = me._cursor;
-        }, this._proxy);
+        }, this._proxy, this._requestHeaders);
       } else if (popupDef) {
         called = true;
-        service.getFeatureInfo(layer, evt.coordinate, map, 'application/json', onReady, undefined, this._proxy);
+        service.getFeatureInfo(layer, evt.coordinate, map, 'application/json', onReady, undefined, this._proxy, this.requestHeaders);
       }
     }
     if (called === false) {

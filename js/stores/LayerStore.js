@@ -29,9 +29,12 @@ class LayerStore extends EventEmitter {
     super();
     this._onError = debounce(this._onError, 1000);
   }
-  bindMap(map, opt_proxy) {
-    if (!this._proxy) {
+  bindMap(map, opt_proxy, opt_requestHeaders) {
+    if (!this._proxy && opt_proxy) {
       this._proxy = opt_proxy;
+    }
+    if (!this._requestHeaders && opt_requestHeaders) {
+      this._requestHeaders = opt_requestHeaders;
     }
     if (map !== this._map) {
       this._map = map;
@@ -73,7 +76,7 @@ class LayerStore extends EventEmitter {
     RESTService.getStyleName(layer, function(styleName) {
       layer.set('styleName', styleName);
     }, function() {
-    }, this._proxy);
+    }, this._proxy, this._requestHeaders);
   }
   _getWfsInfo(layer) {
     var source = layer.getSource();
@@ -83,7 +86,7 @@ class LayerStore extends EventEmitter {
     }, function() {
       this.set('isSelectable', false);
       this.set('wfsInfo', undefined);
-    }, layer, this._proxy);
+    }, layer, this._proxy, this._requestHeaders);
   }
   _recurseBind(layer) {
     if (layer instanceof ol.layer.Group) {

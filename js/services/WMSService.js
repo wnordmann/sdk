@@ -39,13 +39,13 @@ class WMSService {
       }
     }
   }
-  getCapabilities(url, onSuccess, onFailure, opt_proxy) {
+  getCapabilities(url, onSuccess, onFailure, opt_proxy, opt_requestHeaders) {
     return util.doGET(this.getCapabilitiesUrl(url, opt_proxy), function(xmlhttp) {
       var info = wmsCapsFormat.read(xmlhttp.responseText);
       onSuccess.call(this, info.Capability.Layer, this._getGetMapUrl(info));
     }, function(xmlhttp) {
       onFailure.call(this, xmlhttp);
-    }, this);
+    }, this, opt_requestHeaders);
   }
   createLayerFromGetCaps(url, layerName, projection, callback, opt_proxy) {
     this.getCapabilities(url, function(layerInfo, getMapUrl) {
@@ -112,13 +112,13 @@ class WMSService {
     });
     return util.getProxiedUrl(urlObj.toString(), opt_proxy);
   }
-  getStyles(url, layer, onSuccess, onFailure, opt_proxy) {
+  getStyles(url, layer, onSuccess, onFailure, opt_proxy, opt_requestHeaders) {
     return util.doGET(this.getStylesUrl(url, layer, opt_proxy), function(xmlhttp) {
       var info = SLDService.parse(xmlhttp.responseText);
       onSuccess.call(this, info);
     }, function(xmlhttp) {
       onFailure.call(this, xmlhttp);
-    }, this);
+    }, this, opt_requestHeaders);
   }
   getFeatureInfoUrl(layer, coordinate, view, infoFormat, opt_proxy) {
     var resolution = view.getResolution(), projection = view.getProjection();
@@ -131,7 +131,7 @@ class WMSService {
     );
     return util.getProxiedUrl(url, opt_proxy);
   }
-  getFeatureInfo(layer, coordinate, map, infoFormat, onSuccess, onFailure, opt_proxy) {
+  getFeatureInfo(layer, coordinate, map, infoFormat, onSuccess, onFailure, opt_proxy, opt_requestHeaders) {
     var view = map.getView();
     util.doGET(this.getFeatureInfoUrl(layer, coordinate, view, infoFormat, opt_proxy), function(response) {
       var result = {};
@@ -146,7 +146,7 @@ class WMSService {
       }
       result.layer = layer;
       onSuccess.call(this, result);
-    }, onFailure);
+    }, onFailure, this, opt_requestHeaders);
   }
 }
 

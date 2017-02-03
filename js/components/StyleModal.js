@@ -99,7 +99,8 @@ class StyleModal extends React.PureComponent {
 
   static contextTypes = {
     muiTheme: React.PropTypes.object,
-    proxy: React.PropTypes.string
+    proxy: React.PropTypes.string,
+    requestHeaders: React.PropTypes.object
   };
 
   static childContextTypes = {
@@ -110,6 +111,7 @@ class StyleModal extends React.PureComponent {
     super(props);
     this._muiTheme = context.muiTheme || getMuiTheme();
     this._proxy = context.proxy;
+    this._requestHeaders = context.requestHeaders;
     this._styleCache = {};
     this._ruleCounter = 0;
     this.state = {
@@ -181,7 +183,7 @@ class StyleModal extends React.PureComponent {
         me.close();
       }, function(xmlhttp) {
         me.setState({error: true, errorOpen: true, msg: xmlhttp.status + ' ' + xmlhttp.statusText});
-      }, this._proxy);
+      }, this._proxy, this._requestHeaders);
     } else {
       RESTService.createStyle(this.props.layer, sld, function(xmlhttp) {
         me.props.layer.getSource().updateParams({'STYLES': me.props.layer.get('styleName'), '_olSalt': Math.random()});
@@ -189,7 +191,7 @@ class StyleModal extends React.PureComponent {
         me.close();
       }, function(xmlhttp) {
         me.setState({error: true, errorOpen: true, msg: xmlhttp.status + ' ' + xmlhttp.statusText});
-      }, this._proxy);
+      }, this._proxy, this._requestHeaders);
     }
   }
   _generateSLD() {

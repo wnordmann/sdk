@@ -105,15 +105,15 @@ class WFSService {
     });
     return util.getProxiedUrl(urlObj.toString(), opt_proxy);
   }
-  getCapabilities(url, onSuccess, onFailure, opt_proxy) {
+  getCapabilities(url, onSuccess, onFailure, opt_proxy, opt_requestHeaders) {
     return util.doGET(this.getCapabilitiesUrl(url, opt_proxy), function(xmlhttp) {
       var info = this.parseCapabilities(xmlhttp);
       onSuccess.call(this, {Title: info.title, Layer: info.layers});
     }, function(xmlhttp) {
       onFailure.call(this, xmlhttp);
-    }, this);
+    }, this, opt_requestHeaders);
   }
-  describeFeatureType(url, layerName, onSuccess, onFailure, scope, opt_proxy) {
+  describeFeatureType(url, layerName, onSuccess, onFailure, scope, opt_proxy, opt_requestHeaders) {
     var dftUrl = new URL(url);
     dftUrl.set('pathname', dftUrl.pathname.replace('wms', 'wfs'));
     dftUrl.set('query', {
@@ -156,9 +156,9 @@ class WFSService {
       }
     }, function(xmlhttp) {
       onFailure.call(scope || this, xmlhttp);
-    }, this);
+    }, this, opt_requestHeaders);
   }
-  loadFeatures(layer, startIndex, maxFeatures, sortingInfo, srsName, onSuccess, onFailure, opt_proxy) {
+  loadFeatures(layer, startIndex, maxFeatures, sortingInfo, srsName, onSuccess, onFailure, opt_proxy, opt_requestHeaders) {
     var wfsInfo = layer.get('wfsInfo');
     var url = wfsInfo.url;
     var urlObj = new URL(url);
@@ -187,9 +187,9 @@ class WFSService {
       }
     }, function(xmlhttp) {
       onFailure.call(this, xmlhttp);
-    }, this);
+    }, this, opt_requestHeaders);
   }
-  getNumberOfFeatures(layer, callback, opt_proxy) {
+  getNumberOfFeatures(layer, callback, opt_proxy, opt_requestHeaders) {
     if (layer.get('numberOfFeatures') === undefined) {
       var wfsInfo = layer.get('wfsInfo');
       var url = wfsInfo.url;
@@ -204,10 +204,10 @@ class WFSService {
       util.doGET(util.getProxiedUrl(urlObj.toString(), opt_proxy), function(xmlhttp) {
         var info = wfsFormat.readFeatureCollectionMetadata(xmlhttp.responseXML);
         callback.call(this, info.numberOfFeatures);
-      });
+      }, undefined, opt_requestHeaders);
     }
   }
-  bboxFilter(layer, view, extent, onSuccess, onFailure) {
+  bboxFilter(layer, view, extent, onSuccess, onFailure, opt_proxy, opt_requestHeaders) {
     var wfsInfo = layer.get('wfsInfo');
     var url = new URL(wfsInfo.url);
     var srs = view.getProjection().getCode();
@@ -219,10 +219,10 @@ class WFSService {
       typename: wfsInfo.featureType,
       bbox: extent.join(',') + ',' + srs
     });
-    return util.doGET(url.toString(), function(xmlhttp) {
+    return util.doGET(util.getProxiedUrl(url.toString(), opt_proxy), function(xmlhttp) {
       var features = wfsFormat.readFeatures(xmlhttp.responseXML);
       onSuccess.call(this, features);
-    }, onFailure);
+    }, onFailure, this, opt_requestHeaders);
   }
   generateDistanceWithinUrl(layer, view, coord) {
     var point = ol.proj.toLonLat(coord);
@@ -238,15 +238,15 @@ class WFSService {
     });
     return url.toString();
   }
-  distanceWithin(layer, view, coord, onSuccess, onFailure) {
-    return util.doGET(this.generateDistanceWithinUrl(layer, view, coord), function(xmlhttp) {
+  distanceWithin(layer, view, coord, onSuccess, onFailure, opt_proxy, opt_requestHeaders) {
+    return util.doGET(util.getProxiedUrl(this.generateDistanceWithinUrl(layer, view, coord), opt_proxy), function(xmlhttp) {
       var features = wfsFormat.readFeatures(xmlhttp.responseXML);
       if (features.length > 0) {
         onSuccess.call(this, features[0]);
       } else if (onFailure) {
         onFailure.call(this, xmlhttp);
       }
-    }, onFailure);
+    }, onFailure, this, opt_requestHeaders);
   }
   readResponse(data, xmlhttp, onSuccess, onFailure) {
     if (global.Document && data instanceof global.Document && data.documentElement &&
@@ -328,14 +328,17 @@ class WFSService {
       }
     }, onFailure);
   }
-  updateFeature(layer, view, feature, values, onSuccess, onFailure) {
+  updateFeature(layer, view, feature, values, onSuccess, onFailure, opt_proxy, opt_requestHeaders) {
     var wfsInfo = layer.get('wfsInfo');
-    return util.doPOST(wfsInfo.url, this.getUpdatePayload(wfsInfo, view, feature, values),
+    return util.doPOST(util.getProxiedUrl(wfsInfo.url, opt_proxy), this.getUpdatePayload(wfsInfo, view, feature, values),
       function(xmlhttp) {
         this.handleUpdateResponse(xmlhttp, onSuccess, onFailure);
       },
       onFailure,
-      this
+      this,
+      undefined,
+      false,
+      opt_requestHeaders
     );
   }
   getInsertPayload(wfsInfo, view, feature) {
@@ -360,14 +363,17 @@ class WFSService {
       }
     }, onFailure);
   }
-  insertFeature(layer, view, feature, onSuccess, onFailure) {
+  insertFeature(layer, view, feature, onSuccess, onFailure, opt_proxy, opt_requestHeaders) {
     var wfsInfo = layer.get('wfsInfo');
-    return util.doPOST(wfsInfo.url, this.getInsertPayload(wfsInfo, view, feature),
+    return util.doPOST(util.getProxiedUrl(wfsInfo.url, opt_proxy), this.getInsertPayload(wfsInfo, view, feature),
       function(xmlhttp) {
         this.handleInsertResponse(xmlhttp, onSuccess, onFailure);
       },
       onFailure,
-      this
+      this,
+      undefined,
+      false,
+      opt_requestHeaders
     );
   }
 }
