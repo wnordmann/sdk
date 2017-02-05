@@ -164,7 +164,25 @@ class MapConfigTransformService {
     };
     return result;
   }
-  transform(data, opt_errors) {
+  _transformTileService(layerConfig) {
+    var thumbnail;
+    if (layerConfig.source.type === 'OSM') {
+      thumbnail = 'https://a.tile.openstreetmap.org/0/0/0.png';
+    } else {
+      if (layerConfig.source.properties.urls) {
+        thumbnail = layerConfig.source.properties.urls[0].replace('{z}', '0').replace('{y}', '0').replace('{x}', '0');
+      }
+    }
+    return {
+      name: layerConfig.properties.name,
+      description: layerConfig.properties.title,
+      standard: layerConfig.source.type,
+      attribution: layerConfig.source.properties.attributions ? layerConfig.source.properties.attributions[0] : undefined,
+      endpoint: layerConfig.source.properties.urls ? layerConfig.source.properties.urls[0] : undefined,
+      thumbnail: thumbnail
+    };
+  }
+  transform(data, opt_errors, opt_tileServices) {
     var i, ii, layers = [];
     var groups = {};
     for (i = 0, ii = data.map.layers.length; i < ii; ++i) {
@@ -328,6 +346,12 @@ class MapConfigTransformService {
         if (layer.group) {
           if (layer.group === gxpGroup) {
             layerConfig.properties.type = 'base';
+            if (opt_tileServices) {
+              var tileService = this._transformTileService(layerConfig);
+              if (tileService) {
+                opt_tileServices.push(tileService);
+              }
+            }
           }
           if (!groups[layer.group]) {
             groups[layer.group] = {
