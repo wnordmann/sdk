@@ -298,6 +298,9 @@ class LayerList extends React.PureComponent {
     this._modalOpen = false;
   }
   getLayerNode(lyr, group, idx) {
+    if (this.props.addBaseMap && lyr.get('type') === 'base' && !lyr.getVisible()) {
+      return undefined;
+    }
     if (lyr.get('id') === undefined) {
       lyr.set('id', LayerIdService.generateId());
     }
