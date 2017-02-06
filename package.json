@@ -95,6 +95,7 @@
     "babelify": "^7.3.0",
     "browserify": "13.1.0",
     "chai": "^1.10.0",
+    "chai-as-promised": "^6.0.0",
     "chai-xml": "^0.3.1",
     "clean-css": "^3.4.6",
     "coveralls": "^2.11.14",

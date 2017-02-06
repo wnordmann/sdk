@@ -1,36 +1,43 @@
 /* global describe, it */
 
-import {assert} from 'chai';
+//import {assert, expect} from 'chai';
+
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+
+chai.use(chaiAsPromised);
+var assert = chai.assert;
+
 import raf from 'raf';
 import ol from 'openlayers';
 import WMSService from '../../js/services/WMSService';
-import util from '../../js/util';
-// import nock from 'nock';
-import fetchMock from 'fetch-mock';
-// import testJson from './test.json';
+// import fetchMock from 'fetch-mock';
+//import testJson from './test.json';
 // import testReq from './testReq.json';
 raf.polyfill();
 
 describe('WMSService', function() {
-
-
-  // // Mock the fetch() global to always return the same value for GET
-  // // requests to all URLs.
-  // fetchMock.get('*', {hello: 'world'});
-  //
-  // makeRequest().then(function(data) {
-  //   console.log('got data', data);
+  // it('get capabilites from a url', function() {
+  //   fetchMock.get('http://www.example.com/test1', {hello: 'world'});
+  //   util.fetchGet('http://www.example.com/test1').then(function(d) {
+  //     assert.equal(d, {hello: 'world'});
+  //   });
   // });
-  it('get capabilites from a url', function() {
-    // nock('http://www.example.com')
-    //   .get('/resource')
-    //   .reply(200, 'path matched');
-    fetchMock.get('*', {hello: 'world'});
-    util.fetchGet('http://www.example.com').then(function(d) {
-      assert.equal(d, {hello: 'world'});
-    });
+  it('get capabilites from a promise', function() {
+    //fetchMock.get('*', testReq);
+    // expect(WMSService.getCapabilities('/geoserver/wms'))
+    //   .to.eventually.equal('test');
+    // .then(function(d) {
+    //   assert.deepEqual(d.dataNoGood, testJson.mapUrl);
+    // });
+    // assert.eventually.deepEqual(data, testJson.info);
+    // assert.eventually.equal(Promise.resolve(2 + 2), 4, "This had better be true, eventually");
+    assert.eventually
+    .equal(WMSService.getCapabilities('/geoserver/wms')
+      .then(function(data) {
+        return data
+      }), 4);
   });
-
   it('uses correct GetCapabilities url', function() {
     var url = WMSService.getCapabilitiesUrl('http://localhost/geoserver/ows');
     assert.equal(url, 'http://localhost/geoserver/ows?service=WMS&request=GetCapabilities&version=1.3.0');
