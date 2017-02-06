@@ -212,7 +212,10 @@ class Bookmarks extends React.PureComponent {
           previousSlide: React.PropTypes.func.isRequired
         }
         render() {
-          return <div onClick = {this.props.previousSlide} className='navPrev'><ArrowLeft/></div>;
+          function getNavStyles() {
+            return {margin: '40px 0 0 0'};
+          }
+          return <div style = {getNavStyles()} onClick = {this.props.previousSlide} className='navPrev'><ArrowLeft/></div>;
         }
       },
       position: 'CenterLeft'
@@ -222,7 +225,10 @@ class Bookmarks extends React.PureComponent {
           nextSlide: React.PropTypes.func.isRequired
         }
         render() {
-          return <div onClick = {this.props.nextSlide} className='navNext'><ArrowRight/></div>
+          function getNavStyles() {
+            return {margin: '40px 0 0 0'};
+          }
+          return <div style = {getNavStyles()} onClick = {this.props.nextSlide} className='navNext'><ArrowRight/></div>
         }
       },
       position: 'CenterRight'
