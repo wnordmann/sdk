@@ -13,10 +13,10 @@ class Dots extends React.Component {
       return arr;
     }
     function getListStyles() {
-      return {position: 'relative', margin: 0, padding: 0, top: '38px'};
+      return {position: 'relative', margin: 0, padding: 0, top: '38px',  display: 'flex'};
     }
     function getListItemStyles() {
-      return {listStyleType: 'none', display: 'inline-block'};
+      return {listStyleType: 'none'};
     }
     function getButtonStyles(active) {
       return {
