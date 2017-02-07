@@ -33,7 +33,12 @@ class RESTService {
   }
   _getStyleNameUrl(layer, opt_proxy) {
     var urlObj = this._getBaseUrl(layer);
-    var id = layer.get('name').split(':').pop();
+    var id;
+    if (layer.get('name')) {
+      id = layer.get('name').split(':').pop();
+    } else {
+      id = layer.get('wfsInfo').featureType;
+    }
     urlObj.set('pathname', urlObj.pathname + this._getTrailingChar(urlObj) + 'layers/' + id + '.json');
     return util.getProxiedUrl(urlObj.toString(), opt_proxy);
   }
