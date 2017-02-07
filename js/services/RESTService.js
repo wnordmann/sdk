@@ -12,10 +12,18 @@
 
 import util from '../util';
 import URL from 'url-parse';
+import ol from 'openlayers';
 
 class RESTService {
   _getBaseUrl(layer) {
-    var url = layer.getSource().getUrls()[0];
+    var url;
+    if (layer.get('wfsInfo')) {
+      url = layer.get('wfsInfo').url;
+    } else if (layer.getSource() instanceof ol.source.TileWMS) {
+      url = layer.getSource().getUrls()[0];
+    } else if (layer.getSource() instanceof ol.source.ImageWMS) {
+      url = layer.getSource().getUrl();
+    }
     var urlObj = new URL(url, true);
     urlObj.set('pathname', urlObj.pathname.replace(/wms|ows|wfs/, 'rest'));
     return urlObj;
