@@ -4,17 +4,50 @@ import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
 import RESTService from '../../js/services/RESTService';
+import URL from 'url-parse';
 
 raf.polyfill();
 
 describe('RESTService', function() {
 
-  var layer;
+  var layer, vector;
   beforeEach(function() {
     layer = new ol.layer.Tile({
       name: 'states',
       source: new ol.source.TileWMS({
         url: 'http://demo.boundlessgeo.com/geoserver/wms'
+      })
+    });
+    var vectorSource = new ol.source.Vector({
+      format: new ol.format.GeoJSON(),
+      url: function(extent, resolution, projection) {
+        return '/geoserver/wfs?service=WFS&' +
+          'version=1.1.0&request=GetFeature&typename=usa:states&' +
+          'outputFormat=application/json&srsname=EPSG:3857&' +
+          'bbox=' + extent.join(',') + ',EPSG:3857';
+      },
+      strategy: ol.loadingstrategy.tile(ol.tilegrid.createXYZ({
+        maxZoom: 19
+      }))
+    });
+    vector = new ol.layer.Vector({
+      source: vectorSource,
+      id: 'wfst',
+      wfsInfo: {
+        featureNS: 'http://census.gov',
+        featureType: 'states',
+        featurePrefix: 'usa',
+        geometryType: 'MultiPolygon',
+        geometryName: 'the_geom',
+        url: '/geoserver/wfs'
+      },
+      isWFST: true,
+      title: 'WFST layer',
+      style: new ol.style.Style({
+        stroke: new ol.style.Stroke({
+          color: 'rgba(0, 0, 255, 1.0)',
+          width: 2
+        })
       })
     });
   });
@@ -90,6 +123,17 @@ describe('RESTService', function() {
   it('create style payload is correct', function() {
     var payload = RESTService._createStylePayload('foo');
     assert.equal(payload, '<style><name>foo</name><filename>foo.sld</filename></style>');
+  });
+
+  it('getBaseUrl works ok with a vector layer as well', function() {
+    var url = RESTService._getBaseUrl(vector);
+    assert.equal(url.pathname, '/geoserver/rest');
+  });
+
+  it('getStyleName works ok with a vector layer as well', function() {
+    var url = RESTService._getStyleNameUrl(vector);
+    var urlObj = new URL(url);
+    assert.equal(urlObj.pathname, '/geoserver/rest/layers/states.json');
   });
 
 });
