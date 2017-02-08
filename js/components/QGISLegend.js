@@ -14,11 +14,11 @@ import React from 'react';
 import ol from 'openlayers';
 import classNames from 'classnames';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import LayerStore from '../stores/LayerStore';
 import Button from './Button';
 import LegendIcon from 'material-ui/svg-icons/image/image';
 import Paper from 'material-ui/Paper';
 import {List, ListItem} from 'material-ui/List';
+import {findLayerById} from '../state/layers/reducers';
 import './QGISLegend.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
@@ -107,7 +107,6 @@ class QGISLegend extends React.PureComponent {
 
   constructor(props, context) {
     super(props);
-    LayerStore.bindMap(this.props.map);
     this.state = {
       muiTheme: context.muiTheme || getMuiTheme(),
       visible: this.props.showExpandedOnStartup
@@ -129,7 +128,7 @@ class QGISLegend extends React.PureComponent {
       return (<ListItem key={symbol.title} primaryText={symbol.title} leftIcon={<img src={src}></img>} />);
     };
     for (var id in legendData) {
-      var title = LayerStore.findLayer(id).get('title');
+      var title = findLayerById(id).get('title');
       if (title !== null) {
         var symbols = legendData[id].map(symbolFunc);
         legendNodes.push(

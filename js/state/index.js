@@ -10,32 +10,11 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import LayerListView from '../components/LayerListView';
-import {connect} from 'react-redux';
+import {combineReducers} from 'redux';
+import layers from './layers/reducers';
 
-const mapStateToProps = (state) => {
-  return {
-    layers: state.layers.layers
-  };
-};
+const rootReducer = combineReducers({
+  layers
+});
 
-const removeLayer = (map, layer, group) => {
-  if (group) {
-    group.remove(layer);
-  } else {
-    map.removeLayer(layer);
-  }
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onLayerRemove: removeLayer
-  };
-};
-
-const LayerList = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LayerListView);
-
-export default LayerList;
+export default rootReducer;

@@ -10,32 +10,20 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import LayerListView from '../components/LayerListView';
-import {connect} from 'react-redux';
+import * as types from '../actiontypes';
 
-const mapStateToProps = (state) => {
+export const addLayer = (layer) => {
   return {
-    layers: state.layers.layers
+    type: types.ADD_LAYER,
+    layer
   };
 };
 
-const removeLayer = (map, layer, group) => {
-  if (group) {
-    group.remove(layer);
-  } else {
-    map.removeLayer(layer);
-  }
-};
-
-const mapDispatchToProps = (dispatch) => {
+export const removeLayer = (map, layer, group) => {
   return {
-    onLayerRemove: removeLayer
+    type: types.REMOVE_LAYER,
+    map,
+    layer,
+    group
   };
-};
-
-const LayerList = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LayerListView);
-
-export default LayerList;
+}

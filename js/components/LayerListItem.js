@@ -474,7 +474,7 @@ class LayerListItem extends React.PureComponent {
     );
   }
   _remove() {
-    LayerActions.removeLayer(this.props.layer, this.props.group);
+    this.props.onLayerRemove(this.props.map, this.props.layer, this.props.group);
   }
   _edit() {
     LayerActions.editLayer(this.props.layer);

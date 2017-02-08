@@ -75,8 +75,10 @@
     "react-dnd-html5-backend": "^2.1.2",
     "react-dropzone": "3.6.0",
     "react-intl": "^2.1.5",
+    "react-redux": "^5.0.2",
     "react-responsive-decorator": "0.0.1",
     "react-table": "^3.0.0",
+    "redux": "^3.6.0",
     "url-parse": "^1.1.1",
     "w3c-schemas": "^1.4.0"
   },
