@@ -93,6 +93,7 @@ class MapConfigTransformService {
           SLD_BODY: config.source.properties.params.SLD_BODY
         };
       }
+      layerConfig.queryable = config.properties.isSelectable;
       layerConfig.capability = {
         queryable: config.properties.isSelectable,
         styles: [{
@@ -252,9 +253,13 @@ class MapConfigTransformService {
         };
       } else if (source.ptype === 'gxp_wmscsource' && layer.name) {
         layerConfig.properties.popupInfo = '#AllAttributes';
+        layerConfig.properties.isSelectable = layer.queryable;
+        layerConfig.properties.isWFST = layer.queryable;
         if (layer.capability) {
-          layerConfig.properties.isSelectable = layer.capability.queryable;
-          layerConfig.properties.isWFST = layer.capability.queryable;
+          if (layer.queryable === undefined) {
+            layerConfig.properties.isSelectable = layer.capability.queryable;
+            layerConfig.properties.isWFST = layer.capability.queryable;
+          }
           layerConfig.properties.styleName = layer.capability.styles[0].name;
           layerConfig.properties.legendUrl = layer.capability.styles[0].legend.href;
           layerConfig.properties.EX_GeographicBoundingBox = layer.capability.llbbox;
