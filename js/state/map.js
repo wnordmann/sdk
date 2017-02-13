@@ -31,6 +31,7 @@ const getLayerInfo = (layer) => {
       if (!layer.get('styleName')) {
         RESTService.getStyleName(layer, function(styleName) {
           layer.set('styleName', styleName);
+        }, function() {
         });
       }
     }
