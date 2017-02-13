@@ -15,7 +15,6 @@ import ReactDOM from 'react-dom';
 import debounce from  'debounce';
 import HTML5Backend from 'react-dnd-html5-backend';
 import {DragDropContext} from 'react-dnd';
-import LayerActions from '../actions/LayerActions';
 import ol from 'openlayers';
 import classNames from 'classnames';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -77,6 +76,10 @@ class LayerList extends React.Component {
      * Remove layer callback. Gets map, layer and group arguments.
      */
     onLayerRemove: React.PropTypes.func,
+    /**
+     * Move layer callback.
+     */
+    onLayerMove: React.PropTypes.func,
     /**
      * The map whose layers should show up in this layer list.
      */
@@ -302,11 +305,11 @@ class LayerList extends React.Component {
       if (lyr instanceof ol.layer.Group) {
         var children = this.props.showGroupContent ? this.renderLayerGroup(layer) : [];
         return (
-          <LayerListItem index={idx} onLayerRemove={this.props.onLayerRemove} moveLayer={this.moveLayer} {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('id')} layer={lyr} group={group} nestedItems={children} title={lyr.get('title')} disableTouchRipple={true}/>
+          <LayerListItem index={idx} onLayerRemove={this.props.onLayerRemove} moveLayer={this.moveLayer.bind(this)} {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('id')} layer={lyr} group={group} nestedItems={children} title={lyr.get('title')} disableTouchRipple={true}/>
         );
       } else {
         return (
-          <LayerListItem index={idx} onLayerRemove={this.props.onLayerRemove} moveLayer={this.moveLayer} {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('id')} layer={lyr} group={group} title={lyr.get('title')} disableTouchRipple={true}/>
+          <LayerListItem index={idx} onLayerRemove={this.props.onLayerRemove} moveLayer={this.moveLayer.bind(this)} {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('id')} layer={lyr} group={group} title={lyr.get('title')} disableTouchRipple={true}/>
         );
       }
     }
@@ -318,7 +321,7 @@ class LayerList extends React.Component {
     this.refs.addbasemapmodal.getWrappedInstance().open();
   }
   moveLayer(dragIndex, hoverIndex, layer, group) {
-    LayerActions.moveLayer(dragIndex, hoverIndex, layer, group);
+    this.props.onLayerMove(this.props.map, hoverIndex, layer, group);
   }
   render() {
     const {formatMessage} = this.props.intl;

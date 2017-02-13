@@ -27,8 +27,15 @@ const removeLayer = (map, layer, group) => {
   }
 };
 
+const moveLayer = (map, hoverIndex, layer, group) => {
+  var layers = group ? group.getLayers() : map.getLayers();
+  layers.remove(layer);
+  layers.insertAt(hoverIndex, layer);
+};
+
 const mapDispatchToProps = (dispatch) => {
   return {
+    onLayerMove: moveLayer,
     onLayerRemove: removeLayer
   };
 };
