@@ -11,13 +11,43 @@
  */
 
 import {addLayer, removeLayer} from './layers/actions';
+import RESTService from '../services/RESTService';
+import WFSService from '../services/WFSService';
+
+const getLayerInfo = (layer) => {
+  // TODO proxy, request headers
+  if (!(layer instanceof ol.layer.Group)) {
+    var source = layer.getSource();
+    if ((source instanceof ol.source.ImageWMS || source instanceof ol.source.TileWMS) || layer.get('isWFST')) {
+      if (!layer.get('wfsInfo')) {
+        var url = source.getUrls()[0];
+        WFSService.describeFeatureType(url, layer.get('name'), function(wfsInfo) {
+          layer.set('wfsInfo', wfsInfo);
+        }, function() {
+          layer.set('isSelectable', false);
+          layer.set('wfsInfo', undefined);
+        });
+      }
+      if (!layer.get('styleName')) {
+        RESTService.getStyleName(layer, function(styleName) {
+          layer.set('styleName', styleName);
+        });
+      }
+    }
+  }
+};
+
+const addLayerAndGetInfo = (layer) => {
+  getLayerInfo(layer);
+  return addLayer(layer);
+};
 
 export default function(store, map) {
   map.getLayers().forEach(function(layer) {
-    store.dispatch(addLayer(layer));
+    store.dispatch(addLayerAndGetInfo(layer));
   });
   map.getLayers().on('add', function(evt) {
-    store.dispatch(addLayer(evt.element));
+    store.dispatch(addLayerAndGetInfo(evt.element));
   });
   map.getLayers().on('remove', function(evt) {
     store.dispatch(removeLayer(map, evt.element));

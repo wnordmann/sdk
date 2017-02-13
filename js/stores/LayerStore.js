@@ -52,7 +52,7 @@ class LayerStore extends EventEmitter {
     layer.on('change:wfsInfo', this.emitChange, this);
     layer.on('change:styleName', this.emitChange, this);
     layer.on('change:visible', this.emitChange, this);
-    if (!(layer instanceof ol.layer.Group)) {
+/*    if (!(layer instanceof ol.layer.Group)) {
       var source = layer.getSource();
       if ((source instanceof ol.source.ImageWMS || source instanceof ol.source.TileWMS) || layer.get('isWFST')) {
         if (!layer.get('wfsInfo')) {
@@ -70,7 +70,8 @@ class LayerStore extends EventEmitter {
     } else {
       // change:layers on layer does not seem to work
       this._recurseBind(layer);
-    }
+    }*/
+    // TODO restore recurseBind
   }
   _getStyleName(layer) {
     RESTService.getStyleName(layer, function(styleName) {
