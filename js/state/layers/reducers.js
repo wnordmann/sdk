@@ -64,7 +64,7 @@ const layers = function(state = {layers: [], flatLayers: []}, action) {
       } else {
         return {
           flatLayers: state.flatLayers.filter(function(item) {
-             return (item.id !== action.layer.get('id')) && (item.parentId !== action.layer.get('id'));
+            return (item.id !== action.layer.get('id')) && (item.parentId !== action.layer.get('id'));
           }),
           layers: state.layers.filter(function(item) {
             return item.id !== action.layer.get('id');
