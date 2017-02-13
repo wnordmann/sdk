@@ -38,7 +38,6 @@ const getChildren = function(lyr, layer, flatCopy) {
       var childObj = {id: childId};
       flatCopy.push({id: childId, parentId: lyr.id});
       getChildren(childObj, child);
-      flatCopy.push(childObj);
       lyr.children.push(childObj);
     });
   }
@@ -49,14 +48,15 @@ const layers = function(state = {layers: [], flatLayers: []}, action) {
     case types.ADD_LAYER:
       var copy = state.layers.slice(0);
       var flatCopy = state.flatLayers.slice(0);
+      var id = setId(action.layer);
       var lyr = {
-        id: setId(action.layer)
+        id: id
       };
       if (action.layer instanceof ol.layer.Group) {
         getChildren(lyr, action.layer, flatCopy);
       }
       copy.unshift(lyr);
-      flatCopy.unshift(lyr);
+      flatCopy.unshift({id: id});
       return {layers: copy, flatLayers: flatCopy};
     case types.REMOVE_LAYER:
       if (action.group) {
