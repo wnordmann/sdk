@@ -38,7 +38,7 @@ import './FeatureTable.css';
 const messages = defineMessages({
   optionslabel: {
     id: 'featuretable.optionslabel',
-    description: 'Label for the collapsble options',
+    description: 'Label for the collapsible options',
     defaultMessage: 'Options'
   },
   nodatamsg: {

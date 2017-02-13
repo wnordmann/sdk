@@ -13,11 +13,11 @@
 import React from 'react';
 import ol from 'openlayers';
 import classNames from 'classnames';
-import LayerStore from '../stores/LayerStore';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import {findLayerById} from '../state/layers/reducers';
 
 const messages = defineMessages({
   emptytext: {
@@ -81,57 +81,30 @@ class LayerSelector extends React.PureComponent {
   constructor(props, context) {
     super(props);
     this._muiTheme = context.muiTheme || getMuiTheme();
-    LayerStore.bindMap(this.props.map);
     this.state = {
-      layers: [],
       value: this.props.value
     };
   }
   getChildContext() {
     return {muiTheme: this._muiTheme};
   }
-  componentWillMount() {
-    this._onChangeCb = this._onChange.bind(this);
-    LayerStore.addChangeListener(this._onChangeCb);
-    this._onChange();
-  }
   componentDidMount() {
     if (this.state.value) {
-      var layer = LayerStore.findLayer(this.state.value);
+      var layer = findLayerById(this.state.value);
       if (layer) {
         this.props.onChange.call(this, layer);
       }
     }
   }
-  componentWillUnmount() {
-    LayerStore.removeChangeListener(this._onChangeCb);
-  }
-  _onChange() {
-    var flatLayers = LayerStore.getState().flatLayers;
-    var layers = [];
-    for (var i = 0, ii = flatLayers.length; i < ii; ++i) {
-      var lyr = flatLayers[i];
-      if (!this.props.filter || this.props.filter(lyr) === true) {
-        layers.push(lyr);
-      }
-    }
-    if (layers.length > 0) {
-      this.setState({layers: layers, value: layers[0].get('id')});
-      this.props.onChange.call(this, layers[0]);
-    } else {
-      this.setState({layers: layers});
-      this.props.onChange.call(this, null);
-    }
-  }
   _onItemChange(evt, index, value) {
-    var layer = LayerStore.findLayer(value);
+    var layer = findLayerById(value);
     this.props.onChange.call(this, layer);
     this.setState({value: value});
   }
   render() {
     const {formatMessage} = this.props.intl;
-    var selectItems = this.state.layers.map(function(lyr, idx) {
-      var title = lyr.get('title'), id = lyr.get('id');
+    var selectItems = this.props.layers.map(function(lyr, idx) {
+      var title = lyr.title, id = lyr.id;
       return (
         <MenuItem key={id} value={id} label={title} primaryText={title} />
       );

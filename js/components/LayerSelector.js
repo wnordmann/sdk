@@ -10,5 +10,21 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-export const ADD_LAYER = 'ADD_LAYER';
-export const REMOVE_LAYER = 'REMOVE_LAYER';
+import LayerSelectorView from '../components/LayerSelectorView';
+import {connect} from 'react-redux';
+import {findLayerById} from '../state/layers/reducers';
+
+const mapStateToProps = (state, props) => {
+  return {
+    layers: props.filter ? state.layers.flatLayers.filter(function(layerObj) {
+      return props.filter(findLayerById(layerObj.id));
+    }) : state.layers.flatLayers
+  };
+};
+
+const LayerSelector = connect(
+  mapStateToProps,
+  null
+)(LayerSelectorView);
+
+export default LayerSelector;

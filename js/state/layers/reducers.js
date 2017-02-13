@@ -36,7 +36,7 @@ const getChildren = function(lyr, layer, flatCopy) {
     layer.getLayers().forEach(function(child) {
       var childId = setId(child);
       var childObj = {id: childId};
-      flatCopy.push({id: childId, parentId: lyr.id});
+      flatCopy.push({id: childId, parentId: lyr.id, title: child.get('title')});
       getChildren(childObj, child);
       lyr.children.push(childObj);
     });
@@ -56,7 +56,7 @@ const layers = function(state = {layers: [], flatLayers: []}, action) {
         getChildren(lyr, action.layer, flatCopy);
       }
       copy.unshift(lyr);
-      flatCopy.unshift({id: id});
+      flatCopy.unshift({id: id, title: action.layer.get('title')});
       return {layers: copy, flatLayers: flatCopy};
     case types.REMOVE_LAYER:
       if (action.group) {
