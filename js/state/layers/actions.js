@@ -26,4 +26,12 @@ export const removeLayer = (map, layer, group) => {
     layer,
     group
   };
-}
+};
+
+export const changeLayerVisible = (layer, visible) => {
+  return {
+    type: types.CHANGE_LAYER_VISIBLE,
+    layer: layer,
+    visible: visible
+  };
+};

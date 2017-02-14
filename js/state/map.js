@@ -10,12 +10,15 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {addLayer, removeLayer} from './layers/actions';
+import {addLayer, removeLayer, changeLayerVisible} from './layers/actions';
 import RESTService from '../services/RESTService';
 import WFSService from '../services/WFSService';
 
-const getLayerInfo = (layer) => {
+const getLayerInfo = (layer, store) => {
   // TODO proxy, request headers
+  layer.on('change:visible', function() {
+    store.dispatch(changeLayerVisible(layer, layer.getVisible()));
+  });
   if (!(layer instanceof ol.layer.Group)) {
     var source = layer.getSource();
     if ((source instanceof ol.source.ImageWMS || source instanceof ol.source.TileWMS) || layer.get('isWFST')) {
@@ -38,17 +41,17 @@ const getLayerInfo = (layer) => {
   }
 };
 
-const addLayerAndGetInfo = (layer) => {
-  getLayerInfo(layer);
+const addLayerAndGetInfo = (layer, store) => {
+  getLayerInfo(layer, store);
   return addLayer(layer);
 };
 
 export default function(store, map) {
   map.getLayers().forEach(function(layer) {
-    store.dispatch(addLayerAndGetInfo(layer));
+    store.dispatch(addLayerAndGetInfo(layer, store));
   });
   map.getLayers().on('add', function(evt) {
-    store.dispatch(addLayerAndGetInfo(evt.element));
+    store.dispatch(addLayerAndGetInfo(evt.element, store));
   });
   map.getLayers().on('remove', function(evt) {
     store.dispatch(removeLayer(map, evt.element));

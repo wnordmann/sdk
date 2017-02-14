@@ -12,3 +12,4 @@
 
 export const ADD_LAYER = 'ADD_LAYER';
 export const REMOVE_LAYER = 'REMOVE_LAYER';
+export const CHANGE_LAYER_VISIBLE = 'CHANGE_LAYER_VISIBLE';

@@ -43,6 +43,20 @@ const getChildren = function(lyr, layer, flatCopy) {
   }
 };
 
+const toggle = (state = {}, action) => {
+  switch (action.type) {
+    case types.CHANGE_LAYER_VISIBLE:
+      if (state.id !== action.layer.get('id')) {
+        return state
+      }
+      return Object.assign({}, state, {
+        visible: action.visible
+      });
+    default:
+      return state
+  }
+};
+
 const layers = function(state = {layers: [], flatLayers: []}, action) {
   switch (action.type) {
     case types.ADD_LAYER:
@@ -72,6 +86,13 @@ const layers = function(state = {layers: [], flatLayers: []}, action) {
         };
       }
       break;
+    case types.CHANGE_LAYER_VISIBLE:
+      return {
+        layers: state.layers,
+        flatLayers: state.flatLayers.map(fl =>
+          toggle(fl, action)
+        )
+      };
     default:
       return state;
   }
