@@ -1,7 +1,7 @@
 import React from 'react'
 import reactCSS from 'reactcss'
 import { SketchPicker } from 'react-color'
-import RenderInBody from './renderInBody.js'
+// import RenderInBody from './renderInBody.js'
 import Popover from 'material-ui/Popover';
 
 class SketchExample extends React.Component {
