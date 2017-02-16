@@ -13,6 +13,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import {intlShape, injectIntl} from 'react-intl';
+import Paper from 'material-ui/Paper';
 import StrokeEditor from './StrokeEditor';
 
 /**
@@ -44,9 +45,9 @@ class LineSymbolizerEditor extends React.PureComponent {
 
   render() {
     return (
-      <div className={classNames('sdk-component line-symbolizer-editor', this.props.className)}>
-        <StrokeEditor onChange={this.props.onChange} intl={this.props.intl} initialStrokeColor={this.props.initialState ? this.props.initialState.strokeColor : undefined} initialStrokeWidth={this.props.initialState ? this.props.initialState.strokeWidth : undefined} />
-      </div>
+      <Paper zDepth={0} className={classNames('sdk-component line-symbolizer-editor', this.props.className)}>
+        <StrokeEditor onChange={this.props.onChange} initialStrokeColor={this.props.initialState ? this.props.initialState.strokeColor : undefined} initialStrokeWidth={this.props.initialState ? this.props.initialState.strokeWidth : undefined} />
+      </Paper>
     );
   }
 }

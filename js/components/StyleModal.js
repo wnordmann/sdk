@@ -14,8 +14,7 @@ import React from 'react';
 import ol from 'openlayers';
 import classNames from 'classnames';
 import Dialog from 'material-ui/Dialog';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
+import {List, ListItem} from 'material-ui/List';
 import LayerActions from '../actions/LayerActions';
 import Button from './Button';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
@@ -223,32 +222,18 @@ class StyleModal extends React.PureComponent {
       return null;
     });
   }
-  _onChange(state) {
-    var rule = this.state.rule;
+  _onChange(rule, state) {
     // TODO support more symbolizers
     var symbolizers = this._getRuleByName(rule).symbolizers;
     var styleState = symbolizers[0];
     Object.assign(styleState, state);
     this._setStyle();
   }
-  _onRuleChange(evt, idx, value) {
-    this.setState({rule: value});
-  }
-  _addRule() {
-    this._ruleCounter++;
-    var rules = this.state.rules.slice();
-    var name = 'Rule ' + this._ruleCounter;
-    rules.push({
-      name: name,
-      title: name
-    });
-    this.setState({rule: name, rules: rules});
-  }
-  _removeRule() {
+  _removeRule(name) {
     var rules = this.state.rules.slice();
     var idx;
     for (var i = 0, ii = rules.length; i < ii; ++i) {
-      if (rules[i].name === this.state.rule) {
+      if (rules[i].name === name) {
         idx = i;
         break;
       }
@@ -268,6 +253,9 @@ class StyleModal extends React.PureComponent {
       }
     }
   }
+  _resizeDialog() {
+    this.refs.dialog.forceUpdate();
+  }
   render() {
     const {formatMessage} = this.props.intl;
     var error;
@@ -282,26 +270,20 @@ class StyleModal extends React.PureComponent {
       />);
     }
     var ruleItems = this.state.rules.map(function(rule, key) {
-      return (<MenuItem key={key} value={rule.name} primaryText={rule.name} />);
-    });
-    // TODO see if we can do with a single rule editor
-    var ruleEditors = this.state.rules.map(function(rule, key) {
       // only support a single symbolizer for now
       var ruleObj = this._getRuleByName(rule.name);
-      return (<RuleEditor {...this.props} geometryType={this.state.geometryType} visible={rule.name === this.state.rule} key={key} initialState={ruleObj} onChange={this._onChange.bind(this)} attributes={this.state.attributes} />)
+      var editor = (<RuleEditor onRemove={this._removeRule.bind(this, rule.name)} {...this.props} geometryType={this.state.geometryType} key={key} initialState={ruleObj} onChange={this._onChange.bind(this, rule.name)} attributes={this.state.attributes} />);
+      return (<ListItem onNestedListToggle={this._resizeDialog.bind(this)} nestedItems={[editor]} primaryTogglesNestedList={true} insetChildren={false} key={key} primaryText={rule.name} />);
     }, this);
     var actions = [
       <Button buttonType='Flat' primary={true} label={formatMessage(messages.savebutton)} onTouchTap={this._saveStyle.bind(this)} />,
       <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
     ];
     return (
-      <Dialog className={classNames('sdk-component style-modal', this.props.className)} actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} open={this.state.open} onRequestClose={this.close.bind(this)}>
-        <SelectField floatingLabelText={formatMessage(messages.rulelabel)} value={this.state.rule} onChange={this._onRuleChange.bind(this)}>
+      <Dialog ref='dialog' className={classNames('sdk-component style-modal', this.props.className)} actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} open={this.state.open} onRequestClose={this.close.bind(this)}>
+        <List>
           {ruleItems}
-        </SelectField>
-        <Button label={formatMessage(messages.addrulebutton)} onTouchTap={this._addRule.bind(this)} />
-        <Button label={formatMessage(messages.removerulebutton)} onTouchTap={this._removeRule.bind(this)} />
-        {ruleEditors}
+        </List>
         {error}
       </Dialog>
     );

@@ -6,6 +6,8 @@ import {assert} from 'chai';
 import intl from '../mock-i18n';
 import 'phantomjs-polyfill-object-assign';
 import FillEditor from '../../js/components/FillEditor';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 describe('FillEditor', function() {
 
@@ -20,7 +22,9 @@ describe('FillEditor', function() {
       assert.equal(state.fillColor.rgb.a, initialState.fillColor.rgb.a);
     };
     ReactDOM.render((
-      <FillEditor intl={intl} onChange={onChange} initialState={initialState} />
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <FillEditor intl={intl} onChange={onChange} initialState={initialState} />
+      </MuiThemeProvider>
     ), container);
     ReactDOM.unmountComponentAtNode(container);
   });
