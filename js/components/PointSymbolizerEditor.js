@@ -13,17 +13,22 @@
 import React from 'react';
 import classNames from 'classnames';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
-import Checkbox from 'material-ui/Checkbox';
 import FillEditor from './FillEditor';
+import Subheader from 'material-ui/Subheader';
 import StrokeEditor from './StrokeEditor';
 import Slider from 'material-ui/Slider';
 import SelectField from 'material-ui/SelectField';
 import Paper from 'material-ui/Paper';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
-import {GridList, GridTile} from 'material-ui/GridList'
+import {ListItem} from 'material-ui/List';
 
 const messages = defineMessages({
+  header: {
+    id: 'pointsymbolizereditor.header',
+    description: 'Header',
+    defaultMessage: 'Symbolizer'
+  },
   filllabel: {
     id: 'pointsymbolizereditor.filllabel',
     description: 'Label for fill checkbox',
@@ -141,12 +146,6 @@ class PointSymbolizerEditor extends React.PureComponent {
       opacity: value
     }, this._onChange);
   }
-  _onFillCheck(evt) {
-    this.setState({hasFill: evt.target.checked}, this._onChange);
-  }
-  _onStrokeCheck(evt) {
-    this.setState({hasStroke: evt.target.checked}, this._onChange);
-  }
   _onChangeSymbol(evt, idx, value) {
     this.setState({symbolType: value}, this._onChange);
   }
@@ -178,37 +177,37 @@ class PointSymbolizerEditor extends React.PureComponent {
     }, this);
   }
   render() {
+    var listStyle = {
+      padding: '0px 16px',
+      marginLeft: 0
+    };
     const {formatMessage} = this.props.intl;
     var options = symboltypes.map(function(symbol, idx) {
       return (<MenuItem key={idx} value={symbol} primaryText={symbol} />);
     });
     return (
-      <div className={classNames('sdk-component point-symbolizer-editor', this.props.className)}>
-        <Paper zDepth={0}>
-          <SelectField style={this.state.externalGraphic ? {display: 'none'} : undefined} floatingLabelText={formatMessage(messages.symboltype)} value={this.state.symbolType} onChange={this._onChangeSymbol.bind(this)}>
+      <Paper zDepth={0} className={classNames('sdk-component point-symbolizer-editor', this.props.className)}>
+        <Subheader>{formatMessage(messages.header)}</Subheader>
+        <ListItem innerDivStyle={ listStyle } insetChildren={false}>
+          <SelectField fullWidth={true} style={this.state.externalGraphic ? {display: 'none'} : undefined} floatingLabelText={formatMessage(messages.symboltype)} value={this.state.symbolType} onChange={this._onChangeSymbol.bind(this)}>
             {options}
           </SelectField>
-          <TextField value={this.state.symbolSize} onChange={this._onSymbolSizeChange.bind(this)} onBlur={this._onSymbolSizeBlur.bind(this)} floatingLabelText={formatMessage(messages.symbolsize)} />
-          <TextField value={this.state.rotation} onChange={this._onSymbolRotationChange.bind(this)} onBlur={this._onSymbolRotationBlur.bind(this)} floatingLabelText={formatMessage(messages.symbolrotation)} />
-          <TextField fullWidth={true} defaultValue={this.state.externalGraphic} onChange={this._onUrlChange.bind(this)} onBlur={this._onUrlBlur.bind(this)} floatingLabelText={formatMessage(messages.externalgraphic)} />
-          <div style={!this.state.externalGraphic ? {display: 'none'} : {width: 250}}>
-            <label>{formatMessage(messages.opacity)}</label>
-            <Slider defaultValue={this.state.opacity} onChange={this._onOpacityChange.bind(this)} />
-          </div>
-        </Paper>
-        <Paper zDepth={0} style={this.state.externalGraphic ? {display: 'none'} : undefined}>
-          <GridList cellHeight='auto'>
-            <GridTile>
-              <Checkbox onCheck={this._onFillCheck.bind(this)} checked={this.state.hasFill} label={formatMessage(messages.filllabel)} />
-              <FillEditor onChange={this.props.onChange} intl={this.props.intl} initialFillColor={this.props.initialState ? this.props.initialState.fillColor : undefined} />
-            </GridTile>
-            <GridTile>
-              <Checkbox onCheck={this._onStrokeCheck.bind(this)} checked={this.state.hasStroke} label={formatMessage(messages.strokelabel)} />
-              <StrokeEditor onChange={this.props.onChange} intl={this.props.intl} initialStrokeColor={this.props.initialState ? this.props.initialState.strokeColor : undefined} initialStrokeWidth={this.props.initialState ? this.props.initialState.strokeWidth : undefined} />
-            </GridTile>
-          </GridList>
-        </Paper>
-      </div>
+        </ListItem>
+        <ListItem innerDivStyle={ listStyle }>
+          <TextField floatingLabelFixed={true} hintText="Number" fullWidth={true} value={this.state.symbolSize} onChange={this._onSymbolSizeChange.bind(this)} onBlur={this._onSymbolSizeBlur.bind(this)} floatingLabelText={formatMessage(messages.symbolsize)} />
+        </ListItem>
+        <ListItem innerDivStyle={ listStyle }>
+          <TextField floatingLabelFixed={true} fullWidth={true} value={this.state.rotation} onChange={this._onSymbolRotationChange.bind(this)} onBlur={this._onSymbolRotationBlur.bind(this)} floatingLabelText={formatMessage(messages.symbolrotation)} />
+        </ListItem>
+        <ListItem innerDivStyle={ listStyle }>
+          <TextField floatingLabelFixed={true} fullWidth={true} defaultValue={this.state.externalGraphic} onChange={this._onUrlChange.bind(this)} onBlur={this._onUrlBlur.bind(this)} floatingLabelText={formatMessage(messages.externalgraphic)} />
+        </ListItem>
+        <ListItem innerDivStyle={ listStyle } style={!this.state.externalGraphic ? {display: 'none'} : {width: '100%'}} primaryText={formatMessage(messages.opacity)}>
+          <Slider defaultValue={this.state.opacity} onChange={this._onOpacityChange.bind(this)} />
+        </ListItem>
+        <FillEditor onChange={this.props.onChange} initialHasFill={this.state.hasFill} initialFillColor={this.props.initialState ? this.props.initialState.fillColor : undefined} />
+        <StrokeEditor onChange={this.props.onChange} initialHasStroke={this.state.hasStroke} initialStrokeWidth={this.props.initialState ? this.props.initialState.strokeWidth : undefined} initialStrokeColor={this.props.initialState ? this.props.initialState.strokeColor : undefined} />
+      </Paper>
     );
   }
 }

@@ -11,7 +11,6 @@
  */
 
 import React from 'react';
-import {Tabs, Tab} from 'material-ui/Tabs';
 import classNames from 'classnames';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import LabelEditor from './LabelEditor';
@@ -20,9 +19,15 @@ import PolygonSymbolizerEditor from './PolygonSymbolizerEditor';
 import LineSymbolizerEditor from './LineSymbolizerEditor';
 import PointSymbolizerEditor from './PointSymbolizerEditor';
 import FilterEditor from './FilterEditor';
-import TextField from 'material-ui/TextField';
+import ActionDelete from 'material-ui/svg-icons/action/delete';
+import {ListItem} from 'material-ui/List';
 
 const messages = defineMessages({
+  removetext: {
+    id: 'ruleeditor.removetext',
+    description: 'Text for remove list item',
+    defaultMessage: 'Remove'
+  },
   titlelabel: {
     id: 'ruleeditor.titlelabel',
     description: 'Label for the title text field',
@@ -49,15 +54,11 @@ const messages = defineMessages({
  * Editor for a style rule. This means editing symbolizer properties and filter. Used by the Style Modal.
  *
  * ```xml
- * <RuleEditor geometryType={this.state.geometryType} visible={rule.name === this.state.rule} key={key} initialState={symbol} onChange={this._onChange.bind(this)} attributes={this.state.attributes} />
+ * <RuleEditor geometryType={this.state.geometryType} initialState={symbol} onChange={this._onChange.bind(this)} attributes={this.state.attributes} />
  * ```
  */
 class RuleEditor extends React.PureComponent {
   static propTypes = {
-    /**
-     * Are we visible or not?
-     */
-    visible: React.PropTypes.bool,
     /**
      * List of attributes.
      */
@@ -88,32 +89,6 @@ class RuleEditor extends React.PureComponent {
     muiTheme: React.PropTypes.object.isRequired
   };
 
-  constructor(props) {
-    super(props);
-    var title = this.props.initialState ? this.props.initialState.title : undefined;
-    this.state = {
-      value: 1,
-      title: title
-    };
-  }
-  handleChange(value) {
-    if (value === parseInt(value, 10)) {
-      this.setState({
-        value: value
-      });
-    }
-  }
-  _onTitleBlur() {
-    var title = this.refs.title.getValue();
-    this.setState({title: title});
-    this.props.onChange({
-      title: title
-    });
-  }
-  _onTitleChange() {
-    var title = this.refs.title.getValue();
-    this.setState({title: title});
-  }
   _getSymbolizer() {
     if (this.props.initialState && this.props.initialState.symbolizers && this.props.initialState.symbolizers.length > 0) {
       return this.props.initialState.symbolizers[0];
@@ -129,51 +104,25 @@ class RuleEditor extends React.PureComponent {
       }
     }
   }
-  _getTabs() {
+  render() {
     const {formatMessage} = this.props.intl;
-    var tabs = [];
+    const boxStyle = {
+      marginLeft: 0
+    };
+    var items = [];
     var symbol = this._getSymbolizer();
     if (this.props.geometryType === 'Polygon') {
-      tabs.push((<Tab key='poly' value={1} label={formatMessage(messages.symbolizertitle)} disableTouchRipple={true}>
-          <PolygonSymbolizerEditor intl={this.props.intl} onChange={this.props.onChange} initialState={symbol} />
-        </Tab>
-      ));
+      items.push(<PolygonSymbolizerEditor key='polygon' onChange={this.props.onChange} initialState={symbol} />);
     } else if (this.props.geometryType === 'LineString') {
-      tabs.push((<Tab key='line' value={1} label={formatMessage(messages.symbolizertitle)} disableTouchRipple={true}>
-          <LineSymbolizerEditor intl={this.props.intl} onChange={this.props.onChange} initialState={symbol} />
-        </Tab>
-      ));
+      items.push(<LineSymbolizerEditor key='line' onChange={this.props.onChange} initialState={symbol} />);
     } else if (this.props.geometryType === 'Point') {
-      tabs.push((<Tab key='point' value={1} label={formatMessage(messages.symbolizertitle)} disableTouchRipple={true}>
-          <PointSymbolizerEditor intl={this.props.intl} onChange={this.props.onChange} initialState={symbol} />
-        </Tab>
-      ));
+      items.push(<PointSymbolizerEditor key='point' onChange={this.props.onChange} initialState={symbol} />);
     }
     var textSym = this._getTextSymbolizer();
-    tabs.push((<Tab key='label' value={3} label={formatMessage(messages.labeltitle)} disableTouchRipple={true}>
-         <LabelEditor attributes={this.props.attributes} intl={this.props.intl} onChange={this.props.onChange} initialFontColor={textSym ? textSym.fontColor : undefined} initialFontSize={textSym ? textSym.fontSize : undefined} initialLabelAttribute={textSym ? textSym.labelAttribute : undefined} />
-       </Tab>),
-      (<Tab key='filter' value={4} label={formatMessage(messages.filtertitle)} disableTouchRipple={true}>
-         <FilterEditor intl={this.props.intl} onChange={this.props.onChange} initialExpression={this.props.initialState ? this.props.initialState.expression : undefined} />
-       </Tab>)
-    );
-    return tabs;
-  }
-  render() {
-    if (this.props.visible) {
-      const {formatMessage} = this.props.intl;
-      var tabs = this._getTabs();
-      return (
-        <Paper className={classNames('sdk-component rule-editor', this.props.className)} zDepth={0}>
-          <TextField value={this.state.title} ref='title' onBlur={this._onTitleBlur.bind(this)} onChange={this._onTitleChange.bind(this)} floatingLabelText={formatMessage(messages.titlelabel)} />
-          <Tabs value={this.state.value} onChange={this.handleChange.bind(this)}>
-            {tabs}
-          </Tabs>
-        </Paper>
-      );
-    } else {
-      return (<article />);
-    }
+    items.push(<LabelEditor intl={this.props.intl} key='label' attributes={this.props.attributes} onChange={this.props.onChange} initialFontColor={textSym ? textSym.fontColor : undefined} initialFontSize={textSym ? textSym.fontSize : undefined} initialLabelAttribute={textSym ? textSym.labelAttribute : undefined} />);
+    items.push(<FilterEditor intl={this.props.intl} key='filter' onChange={this.props.onChange} initialExpression={this.props.initialState ? this.props.initialState.expression : undefined} />);
+    items.push(<ListItem key='delete' onTouchTap={this.props.onRemove} primaryText={formatMessage(messages.removetext)} rightIcon={<ActionDelete />} innerDivStyle={ boxStyle } />);
+    return (<Paper className={classNames('sdk-component rule-editor', this.props.className)} zDepth={0}>{items}</Paper>);
   }
 }
 
