@@ -11,16 +11,18 @@
  */
 
 import React from 'react';
+import Paper from 'material-ui/Paper';
 import classNames from 'classnames';
-import ColorPicker from 'react-color';
+import ColorPicker from './ColorPicker';
+import {ListItem} from 'material-ui/List';
+import Checkbox from 'material-ui/Checkbox';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
-import Label from './Label';
 
 const messages = defineMessages({
-  fillcolorlabel: {
-    id: 'filleditor.fillcolorlabel',
+  filllabel: {
+    id: 'filleditor.filllabel',
     description: 'Label for fill color picker',
-    defaultMessage: 'Fill color'
+    defaultMessage: 'Fill'
   }
 });
 
@@ -66,20 +68,28 @@ class FillEditor extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      fillColor: this.props.initialFillColor
+      fillColor: this.props.initialFillColor,
+      hasFill: this.props.initialHasFill
     };
   }
   _onChangeFill(color) {
     this.setState({fillColor: color});
     this.props.onChange(this.state);
   }
+  _onFillCheck(evt) {
+    this.setState({hasFill: evt.target.checked}, function() {
+      this.props.onChange(this.state);
+    });
+  }
   render() {
+    const boxStyle = {
+      marginLeft: 0
+    };
     const {formatMessage} = this.props.intl;
     return (
-      <div className={classNames('sdk-component stroke-editor', this.props.className)}>
-        <Label>{formatMessage(messages.fillcolorlabel)}:</Label>
-        <ColorPicker type='chrome' onChangeComplete={this._onChangeFill.bind(this)} color={this.state.fillColor.rgb} />
-      </div>
+      <Paper zDepth={0} className={classNames('sdk-component fill-editor', this.props.className)}>
+        <ListItem innerDivStyle={ boxStyle } primaryText={<Checkbox onCheck={this._onFillCheck.bind(this)} checked={this.state.hasFill} label={formatMessage(messages.filllabel)} />} rightIconButton={ <ColorPicker onChange={this._onChangeFill.bind(this)} initialColor={this.state.fillColor} /> } />
+      </Paper>
     );
   }
 }

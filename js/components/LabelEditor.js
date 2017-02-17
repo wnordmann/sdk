@@ -11,16 +11,22 @@
  */
 
 import React from 'react';
-import ColorPicker from 'react-color';
+import ColorPicker from './ColorPicker';
+import Paper from 'material-ui/Paper';
 import MenuItem from 'material-ui/MenuItem';
 import classNames from 'classnames';
 import SelectField from 'material-ui/SelectField';
 import TextField from 'material-ui/TextField';
-import Label from './Label';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
-import {GridList, GridTile} from 'material-ui/GridList';
+import Subheader from 'material-ui/Subheader';
+import {ListItem} from 'material-ui/List';
 
 const messages = defineMessages({
+  header: {
+    id: 'labeleditor.header',
+    description: 'Main header',
+    defaultMessage: 'Label'
+  },
   attributelabel: {
     id: 'labeleditor.attributelabel',
     description: 'Label for the attribute select combo',
@@ -125,6 +131,13 @@ class LabelEditor extends React.PureComponent {
   }
   render() {
     const {formatMessage} = this.props.intl;
+    const listStyle = {
+      padding: '0px 16px',
+      marginLeft: 0
+    };
+    const boxStyle = {
+      marginLeft: 0
+    };
     var attributeItems = [];
     attributeItems.push(<MenuItem key={0} style={{'minHeight':'32px'}} value={null} primaryText={' '} />);
     for (var i = 0, ii = this.props.attributes.length; i < ii; ++i) {
@@ -132,26 +145,18 @@ class LabelEditor extends React.PureComponent {
       attributeItems.push(<MenuItem key={i + 1} value={attribute} primaryText={attribute} />);
     }
     return (
-      <div className={classNames('sdk-component label-editor', this.props.className)}>
-        <GridList cellHeight='auto'>
-          <GridTile>
-            <div className='label-value'>
-              <SelectField floatingLabelText={formatMessage(messages.attributelabel)} hintText={formatMessage(messages.emptytext)} value={this.state.labelAttribute} onChange={this._onItemChange.bind(this)}>
-                {attributeItems}
-              </SelectField>
-            </div>
-            <div className='label-size'>
-              <TextField defaultValue={this.state.fontSize} floatingLabelText={formatMessage(messages.sizelabel)} onChange={this._onChangeFontSize.bind(this)} />
-            </div>
-          </GridTile>
-          <GridTile>
-            <div className='label-color'>
-              <Label>{formatMessage(messages.fillcolorlabel)}:</Label>
-              <ColorPicker type='chrome' onChangeComplete={this._onChangeFill.bind(this)} color={this.state.fontColor.rgb} />
-            </div>
-          </GridTile>
-        </GridList>
-      </div>
+      <Paper zDepth={0} className={classNames('sdk-component label-editor', this.props.className)}>
+        <Subheader>{formatMessage(messages.header)}</Subheader>
+        <ListItem innerDivStyle={ listStyle }>
+          <SelectField fullWidth={true} floatingLabelText={formatMessage(messages.attributelabel)} hintText={formatMessage(messages.emptytext)} value={this.state.labelAttribute} onChange={this._onItemChange.bind(this)}>
+            {attributeItems}
+          </SelectField>
+        </ListItem>
+        <ListItem innerDivStyle={ listStyle }>
+          <TextField fullWidth={true} floatingLabelFixed={true} defaultValue={this.state.fontSize} floatingLabelText={formatMessage(messages.sizelabel)} onChange={this._onChangeFontSize.bind(this)} />
+        </ListItem>
+        <ListItem innerDivStyle={ boxStyle } primaryText={formatMessage(messages.fillcolorlabel)} rightIconButton={ <ColorPicker onChange={this._onChangeFill.bind(this)} initialColor={this.state.fontColor} /> } />
+      </Paper>
     );
   }
 }

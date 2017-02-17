@@ -11,7 +11,10 @@
  */
 
 import React from 'react';
+import {ListItem} from 'material-ui/List';
+import Subheader from 'material-ui/Subheader';
 import classNames from 'classnames';
+import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import FilterService from '../services/FilterService';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -102,13 +105,22 @@ class FilterEditor extends React.PureComponent {
     }
   }
   render() {
+    const listStyle = {
+      padding: '0px 16px',
+      marginLeft: 0
+    };
     const {formatMessage} = this.props.intl;
     var errorText;
     if (this.state.hasError) {
       errorText = formatMessage(messages.errortext);
     }
     return (
-      <TextField className={classNames('sdk-component filter-editor', this.props.className)} errorText={errorText} hintText={formatMessage(messages.filterplaceholder)} defaultValue={this.state.expression} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} />
+      <Paper zDepth={0}>
+        <Subheader>{formatMessage(messages.filterlabel)}</Subheader>
+        <ListItem innerDivStyle={ listStyle }>
+          <TextField fullWidth={true} className={classNames('sdk-component filter-editor', this.props.className)} errorText={errorText} hintText={formatMessage(messages.filterplaceholder)} defaultValue={this.state.expression} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} />
+        </ListItem>
+      </Paper>
     );
   }
 }
