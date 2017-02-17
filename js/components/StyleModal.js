@@ -13,7 +13,7 @@
 import React from 'react';
 import ol from 'openlayers';
 import classNames from 'classnames';
-import Dialog from 'material-ui/Dialog';
+import Dialog from './Dialog';
 import {List, ListItem} from 'material-ui/List';
 import LayerActions from '../actions/LayerActions';
 import Button from './Button';
