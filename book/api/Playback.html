@@ -2,12 +2,12 @@
 <!DOCTYPE HTML>
 <html lang="" >
     <head>
-        <title>Playback · GitBook</title>
         <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Playback · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="GitBook 3.2.0-pre.1">
+        <meta name="generator" content="GitBook 3.2.2">
         
         
         
@@ -888,11 +888,36 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="playback-component"><code>Playback</code> (component)</h1><p>Adds a slider to the map that can be used to select a given date, and modifies the visibility of layers and features depending on their timestamp and the current time.</p><pre><code class="lang-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Playback</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> <span class="hljs-attr">minDate</span>=<span class="hljs-string">{324511200000}</span> <span class="hljs-attr">maxDate</span>=<span class="hljs-string">{1385938800000}</span> /&gt;</span></code></pre>
-<h2 id="properties">Properties</h2><h3 id="autoplay"><code>autoPlay</code></h3><p>Should the playback tool start playing automatically?</p><p>type: <code>bool</code>
-defaultValue: <code>false</code></p><h3 id="classname"><code>className</code></h3><p>Css class name to apply on the root element of this component.</p><p>type: <code>string</code></p><h3 id="interval"><code>interval</code></h3><p>The time, in milliseconds, to wait in each position of the slider. Positions are defined by dividing the slider range by the number of intervals defined in the numIntervals parameter.</p><p>type: <code>number</code>
-defaultValue: <code>500</code></p><h3 id="map-required"><code>map</code> (required)</h3><p>The map whose time-enabled layers should be filtered. Time-enabled layers are layers that have a timeInfo property.</p><p>type: <code>instanceOf ol.Map</code></p><h3 id="maxdate"><code>maxDate</code></h3><p>The maximum date to use for the slider field and the date picker.</p><p>type: <code>number</code></p><h3 id="mindate"><code>minDate</code></h3><p>The minimum date to use for the slider field and the date picker.</p><p>type: <code>number</code></p><h3 id="numintervals"><code>numIntervals</code></h3><p>The number of intervals into which the full range of the slider is divided.</p><p>type: <code>number</code>
+                                <h1 id="playback-component"><code>Playback</code> (component)</h1>
+<p>Adds a slider to the map that can be used to select a given date, and modifies the visibility of layers and features depending on their timestamp and the current time.</p>
+<pre><code class="lang-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Playback</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> <span class="hljs-attr">minDate</span>=<span class="hljs-string">{324511200000}</span> <span class="hljs-attr">maxDate</span>=<span class="hljs-string">{1385938800000}</span> /&gt;</span>
+</code></pre>
+<h2 id="properties">Properties</h2>
+<h3 id="autoplay"><code>autoPlay</code></h3>
+<p>Should the playback tool start playing automatically?</p>
+<p>type: <code>bool</code>
+defaultValue: <code>false</code></p>
+<h3 id="classname"><code>className</code></h3>
+<p>Css class name to apply on the root element of this component.</p>
+<p>type: <code>string</code></p>
+<h3 id="interval"><code>interval</code></h3>
+<p>The time, in milliseconds, to wait in each position of the slider. Positions are defined by dividing the slider range by the number of intervals defined in the numIntervals parameter.</p>
+<p>type: <code>number</code>
+defaultValue: <code>500</code></p>
+<h3 id="map-required"><code>map</code> (required)</h3>
+<p>The map whose time-enabled layers should be filtered. Time-enabled layers are layers that have a timeInfo property.</p>
+<p>type: <code>instanceOf ol.Map</code></p>
+<h3 id="maxdate"><code>maxDate</code></h3>
+<p>The maximum date to use for the slider field and the date picker.</p>
+<p>type: <code>number</code></p>
+<h3 id="mindate"><code>minDate</code></h3>
+<p>The minimum date to use for the slider field and the date picker.</p>
+<p>type: <code>number</code></p>
+<h3 id="numintervals"><code>numIntervals</code></h3>
+<p>The number of intervals into which the full range of the slider is divided.</p>
+<p>type: <code>number</code>
 defaultValue: <code>100</code></p>
+
                                 
                                 </section>
                             
@@ -935,7 +960,7 @@ defaultValue: <code>100</code></p>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Playback","level":"1.7.36","depth":2,"next":{"title":"PointSymbolizerEditor","level":"1.7.37","depth":2,"path":"api/PointSymbolizerEditor.md","ref":"api/PointSymbolizerEditor.md","articles":[]},"previous":{"title":"PanelButton","level":"1.7.35","depth":2,"path":"api/PanelButton.md","ref":"api/PanelButton.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"api/Playback.md","mtime":"2017-01-13T12:57:34.725Z","type":"markdown"},"gitbook":{"version":"3.2.0-pre.1","time":"2017-01-13T12:58:12.324Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Playback","level":"1.7.36","depth":2,"next":{"title":"PointSymbolizerEditor","level":"1.7.37","depth":2,"path":"api/PointSymbolizerEditor.md","ref":"api/PointSymbolizerEditor.md","articles":[]},"previous":{"title":"PanelButton","level":"1.7.35","depth":2,"path":"api/PanelButton.md","ref":"api/PanelButton.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"api/Playback.md","mtime":"2017-02-17T09:48:31.136Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-02-17T09:49:13.762Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

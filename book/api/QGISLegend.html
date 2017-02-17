@@ -2,12 +2,12 @@
 <!DOCTYPE HTML>
 <html lang="" >
     <head>
-        <title>QGISLegend · GitBook</title>
         <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>QGISLegend · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="GitBook 3.2.0-pre.1">
+        <meta name="generator" content="GitBook 3.2.2">
         
         
         
@@ -888,7 +888,9 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="qgislegend-component"><code>QGISLegend</code> (component)</h1><p>A component that shows a legend based on artefacts created by the QGIS plugin Web Application Builder.</p><pre><code class="lang-javascript"><span class="hljs-keyword">var</span> legendData = {
+                                <h1 id="qgislegend-component"><code>QGISLegend</code> (component)</h1>
+<p>A component that shows a legend based on artefacts created by the QGIS plugin Web Application Builder.</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> legendData = {
   <span class="hljs-string">&apos;geo20130827100512660&apos;</span>: [
     {
      <span class="hljs-string">&apos;href&apos;</span>: <span class="hljs-string">&apos;0_1.png&apos;</span>,
@@ -907,11 +909,32 @@
       <span class="hljs-string">&apos;title&apos;</span>: <span class="hljs-string">&apos;116.84-148.68&apos;</span>
     }
   ]
-};</code></pre>
-<pre><code class="lang-xml"><span class="hljs-tag">&lt;<span class="hljs-name">QGISLegend</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> <span class="hljs-attr">legendBasePath</span>=<span class="hljs-string">&apos;./resources/legend/&apos;</span> <span class="hljs-attr">legendData</span>=<span class="hljs-string">{legendData}</span> <span class="hljs-attr">pullRight</span>/&gt;</span></code></pre>
-<h2 id="properties">Properties</h2><h3 id="classname"><code>className</code></h3><p>Css class name to apply on the root element of this component.</p><p>type: <code>string</code></p><h3 id="legendbasepath"><code>legendBasePath</code></h3><p>The base path (relative url) to use for finding the artefacts.</p><p>type: <code>string</code>
-defaultValue: <code>&apos;./legend/&apos;</code></p><h3 id="legenddata-required"><code>legendData</code> (required)</h3><p>The label and image to use per layer. The object is keyed by layer name currently. For example: {&apos;swamp&apos;: [[&apos;&apos;, &apos;4_0.png&apos;]]}.</p><p>type: <code>object</code></p><h3 id="map-required"><code>map</code> (required)</h3><p>The map from which to extract the layers.</p><p>type: <code>instanceOf ol.Map</code></p><h3 id="showexpandedonstartup"><code>showExpandedOnStartup</code></h3><p>Should we expand on startup of the application?</p><p>type: <code>bool</code>
-defaultValue: <code>false</code></p><h3 id="style"><code>style</code></h3><p>Style for the button.</p><p>type: <code>object</code></p>
+};
+</code></pre>
+<pre><code class="lang-xml"><span class="hljs-tag">&lt;<span class="hljs-name">QGISLegend</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> <span class="hljs-attr">legendBasePath</span>=<span class="hljs-string">&apos;./resources/legend/&apos;</span> <span class="hljs-attr">legendData</span>=<span class="hljs-string">{legendData}</span> <span class="hljs-attr">pullRight</span>/&gt;</span>
+</code></pre>
+<h2 id="properties">Properties</h2>
+<h3 id="classname"><code>className</code></h3>
+<p>Css class name to apply on the root element of this component.</p>
+<p>type: <code>string</code></p>
+<h3 id="legendbasepath"><code>legendBasePath</code></h3>
+<p>The base path (relative url) to use for finding the artefacts.</p>
+<p>type: <code>string</code>
+defaultValue: <code>&apos;./legend/&apos;</code></p>
+<h3 id="legenddata-required"><code>legendData</code> (required)</h3>
+<p>The label and image to use per layer. The object is keyed by layer name currently. For example: {&apos;swamp&apos;: [[&apos;&apos;, &apos;4_0.png&apos;]]}.</p>
+<p>type: <code>object</code></p>
+<h3 id="map-required"><code>map</code> (required)</h3>
+<p>The map from which to extract the layers.</p>
+<p>type: <code>instanceOf ol.Map</code></p>
+<h3 id="showexpandedonstartup"><code>showExpandedOnStartup</code></h3>
+<p>Should we expand on startup of the application?</p>
+<p>type: <code>bool</code>
+defaultValue: <code>false</code></p>
+<h3 id="style"><code>style</code></h3>
+<p>Style for the button.</p>
+<p>type: <code>object</code></p>
+
                                 
                                 </section>
                             
@@ -954,7 +977,7 @@ defaultValue: <code>false</code></p><h3 id="style"><code>style</code></h3><p>Sty
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"QGISLegend","level":"1.7.39","depth":2,"next":{"title":"QGISPrint","level":"1.7.40","depth":2,"path":"api/QGISPrint.md","ref":"api/QGISPrint.md","articles":[]},"previous":{"title":"PolygonSymbolizerEditor","level":"1.7.38","depth":2,"path":"api/PolygonSymbolizerEditor.md","ref":"api/PolygonSymbolizerEditor.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"api/QGISLegend.md","mtime":"2017-01-13T12:57:34.993Z","type":"markdown"},"gitbook":{"version":"3.2.0-pre.1","time":"2017-01-13T12:58:12.324Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"QGISLegend","level":"1.7.39","depth":2,"next":{"title":"QGISPrint","level":"1.7.40","depth":2,"path":"api/QGISPrint.md","ref":"api/QGISPrint.md","articles":[]},"previous":{"title":"PolygonSymbolizerEditor","level":"1.7.38","depth":2,"path":"api/PolygonSymbolizerEditor.md","ref":"api/PolygonSymbolizerEditor.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"api/QGISLegend.md","mtime":"2017-02-17T09:48:31.224Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-02-17T09:49:13.762Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

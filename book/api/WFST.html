@@ -2,12 +2,12 @@
 <!DOCTYPE HTML>
 <html lang="" >
     <head>
-        <title>WFST · GitBook</title>
         <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>WFST · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="GitBook 3.2.0-pre.1">
+        <meta name="generator" content="GitBook 3.2.2">
         
         
         
@@ -888,27 +888,52 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="wfst-component"><code>WFST</code> (component)</h1><p>Allows users to make changes to WFS-T layers. This can be drawing new
+                                <h1 id="wfst-component"><code>WFST</code> (component)</h1>
+<p>Allows users to make changes to WFS-T layers. This can be drawing new
 features and deleting or modifying existing features. Only geometry
 changes are currently supported, no attribute changes.
 This depends on ol.layer.Vector with ol.source.Vector. The layer
 needs to have isWFST set to true. Also a wfsInfo object needs to be
-configured on the layer with the following properties:</p><ul><li>featureNS: the namespace of the WFS typename
-</li>
-<li>featureType: the name (without prefix) of the underlying WFS typename
-</li>
-<li>geometryType: the type of geometry (e.g. MultiPolygon)
-</li>
-<li>geometryName: the name of the geometry attribute
-</li>
-<li>url: the online resource of the WFS endpoint
-</li></ul>
-<pre><code class="lang-xml"><span class="hljs-tag">&lt;<span class="hljs-name">WFST</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> /&gt;</span></code></pre>
-<h2 id="properties">Properties</h2><h3 id="classname"><code>className</code></h3><p>Css class name to apply on the root element of this component.</p><p>type: <code>string</code></p><h3 id="layerselector"><code>layerSelector</code></h3><p>Show a layer selector for the user to choose from?</p><p>type: <code>bool</code>
-defaultValue: <code>true</code></p><h3 id="map-required"><code>map</code> (required)</h3><p>The ol3 map whose layers can be used for the WFS-T tool.</p><p>type: <code>instanceOf ol.Map</code></p><h3 id="pointbuffer"><code>pointBuffer</code></h3><p>Buffer to put around clicked point to find the feature clicked. This is in the units of the coordinate reference system of the map.</p><p>type: <code>number</code>
-defaultValue: <code>0.5</code></p><h3 id="showeditform"><code>showEditForm</code></h3><p>Should we display an edit form for editing feature attributes on select?</p><p>type: <code>bool</code>
-defaultValue: <code>false</code></p><h3 id="togglegroup"><code>toggleGroup</code></h3><p>The toggleGroup to use. When this tool is activated, all other tools in the same toggleGroup will be deactivated.</p><p>type: <code>string</code></p><h3 id="toolid"><code>toolId</code></h3><p>Identifier to use for this tool. Can be used to group tools together.</p><p>type: <code>string</code></p><h3 id="visible"><code>visible</code></h3><p>Should this component be visible from the start?</p><p>type: <code>bool</code>
+configured on the layer with the following properties:</p>
+<ul>
+<li>featureNS: the namespace of the WFS typename</li>
+<li>featureType: the name (without prefix) of the underlying WFS typename</li>
+<li>geometryType: the type of geometry (e.g. MultiPolygon)</li>
+<li>geometryName: the name of the geometry attribute</li>
+<li>url: the online resource of the WFS endpoint</li>
+</ul>
+<pre><code class="lang-xml"><span class="hljs-tag">&lt;<span class="hljs-name">WFST</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> /&gt;</span>
+</code></pre>
+<h2 id="properties">Properties</h2>
+<h3 id="classname"><code>className</code></h3>
+<p>Css class name to apply on the root element of this component.</p>
+<p>type: <code>string</code></p>
+<h3 id="layerselector"><code>layerSelector</code></h3>
+<p>Show a layer selector for the user to choose from?</p>
+<p>type: <code>bool</code>
 defaultValue: <code>true</code></p>
+<h3 id="map-required"><code>map</code> (required)</h3>
+<p>The ol3 map whose layers can be used for the WFS-T tool.</p>
+<p>type: <code>instanceOf ol.Map</code></p>
+<h3 id="pointbuffer"><code>pointBuffer</code></h3>
+<p>Buffer to put around clicked point to find the feature clicked. This is in the units of the coordinate reference system of the map.</p>
+<p>type: <code>number</code>
+defaultValue: <code>0.5</code></p>
+<h3 id="showeditform"><code>showEditForm</code></h3>
+<p>Should we display an edit form for editing feature attributes on select?</p>
+<p>type: <code>bool</code>
+defaultValue: <code>false</code></p>
+<h3 id="togglegroup"><code>toggleGroup</code></h3>
+<p>The toggleGroup to use. When this tool is activated, all other tools in the same toggleGroup will be deactivated.</p>
+<p>type: <code>string</code></p>
+<h3 id="toolid"><code>toolId</code></h3>
+<p>Identifier to use for this tool. Can be used to group tools together.</p>
+<p>type: <code>string</code></p>
+<h3 id="visible"><code>visible</code></h3>
+<p>Should this component be visible from the start?</p>
+<p>type: <code>bool</code>
+defaultValue: <code>true</code></p>
+
                                 
                                 </section>
                             
@@ -951,7 +976,7 @@ defaultValue: <code>true</code></p>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"WFST","level":"1.7.47","depth":2,"next":{"title":"WMSLegend","level":"1.7.48","depth":2,"path":"api/WMSLegend.md","ref":"api/WMSLegend.md","articles":[]},"previous":{"title":"StyleModal","level":"1.7.46","depth":2,"path":"api/StyleModal.md","ref":"api/StyleModal.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"api/WFST.md","mtime":"2017-01-13T12:57:35.281Z","type":"markdown"},"gitbook":{"version":"3.2.0-pre.1","time":"2017-01-13T12:58:12.324Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"WFST","level":"1.7.47","depth":2,"next":{"title":"WMSLegend","level":"1.7.48","depth":2,"path":"api/WMSLegend.md","ref":"api/WMSLegend.md","articles":[]},"previous":{"title":"StyleModal","level":"1.7.46","depth":2,"path":"api/StyleModal.md","ref":"api/StyleModal.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"api/WFST.md","mtime":"2017-02-17T09:48:31.656Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-02-17T09:49:13.762Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

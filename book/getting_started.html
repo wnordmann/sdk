@@ -2,12 +2,12 @@
 <!DOCTYPE HTML>
 <html lang="" >
     <head>
-        <title>Getting started · GitBook</title>
         <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Getting started · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="GitBook 3.2.0-pre.1">
+        <meta name="generator" content="GitBook 3.2.2">
         
         
         
@@ -888,14 +888,30 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="getting-started">Getting Started</h1><h2 id="jsfiddle">JSFiddle</h2><p>Check out the following <a href="https://jsfiddle.net/bartvde/4uwjvcej/" target="_blank">JSFiddle example</a>.</p><h2 id="requirements-for-development-environment">Requirements for development environment</h2><p>Make sure g++ is installed on your system.</p><h2 id="node-version-manager-nvm">Node version manager (nvm)</h2><p>Install the node version manager from <a href="https://github.com/creationix/nvm" target="_blank">https://github.com/creationix/nvm</a>
-For the SDK, you should be using node 6.0.0 so:</p><pre><code>nvm install 6.0.0
-nvm use 6.0.0</code></pre>
-<h2 id="using-the-web-sdk-application-generator">Using the web-sdk application generator</h2><p>The easiest way to get started is to use the web-sdk application generator. We will also outline the manual steps at the end of this section for advanced users, but the preferred way is to use the application generator.</p><h3 id="installing-the-generator">Installing the generator</h3><p>Run the following command:</p><pre><code>npm install -g boundless-web-sdk-generator</code></pre>
-<p>To install the package globally might need <code>sudo</code> rights.</p><p>You can then run the web-sdk command like this:</p><pre><code>web-sdk --help</code></pre>
-<p>If you have insufficient rights to install globally, install the package like this:</p><pre><code>npm install boundless-web-sdk-generator</code></pre>
-<p>And run:</p><pre><code>node_modules/.bin/web-sdk --help</code></pre>
-<p>This will output the usage instructions:</p><pre><code>$ web-sdk --help
+                                <h1 id="getting-started">Getting Started</h1>
+<h2 id="jsfiddle">JSFiddle</h2>
+<p>Check out the following <a href="https://jsfiddle.net/bartvde/4uwjvcej/" target="_blank">JSFiddle example</a>.</p>
+<h2 id="requirements-for-development-environment">Requirements for development environment</h2>
+<p>Make sure g++ is installed on your system.</p>
+<h2 id="node-version-manager-nvm">Node version manager (nvm)</h2>
+<p>Install the node version manager from <a href="https://github.com/creationix/nvm" target="_blank">https://github.com/creationix/nvm</a>
+For the SDK, you should be using node 6.0.0 so:</p>
+<pre><code>nvm install 6.0.0
+nvm use 6.0.0
+</code></pre><h2 id="using-the-web-sdk-application-generator">Using the web-sdk application generator</h2>
+<p>The easiest way to get started is to use the web-sdk application generator. We will also outline the manual steps at the end of this section for advanced users, but the preferred way is to use the application generator.</p>
+<h3 id="installing-the-generator">Installing the generator</h3>
+<p>Run the following command:</p>
+<pre><code>npm install -g boundless-web-sdk-generator
+</code></pre><p>To install the package globally might need <code>sudo</code> rights.</p>
+<p>You can then run the web-sdk command like this:</p>
+<pre><code>web-sdk --help
+</code></pre><p>If you have insufficient rights to install globally, install the package like this:</p>
+<pre><code>npm install boundless-web-sdk-generator
+</code></pre><p>And run:</p>
+<pre><code>node_modules/.bin/web-sdk --help
+</code></pre><p>This will output the usage instructions:</p>
+<pre><code>$ web-sdk --help
 
   Usage: web-sdk [options] [dir]
 
@@ -904,8 +920,10 @@ nvm use 6.0.0</code></pre>
     -h, --help     output usage information
     -V, --version  output the version number
     -f, --force    force on non-empty directory
-    -d, --debug    output more debug info</code></pre>
-<h3 id="creating-the-application">Creating the application</h3><p>Let&apos;s create our first application with the following command (when using a globally installed <code>web-sdk</code> you can simply use <code>web-sdk ~/myapp</code>):</p><pre><code>$ node_modules/.bin/web-sdk ~/myapp
+    -d, --debug    output more debug info
+</code></pre><h3 id="creating-the-application">Creating the application</h3>
+<p>Let&apos;s create our first application with the following command (when using a globally installed <code>web-sdk</code> you can simply use <code>web-sdk ~/myapp</code>):</p>
+<pre><code>$ node_modules/.bin/web-sdk ~/myapp
 
    create : ~/myapp
    create : ~/myapp/app.jsx
@@ -919,10 +937,14 @@ nvm use 6.0.0</code></pre>
      $ cd ~/myapp &amp;&amp; npm install
 
    run the app:
-     $ npm start</code></pre>
-<p>The application is generated and instructions are outputted on the next steps to undertake. Change to this directory and run:</p><pre><code>npm install</code></pre>
-<p>This will install all the needed dependencies for the application.</p><p>We can now run the debug server with the following command:</p><pre><code>npm start</code></pre>
-<p>This will start up a debug server on port 3000:</p><pre><code>$ npm start
+     $ npm start
+</code></pre><p>The application is generated and instructions are outputted on the next steps to undertake. Change to this directory and run:</p>
+<pre><code>npm install
+</code></pre><p>This will install all the needed dependencies for the application.</p>
+<p>We can now run the debug server with the following command:</p>
+<pre><code>npm start
+</code></pre><p>This will start up a debug server on port 3000:</p>
+<pre><code>$ npm start
 
 &gt; myapp@0.0.0 start ~/myapp
 &gt; npm-run-all --parallel createdir start:debug
@@ -936,18 +958,22 @@ nvm use 6.0.0</code></pre>
 &gt; node debug-server.js
 
 info serve-lib Parsing dependencies.
-info serve-lib Debug server running http://localhost:3000/loader.js (Ctrl+C to stop)</code></pre>
-<p>To create a zip file package for production use the following command:</p><pre><code>$ npm run package</code></pre>
-<p>You will be prompted for a destination file path and file name for the zip file, for instance <code>~/myapp.zip</code>.</p><h2 id="using-boundless-sdk-from-npm">Using Boundless SDK from npm</h2><p>The following packages are relevant for the Boundless SDK:</p><ul><li><code>boundless-sdk</code>, the main package containing the components 
-</li>
-<li><code>boundless-sdk-tools</code>, package containing debug server
-</li>
-<li><code>boundless-web-sdk-generator</code>, package containing CLI for creating apps
-</li></ul>
-<p>So to install them you will need to use:</p><pre><code>npm install boundless-sdk
+info serve-lib Debug server running http://localhost:3000/loader.js (Ctrl+C to stop)
+</code></pre><p>To create a zip file package for production use the following command:</p>
+<pre><code>$ npm run package
+</code></pre><p>You will be prompted for a destination file path and file name for the zip file, for instance <code>~/myapp.zip</code>.</p>
+<h2 id="using-boundless-sdk-from-npm">Using Boundless SDK from npm</h2>
+<p>The following packages are relevant for the Boundless SDK:</p>
+<ul>
+<li><code>boundless-sdk</code>, the main package containing the components </li>
+<li><code>boundless-sdk-tools</code>, package containing debug server</li>
+<li><code>boundless-web-sdk-generator</code>, package containing CLI for creating apps</li>
+</ul>
+<p>So to install them you will need to use:</p>
+<pre><code>npm install boundless-sdk
 npm install boundless-sdk-tools
-npm install boundless-web-sdk-generator</code></pre>
-
+npm install boundless-web-sdk-generator
+</code></pre>
                                 
                                 </section>
                             
@@ -990,7 +1016,7 @@ npm install boundless-web-sdk-generator</code></pre>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Getting started","level":"1.2","depth":1,"next":{"title":"QGIS Web Application Builder","level":"1.3","depth":1,"path":"wab.md","ref":"wab.md","articles":[]},"previous":{"title":"Introduction","level":"1.1","depth":1,"path":"README.md","ref":"README.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"getting_started.md","mtime":"2017-01-13T12:53:44.073Z","type":"markdown"},"gitbook":{"version":"3.2.0-pre.1","time":"2017-01-13T12:58:12.324Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Getting started","level":"1.2","depth":1,"next":{"title":"QGIS Web Application Builder","level":"1.3","depth":1,"path":"wab.md","ref":"wab.md","articles":[]},"previous":{"title":"Introduction","level":"1.1","depth":1,"path":"README.md","ref":"README.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"getting_started.md","mtime":"2017-02-17T09:44:46.456Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-02-17T09:49:13.762Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

@@ -2,12 +2,12 @@
 <!DOCTYPE HTML>
 <html lang="" >
     <head>
-        <title>Tutorial · GitBook</title>
         <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Tutorial · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="GitBook 3.2.0-pre.1">
+        <meta name="generator" content="GitBook 3.2.2">
         
         
         
@@ -888,21 +888,33 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="tutorial">Tutorial</h1><h2 id="1-using-the-generator">1. Using the generator</h2><p>In the getting started section we have learned how to create a skeleton application with the <code>web-sdk</code> command.</p><p>The skeleton application contains two base map layers, OSM streets and ESRI world imagery, and a single widget, the <code>LayerList</code> widget.</p><p>The main file of the application is <code>app.jsx</code>. Open up this file in your favorite text editor. Look for the definition of <code>ol.Map</code>. The map gets defined with a layer group, that combines the OSM streets and ESRI world imagery layers. The view is defined with an initial  center and zoom level. If you are not familiar with OpenLayers 3, the recommendation is to use the workshop at <a href="http://openlayers.org/workshop/" target="_blank">http://openlayers.org/workshop/</a> to get up to speed with OpenLayers 3.</p><h2 id="2-adding-a-vector-layer-from-a-geojson-file">2. Adding a vector layer from a GeoJSON file</h2><p>Create a subdirectory called <code>data</code> in the root of the application directory, download USA states data as GeoJSON from: <a href="http://data.okfn.org/data/datasets/geo-boundaries-us-110m" target="_blank">http://data.okfn.org/data/datasets/geo-boundaries-us-110m</a> and save it to the <code>data</code> subdirectory.</p><pre><code>mkdir data
-curl &quot;https://raw.githubusercontent.com/datasets/geo-boundaries-us-110m/master/json/ne_110m_admin_1_states_provinces_shp_scale_rank.geojson&quot; -o data/ne_110m_admin_1_states_provinces_shp_scale_rank.geojson</code></pre>
-<p>Add the following layer definition in <code>app.jsx</code> after the existing <code>ol.layer.Group</code>:</p><pre><code class="lang-javascript">  <span class="hljs-keyword">new</span> ol.layer.Vector({
+                                <h1 id="tutorial">Tutorial</h1>
+<h2 id="1-using-the-generator">1. Using the generator</h2>
+<p>In the getting started section we have learned how to create a skeleton application with the <code>web-sdk</code> command.</p>
+<p>The skeleton application contains two base map layers, OSM streets and ESRI world imagery, and a single widget, the <code>LayerList</code> widget.</p>
+<p>The main file of the application is <code>app.jsx</code>. Open up this file in your favorite text editor. Look for the definition of <code>ol.Map</code>. The map gets defined with a layer group, that combines the OSM streets and ESRI world imagery layers. The view is defined with an initial  center and zoom level. If you are not familiar with OpenLayers 3, the recommendation is to use the workshop at <a href="http://openlayers.org/workshop/" target="_blank">http://openlayers.org/workshop/</a> to get up to speed with OpenLayers 3.</p>
+<h2 id="2-adding-a-vector-layer-from-a-geojson-file">2. Adding a vector layer from a GeoJSON file</h2>
+<p>Create a subdirectory called <code>data</code> in the root of the application directory, download USA states data as GeoJSON from: <a href="http://data.okfn.org/data/datasets/geo-boundaries-us-110m" target="_blank">http://data.okfn.org/data/datasets/geo-boundaries-us-110m</a> and save it to the <code>data</code> subdirectory.</p>
+<pre><code>mkdir data
+curl &quot;https://raw.githubusercontent.com/datasets/geo-boundaries-us-110m/master/json/ne_110m_admin_1_states_provinces_shp_scale_rank.geojson&quot; -o data/ne_110m_admin_1_states_provinces_shp_scale_rank.geojson
+</code></pre><p>Add the following layer definition in <code>app.jsx</code> after the existing <code>ol.layer.Group</code>:</p>
+<pre><code class="lang-javascript">  <span class="hljs-keyword">new</span> ol.layer.Vector({
     id: <span class="hljs-string">&apos;states&apos;</span>,
     title: <span class="hljs-string">&apos;USA States&apos;</span>,
     source: <span class="hljs-keyword">new</span> ol.source.Vector({
       url: <span class="hljs-string">&apos;data/ne_110m_admin_1_states_provinces_shp_scale_rank.geojson&apos;</span>,
       format: <span class="hljs-keyword">new</span> ol.format.GeoJSON()
     })
-  })</code></pre>
-<p>And change the view&apos;s center so that the GeoJSON layer will be visible on start up:</p><pre><code class="lang-javascript">  view: <span class="hljs-keyword">new</span> ol.View({
+  })
+</code></pre>
+<p>And change the view&apos;s center so that the GeoJSON layer will be visible on start up:</p>
+<pre><code class="lang-javascript">  view: <span class="hljs-keyword">new</span> ol.View({
     center: [<span class="hljs-number">-10605790.55</span>, <span class="hljs-number">4363637.07</span>],
     zoom: <span class="hljs-number">4</span>
-  })</code></pre>
-<p>The full map definition should now look like:</p><pre><code class="lang-javascript"><span class="hljs-keyword">var</span> map = <span class="hljs-keyword">new</span> ol.Map({
+  })
+</code></pre>
+<p>The full map definition should now look like:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> map = <span class="hljs-keyword">new</span> ol.Map({
   layers: [
     <span class="hljs-keyword">new</span> ol.layer.Group({
       type: <span class="hljs-string">&apos;base-group&apos;</span>,
@@ -941,19 +953,32 @@ curl &quot;https://raw.githubusercontent.com/datasets/geo-boundaries-us-110m/mas
     center: [<span class="hljs-number">-10605790.55</span>, <span class="hljs-number">4363637.07</span>],
     zoom: <span class="hljs-number">4</span>
   })
-});</code></pre>
-<h2 id="3-adding-a-feature-grid">3. Adding a feature grid</h2><p>In this step we&apos;ll learn how to add another component to the application, besides the LayerList component which is already in the application. First, we&apos;ll add an import statement at the top of <code>app.jsx</code>:</p><pre><code class="lang-javascript"><span class="hljs-keyword">import</span> FeatureTable <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;boundless-sdk/js/components/FeatureTable.jsx&apos;</span>;</code></pre>
-<p>In the render function of our application, we need to add the definition of our new component, FeatureTable:</p><p>The feature table needs to get configured with at least a layer and a map:</p><pre><code class="lang-html">  <span class="hljs-tag">&lt;<span class="hljs-name">MapPanel</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&apos;map&apos;</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&apos;row&apos;</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> /&gt;</span>
+});
+</code></pre>
+<h2 id="3-adding-a-feature-grid">3. Adding a feature grid</h2>
+<p>In this step we&apos;ll learn how to add another component to the application, besides the LayerList component which is already in the application. First, we&apos;ll add an import statement at the top of <code>app.jsx</code>:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">import</span> FeatureTable <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;boundless-sdk/js/components/FeatureTable.jsx&apos;</span>;
+</code></pre>
+<p>In the render function of our application, we need to add the definition of our new component, FeatureTable:</p>
+<p>The feature table needs to get configured with at least a layer and a map:</p>
+<pre><code class="lang-html">  <span class="hljs-tag">&lt;<span class="hljs-name">MapPanel</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&apos;map&apos;</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&apos;row&apos;</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> /&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">LayerList</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&apos;zoom-buttons&apos;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">Zoom</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&apos;table&apos;</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&apos;row&apos;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">FeatureTable</span> <span class="hljs-attr">resizeTo</span>=<span class="hljs-string">&apos;table&apos;</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> <span class="hljs-attr">layer</span>=<span class="hljs-string">{map.getLayers().item(1)}</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
-<p>Our div with id <code>table</code> does not yet have a size, so open up <code>app.css</code> and give it some space on the page:</p><pre><code class="lang-css"><span class="hljs-selector-id">#map</span> {
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&apos;table&apos;</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&apos;row&apos;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">FeatureTable</span> <span class="hljs-attr">resizeTo</span>=<span class="hljs-string">&apos;table&apos;</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> <span class="hljs-attr">layer</span>=<span class="hljs-string">{map.getLayers().item(1)}</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre>
+<p>Our div with id <code>table</code> does not yet have a size, so open up <code>app.css</code> and give it some space on the page:</p>
+<pre><code class="lang-css"><span class="hljs-selector-id">#map</span> {
   <span class="hljs-attribute">height</span>: <span class="hljs-number">50%</span>;
 }
 <span class="hljs-selector-id">#table</span> {
   <span class="hljs-attribute">height</span>: <span class="hljs-number">50%</span>;
-}</code></pre>
-<p>We have reduced the map div to 50% height and allocated the other 50% for the table.</p><p>If you reload the debug server at <a href="http://localhost:3000/" target="_blank">http://localhost:3000/</a> you&apos;ll see that we now have a feature table at the bottom of the page. With the <code>resizeTo</code> property we have told the FeatureTable to resize itself to the div with id <code>table</code>.</p><p>When you click a row in the feature table, it will select the corresponding geometry in the map.</p><p>Our app.jsx will now  look like:</p><pre><code class="lang-javascript"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react&apos;</span>;
+}
+</code></pre>
+<p>We have reduced the map div to 50% height and allocated the other 50% for the table.</p>
+<p>If you reload the debug server at <a href="http://localhost:3000/" target="_blank">http://localhost:3000/</a> you&apos;ll see that we now have a feature table at the bottom of the page. With the <code>resizeTo</code> property we have told the FeatureTable to resize itself to the div with id <code>table</code>.</p>
+<p>When you click a row in the feature table, it will select the corresponding geometry in the map.</p>
+<p>Our app.jsx will now  look like:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react&apos;</span>;
 <span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react-dom&apos;</span>;
 <span class="hljs-keyword">import</span> ol <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;openlayers&apos;</span>;
 <span class="hljs-keyword">import</span> {addLocaleData, IntlProvider} <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react-intl&apos;</span>;
@@ -964,6 +989,8 @@ curl &quot;https://raw.githubusercontent.com/datasets/geo-boundaries-us-110m/mas
 <span class="hljs-keyword">import</span> injectTapEventPlugin <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react-tap-event-plugin&apos;</span>;
 <span class="hljs-keyword">import</span> enLocaleData <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react-intl/locale-data/en.js&apos;</span>;
 <span class="hljs-keyword">import</span> enMessages <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;boundless-sdk/locale/en.js&apos;</span>;
+<span class="hljs-keyword">import</span> getMuiTheme <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;material-ui/styles/getMuiTheme&apos;</span>;
+
 
 <span class="hljs-comment">// Needed for onTouchTap</span>
 <span class="hljs-comment">// Can go away when react 1.0 release</span>
@@ -1018,6 +1045,11 @@ addLocaleData(
 });
 
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyApp</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+  getChildContext() {
+    <span class="hljs-keyword">return</span> {
+      muiTheme: getMuiTheme()
+    };
+  }
   render() {
     <span class="hljs-keyword">return</span> (
        &lt;div id=&apos;content&apos;&gt;
@@ -1030,8 +1062,14 @@ addLocaleData(
   }
 }
 
-ReactDOM.render(&lt;IntlProvider locale=&apos;en&apos; messages={enMessages}&gt;&lt;MyApp /&gt;&lt;/IntlProvider&gt;, document.getElementById(&apos;main&apos;));</code></pre>
-<p>Our app.css will look like:</p><pre><code class="lang-css"><span class="hljs-selector-tag">html</span>, <span class="hljs-selector-tag">body</span> {
+MyApp.childContextTypes = {
+  muiTheme: React.PropTypes.object
+};
+
+ReactDOM.render(&lt;IntlProvider locale=&apos;en&apos; messages={enMessages}&gt;&lt;MyApp /&gt;&lt;/IntlProvider&gt;, document.getElementById(&apos;main&apos;));
+</code></pre>
+<p>Our app.css will look like:</p>
+<pre><code class="lang-css"><span class="hljs-selector-tag">html</span>, <span class="hljs-selector-tag">body</span> {
   <span class="hljs-attribute">height</span>: <span class="hljs-number">100%</span>;
   <span class="hljs-attribute">padding</span>: <span class="hljs-number">0</span>;
   <span class="hljs-attribute">margin</span>: <span class="hljs-number">0</span>;
@@ -1066,13 +1104,21 @@ ReactDOM.render(&lt;IntlProvider locale=&apos;en&apos; messages={enMessages}&gt;
   <span class="hljs-attribute">margin-left</span>: <span class="hljs-number">20px</span>;
   <span class="hljs-attribute">position</span>: absolute;
   <span class="hljs-attribute">top</span>: <span class="hljs-number">20px</span>;
-}</code></pre>
-<h2 id="4-adding-an-upload-component">4. Adding an upload component</h2><p>In this step we&apos;ll be adding a button to the application that will open up a dialog where the user can upload a vector file, such as a KML, GPX or GeoJSON file.</p><p>Again, we will start by adding an <code>import</code> statement to import our component (and the Toolbar to put the button into):</p><pre><code class="lang-javascript"><span class="hljs-keyword">import</span> AddLayer <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;boundless-sdk/js/components/AddLayer.jsx&apos;</span>;
-<span class="hljs-keyword">import</span> Toolbar <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;material-ui/lib/toolbar/toolbar&apos;</span>;</code></pre>
-<p>In the <code>render</code> function of our application, we need to add a toolbar to accommodate for the button of the upload component:</p><pre><code class="lang-html"> <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&apos;content&apos;</span>&gt;</span>
+}
+</code></pre>
+<h2 id="4-adding-an-upload-component">4. Adding an upload component</h2>
+<p>In this step we&apos;ll be adding a button to the application that will open up a dialog where the user can upload a vector file, such as a KML, GPX or GeoJSON file.</p>
+<p>Again, we will start by adding an <code>import</code> statement to import our component (and the Toolbar to put the button into):</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">import</span> AddLayer <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;boundless-sdk/js/components/AddLayer.jsx&apos;</span>;
+<span class="hljs-keyword">import</span> Toolbar <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;material-ui/Toolbar/Toolbar&apos;</span>;
+</code></pre>
+<p>In the <code>render</code> function of our application, we need to add a toolbar to accommodate for the button of the upload component:</p>
+<pre><code class="lang-html"> <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&apos;content&apos;</span>&gt;</span>
    <span class="hljs-tag">&lt;<span class="hljs-name">Toolbar</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">AddLayer</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">Toolbar</span>&gt;</span>
-   <span class="hljs-tag">&lt;<span class="hljs-name">MapPanel</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&apos;map&apos;</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&apos;row&apos;</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> /&gt;</span></code></pre>
-<p>Open up app.css and take the 56px of the toolbar from the map&apos;s height, and move the zoom buttons 56px down. Also move the layer list button down.</p><pre><code class="lang-css"><span class="hljs-selector-id">#map</span> {
+   <span class="hljs-tag">&lt;<span class="hljs-name">MapPanel</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&apos;map&apos;</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&apos;row&apos;</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> /&gt;</span>
+</code></pre>
+<p>Open up app.css and take the 56px of the toolbar from the map&apos;s height, and move the zoom buttons 56px down. Also move the layer list button down.</p>
+<pre><code class="lang-css"><span class="hljs-selector-id">#map</span> {
   <span class="hljs-attribute">height</span>: <span class="hljs-built_in">calc</span>(50% - 56px);
 }
 <span class="hljs-selector-id">#zoom-buttons</span> {
@@ -1082,8 +1128,10 @@ ReactDOM.render(&lt;IntlProvider locale=&apos;en&apos; messages={enMessages}&gt;
 }
 <span class="hljs-selector-tag">div</span><span class="hljs-selector-class">.layer-switcher</span> {
   <span class="hljs-attribute">top</span>: <span class="hljs-number">4em</span>;
-}</code></pre>
-<p>The final app.jsx will look like:</p><pre><code class="lang-javascript"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react&apos;</span>;
+}
+</code></pre>
+<p>The final app.jsx will look like:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react&apos;</span>;
 <span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react-dom&apos;</span>;
 <span class="hljs-keyword">import</span> ol <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;openlayers&apos;</span>;
 <span class="hljs-keyword">import</span> {addLocaleData, IntlProvider} <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react-intl&apos;</span>;
@@ -1092,7 +1140,7 @@ ReactDOM.render(&lt;IntlProvider locale=&apos;en&apos; messages={enMessages}&gt;
 <span class="hljs-keyword">import</span> FeatureTable <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;boundless-sdk/js/components/FeatureTable.jsx&apos;</span>;
 <span class="hljs-keyword">import</span> LayerList <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;boundless-sdk/js/components/LayerList.jsx&apos;</span>;
 <span class="hljs-keyword">import</span> AddLayer <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;boundless-sdk/js/components/AddLayer.jsx&apos;</span>;
-<span class="hljs-keyword">import</span> Toolbar <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;material-ui/lib/toolbar/toolbar&apos;</span>;
+<span class="hljs-keyword">import</span> Toolbar <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;material-ui/Toolbar/Toolbar&apos;</span>;
 <span class="hljs-keyword">import</span> injectTapEventPlugin <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react-tap-event-plugin&apos;</span>;
 <span class="hljs-keyword">import</span> enLocaleData <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react-intl/locale-data/en.js&apos;</span>;
 <span class="hljs-keyword">import</span> enMessages <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;boundless-sdk/locale/en.js&apos;</span>;
@@ -1150,6 +1198,11 @@ addLocaleData(
 });
 
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyApp</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+  getChildContext() {
+    <span class="hljs-keyword">return</span> {
+      muiTheme: getMuiTheme()
+    };
+  }
   render() {
     <span class="hljs-keyword">return</span> (
        &lt;div id=&apos;content&apos;&gt;
@@ -1163,8 +1216,14 @@ addLocaleData(
   }
 }
 
-ReactDOM.render(&lt;IntlProvider locale=&apos;en&apos; messages={enMessages}&gt;&lt;MyApp /&gt;&lt;/IntlProvider&gt;, document.getElementById(&apos;main&apos;));</code></pre>
-<p>The final app.css will look like:</p><pre><code class="lang-css"><span class="hljs-selector-tag">html</span>, <span class="hljs-selector-tag">body</span> {
+MyApp.childContextTypes = {
+  muiTheme: React.PropTypes.object
+};
+
+ReactDOM.render(&lt;IntlProvider locale=&apos;en&apos; messages={enMessages}&gt;&lt;MyApp /&gt;&lt;/IntlProvider&gt;, document.getElementById(&apos;main&apos;));
+</code></pre>
+<p>The final app.css will look like:</p>
+<pre><code class="lang-css"><span class="hljs-selector-tag">html</span>, <span class="hljs-selector-tag">body</span> {
   <span class="hljs-attribute">height</span>: <span class="hljs-number">100%</span>;
   <span class="hljs-attribute">padding</span>: <span class="hljs-number">0</span>;
   <span class="hljs-attribute">margin</span>: <span class="hljs-number">0</span>;
@@ -1202,8 +1261,10 @@ ReactDOM.render(&lt;IntlProvider locale=&apos;en&apos; messages={enMessages}&gt;
 }
 <span class="hljs-selector-tag">div</span><span class="hljs-selector-class">.layer-switcher</span> {
   <span class="hljs-attribute">top</span>: <span class="hljs-number">4em</span>;
-}</code></pre>
-<p>The final application will look like: <img alt="final tutorial application" src="tutorial.png">.</p>
+}
+</code></pre>
+<p>The final application will look like: <img src="tutorial.png" alt="final tutorial application">.</p>
+
                                 
                                 </section>
                             
@@ -1246,7 +1307,7 @@ ReactDOM.render(&lt;IntlProvider locale=&apos;en&apos; messages={enMessages}&gt;
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Tutorial","level":"1.4","depth":1,"next":{"title":"Writing components","level":"1.5","depth":1,"path":"writing_components.md","ref":"writing_components.md","articles":[]},"previous":{"title":"QGIS Web Application Builder","level":"1.3","depth":1,"path":"wab.md","ref":"wab.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"tutorial.md","mtime":"2017-01-13T12:53:44.077Z","type":"markdown"},"gitbook":{"version":"3.2.0-pre.1","time":"2017-01-13T12:58:12.324Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Tutorial","level":"1.4","depth":1,"next":{"title":"Writing components","level":"1.5","depth":1,"path":"writing_components.md","ref":"writing_components.md","articles":[]},"previous":{"title":"QGIS Web Application Builder","level":"1.3","depth":1,"path":"wab.md","ref":"wab.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"tutorial.md","mtime":"2017-02-17T09:44:46.456Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-02-17T09:49:13.762Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

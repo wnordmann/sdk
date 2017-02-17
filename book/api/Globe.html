@@ -2,12 +2,12 @@
 <!DOCTYPE HTML>
 <html lang="" >
     <head>
-        <title>Globe · GitBook</title>
         <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Globe · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="GitBook 3.2.0-pre.1">
+        <meta name="generator" content="GitBook 3.2.2">
         
         
         
@@ -888,11 +888,31 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="globe-component"><code>Globe</code> (component)</h1><p>Adds a button to toggle 3D mode.
-The HTML page of the application needs to include a script tag to cesium:</p><pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;./resources/ol3-cesium/Cesium.js&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/javascript&quot;</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;utf-8&quot;</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
-<pre><code class="lang-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Globe</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> /&gt;</span></code></pre>
-<h2 id="properties">Properties</h2><h3 id="classname"><code>className</code></h3><p>Css class name to apply on the root element of this component.</p><p>type: <code>string</code></p><h3 id="hidescalebar"><code>hideScalebar</code></h3><p>Resolution at which to hide the scalebar in 3D mode</p><p>type: <code>number</code>
-defaultValue: <code>78271</code></p><h3 id="map-required"><code>map</code> (required)</h3><p>The ol3 map instance to work on.</p><p>type: <code>instanceOf ol.Map</code></p><h3 id="style"><code>style</code></h3><p>Style for the button.</p><p>type: <code>object</code></p><h3 id="tooltipposition"><code>tooltipPosition</code></h3><p>Position of the tooltip.</p><p>type: <code>enum (&apos;bottom&apos;|&apos;bottom-right&apos;|&apos;bottom-left&apos;|&apos;right&apos;|&apos;left&apos;|&apos;top-right&apos;|&apos;top&apos;|&apos;top-left&apos;)</code></p>
+                                <h1 id="globe-component"><code>Globe</code> (component)</h1>
+<p>Adds a button to toggle 3D mode.
+The HTML page of the application needs to include a script tag to cesium:</p>
+<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;./resources/ol3-cesium/Cesium.js&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/javascript&quot;</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;utf-8&quot;</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<pre><code class="lang-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Globe</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> /&gt;</span>
+</code></pre>
+<h2 id="properties">Properties</h2>
+<h3 id="classname"><code>className</code></h3>
+<p>Css class name to apply on the root element of this component.</p>
+<p>type: <code>string</code></p>
+<h3 id="hidescalebar"><code>hideScalebar</code></h3>
+<p>Resolution at which to hide the scalebar in 3D mode</p>
+<p>type: <code>number</code>
+defaultValue: <code>78271</code></p>
+<h3 id="map-required"><code>map</code> (required)</h3>
+<p>The ol3 map instance to work on.</p>
+<p>type: <code>instanceOf ol.Map</code></p>
+<h3 id="style"><code>style</code></h3>
+<p>Style for the button.</p>
+<p>type: <code>object</code></p>
+<h3 id="tooltipposition"><code>tooltipPosition</code></h3>
+<p>Position of the tooltip.</p>
+<p>type: <code>enum (&apos;bottom&apos;|&apos;bottom-right&apos;|&apos;bottom-left&apos;|&apos;right&apos;|&apos;left&apos;|&apos;top-right&apos;|&apos;top&apos;|&apos;top-left&apos;)</code></p>
+
                                 
                                 </section>
                             
@@ -935,7 +955,7 @@ defaultValue: <code>78271</code></p><h3 id="map-required"><code>map</code> (requ
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Globe","level":"1.7.17","depth":2,"next":{"title":"HomeButton","level":"1.7.18","depth":2,"path":"api/HomeButton.md","ref":"api/HomeButton.md","articles":[]},"previous":{"title":"Geolocation","level":"1.7.16","depth":2,"path":"api/Geolocation.md","ref":"api/Geolocation.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"api/Globe.md","mtime":"2017-01-13T12:57:33.701Z","type":"markdown"},"gitbook":{"version":"3.2.0-pre.1","time":"2017-01-13T12:58:12.324Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Globe","level":"1.7.17","depth":2,"next":{"title":"HomeButton","level":"1.7.18","depth":2,"path":"api/HomeButton.md","ref":"api/HomeButton.md","articles":[]},"previous":{"title":"Geolocation","level":"1.7.16","depth":2,"path":"api/Geolocation.md","ref":"api/Geolocation.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"api/Globe.md","mtime":"2017-02-17T09:48:30.168Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-02-17T09:49:13.762Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

@@ -2,12 +2,12 @@
 <!DOCTYPE HTML>
 <html lang="" >
     <head>
-        <title>Button · GitBook</title>
         <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Button · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="GitBook 3.2.0-pre.1">
+        <meta name="generator" content="GitBook 3.2.2">
         
         
         
@@ -888,10 +888,59 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="button-component"><code>Button</code> (component)</h1><p>Button with built-in tooltip.</p><pre><code class="lang-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Button</span> <span class="hljs-attr">buttonType</span>=<span class="hljs-string">&apos;Flat&apos;</span> <span class="hljs-attr">label</span>=<span class="hljs-string">&apos;Close&apos;</span> <span class="hljs-attr">tooltip</span>=<span class="hljs-string">&apos;Close dialog&apos;</span> <span class="hljs-attr">onTouchTap</span>=<span class="hljs-string">{this.close.bind(this)}</span> /&gt;</span></code></pre>
-<h2 id="properties">Properties</h2><h3 id="backgroundcolor"><code>backgroundColor</code></h3><p>Background color.</p><p>type: <code>string</code></p><h3 id="buttonstyle"><code>buttonStyle</code></h3><p>Style config object for the wrapping span element.</p><p>type: <code>object</code></p><h3 id="buttontype"><code>buttonType</code></h3><p>Type of button.</p><p>type: <code>enum (&apos;Raised&apos;|&apos;Flat&apos;|&apos;Action&apos;|&apos;Icon&apos;)</code>
-defaultValue: <code>&apos;Raised&apos;</code></p><h3 id="classname"><code>className</code></h3><p>Css class name to apply on the span.</p><p>type: <code>string</code></p><h3 id="disabled"><code>disabled</code></h3><p>Should this button be disabled?</p><p>type: <code>bool</code></p><h3 id="icon"><code>icon</code></h3><p>Optional icon.</p><p>type: <code>node</code></p><h3 id="iconstyle"><code>iconStyle</code></h3><p>Icon style config object.</p><p>type: <code>object</code></p><h3 id="label"><code>label</code></h3><p>Label to show on the button.</p><p>type: <code>string</code></p><h3 id="mini"><code>mini</code></h3><p>Should this button be mini? Only applies to certain button types.</p><p>type: <code>bool</code></p><h3 id="ontouchtap"><code>onTouchTap</code></h3><p>Function to execute when the button is clicked.</p><p>type: <code>func</code></p><h3 id="primary"><code>primary</code></h3><p>Should we use the primary state?</p><p>type: <code>bool</code></p><h3 id="secondary"><code>secondary</code></h3><p>Should we use the secondary state?</p><p>type: <code>bool</code></p><h3 id="style"><code>style</code></h3><p>Style config object for the button.</p><p>type: <code>object</code></p><h3 id="tooltip"><code>tooltip</code></h3><p>The tooltip to show for this button.</p><p>type: <code>string</code></p><h3 id="tooltipposition"><code>tooltipPosition</code></h3><p>Position of the tooltip.</p><p>type: <code>enum (&apos;bottom&apos;|&apos;bottom-right&apos;|&apos;bottom-left&apos;|&apos;right&apos;|&apos;left&apos;|&apos;top-right&apos;|&apos;top&apos;|&apos;top-left&apos;)</code>
+                                <h1 id="button-component"><code>Button</code> (component)</h1>
+<p>Button with built-in tooltip.</p>
+<pre><code class="lang-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Button</span> <span class="hljs-attr">buttonType</span>=<span class="hljs-string">&apos;Flat&apos;</span> <span class="hljs-attr">label</span>=<span class="hljs-string">&apos;Close&apos;</span> <span class="hljs-attr">tooltip</span>=<span class="hljs-string">&apos;Close dialog&apos;</span> <span class="hljs-attr">onTouchTap</span>=<span class="hljs-string">{this.close.bind(this)}</span> /&gt;</span>
+</code></pre>
+<h2 id="properties">Properties</h2>
+<h3 id="backgroundcolor"><code>backgroundColor</code></h3>
+<p>Background color.</p>
+<p>type: <code>string</code></p>
+<h3 id="buttonstyle"><code>buttonStyle</code></h3>
+<p>Style config object for the wrapping span element.</p>
+<p>type: <code>object</code></p>
+<h3 id="buttontype"><code>buttonType</code></h3>
+<p>Type of button.</p>
+<p>type: <code>enum (&apos;Raised&apos;|&apos;Flat&apos;|&apos;Action&apos;|&apos;Icon&apos;)</code>
+defaultValue: <code>&apos;Raised&apos;</code></p>
+<h3 id="classname"><code>className</code></h3>
+<p>Css class name to apply on the span.</p>
+<p>type: <code>string</code></p>
+<h3 id="disabled"><code>disabled</code></h3>
+<p>Should this button be disabled?</p>
+<p>type: <code>bool</code></p>
+<h3 id="icon"><code>icon</code></h3>
+<p>Optional icon.</p>
+<p>type: <code>node</code></p>
+<h3 id="iconstyle"><code>iconStyle</code></h3>
+<p>Icon style config object.</p>
+<p>type: <code>object</code></p>
+<h3 id="label"><code>label</code></h3>
+<p>Label to show on the button.</p>
+<p>type: <code>string</code></p>
+<h3 id="mini"><code>mini</code></h3>
+<p>Should this button be mini? Only applies to certain button types.</p>
+<p>type: <code>bool</code></p>
+<h3 id="ontouchtap"><code>onTouchTap</code></h3>
+<p>Function to execute when the button is clicked.</p>
+<p>type: <code>func</code></p>
+<h3 id="primary"><code>primary</code></h3>
+<p>Should we use the primary state?</p>
+<p>type: <code>bool</code></p>
+<h3 id="secondary"><code>secondary</code></h3>
+<p>Should we use the secondary state?</p>
+<p>type: <code>bool</code></p>
+<h3 id="style"><code>style</code></h3>
+<p>Style config object for the button.</p>
+<p>type: <code>object</code></p>
+<h3 id="tooltip"><code>tooltip</code></h3>
+<p>The tooltip to show for this button.</p>
+<p>type: <code>string</code></p>
+<h3 id="tooltipposition"><code>tooltipPosition</code></h3>
+<p>Position of the tooltip.</p>
+<p>type: <code>enum (&apos;bottom&apos;|&apos;bottom-right&apos;|&apos;bottom-left&apos;|&apos;right&apos;|&apos;left&apos;|&apos;top-right&apos;|&apos;top&apos;|&apos;top-left&apos;)</code>
 defaultValue: <code>&apos;bottom&apos;</code></p>
+
                                 
                                 </section>
                             
@@ -934,7 +983,7 @@ defaultValue: <code>&apos;bottom&apos;</code></p>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Button","level":"1.7.4","depth":2,"next":{"title":"Chart","level":"1.7.5","depth":2,"path":"api/Chart.md","ref":"api/Chart.md","articles":[]},"previous":{"title":"Bookmarks","level":"1.7.3","depth":2,"path":"api/Bookmarks.md","ref":"api/Bookmarks.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"api/Button.md","mtime":"2017-01-13T12:57:32.889Z","type":"markdown"},"gitbook":{"version":"3.2.0-pre.1","time":"2017-01-13T12:58:12.324Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Button","level":"1.7.4","depth":2,"next":{"title":"Chart","level":"1.7.5","depth":2,"path":"api/Chart.md","ref":"api/Chart.md","articles":[]},"previous":{"title":"Bookmarks","level":"1.7.3","depth":2,"path":"api/Bookmarks.md","ref":"api/Bookmarks.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"api/Button.md","mtime":"2017-02-17T09:48:29.372Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-02-17T09:49:13.762Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

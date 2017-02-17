@@ -2,12 +2,12 @@
 <!DOCTYPE HTML>
 <html lang="" >
     <head>
-        <title>AddLayerModal · GitBook</title>
         <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>AddLayerModal · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="GitBook 3.2.0-pre.1">
+        <meta name="generator" content="GitBook 3.2.2">
         
         
         
@@ -888,9 +888,26 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="addlayermodal-component"><code>AddLayerModal</code> (component)</h1><p>Modal window to add layers from a WMS, WFS, WMTS or ArcGIS REST service.</p><pre><code class="lang-xml"><span class="hljs-tag">&lt;<span class="hljs-name">AddLayerModal</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> <span class="hljs-attr">allowUserInput</span>=<span class="hljs-string">{true}</span> <span class="hljs-attr">sources</span>=<span class="hljs-string">{[{url:</span> &apos;/<span class="hljs-attr">geoserver</span>/<span class="hljs-attr">wms</span>&apos;, <span class="hljs-attr">type:</span> &apos;<span class="hljs-attr">WMS</span>&apos;, <span class="hljs-attr">title:</span> &apos;<span class="hljs-attr">Local</span> <span class="hljs-attr">GeoServer</span>&apos;}]} /&gt;</span></code></pre>
-<p><img alt="Add Layer Modal" src="../AddLayerModal.png"></p><h2 id="properties">Properties</h2><h3 id="allowuserinput"><code>allowUserInput</code></h3><p>Should be user be able to provide their own url?</p><p>type: <code>bool</code>
-defaultValue: <code>false</code></p><h3 id="classname"><code>className</code></h3><p>Css class name to apply on the dialog.</p><p>type: <code>string</code></p><h3 id="map-required"><code>map</code> (required)</h3><p>The ol3 map to add layers to.</p><p>type: <code>instanceOf ol.Map</code></p><h3 id="sources"><code>sources</code></h3><p>List of sources to use for this dialog. Entries have a title, type and url property. Type can be one of: WMS, WFS, WMTS or ArcGISRest.</p><p>type: <code>arrayOf shape</code></p>
+                                <h1 id="addlayermodal-component"><code>AddLayerModal</code> (component)</h1>
+<p>Modal window to add layers from a WMS, WFS, WMTS or ArcGIS REST service.</p>
+<pre><code class="lang-xml"><span class="hljs-tag">&lt;<span class="hljs-name">AddLayerModal</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> <span class="hljs-attr">allowUserInput</span>=<span class="hljs-string">{true}</span> <span class="hljs-attr">sources</span>=<span class="hljs-string">{[{url:</span> &apos;/<span class="hljs-attr">geoserver</span>/<span class="hljs-attr">wms</span>&apos;, <span class="hljs-attr">type:</span> &apos;<span class="hljs-attr">WMS</span>&apos;, <span class="hljs-attr">title:</span> &apos;<span class="hljs-attr">Local</span> <span class="hljs-attr">GeoServer</span>&apos;}]} /&gt;</span>
+</code></pre>
+<p><img src="../AddLayerModal.png" alt="Add Layer Modal"></p>
+<h2 id="properties">Properties</h2>
+<h3 id="allowuserinput"><code>allowUserInput</code></h3>
+<p>Should be user be able to provide their own url?</p>
+<p>type: <code>bool</code>
+defaultValue: <code>false</code></p>
+<h3 id="classname"><code>className</code></h3>
+<p>Css class name to apply on the dialog.</p>
+<p>type: <code>string</code></p>
+<h3 id="map-required"><code>map</code> (required)</h3>
+<p>The ol3 map to add layers to.</p>
+<p>type: <code>instanceOf ol.Map</code></p>
+<h3 id="sources"><code>sources</code></h3>
+<p>List of sources to use for this dialog. Entries have a title, type and url property. Type can be one of: WMS, WFS, WMTS or ArcGISRest.</p>
+<p>type: <code>arrayOf shape</code></p>
+
                                 
                                 </section>
                             
@@ -933,7 +950,7 @@ defaultValue: <code>false</code></p><h3 id="classname"><code>className</code></h
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"AddLayerModal","level":"1.7.2","depth":2,"next":{"title":"Bookmarks","level":"1.7.3","depth":2,"path":"api/Bookmarks.md","ref":"api/Bookmarks.md","articles":[]},"previous":{"title":"AddLayer","level":"1.7.1","depth":2,"path":"api/AddLayer.md","ref":"api/AddLayer.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"api/AddLayerModal.md","mtime":"2017-01-13T12:57:32.721Z","type":"markdown"},"gitbook":{"version":"3.2.0-pre.1","time":"2017-01-13T12:58:12.324Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"AddLayerModal","level":"1.7.2","depth":2,"next":{"title":"Bookmarks","level":"1.7.3","depth":2,"path":"api/Bookmarks.md","ref":"api/Bookmarks.md","articles":[]},"previous":{"title":"AddLayer","level":"1.7.1","depth":2,"path":"api/AddLayer.md","ref":"api/AddLayer.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"api/AddLayerModal.md","mtime":"2017-02-17T09:48:29.124Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-02-17T09:49:13.762Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

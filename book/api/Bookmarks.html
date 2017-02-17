@@ -2,12 +2,12 @@
 <!DOCTYPE HTML>
 <html lang="" >
     <head>
-        <title>Bookmarks · GitBook</title>
         <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Bookmarks · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="GitBook 3.2.0-pre.1">
+        <meta name="generator" content="GitBook 3.2.2">
         
         
         
@@ -888,21 +888,75 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="bookmarks-component"><code>Bookmarks</code> (component)</h1><p>Adds the ability to retrieve spatial bookmarks.
-A spatial bookmark consists of a name, an extent and a description. Extent needs to be in the view projection.</p><pre><code class="lang-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Bookmarks</span> <span class="hljs-attr">introTitle</span>=<span class="hljs-string">&apos;Paris bakeries&apos;</span> <span class="hljs-attr">introDescription</span>=<span class="hljs-string">&apos;Explore the best bakeries of the capital of France&apos;</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> <span class="hljs-attr">bookmarks</span>=<span class="hljs-string">{[{name:</span> &apos;<span class="hljs-attr">foo1</span>&apos;, <span class="hljs-attr">description:</span> &apos;<span class="hljs-attr">description1</span>&apos;, <span class="hljs-attr">extent:</span> [<span class="hljs-attr">259562</span>, <span class="hljs-attr">6254560</span>, <span class="hljs-attr">260675</span>, <span class="hljs-attr">6256252</span>]}, {<span class="hljs-attr">name:</span> &apos;<span class="hljs-attr">foo2</span>&apos;, <span class="hljs-attr">description:</span> &apos;<span class="hljs-attr">description2</span>&apos;, <span class="hljs-attr">extent:</span> [<span class="hljs-attr">258703</span>, <span class="hljs-attr">6248811</span>, <span class="hljs-attr">259816</span>, <span class="hljs-attr">6250503</span>]}]} /&gt;</span></code></pre>
-<h2 id="properties">Properties</h2><h3 id="animatepanzoom"><code>animatePanZoom</code></h3><p>Should we animate the pan and zoom operation?</p><p>type: <code>bool</code>
-defaultValue: <code>true</code></p><h3 id="animationduration"><code>animationDuration</code></h3><p>The duration of the animation in milleseconds. Only relevant if animatePanZoom is true.</p><p>type: <code>number</code>
-defaultValue: <code>500</code></p><h3 id="autoplay"><code>autoplay</code></h3><p>Should the scroller auto scroll?</p><p>type: <code>bool</code>
-defaultValue: <code>false</code></p><h3 id="autoplayspeed"><code>autoplaySpeed</code></h3><p>Delay between each auto scoll in ms.</p><p>type: <code>number</code></p><h3 id="bookmarks-required"><code>bookmarks</code> (required)</h3><p>The bookmark data. An array of objects with name (string, required), description (string, required) and extent (array of number, required) keys.
-The extent should be in the view projection.</p><p>type: <code>arrayOf shape</code></p><h3 id="classname"><code>className</code></h3><p>Css class name to apply on the menu or the div.</p><p>type: <code>string</code></p><h3 id="dots"><code>dots</code></h3><p>Should we show indicators? These are dots to navigate the bookmark pages.</p><p>type: <code>bool</code>
-defaultValue: <code>true</code></p><h3 id="introdescription"><code>introDescription</code></h3><p>The description of the introduction (first) page of the bookmarks.</p><p>type: <code>string</code>
-defaultValue: <code>&apos;&apos;</code></p><h3 id="introtitle"><code>introTitle</code></h3><p>The title on the introduction (first) page of the bookmarks.</p><p>type: <code>string</code>
-defaultValue: <code>&apos;&apos;</code></p><h3 id="map-required"><code>map</code> (required)</h3><p>The ol3 map instance on whose view we should navigate.</p><p>type: <code>instanceOf ol.Map</code></p><h3 id="markerurl"><code>markerUrl</code></h3><p>Url to the marker image to use for bookmark position.</p><p>type: <code>string</code>
-defaultValue: <code>&apos;./resources/marker.png&apos;</code></p><h3 id="menu"><code>menu</code></h3><p>Display as a menu drop down list.</p><p>type: <code>bool</code>
-defaultValue: <code>false</code></p><h3 id="showmarker"><code>showMarker</code></h3><p>Should we display a marker for the bookmark?</p><p>type: <code>bool</code>
-defaultValue: <code>true</code></p><h3 id="style"><code>style</code></h3><p>defaultValue: <code>{
-  margin: &apos;10px 12px&apos;
-}</code></p>
+                                <h1 id="bookmarks-component"><code>Bookmarks</code> (component)</h1>
+<p>Adds the ability to retrieve spatial bookmarks.
+A spatial bookmark consists of a name, an extent and a description. Extent needs to be in the view projection.</p>
+<pre><code class="lang-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Bookmarks</span> <span class="hljs-attr">introTitle</span>=<span class="hljs-string">&apos;Paris bakeries&apos;</span> <span class="hljs-attr">introDescription</span>=<span class="hljs-string">&apos;Explore the best bakeries of the capital of France&apos;</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> <span class="hljs-attr">bookmarks</span>=<span class="hljs-string">{[{name:</span> &apos;<span class="hljs-attr">foo1</span>&apos;, <span class="hljs-attr">description:</span> &apos;<span class="hljs-attr">description1</span>&apos;, <span class="hljs-attr">extent:</span> [<span class="hljs-attr">259562</span>, <span class="hljs-attr">6254560</span>, <span class="hljs-attr">260675</span>, <span class="hljs-attr">6256252</span>]}, {<span class="hljs-attr">name:</span> &apos;<span class="hljs-attr">foo2</span>&apos;, <span class="hljs-attr">description:</span> &apos;<span class="hljs-attr">description2</span>&apos;, <span class="hljs-attr">extent:</span> [<span class="hljs-attr">258703</span>, <span class="hljs-attr">6248811</span>, <span class="hljs-attr">259816</span>, <span class="hljs-attr">6250503</span>]}]} /&gt;</span>
+</code></pre>
+<h2 id="properties">Properties</h2>
+<h3 id="animatepanzoom"><code>animatePanZoom</code></h3>
+<p>Should we animate the pan and zoom operation?</p>
+<p>type: <code>bool</code>
+defaultValue: <code>true</code></p>
+<h3 id="animationduration"><code>animationDuration</code></h3>
+<p>The duration of the animation in milleseconds. Only relevant if animatePanZoom is true.</p>
+<p>type: <code>number</code>
+defaultValue: <code>500</code></p>
+<h3 id="autoplay"><code>autoplay</code></h3>
+<p>Should the scroller auto scroll?</p>
+<p>type: <code>bool</code>
+defaultValue: <code>false</code></p>
+<h3 id="autoplayinterval"><code>autoplayInterval</code></h3>
+<p>defaultValue: <code>3000</code></p>
+<h3 id="autoplayspeed"><code>autoplaySpeed</code></h3>
+<p>Delay between each auto scoll in ms.</p>
+<p>type: <code>number</code></p>
+<h3 id="bookmarks-required"><code>bookmarks</code> (required)</h3>
+<p>The bookmark data. An array of objects with name (string, required), description (string, required) and extent (array of number, required) keys.
+The extent should be in the view projection.</p>
+<p>type: <code>arrayOf shape</code></p>
+<h3 id="classname"><code>className</code></h3>
+<p>Css class name to apply on the menu or the div.</p>
+<p>type: <code>string</code></p>
+<h3 id="dots"><code>dots</code></h3>
+<p>Should we show indicators? These are dots to navigate the bookmark pages.</p>
+<p>type: <code>bool</code>
+defaultValue: <code>true</code></p>
+<h3 id="introdescription"><code>introDescription</code></h3>
+<p>The description of the introduction (first) page of the bookmarks.</p>
+<p>type: <code>string</code>
+defaultValue: <code>&apos;&apos;</code></p>
+<h3 id="introtitle"><code>introTitle</code></h3>
+<p>The title on the introduction (first) page of the bookmarks.</p>
+<p>type: <code>string</code>
+defaultValue: <code>&apos;&apos;</code></p>
+<h3 id="map-required"><code>map</code> (required)</h3>
+<p>The ol3 map instance on whose view we should navigate.</p>
+<p>type: <code>instanceOf ol.Map</code></p>
+<h3 id="markerurl"><code>markerUrl</code></h3>
+<p>Url to the marker image to use for bookmark position.</p>
+<p>type: <code>string</code>
+defaultValue: <code>&apos;./resources/marker.png&apos;</code></p>
+<h3 id="menu"><code>menu</code></h3>
+<p>Display as a menu drop down list.</p>
+<p>type: <code>bool</code>
+defaultValue: <code>false</code></p>
+<h3 id="showmarker"><code>showMarker</code></h3>
+<p>Animation duration.</p>
+<p>type: <code>bool</code>
+defaultValue: <code>true</code></p>
+<h3 id="speed"><code>speed</code></h3>
+<p>Should we display a marker for the bookmark?</p>
+<p>type: <code>number</code></p>
+<h3 id="width"><code>width</code></h3>
+<p>Used to hardcode the slider width. Accepts any string dimension value such as &quot;80%&quot; or &quot;500px&quot;.</p>
+<p>type: <code>string</code>
+defaultValue: <code>&apos;400px&apos;</code></p>
+<h3 id="wraparound"><code>wrapAround</code></h3>
+<p>Sets infinite wrapAround mode. Defaults to true</p>
+<p>type: <code>bool</code>
+defaultValue: <code>true</code></p>
+
                                 
                                 </section>
                             
@@ -945,7 +999,7 @@ defaultValue: <code>true</code></p><h3 id="style"><code>style</code></h3><p>defa
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Bookmarks","level":"1.7.3","depth":2,"next":{"title":"Button","level":"1.7.4","depth":2,"path":"api/Button.md","ref":"api/Button.md","articles":[]},"previous":{"title":"AddLayerModal","level":"1.7.2","depth":2,"path":"api/AddLayerModal.md","ref":"api/AddLayerModal.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"api/Bookmarks.md","mtime":"2017-01-13T12:57:32.837Z","type":"markdown"},"gitbook":{"version":"3.2.0-pre.1","time":"2017-01-13T12:58:12.324Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Bookmarks","level":"1.7.3","depth":2,"next":{"title":"Button","level":"1.7.4","depth":2,"path":"api/Button.md","ref":"api/Button.md","articles":[]},"previous":{"title":"AddLayerModal","level":"1.7.2","depth":2,"path":"api/AddLayerModal.md","ref":"api/AddLayerModal.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"api/Bookmarks.md","mtime":"2017-02-17T09:48:29.328Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-02-17T09:49:13.762Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

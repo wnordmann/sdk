@@ -2,12 +2,12 @@
 <!DOCTYPE HTML>
 <html lang="" >
     <head>
-        <title>For developers · GitBook</title>
         <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>For developers · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="GitBook 3.2.0-pre.1">
+        <meta name="generator" content="GitBook 3.2.2">
         
         
         
@@ -888,20 +888,30 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="information-for-component-developers">Information for component developers</h1><h2 id="introduction">Introduction</h2><p>The SDK is based on EcmaScript 6 (ES6). It uses babelify to translate to ES5.
+                                <h1 id="information-for-component-developers">Information for component developers</h1>
+<h2 id="introduction">Introduction</h2>
+<p>The SDK is based on EcmaScript 6 (ES6). It uses babelify to translate to ES5.
 It is based on OpenLayers 3, React 15 and Flux.
 For the user interface, material-ui React components are used. See <a href="http://www.material-ui.com" target="_blank">http://www.material-ui.com</a> for more information.
 For internationalization, Yahoo&apos;s react-intl (v2) is used.
-Node and npm are used as the development environment.</p><h2 id="react">React</h2><p>Component API (e.g. <code>componentWillMount</code>, <code>componentWillUnmount</code>) is important to know about.
+Node and npm are used as the development environment.</p>
+<h2 id="react">React</h2>
+<p>Component API (e.g. <code>componentWillMount</code>, <code>componentWillUnmount</code>) is important to know about.
 Components have properties (<code>this.props</code>), more like configuration options.
 Components have state (<code>this.state</code>), and on change of state (<code>setState</code>) they are re-rendered.
 React uses a virtual DOM, so it can diff the changes and only apply those (performance).
 Render method needs to return single root (<code>&lt;article&gt;</code> can be used as workaround).
 To pass on all properties to a child component use: <code>{&#x2026;this.props}</code>.
-Define <code>propTypes</code> static on the class, for example: <code>Chart.propTypes = { charts: React.PropTypes.array.isRequired };</code>.</p><h2 id="jsx">JSX</h2><p>JSX is an XML like syntax to create components. For example:</p><pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">Component</span> <span class="hljs-attr">property1</span>=<span class="hljs-string">{variable1}</span> /&gt;</span></code></pre>
+Define <code>propTypes</code> static on the class, for example: <code>Chart.propTypes = { charts: React.PropTypes.array.isRequired };</code>.</p>
+<h2 id="jsx">JSX</h2>
+<p>JSX is an XML like syntax to create components. For example:</p>
+<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">Component</span> <span class="hljs-attr">property1</span>=<span class="hljs-string">{variable1}</span> /&gt;</span>
+</code></pre>
 <p>It can be nested, and can be mixed with normal HTML.
 You can use the ref property instead of the HTML id (<code>ref=&apos;map&apos;</code> in JSX and then <code>this.refs.map</code> in code).
-Babelify will transform this to regular javascript.</p><h2 id="flux">Flux</h2><p>Flux means Uni-directional flow of data.
+Babelify will transform this to regular javascript.</p>
+<h2 id="flux">Flux</h2>
+<p>Flux means Uni-directional flow of data.
 A dispatched change needs to be handled, before another one can commence.
 It has concepts such as stores, actions, dispatchers.
 This is internal to the SDK, the app developer should not need to know too much about it.
@@ -909,7 +919,8 @@ The store extends the standard EventEmitter class.
 Stores should be singletons.
 We use a central application dispatcher that extends Flux&#x2019;s Dispatcher.
 Actions are functions that ask the dispatcher to handle certain actions (using constants).
-Components (or stores) can register listener from actions on the dispatcher. An example:</p><pre><code class="lang-javascript">AppDispatcher.register((payload) =&gt; {
+Components (or stores) can register listener from actions on the dispatcher. An example:</p>
+<pre><code class="lang-javascript">AppDispatcher.register((payload) =&gt; {
   <span class="hljs-keyword">let</span> action = payload.action;
   <span class="hljs-keyword">switch</span>(action.type) {
     <span class="hljs-keyword">case</span> SelectConstants.SELECT_FEATURES_IN:
@@ -918,8 +929,11 @@ Components (or stores) can register listener from actions on the dispatcher. An 
     <span class="hljs-keyword">default</span>:
       <span class="hljs-keyword">break</span>;
   }
-});</code></pre>
-<h2 id="internationalisation-i18n">Internationalisation (i18n)</h2><p>At the component level:</p><pre><code class="lang-javascript">import {defineMessages, injectIntl, intlShape} from &#x2018;react-intl&apos;;
+});
+</code></pre>
+<h2 id="internationalisation-i18n">Internationalisation (i18n)</h2>
+<p>At the component level:</p>
+<pre><code class="lang-javascript">import {defineMessages, injectIntl, intlShape} from &#x2018;react-intl&apos;;
 
 const messages = defineMessages({
   buttontitle: {
@@ -942,8 +956,10 @@ HomeButton.propTypes = {
  intl: intlShape.isRequired
 };
 
-export default injectIntl(HomeButton);</code></pre>
-<p>At the application level:</p><pre><code class="lang-javascript">import {addLocaleData, IntlProvider} from &#x2018;react-intl&apos;;
+export default injectIntl(HomeButton);
+</code></pre>
+<p>At the application level:</p>
+<pre><code class="lang-javascript">import {addLocaleData, IntlProvider} from &#x2018;react-intl&apos;;
 import enLocaleData from &apos;react-intl/dist/locale-data/en.js&apos;;
 import enMessages from &apos;boundless-sdk/locale/en.js&apos;;
 
@@ -951,31 +967,52 @@ addLocaleData(
   enLocaleData
 );
 
-ReactDOM.render(&lt;IntlProvider locale=&apos;en&apos; messages={enMessages}&gt;&lt;App /&gt;&lt;/IntlProvider&gt;, document.getElementById(&apos;main&apos;));</code></pre>
+ReactDOM.render(&lt;IntlProvider locale=&apos;en&apos; messages={enMessages}&gt;&lt;App /&gt;&lt;/IntlProvider&gt;, document.getElementById(&apos;main&apos;));
+</code></pre>
 <p>We use the babel-plugin-react-intl to extract messages from source code.
 It generates JSON files per component.
 <code>npm run i18n</code> generates i18n template for all components in <code>locale/en.js</code>
-In <code>.babelrc</code> this is activated with:</p><pre><code class="lang-json">  <span class="hljs-string">&quot;plugins&quot;</span>: [<span class="hljs-string">&quot;react-intl&quot;</span>],
+In <code>.babelrc</code> this is activated with:</p>
+<pre><code class="lang-json">  <span class="hljs-string">&quot;plugins&quot;</span>: [<span class="hljs-string">&quot;react-intl&quot;</span>],
   <span class="hljs-string">&quot;extra&quot;</span>: {
     <span class="hljs-string">&quot;react-intl&quot;</span>: {
       <span class="hljs-string">&quot;messagesDir&quot;</span>: <span class="hljs-string">&quot;./build/messages/&quot;</span>,
       <span class="hljs-string">&quot;enforceDescriptions&quot;</span>: <span class="hljs-literal">true</span>
     }
-  }</code></pre>
-<h2 id="api-docs">API docs</h2><p>Uses <code>react-docgen</code>, which reads a documentation block on top of the class and a documentation block on top of each prop.
-<code>npm run generate:docs</code> will generate the API docs.</p><h2 id="css">CSS</h2><p>Two approaches are used:</p><ul><li>dr-frankenstyle
-</li>
-<li>cssify (browserify transform)
-</li></ul>
-<h3 id="dr-frankenstyle">dr-frankenstyle</h3><p>Tool by Pivotal that looks for style keys in package.json of all node dependencies.
+  }
+</code></pre>
+<h2 id="api-docs">API docs</h2>
+<p>Uses <code>react-docgen</code>, which reads a documentation block on top of the class and a documentation block on top of each prop.
+<code>npm run generate:docs</code> will generate the API docs.</p>
+<h2 id="css">CSS</h2>
+<p>Two approaches are used:</p>
+<ul>
+<li>dr-frankenstyle</li>
+<li>cssify (browserify transform)</li>
+</ul>
+<h3 id="dr-frankenstyle">dr-frankenstyle</h3>
+<p>Tool by Pivotal that looks for style keys in package.json of all node dependencies.
 It will bundle this up with all the resources (fonts, images).
-<code>dr-frankenstyle</code> is used to generates dist/css/* for the SDK.</p><h3 id="cssify">cssify</h3><p>A post install task copies css files needed from external components (such as fixed-data-table).
-By using import statements to css files, browserify bundles up the css (but won&#x2019;t copy any needed resources, so this only works for plain css).</p><pre><code class="lang-javascript">  <span class="hljs-keyword">import</span> <span class="hljs-string">&apos;./FeatureTable.css&apos;</span>;</code></pre>
-<h2 id="debug-server">Debug server</h2><p>Can be used by any SDK application. In <code>package.json</code>:</p><pre><code>  &quot;sdk-debug-server&quot;: &quot;git+https://github.com/bartvde/sdk-debug-server.git&quot;</code></pre>
-<p>To use it in a node script file:</p><pre><code class="lang-javascript"><span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;sdk-debug-server&apos;</span>).startServer();</code></pre>
-<p>Any application generated by the <code>web-sdk</code> will facilitate this.</p><h2 id="proxy-to-local-geoserver">Proxy to local geoserver</h2><p>Add the following dependency to your <code>package.json</code>:</p><pre><code>&quot;json-http-proxy&quot;: &quot;1.0.0-ALPHA-4&quot;,</code></pre>
-<p>To start the proxy, add a script to the <code>package.json</code> file:</p><pre><code>&quot;start:proxy&quot;: &quot;node_modules/.bin/json-http-proxy -p 4000&quot;,</code></pre>
-<p>Using <code>npm run start:proxy</code> will start up the proxy server on port 4000 using config from <code>proxy-config.json</code>:</p><pre><code class="lang-json">{
+<code>dr-frankenstyle</code> is used to generates dist/css/* for the SDK.</p>
+<h3 id="cssify">cssify</h3>
+<p>A post install task copies css files needed from external components (such as fixed-data-table).
+By using import statements to css files, browserify bundles up the css (but won&#x2019;t copy any needed resources, so this only works for plain css).</p>
+<pre><code class="lang-javascript">  <span class="hljs-keyword">import</span> <span class="hljs-string">&apos;./FeatureTable.css&apos;</span>;
+</code></pre>
+<h2 id="debug-server">Debug server</h2>
+<p>Can be used by any SDK application. In <code>package.json</code>:</p>
+<pre><code>  &quot;sdk-debug-server&quot;: &quot;git+https://github.com/bartvde/sdk-debug-server.git&quot;
+</code></pre><p>To use it in a node script file:</p>
+<pre><code class="lang-javascript"><span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;sdk-debug-server&apos;</span>).startServer();
+</code></pre>
+<p>Any application generated by the <code>web-sdk</code> will facilitate this.</p>
+<h2 id="proxy-to-local-geoserver">Proxy to local geoserver</h2>
+<p>Add the following dependency to your <code>package.json</code>:</p>
+<pre><code>&quot;json-http-proxy&quot;: &quot;1.0.0-ALPHA-4&quot;,
+</code></pre><p>To start the proxy, add a script to the <code>package.json</code> file:</p>
+<pre><code>&quot;start:proxy&quot;: &quot;node_modules/.bin/json-http-proxy -p 4000&quot;,
+</code></pre><p>Using <code>npm run start:proxy</code> will start up the proxy server on port 4000 using config from <code>proxy-config.json</code>:</p>
+<pre><code class="lang-json">{
   <span class="hljs-string">&quot;routes&quot;</span>: [
     {
       <span class="hljs-string">&quot;path&quot;</span>: <span class="hljs-string">&quot;/geoserver/*&quot;</span>,
@@ -996,8 +1033,10 @@ By using import statements to css files, browserify bundles up the css (but won&
       <span class="hljs-string">&quot;port&quot;</span>: <span class="hljs-number">3000</span>
     }
   }
-}</code></pre>
+}
+</code></pre>
 <p>This means in another shell you will need to start up the normal debug server on port 3000 using <code>npm start</code>.</p>
+
                                 
                                 </section>
                             
@@ -1040,7 +1079,7 @@ By using import statements to css files, browserify bundles up the css (but won&
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"For developers","level":"1.6","depth":1,"next":{"title":"API","level":"1.7","depth":1,"path":"api.md","ref":"api.md","articles":[{"title":"AddLayer","level":"1.7.1","depth":2,"path":"api/AddLayer.md","ref":"api/AddLayer.md","articles":[]},{"title":"AddLayerModal","level":"1.7.2","depth":2,"path":"api/AddLayerModal.md","ref":"api/AddLayerModal.md","articles":[]},{"title":"Bookmarks","level":"1.7.3","depth":2,"path":"api/Bookmarks.md","ref":"api/Bookmarks.md","articles":[]},{"title":"Button","level":"1.7.4","depth":2,"path":"api/Button.md","ref":"api/Button.md","articles":[]},{"title":"Chart","level":"1.7.5","depth":2,"path":"api/Chart.md","ref":"api/Chart.md","articles":[]},{"title":"Edit","level":"1.7.6","depth":2,"path":"api/Edit.md","ref":"api/Edit.md","articles":[]},{"title":"EditForm","level":"1.7.7","depth":2,"path":"api/EditForm.md","ref":"api/EditForm.md","articles":[]},{"title":"EditPopup","level":"1.7.8","depth":2,"path":"api/EditPopup.md","ref":"api/EditPopup.md","articles":[]},{"title":"FeatureTable","level":"1.7.9","depth":2,"path":"api/FeatureTable.md","ref":"api/FeatureTable.md","articles":[]},{"title":"FillEditor","level":"1.7.10","depth":2,"path":"api/FillEditor.md","ref":"api/FillEditor.md","articles":[]},{"title":"FilterEditor","level":"1.7.11","depth":2,"path":"api/FilterEditor.md","ref":"api/FilterEditor.md","articles":[]},{"title":"FilterHelp","level":"1.7.12","depth":2,"path":"api/FilterHelp.md","ref":"api/FilterHelp.md","articles":[]},{"title":"FilterModal","level":"1.7.13","depth":2,"path":"api/FilterModal.md","ref":"api/FilterModal.md","articles":[]},{"title":"Geocoding","level":"1.7.14","depth":2,"path":"api/Geocoding.md","ref":"api/Geocoding.md","articles":[]},{"title":"GeocodingResults","level":"1.7.15","depth":2,"path":"api/GeocodingResults.md","ref":"api/GeocodingResults.md","articles":[]},{"title":"Geolocation","level":"1.7.16","depth":2,"path":"api/Geolocation.md","ref":"api/Geolocation.md","articles":[]},{"title":"Globe","level":"1.7.17","depth":2,"path":"api/Globe.md","ref":"api/Globe.md","articles":[]},{"title":"HomeButton","level":"1.7.18","depth":2,"path":"api/HomeButton.md","ref":"api/HomeButton.md","articles":[]},{"title":"ImageExport","level":"1.7.19","depth":2,"path":"api/ImageExport.md","ref":"api/ImageExport.md","articles":[]},{"title":"InfoPopup","level":"1.7.20","depth":2,"path":"api/InfoPopup.md","ref":"api/InfoPopup.md","articles":[]},{"title":"LabelEditor","level":"1.7.21","depth":2,"path":"api/LabelEditor.md","ref":"api/LabelEditor.md","articles":[]},{"title":"LabelModal","level":"1.7.22","depth":2,"path":"api/LabelModal.md","ref":"api/LabelModal.md","articles":[]},{"title":"LayerList","level":"1.7.23","depth":2,"path":"api/LayerList.md","ref":"api/LayerList.md","articles":[]},{"title":"LayerListItem","level":"1.7.24","depth":2,"path":"api/LayerListItem.md","ref":"api/LayerListItem.md","articles":[]},{"title":"LayerSelector","level":"1.7.25","depth":2,"path":"api/LayerSelector.md","ref":"api/LayerSelector.md","articles":[]},{"title":"Legend","level":"1.7.26","depth":2,"path":"api/Legend.md","ref":"api/Legend.md","articles":[]},{"title":"LineSymbolizerEditor","level":"1.7.27","depth":2,"path":"api/LineSymbolizerEditor.md","ref":"api/LineSymbolizerEditor.md","articles":[]},{"title":"LoadingPanel","level":"1.7.28","depth":2,"path":"api/LoadingPanel.md","ref":"api/LoadingPanel.md","articles":[]},{"title":"Login","level":"1.7.29","depth":2,"path":"api/Login.md","ref":"api/Login.md","articles":[]},{"title":"LoginModal","level":"1.7.30","depth":2,"path":"api/LoginModal.md","ref":"api/LoginModal.md","articles":[]},{"title":"MapConfig","level":"1.7.31","depth":2,"path":"api/MapConfig.md","ref":"api/MapConfig.md","articles":[]},{"title":"MapPanel","level":"1.7.32","depth":2,"path":"api/MapPanel.md","ref":"api/MapPanel.md","articles":[]},{"title":"Measure","level":"1.7.33","depth":2,"path":"api/Measure.md","ref":"api/Measure.md","articles":[]},{"title":"Navigation","level":"1.7.34","depth":2,"path":"api/Navigation.md","ref":"api/Navigation.md","articles":[]},{"title":"PanelButton","level":"1.7.35","depth":2,"path":"api/PanelButton.md","ref":"api/PanelButton.md","articles":[]},{"title":"Playback","level":"1.7.36","depth":2,"path":"api/Playback.md","ref":"api/Playback.md","articles":[]},{"title":"PointSymbolizerEditor","level":"1.7.37","depth":2,"path":"api/PointSymbolizerEditor.md","ref":"api/PointSymbolizerEditor.md","articles":[]},{"title":"PolygonSymbolizerEditor","level":"1.7.38","depth":2,"path":"api/PolygonSymbolizerEditor.md","ref":"api/PolygonSymbolizerEditor.md","articles":[]},{"title":"QGISLegend","level":"1.7.39","depth":2,"path":"api/QGISLegend.md","ref":"api/QGISLegend.md","articles":[]},{"title":"QGISPrint","level":"1.7.40","depth":2,"path":"api/QGISPrint.md","ref":"api/QGISPrint.md","articles":[]},{"title":"QueryBuilder","level":"1.7.41","depth":2,"path":"api/QueryBuilder.md","ref":"api/QueryBuilder.md","articles":[]},{"title":"Rotate","level":"1.7.42","depth":2,"path":"api/Rotate.md","ref":"api/Rotate.md","articles":[]},{"title":"RuleEditor","level":"1.7.43","depth":2,"path":"api/RuleEditor.md","ref":"api/RuleEditor.md","articles":[]},{"title":"Select","level":"1.7.44","depth":2,"path":"api/Select.md","ref":"api/Select.md","articles":[]},{"title":"StrokeEditor","level":"1.7.45","depth":2,"path":"api/StrokeEditor.md","ref":"api/StrokeEditor.md","articles":[]},{"title":"StyleModal","level":"1.7.46","depth":2,"path":"api/StyleModal.md","ref":"api/StyleModal.md","articles":[]},{"title":"WFST","level":"1.7.47","depth":2,"path":"api/WFST.md","ref":"api/WFST.md","articles":[]},{"title":"WMSLegend","level":"1.7.48","depth":2,"path":"api/WMSLegend.md","ref":"api/WMSLegend.md","articles":[]},{"title":"Zoom","level":"1.7.49","depth":2,"path":"api/Zoom.md","ref":"api/Zoom.md","articles":[]},{"title":"ZoomSlider","level":"1.7.50","depth":2,"path":"api/ZoomSlider.md","ref":"api/ZoomSlider.md","articles":[]},{"title":"ZoomToLatLon","level":"1.7.51","depth":2,"path":"api/ZoomToLatLon.md","ref":"api/ZoomToLatLon.md","articles":[]}]},"previous":{"title":"Writing components","level":"1.5","depth":1,"path":"writing_components.md","ref":"writing_components.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"developers.md","mtime":"2017-01-13T12:53:44.073Z","type":"markdown"},"gitbook":{"version":"3.2.0-pre.1","time":"2017-01-13T12:58:12.324Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"For developers","level":"1.6","depth":1,"next":{"title":"API","level":"1.7","depth":1,"path":"api.md","ref":"api.md","articles":[{"title":"AddLayer","level":"1.7.1","depth":2,"path":"api/AddLayer.md","ref":"api/AddLayer.md","articles":[]},{"title":"AddLayerModal","level":"1.7.2","depth":2,"path":"api/AddLayerModal.md","ref":"api/AddLayerModal.md","articles":[]},{"title":"Bookmarks","level":"1.7.3","depth":2,"path":"api/Bookmarks.md","ref":"api/Bookmarks.md","articles":[]},{"title":"Button","level":"1.7.4","depth":2,"path":"api/Button.md","ref":"api/Button.md","articles":[]},{"title":"Chart","level":"1.7.5","depth":2,"path":"api/Chart.md","ref":"api/Chart.md","articles":[]},{"title":"Edit","level":"1.7.6","depth":2,"path":"api/Edit.md","ref":"api/Edit.md","articles":[]},{"title":"EditForm","level":"1.7.7","depth":2,"path":"api/EditForm.md","ref":"api/EditForm.md","articles":[]},{"title":"EditPopup","level":"1.7.8","depth":2,"path":"api/EditPopup.md","ref":"api/EditPopup.md","articles":[]},{"title":"FeatureTable","level":"1.7.9","depth":2,"path":"api/FeatureTable.md","ref":"api/FeatureTable.md","articles":[]},{"title":"FillEditor","level":"1.7.10","depth":2,"path":"api/FillEditor.md","ref":"api/FillEditor.md","articles":[]},{"title":"FilterEditor","level":"1.7.11","depth":2,"path":"api/FilterEditor.md","ref":"api/FilterEditor.md","articles":[]},{"title":"FilterHelp","level":"1.7.12","depth":2,"path":"api/FilterHelp.md","ref":"api/FilterHelp.md","articles":[]},{"title":"FilterModal","level":"1.7.13","depth":2,"path":"api/FilterModal.md","ref":"api/FilterModal.md","articles":[]},{"title":"Geocoding","level":"1.7.14","depth":2,"path":"api/Geocoding.md","ref":"api/Geocoding.md","articles":[]},{"title":"GeocodingResults","level":"1.7.15","depth":2,"path":"api/GeocodingResults.md","ref":"api/GeocodingResults.md","articles":[]},{"title":"Geolocation","level":"1.7.16","depth":2,"path":"api/Geolocation.md","ref":"api/Geolocation.md","articles":[]},{"title":"Globe","level":"1.7.17","depth":2,"path":"api/Globe.md","ref":"api/Globe.md","articles":[]},{"title":"HomeButton","level":"1.7.18","depth":2,"path":"api/HomeButton.md","ref":"api/HomeButton.md","articles":[]},{"title":"ImageExport","level":"1.7.19","depth":2,"path":"api/ImageExport.md","ref":"api/ImageExport.md","articles":[]},{"title":"InfoPopup","level":"1.7.20","depth":2,"path":"api/InfoPopup.md","ref":"api/InfoPopup.md","articles":[]},{"title":"LabelEditor","level":"1.7.21","depth":2,"path":"api/LabelEditor.md","ref":"api/LabelEditor.md","articles":[]},{"title":"LabelModal","level":"1.7.22","depth":2,"path":"api/LabelModal.md","ref":"api/LabelModal.md","articles":[]},{"title":"LayerList","level":"1.7.23","depth":2,"path":"api/LayerList.md","ref":"api/LayerList.md","articles":[]},{"title":"LayerListItem","level":"1.7.24","depth":2,"path":"api/LayerListItem.md","ref":"api/LayerListItem.md","articles":[]},{"title":"LayerSelector","level":"1.7.25","depth":2,"path":"api/LayerSelector.md","ref":"api/LayerSelector.md","articles":[]},{"title":"Legend","level":"1.7.26","depth":2,"path":"api/Legend.md","ref":"api/Legend.md","articles":[]},{"title":"LineSymbolizerEditor","level":"1.7.27","depth":2,"path":"api/LineSymbolizerEditor.md","ref":"api/LineSymbolizerEditor.md","articles":[]},{"title":"LoadingPanel","level":"1.7.28","depth":2,"path":"api/LoadingPanel.md","ref":"api/LoadingPanel.md","articles":[]},{"title":"Login","level":"1.7.29","depth":2,"path":"api/Login.md","ref":"api/Login.md","articles":[]},{"title":"LoginModal","level":"1.7.30","depth":2,"path":"api/LoginModal.md","ref":"api/LoginModal.md","articles":[]},{"title":"MapConfig","level":"1.7.31","depth":2,"path":"api/MapConfig.md","ref":"api/MapConfig.md","articles":[]},{"title":"MapPanel","level":"1.7.32","depth":2,"path":"api/MapPanel.md","ref":"api/MapPanel.md","articles":[]},{"title":"Measure","level":"1.7.33","depth":2,"path":"api/Measure.md","ref":"api/Measure.md","articles":[]},{"title":"Navigation","level":"1.7.34","depth":2,"path":"api/Navigation.md","ref":"api/Navigation.md","articles":[]},{"title":"PanelButton","level":"1.7.35","depth":2,"path":"api/PanelButton.md","ref":"api/PanelButton.md","articles":[]},{"title":"Playback","level":"1.7.36","depth":2,"path":"api/Playback.md","ref":"api/Playback.md","articles":[]},{"title":"PointSymbolizerEditor","level":"1.7.37","depth":2,"path":"api/PointSymbolizerEditor.md","ref":"api/PointSymbolizerEditor.md","articles":[]},{"title":"PolygonSymbolizerEditor","level":"1.7.38","depth":2,"path":"api/PolygonSymbolizerEditor.md","ref":"api/PolygonSymbolizerEditor.md","articles":[]},{"title":"QGISLegend","level":"1.7.39","depth":2,"path":"api/QGISLegend.md","ref":"api/QGISLegend.md","articles":[]},{"title":"QGISPrint","level":"1.7.40","depth":2,"path":"api/QGISPrint.md","ref":"api/QGISPrint.md","articles":[]},{"title":"QueryBuilder","level":"1.7.41","depth":2,"path":"api/QueryBuilder.md","ref":"api/QueryBuilder.md","articles":[]},{"title":"Rotate","level":"1.7.42","depth":2,"path":"api/Rotate.md","ref":"api/Rotate.md","articles":[]},{"title":"RuleEditor","level":"1.7.43","depth":2,"path":"api/RuleEditor.md","ref":"api/RuleEditor.md","articles":[]},{"title":"Select","level":"1.7.44","depth":2,"path":"api/Select.md","ref":"api/Select.md","articles":[]},{"title":"StrokeEditor","level":"1.7.45","depth":2,"path":"api/StrokeEditor.md","ref":"api/StrokeEditor.md","articles":[]},{"title":"StyleModal","level":"1.7.46","depth":2,"path":"api/StyleModal.md","ref":"api/StyleModal.md","articles":[]},{"title":"WFST","level":"1.7.47","depth":2,"path":"api/WFST.md","ref":"api/WFST.md","articles":[]},{"title":"WMSLegend","level":"1.7.48","depth":2,"path":"api/WMSLegend.md","ref":"api/WMSLegend.md","articles":[]},{"title":"Zoom","level":"1.7.49","depth":2,"path":"api/Zoom.md","ref":"api/Zoom.md","articles":[]},{"title":"ZoomSlider","level":"1.7.50","depth":2,"path":"api/ZoomSlider.md","ref":"api/ZoomSlider.md","articles":[]},{"title":"ZoomToLatLon","level":"1.7.51","depth":2,"path":"api/ZoomToLatLon.md","ref":"api/ZoomToLatLon.md","articles":[]}]},"previous":{"title":"Writing components","level":"1.5","depth":1,"path":"writing_components.md","ref":"writing_components.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"developers.md","mtime":"2017-02-17T09:44:46.456Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-02-17T09:49:13.762Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

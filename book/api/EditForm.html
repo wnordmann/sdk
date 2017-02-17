@@ -2,12 +2,12 @@
 <!DOCTYPE HTML>
 <html lang="" >
     <head>
-        <title>EditForm · GitBook</title>
         <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>EditForm · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="GitBook 3.2.0-pre.1">
+        <meta name="generator" content="GitBook 3.2.2">
         
         
         
@@ -888,8 +888,34 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="editform-component"><code>EditForm</code> (component)</h1><p>Form to allow editing of the attributes of a feature.</p><pre><code class="lang-xml"><span class="hljs-tag">&lt;<span class="hljs-name">EditForm</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{this.props.map}</span> <span class="hljs-attr">onGeometryUpdate</span>=<span class="hljs-string">{this._onGeomUpdate.bind(this)}</span> <span class="hljs-attr">onSuccess</span>=<span class="hljs-string">{this._onSuccess.bind(this)}</span> <span class="hljs-attr">onDeleteSuccess</span>=<span class="hljs-string">{this._onDeleteSuccess.bind(this)}</span> <span class="hljs-attr">feature</span>=<span class="hljs-string">{this.state.feature}</span> <span class="hljs-attr">layer</span>=<span class="hljs-string">{this.state.layer}</span> /&gt;</span></code></pre>
-<p><img alt="Edit Form" src="../EditForm.png"></p><h2 id="properties">Properties</h2><h3 id="classname"><code>className</code></h3><p>Css class name to apply on the root element of this component.</p><p>type: <code>string</code></p><h3 id="feature-required"><code>feature</code> (required)</h3><p>The feature whose values to display and edit.</p><p>type: <code>instanceOf ol.Feature</code></p><h3 id="layer-required"><code>layer</code> (required)</h3><p>The layer from which the feature comes.</p><p>type: <code>instanceOf ol.layer.Base</code></p><h3 id="map-required"><code>map</code> (required)</h3><p>The ol3 map.</p><p>type: <code>instanceOf ol.Map</code></p><h3 id="ondeletesuccess"><code>onDeleteSuccess</code></h3><p>Callback function for successfull delete</p><p>type: <code>func</code></p><h3 id="ongeometryupdate"><code>onGeometryUpdate</code></h3><p>Callback function for successfull geometry update</p><p>type: <code>func</code></p><h3 id="onsuccess"><code>onSuccess</code></h3><p>Callback function for successfull update</p><p>type: <code>func</code></p>
+                                <h1 id="editform-component"><code>EditForm</code> (component)</h1>
+<p>Form to allow editing of the attributes of a feature.</p>
+<pre><code class="lang-xml"><span class="hljs-tag">&lt;<span class="hljs-name">EditForm</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{this.props.map}</span> <span class="hljs-attr">onGeometryUpdate</span>=<span class="hljs-string">{this._onGeomUpdate.bind(this)}</span> <span class="hljs-attr">onSuccess</span>=<span class="hljs-string">{this._onSuccess.bind(this)}</span> <span class="hljs-attr">onDeleteSuccess</span>=<span class="hljs-string">{this._onDeleteSuccess.bind(this)}</span> <span class="hljs-attr">feature</span>=<span class="hljs-string">{this.state.feature}</span> <span class="hljs-attr">layer</span>=<span class="hljs-string">{this.state.layer}</span> /&gt;</span>
+</code></pre>
+<p><img src="../EditForm.png" alt="Edit Form"></p>
+<h2 id="properties">Properties</h2>
+<h3 id="classname"><code>className</code></h3>
+<p>Css class name to apply on the root element of this component.</p>
+<p>type: <code>string</code></p>
+<h3 id="feature-required"><code>feature</code> (required)</h3>
+<p>The feature whose values to display and edit.</p>
+<p>type: <code>instanceOf ol.Feature</code></p>
+<h3 id="layer-required"><code>layer</code> (required)</h3>
+<p>The layer from which the feature comes.</p>
+<p>type: <code>instanceOf ol.layer.Base</code></p>
+<h3 id="map-required"><code>map</code> (required)</h3>
+<p>The ol3 map.</p>
+<p>type: <code>instanceOf ol.Map</code></p>
+<h3 id="ondeletesuccess"><code>onDeleteSuccess</code></h3>
+<p>Callback function for successfull delete</p>
+<p>type: <code>func</code></p>
+<h3 id="ongeometryupdate"><code>onGeometryUpdate</code></h3>
+<p>Callback function for successfull geometry update</p>
+<p>type: <code>func</code></p>
+<h3 id="onsuccess"><code>onSuccess</code></h3>
+<p>Callback function for successfull update</p>
+<p>type: <code>func</code></p>
+
                                 
                                 </section>
                             
@@ -932,7 +958,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"EditForm","level":"1.7.7","depth":2,"next":{"title":"EditPopup","level":"1.7.8","depth":2,"path":"api/EditPopup.md","ref":"api/EditPopup.md","articles":[]},"previous":{"title":"Edit","level":"1.7.6","depth":2,"path":"api/Edit.md","ref":"api/Edit.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"api/EditForm.md","mtime":"2017-01-13T12:57:33.121Z","type":"markdown"},"gitbook":{"version":"3.2.0-pre.1","time":"2017-01-13T12:58:12.324Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"EditForm","level":"1.7.7","depth":2,"next":{"title":"EditPopup","level":"1.7.8","depth":2,"path":"api/EditPopup.md","ref":"api/EditPopup.md","articles":[]},"previous":{"title":"Edit","level":"1.7.6","depth":2,"path":"api/Edit.md","ref":"api/Edit.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"api/EditForm.md","mtime":"2017-02-17T09:48:29.704Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-02-17T09:49:13.762Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
