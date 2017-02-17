@@ -13,9 +13,7 @@
 import React from 'react';
 import MuiDialog from 'material-ui/Dialog';
 import Paper from 'material-ui/Paper';
-import AppBar from 'material-ui/AppBar';
-import NavigationClose from 'material-ui/svg-icons/navigation/close';
-import IconButton from 'material-ui/IconButton';
+import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 
 export default class Dialog extends React.PureComponent {
   static propTypes = {
@@ -23,7 +21,7 @@ export default class Dialog extends React.PureComponent {
   };
 
   static defaultProps = {
-    inline: false
+    inline: true
   };
 
   render() {
@@ -38,7 +36,7 @@ export default class Dialog extends React.PureComponent {
         display: this.props.open ? 'block' : 'none',
         overflow: 'auto'
       };
-      return (<Paper style={style} zDepth={0}><AppBar showMenuIconButton={false} iconElementRight={<IconButton onTouchTap={this.props.onRequestClose}><NavigationClose /></IconButton>} title={this.props.title}/>{this.props.children}</Paper>);
+      return (<Paper style={style} zDepth={0}><Toolbar><ToolbarTitle text={this.props.title} /><ToolbarGroup><ToolbarSeparator /></ToolbarGroup><ToolbarGroup>{React.Children.toArray(this.props.actions)}</ToolbarGroup></Toolbar>{this.props.children}</Paper>);
     } else {
       return (<MuiDialog {...this.props} />);
     }
