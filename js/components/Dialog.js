@@ -33,10 +33,9 @@ export default class Dialog extends React.PureComponent {
         height: '100%',
         width: '100%',
         zIndex : 1,
-        display: this.props.open ? 'block' : 'none',
-        overflow: 'auto'
+        display: this.props.open ? 'block' : 'none'
       };
-      return (<Paper style={style} zDepth={0}><Toolbar><ToolbarTitle text={this.props.title} /><ToolbarGroup><ToolbarSeparator /></ToolbarGroup><ToolbarGroup>{React.Children.toArray(this.props.actions)}</ToolbarGroup></Toolbar>{this.props.children}</Paper>);
+      return (<Paper style={style} zDepth={0}><Toolbar><ToolbarTitle text={this.props.title} /><ToolbarGroup><ToolbarSeparator /></ToolbarGroup><ToolbarGroup>{React.Children.toArray(this.props.actions)}</ToolbarGroup></Toolbar><Paper zDepth={0} style={{overflow: 'auto', height: '100%'}}>{this.props.children}</Paper></Paper>);
     } else {
       return (<MuiDialog {...this.props} />);
     }
