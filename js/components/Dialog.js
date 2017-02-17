@@ -14,6 +14,9 @@ import React from 'react';
 import MuiDialog from 'material-ui/Dialog';
 import Paper from 'material-ui/Paper';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
+import AppBar from 'material-ui/AppBar';
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import IconButton from 'material-ui/IconButton';
 
 export default class Dialog extends React.PureComponent {
   static propTypes = {
@@ -35,7 +38,7 @@ export default class Dialog extends React.PureComponent {
         zIndex : 1,
         display: this.props.open ? 'block' : 'none'
       };
-      return (<Paper className={this.props.className} style={style} zDepth={0}><Toolbar><ToolbarTitle text={this.props.title} /><ToolbarGroup><ToolbarSeparator /></ToolbarGroup><ToolbarGroup>{React.Children.toArray(this.props.actions)}</ToolbarGroup></Toolbar><Paper zDepth={0} style={{overflow: this.props.autoScrollBodyContent ? 'auto' : 'visible', height: 'calc(100% - 56px)'}}>{this.props.children}</Paper></Paper>);
+      return (<Paper className={this.props.className} style={style} zDepth={0}><AppBar showMenuIconButton={false} iconElementRight={<IconButton onTouchTap={this.props.onRequestClose}><NavigationClose /></IconButton>} title={this.props.title}/><Paper zDepth={0} style={{overflow: this.props.autoScrollBodyContent ? 'auto' : 'visible', height: 'calc(100% - 120px)'}}>{this.props.children}</Paper><Toolbar><ToolbarGroup style={{width: '100%', justifyContent: 'flex-end'}}>{React.Children.toArray(this.props.actions)}</ToolbarGroup></Toolbar></Paper>);
     } else {
       return (<MuiDialog {...this.props} />);
     }
