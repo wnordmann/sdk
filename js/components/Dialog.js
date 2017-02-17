@@ -21,7 +21,7 @@ export default class Dialog extends React.PureComponent {
   };
 
   static defaultProps = {
-    inline: true
+    inline: false
   };
 
   render() {
@@ -35,7 +35,7 @@ export default class Dialog extends React.PureComponent {
         zIndex : 1,
         display: this.props.open ? 'block' : 'none'
       };
-      return (<Paper style={style} zDepth={0}><Toolbar><ToolbarTitle text={this.props.title} /><ToolbarGroup><ToolbarSeparator /></ToolbarGroup><ToolbarGroup>{React.Children.toArray(this.props.actions)}</ToolbarGroup></Toolbar><Paper zDepth={0} style={{overflow: this.props.autoScrollBodyContent ? 'auto' : 'visible', height: '100%'}}>{this.props.children}</Paper></Paper>);
+      return (<Paper className={this.props.className} style={style} zDepth={0}><Toolbar><ToolbarTitle text={this.props.title} /><ToolbarGroup><ToolbarSeparator /></ToolbarGroup><ToolbarGroup>{React.Children.toArray(this.props.actions)}</ToolbarGroup></Toolbar><Paper zDepth={0} style={{overflow: this.props.autoScrollBodyContent ? 'auto' : 'visible', height: '100%'}}>{this.props.children}</Paper></Paper>);
     } else {
       return (<MuiDialog {...this.props} />);
     }
