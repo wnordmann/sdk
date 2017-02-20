@@ -290,4 +290,4 @@ class StyleModal extends React.PureComponent {
   }
 }
 
-export default injectIntl(StyleModal, {withRef: true});
+export default injectIntl(StyleModal);
