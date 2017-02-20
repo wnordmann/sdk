@@ -114,7 +114,6 @@ class StyleModal extends React.PureComponent {
     this._styleCache = {};
     this._ruleCounter = 0;
     this.state = {
-      open: false,
       error: false,
       errorOpen: false,
       attributes: [],
@@ -132,29 +131,30 @@ class StyleModal extends React.PureComponent {
     if (this.props.layer.get('wfsInfo')) {
       this._setGeomTypeAndAttributes();
     } else {
-      this.props.layer.on('change:wfsInfo', this._setGeomTypeAndAttributes, this);
+      this.props.layer.once('change:wfsInfo', this._setGeomTypeAndAttributes, this);
+    }
+    if (this.props.layer.get('styleInfo')) {
+      this._setRules();
+    } else {
+      this.props.layer.once('change:styleInfo', this._setRules, this);
     }
   }
-  open() {
-    if (this.props.layer.get('styleInfo')) {
-      // only support for a single featureTypeStyle now
-      var rules = this.props.layer.get('styleInfo').featureTypeStyles[0].rules;
-      for (var i = 0, ii = rules.length; i < ii; ++i) {
-        if (rules[i].name === undefined) {
-          rules[i].name = rules[i].title ? rules[i].title : 'Untitled ' + (i + 1);
-        }
+  _setRules() {
+    // only support for a single featureTypeStyle now
+    var rules = this.props.layer.get('styleInfo').featureTypeStyles[0].rules;
+    for (var i = 0, ii = rules.length; i < ii; ++i) {
+      if (rules[i].name === undefined) {
+        rules[i].name = rules[i].title ? rules[i].title : 'Untitled ' + (i + 1);
       }
-      this.setState({open: true, rule: rules[0].name, rules: rules}, function() {
-        if (this.props.layer instanceof ol.layer.Vector) {
-          this._setStyleVector();
-        }
-      });
-    } else {
-      this.setState({open: true});
     }
+    this.setState({rule: rules[0].name, rules: rules}, function() {
+      if (this.props.layer instanceof ol.layer.Vector) {
+        this._setStyleVector();
+      }
+    });
   }
   close() {
-    this.setState({open: false});
+    this.props.onRequestClose();
   }
   _setGeomTypeAndAttributes() {
     var wfsInfo = this.props.layer.get('wfsInfo');
@@ -280,7 +280,7 @@ class StyleModal extends React.PureComponent {
       <Button buttonType='Flat' primary={true} label={formatMessage(messages.savebutton)} onTouchTap={this._saveStyle.bind(this)} />
     ];
     return (
-      <Dialog ref='dialog' inline={true} className={classNames('sdk-component style-modal', this.props.className)} actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} open={this.state.open} onRequestClose={this.close.bind(this)}>
+      <Dialog ref='dialog' inline={true} className={classNames('sdk-component style-modal', this.props.className)} actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} open={this.props.open} onRequestClose={this.close.bind(this)}>
         <List>
           {ruleItems}
         </List>

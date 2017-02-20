@@ -42,8 +42,9 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const layerListItemSource = {
+
   canDrag(props, monitor) {
-    return (props.allowReordering && props.layer.get('type') !== 'base' && props.layer.get('type') !== 'base-group');
+    return (props.layer.get('canDrag') !== false && props.allowReordering && props.layer.get('type') !== 'base' && props.layer.get('type') !== 'base-group');
   },
   beginDrag(props) {
     return {
@@ -314,6 +315,7 @@ class LayerListItem extends React.PureComponent {
     this._muiTheme = context.muiTheme || getMuiTheme();
     this.state = {
       tableOpen: false,
+      styleOpen: false,
       checked: props.layer.getVisible()
     };
   }
@@ -428,16 +430,16 @@ class LayerListItem extends React.PureComponent {
       var sld_body = this.props.layer.getSource().getParams().SLD_BODY;
       if (sld_body) {
         this.props.layer.set('styleInfo', SLDService.parse(sld_body));
-        this.refs.stylemodal.getWrappedInstance().open();
+        this._showStyling();
       } else {
         var me = this;
         WMSService.getStyles(this.props.layer.get('wfsInfo').url, this.props.layer, function(info) {
           me.props.layer.set('styleInfo', info);
-          me.refs.stylemodal.getWrappedInstance().open();
+          me._showStyling();
         }, undefined, this._proxy, this._requestHeaders);
       }
     } else {
-      this.refs.stylemodal.getWrappedInstance().open();
+      this._showStyling();
     }
   }
   _modifyLatLonBBOX(bbox) {
@@ -456,6 +458,18 @@ class LayerListItem extends React.PureComponent {
     this.setState({
       tableOpen: false
     });
+  }
+  _showStyling() {
+    this.props.layer.set('canDrag', false);
+    this.setState({
+      styleOpen: true
+    });
+  }
+  _closeStyling() {
+    this.setState({
+      styleOpen: false
+    });
+    this.props.layer.set('canDrag', true);
   }
   _zoomTo() {
     var map = this.props.map;
@@ -556,7 +570,7 @@ class LayerListItem extends React.PureComponent {
       filterModal = (<FilterModal {...this.props} layer={this.props.layer} ref='filtermodal' />);
     }
     if (canStyle) {
-      styleModal = (<StyleModal {...this.props} layer={this.props.layer} ref='stylemodal' />);
+      styleModal = (<StyleModal {...this.props} open={this.state.styleOpen} onRequestClose={this._closeStyling.bind(this)} layer={this.props.layer} />);
     }
     if (this.props.showTable) {
       var actions = [
