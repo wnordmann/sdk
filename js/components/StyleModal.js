@@ -276,8 +276,8 @@ class StyleModal extends React.PureComponent {
       return (<ListItem onNestedListToggle={this._resizeDialog.bind(this)} nestedItems={[editor]} primaryTogglesNestedList={true} insetChildren={false} key={key} primaryText={rule.name} />);
     }, this);
     var actions = [
-      <Button buttonType='Flat' primary={true} label={formatMessage(messages.savebutton)} onTouchTap={this._saveStyle.bind(this)} />,
-      <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
+      <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />,
+      <Button buttonType='Flat' primary={true} label={formatMessage(messages.savebutton)} onTouchTap={this._saveStyle.bind(this)} />
     ];
     return (
       <Dialog ref='dialog' inline={true} className={classNames('sdk-component style-modal', this.props.className)} actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} open={this.state.open} onRequestClose={this.close.bind(this)}>
