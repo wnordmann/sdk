@@ -13,6 +13,11 @@
 import ol from 'openlayers';
 import util from '../util';
 
+const sldDefaults = {
+  strokeColor: '#000000',
+  strokeWidth: 1
+};
+
 class OpenLayersService {
   createStyle(styleState, geometryType) {
     var result = [];
@@ -26,10 +31,10 @@ class OpenLayersService {
         });
       }
       var stroke;
-      if (symbolState.hasStroke !== false && symbolState.strokeColor) {
+      if (symbolState.hasStroke !== false && (symbolState.strokeColor || symbolState.strokeWidth !== undefined)) {
         stroke = new ol.style.Stroke({
-          color: util.transformColor(symbolState.strokeColor),
-          width: symbolState.strokeWidth
+          color: symbolState.strokeColor ? util.transformColor(symbolState.strokeColor) : sldDefaults.strokeColor,
+          width: symbolState.strokeWidth !== undefined ? symbolState.strokeWidth : sldDefaults.strokeWidth
         });
       }
       var text;

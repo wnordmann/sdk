@@ -23,6 +23,7 @@ import SLDService from '../services/SLDService';
 import OpenLayersService from '../services/OpenLayersService';
 import RESTService from '../services/RESTService';
 import Snackbar from 'material-ui/Snackbar';
+import FilterService from '../services/FilterService';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const messages = defineMessages({
@@ -211,10 +212,19 @@ class StyleModal extends React.PureComponent {
     // TODO cache as many style objects as possible
     this.props.layer.setStyle(function(feature) {
       // loop over the rules and see which one we match
-      for (var i = 0, ii = me.state.rules.length; i < ii; ++i) {
+      var styles = [];
+      for (var i = me.state.rules.length - 1; i >= 0; --i) {
         var rule = me.state.rules[i];
         var styleState = rule;
-        if (!styleState.filter || styleState.filter(feature.getProperties())) {
+        var filterParseError = false;
+        if (styleState.expression && !styleState.filter) {
+          try {
+            styleState.filter = FilterService.filter(styleState.expression);
+          } catch (e) {
+            filterParseError = true;
+          }
+        }
+        if (!filterParseError && (!styleState.filter || styleState.filter(feature.getProperties()))) {
           var style = me._createStyle(styleState);
           for (var j = 0, jj = style.length; j < jj; ++j) {
             if (style[j].getText()) {
@@ -222,10 +232,10 @@ class StyleModal extends React.PureComponent {
               style[j].getText().setText(text ? '' + text : '');
             }
           }
-          return style;
+          styles = styles.concat(style);
         }
       }
-      return null;
+      return styles;
     });
   }
   _onChange(rule, state) {
