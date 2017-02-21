@@ -617,7 +617,16 @@ class LayerListItem extends React.PureComponent {
     }
     return connectDragSource(connectDropTarget(
       <div>
-        <ListItem className={classNames({'sdk-component': true, 'layer-list-item': true}, this.props.className)} autoGenerateNestedIndicator={this.props.collapsible} primaryTogglesNestedList={false} leftCheckbox={leftCheckbox} primaryText={input ? undefined : this.props.title} nestedItems={this.props.nestedItems} nestedListStyle={{'marginLeft':'40px'}} initiallyOpen={true}>
+        <ListItem
+          className={classNames({'sdk-component': true, 'layer-list-item': true, 'menuItem': true}, this.props.className)}
+          autoGenerateNestedIndicator={this.props.collapsible}
+          insetChildren={false}
+          primaryTogglesNestedList={false}
+          leftCheckbox={leftCheckbox}
+          primaryText={<span className="statusIcons"><i className="fa fa-angle-down"></i><i className="ms ms-layers"></i><span>{this.props.title}</span></span>}
+          rightIconButton={<span className="fixedContainer"><i className="fa fa-eye"></i><i className="fa fa-crosshairs"></i><i className="fa fa-cog"></i></span>}
+          nestedItems={this.props.nestedItems}
+          initiallyOpen={true}>
           {input}
         </ListItem>
         <div style={{paddingLeft: 72}}>
