@@ -223,4 +223,4 @@ class FilterModal extends React.PureComponent {
   }
 }
 
-export default injectIntl(FilterModal, {withRef: true});
+export default injectIntl(FilterModal);

@@ -211,14 +211,16 @@ class StyleModal extends React.PureComponent {
     // TODO cache as many style objects as possible
     this.props.layer.setStyle(function(feature) {
       // loop over the rules and see which one we match
-      for (var i = me.state.rules.length - 1; i >= 0; --i) {
+      for (var i = 0, ii = me.state.rules.length; i < ii; ++i) {
         var rule = me.state.rules[i];
         var styleState = rule;
         if (!styleState.filter || styleState.filter(feature.getProperties())) {
           var style = me._createStyle(styleState);
-          if (styleState.labelAttribute) {
-            var text = feature.get(styleState.labelAttribute);
-            style.getText().setText(text ? '' + text : '');
+          for (var j = 0, jj = style.length; j < jj; ++j) {
+            if (style[j].getText()) {
+              var text = feature.get(styleState.symbolizers[j].labelAttribute);
+              style[j].getText().setText(text ? '' + text : '');
+            }
           }
           return style;
         }

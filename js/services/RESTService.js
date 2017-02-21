@@ -23,6 +23,8 @@ class RESTService {
       url = layer.getSource().getUrls()[0];
     } else if (layer.getSource() instanceof ol.source.ImageWMS) {
       url = layer.getSource().getUrl();
+    } else {
+      url = layer.get('url');
     }
     var urlObj = new URL(url, true);
     urlObj.set('pathname', urlObj.pathname.replace(/wms|ows|wfs/, 'rest'));

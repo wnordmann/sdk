@@ -87,7 +87,7 @@ class LabelModal extends React.PureComponent {
   componentDidMount() {
     var source = this.props.layer.getSource();
     if (source && !(source instanceof ol.source.Cluster)) {
-      if (source.getState() === 'ready') {
+      if (source.getState() === 'ready' && source.getFeatures().length > 0) {
         this._getAttributes(source);
       } else {
         source.on('change', function(evt) {
