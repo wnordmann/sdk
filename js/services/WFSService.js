@@ -38,6 +38,26 @@ const proj4326 = new ol.proj.Projection({
 ol.proj.addEquivalentProjections([ol.proj.get('EPSG:4326'), proj4326]);
 
 class WFSService {
+  createSource(url, projection, typeName, opt_proxy) {
+    return new ol.source.Vector({
+      wrapX: false,
+      url: function(extent) {
+        var urlObj = new URL(url);
+        urlObj.set('query', {
+          service: 'WFS',
+          request: 'GetFeature',
+          version: '1.1.0',
+          typename: typeName,
+          outputFormat: 'application/json',
+          srsname: projection.getCode(),
+          bbox: extent.join(',') + ',' + projection.getCode()
+        });
+        return util.getProxiedUrl(urlObj.toString(), opt_proxy);
+      },
+      format: geojsonFormat,
+      strategy: ol.loadingstrategy.bbox
+    });
+  }
   createLayer(layer, url, titleObj, projection, opt_proxy) {
     return new ol.layer.Vector({
       title: titleObj.title,
@@ -50,24 +70,7 @@ class WFSService {
       isSelectable: true,
       popupInfo: '#AllAttributes',
       url: url,
-      source: new ol.source.Vector({
-        wrapX: false,
-        url: function(extent) {
-          var urlObj = new URL(url);
-          urlObj.set('query', {
-            service: 'WFS',
-            request: 'GetFeature',
-            version: '1.1.0',
-            typename: layer.Name,
-            outputFormat: 'application/json',
-            srsname: projection.getCode(),
-            bbox: extent.join(',') + ',' + projection.getCode()
-          });
-          return util.getProxiedUrl(urlObj.toString(), opt_proxy);
-        },
-        format: geojsonFormat,
-        strategy: ol.loadingstrategy.bbox
-      })
+      source: this.createSource(url, projection, layer.Name, opt_proxy)
     });
   }
   parseCapabilities(xmlhttp) {
