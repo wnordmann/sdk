@@ -1,4 +1,23 @@
+var webpack = require('webpack');
 var path = require('path');
+
+// Vars
+var BUILD_DIR = path.resolve(__dirname, 'dist');
+var APP_DIR = path.resolve(__dirname, '.');
+
+var plugins = [
+  new webpack.ProvidePlugin({
+    'Intl': 'imports?this=>global!exports?global.Intl!intl'
+  })
+];
+var filename = '[name].js';
+var PROD = JSON.parse(process.env.BUILD_PROD || false);
+if(PROD) {
+  plugins.push(new webpack.DefinePlugin({ 'process.env': { 'NODE_ENV': JSON.stringify('production') } }));
+  plugins.push(new webpack.optimize.UglifyJsPlugin({ compress:{ warnings: true } }));
+  filename = '[name].min.js';
+}
+
 
 // webpack.config.js
 module.exports = {
@@ -23,9 +42,6 @@ module.exports = {
     ]
   },
   node: {
-    console: 'mock',
-    fs: 'empty',
-    net: 'empty',
-    tls: 'empty'
+    fs: 'empty'
   }
 };
