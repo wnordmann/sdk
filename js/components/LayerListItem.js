@@ -492,10 +492,12 @@ class LayerListItem extends React.PureComponent {
     var map = this.props.map;
     var view = map.getView();
     var extent = this.props.layer.get('EX_GeographicBoundingBox');
-    if (view.getProjection().getCode() === 'EPSG:3857') {
-      this._modifyLatLonBBOX(extent);
+    if (extent) {
+      if (view.getProjection().getCode() === 'EPSG:3857') {
+        this._modifyLatLonBBOX(extent);
+      }
+      extent = ol.proj.transformExtent(extent, 'EPSG:4326', view.getProjection());
     }
-    extent = ol.proj.transformExtent(extent, 'EPSG:4326', view.getProjection());
     if (!extent) {
       extent = this.props.layer.getSource().getExtent();
     }
