@@ -11,7 +11,6 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import debounce from  'debounce';
 import HTML5Backend from 'react-dnd-html5-backend';
 import {DragDropContext} from 'react-dnd';
@@ -193,6 +192,10 @@ class LayerList extends React.PureComponent {
      */
     children: React.PropTypes.node,
     /**
+     * Should dialogs show inline instead of a modal?
+     */
+    inlineDialogs: React.PropTypes.bool,
+    /**
     * @ignore
     */
     intl: intlShape.isRequired
@@ -207,6 +210,7 @@ class LayerList extends React.PureComponent {
   };
 
   static defaultProps = {
+    inlineDialogs: true,
     handleResolutionChange: true,
     labelStyleOutOfScale: {
       color: '#BBBBBB'
@@ -232,6 +236,7 @@ class LayerList extends React.PureComponent {
     super(props);
     LayerStore.bindMap(this.props.map);
     this.state = {
+      addLayerOpen: false,
       muiTheme: context.muiTheme || getMuiTheme()
     };
     this.moveLayer = debounce(this.moveLayer, 100);
@@ -269,33 +274,11 @@ class LayerList extends React.PureComponent {
       this.setState({visible: true});
     }
   }
-  _isDescendant(el) {
-    var parent = ReactDOM.findDOMNode(this.refs.parent);
-    var node = el;
-    while (node !== null) {
-      if (node == parent) {
-        return true;
-      }
-      node = node.parentNode;
-    }
-    return false;
-  }
-  _hidePanel(evt) {
-    if (this._modalOpen !== true && !this._isDescendant(evt.relatedTarget)) {
-      this.setState({visible: false});
-    }
-  }
   _togglePanel() {
     var newVisible = !this.state.visible;
     if (newVisible || this._modalOpen !== true) {
       this.setState({visible: newVisible});
     }
-  }
-  _onModalOpen() {
-    this._modalOpen = true;
-  }
-  _onModalClose() {
-    this._modalOpen = false;
   }
   getLayerNode(lyr, group, idx) {
     if (this.props.addBaseMap && lyr.get('type') === 'base' && !lyr.getVisible()) {
@@ -308,17 +291,24 @@ class LayerList extends React.PureComponent {
       if (lyr instanceof ol.layer.Group) {
         var children = this.props.showGroupContent ? this.renderLayerGroup(lyr) : [];
         return (
-          <LayerListItem index={idx} moveLayer={this.moveLayer} {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('id')} layer={lyr} group={group} nestedItems={children} title={lyr.get('title')} disableTouchRipple={true}/>
+          <LayerListItem index={idx} moveLayer={this.moveLayer} {...this.props} key={lyr.get('id')} layer={lyr} group={group} nestedItems={children} title={lyr.get('title')} disableTouchRipple={true}/>
         );
       } else {
         return (
-          <LayerListItem index={idx} moveLayer={this.moveLayer} {...this.props} onModalClose={this._onModalClose.bind(this)} onModalOpen={this._onModalOpen.bind(this)} key={lyr.get('id')} layer={lyr} group={group} title={lyr.get('title')} disableTouchRipple={true}/>
+          <LayerListItem index={idx} moveLayer={this.moveLayer} {...this.props} key={lyr.get('id')} layer={lyr} group={group} title={lyr.get('title')} disableTouchRipple={true}/>
         );
       }
     }
   }
   _showAddLayer() {
-    this.refs.addlayermodal.getWrappedInstance().open();
+    this.setState({
+      addLayerOpen: true
+    });
+  }
+  _closeAddLayer() {
+    this.setState({
+      addLayerOpen: false
+    });
   }
   _showAddBaseMap() {
     this.refs.addbasemapmodal.getWrappedInstance().open();
@@ -336,26 +326,24 @@ class LayerList extends React.PureComponent {
       'layer-list': true
     };
     var tipLabel = this.props.tipLabel ? (<div className='layer-list-header'><Label>{this.props.tipLabel}</Label></div>) : undefined;
-    var addLayer;
+    var addLayer, layerModal, baseModal;
     if (this.props.addLayer || this.props.addBaseMap) {
-      var layerAdd, baseAdd, layerModal, baseModal;
+      var layerAdd, baseAdd;
       if (this.props.addLayer) {
         layerAdd = <RaisedButton icon={<NoteAdd />} label={formatMessage(messages.addlayertext)} onTouchTap={this._showAddLayer.bind(this)} disableTouchRipple={true}/>;
-        layerModal = <AddLayerModal srsName={this.props.map.getView().getProjection().getCode()} allowUserInput={this.props.addLayer.allowUserInput} sources={this.props.addLayer.sources} map={this.props.map} ref='addlayermodal'/>;
+        layerModal = <AddLayerModal open={this.state.addLayerOpen} inline={this.props.inlineDialogs} srsName={this.props.map.getView().getProjection().getCode()} allowUserInput={this.props.addLayer.allowUserInput} onRequestClose={this._closeAddLayer.bind(this)} sources={this.props.addLayer.sources} map={this.props.map} />;
       }
       if (this.props.addBaseMap) {
         baseAdd = <RaisedButton icon={<BaseMapIcon />} label={formatMessage(messages.addbasemaptext)} onTouchTap={this._showAddBaseMap.bind(this)} disableTouchRipple={true}/>;
         baseModal = <BaseMapModal tileServices={this.props.addBaseMap.tileServices} map={this.props.map} ref='addbasemapmodal' />;
       }
       addLayer = (
-          <article className="layer-list-add">
-          <Toolbar><ToolbarGroup>
+          <Paper zDepth={0} className="layer-list-add">
+          <Toolbar><ToolbarGroup style={{width: '100%', justifyContent: 'flex-end'}}>
             {layerAdd}
             {baseAdd}
           </ToolbarGroup></Toolbar>
-          {layerModal}
-          {baseModal}
-          </article>
+          </Paper>
       );
     }
     return (
@@ -369,6 +357,8 @@ class LayerList extends React.PureComponent {
           {addLayer}
         </Paper>
         {this.props.children}
+        {layerModal}
+        {baseModal}
       </div>
     );
   }

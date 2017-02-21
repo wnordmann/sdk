@@ -130,6 +130,7 @@ describe('WFSService', function() {
       empty: false
     };
     var lyr = WFSService.createLayer(layer, url, titleObj, ol.proj.get('EPSG:3857'));
+    assert.equal(lyr.get('url'), url);
     assert.equal(lyr instanceof ol.layer.Vector, true);
     assert.equal(lyr.get('title'), titleObj.title);
     assert.equal(lyr.get('id'), layer.Name);

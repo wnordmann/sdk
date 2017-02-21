@@ -12,7 +12,7 @@
 
 import React from 'react';
 import ol from 'openlayers';
-import Dialog from 'material-ui/Dialog';
+import Dialog from './Dialog';
 import Snackbar from 'material-ui/Snackbar';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import RefreshIcon from 'material-ui/svg-icons/navigation/refresh';
@@ -175,12 +175,16 @@ class AddLayerModal extends React.PureComponent {
       filter: null,
       error: false,
       errorOpen: false,
-      open: false,
       layerInfo: null
     };
   }
   getChildContext() {
     return {muiTheme: this._muiTheme};
+  }
+  componentWillReceiveProps(newProps) {
+    if (newProps.open) {
+      this._getCaps();
+    }
   }
   componentWillUnmount() {
     if (this._request) {
@@ -321,12 +325,8 @@ class AddLayerModal extends React.PureComponent {
       }
     }
   }
-  open() {
-    this._getCaps();
-    this.setState({open: true});
-  }
   close() {
-    this.setState({open: false});
+    this.props.onRequestClose();
   }
   addLayers() {
     var doZoom = false;
@@ -438,11 +438,11 @@ class AddLayerModal extends React.PureComponent {
       <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.closeNewServer.bind(this)} />
     ];
     return (
-      <Dialog className={classNames('sdk-component add-layer-modal', this.props.className)}  actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title)} open={this.state.open} onRequestClose={this.close.bind(this)}>
+      <Dialog inline={this.props.inline} className={classNames('sdk-component add-layer-modal', this.props.className)}  actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title)} open={this.props.open} onRequestClose={this.close.bind(this)}>
         <SelectField value={this.state.source} onChange={this._onSourceChange.bind(this)}>
           {selectOptions}
         </SelectField><Button buttonType='Icon' key='refresh' tooltip={formatMessage(messages.refresh)} onTouchTap={this._refreshService.bind(this)}><RefreshIcon /></Button><br/>
-        <Dialog open={this.state.newModalOpen} actions={newActions} autoScrollBodyContent={true} onRequestClose={this.closeNewServer.bind(this)} modal={true} title={formatMessage(messages.newservermodaltitle)}>
+        <Dialog inline={this.props.inline} open={this.state.newModalOpen} actions={newActions} autoScrollBodyContent={true} onRequestClose={this.closeNewServer.bind(this)} modal={true} title={formatMessage(messages.newservermodaltitle)}>
           <SelectField floatingLabelText={formatMessage(messages.servertypelabel)} value={this.state.newType} onChange={this._onTypeChange.bind(this)}>{typeOptions}</SelectField><br/>
           <TextField fullWidth={true} ref='newservername' floatingLabelText={formatMessage(messages.newservername)} /><br/>
           <TextField fullWidth={true} ref='newserverurl' floatingLabelText={formatMessage(messages.newserverurl)} />
@@ -456,4 +456,4 @@ class AddLayerModal extends React.PureComponent {
   }
 }
 
-export default injectIntl(AddLayerModal, {withRef: true});
+export default injectIntl(AddLayerModal);

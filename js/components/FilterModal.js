@@ -14,7 +14,7 @@ import React from 'react';
 import ol from 'openlayers';
 import classNames from 'classnames';
 import FilterService from '../services/FilterService';
-import Dialog from 'material-ui/Dialog';
+import Dialog from './Dialog';
 import Button from './Button';
 import {List, ListItem} from 'material-ui/List';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
@@ -74,10 +74,6 @@ class FilterModal extends React.PureComponent {
      */
     className: React.PropTypes.string,
     /**
-     * Called when the modal is closed.
-     */
-    onModalClose: React.PropTypes.func,
-    /**
      * @ignore
      */
     intl: intlShape.isRequired
@@ -103,14 +99,8 @@ class FilterModal extends React.PureComponent {
   getChildContext() {
     return {muiTheme: this._muiTheme};
   }
-  open() {
-    this.setState({open: true});
-  }
   close() {
-    if (this.props.onModalClose) {
-      this.props.onModalClose.call();
-    }
-    this.setState({open: false});
+    this.props.onRequestClose();
   }
   _setStyleFunction() {
     var layer = this.props.layer;
@@ -221,7 +211,7 @@ class FilterModal extends React.PureComponent {
       <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
     ];
     return (
-      <Dialog className={classNames('sdk-component filter-modal', this.props.className)} actions={actions} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} modal={true} open={this.state.open} onRequestClose={this.close.bind(this)}>
+      <Dialog inline={this.props.inline} className={classNames('sdk-component filter-modal', this.props.className)} actions={actions} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} modal={true} open={this.props.open} onRequestClose={this.close.bind(this)}>
         <TextField name='filter' errorText={errorText} style={{width: 512}} ref='filterTextBox' />
         <FilterHelp intl={this.props.intl} />
         <Button style={{float: 'right'}} label={formatMessage(messages.addfiltertext)} onTouchTap={this._addFilter.bind(this)} />
@@ -233,4 +223,4 @@ class FilterModal extends React.PureComponent {
   }
 }
 
-export default injectIntl(FilterModal, {withRef: true});
+export default injectIntl(FilterModal);

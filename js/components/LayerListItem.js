@@ -14,7 +14,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {DragSource, DropTarget} from 'react-dnd';
 import ol from 'openlayers';
-import Dialog from 'material-ui/Dialog';
+import Dialog from './Dialog';
 import Button from './Button';
 import FeatureTable from './FeatureTable';
 import FilterModal from './FilterModal';
@@ -264,14 +264,6 @@ class LayerListItem extends React.PureComponent {
      */
     showOpacity: React.PropTypes.bool,
     /**
-     * Called when a modal is opened by this layer list item.
-     */
-    onModalOpen: React.PropTypes.func,
-    /**
-     * Called when a modal is closed by this layer list item.
-     */
-    onModalClose: React.PropTypes.func,
-    /**
      * Css class name to apply on the root element of this component.
      */
     className: React.PropTypes.string,
@@ -283,6 +275,10 @@ class LayerListItem extends React.PureComponent {
      * Should we handle resolution changes to show when a layer is in or out of scale?
      */
     handleResolutionChange: React.PropTypes.bool,
+    /**
+     * Should dialogs show inline instead of a modal?
+     */
+    inlineDialogs: React.PropTypes.bool,
     /**
      * @ignore
      */
@@ -314,6 +310,8 @@ class LayerListItem extends React.PureComponent {
     this._requestHeaders = context.requestHeaders;
     this._muiTheme = context.muiTheme || getMuiTheme();
     this.state = {
+      filterOpen: false,
+      labelOpen: false,
       tableOpen: false,
       styleOpen: false,
       checked: props.layer.getVisible()
@@ -331,6 +329,11 @@ class LayerListItem extends React.PureComponent {
     this.props.layer.on('change:visible', this._changeLayerVisible, this);
     if (this.props.handleResolutionChange) {
       this.props.map.getView().on('change:resolution', this._changeResolution, this);
+    }
+    if (!this.props.layer.get('wfsInfo')) {
+      this.props.layer.once('change:wfsInfo', function() {
+        this.forceUpdate();
+      }, this);
     }
   }
   componentWillUnmount() {
@@ -417,17 +420,31 @@ class LayerListItem extends React.PureComponent {
     dl.click();
   }
   _filter() {
-    if (this.props.onModalOpen) {
-      this.props.onModalOpen.call();
-    }
-    this.refs.filtermodal.getWrappedInstance().open();
+    this.setState({
+      filterOpen: true
+    });
+  }
+  _closeFilter() {
+    this.setState({
+      filterOpen: false
+    });
   }
   _label() {
-    this.refs.labelmodal.getWrappedInstance().open();
+    this.setState({
+      labelOpen: true
+    });
+  }
+  _closeLabel() {
+    this.setState({
+      labelOpen: false
+    });
   }
   _style() {
     if (!this.props.layer.get('styleInfo')) {
-      var sld_body = this.props.layer.getSource().getParams().SLD_BODY;
+      var sld_body;
+      if (!(this.props.layer instanceof ol.layer.Vector)) {
+        sld_body = this.props.layer.getSource().getParams().SLD_BODY;
+      }
       if (sld_body) {
         this.props.layer.set('styleInfo', SLDService.parse(sld_body));
         this._showStyling();
@@ -475,10 +492,12 @@ class LayerListItem extends React.PureComponent {
     var map = this.props.map;
     var view = map.getView();
     var extent = this.props.layer.get('EX_GeographicBoundingBox');
-    if (view.getProjection().getCode() === 'EPSG:3857') {
-      this._modifyLatLonBBOX(extent);
+    if (extent) {
+      if (view.getProjection().getCode() === 'EPSG:3857') {
+        this._modifyLatLonBBOX(extent);
+      }
+      extent = ol.proj.transformExtent(extent, 'EPSG:4326', view.getProjection());
     }
-    extent = ol.proj.transformExtent(extent, 'EPSG:4326', view.getProjection());
     if (!extent) {
       extent = this.props.layer.getSource().getExtent();
     }
@@ -566,18 +585,18 @@ class LayerListItem extends React.PureComponent {
     }
     var tableModal, labelModal, filterModal, styleModal;
     if (this.props.layer instanceof ol.layer.Vector) {
-      labelModal = (<LabelModal {...this.props} layer={this.props.layer} ref='labelmodal' />);
-      filterModal = (<FilterModal {...this.props} layer={this.props.layer} ref='filtermodal' />);
+      labelModal = (<LabelModal {...this.props} open={this.state.labelOpen} onRequestClose={this._closeLabel.bind(this)} inline={this.props.inlineDialogs} layer={this.props.layer} />);
+      filterModal = (<FilterModal {...this.props} open={this.state.filterOpen} onRequestClose={this._closeFilter.bind(this)} inline={this.props.inlineDialogs} layer={this.props.layer} />);
     }
     if (canStyle) {
-      styleModal = (<StyleModal {...this.props} open={this.state.styleOpen} onRequestClose={this._closeStyling.bind(this)} layer={this.props.layer} />);
+      styleModal = (<StyleModal inline={this.props.inlineDialogs} {...this.props} open={this.state.styleOpen} onRequestClose={this._closeStyling.bind(this)} layer={this.props.layer} />);
     }
     if (this.props.showTable) {
       var actions = [
         <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this._closeTable.bind(this)} />
       ];
       tableModal = (
-        <Dialog ref='tablemodal' actions={actions} title={formatMessage(messages.tablemodaltitle)} open={this.state.tableOpen} onRequestClose={this._closeTable.bind(this)}>
+        <Dialog ref='tablemodal' inline={this.props.inlineDialogs} actions={actions} title={formatMessage(messages.tablemodaltitle)} open={this.state.tableOpen} onRequestClose={this._closeTable.bind(this)}>
           <FeatureTable height={400} onUpdate={this._onTableUpdate.bind(this)} map={this.props.map} layer={this.props.layer} />
         </Dialog>
       );

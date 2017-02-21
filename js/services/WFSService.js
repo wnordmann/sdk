@@ -49,6 +49,7 @@ class WFSService {
       isRemovable: true,
       isSelectable: true,
       popupInfo: '#AllAttributes',
+      url: url,
       source: new ol.source.Vector({
         wrapX: false,
         url: function(extent) {

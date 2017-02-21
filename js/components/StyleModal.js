@@ -23,6 +23,7 @@ import SLDService from '../services/SLDService';
 import OpenLayersService from '../services/OpenLayersService';
 import RESTService from '../services/RESTService';
 import Snackbar from 'material-ui/Snackbar';
+import FilterService from '../services/FilterService';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const messages = defineMessages({
@@ -82,6 +83,10 @@ const messages = defineMessages({
  */
 class StyleModal extends React.PureComponent {
   static propTypes = {
+    /**
+     * Should we show inline instead of modal?
+     */
+    inline: React.PropTypes.bool,
     /**
      * The layer associated with the style modal.
      */
@@ -207,19 +212,30 @@ class StyleModal extends React.PureComponent {
     // TODO cache as many style objects as possible
     this.props.layer.setStyle(function(feature) {
       // loop over the rules and see which one we match
+      var styles = [];
       for (var i = me.state.rules.length - 1; i >= 0; --i) {
         var rule = me.state.rules[i];
         var styleState = rule;
-        if (!styleState.filter || styleState.filter(feature.getProperties())) {
-          var style = me._createStyle(styleState);
-          if (styleState.labelAttribute) {
-            var text = feature.get(styleState.labelAttribute);
-            style.getText().setText(text ? '' + text : '');
+        var filterParseError = false;
+        if (styleState.expression && !styleState.filter) {
+          try {
+            styleState.filter = FilterService.filter(styleState.expression);
+          } catch (e) {
+            filterParseError = true;
           }
-          return style;
+        }
+        if (!filterParseError && (!styleState.filter || styleState.filter(feature.getProperties()))) {
+          var style = me._createStyle(styleState);
+          for (var j = 0, jj = style.length; j < jj; ++j) {
+            if (style[j].getText()) {
+              var text = feature.get(styleState.symbolizers[j].labelAttribute);
+              style[j].getText().setText(text ? '' + text : '');
+            }
+          }
+          styles = styles.concat(style);
         }
       }
-      return null;
+      return styles;
     });
   }
   _onChange(rule, state) {
@@ -280,7 +296,7 @@ class StyleModal extends React.PureComponent {
       <Button buttonType='Flat' primary={true} label={formatMessage(messages.savebutton)} onTouchTap={this._saveStyle.bind(this)} />
     ];
     return (
-      <Dialog ref='dialog' inline={true} className={classNames('sdk-component style-modal', this.props.className)} actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} open={this.props.open} onRequestClose={this.close.bind(this)}>
+      <Dialog ref='dialog' inline={this.props.inline} className={classNames('sdk-component style-modal', this.props.className)} actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} open={this.props.open} onRequestClose={this.close.bind(this)}>
         <List>
           {ruleItems}
         </List>

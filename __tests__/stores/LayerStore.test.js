@@ -5,6 +5,7 @@ import raf from 'raf';
 import ol from 'openlayers';
 import LayerStore from '../../js/stores/LayerStore';
 import LayerActions from '../../js/actions/LayerActions';
+import WFSService from '../../js/services/WFSService';
 
 raf.polyfill();
 
@@ -127,6 +128,17 @@ describe('LayerStore', function() {
     LayerActions.removeLayer(level1);
     length = map.getLayers().getLength();
     assert.equal(length, 0);
+  });
+
+  it('_getWfsInfo does not fail on a WFS layer', function() {
+    var layer = WFSService.createLayer({Name: 'foo'}, 'http://localhost/geoserver/wfs', {title: 'Foo layer'}, ol.proj.get('EPSG:4326'));
+    var error = false;
+    try {
+      LayerStore._getWfsInfo(layer);
+    } catch (e) {
+      error = true;
+    }
+    assert.equal(error, false);
   });
 
 });

@@ -24,7 +24,8 @@ export default class Dialog extends React.PureComponent {
   };
 
   static defaultProps = {
-    inline: false
+    inline: false,
+    open: false
   };
 
   render() {
