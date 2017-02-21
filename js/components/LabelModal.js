@@ -12,7 +12,7 @@
 
 import React from 'react';
 import ol from 'openlayers';
-import Dialog from 'material-ui/Dialog';
+import Dialog from './Dialog';
 import Button from './Button';
 import classNames from 'classnames';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
@@ -78,8 +78,7 @@ class LabelModal extends React.PureComponent {
     super(props);
     this._muiTheme = context.muiTheme || getMuiTheme();
     this.state = {
-      attributes: [],
-      open: false
+      attributes: []
     };
   }
   getChildContext() {
@@ -164,25 +163,22 @@ class LabelModal extends React.PureComponent {
       this.props.layer.changed();
     }
   }
-  open() {
-    this.setState({open: true});
-  }
   close() {
-    this.setState({open: false});
+    this.props.onRequestClose();
   }
   render() {
     const {formatMessage} = this.props.intl;
     var actions = [
+      <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />,
       <Button buttonType='Flat' label={formatMessage(messages.applybutton)} onTouchTap={this._setLabel.bind(this)} />,
-      <Button buttonType='Flat' label={formatMessage(messages.clearbutton)} onTouchTap={this._clearLabel.bind(this)} />,
-      <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
+      <Button buttonType='Flat' label={formatMessage(messages.clearbutton)} onTouchTap={this._clearLabel.bind(this)} />
     ];
     return (
-      <Dialog className={classNames('sdk-component label-modal', this.props.className)} autoScrollBodyContent={true} modal={true} actions={actions} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} open={this.state.open} onRequestClose={this.close.bind(this)} >
+      <Dialog inline={this.props.inline} open={this.props.open} className={classNames('sdk-component label-modal', this.props.className)} autoScrollBodyContent={true} modal={true} actions={actions} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} onRequestClose={this.close.bind(this)} >
         <LabelEditor {...this.props} initialState={this._labelState} onChange={this._onChangeLabel.bind(this)} attributes={this.state.attributes} />
       </Dialog>
     );
   }
 }
 
-export default injectIntl(LabelModal, {withRef: true});
+export default injectIntl(LabelModal);

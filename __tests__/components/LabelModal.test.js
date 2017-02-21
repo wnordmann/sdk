@@ -50,9 +50,8 @@ describe('LabelModal', function() {
   it('sets the style function on the layer when a label is set', function(done) {
     var container = document.createElement('div');
     var label = ReactDOM.render((
-      <LabelModal layer={layer} intl={intl} />
+      <LabelModal open={true} layer={layer} intl={intl} />
     ), container);
-    label.open();
     label._setLabel();
     assert.equal(label._styleSet, true);
     window.setTimeout(function() {

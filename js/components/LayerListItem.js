@@ -14,7 +14,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {DragSource, DropTarget} from 'react-dnd';
 import ol from 'openlayers';
-import Dialog from 'material-ui/Dialog';
+import Dialog from './Dialog';
 import Button from './Button';
 import FeatureTable from './FeatureTable';
 import FilterModal from './FilterModal';
@@ -283,6 +283,10 @@ class LayerListItem extends React.PureComponent {
      * Should we handle resolution changes to show when a layer is in or out of scale?
      */
     handleResolutionChange: React.PropTypes.bool,
+    /**
+     * Should dialogs show inline instead of a modal?
+     */
+    inlineDialogs: React.PropTypes.bool,
     /**
      * @ignore
      */
@@ -566,18 +570,18 @@ class LayerListItem extends React.PureComponent {
     }
     var tableModal, labelModal, filterModal, styleModal;
     if (this.props.layer instanceof ol.layer.Vector) {
-      labelModal = (<LabelModal {...this.props} layer={this.props.layer} ref='labelmodal' />);
-      filterModal = (<FilterModal {...this.props} layer={this.props.layer} ref='filtermodal' />);
+      labelModal = (<LabelModal {...this.props} inline={this.props.inlineDialogs} layer={this.props.layer} ref='labelmodal' />);
+      filterModal = (<FilterModal {...this.props} inline={this.props.inlineDialogs} layer={this.props.layer} ref='filtermodal' />);
     }
     if (canStyle) {
-      styleModal = (<StyleModal {...this.props} open={this.state.styleOpen} onRequestClose={this._closeStyling.bind(this)} layer={this.props.layer} />);
+      styleModal = (<StyleModal inline={this.props.inlineDialogs} {...this.props} open={this.state.styleOpen} onRequestClose={this._closeStyling.bind(this)} layer={this.props.layer} />);
     }
     if (this.props.showTable) {
       var actions = [
         <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this._closeTable.bind(this)} />
       ];
       tableModal = (
-        <Dialog ref='tablemodal' actions={actions} title={formatMessage(messages.tablemodaltitle)} open={this.state.tableOpen} onRequestClose={this._closeTable.bind(this)}>
+        <Dialog ref='tablemodal' inline={this.props.inlineDialogs} actions={actions} title={formatMessage(messages.tablemodaltitle)} open={this.state.tableOpen} onRequestClose={this._closeTable.bind(this)}>
           <FeatureTable height={400} onUpdate={this._onTableUpdate.bind(this)} map={this.props.map} layer={this.props.layer} />
         </Dialog>
       );
