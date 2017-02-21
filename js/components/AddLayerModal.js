@@ -442,7 +442,7 @@ class AddLayerModal extends React.PureComponent {
         <SelectField value={this.state.source} onChange={this._onSourceChange.bind(this)}>
           {selectOptions}
         </SelectField><Button buttonType='Icon' key='refresh' tooltip={formatMessage(messages.refresh)} onTouchTap={this._refreshService.bind(this)}><RefreshIcon /></Button><br/>
-        <Dialog open={this.state.newModalOpen} actions={newActions} autoScrollBodyContent={true} onRequestClose={this.closeNewServer.bind(this)} modal={true} title={formatMessage(messages.newservermodaltitle)}>
+        <Dialog inline={this.props.inline} open={this.state.newModalOpen} actions={newActions} autoScrollBodyContent={true} onRequestClose={this.closeNewServer.bind(this)} modal={true} title={formatMessage(messages.newservermodaltitle)}>
           <SelectField floatingLabelText={formatMessage(messages.servertypelabel)} value={this.state.newType} onChange={this._onTypeChange.bind(this)}>{typeOptions}</SelectField><br/>
           <TextField fullWidth={true} ref='newservername' floatingLabelText={formatMessage(messages.newservername)} /><br/>
           <TextField fullWidth={true} ref='newserverurl' floatingLabelText={formatMessage(messages.newserverurl)} />
