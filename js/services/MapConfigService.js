@@ -72,20 +72,20 @@ class MapConfigService {
     }
     return sourceObj;
   }
-  generateLayerFromConfig(config, opt_proxy, map) {
+  generateLayerFromConfig(config, map, opt_proxy) {
     var type = config.type;
     var layerConfig = config.properties || {};
     layerConfig.id = LayerIdService.generateId();
     if (type === 'Group') {
       layerConfig.layers = [];
       for (var i = 0, ii = config.children.length; i < ii; ++i) {
-        layerConfig.layers.push(this.generateLayerFromConfig(config.children[i], opt_proxy, map));
+        layerConfig.layers.push(this.generateLayerFromConfig(config.children[i], map, opt_proxy));
       }
     }
     var layer = new ol.layer[type](layerConfig);
     var sourceConfig = config.source;
     if (sourceConfig) {
-      var source = this.generateSourceFromConfig(map, sourceConfig, opt_proxy, config.properties.url, config.properties.name);
+      var source = this.generateSourceFromConfig(map, sourceConfig, opt_proxy, layerConfig.url, layerConfig.name);
       layer.setSource(source);
     }
     return layer;
@@ -209,7 +209,7 @@ class MapConfigService {
       map.removeLayer(remove[i]);
     }
     for (i = 0, ii = layerConfig.length; i < ii; ++i) {
-      var layer = this.generateLayerFromConfig(layerConfig[i], opt_proxy, map);
+      var layer = this.generateLayerFromConfig(layerConfig[i], map, opt_proxy);
       map.addLayer(layer);
     }
     var view = map.getView();

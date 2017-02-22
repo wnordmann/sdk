@@ -180,7 +180,7 @@ describe('MapConfigService', function() {
 
   it('creates and serializes TMS source correctly', function() {
     var config = {'type':'TMS','properties':{'format':'png','urls':['http://a.tiles.mapbox.com/v1/mapbox.geography-class/','http://b.tiles.mapbox.com/v1/mapbox.geography-class/','http://c.tiles.mapbox.com/v1/mapbox.geography-class/','http://d.tiles.mapbox.com/v1/mapbox.geography-class/'],'maxZoom':8}};
-    var source = MapConfigService.generateSourceFromConfig(config);
+    var source = MapConfigService.generateSourceFromConfig(map, config);
     assert.equal(source instanceof ol.source.XYZ, true);
     assert.equal(source.get('originalType'), 'TMS');
     assert.equal(source.get('originalProperties').urls[0], 'http://a.tiles.mapbox.com/v1/mapbox.geography-class/');
@@ -191,7 +191,7 @@ describe('MapConfigService', function() {
 
   it('creates and serializes TileArcGISRest source properly', function() {
     var config = {'type':'TileArcGISRest','properties':{'urls':['http://cga6.cga.harvard.edu/arcgis/rest/services/darmc/roman/MapServer'],'params':{'LAYERS':'show:0','FORMAT':'png'}}};
-    var source = MapConfigService.generateSourceFromConfig(config);
+    var source = MapConfigService.generateSourceFromConfig(map, config);
     assert.equal(source instanceof ol.source.TileArcGISRest, true);
     assert.equal(source.getUrls()[0], 'http://cga6.cga.harvard.edu/arcgis/rest/services/darmc/roman/MapServer');
     assert.equal(source.getParams().LAYERS, 'show:0');
@@ -203,7 +203,7 @@ describe('MapConfigService', function() {
 
   it('creates and serializes BingMaps source properly', function() {
     var config = {'type':'BingMaps','properties':{'key': 'foo','imagerySet': 'AerialWithLabels'}};
-    var source = MapConfigService.generateSourceFromConfig(config);
+    var source = MapConfigService.generateSourceFromConfig(map, config);
     assert.equal(source instanceof ol.source.BingMaps, true);
     assert.equal(source.getApiKey(), 'foo');
     assert.equal(source.getImagerySet(), 'AerialWithLabels');
@@ -236,6 +236,26 @@ describe('MapConfigService', function() {
     assert.equal(result.getLayers().item(0).getSource() instanceof ol.source.OSM, true);
     assert.equal(result.getLayers().item(1) instanceof ol.layer.Tile, true);
     assert.equal(result.getLayers().item(1).getSource() instanceof ol.source.TileWMS, true);
+  });
+
+  it('handles WFS layers correctly', function() {
+    var url = 'http://localhost/geoserver/wfs';
+    var layer = new ol.layer.Vector({
+      url: url,
+      name: 'usa:states',
+      source: new ol.source.Vector({
+        url: function() {
+          return 'foo';
+        },
+        format: new ol.format.GeoJSON(),
+        strategy: ol.loadingstrategy.bbox
+      })
+    });
+    var config = {};
+    config = JSON.stringify(MapConfigService.getLayerConfig(config, layer));
+    var newLayer = MapConfigService.generateLayerFromConfig(JSON.parse(config), map);
+    var wfsUrl = newLayer.getSource().getUrl()([0, 0, 180, 180]);
+    assert.equal(wfsUrl, 'http://localhost/geoserver/wfs?service=WFS&request=GetFeature&version=1.1.0&typename=usa%3Astates&outputFormat=application%2Fjson&srsname=EPSG%3A3857&bbox=0%2C0%2C180%2C180%2CEPSG%3A3857');
   });
 
   it('performs save correctly', function() {
