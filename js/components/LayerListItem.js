@@ -623,7 +623,7 @@ class LayerListItem extends React.PureComponent {
           insetChildren={false}
           primaryTogglesNestedList={false}
           leftCheckbox={leftCheckbox}
-          primaryText={<span className="statusIcons"><i className="fa fa-angle-down"></i><i className="fa fa-map"></i><span>{this.props.title}</span></span>}
+          primaryText={<span className="statusIcons"><i className="fa fa-angle-down"></i><i className="ms ms-layers"></i><span>{this.props.title}</span></span>}
           rightIconButton={<span className="fixedContainer"><i className="fa fa-eye"></i><i className="fa fa-crosshairs"></i><i className="fa fa-cog"></i></span>}
           nestedItems={this.props.nestedItems}
           initiallyOpen={true}>
