@@ -34,6 +34,7 @@ import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Paper from 'material-ui/Paper';
 import './LayerList.css';
+import './main.css';
 
 const messages = defineMessages({
   layertitle: {
