@@ -627,7 +627,6 @@ class LayerListItem extends React.PureComponent {
           rightIconButton={<span className="fixedContainer"><i className="fa fa-eye"></i><i className="fa fa-crosshairs"></i><i className="fa fa-cog"></i></span>}
           nestedItems={this.props.nestedItems}
           initiallyOpen={true}>
-          {input}
         </ListItem>
         <div style={{paddingLeft: 72}}>
           {legend}

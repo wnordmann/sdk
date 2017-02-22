@@ -43,12 +43,8 @@
 .layer-tree-panel  li:last-child::before {
   height: 30px;
 }
-/* Font Awesome */
+/* HACK Base64 encoding the fonts, need to script this with webpack or a npm task */
 @import '../fonts/font-awesome';
-@font-face {
-    font-family: 'FontAwesome';
-    src: url('../font/fontawesome-webfont-webfont.eot');
-}
 
 @font-face {
     font-family: 'FontAwesome';
