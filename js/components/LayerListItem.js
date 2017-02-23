@@ -603,18 +603,6 @@ class LayerListItem extends React.PureComponent {
     if (this.props.allowEditing && layer.get('isWFST') === true) {
       edit = (<Button className='layer-list-item-edit' onTouchTap={this._edit.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.editbuttonlabel)} ><EditIcon /></Button>);
     }
-    var input, labelStyle;
-    // if (layer.get('type') === 'base' && this.props.group && this.props.group.get('type') === 'base-group') {
-    //   input = (<RadioButton disabled={this.state.disabled} checked={this.state.checked} label={this.props.title} value={this.props.title} onCheck={this._handleChange.bind(this)} disableTouchRipple={true}/>);
-    // } else {
-    //   if (this.props.handleResolutionChange && this.props.layer.get('type') !== 'base-group' && !this.calculateInRange()) {
-    //     labelStyle = this.props.labelStyleOutOfScale;
-    //   }
-    //   if (this.props.layer.get('emptyTitle')) {
-    //     labelStyle = labelStyle || {};
-    //     labelStyle.fontStyle = 'italic';
-    //   }
-    // }
     var tableModal, labelModal, filterModal, styleModal;
     if (this.props.layer instanceof ol.layer.Vector) {
       labelModal = (<LabelModal {...this.props} open={this.state.labelOpen} onRequestClose={this._closeLabel.bind(this)} inline={this.props.inlineDialogs} layer={this.props.layer} />);
@@ -642,10 +630,6 @@ class LayerListItem extends React.PureComponent {
       if (this.props.layer instanceof ol.layer.Tile && this.props.layer.getSource() instanceof ol.source.TileArcGISRest) {
         legend = <ArcGISRestLegend layer={this.props.layer} />;
       }
-    }
-    var leftCheckbox;
-    if (!input) {
-      //leftCheckbox = <Checkbox checked={this.state.checked} onCheck={this._handleChange.bind(this)} />;
     }
 
     var checked = <i className='fa fa-eye'></i>;
