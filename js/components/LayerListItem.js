@@ -604,17 +604,17 @@ class LayerListItem extends React.PureComponent {
       edit = (<Button className='layer-list-item-edit' onTouchTap={this._edit.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.editbuttonlabel)} ><EditIcon /></Button>);
     }
     var input, labelStyle;
-    if (layer.get('type') === 'base' && this.props.group && this.props.group.get('type') === 'base-group') {
-      input = (<RadioButton disabled={this.state.disabled} checked={this.state.checked} label={this.props.title} value={this.props.title} onCheck={this._handleChange.bind(this)} disableTouchRipple={true}/>);
-    } else {
-      if (this.props.handleResolutionChange && this.props.layer.get('type') !== 'base-group' && !this.calculateInRange()) {
-        labelStyle = this.props.labelStyleOutOfScale;
-      }
-      if (this.props.layer.get('emptyTitle')) {
-        labelStyle = labelStyle || {};
-        labelStyle.fontStyle = 'italic';
-      }
-    }
+    // if (layer.get('type') === 'base' && this.props.group && this.props.group.get('type') === 'base-group') {
+    //   input = (<RadioButton disabled={this.state.disabled} checked={this.state.checked} label={this.props.title} value={this.props.title} onCheck={this._handleChange.bind(this)} disableTouchRipple={true}/>);
+    // } else {
+    //   if (this.props.handleResolutionChange && this.props.layer.get('type') !== 'base-group' && !this.calculateInRange()) {
+    //     labelStyle = this.props.labelStyleOutOfScale;
+    //   }
+    //   if (this.props.layer.get('emptyTitle')) {
+    //     labelStyle = labelStyle || {};
+    //     labelStyle.fontStyle = 'italic';
+    //   }
+    // }
     var tableModal, labelModal, filterModal, styleModal;
     if (this.props.layer instanceof ol.layer.Vector) {
       labelModal = (<LabelModal {...this.props} open={this.state.labelOpen} onRequestClose={this._closeLabel.bind(this)} inline={this.props.inlineDialogs} layer={this.props.layer} />);
@@ -645,18 +645,27 @@ class LayerListItem extends React.PureComponent {
     }
     var leftCheckbox;
     if (!input) {
-      leftCheckbox = <Checkbox checked={this.state.checked} onCheck={this._handleChange.bind(this)} />;
+      //leftCheckbox = <Checkbox checked={this.state.checked} onCheck={this._handleChange.bind(this)} />;
     }
+
     var checked = <i className='fa fa-eye'></i>;
     var unchecked = <i className='fa fa-eye-slash'></i>;
-    // var visibility = <i className={classNames({'fa':true, 'fa-eye':!this.state.baseLayer, 'fa-eye-slash':this.state.baseLayer}, this.state.baseLayer)}  id={this.props.layer.get('id')} onClick={this._handleVisibility.bind(this)}></i>;
-    var visibility = <RadioButton checkedIcon={checked} uncheckedIcon={unchecked} style={{margin:'0', width:'auto'}} disabled={this.state.disabled} checked={this.state.checked} value={this.props.title} onCheck={this._handleVisibility.bind(this)} disableTouchRipple={true}/>;
+    var baseVisibility = <RadioButton
+      checkedIcon={checked}
+      uncheckedIcon={unchecked}
+      style={{margin:'0', width:'19px'}}
+      disabled={this.state.disabled}
+      checked={this.state.checked}
+      value={this.props.title}
+      onCheck={this._handleVisibility.bind(this)}
+      disableTouchRipple={true}/>;
 
-
-    var rightIconButton = <span className="fixedContainer"><i className="fa fa-crosshairs"></i><i className="fa fa-cog"></i></span>;
-    if (layer.get('type') === 'base' && this.props.group && this.props.group.get('type') === 'base-group') {
-      rightIconButton = <span className="fixedContainer">{visibility}<i className="fa fa-cog"></i></span>;
+    var visibility = <i className='fa fa-eye'></i>;
+    var rightIconButton = <span className="fixedContainer">{visibility}<i className="fa fa-crosshairs"></i><i className="fa fa-cog"></i></span>;
+    if (layer.get('type') === 'base') {
+      rightIconButton = <span className="fixedContainer">{baseVisibility}</span>;
     }
+
     return connectDragSource(connectDropTarget(
       <div>
         <ListItem
@@ -664,8 +673,7 @@ class LayerListItem extends React.PureComponent {
           autoGenerateNestedIndicator={this.props.collapsible}
           insetChildren={false}
           primaryTogglesNestedList={false}
-          leftCheckbox={leftCheckbox}
-          primaryText={<span className="statusIcons"><i className="fa fa-angle-down"></i><i className="ms ms-layers"></i><span>{this.props.title}</span></span>}
+          primaryText={<span className="statusIcons"><span>{this.props.title}</span></span>}
           rightIconButton={rightIconButton}
           nestedItems={this.props.nestedItems}
           initiallyOpen={true}>
