@@ -8,6 +8,6 @@ Javascript SDK based on React, OpenLayers 3 and Flux.
 
 For the user interface, [material-ui](http://www.material-ui.com/) is used.
 
-For example usage see [the corresponding apps repository](https://github.com/boundlessgeo/sdk-apps)
+For example usage see [the corresponding apps repository](https://github.com/boundlessgeo/sdk-apps) and the corresponding [demos](http://boundlessgeo.github.io/sdk-apps/index.html)
 
 For online docs see [HTML](https://boundlessgeo.github.io/sdk/book/index.html)
