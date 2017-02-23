@@ -373,7 +373,36 @@ class LayerListItem extends React.PureComponent {
   _changeResolution() {
     this.setState({resolution: this.props.map.getView().getResolution()});
   }
+  _handleVisibility(event){
+    console.log("new event");
+    this.state.baseLayer = this.props.layer.get('id');
+    var i, ii;
+    var baseLayers = [];
+    var forEachLayer = function(layers, layer) {
+      if (layer instanceof ol.layer.Group) {
+        layer.getLayers().forEach(function(groupLayer) {
+          forEachLayer(layers, groupLayer);
+        });
+      } else if (layer.get('type') === 'base') {
+        layers.push(layer);
+      }
+    };
+    forEachLayer(baseLayers, this.props.map.getLayerGroup());
+    for (i = 0, ii = baseLayers.length; i < ii; ++i) {
+      baseLayers[i].setVisible(false);
+    }
+    this.props.layer.setVisible(true);
+
+    if (this.props.layer instanceof ol.layer.Group) {
+      if (this.props.layer.get('type') !== 'base-group') {
+        this.props.layer.getLayers().forEach(function(child) {
+          child.setVisible(visible);
+        }, this);
+      }
+    }
+  }
   _handleChange(event) {
+    console.log("some event");
     var visible = event.target.checked;
     var i, ii;
     if (event.target.type === 'radio') {
@@ -615,6 +644,12 @@ class LayerListItem extends React.PureComponent {
     if (!input) {
       leftCheckbox = <Checkbox checked={this.state.checked} onCheck={this._handleChange.bind(this)} />;
     }
+    var visibility = <i className={classNames({'fa':true, 'fa-eye':true})} onClick={this._handleVisibility.bind(this)}></i>;
+
+    var rightIconButton = <span className="fixedContainer"><i className="fa fa-crosshairs"></i><i className="fa fa-cog"></i></span>;
+    if (layer.get('type') === 'base' && this.props.group && this.props.group.get('type') === 'base-group') {
+      rightIconButton = <span className="fixedContainer">{visibility}<i className="fa fa-cog"></i></span>;
+    }
     return connectDragSource(connectDropTarget(
       <div>
         <ListItem
@@ -624,7 +659,7 @@ class LayerListItem extends React.PureComponent {
           primaryTogglesNestedList={false}
           leftCheckbox={leftCheckbox}
           primaryText={<span className="statusIcons"><i className="fa fa-angle-down"></i><i className="ms ms-layers"></i><span>{this.props.title}</span></span>}
-          rightIconButton={<span className="fixedContainer"><i className="fa fa-eye"></i><i className="fa fa-crosshairs"></i><i className="fa fa-cog"></i></span>}
+          rightIconButton={rightIconButton}
           nestedItems={this.props.nestedItems}
           initiallyOpen={true}>
         </ListItem>
