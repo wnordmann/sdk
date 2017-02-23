@@ -373,11 +373,13 @@ class LayerListItem extends React.PureComponent {
   _changeResolution() {
     this.setState({resolution: this.props.map.getView().getResolution()});
   }
+
   _handleVisibility(event){
-    console.log("new event");
-    this.state.baseLayer = this.props.layer.get('id');
+    // this.state.baseLayer = this.props.layer.get('id');
+    this.setState({baseLayer:this.props.layer.get('id')});
     var i, ii;
     var baseLayers = [];
+
     var forEachLayer = function(layers, layer) {
       if (layer instanceof ol.layer.Group) {
         layer.getLayers().forEach(function(groupLayer) {
@@ -387,6 +389,7 @@ class LayerListItem extends React.PureComponent {
         layers.push(layer);
       }
     };
+
     forEachLayer(baseLayers, this.props.map.getLayerGroup());
     for (i = 0, ii = baseLayers.length; i < ii; ++i) {
       baseLayers[i].setVisible(false);
@@ -644,7 +647,11 @@ class LayerListItem extends React.PureComponent {
     if (!input) {
       leftCheckbox = <Checkbox checked={this.state.checked} onCheck={this._handleChange.bind(this)} />;
     }
-    var visibility = <i className={classNames({'fa':true, 'fa-eye':true})} onClick={this._handleVisibility.bind(this)}></i>;
+    var checked = <i className='fa fa-eye'></i>;
+    var unchecked = <i className='fa fa-eye-slash'></i>;
+    // var visibility = <i className={classNames({'fa':true, 'fa-eye':!this.state.baseLayer, 'fa-eye-slash':this.state.baseLayer}, this.state.baseLayer)}  id={this.props.layer.get('id')} onClick={this._handleVisibility.bind(this)}></i>;
+    var visibility = <RadioButton checkedIcon={checked} uncheckedIcon={unchecked} style={{margin:'0', width:'auto'}} disabled={this.state.disabled} checked={this.state.checked} value={this.props.title} onCheck={this._handleVisibility.bind(this)} disableTouchRipple={true}/>;
+
 
     var rightIconButton = <span className="fixedContainer"><i className="fa fa-crosshairs"></i><i className="fa fa-cog"></i></span>;
     if (layer.get('type') === 'base' && this.props.group && this.props.group.get('type') === 'base-group') {
