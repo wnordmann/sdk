@@ -22,6 +22,7 @@ import Paper from 'material-ui/Paper';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import {ListItem} from 'material-ui/List';
+import Divider from 'material-ui';
 
 const messages = defineMessages({
   header: {
@@ -186,8 +187,8 @@ class PointSymbolizerEditor extends React.PureComponent {
       return (<MenuItem key={idx} value={symbol} primaryText={symbol} />);
     });
     return (
-      <Paper zDepth={0} className={classNames('sdk-component point-symbolizer-editor', this.props.className)}>
-        <Subheader>{formatMessage(messages.header)}</Subheader>
+      <Paper zDepth={0} className={classNames('sdk-component point-symbolizer-editor style-contentContainer', this.props.className)}>
+        <Subheader className="style-listHeader">{formatMessage(messages.header)}</Subheader>
         <ListItem innerDivStyle={ listStyle } insetChildren={false}>
           <SelectField fullWidth={true} style={this.state.externalGraphic ? {display: 'none'} : undefined} floatingLabelText={formatMessage(messages.symboltype)} value={this.state.symbolType} onChange={this._onChangeSymbol.bind(this)}>
             {options}

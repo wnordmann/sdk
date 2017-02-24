@@ -23,8 +23,10 @@ import SLDService from '../services/SLDService';
 import OpenLayersService from '../services/OpenLayersService';
 import RESTService from '../services/RESTService';
 import Snackbar from 'material-ui/Snackbar';
+import Divider from 'material-ui/Divider';
 import FilterService from '../services/FilterService';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import './StyleModal.css';
 
 const messages = defineMessages({
   title: {
@@ -45,12 +47,12 @@ const messages = defineMessages({
   savebutton: {
     id: 'stylemodal.savebutton',
     description: 'Text for the save button',
-    defaultMessage: 'Save'
+    defaultMessage: 'SAVE'
   },
   addrulebutton: {
     id: 'stylemodal.addrulebutton',
     description: 'Text for the add rule button',
-    defaultMessage: 'Add'
+    defaultMessage: 'ADD'
   },
   addrulebuttontitle: {
     id: 'stylemodal.addrulebuttontitle',
@@ -60,7 +62,7 @@ const messages = defineMessages({
   removerulebutton: {
     id: 'stylemodal.removerulebutton',
     description: 'Text for the remove rule button',
-    defaultMessage: 'Remove'
+    defaultMessage: 'REMOVE'
   },
   removerulebuttontitle: {
     id: 'stylemodal.removerulebuttontitle',
@@ -289,7 +291,7 @@ class StyleModal extends React.PureComponent {
       // only support a single symbolizer for now
       var ruleObj = this._getRuleByName(rule.name);
       var editor = (<RuleEditor onRemove={this._removeRule.bind(this, rule.name)} {...this.props} geometryType={this.state.geometryType} key={key} initialState={ruleObj} onChange={this._onChange.bind(this, rule.name)} attributes={this.state.attributes} />);
-      return (<ListItem onNestedListToggle={this._resizeDialog.bind(this)} nestedItems={[editor]} primaryTogglesNestedList={true} insetChildren={false} key={key} primaryText={rule.name} />);
+      return (<span><ListItem onNestedListToggle={this._resizeDialog.bind(this)} nestedItems={[editor]} primaryTogglesNestedList={true}  key={key} primaryText={rule.name} /><Divider /></span>);
     }, this);
     var actions = [
       <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />,

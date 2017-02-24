@@ -21,12 +21,13 @@ import PointSymbolizerEditor from './PointSymbolizerEditor';
 import FilterEditor from './FilterEditor';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
 import {ListItem} from 'material-ui/List';
+import {red500, yellow500, blue500} from 'material-ui/styles/colors';
 
 const messages = defineMessages({
   removetext: {
     id: 'ruleeditor.removetext',
     description: 'Text for remove list item',
-    defaultMessage: 'Remove'
+    defaultMessage: 'REMOVE'
   },
   titlelabel: {
     id: 'ruleeditor.titlelabel',
@@ -109,6 +110,11 @@ class RuleEditor extends React.PureComponent {
     const boxStyle = {
       marginLeft: 0
     };
+    const divStyle = {
+      color: 'red',
+    };
+
+
     var items = [];
     var symbol = this._getSymbolizer();
     if (this.props.geometryType === 'Polygon') {
@@ -121,7 +127,7 @@ class RuleEditor extends React.PureComponent {
     var textSym = this._getTextSymbolizer();
     items.push(<LabelEditor intl={this.props.intl} key='label' attributes={this.props.attributes} onChange={this.props.onChange} initialFontColor={textSym ? textSym.fontColor : undefined} initialFontSize={textSym ? textSym.fontSize : undefined} initialLabelAttribute={textSym ? textSym.labelAttribute : undefined} />);
     items.push(<FilterEditor intl={this.props.intl} key='filter' onChange={this.props.onChange} initialExpression={this.props.initialState ? this.props.initialState.expression : undefined} />);
-    items.push(<ListItem key='delete' onTouchTap={this.props.onRemove} primaryText={formatMessage(messages.removetext)} rightIcon={<ActionDelete />} innerDivStyle={ boxStyle } />);
+    items.push(<ListItem key='delete' style={divStyle} onTouchTap={this.props.onRemove} primaryText={formatMessage(messages.removetext)} rightIcon={<ActionDelete color={red500} />}  />);
     return (<Paper className={classNames('sdk-component rule-editor', this.props.className)} zDepth={0}>{items}</Paper>);
   }
 }

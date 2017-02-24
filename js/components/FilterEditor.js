@@ -115,10 +115,10 @@ class FilterEditor extends React.PureComponent {
       errorText = formatMessage(messages.errortext);
     }
     return (
-      <Paper zDepth={0}>
-        <Subheader>{formatMessage(messages.filterlabel)}</Subheader>
+      <Paper className='style-contentContainer' zDepth={0}>
+        <Subheader className='style-listHeader'>{formatMessage(messages.filterlabel)}</Subheader>
         <ListItem innerDivStyle={ listStyle }>
-          <TextField fullWidth={true} className={classNames('sdk-component filter-editor', this.props.className)} errorText={errorText} hintText={formatMessage(messages.filterplaceholder)} defaultValue={this.state.expression} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} />
+          <TextField floatingLabelFixed={true} fullWidth={true} className={classNames('sdk-component filter-editor', this.props.className)} errorText={errorText} hintText={formatMessage(messages.filterplaceholder)} defaultValue={this.state.expression} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} />
         </ListItem>
       </Paper>
     );

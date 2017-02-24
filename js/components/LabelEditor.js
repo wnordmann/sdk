@@ -145,14 +145,14 @@ class LabelEditor extends React.PureComponent {
       attributeItems.push(<MenuItem key={i + 1} value={attribute} primaryText={attribute} />);
     }
     return (
-      <Paper zDepth={0} className={classNames('sdk-component label-editor', this.props.className)}>
-        <Subheader>{formatMessage(messages.header)}</Subheader>
-        <ListItem innerDivStyle={ listStyle }>
-          <SelectField fullWidth={true} floatingLabelText={formatMessage(messages.attributelabel)} hintText={formatMessage(messages.emptytext)} value={this.state.labelAttribute} onChange={this._onItemChange.bind(this)}>
+      <Paper zDepth={0} className={classNames('sdk-component label-editor style-contentContainer', this.props.className)}>
+        <Subheader className='style-listHeader'>{formatMessage(messages.header)}</Subheader>
+        <ListItem insetChildren={true} innerDivStyle={ listStyle }>
+          <SelectField floatingLabelFixed={true} fullWidth={true} floatingLabelText={formatMessage(messages.attributelabel)} hintText={formatMessage(messages.emptytext)} value={this.state.labelAttribute} onChange={this._onItemChange.bind(this)}>
             {attributeItems}
           </SelectField>
         </ListItem>
-        <ListItem innerDivStyle={ listStyle }>
+        <ListItem insetChildren={true} innerDivStyle={ listStyle }>
           <TextField fullWidth={true} floatingLabelFixed={true} defaultValue={this.state.fontSize} floatingLabelText={formatMessage(messages.sizelabel)} onChange={this._onChangeFontSize.bind(this)} />
         </ListItem>
         <ListItem innerDivStyle={ boxStyle } primaryText={formatMessage(messages.fillcolorlabel)} rightIconButton={ <ColorPicker onChange={this._onChangeFill.bind(this)} initialColor={this.state.fontColor} /> } />
