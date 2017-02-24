@@ -15,6 +15,7 @@ import ol from 'openlayers';
 import Dialog from 'material-ui/Dialog';
 import Button from './Button';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import BaseMapConfigService from '../services/BaseMapConfigService';
 import {intlShape, defineMessages, injectIntl} from 'react-intl';
 import {GridList, GridTile} from 'material-ui/GridList';
 
@@ -108,29 +109,10 @@ class BaseMapModal extends React.Component {
   open() {
     this.setState({open: true});
   }
-  _createSource(config) {
-    if (config.standard === 'XYZ') {
-      return new ol.source.XYZ({
-        url: config.endpoint,
-        attributions: config.attribution ? [
-          new ol.Attribution({html: config.attribution})
-        ] : undefined
-      });
-    } else if (config.standard === 'OSM') {
-      return new ol.source.OSM();
-    }
-  }
-  _createLayer(config) {
-    return new ol.layer.Tile({
-      type: 'base',
-      title: config.description,
-      source: this._createSource(config)
-    });
-  }
   _tileClick(tileService) {
     var foundGroup = false;
     var map = this.props.map;
-    var olLayer = this._createLayer(tileService);
+    var olLayer = BaseMapConfigService.createLayer(tileService);
     map.getLayers().forEach(function(lyr) {
       if (foundGroup === false && lyr.get('type') === 'base-group') {
         foundGroup = true;
