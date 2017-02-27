@@ -637,6 +637,7 @@ class LayerListItem extends React.PureComponent {
     var downArrow = <i className="fa fa-angle-down"></i>;
     var sideArrow = <i className="fa fa-angle-right"></i>;
     var leftIcon = this.state.open ? downArrow : sideArrow;
+
     var checked = <i className='fa fa-eye'></i>;
     var unchecked = <i className='fa fa-eye-slash'></i>;
     var baseVisibility = <RadioButton
@@ -662,7 +663,7 @@ class LayerListItem extends React.PureComponent {
           className={classNames({'sdk-component': true, 'layer-list-item': true, 'menuItem': true}, this.props.className)}
           autoGenerateNestedIndicator={this.props.collapsible}
           insetChildren={false}
-          autoGenerateNestedIndicator={true}
+          autoGenerateNestedIndicator={false}
           primaryText={<span className="statusIcons"><span>{this.props.title}</span></span>}
           rightIconButton={rightIconButton}
           leftIcon={leftIcon}
