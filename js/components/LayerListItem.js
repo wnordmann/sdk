@@ -404,8 +404,11 @@ class LayerListItem extends React.PureComponent {
       }
     }
   }
+
+  _toggleNested(event){
+    this.setState({open:!this.state.open})
+  }
   _handleChange(event) {
-    console.log("some event");
     var visible = event.target.checked;
     var i, ii;
     if (event.target.type === 'radio') {
@@ -631,7 +634,9 @@ class LayerListItem extends React.PureComponent {
         legend = <ArcGISRestLegend layer={this.props.layer} />;
       }
     }
-
+    var downArrow = <i className="fa fa-angle-down"></i>;
+    var sideArrow = <i className="fa fa-angle-right"></i>;
+    var leftIcon = this.state.open ? downArrow : sideArrow;
     var checked = <i className='fa fa-eye'></i>;
     var unchecked = <i className='fa fa-eye-slash'></i>;
     var baseVisibility = <RadioButton
@@ -644,10 +649,11 @@ class LayerListItem extends React.PureComponent {
       onCheck={this._handleVisibility.bind(this)}
       disableTouchRipple={true}/>;
 
-    var visibility = <i className='fa fa-eye'></i>;
+    var visibility = <i className='fa fa-eye' onClick={this._handleVisibility.bind(this)}> </i>;
     var rightIconButton = <span className="fixedContainer">{visibility}<i className="fa fa-crosshairs"></i><i className="fa fa-cog"></i></span>;
     if (layer.get('type') === 'base') {
       rightIconButton = <span className="fixedContainer">{baseVisibility}</span>;
+      leftIcon = null;
     }
 
     return connectDragSource(connectDropTarget(
@@ -656,11 +662,13 @@ class LayerListItem extends React.PureComponent {
           className={classNames({'sdk-component': true, 'layer-list-item': true, 'menuItem': true}, this.props.className)}
           autoGenerateNestedIndicator={this.props.collapsible}
           insetChildren={false}
-          primaryTogglesNestedList={false}
+          autoGenerateNestedIndicator={true}
           primaryText={<span className="statusIcons"><span>{this.props.title}</span></span>}
           rightIconButton={rightIconButton}
+          leftIcon={leftIcon}
           nestedItems={this.props.nestedItems}
-          initiallyOpen={true}>
+          open={this.state.open}
+          onClick={this._toggleNested.bind(this)}>
         </ListItem>
         <div style={{paddingLeft: 72}}>
           {legend}
