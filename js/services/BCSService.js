@@ -13,7 +13,7 @@
 import util from '../util';
 import URL from 'url-parse';
 
-const url = 'http://api.dev.boundlessgeo.io/v1/basemaps/';
+const url = 'http://api.boundlessgeo.io/v1/basemaps/';
 
 class BCSService {
   getTileServices(apiKey, callback) {
