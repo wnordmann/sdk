@@ -21,7 +21,7 @@ import PointSymbolizerEditor from './PointSymbolizerEditor';
 import FilterEditor from './FilterEditor';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
 import {ListItem} from 'material-ui/List';
-import {red500, yellow500, blue500} from 'material-ui/styles/colors';
+import {red500} from 'material-ui/styles/colors';
 
 const messages = defineMessages({
   removetext: {
@@ -107,11 +107,8 @@ class RuleEditor extends React.PureComponent {
   }
   render() {
     const {formatMessage} = this.props.intl;
-    const boxStyle = {
-      marginLeft: 0
-    };
     const divStyle = {
-      color: 'red',
+      color: 'red'
     };
 
 

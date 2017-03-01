@@ -10,7 +10,7 @@
   },
   "scripts": {
     "build:babel": "NODE_ENV=release babel ./js --out-dir ./release",
-    "start": "parallelshell 'npm run babel' 'npm run watch:css'",
+    "start": "parallelshell 'npm run build:copy:css' 'npm run babel' 'npm run watch:css'",
     "watch:css": "onchange 'js/components/*.css' -- npm run build:copy:css",
     "babel": "babel --watch ./js --out-dir ./release",
     "build:copy-files": "babel-node ./scripts/copy-files.js",

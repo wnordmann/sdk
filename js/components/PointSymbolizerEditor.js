@@ -22,7 +22,6 @@ import Paper from 'material-ui/Paper';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import {ListItem} from 'material-ui/List';
-import Divider from 'material-ui';
 
 const messages = defineMessages({
   header: {
