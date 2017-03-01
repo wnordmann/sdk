@@ -313,6 +313,7 @@ class LayerListItem extends React.PureComponent {
       filterOpen: false,
       labelOpen: false,
       tableOpen: false,
+      open: true,
       styleOpen: false,
       checked: props.layer.getVisible()
     };
@@ -375,10 +376,9 @@ class LayerListItem extends React.PureComponent {
   }
 
   _handleVisibility(event){
-    // this.state.baseLayer = this.props.layer.get('id');
-    this.setState({baseLayer:this.props.layer.get('id')});
     var i, ii;
     var baseLayers = [];
+    var visible = event.target.className.indexOf('fa-eye-slash') > 0;
 
     var forEachLayer = function(layers, layer) {
       if (layer instanceof ol.layer.Group) {
@@ -390,18 +390,31 @@ class LayerListItem extends React.PureComponent {
       }
     };
 
-    forEachLayer(baseLayers, this.props.map.getLayerGroup());
-    for (i = 0, ii = baseLayers.length; i < ii; ++i) {
-      baseLayers[i].setVisible(false);
+    if (this.props.layer instanceof ol.layer.Vector) {
+      this.props.layer.setVisible(visible);
     }
-    this.props.layer.setVisible(true);
-
-    if (this.props.layer instanceof ol.layer.Group) {
-      if (this.props.layer.get('type') !== 'base-group') {
-        this.props.layer.getLayers().forEach(function(child) {
-          child.setVisible(visible);
-        }, this);
+    else if (event.target.type === 'radio' ) {
+      visible = event.target.checked;
+      var layers = this.props.map.getLayers();
+      forEachLayer(baseLayers, this.props.map.getLayerGroup());
+      for (i = 0, ii = baseLayers.length; i < ii; ++i) {
+        baseLayers[i].setVisible(false);
       }
+      layers.forEach(function(l){
+        if(l instanceof ol.layer.Group)
+        {
+          l.setVisible(true);
+        }
+      })
+      this.props.layer.setVisible(visible);
+    }
+    else if (this.props.layer instanceof ol.layer.Group ) {
+      forEachLayer(baseLayers, this.props.map.getLayerGroup());
+      for (i = 0, ii = baseLayers.length; i < ii; ++i) {
+        baseLayers[i].setVisible(false);
+      }
+      this.props.layer.setVisible(visible);
+      baseLayers[0].setVisible(visible)
     }
   }
 
@@ -411,6 +424,7 @@ class LayerListItem extends React.PureComponent {
   _handleChange(event) {
     var visible = event.target.checked;
     var i, ii;
+
     if (event.target.type === 'radio') {
       var forEachLayer = function(layers, layer) {
         if (layer instanceof ol.layer.Group) {
@@ -634,12 +648,12 @@ class LayerListItem extends React.PureComponent {
         legend = <ArcGISRestLegend layer={this.props.layer} />;
       }
     }
-    var downArrow = <i className="fa fa-angle-down"></i>;
-    var sideArrow = <i className="fa fa-angle-right"></i>;
+    var downArrow = <i className="fa fa-angle-down" onClick={this._toggleNested.bind(this)}></i>;
+    var sideArrow = <i className="fa fa-angle-right" onClick={this._toggleNested.bind(this)}></i>;
     var leftIcon = this.state.open ? downArrow : sideArrow;
 
-    var checked = <i className='fa fa-eye'></i>;
-    var unchecked = <i className='fa fa-eye-slash'></i>;
+    var checked = <i className='fa fa-eye' onClick={this._handleVisibility.bind(this)}></i>;
+    var unchecked = <i className='fa fa-eye-slash' onClick={this._handleVisibility.bind(this)}></i>;
     var baseVisibility = <RadioButton
       checkedIcon={checked}
       uncheckedIcon={unchecked}
@@ -647,10 +661,11 @@ class LayerListItem extends React.PureComponent {
       disabled={this.state.disabled}
       checked={this.state.checked}
       value={this.props.title}
-      onCheck={this._handleVisibility.bind(this)}
+      onClick={this._handleVisibility.bind(this)}
       disableTouchRipple={true}/>;
 
-    var visibility = <i className='fa fa-eye' onClick={this._handleVisibility.bind(this)}> </i>;
+    var visibility = this.state.checked ? checked : unchecked;
+
     var rightIconButton = <span className="fixedContainer">{visibility}<i className="fa fa-crosshairs"></i><i className="fa fa-cog"></i></span>;
     if (layer.get('type') === 'base') {
       rightIconButton = <span className="fixedContainer">{baseVisibility}</span>;
@@ -668,8 +683,7 @@ class LayerListItem extends React.PureComponent {
           rightIconButton={rightIconButton}
           leftIcon={leftIcon}
           nestedItems={this.props.nestedItems}
-          open={this.state.open}
-          onClick={this._toggleNested.bind(this)}>
+          open={this.state.open}>
         </ListItem>
         <div style={{paddingLeft: 72}}>
           {legend}
