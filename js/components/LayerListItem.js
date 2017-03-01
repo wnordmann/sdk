@@ -348,23 +348,26 @@ class LayerListItem extends React.PureComponent {
       this.props.map.getView().un('change:resolution', this._changeResolution, this);
     }
   }
-  static formats = {
-    GeoJSON: {
-      format: new ol.format.GeoJSON(),
-      mimeType: 'text/json',
-      extension: 'geojson'
-    },
-    KML: {
-      format: new ol.format.KML(),
-      mimeType: 'application/vnd.google-earth.kml+xml',
-      extension: 'kml'
-    },
-    GPX: {
-      format: new ol.format.GPX(),
-      mimeType: 'application/gpx+xml',
-      extension: 'gpx'
+  getFormats(format){
+    var formats = {
+      GeoJSON: {
+        format: new ol.format.GeoJSON(),
+        mimeType: 'text/json',
+        extension: 'geojson'
+      },
+      KML: {
+        format: new ol.format.KML(),
+        mimeType: 'application/vnd.google-earth.kml+xml',
+        extension: 'kml'
+      },
+      GPX: {
+        format: new ol.format.GPX(),
+        mimeType: 'application/gpx+xml',
+        extension: 'gpx'
+      }
     }
-  };
+    return formats[format];
+  }
   _changeGroupVisible(evt) {
     this.setState({checked: evt.target.getVisible()});
   }
@@ -453,7 +456,7 @@ class LayerListItem extends React.PureComponent {
     }
   }
   _download() {
-    var formatInfo = this.formats[this.props.downloadFormat];
+    var formatInfo = this.getFormats(this.props.downloadFormat);
     var format = formatInfo.format;
     var layer = this.props.layer;
     var source = layer.getSource();
@@ -597,11 +600,13 @@ class LayerListItem extends React.PureComponent {
     }
     var download;
     if (layer instanceof ol.layer.Vector && this.props.showDownload) {
-      download = (<Button className='layer-list-item-download' onTouchTap={this._download.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.downloadbuttonlabel)}><DownloadIcon /></Button>);
+      // download = (<Button className='layer-list-item-download' onTouchTap={this._download.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.downloadbuttonlabel)}><DownloadIcon /></Button>);
+      download = (<i className='fa fa-download' onTouchTap={this._download.bind(this)} tooltipPosition='top' tooltip={formatMessage(messages.downloadbuttonlabel)}></i>);
     }
     var filter;
     if (layer instanceof ol.layer.Vector && this.props.allowFiltering) {
-      filter = (<Button className='layer-list-item-filter' onTouchTap={this._filter.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.filterbuttonlabel)}><FilterIcon /></Button>);
+      // filter = (<Button className='layer-list-item-filter' onTouchTap={this._filter.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.filterbuttonlabel)}><FilterIcon /></Button>);
+      filter = (<i className='fa fa-filter' onTouchTap={this._filter.bind(this)} tooltipPosition='top' tooltip={formatMessage(messages.filterbuttonlabel)}></i>);
     }
     var label;
     if (layer instanceof ol.layer.Vector && this.props.allowLabeling) {
@@ -666,7 +671,7 @@ class LayerListItem extends React.PureComponent {
 
     var visibility = this.state.checked ? checked : unchecked;
 
-    var rightIconButton = <span className="fixedContainer">{visibility}<i className="fa fa-crosshairs"></i><i className="fa fa-cog"></i></span>;
+    var rightIconButton = <span className="fixedContainer">{filter}{download}{visibility}<i className="fa fa-crosshairs" onTouchTap={this._zoomTo.bind(this)}></i><i className="fa fa-cog"></i></span>;
     if (layer.get('type') === 'base') {
       rightIconButton = <span className="fixedContainer">{baseVisibility}</span>;
       leftIcon = null;
@@ -688,10 +693,7 @@ class LayerListItem extends React.PureComponent {
         <div style={{paddingLeft: 72}}>
           {legend}
           {opacity}
-          {zoomTo}
           {table}
-          {download}
-          {filter}
           {label}
           {styling}
           {remove}
