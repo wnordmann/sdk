@@ -13,12 +13,8 @@ describe('FilterEditor', function() {
     var onChange = function(result) {
     };
     var editor = ReactDOM.render((
-      <FilterEditor onChange={onChange} intl={intl} />
+      <FilterEditor attributes={['foo']} onChange={onChange} intl={intl} />
     ), container);
-    editor._setQueryFilter({target: {value: 'foo = "bar"'}});
-    assert.equal(editor.state.hasError, true);
-    editor._setQueryFilter({target: {value: 'foo == "bar"'}});
-    assert.equal(editor.state.hasError, false);
     ReactDOM.unmountComponentAtNode(container);
   });
 

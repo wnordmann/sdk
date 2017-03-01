@@ -42,8 +42,7 @@ const comparisonOps = {
   '>=': 'PropertyIsGreaterThanOrEqualTo',
   '<=': 'PropertyIsLessThanOrEqualTo',
   '>' : 'PropertyIsGreaterThan',
-  '<' : 'PropertyIsLessThan',
-  'BETWEEN': 'PropertyIsBetween'
+  '<' : 'PropertyIsLessThan'
 };
 
 class SLDService {
@@ -101,7 +100,7 @@ class SLDService {
         value = expr.value.content[0];
       }
     }
-    if (comparisonOps[operator] === 'PropertyIsBetween') {
+/*    if (comparisonOps[operator] === 'PropertyIsBetween') {
       name = op.value.expression.value.content[0];
       var lower = op.value.lowerBoundary.expression.value.content[0];
       var upper = op.value.upperBoundary.expression.value.content[0];
@@ -110,19 +109,22 @@ class SLDService {
       if (name !== undefined && value !== undefined && operator !== undefined) {
         return name + ' ' + operator + ' ' + value;
       }
-    }
+    }*/
+    return [operator, name, value];
   }
   parseLogicOps(logicOps) {
     var expressions = [];
     // TODO other logical operators
     if (logicOps.name.localPart === 'And') {
-      for (var i = 0, ii = logicOps.value.ops.length; i < ii; ++i) {
-        var op = logicOps.value.ops[i];
-        // TODO this can be another logical as well
-        expressions.push(this.parseComparisonOps(op));
-      }
-      return expressions.join(' ' + logicOps.name.localPart.toLowerCase() + ' ');
+      expressions.push('all');
+    } else if (logicOps.name.localPart === 'Or') {
+      expressions.push('any');
     }
+    for (var i = 0, ii = logicOps.value.ops.length; i < ii; ++i) {
+      var op = logicOps.value.ops[i];
+      expressions.push(this.parseComparisonOps(op));
+    }
+    return expressions;
   }
   filterToExpression(filter) {
     if (filter.comparisonOps) {
@@ -579,22 +581,20 @@ class SLDService {
     return result;
   }
   expressionToFilter(expression) {
-    // TODO handle more
-    if (expression.indexOf('and') !== -1) {
-      var expressions = expression.split(' and ');
+    if (expression[0] === 'all' || expression[0] === 'any') {
       var result = {
         logicOps: {
           name: {
             namespaceURI: ogcNamespace,
-            localPart: 'And'
+            localPart: expression[0] === 'all'  ? 'And' : 'Or'
           },
           value: {
             ops: []
           }
         }
       };
-      for (var i = 0, ii = expressions.length; i < ii; ++i) {
-        result.logicOps.value.ops.push(this.expressionToComparisonOp(expressions[i]).comparisonOps);
+      for (var i = 1, ii = expression.length; i < ii; ++i) {
+        result.logicOps.value.ops.push(this.expressionToComparisonOp(expression[i]).comparisonOps);
       }
       return result;
     } else {
@@ -602,17 +602,10 @@ class SLDService {
     }
   }
   expressionToComparisonOp(expression) {
-    // TODO support more (complex) filters, maybe using jison
     var operator, property, value;
-    for (var key in comparisonOps) {
-      var idx = expression.indexOf(key);
-      if (idx !== -1) {
-        operator = comparisonOps[key];
-        property = expression.substring(0, idx).trim();
-        value = expression.substring(idx + key.length).replace(/"/g, '').trim();
-        break;
-      }
-    }
+    operator = comparisonOps[expression[0]];
+    property = expression[1];
+    value = expression[2];
     if (operator) {
       var result = {
         comparisonOps: {
@@ -622,62 +615,26 @@ class SLDService {
           }
         }
       };
-      if (operator === 'PropertyIsBetween') {
-        var values = value.split(' AND ');
-        result.comparisonOps.value = {
-          expression: {
-            name: {
-              namespaceURI: ogcNamespace,
-              localPart: 'PropertyName'
-            },
-            value: {
-              content: [property]
-            }
+      // TODO add back PropertyIsBetween
+      result.comparisonOps.value = {
+        expression: [{
+          name: {
+            namespaceURI: ogcNamespace,
+            localPart: 'PropertyName'
           },
-          lowerBoundary: {
-            expression: {
-              name: {
-                namespaceURI: ogcNamespace,
-                localPart: 'Literal'
-              },
-              value: {
-                content: [values[0]]
-              }
-            }
-          },
-          upperBoundary: {
-            expression: {
-              name: {
-                namespaceURI: ogcNamespace,
-                localPart: 'Literal'
-              },
-              value: {
-                content: [values[1]]
-              }
-            }
+          value: {
+            content: [property]
           }
-        };
-      } else {
-        result.comparisonOps.value = {
-          expression: [{
-            name: {
-              namespaceURI: ogcNamespace,
-              localPart: 'PropertyName'
-            },
-            value: {
-              content: [property]
-            }
-          }, {
-            name: {
-              namespaceURI: ogcNamespace,
-              localPart: 'Literal'
-            },
-            value: {
-              content: [String(value)]
-            }
-          }]
-        };
-      }
+        }, {
+          name: {
+            namespaceURI: ogcNamespace,
+            localPart: 'Literal'
+          },
+          value: {
+            content: [String(value)]
+          }
+        }]
+      };
       return result;
     }
   }
