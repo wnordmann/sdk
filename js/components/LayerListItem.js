@@ -596,17 +596,18 @@ class LayerListItem extends React.PureComponent {
     }
     var zoomTo;
     if (layer.get('type') !== 'base' && layer.get('type') !== 'base-group' && ((source && source.getExtent) || layer.get('EX_GeographicBoundingBox')) && this.props.showZoomTo) {
-      zoomTo = (<Button className='layer-list-item-zoom' onTouchTap={this._zoomTo.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.zoombuttonlabel)}><ZoomInIcon /></Button>);
+      // zoomTo = (<Button className='layer-list-item-zoom' onTouchTap={this._zoomTo.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.zoombuttonlabel)}><ZoomInIcon /></Button>);
+      zoomTo = <i className="fa fa-crosshairs" onTouchTap={this._zoomTo.bind(this)}></i>;
     }
     var download;
     if (layer instanceof ol.layer.Vector && this.props.showDownload) {
       // download = (<Button className='layer-list-item-download' onTouchTap={this._download.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.downloadbuttonlabel)}><DownloadIcon /></Button>);
-      download = (<i className='fa fa-download' onTouchTap={this._download.bind(this)} tooltipPosition='top' tooltip={formatMessage(messages.downloadbuttonlabel)}></i>);
+      download = (<i className='fa fa-download' onTouchTap={this._download.bind(this)}></i>);
     }
     var filter;
     if (layer instanceof ol.layer.Vector && this.props.allowFiltering) {
       // filter = (<Button className='layer-list-item-filter' onTouchTap={this._filter.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.filterbuttonlabel)}><FilterIcon /></Button>);
-      filter = (<i className='fa fa-filter' onTouchTap={this._filter.bind(this)} tooltipPosition='top' tooltip={formatMessage(messages.filterbuttonlabel)}></i>);
+      filter = (<i className='fa fa-filter' onTouchTap={this._filter.bind(this)} ></i>);
     }
     var label;
     if (layer instanceof ol.layer.Vector && this.props.allowLabeling) {
@@ -615,11 +616,13 @@ class LayerListItem extends React.PureComponent {
     var styling;
     var canStyle = layer.get('wfsInfo') && this.props.allowStyling;
     if (canStyle) {
-      styling = (<Button className='layer-list-item-style' onTouchTap={this._style.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.stylingbuttonlabel)} ><StyleIcon /></Button>);
+      // styling = (<Button className='layer-list-item-style' onTouchTap={this._style.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.stylingbuttonlabel)} ><StyleIcon /></Button>);
+      styling = (<i className='ms ms-style' onTouchTap={this._style.bind(this)} tooltipPosition='top'  tooltip={formatMessage(messages.stylingbuttonlabel)}> </i>);
     }
     var remove;
     if (this.props.allowRemove && layer.get('type') !== 'base' && layer.get('isRemovable') === true) {
-      remove = (<Button className='layer-list-item-remove' onTouchTap={this._remove.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.removebuttonlabel)} ><DeleteIcon /></Button>);
+      // remove = (<Button className='layer-list-item-remove' onTouchTap={this._remove.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.removebuttonlabel)} ><DeleteIcon /></Button>);
+      remove = (<i className='fa fa-trash' onTouchTap={this._remove.bind(this)} tooltipPosition='top' tooltip={formatMessage(messages.removebuttonlabel)} ></i>);
     }
     var edit;
     if (this.props.allowEditing && layer.get('isWFST') === true) {
@@ -671,7 +674,7 @@ class LayerListItem extends React.PureComponent {
 
     var visibility = this.state.checked ? checked : unchecked;
 
-    var rightIconButton = <span className="fixedContainer">{filter}{download}{visibility}<i className="fa fa-crosshairs" onTouchTap={this._zoomTo.bind(this)}></i><i className="fa fa-cog"></i></span>;
+    var rightIconButton = <span className="fixedContainer">{filter}{download}{visibility}{zoomTo}{styling}{remove}<i className="fa fa-cog"></i></span>;
     if (layer.get('type') === 'base') {
       rightIconButton = <span className="fixedContainer">{baseVisibility}</span>;
       leftIcon = null;
@@ -695,8 +698,6 @@ class LayerListItem extends React.PureComponent {
           {opacity}
           {table}
           {label}
-          {styling}
-          {remove}
           {edit}
           <span>
             {filterModal}
