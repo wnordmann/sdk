@@ -26,6 +26,7 @@ import Snackbar from 'material-ui/Snackbar';
 import Divider from 'material-ui/Divider';
 import FilterService from '../services/FilterService';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import NewRuleModal from './NewRuleModal';
 import './StyleModal.css';
 
 const messages = defineMessages({
@@ -58,21 +59,6 @@ const messages = defineMessages({
     id: 'stylemodal.addrulebuttontitle',
     description: 'Title for the add rule button',
     defaultMessage: 'Add New Rule'
-  },
-  removerulebutton: {
-    id: 'stylemodal.removerulebutton',
-    description: 'Text for the remove rule button',
-    defaultMessage: 'REMOVE'
-  },
-  removerulebuttontitle: {
-    id: 'stylemodal.removerulebuttontitle',
-    description: 'Text for the remove rule button',
-    defaultMessage: 'Remove Selected Rule'
-  },
-  rulelabel: {
-    id: 'stylemodal.rulelabel',
-    description: 'Label for the rule combo box',
-    defaultMessage: 'Rule:'
   }
 });
 
@@ -121,6 +107,7 @@ class StyleModal extends React.PureComponent {
     this._styleCache = {};
     this._ruleCounter = 0;
     this.state = {
+      newRuleOpen: false,
       error: false,
       errorOpen: false,
       attributes: [],
@@ -271,6 +258,21 @@ class StyleModal extends React.PureComponent {
       }
     }
   }
+  _addNewRule(name) {
+    var rules = this.state.rules.slice();
+    rules.push({name: name, symbolizers: []});
+    this.setState({rules: rules, rule: name, newRuleOpen: false});
+  }
+  _addRule() {
+    this.setState({
+      newRuleOpen: true
+    });
+  }
+  closeNew() {
+    this.setState({
+      newRuleOpen: false
+    });
+  }
   _resizeDialog() {
     this.refs.dialog.forceUpdate();
   }
@@ -295,15 +297,19 @@ class StyleModal extends React.PureComponent {
     }, this);
     var actions = [
       <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />,
+      <Button buttonType='Flat' label={formatMessage(messages.addrulebutton)} tooltipPosition='top' tooltip={formatMessage(messages.addrulebuttontitle)} onTouchTap={this._addRule.bind(this)} />,
       <Button buttonType='Flat' primary={true} label={formatMessage(messages.savebutton)} onTouchTap={this._saveStyle.bind(this)} />
     ];
     return (
-      <Dialog ref='dialog' inline={this.props.inline} className={classNames('sdk-component style-modal', this.props.className)} actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} open={this.props.open} onRequestClose={this.close.bind(this)}>
-        <List>
-          {ruleItems}
-        </List>
-        {error}
-      </Dialog>
+      <span>
+        <Dialog ref='dialog' inline={this.props.inline} className={classNames('sdk-component style-modal', this.props.className)} actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} open={this.props.open} onRequestClose={this.close.bind(this)}>
+          <List>
+            {ruleItems}
+          </List>
+          {error}
+        </Dialog>
+        <NewRuleModal intl={this.props.intl} inline={this.props.inline} open={this.state.newRuleOpen} onRequestClose={this.closeNew.bind(this)} onAdd={this._addNewRule.bind(this)} />
+      </span>
     );
   }
 }
