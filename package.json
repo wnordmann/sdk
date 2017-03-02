@@ -1,7 +1,7 @@
 {
   "name": "boundless-sdk-build",
   "private": true,
-  "version": "0.10.23",
+  "version": "0.10.24",
   "description": "SDK for OpenLayers 3 and React plus Flux",
   "main": "index.js",
   "repository": {
