@@ -212,15 +212,25 @@ class MapConfigService {
       var layer = this.generateLayerFromConfig(layerConfig[i], map, opt_proxy);
       map.addLayer(layer);
     }
-    var view = map.getView();
-    view.setCenter(viewConfig.center);
-    if (viewConfig.resolution !== undefined) {
-      view.setResolution(viewConfig.resolution);
-    } else if (viewConfig.zoom !== undefined) {
-      view.setZoom(viewConfig.zoom);
-    }
-    if (viewConfig.rotation !== undefined) {
-      view.setRotation(viewConfig.rotation);
+    var view = map.getView(), proj = ol.proj.get(viewConfig.projection);
+    if (proj && !ol.proj.equivalent(view.getProjection(), proj)) {
+      map.setView(new ol.View({
+        center: viewConfig.center,
+        resolution: viewConfig.resolution,
+        zoom: viewConfig.zoom,
+        rotation: viewConfig.rotation,
+        projection: viewConfig.projection
+      }));
+    } else {
+      view.setCenter(viewConfig.center);
+      if (viewConfig.resolution !== undefined) {
+        view.setResolution(viewConfig.resolution);
+      } else if (viewConfig.zoom !== undefined) {
+        view.setZoom(viewConfig.zoom);
+      }
+      if (viewConfig.rotation !== undefined) {
+        view.setRotation(viewConfig.rotation);
+      }
     }
   }
   save(map) {
