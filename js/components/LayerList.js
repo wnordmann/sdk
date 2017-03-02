@@ -33,6 +33,8 @@ import BaseMapIcon from 'material-ui/svg-icons/maps/satellite';
 import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Paper from 'material-ui/Paper';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
 import './LayerList.css';
 import './main.css';
 
@@ -329,7 +331,12 @@ class LayerList extends React.PureComponent {
     var tipLabel = this.props.tipLabel ? (<div className='layer-list-header'><Label>{this.props.tipLabel}</Label></div>) : undefined;
     var addLayer, layerModal, baseModal;
 
-    var roundLayerAdd = <i className='ms ms-layers-add' label={formatMessage(messages.addlayertext)} onTouchTap={this._showAddLayer.bind(this)} disableTouchRipple={true}/>;
+    const style = {
+      marginRight: 20,
+    };
+
+    // var roundLayerAdd = <i className='ms ms-layers-add' label={formatMessage(messages.addlayertext)} onTouchTap={this._showAddLayer.bind(this)} disableTouchRipple={true}/>;
+    var roundLayerAdd =  <FloatingActionButton style={style}><i className='ms ms-layers-add' label={formatMessage(messages.addlayertext)} onTouchTap={this._showAddLayer.bind(this)} disableTouchRipple={true}/></FloatingActionButton>
 
 
     if (this.props.addLayer || this.props.addBaseMap) {
@@ -360,9 +367,9 @@ class LayerList extends React.PureComponent {
             {this.renderLayers(layers)}
           </List>
           {addLayer}
+          {roundLayerAdd}
         </Paper>
         {this.props.children}
-        {roundLayerAdd}
         {layerModal}
         {baseModal}
       </div>
