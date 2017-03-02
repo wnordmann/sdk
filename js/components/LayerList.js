@@ -210,7 +210,7 @@ class LayerList extends React.PureComponent {
   };
 
   static defaultProps = {
-    inlineDialogs: true,
+    inlineDialogs: false,
     handleResolutionChange: true,
     labelStyleOutOfScale: {
       color: '#BBBBBB'
