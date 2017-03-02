@@ -107,15 +107,21 @@ class Zoom extends React.PureComponent {
     var view = map.getView();
     var currentResolution = view.getResolution();
     if (currentResolution) {
+      var newResolution = view.constrainResolution(currentResolution, delta);
       if (this.props.duration > 0) {
-        map.beforeRender(ol.animation.zoom({
-          resolution: currentResolution,
+/* TODO: not yet API see https://github.com/openlayers/openlayers/issues/6548
+        if (view.getAnimating()) {
+          view.cancelAnimations();
+        }
+*/
+        view.animate({
+          resolution: newResolution,
           duration: this.props.duration,
           easing: ol.easing.easeOut
-        }));
+        });
+      } else {
+        view.setResolution(newResolution);
       }
-      var newResolution = view.constrainResolution(currentResolution, delta);
-      view.setResolution(newResolution);
     }
   }
   render() {
