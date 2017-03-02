@@ -335,14 +335,12 @@ class LayerList extends React.PureComponent {
       marginRight: 20,
     };
 
-    // var roundLayerAdd = <i className='ms ms-layers-add' label={formatMessage(messages.addlayertext)} onTouchTap={this._showAddLayer.bind(this)} disableTouchRipple={true}/>;
-    var roundLayerAdd =  <FloatingActionButton style={style}><i className='ms ms-layers-add' label={formatMessage(messages.addlayertext)} onTouchTap={this._showAddLayer.bind(this)} disableTouchRipple={true}/></FloatingActionButton>
-
-
     if (this.props.addLayer || this.props.addBaseMap) {
       var layerAdd, baseAdd;
       if (this.props.addLayer) {
-        layerAdd = <RaisedButton icon={<NoteAdd />} label={formatMessage(messages.addlayertext)} onTouchTap={this._showAddLayer.bind(this)} disableTouchRipple={true}/>;
+        layerAdd =  <FloatingActionButton className='layerAddButton' onTouchTap={this._showAddLayer.bind(this)}><i className='ms ms-layers-add'/></FloatingActionButton>
+
+        // layerAdd = <RaisedButton icon={<NoteAdd />} label={formatMessage(messages.addlayertext)} onTouchTap={this._showAddLayer.bind(this)} disableTouchRipple={true}/>;
         layerModal = <AddLayerModal open={this.state.addLayerOpen} inline={this.props.inlineDialogs} srsName={this.props.map.getView().getProjection().getCode()} allowUserInput={this.props.addLayer.allowUserInput} onRequestClose={this._closeAddLayer.bind(this)} sources={this.props.addLayer.sources} map={this.props.map} />;
       }
       if (this.props.addBaseMap) {
@@ -350,12 +348,10 @@ class LayerList extends React.PureComponent {
         baseModal = <BaseMapModal tileServices={this.props.addBaseMap.tileServices} map={this.props.map} ref='addbasemapmodal' />;
       }
       addLayer = (
-          <Paper zDepth={0} className="layer-list-add">
-          <Toolbar><ToolbarGroup style={{width: '100%', justifyContent: 'flex-end'}}>
-            {layerAdd}
-            {baseAdd}
-          </ToolbarGroup></Toolbar>
-          </Paper>
+        <span>
+          {layerAdd}
+          {baseAdd}
+        </span>
       );
     }
     return (
@@ -367,7 +363,6 @@ class LayerList extends React.PureComponent {
             {this.renderLayers(layers)}
           </List>
           {addLayer}
-          {roundLayerAdd}
         </Paper>
         {this.props.children}
         {layerModal}
