@@ -328,6 +328,10 @@ class LayerList extends React.PureComponent {
     };
     var tipLabel = this.props.tipLabel ? (<div className='layer-list-header'><Label>{this.props.tipLabel}</Label></div>) : undefined;
     var addLayer, layerModal, baseModal;
+
+    var roundLayerAdd = <i className='ms ms-layers-add' label={formatMessage(messages.addlayertext)} onTouchTap={this._showAddLayer.bind(this)} disableTouchRipple={true}/>;
+
+
     if (this.props.addLayer || this.props.addBaseMap) {
       var layerAdd, baseAdd;
       if (this.props.addLayer) {
@@ -358,6 +362,7 @@ class LayerList extends React.PureComponent {
           {addLayer}
         </Paper>
         {this.props.children}
+        {roundLayerAdd}
         {layerModal}
         {baseModal}
       </div>
