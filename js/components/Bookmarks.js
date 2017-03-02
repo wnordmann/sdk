@@ -177,26 +177,36 @@ class Bookmarks extends React.PureComponent {
   _selectBookmark(bookmark) {
     var map = this.props.map;
     var view = map.getView();
-    if (this.props.animatePanZoom === true) {
-      var pan = ol.animation.pan({duration: this.props.animationDuration, source: view.getCenter()});
-      var zoom = ol.animation.zoom({duration: this.props.animationDuration, resolution: view.getResolution(), source: view.getZoom()});
-      map.beforeRender(pan, zoom);
-    }
-    var center;
+    var center, animateOptions;
     if (bookmark) {
+      if (this.props.animatePanZoom) {
+        animateOptions = {
+          duration: this.props.animationDuration
+        };
+      }
       var extent = bookmark.extent;
-      view.fit(extent, map.getSize());
+      view.fit(extent, animateOptions);
       center = ol.extent.getCenter(extent);
     } else {
-      view.setCenter(this._center);
-      view.setResolution(this._resolution);
+      if (this.props.animatePanZoom) {
+        view.animate({
+          center: this._center,
+          resolution: this._resolution,
+          duration: this.props.animationDuration
+        });
+      } else {
+        view.setCenter(this._center);
+        view.setResolution(this._resolution);
+      }
       center = this._center;
     }
     if (this.props.showMarker) {
       var source = this._layer.getSource();
       source.clear();
-      var feature = new ol.Feature({geometry: new ol.geom.Point(center)});
-      source.addFeature(feature);
+      if (bookmark) {
+        var feature = new ol.Feature({geometry: new ol.geom.Point(center)});
+        source.addFeature(feature);
+      }
     }
   }
   _afterChange(idx) {
