@@ -40,6 +40,14 @@ import WMSLegend from './WMSLegend';
 import ArcGISRestLegend from './ArcGISRestLegend';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import Popover from 'material-ui/Popover';
+import Menu from 'material-ui/Menu';
+import MenuItem from 'material-ui/MenuItem';
+import Download from 'material-ui/svg-icons/file/file-download';
+import Filterlist from 'material-ui/svg-icons/content/filter-list';
+import Divider from 'material-ui/Divider';
+
+
 
 const layerListItemSource = {
 
@@ -579,6 +587,22 @@ class LayerListItem extends React.PureComponent {
     var resolution = map.getView().getResolution();
     return (resolution >= layer.getMinResolution() && resolution < layer.getMaxResolution());
   }
+
+  _handleMenuOpen = (event) => {
+    // This prevents ghost click.
+    event.preventDefault();
+
+    this.setState({
+      popover: true,
+      anchorEl: event.currentTarget,
+    });
+  };
+  _handleRequestClose = () => {
+    this.setState({
+      popover: false,
+    });
+  };
+
   render() {
     const {connectDragSource, connectDropTarget} = this.props;
     const layer = this.props.layer;
@@ -622,7 +646,8 @@ class LayerListItem extends React.PureComponent {
     var remove;
     if (this.props.allowRemove && layer.get('type') !== 'base' && layer.get('isRemovable') === true) {
       // remove = (<Button className='layer-list-item-remove' onTouchTap={this._remove.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.removebuttonlabel)} ><DeleteIcon /></Button>);
-      remove = (<i className='fa fa-trash' onTouchTap={this._remove.bind(this)} tooltipPosition='top' tooltip={formatMessage(messages.removebuttonlabel)} ></i>);
+      // remove = (<i className='fa fa-trash' onTouchTap={this._remove.bind(this)} tooltipPosition='top' tooltip={formatMessage(messages.removebuttonlabel)} ></i>);
+      remove = <MenuItem primaryText='Remove' leftIcon={<DeleteIcon />}onTouchTap={this._remove.bind(this)} />
     }
     var edit;
     if (this.props.allowEditing && layer.get('isWFST') === true) {
@@ -674,7 +699,31 @@ class LayerListItem extends React.PureComponent {
 
     var visibility = this.state.checked ? checked : unchecked;
 
-    var rightIconButton = <span className="fixedContainer">{filter}{download}{visibility}{zoomTo}{styling}{remove}<i className="fa fa-cog"></i></span>;
+
+
+    var popoverEllipsis = (
+      <div>
+        <i className="fa fa-ellipsis-v" onTouchTap={this._handleMenuOpen}></i>
+        <Popover
+            open={this.state.popover}
+            anchorEl={this.state.anchorEl}
+            anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
+            targetOrigin={{horizontal: 'right', vertical: 'top'}}
+            onRequestClose={this._handleRequestClose}
+          >
+            <Menu>
+              <MenuItem leftIcon={<i className='ms ms-opacity'></i>}>{opacity}</MenuItem>
+              <Divider/>
+              <MenuItem primaryText='Download' leftIcon={<Download />}onTouchTap={this._download.bind(this)} />
+              <MenuItem primaryText='Filter' leftIcon={<i className='fa fa-filter'></i>} onTouchTap={this._filter.bind(this)} />
+              <MenuItem primaryText='Filter' leftIcon={<Filterlist/>} onTouchTap={this._filter.bind(this)}/>
+              {remove}  
+            </Menu>
+          </Popover>
+      </div>
+      );
+
+    var rightIconButton = <span className="fixedContainer">{visibility}{zoomTo}{styling}{popoverEllipsis}</span>;
     if (layer.get('type') === 'base') {
       rightIconButton = <span className="fixedContainer">{baseVisibility}</span>;
       leftIcon = null;
@@ -695,7 +744,6 @@ class LayerListItem extends React.PureComponent {
         </ListItem>
         <div style={{paddingLeft: 72}}>
           {legend}
-          {opacity}
           {table}
           {label}
           {edit}
