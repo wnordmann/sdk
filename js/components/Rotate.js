@@ -92,20 +92,14 @@ class Rotate extends React.PureComponent {
     var currentRotation = view.getRotation();
     if (currentRotation !== 0) {
       if (this.props.duration > 0) {
-        currentRotation = currentRotation % (2 * Math.PI);
-        if (currentRotation < -Math.PI) {
-          currentRotation += 2 * Math.PI;
-        }
-        if (currentRotation > Math.PI) {
-          currentRotation -= 2 * Math.PI;
-        }
-        map.beforeRender(ol.animation.rotate({
-          rotation: currentRotation,
+        view.animate({
+          rotation: 0,
           duration: this.props.duration,
           easing: ol.easing.easeOut
-        }));
+        });
+      } else {
+        view.setRotation(0);
       }
-      view.setRotation(0);
     }
   }
   render() {
