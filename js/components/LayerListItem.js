@@ -612,7 +612,8 @@ class LayerListItem extends React.PureComponent {
     var opacity;
     if (this.props.showOpacity && source && layer.get('type') !== 'base') {
       var val = layer.getOpacity();
-      opacity = (<Slider style={{width: '200px', 'marginLeft':'21px', 'marginTop':'4px', 'marginBottom':'0px'}} defaultValue={val} onChange={this._changeOpacity.bind(this)} />);
+      // opacity = (<Slider style={{width: '200px', 'marginLeft':'21px', 'marginTop':'4px', 'marginBottom':'0px'}} defaultValue={val} onChange={this._changeOpacity.bind(this)} />);
+      opacity = (<Slider style={{width: '150px',  'marginTop':'0px', 'marginBottom':'0px'}} defaultValue={val} onChange={this._changeOpacity.bind(this)} />);
     }
     var table;
     if (this.props.showTable && (this.props.layer instanceof ol.layer.Vector || this.props.layer.get('wfsInfo') !== undefined)) {
@@ -717,7 +718,7 @@ class LayerListItem extends React.PureComponent {
               <MenuItem primaryText='Download' leftIcon={<Download />}onTouchTap={this._download.bind(this)} />
               <MenuItem primaryText='Filter' leftIcon={<i className='fa fa-filter'></i>} onTouchTap={this._filter.bind(this)} />
               <MenuItem primaryText='Filter' leftIcon={<Filterlist/>} onTouchTap={this._filter.bind(this)}/>
-              {remove}  
+              {remove}
             </Menu>
           </Popover>
       </div>
