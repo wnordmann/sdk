@@ -38,6 +38,7 @@ const graphicFormats = {
 
 // make sure <= is on top of < etc.
 const comparisonOps = {
+  '!=': 'PropertyIsNotEqualTo',
   '==': 'PropertyIsEqualTo',
   '>=': 'PropertyIsGreaterThanOrEqualTo',
   '<=': 'PropertyIsLessThanOrEqualTo',
@@ -104,7 +105,7 @@ class SLDService {
       name = op.value.expression.value.content[0];
       var lower = op.value.lowerBoundary.expression.value.content[0];
       var upper = op.value.upperBoundary.expression.value.content[0];
-      return ['all', [name, '>=', lower], [name, '<=', upper]];
+      return ['all', ['>=', name, lower], ['<=', name, upper]];
     } else {
       return [operator, name, value];
     }
