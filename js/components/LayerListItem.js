@@ -401,7 +401,7 @@ class LayerListItem extends React.PureComponent {
       }
     };
 
-    if (this.props.layer instanceof ol.layer.Vector) {
+    if (this.props.layer instanceof ol.layer.Vector || this.props.layer instanceof ol.layer.Tile) {
       this.props.layer.setVisible(visible);
     }
     else if (event.target.type === 'radio' ) {
