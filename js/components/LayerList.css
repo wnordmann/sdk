@@ -1,3 +1,20 @@
+.menuItem .statusIcons {
+  display: flex; }
+  .menuItem .statusIcons i {
+    width: 24px; }
+  .menuItem .statusIcons .content {
+    flex: 1; }
+
+.menuItem .fixedContainer {
+  top: 16px !important;
+  width: 78px;
+  display: flex !important; }
+  .menuItem .fixedContainer i {
+    flex: 1; }
+
+.menuItem + div {
+  padding: 0 0 0 10px !important; }
+
 .layer-switcher {
   position: absolute;
   top: 20px;
@@ -39,6 +56,9 @@
 
 .layer-tree-panel li:last-child::before {
   height: 30px; }
+
+.iconSpan {
+  width: 48px; }
 
 /* HACK Base64 encoding the fonts, need to script this with webpack or a npm task */
 /*!

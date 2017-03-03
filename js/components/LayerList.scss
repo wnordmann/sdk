@@ -1,4 +1,43 @@
+// Begin styles for the menuItems in the Drawer Component
+.menuItem {
+  .statusIcons {
+    // background-color: blue;
+    display: flex;
+    i {
+      width: 24px;
+    }
+    .content {
+      flex: 1;
+    }
+    .caret {
+      &.down {}
+      &.up {}
+    }
+  }
+  .viz {
+    &.closed {
 
+    }
+  }
+  .fixedContainer {
+    top: 16px !important;
+    // background-color: green;
+    width: 78px;
+    display: flex !important;
+    i {
+      flex: 1;
+    }
+  }
+  .settings {
+
+  }
+  .zoomTo {
+
+  }
+}
+.menuItem + div {
+  padding: 0 0 0 10px !important;
+}
 
 .layer-switcher {
   position: absolute;
@@ -42,6 +81,9 @@
 }
 .layer-tree-panel  li:last-child::before {
   height: 30px;
+}
+.iconSpan {
+  width: 48px;
 }
 /* HACK Base64 encoding the fonts, need to script this with webpack or a npm task */
 @import '../fonts/font-awesome';

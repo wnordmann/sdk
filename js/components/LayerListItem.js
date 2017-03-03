@@ -612,7 +612,6 @@ class LayerListItem extends React.PureComponent {
     var opacity;
     if (this.props.showOpacity && source && layer.get('type') !== 'base') {
       var val = layer.getOpacity();
-      // opacity = (<Slider style={{width: '200px', 'marginLeft':'21px', 'marginTop':'4px', 'marginBottom':'0px'}} defaultValue={val} onChange={this._changeOpacity.bind(this)} />);
       opacity = (<Slider style={{width: '150px',  'marginTop':'px', 'marginBottom':'0px'}} defaultValue={val} onChange={this._changeOpacity.bind(this)} />);
     }
     var table;
@@ -622,12 +621,16 @@ class LayerListItem extends React.PureComponent {
 
     var downArrow = <i className="fa fa-angle-down" onClick={this._toggleNested.bind(this)}></i>;
     var sideArrow = <i className="fa fa-angle-right" onClick={this._toggleNested.bind(this)}></i>;
+    var arrowIcon = this.state.open ? downArrow : sideArrow;
+
+    var layersIcon = <i className="ms ms-layers"></i>;
+    if (layer.get('type') !== 'base-group') {
+      arrowIcon = <i className="fa fa-fw" ></i>;
+    }
     var zoomTo;
-    var leftIcon;
     if (layer.get('type') !== 'base' && layer.get('type') !== 'base-group' && ((source && source.getExtent) || layer.get('EX_GeographicBoundingBox')) && this.props.showZoomTo) {
       // zoomTo = (<Button className='layer-list-item-zoom' onTouchTap={this._zoomTo.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.zoombuttonlabel)}><ZoomInIcon /></Button>);
       zoomTo = <i className="fa fa-crosshairs" onTouchTap={this._zoomTo.bind(this)}></i>;
-      leftIcon = this.state.open ? downArrow : sideArrow;
     }
     var download;
     if (layer instanceof ol.layer.Vector && this.props.showDownload) {
@@ -687,9 +690,9 @@ class LayerListItem extends React.PureComponent {
         legend = <ArcGISRestLegend layer={this.props.layer} />;
       }
     }
-    var downArrow = <i className="fa fa-angle-down" onClick={this._toggleNested.bind(this)}></i>;
-    var sideArrow = <i className="fa fa-angle-right" onClick={this._toggleNested.bind(this)}></i>;
-    var leftIcon = this.state.open ? downArrow : sideArrow;
+    // var downArrow = <i className="fa fa-angle-down" onClick={this._toggleNested.bind(this)}></i>;
+    // var sideArrow = <i className="fa fa-angle-right" onClick={this._toggleNested.bind(this)}></i>;
+    // var leftIcon = this.state.open ? downArrow : sideArrow;
 
     var checked = <i className='fa fa-eye' onClick={this._handleVisibility.bind(this)}></i>;
     var unchecked = <i className='fa fa-eye-slash' onClick={this._handleVisibility.bind(this)}></i>;
@@ -732,9 +735,7 @@ class LayerListItem extends React.PureComponent {
     var rightIconButton = <span className="fixedContainer">{visibility}{zoomTo}{styling}{popoverEllipsis}</span>;
     if (layer.get('type') === 'base') {
       rightIconButton = <span className="fixedContainer">{baseVisibility}</span>;
-      leftIcon = null;
     }
-
     return connectDragSource(connectDropTarget(
       <div>
         <ListItem
@@ -742,9 +743,8 @@ class LayerListItem extends React.PureComponent {
           autoGenerateNestedIndicator={this.props.collapsible}
           insetChildren={false}
           autoGenerateNestedIndicator={false}
-          primaryText={<span className="statusIcons"><span>{this.props.title}</span></span>}
+          primaryText={<span className="statusIcons">{arrowIcon}{layersIcon}<span> {this.props.title}</span></span>}
           rightIconButton={rightIconButton}
-          leftIcon={leftIcon}
           nestedItems={this.props.nestedItems}
           open={this.state.open}>
         </ListItem>
