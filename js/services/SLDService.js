@@ -100,21 +100,17 @@ class SLDService {
         value = expr.value.content[0];
       }
     }
-/*    if (comparisonOps[operator] === 'PropertyIsBetween') {
+    if (op.name.localPart === 'PropertyIsBetween') {
       name = op.value.expression.value.content[0];
       var lower = op.value.lowerBoundary.expression.value.content[0];
       var upper = op.value.upperBoundary.expression.value.content[0];
-      return name + ' BETWEEN ' + lower + ' AND ' + upper;
+      return ['all', [name, '>=', lower], [name, '<=', upper]];
     } else {
-      if (name !== undefined && value !== undefined && operator !== undefined) {
-        return name + ' ' + operator + ' ' + value;
-      }
-    }*/
-    return [operator, name, value];
+      return [operator, name, value];
+    }
   }
   parseLogicOps(logicOps) {
     var expressions = [];
-    // TODO other logical operators
     if (logicOps.name.localPart === 'And') {
       expressions.push('all');
     } else if (logicOps.name.localPart === 'Or') {
@@ -122,7 +118,12 @@ class SLDService {
     }
     for (var i = 0, ii = logicOps.value.ops.length; i < ii; ++i) {
       var op = logicOps.value.ops[i];
-      expressions.push(this.parseComparisonOps(op));
+      var subExpressions = this.parseComparisonOps(op);
+      if (subExpressions[0] === 'all') {
+        return subExpressions;
+      } else {
+        expressions.push(subExpressions);
+      }
     }
     return expressions;
   }

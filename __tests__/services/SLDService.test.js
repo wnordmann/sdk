@@ -368,4 +368,17 @@ describe('SLDService', function() {
     assert.equal(error, false);
   });
 
+  it('can parse PropertyIsBetween', function() {
+    var sld = '<sld:StyledLayerDescriptor xmlns="http://www.opengis.net/sld" xmlns:sld="http://www.opengis.net/sld" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"><sld:NamedLayer><sld:Name>population</sld:Name><sld:UserStyle><sld:Name>population</sld:Name><sld:Title>Population in the United States</sld:Title><sld:FeatureTypeStyle><sld:Name>name</sld:Name><sld:Rule><sld:Name>2M - 4M</sld:Name><sld:Title>2M - 4M</sld:Title><ogc:Filter><ogc:PropertyIsBetween><ogc:PropertyName>PERSONS</ogc:PropertyName><ogc:LowerBoundary><ogc:Literal>2000000</ogc:Literal></ogc:LowerBoundary><ogc:UpperBoundary><ogc:Literal>4000000</ogc:Literal></ogc:UpperBoundary></ogc:PropertyIsBetween></ogc:Filter><sld:PolygonSymbolizer><sld:Fill><sld:CssParameter name="fill">#FF4D4D</sld:CssParameter><sld:CssParameter name="fill-opacity">0.7</sld:CssParameter></sld:Fill></sld:PolygonSymbolizer></sld:Rule></sld:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>';
+    var info = SLDService.parse(sld);
+    var expression = info.featureTypeStyles[0].rules[0].expression;
+    assert.equal(expression[0], 'all');
+    assert.equal(expression[1][0], 'PERSONS');
+    assert.equal(expression[1][1], '>=');
+    assert.equal(expression[1][2], '2000000');
+    assert.equal(expression[2][0], 'PERSONS');
+    assert.equal(expression[2][1], '<=');
+    assert.equal(expression[2][2], '4000000');
+  });
+
 });
