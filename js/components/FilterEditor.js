@@ -79,7 +79,7 @@ class FilterEditor extends React.PureComponent {
     /**
      * Initial expression.
      */
-    initialExpression: React.PropTypes.string,
+    initialExpression: React.PropTypes.array,
     /**
      * Css class name to apply on the root element of this component.
      */
@@ -105,11 +105,16 @@ class FilterEditor extends React.PureComponent {
   constructor(props, context) {
     super(props);
     this._muiTheme = context.muiTheme || getMuiTheme();
+    var operator, attribute, value;
+    if (this.props.initialExpression && this.props.initialExpression.length === 3) {
+      attribute = this.props.initialExpression[1];
+      operator = this.props.initialExpression[0];
+      value = this.props.initialExpression[2];
+    }
     this.state = {
-      attribute: props.attributes[0],
-      operator: operators[0],
-      hasError: false,
-      expression: this.props.initialExpression
+      property: attribute,
+      operator: operator,
+      value: value
     };
   }
   getChildContext() {
@@ -161,7 +166,6 @@ class FilterEditor extends React.PureComponent {
       marginLeft: 0
     };
     var attributeItems = [];
-    attributeItems.push(<MenuItem key={0} style={{'minHeight':'32px'}} value={null} primaryText={' '} />);
     var i, ii;
     for (i = 0, ii = this.props.attributes.length; i < ii; ++i) {
       var attribute = this.props.attributes[i];
