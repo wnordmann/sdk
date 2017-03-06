@@ -28,9 +28,7 @@ import Slider from 'material-ui/Slider';
 import Checkbox from 'material-ui/Checkbox';
 import {ListItem} from 'material-ui/List';
 import {RadioButton} from 'material-ui/RadioButton';
-import DownloadIcon from 'material-ui/svg-icons/file/file-download';
 import ZoomInIcon from 'material-ui/svg-icons/action/zoom-in';
-import FilterIcon from 'material-ui/svg-icons/content/filter-list';
 import LabelIcon from 'material-ui/svg-icons/content/text-format';
 import StyleIcon from 'material-ui/svg-icons/image/brush';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
@@ -432,37 +430,6 @@ class LayerListItem extends React.PureComponent {
   _toggleNested(event){
     this.setState({open:!this.state.open})
   }
-  _handleChange(event) {
-    var visible = event.target.checked;
-    var i, ii;
-
-    if (event.target.type === 'radio') {
-      var forEachLayer = function(layers, layer) {
-        if (layer instanceof ol.layer.Group) {
-          layer.getLayers().forEach(function(groupLayer) {
-            forEachLayer(layers, groupLayer);
-          });
-        } else if (layer.get('type') === 'base') {
-          layers.push(layer);
-        }
-      };
-      var baseLayers = [];
-      forEachLayer(baseLayers, this.props.map.getLayerGroup());
-      for (i = 0, ii = baseLayers.length; i < ii; ++i) {
-        baseLayers[i].setVisible(false);
-      }
-      this.props.layer.setVisible(true);
-    } else {
-      this.props.layer.setVisible(visible);
-      if (this.props.layer instanceof ol.layer.Group) {
-        if (this.props.layer.get('type') !== 'base-group') {
-          this.props.layer.getLayers().forEach(function(child) {
-            child.setVisible(visible);
-          }, this);
-        }
-      }
-    }
-  }
   _download() {
     var formatInfo = this.getFormats(this.props.downloadFormat);
     var format = formatInfo.format;
@@ -612,7 +579,7 @@ class LayerListItem extends React.PureComponent {
     var opacity;
     if (this.props.showOpacity && source && layer.get('type') !== 'base') {
       var val = layer.getOpacity();
-      opacity = (<Slider style={{width: '150px',  'marginTop':'px', 'marginBottom':'0px'}} defaultValue={val} onChange={this._changeOpacity.bind(this)} />);
+      opacity = (<Slider style={{width: '150px',  'marginTop':'0px', 'marginBottom':'0px'}} defaultValue={val} onChange={this._changeOpacity.bind(this)} />);
     }
     var table;
     if (this.props.showTable && (this.props.layer instanceof ol.layer.Vector || this.props.layer.get('wfsInfo') !== undefined)) {
@@ -629,17 +596,14 @@ class LayerListItem extends React.PureComponent {
     }
     var zoomTo;
     if (layer.get('type') !== 'base' && layer.get('type') !== 'base-group' && ((source && source.getExtent) || layer.get('EX_GeographicBoundingBox')) && this.props.showZoomTo) {
-      // zoomTo = (<Button className='layer-list-item-zoom' onTouchTap={this._zoomTo.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.zoombuttonlabel)}><ZoomInIcon /></Button>);
       zoomTo = <i className="fa fa-crosshairs" onTouchTap={this._zoomTo.bind(this)}></i>;
     }
     var download;
     if (layer instanceof ol.layer.Vector && this.props.showDownload) {
-      // download = (<Button className='layer-list-item-download' onTouchTap={this._download.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.downloadbuttonlabel)}><DownloadIcon /></Button>);
       download = (<i className='fa fa-download' onTouchTap={this._download.bind(this)}></i>);
     }
     var filter;
     if (layer instanceof ol.layer.Vector && this.props.allowFiltering) {
-      // filter = (<Button className='layer-list-item-filter' onTouchTap={this._filter.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.filterbuttonlabel)}><FilterIcon /></Button>);
       filter = (<i className='fa fa-filter' onTouchTap={this._filter.bind(this)} ></i>);
     }
     var label;
@@ -649,13 +613,10 @@ class LayerListItem extends React.PureComponent {
     var styling;
     var canStyle = layer.get('wfsInfo') && this.props.allowStyling;
     if (canStyle) {
-      // styling = (<Button className='layer-list-item-style' onTouchTap={this._style.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.stylingbuttonlabel)} ><StyleIcon /></Button>);
       styling = (<i className='ms ms-style' onTouchTap={this._style.bind(this)} tooltipPosition='top'  tooltip={formatMessage(messages.stylingbuttonlabel)}> </i>);
     }
     var remove;
     if (this.props.allowRemove && layer.get('type') !== 'base' && layer.get('isRemovable') === true) {
-      // remove = (<Button className='layer-list-item-remove' onTouchTap={this._remove.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.removebuttonlabel)} ><DeleteIcon /></Button>);
-      // remove = (<i className='fa fa-trash' onTouchTap={this._remove.bind(this)} tooltipPosition='top' tooltip={formatMessage(messages.removebuttonlabel)} ></i>);
       remove = <MenuItem primaryText='Remove' leftIcon={<DeleteIcon />}onTouchTap={this._remove.bind(this)} />
     }
     var edit;
@@ -690,9 +651,6 @@ class LayerListItem extends React.PureComponent {
         legend = <ArcGISRestLegend layer={this.props.layer} />;
       }
     }
-    // var downArrow = <i className="fa fa-angle-down" onClick={this._toggleNested.bind(this)}></i>;
-    // var sideArrow = <i className="fa fa-angle-right" onClick={this._toggleNested.bind(this)}></i>;
-    // var leftIcon = this.state.open ? downArrow : sideArrow;
 
     var checked = <i className='fa fa-eye' onClick={this._handleVisibility.bind(this)}></i>;
     var unchecked = <i className='fa fa-eye-slash' onClick={this._handleVisibility.bind(this)}></i>;
@@ -707,8 +665,6 @@ class LayerListItem extends React.PureComponent {
       disableTouchRipple={true}/>;
 
     var visibility = this.state.checked ? checked : unchecked;
-
-
 
     var popoverEllipsis = (
       <div>

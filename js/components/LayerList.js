@@ -331,10 +331,6 @@ class LayerList extends React.PureComponent {
     var tipLabel = this.props.tipLabel ? (<div className='layer-list-header'><Label>{this.props.tipLabel}</Label></div>) : undefined;
     var addLayer, layerModal, baseModal;
 
-    const style = {
-      marginRight: 20,
-    };
-
     if (this.props.addLayer || this.props.addBaseMap) {
       var layerAdd, baseAdd;
       if (this.props.addLayer) {
