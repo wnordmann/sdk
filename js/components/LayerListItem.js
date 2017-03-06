@@ -564,7 +564,7 @@ static formats = {
     var opacity;
     if (this.props.showOpacity && source && layer.get('type') !== 'base') {
       var val = layer.getOpacity();
-      opacity = (<Slider style={{width: '150px',  'marginTop':'0px', 'marginBottom':'0px'}} defaultValue={val} onChange={this._changeOpacity.bind(this)} />);
+      opacity = (<Slider sliderStyle={{marginTop: '0px', top: '14px', marginBottom: '0'}} defaultValue={val} onChange={this._changeOpacity.bind(this)} />);
     }
     var table;
     if (this.props.showTable && (this.props.layer instanceof ol.layer.Vector || this.props.layer.get('wfsInfo') !== undefined)) {

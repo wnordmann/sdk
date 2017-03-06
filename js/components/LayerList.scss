@@ -38,8 +38,8 @@
 .menuItem + div {
   padding: 0 0 0 10px !important;
 }
-.layer-child-marginLeft {
-  margin-left: 18px;
+.layer-child-marginLeft div div {
+  margin-left: 18px !important;
 }
 .layer-switcher {
   position: absolute;
@@ -106,4 +106,8 @@
     font-weight: normal;
     font-style: normal;
 
+}
+
+.fa, .ms {
+  padding: 4px 0 0 4px;
 }
