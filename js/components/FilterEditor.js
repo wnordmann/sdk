@@ -11,7 +11,7 @@
  */
 
 import React from 'react';
-import {ListItem} from 'material-ui/List';
+import { List, ListItem } from 'material-ui/List';
 import MenuItem from 'material-ui/MenuItem';
 import Subheader from 'material-ui/Subheader';
 import Paper from 'material-ui/Paper';
@@ -224,13 +224,13 @@ class FilterEditor extends React.PureComponent {
     this.state.filters.forEach(function(filter, idx) {
       filterItems.push(
         <ListItem key={idx} innerDivStyle={ listStyle } rightIcon={<ActionDelete onTouchTap={this._onDelete.bind(this, filter)} color={red500} />}>
-          <SelectField style={{width: 250}} value={filter.attribute} onChange={this._onChangeProperty.bind(this, filter)}>
+          <SelectField style={{width: '40%', marginRight: '10px', verticalAlign: 'bottom'}} value={filter.attribute} onChange={this._onChangeProperty.bind(this, filter)}>
             {attributeItems}
           </SelectField>
-          <SelectField style={{width: 75}} value={filter.operator} onChange={this._onChangeOperator.bind(this, filter)}>
+          <SelectField style={{width: '10%', marginRight: '10px', verticalAlign: 'bottom'}} value={filter.operator} onChange={this._onChangeOperator.bind(this, filter)}>
             {operatorItems}
           </SelectField>
-          <TextField style={{width: 200}} name={'filter-value-' + idx} defaultValue={filter.value} onChange={this._onChangeValue.bind(this, filter)} />
+          <TextField style={{width: '40%'}} name={'filter-value-' + idx} defaultValue={filter.value} onChange={this._onChangeValue.bind(this, filter)} />
         </ListItem>
       );
     }, this);
@@ -243,10 +243,16 @@ class FilterEditor extends React.PureComponent {
     return (
       <Paper className='style-contentContainer' zDepth={0}>
         <Subheader className='style-listHeader'>{formatMessage(messages.filterlabel)}</Subheader>
-        <SelectField width={{width: 250}} value={this.state.logical} onChange={this._onChangeLogical.bind(this)}>
-          {logicalItems}
-        </SelectField>
-        {filterItems}
+        <list>
+          <ListItem>
+            <SelectField value={this.state.logical} onChange={this._onChangeLogical.bind(this)}>
+              {logicalItems}
+            </SelectField>
+          </ListItem>
+          {filterItems}
+        </list>
+
+
         <ToolbarGroup style={{width: '100%', justifyContent: 'flex-end'}}>
           <Button buttonType='Flat' label={formatMessage(messages.addfilter)} onTouchTap={this._addNewFilter.bind(this)} />
         </ToolbarGroup>
