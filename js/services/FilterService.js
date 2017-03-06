@@ -93,6 +93,18 @@ class FilterService {
     };
     this.parser = Jison.Parser(grammar);
   }
+  filterToExpression(filter) {
+    var expressions = [], i, ii, join = '';
+    if (filter[0] === 'all' || filter[0] === 'any') {
+      join = (filter[0] === 'all') ? ' and ' : ' or ';
+      for (i = 1, ii = filter.length; i < ii; ++i) {
+        expressions.push(filter[i][1] + ' ' + filter[i][0] + ' ' + filter[i][2]);
+      }
+    } else {
+      expressions.push(filter[1] + ' ' + filter[0] + ' ' + filter[2]);
+    }
+    return expressions.join(join);
+  }
   filter(expression) {
     //Construct a parse tree from the expression
     var tree = this.parser.parse(expression);

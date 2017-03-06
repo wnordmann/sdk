@@ -201,19 +201,20 @@ class StyleModal extends React.PureComponent {
     // TODO cache as many style objects as possible
     this.props.layer.setStyle(function(feature) {
       // loop over the rules and see which one we match
-      var styles = [];
+      var styles = [], filter;
       for (var i = me.state.rules.length - 1; i >= 0; --i) {
         var rule = me.state.rules[i];
         var styleState = rule;
         var filterParseError = false;
-        if (styleState.expression && !styleState.filter) {
+        if (styleState.expression) {
+          var expression = FilterService.filterToExpression(styleState.expression);
           try {
-            styleState.filter = FilterService.filter(styleState.expression);
+            filter = FilterService.filter(expression);
           } catch (e) {
             filterParseError = true;
           }
         }
-        if (!filterParseError && (!styleState.filter || styleState.filter(feature.getProperties()))) {
+        if (!filterParseError && (!filter || filter(feature.getProperties()))) {
           var style = me._createStyle(styleState);
           for (var j = 0, jj = style.length; j < jj; ++j) {
             if (style[j].getText()) {
