@@ -123,7 +123,7 @@ class RuleEditor extends React.PureComponent {
     }
     var textSym = this._getTextSymbolizer();
     items.push(<LabelEditor intl={this.props.intl} key='label' attributes={this.props.attributes} onChange={this.props.onChange} initialFontColor={textSym ? textSym.fontColor : undefined} initialFontSize={textSym ? textSym.fontSize : undefined} initialLabelAttribute={textSym ? textSym.labelAttribute : undefined} />);
-    items.push(<FilterEditor intl={this.props.intl} key='filter' onChange={this.props.onChange} initialExpression={this.props.initialState ? this.props.initialState.expression : undefined} />);
+    items.push(<FilterEditor attributes={this.props.attributes} intl={this.props.intl} key='filter' onChange={this.props.onChange} initialExpression={this.props.initialState ? this.props.initialState.expression : undefined} />);
     items.push(<ListItem key='delete' style={divStyle} onTouchTap={this.props.onRemove} primaryText={formatMessage(messages.removetext)} rightIcon={<ActionDelete color={red500} />}  />);
     return (<Paper className={classNames('sdk-component rule-editor', this.props.className)} zDepth={0}>{items}</Paper>);
   }

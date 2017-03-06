@@ -24,7 +24,7 @@ describe('StrokeEditor', function() {
     };
     ReactDOM.render((
       <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <StrokeEditor intl={intl} onChange={onChange} initialState={initialState} />
+        <StrokeEditor intl={intl} onChange={onChange} initialStrokeColor={initialState.strokeColor} initialStrokeWidth={initialState.strokeWidth} />
       </MuiThemeProvider>
     ), container);
     ReactDOM.unmountComponentAtNode(container);

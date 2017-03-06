@@ -2,9 +2,9 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {assert} from 'chai';
 import intl from '../mock-i18n';
 import FilterEditor from '../../js/components/FilterEditor';
+import {assert} from 'chai';
 
 describe('FilterEditor', function() {
 
@@ -12,13 +12,16 @@ describe('FilterEditor', function() {
     var container = document.createElement('div');
     var onChange = function(result) {
     };
+    var expr = [
+      'all',
+      ['<=', 'foo', 20],
+      ['>=', 'foo', 10]
+    ];
     var editor = ReactDOM.render((
-      <FilterEditor onChange={onChange} intl={intl} />
+      <FilterEditor initialExpression={expr} attributes={['foo']} onChange={onChange} intl={intl} />
     ), container);
-    editor._setQueryFilter({target: {value: 'foo = "bar"'}});
-    assert.equal(editor.state.hasError, true);
-    editor._setQueryFilter({target: {value: 'foo == "bar"'}});
-    assert.equal(editor.state.hasError, false);
+    assert.equal(editor.state.filters.length, 2);
+    assert.equal(editor.state.logical, 'all');
     ReactDOM.unmountComponentAtNode(container);
   });
 

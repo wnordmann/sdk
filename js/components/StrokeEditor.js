@@ -50,6 +50,10 @@ class StrokeEditor extends React.PureComponent {
      */
     className: React.PropTypes.string,
     /**
+     * Initial value for hasStroke.
+     */
+    initialHasStroke: React.PropTypes.bool,
+    /**
      * Initial stroke color.
      */
     initialStrokeColor: React.PropTypes.object,
@@ -77,6 +81,7 @@ class StrokeEditor extends React.PureComponent {
       },
       hex: '#000000'
     },
+    initialHasStroke: true,
     initialStrokeWidth: 1
   };
 
@@ -87,6 +92,9 @@ class StrokeEditor extends React.PureComponent {
       strokeWidth: this.props.initialStrokeWidth,
       hasStroke: this.props.initialHasStroke
     };
+  }
+  componentWillMount() {
+    this.props.onChange(this.state);
   }
   _onChangeStrokeWidth(evt) {
     this.setState({strokeWidth: parseFloat(evt.target.value)}, function() {
