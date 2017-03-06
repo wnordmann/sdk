@@ -684,7 +684,7 @@ class LayerListItem extends React.PureComponent {
     return connectDragSource(connectDropTarget(
       <div>
         <ListItem
-          className={classNames({'sdk-component': true, 'layer-list-item': true, 'menuItem': true}, this.props.className)}
+          className={classNames({'sdk-component': true, 'menuItem': true}, this.props.className)}
           autoGenerateNestedIndicator={this.props.collapsible}
           insetChildren={false}
           autoGenerateNestedIndicator={false}
