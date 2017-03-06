@@ -20,9 +20,15 @@ import SelectField from 'material-ui/SelectField';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import Button from './Button';
 import {red500} from 'material-ui/styles/colors';
 
 const messages = defineMessages({
+  addfilter: {
+    id: 'filtereditor.addfilter',
+    description: 'Button text for add filter',
+    defaultMessage: 'Add filter'
+  },
   attributelabel: {
     id: 'filtereditor.attributelabel',
     description: 'Label for the attribute select combo',
@@ -142,11 +148,13 @@ class FilterEditor extends React.PureComponent {
     var result = [this.state.logical];
     for (var i = 0, ii = this.state.filters.length; i < ii; ++i) {
       var filter = this.state.filters[i];
-      result.push([
-        filter.operator,
-        filter.attribute,
-        filter.value
-      ]);
+      if (filter.operator !== undefined && filter.attribute !== undefined && filter.value !== undefined) {
+        result.push([
+          filter.operator,
+          filter.attribute,
+          filter.value
+        ]);
+      }
     }
     return result;
   }
@@ -190,6 +198,10 @@ class FilterEditor extends React.PureComponent {
       this.props.onChange({expression: this._generateFilter()});
     }
   }
+  _addNewFilter() {
+    this.state.filters.push({});
+    this.forceUpdate();
+  }
   render() {
     const listStyle = {
       padding: '0px 16px',
@@ -232,6 +244,7 @@ class FilterEditor extends React.PureComponent {
           {logicalItems}
         </SelectField>
         {filterItems}
+        <Button buttonType='Flat' label={formatMessage(messages.addfilter)} onTouchTap={this._addNewFilter.bind(this)} />
       </Paper>
     );
   }
