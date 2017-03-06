@@ -26,15 +26,12 @@ import AddLayerModal from './AddLayerModal';
 import BaseMapModal from './BaseMapModal';
 import RaisedButton from 'material-ui/RaisedButton';
 import Button from './Button';
-import NoteAdd from 'material-ui/svg-icons/action/note-add';
 import {List} from 'material-ui/List';
 import LayersIcon from 'material-ui/svg-icons/maps/layers';
 import BaseMapIcon from 'material-ui/svg-icons/maps/satellite';
-import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Paper from 'material-ui/Paper';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
 import './LayerList.css';
 import './main.css';
 

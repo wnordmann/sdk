@@ -25,11 +25,9 @@ import LayerActions from '../actions/LayerActions';
 import SLDService from '../services/SLDService';
 import WMSService from '../services/WMSService';
 import Slider from 'material-ui/Slider';
-import Checkbox from 'material-ui/Checkbox';
 import {ListItem} from 'material-ui/List';
 import {RadioButton} from 'material-ui/RadioButton';
 import LabelIcon from 'material-ui/svg-icons/content/text-format';
-import StyleIcon from 'material-ui/svg-icons/image/brush';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import TableIcon from 'material-ui/svg-icons/action/view-list';
@@ -353,7 +351,7 @@ class LayerListItem extends React.PureComponent {
       this.props.map.getView().un('change:resolution', this._changeResolution, this);
     }
   }
-  getFormats(format){
+  getFormats(format) {
     var formats = {
       GeoJSON: {
         format: new ol.format.GeoJSON(),
@@ -383,7 +381,7 @@ class LayerListItem extends React.PureComponent {
     this.setState({resolution: this.props.map.getView().getResolution()});
   }
 
-  _handleVisibility(event){
+  _handleVisibility(event) {
     var i, ii;
     var baseLayers = [];
     var visible = event.target.className.indexOf('fa-eye-slash') > 0;
@@ -401,7 +399,7 @@ class LayerListItem extends React.PureComponent {
     if (this.props.layer instanceof ol.layer.Vector || this.props.layer instanceof ol.layer.Tile) {
       this.props.layer.setVisible(visible);
     }
-    else if (event.target.type === 'radio' ) {
+    else if (event.target.type === 'radio') {
       visible = event.target.checked;
       var layers = this.props.map.getLayers();
       forEachLayer(baseLayers, this.props.map.getLayerGroup());
@@ -603,7 +601,7 @@ class LayerListItem extends React.PureComponent {
     }
     var filter;
     if (layer instanceof ol.layer.Vector && this.props.allowFiltering) {
-      filter = (<i className='fa fa-filter' onTouchTap={this._filter.bind(this)} ></i>);
+      filter = <MenuItem primaryText='Filter' leftIcon={<i className='fa fa-filter'></i>} onTouchTap={this._filter.bind(this)} />
     }
     var label;
     if (layer instanceof ol.layer.Vector && this.props.allowLabeling) {
@@ -653,7 +651,7 @@ class LayerListItem extends React.PureComponent {
 
     var checked = <i className='fa fa-eye' onClick={this._handleVisibility.bind(this)}></i>;
     var unchecked = <i className='fa fa-eye-slash' onClick={this._handleVisibility.bind(this)}></i>;
-    var baseVisibility = <RadioButton
+    var baseVisibility = (<RadioButton
       checkedIcon={checked}
       uncheckedIcon={unchecked}
       style={{margin:'0', width:'19px'}}
@@ -661,7 +659,7 @@ class LayerListItem extends React.PureComponent {
       checked={this.state.checked}
       value={this.props.title}
       onClick={this._handleVisibility.bind(this)}
-      disableTouchRipple={true}/>;
+      disableTouchRipple={true}/>);
 
     var visibility = this.state.checked ? checked : unchecked;
 
@@ -679,7 +677,7 @@ class LayerListItem extends React.PureComponent {
               <MenuItem leftIcon={<i className='ms ms-opacity'></i>}>{opacity}</MenuItem>
               <Divider/>
               <MenuItem primaryText='Download' leftIcon={<Download />}onTouchTap={this._download.bind(this)} />
-              <MenuItem primaryText='Filter' leftIcon={<i className='fa fa-filter'></i>} onTouchTap={this._filter.bind(this)} />
+              {filter}
               <MenuItem primaryText='Filter' leftIcon={<Filterlist/>} onTouchTap={this._filter.bind(this)}/>
               {remove}
             </Menu>
@@ -701,8 +699,7 @@ class LayerListItem extends React.PureComponent {
           primaryText={<span className="statusIcons">{arrowIcon}{layersIcon}<span> {this.props.title}</span></span>}
           rightIconButton={rightIconButton}
           nestedItems={this.props.nestedItems}
-          open={this.state.open}>
-        </ListItem>
+          open={this.state.open}/>
         <div style={{paddingLeft: 72}}>
           {legend}
           {table}
