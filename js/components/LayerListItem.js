@@ -28,7 +28,6 @@ import Slider from 'material-ui/Slider';
 import Checkbox from 'material-ui/Checkbox';
 import {ListItem} from 'material-ui/List';
 import {RadioButton} from 'material-ui/RadioButton';
-import ZoomInIcon from 'material-ui/svg-icons/action/zoom-in';
 import LabelIcon from 'material-ui/svg-icons/content/text-format';
 import StyleIcon from 'material-ui/svg-icons/image/brush';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
