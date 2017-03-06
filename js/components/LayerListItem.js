@@ -1,5 +1,4 @@
-/*
- * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+/* Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -9,7 +8,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {DragSource, DropTarget} from 'react-dnd';
@@ -41,8 +39,6 @@ import MenuItem from 'material-ui/MenuItem';
 import Download from 'material-ui/svg-icons/file/file-download';
 import Filterlist from 'material-ui/svg-icons/content/filter-list';
 import Divider from 'material-ui/Divider';
-
-
 
 const layerListItemSource = {
 
@@ -398,23 +394,20 @@ class LayerListItem extends React.PureComponent {
 
     if (this.props.layer instanceof ol.layer.Vector || this.props.layer instanceof ol.layer.Tile) {
       this.props.layer.setVisible(visible);
-    }
-    else if (event.target.type === 'radio') {
+    }else if (event.target.type === 'radio') {
       visible = event.target.checked;
       var layers = this.props.map.getLayers();
       forEachLayer(baseLayers, this.props.map.getLayerGroup());
       for (i = 0, ii = baseLayers.length; i < ii; ++i) {
         baseLayers[i].setVisible(false);
       }
-      layers.forEach(function(l){
-        if(l instanceof ol.layer.Group)
-        {
+      layers.forEach(function(l) {
+        if (l instanceof ol.layer.Group) {
           l.setVisible(true);
         }
       })
       this.props.layer.setVisible(visible);
-    }
-    else if (this.props.layer instanceof ol.layer.Group ) {
+    } else if (this.props.layer instanceof ol.layer.Group) {
       forEachLayer(baseLayers, this.props.map.getLayerGroup());
       for (i = 0, ii = baseLayers.length; i < ii; ++i) {
         baseLayers[i].setVisible(false);
@@ -423,8 +416,7 @@ class LayerListItem extends React.PureComponent {
       baseLayers[0].setVisible(visible)
     }
   }
-
-  _toggleNested(event){
+  _toggleNested(event) {
     this.setState({open:!this.state.open})
   }
   _download() {
@@ -558,12 +550,12 @@ class LayerListItem extends React.PureComponent {
 
     this.setState({
       popover: true,
-      anchorEl: event.currentTarget,
+      anchorEl: event.currentTarget
     });
   };
   _handleRequestClose = () => {
     this.setState({
-      popover: false,
+      popover: false
     });
   };
 
@@ -597,7 +589,7 @@ class LayerListItem extends React.PureComponent {
     }
     var download;
     if (layer instanceof ol.layer.Vector && this.props.showDownload) {
-      download = (<i className='fa fa-download' onTouchTap={this._download.bind(this)}></i>);
+      download = <MenuItem primaryText='Download' leftIcon={<Download />}onTouchTap={this._download.bind(this)} />
     }
     var filter;
     if (layer instanceof ol.layer.Vector && this.props.allowFiltering) {
@@ -676,7 +668,7 @@ class LayerListItem extends React.PureComponent {
             <Menu>
               <MenuItem leftIcon={<i className='ms ms-opacity'></i>}>{opacity}</MenuItem>
               <Divider/>
-              <MenuItem primaryText='Download' leftIcon={<Download />}onTouchTap={this._download.bind(this)} />
+              {download}
               {filter}
               <MenuItem primaryText='Filter' leftIcon={<Filterlist/>} onTouchTap={this._filter.bind(this)}/>
               {remove}
