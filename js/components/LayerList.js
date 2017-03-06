@@ -33,7 +33,6 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Paper from 'material-ui/Paper';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import './LayerList.css';
-import './main.css';
 
 const messages = defineMessages({
   layertitle: {

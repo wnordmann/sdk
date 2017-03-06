@@ -1,7 +1,6 @@
 // Begin styles for the menuItems in the Drawer Component
 .menuItem {
   .statusIcons {
-    // background-color: blue;
     display: flex;
     i {
       width: 24px;
@@ -20,12 +19,13 @@
     }
   }
   .fixedContainer {
-    top: 16px !important;
-    // background-color: green;
-    width: 78px;
+    top: 6px !important;
+    right: 14px !important;
+    width: 130px;
     display: flex !important;
     i {
       flex: 1;
+      padding: 10px;
     }
   }
   .settings {
