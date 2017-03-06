@@ -105,8 +105,6 @@ class PointSymbolizerEditor extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      hasFill: props.initialState ? props.initialState.fillColor !== undefined : true,
-      hasStroke: props.initialState ? props.initialState.strokeColor !== undefined : true,
       symbolType: props.initialState && props.initialState.symbolType ? props.initialState.symbolType : 'circle',
       symbolSize: props.initialState && props.initialState.symbolSize ? props.initialState.symbolSize : '4',
       rotation: props.initialState && props.initialState.rotation ? props.initialState.rotation : '0',
@@ -205,8 +203,8 @@ class PointSymbolizerEditor extends React.PureComponent {
         <ListItem innerDivStyle={ listStyle } style={!this.state.externalGraphic ? {display: 'none'} : {width: '100%'}} primaryText={formatMessage(messages.opacity)}>
           <Slider defaultValue={this.state.opacity} onChange={this._onOpacityChange.bind(this)} />
         </ListItem>
-        <FillEditor onChange={this.props.onChange} initialHasFill={this.state.hasFill} initialFillColor={this.props.initialState ? this.props.initialState.fillColor : undefined} />
-        <StrokeEditor onChange={this.props.onChange} initialHasStroke={this.state.hasStroke} initialStrokeWidth={this.props.initialState ? this.props.initialState.strokeWidth : undefined} initialStrokeColor={this.props.initialState ? this.props.initialState.strokeColor : undefined} />
+        <FillEditor onChange={this.props.onChange} initialHasFill={this.props.initialState ? this.props.initialState.hasFill : undefined} initialFillColor={this.props.initialState ? this.props.initialState.fillColor : undefined} />
+        <StrokeEditor onChange={this.props.onChange} initialHasStroke={this.props.initialState ? this.props.initialState.hasStroke : undefined} initialStrokeWidth={this.props.initialState ? this.props.initialState.strokeWidth : undefined} initialStrokeColor={this.props.initialState ? this.props.initialState.strokeColor : undefined} />
       </Paper>
     );
   }

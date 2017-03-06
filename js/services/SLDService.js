@@ -223,10 +223,14 @@ class SLDService {
       var fill = externalGraphicOrMark.fill;
       if (fill) {
         result.fillColor = this.parseFill(fill).fillColor;
+      } else {
+        result.hasFill = false;
       }
       var stroke = externalGraphicOrMark.stroke;
       if (stroke) {
         Object.assign(result, this.parseStroke(stroke));
+      } else {
+        result.hasStroke = false;
       }
     }
     return result;
@@ -252,9 +256,13 @@ class SLDService {
       } else if (fill.graphicFill) {
         result.graphicFill = fill.graphicFill;
       }
+    } else {
+      result.hasFill = false;
     }
     if (polyObj.stroke) {
       Object.assign(result, this.parseStroke(polyObj.stroke));
+    } else {
+      result.hasStroke = false;
     }
     return result;
   }

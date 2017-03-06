@@ -266,7 +266,7 @@ class StyleModal extends React.PureComponent {
   }
   _addNewRule(name) {
     var rules = this.state.rules.slice();
-    rules.push({name: name, symbolizers: []});
+    rules.push({name: name, symbolizers: [{}]});
     this.setState({rules: rules, rule: name, newRuleOpen: false});
   }
   _addRule() {

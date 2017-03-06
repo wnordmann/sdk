@@ -135,6 +135,8 @@ class FilterEditor extends React.PureComponent {
           value: expression[2]
         });
       }
+    } else {
+      filters.push({});
     }
     this.state = {
       logical: logical,

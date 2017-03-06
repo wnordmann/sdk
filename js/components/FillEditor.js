@@ -48,6 +48,10 @@ class FillEditor extends React.PureComponent {
      */
     initialFillColor: React.PropTypes.object,
     /**
+     * Initial value for hasFill.
+     */
+    initialHasFill: React.PropTypes.bool,
+    /**
      * @ignore
      */
     intl: intlShape.isRequired
@@ -62,7 +66,8 @@ class FillEditor extends React.PureComponent {
         a: 0.5
       },
       hex: '#FF0000'
-    }
+    },
+    initialHasFill: true
   };
 
   constructor(props) {
@@ -71,6 +76,9 @@ class FillEditor extends React.PureComponent {
       fillColor: this.props.initialFillColor,
       hasFill: this.props.initialHasFill
     };
+  }
+  componentWillMount() {
+    this.props.onChange(this.state);
   }
   _onChangeFill(color) {
     this.setState({fillColor: color});

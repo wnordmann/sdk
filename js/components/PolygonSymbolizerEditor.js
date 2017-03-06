@@ -41,16 +41,12 @@ class PolygonSymbolizerEditor extends React.PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = {
-      hasFill: true,
-      hasStroke: true
-    };
   }
   render() {
     return (
       <Paper zDepth={0} className={classNames('sdk-component polygon-symbolizer-editor', this.props.className)}>
-        <FillEditor initialHasFill={this.state.hasFill} onChange={this.props.onChange} initialFillColor={this.props.initialState ? this.props.initialState.fillColor : undefined} />
-        <StrokeEditor initialHasStroke={this.state.hasStroke} onChange={this.props.onChange} initialStrokeColor={this.props.initialState ? this.props.initialState.strokeColor : undefined} initialStrokeWidth={this.props.initialState ? this.props.initialState.strokeWidth : undefined} />
+        <FillEditor initialHasFill={this.props.initialState ? this.props.initialState.hasFill : undefined} onChange={this.props.onChange} initialFillColor={this.props.initialState ? this.props.initialState.fillColor : undefined} />
+        <StrokeEditor initialHasStroke={this.props.initialState ? this.props.initialState.hasStroke : undefined} onChange={this.props.onChange} initialStrokeColor={this.props.initialState ? this.props.initialState.strokeColor : undefined} initialStrokeWidth={this.props.initialState ? this.props.initialState.strokeWidth : undefined} />
       </Paper>
     );
   }

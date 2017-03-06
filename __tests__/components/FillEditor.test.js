@@ -23,7 +23,7 @@ describe('FillEditor', function() {
     };
     ReactDOM.render((
       <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <FillEditor intl={intl} onChange={onChange} initialState={initialState} />
+        <FillEditor intl={intl} onChange={onChange} initialFillColor={initialState.fillColor} />
       </MuiThemeProvider>
     ), container);
     ReactDOM.unmountComponentAtNode(container);
