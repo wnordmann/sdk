@@ -653,13 +653,13 @@ static formats = {
 
     var popoverEllipsis = (
       <div>
-        <i className="fa fa-ellipsis-v" onTouchTap={this._handleMenuOpen}></i>
+        <i className="fa fa-ellipsis-v" onTouchTap={this._handleMenuOpen.bind(this)}></i>
         <Popover
             open={this.state.popover}
             anchorEl={this.state.anchorEl}
             anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
             targetOrigin={{horizontal: 'right', vertical: 'top'}}
-            onRequestClose={this._handleRequestClose}
+            onRequestClose={this._handleRequestClose.bind(this)}
           >
             <Menu>
               <MenuItem leftIcon={<i className='ms ms-opacity'></i>}>{opacity}</MenuItem>
@@ -672,15 +672,16 @@ static formats = {
           </Popover>
       </div>
       );
-
+    var childItem = false;
     var rightIconButton = <span className="fixedContainer">{visibility}{zoomTo}{styling}{popoverEllipsis}</span>;
     if (layer.get('type') === 'base') {
       rightIconButton = <span className="fixedContainer">{baseVisibility}</span>;
+      childItem = true;
     }
     return connectDragSource(connectDropTarget(
       <div>
         <ListItem
-          className={classNames({'sdk-component': true, 'menuItem': true}, this.props.className)}
+          className={classNames({'sdk-component': true, 'menuItem': true, 'layer-child-marginLeft': childItem}, this.props.className)}
           autoGenerateNestedIndicator={this.props.collapsible}
           insetChildren={false}
           autoGenerateNestedIndicator={false}
