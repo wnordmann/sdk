@@ -113,6 +113,17 @@ class QGISLegend extends React.PureComponent {
       visible: this.props.showExpandedOnStartup
     };
   }
+  componentWillMount() {
+    this._onChangeCb = this._onChange.bind(this);
+    LayerStore.addChangeListener(this._onChangeCb);
+    this._onChange();
+  }
+  componentWillUnmount() {
+    LayerStore.removeChangeListener(this._onChangeCb);
+  }
+  _onChange() {
+    this.setState(LayerStore.getState());
+  }
   _hidePanel() {
     this.setState({visible: false});
   }
@@ -129,8 +140,9 @@ class QGISLegend extends React.PureComponent {
       return (<ListItem key={symbol.title} primaryText={symbol.title} leftIcon={<img src={src}></img>} />);
     };
     for (var id in legendData) {
-      var title = LayerStore.findLayer(id).get('title');
-      if (title !== null) {
+      var layer = LayerStore.findLayer(id);
+      var title = layer.get('title');
+      if (title !== null && layer.getVisible()) {
         var symbols = legendData[id].map(symbolFunc);
         legendNodes.push(
           <ListItem initiallyOpen={true} key={id} nestedItems={symbols} primaryText={title} />
