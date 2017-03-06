@@ -59,6 +59,11 @@ const operators = [
   '<='
 ];
 
+const logical = [
+  {value: 'all', text: 'every filter matches'},
+  {value: 'any', text: 'any filter matches'}
+];
+
 /**
  * Editor for a single filter. Used by the RuleEditor.
  *
@@ -134,7 +139,7 @@ class FilterEditor extends React.PureComponent {
     return {muiTheme: this._muiTheme};
   }
   _generateFilter() {
-    var result = ['all'];
+    var result = [this.state.logical];
     for (var i = 0, ii = this.state.filters.length; i < ii; ++i) {
       var filter = this.state.filters[i];
       result.push([
@@ -162,6 +167,14 @@ class FilterEditor extends React.PureComponent {
   }
   _isEqualFilter(filterA, filterB) {
     return (filterA.attribute === filterB.attribute && filterA.operator === filterB.operator && filterA.value === filterB.value);
+  }
+  _onChangeLogical(evt, id, value) {
+    var me = this;
+    this.setState({
+      logical: value
+    }, function() {
+      me.props.onChange({expression: me._generateFilter()});
+    });
   }
   _onDelete(filter) {
     var idx;
@@ -206,11 +219,18 @@ class FilterEditor extends React.PureComponent {
         </ListItem>
       );
     }, this);
+    var logicalItems = [];
+    logical.forEach(function(logicalItem, idx) {
+      logicalItems.push(<MenuItem key={idx} value={logicalItem.value} primaryText={logicalItem.text} />);
+    });
     const {formatMessage} = this.props.intl;
     // TODO multiple rows
     return (
       <Paper className='style-contentContainer' zDepth={0}>
         <Subheader className='style-listHeader'>{formatMessage(messages.filterlabel)}</Subheader>
+        <SelectField width={{width: 250}} value={this.state.logical} onChange={this._onChangeLogical.bind(this)}>
+          {logicalItems}
+        </SelectField>
         {filterItems}
       </Paper>
     );
