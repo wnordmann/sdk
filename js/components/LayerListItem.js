@@ -347,26 +347,22 @@ class LayerListItem extends React.PureComponent {
       this.props.map.getView().un('change:resolution', this._changeResolution, this);
     }
   }
-  getFormats(format) {
-    var formats = {
-      GeoJSON: {
-        format: new ol.format.GeoJSON(),
-        mimeType: 'text/json',
-        extension: 'geojson'
-      },
-      KML: {
-        format: new ol.format.KML(),
-        mimeType: 'application/vnd.google-earth.kml+xml',
-        extension: 'kml'
-      },
-      GPX: {
-        format: new ol.format.GPX(),
-        mimeType: 'application/gpx+xml',
-        extension: 'gpx'
-      }
-    }
-    return formats[format];
-  }
+static formats = {
+  GeoJSON: {
+    format: new ol.format.GeoJSON(),
+    mimeType: 'text/json',
+    extension: 'geojson'
+  },
+  KML: {
+    format: new ol.format.KML(),
+    mimeType: 'application/vnd.google-earth.kml+xml',
+    extension: 'kml'
+  },
+  GPX: {
+    format: new ol.format.GPX(),
+    mimeType: 'application/gpx+xml',
+    extension: 'gpx'
+  }};
   _changeGroupVisible(evt) {
     this.setState({checked: evt.target.getVisible()});
   }
@@ -420,7 +416,7 @@ class LayerListItem extends React.PureComponent {
     this.setState({open:!this.state.open})
   }
   _download() {
-    var formatInfo = this.getFormats(this.props.downloadFormat);
+    var formatInfo = this.constructor.formats[this.props.downloadFormat];
     var format = formatInfo.format;
     var layer = this.props.layer;
     var source = layer.getSource();
