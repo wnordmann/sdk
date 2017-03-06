@@ -171,4 +171,22 @@ describe('FilterService', function() {
     assert.equal(rows.length, 1);
   });
 
+  it('filterToExpression works correctly (all)', function() {
+    var filter = ['all', ['<=', 'foo', 20], ['>=', 'foo', 10]];
+    var expr = FilterService.filterToExpression(filter);
+    assert.equal(expr, 'foo <= 20 and foo >= 10');
+  });
+
+  it('filterToExpression works correctly (any)', function() {
+    var filter = ['any', ['<=', 'foo', 20], ['>=', 'foo', 10]];
+    var expr = FilterService.filterToExpression(filter);
+    assert.equal(expr, 'foo <= 20 or foo >= 10');
+  });
+
+  it('filterToExpression works correctly', function() {
+    var filter = ['<=', 'foo', 20];
+    var expr = FilterService.filterToExpression(filter);
+    assert.equal(expr, 'foo <= 20');
+  });
+
 });

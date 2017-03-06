@@ -21,6 +21,7 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Button from './Button';
+import {ToolbarGroup} from 'material-ui/Toolbar';
 import {red500} from 'material-ui/styles/colors';
 
 const messages = defineMessages({
@@ -229,7 +230,7 @@ class FilterEditor extends React.PureComponent {
           <SelectField style={{width: 75}} value={filter.operator} onChange={this._onChangeOperator.bind(this, filter)}>
             {operatorItems}
           </SelectField>
-          <TextField style={{top: -27, width: 200}} name={'filter-value-' + idx} defaultValue={filter.value} onChange={this._onChangeValue.bind(this, filter)} />
+          <TextField style={{width: 200}} name={'filter-value-' + idx} defaultValue={filter.value} onChange={this._onChangeValue.bind(this, filter)} />
         </ListItem>
       );
     }, this);
@@ -246,7 +247,9 @@ class FilterEditor extends React.PureComponent {
           {logicalItems}
         </SelectField>
         {filterItems}
-        <Button buttonType='Flat' label={formatMessage(messages.addfilter)} onTouchTap={this._addNewFilter.bind(this)} />
+        <ToolbarGroup style={{width: '100%', justifyContent: 'flex-end'}}>
+          <Button buttonType='Flat' label={formatMessage(messages.addfilter)} onTouchTap={this._addNewFilter.bind(this)} />
+        </ToolbarGroup>
       </Paper>
     );
   }
