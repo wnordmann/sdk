@@ -227,11 +227,16 @@ class StyleModal extends React.PureComponent {
       return styles;
     });
   }
-  _onChange(rule, state) {
+  _onChange(ruleName, state) {
     // TODO support more symbolizers
-    var symbolizers = this._getRuleByName(rule).symbolizers;
-    var styleState = symbolizers[0];
-    Object.assign(styleState, state);
+    var rule = this._getRuleByName(ruleName);
+    if (state.expression) {
+      rule.expression = state.expression;
+    } else {
+      var symbolizers = rule.symbolizers;
+      var styleState = symbolizers[0];
+      Object.assign(styleState, state);
+    }
     this._setStyle();
   }
   _removeRule(name) {

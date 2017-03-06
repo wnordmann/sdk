@@ -105,60 +105,77 @@ class FilterEditor extends React.PureComponent {
   constructor(props, context) {
     super(props);
     this._muiTheme = context.muiTheme || getMuiTheme();
-    var operator, attribute, value;
-    if (this.props.initialExpression && this.props.initialExpression.length === 3) {
-      attribute = this.props.initialExpression[1];
-      operator = this.props.initialExpression[0];
-      value = this.props.initialExpression[2];
+    var filters = [], logical = 'all';
+    var expression = this.props.initialExpression;
+    if (expression) {
+      if (expression[0] === 'all' || expression[0] === 'any') {
+        logical = expression[0];
+        for (var i = 1, ii = expression.length; i < ii; i++) {
+          filters.push({
+            attribute: expression[i][1],
+            operator: expression[i][0],
+            value: expression[i][2]
+          });
+        }
+      } else {
+        filters.push({
+          attribute: expression[1],
+          operator: expression[0],
+          value: expression[2]
+        });
+      }
     }
     this.state = {
-      property: attribute,
-      operator: operator,
-      value: value
+      logical: logical,
+      filters: filters
     };
   }
   getChildContext() {
     return {muiTheme: this._muiTheme};
   }
-  _isComplete() {
-    return this.state.property && this.state.operator && this.state.value;
-  }
   _generateFilter() {
-    return [
-      'all',
-      [
-        this.state.operator,
-        this.state.property,
-        this.state.value
-      ]
-    ];
+    var result = ['all'];
+    for (var i = 0, ii = this.state.filters.length; i < ii; ++i) {
+      var filter = this.state.filters[i];
+      result.push([
+        filter.operator,
+        filter.attribute,
+        filter.value
+      ]);
+    }
+    return result;
   }
-  _onChangeProperty(evt, idx, value) {
-    var me = this;
-    this.setState({property: value}, function() {
-      if (me._isComplete()) {
-        var filter = me._generateFilter();
-        this.props.onChange({filter: filter});
-      }
-    });
+  _onChangeProperty(filter, evt, idx, value) {
+    filter.attribute = value;
+    this.forceUpdate();
+    this.props.onChange({expression: this._generateFilter()});
   }
-  _onChangeOperator(evt, id, value) {
-    var me = this;
-    this.setState({operator: value}, function() {
-      if (me._isComplete()) {
-        var filter = me._generateFilter();
-        this.props.onChange({filter: filter});
-      }
-    });
+  _onChangeOperator(filter, evt, id, value) {
+    filter.operator = value;
+    this.forceUpdate();
+    this.props.onChange({expression: this._generateFilter()});
   }
-  _onChangeValue(evt, value) {
-    var me = this;
-    this.setState({value: value}, function() {
-      if (me._isComplete()) {
-        var filter = me._generateFilter();
-        this.props.onChange({filter: filter});
+  _onChangeValue(filter, evt, value) {
+    filter.value = value;
+    this.forceUpdate();
+    this.props.onChange({expression: this._generateFilter()});
+  }
+  _isEqualFilter(filterA, filterB) {
+    return (filterA.attribute === filterB.attribute && filterA.operator === filterB.operator && filterA.value === filterB.value);
+  }
+  _onDelete(filter) {
+    var idx;
+    for (var i = 0, ii = this.state.filters.length; i < ii; i++) {
+      if (this._isEqualFilter(this.state.filters[i], filter)) {
+        idx = i;
+        break;
       }
-    });
+    }
+    if (idx > -1) {
+      this.state.filters.splice(idx, 1);
+      this.forceUpdate();
+      this.props.onChange({expression: this._generateFilter()});
+    }
   }
   render() {
     const listStyle = {
@@ -175,20 +192,26 @@ class FilterEditor extends React.PureComponent {
     for (i = 0, ii = operators.length; i < ii; ++i) {
       operatorItems.push(<MenuItem key={i} value={operators[i]} primaryText={operators[i]} />);
     }
+    var filterItems = [];
+    this.state.filters.forEach(function(filter, idx) {
+      filterItems.push(
+        <ListItem key={idx} innerDivStyle={ listStyle } rightIcon={<ActionDelete onTouchTap={this._onDelete.bind(this, filter)} color={red500} />}>
+          <SelectField style={{width: 250}} value={filter.attribute} onChange={this._onChangeProperty.bind(this, filter)}>
+            {attributeItems}
+          </SelectField>
+          <SelectField style={{width: 75}} value={filter.operator} onChange={this._onChangeOperator.bind(this, filter)}>
+            {operatorItems}
+          </SelectField>
+          <TextField style={{top: -27, width: 200}} name={'filter-value-' + idx} defaultValue={filter.value} onChange={this._onChangeValue.bind(this, filter)} />
+        </ListItem>
+      );
+    }, this);
     const {formatMessage} = this.props.intl;
     // TODO multiple rows
     return (
       <Paper className='style-contentContainer' zDepth={0}>
         <Subheader className='style-listHeader'>{formatMessage(messages.filterlabel)}</Subheader>
-          <ListItem innerDivStyle={ listStyle } rightIcon={<ActionDelete color={red500} />}>
-            <SelectField style={{width: 250}} ref='property' value={this.state.property} onChange={this._onChangeProperty.bind(this)}>
-              {attributeItems}
-            </SelectField>
-            <SelectField style={{width: 75}} ref='operator' value={this.state.operator} onChange={this._onChangeOperator.bind(this)}>
-              {operatorItems}
-            </SelectField>
-            <TextField style={{top: -27, width: 200}} name='value' ref='value' defaultValue={this.state.value} onChange={this._onChangeValue.bind(this)} />
-          </ListItem>
+        {filterItems}
       </Paper>
     );
   }
