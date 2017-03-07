@@ -125,7 +125,7 @@ describe('LayerList', function() {
         <LayerList intl={intl} map={map}/>
       </MuiThemeProvider>
     ), container);
-    var checkboxes = container.querySelectorAll('input');
+    var checkboxes = container.querySelectorAll('.fa-eye .fa-eye-slash');
     var checkedCount = 0;
     var i, ii;
     for (i = 0, ii = checkboxes.length; i < ii; ++i) {

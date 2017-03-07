@@ -680,7 +680,7 @@ static formats = {
     return connectDragSource(connectDropTarget(
       <div>
         <ListItem
-          className={classNames({'sdk-component': true, 'menuItem': true}, this.props.className)}
+          className={classNames({'sdk-component': true, 'menuItem': true, 'layer-list-item' : true}, this.props.className)}
           innerDivStyle={innerDivNestedStyle}
           autoGenerateNestedIndicator={this.props.collapsible}
           insetChildren={false}
