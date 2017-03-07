@@ -39,6 +39,7 @@ import MenuItem from 'material-ui/MenuItem';
 import Download from 'material-ui/svg-icons/file/file-download';
 import Filterlist from 'material-ui/svg-icons/content/filter-list';
 import Divider from 'material-ui/Divider';
+import IconButton from 'material-ui/IconButton';
 
 const layerListItemSource = {
 
@@ -388,9 +389,7 @@ static formats = {
       }
     };
 
-    if (this.props.layer instanceof ol.layer.Vector || this.props.layer instanceof ol.layer.Tile) {
-      this.props.layer.setVisible(visible);
-    }else if (event.target.type === 'radio') {
+    if (event.target.type === 'radio') {
       visible = event.target.checked;
       var layers = this.props.map.getLayers();
       forEachLayer(baseLayers, this.props.map.getLayerGroup());
@@ -402,6 +401,8 @@ static formats = {
           l.setVisible(true);
         }
       })
+      this.props.layer.setVisible(visible);
+    } else if (this.props.layer instanceof ol.layer.Vector || this.props.layer instanceof ol.layer.Tile) {
       this.props.layer.setVisible(visible);
     } else if (this.props.layer instanceof ol.layer.Group) {
       forEachLayer(baseLayers, this.props.map.getLayerGroup());
@@ -568,7 +569,7 @@ static formats = {
     }
     var table;
     if (this.props.showTable && (this.props.layer instanceof ol.layer.Vector || this.props.layer.get('wfsInfo') !== undefined)) {
-      table = (<Button className='layer-list-item-table' onTouchTap={this._showTable.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.tablebuttonlabel)}><TableIcon /></Button>);
+      table = (<Button className='layer-list-item-table' onTouchTap={this._showTable.bind(this)} tooltipPosition='top-center' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.tablebuttonlabel)}><TableIcon /></Button>);
     }
 
     var downArrow = <i className="fa fa-angle-down" onClick={this._toggleNested.bind(this)}></i>;
@@ -593,27 +594,26 @@ static formats = {
     }
     var label;
     if (layer instanceof ol.layer.Vector && this.props.allowLabeling) {
-      label = (<Button className='layer-list-item-label' onTouchTap={this._label.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.labelbuttonlabel)} ><LabelIcon /></Button>);
+      label = (<Button className='layer-list-item-label' onTouchTap={this._label.bind(this)} tooltipPosition='top-center' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.labelbuttonlabel)} ><LabelIcon /></Button>);
     }
-    var styling;
-    var canStyle = layer.get('wfsInfo') && this.props.allowStyling;
-    if (canStyle) {
-      styling = (<i className='ms ms-style' onTouchTap={this._style.bind(this)} tooltipPosition='top'  tooltip={formatMessage(messages.stylingbuttonlabel)}> </i>);
-    }
+
     var remove;
     if (this.props.allowRemove && layer.get('type') !== 'base' && layer.get('isRemovable') === true) {
       remove = <MenuItem primaryText='Remove' leftIcon={<DeleteIcon />}onTouchTap={this._remove.bind(this)} />
     }
     var edit;
     if (this.props.allowEditing && layer.get('isWFST') === true) {
-      edit = (<Button className='layer-list-item-edit' onTouchTap={this._edit.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.editbuttonlabel)} ><EditIcon /></Button>);
+      edit = (<Button className='layer-list-item-edit' onTouchTap={this._edit.bind(this)} tooltipPosition='top-center' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.editbuttonlabel)} ><EditIcon /></Button>);
     }
     var tableModal, labelModal, filterModal, styleModal;
     if (this.props.layer instanceof ol.layer.Vector) {
       labelModal = (<LabelModal {...this.props} open={this.state.labelOpen} onRequestClose={this._closeLabel.bind(this)} inline={this.props.inlineDialogs} layer={this.props.layer} />);
       filterModal = (<FilterModal {...this.props} open={this.state.filterOpen} onRequestClose={this._closeFilter.bind(this)} inline={this.props.inlineDialogs} layer={this.props.layer} />);
     }
+    var styling = <i className="fa fa-fw" ></i>;
+    var canStyle = layer.get('wfsInfo') && this.props.allowStyling;
     if (canStyle) {
+      styling = (<i className='ms ms-style' onTouchTap={this._style.bind(this)} tooltipPosition='top-center'  tooltip={formatMessage(messages.stylingbuttonlabel)}> </i>);
       styleModal = (<StyleModal inline={this.props.inlineDialogs} {...this.props} open={this.state.styleOpen} onRequestClose={this._closeStyling.bind(this)} layer={this.props.layer} />);
     }
     if (this.props.showTable && (this.props.layer instanceof ol.layer.Vector || this.props.layer.get('wfsInfo') !== undefined)) {
@@ -638,6 +638,7 @@ static formats = {
     }
 
     var checked = <i className='fa fa-eye' onClick={this._handleVisibility.bind(this)}></i>;
+
     var unchecked = <i className='fa fa-eye-slash' onClick={this._handleVisibility.bind(this)}></i>;
     var baseVisibility = (<RadioButton
       checkedIcon={checked}
@@ -672,16 +673,19 @@ static formats = {
           </Popover>
       </div>
       );
-    var childItem = false;
-    var rightIconButton = <span className="fixedContainer">{visibility}{zoomTo}{styling}{popoverEllipsis}</span>;
+    var innerDivNestedStyle
+    var rightIconButton = <div><span className="fixedContainer">{visibility}{zoomTo}{styling}{popoverEllipsis}</span></div>;
     if (layer.get('type') === 'base') {
-      rightIconButton = <span className="fixedContainer">{baseVisibility}</span>;
-      childItem = true;
+      rightIconButton = <div><span className="fixedContainer">{baseVisibility}</span></div>;
+      innerDivNestedStyle = {
+        marginLeft: '18px'
+      };
     }
     return connectDragSource(connectDropTarget(
       <div>
         <ListItem
-          className={classNames({'sdk-component': true, 'menuItem': true, 'layer-child-marginLeft': childItem}, this.props.className)}
+          className={classNames({'sdk-component': true, 'menuItem': true}, this.props.className)}
+          innerDivStyle={innerDivNestedStyle}
           autoGenerateNestedIndicator={this.props.collapsible}
           insetChildren={false}
           autoGenerateNestedIndicator={false}
