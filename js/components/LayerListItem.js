@@ -37,9 +37,7 @@ import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import Download from 'material-ui/svg-icons/file/file-download';
-import Filterlist from 'material-ui/svg-icons/content/filter-list';
 import Divider from 'material-ui/Divider';
-import IconButton from 'material-ui/IconButton';
 
 const layerListItemSource = {
 
@@ -586,20 +584,19 @@ static formats = {
     }
     var download;
     if (layer instanceof ol.layer.Vector && this.props.showDownload) {
-      download = <MenuItem primaryText='Download' leftIcon={<Download />}onTouchTap={this._download.bind(this)} />
+      download = <MenuItem primaryText={formatMessage(messages.downloadbuttonlabel)} leftIcon={<Download />}onTouchTap={this._download.bind(this)}/>
     }
     var filter;
     if (layer instanceof ol.layer.Vector && this.props.allowFiltering) {
-      filter = <MenuItem primaryText='Filter' leftIcon={<i className='fa fa-filter'></i>} onTouchTap={this._filter.bind(this)} />
+      filter = <MenuItem primaryText={formatMessage(messages.filterbuttonlabel)} leftIcon={<i className='fa fa-filter'></i>} onTouchTap={this._filter.bind(this)} />
     }
     var label;
     if (layer instanceof ol.layer.Vector && this.props.allowLabeling) {
       label = (<Button className='layer-list-item-label' onTouchTap={this._label.bind(this)} tooltipPosition='top-center' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.labelbuttonlabel)} ><LabelIcon /></Button>);
     }
-
     var remove;
     if (this.props.allowRemove && layer.get('type') !== 'base' && layer.get('isRemovable') === true) {
-      remove = <MenuItem primaryText='Remove' leftIcon={<DeleteIcon />}onTouchTap={this._remove.bind(this)} />
+      remove = <MenuItem primaryText={formatMessage(messages.removebuttonlabel)} leftIcon={<DeleteIcon />}onTouchTap={this._remove.bind(this)} />
     }
     var edit;
     if (this.props.allowEditing && layer.get('isWFST') === true) {
@@ -613,7 +610,7 @@ static formats = {
     var styling = <i className="fa fa-fw" ></i>;
     var canStyle = layer.get('wfsInfo') && this.props.allowStyling;
     if (canStyle) {
-      styling = (<i className='ms ms-style' onTouchTap={this._style.bind(this)} tooltipPosition='top-center'  tooltip={formatMessage(messages.stylingbuttonlabel)}> </i>);
+      styling = (<i className='ms ms-style' onTouchTap={this._style.bind(this)}> </i>);
       styleModal = (<StyleModal inline={this.props.inlineDialogs} {...this.props} open={this.state.styleOpen} onRequestClose={this._closeStyling.bind(this)} layer={this.props.layer} />);
     }
     if (this.props.showTable && (this.props.layer instanceof ol.layer.Vector || this.props.layer.get('wfsInfo') !== undefined)) {
@@ -667,7 +664,6 @@ static formats = {
               <Divider/>
               {download}
               {filter}
-              <MenuItem primaryText='Filter' leftIcon={<Filterlist/>} onTouchTap={this._filter.bind(this)}/>
               {remove}
             </Menu>
           </Popover>
