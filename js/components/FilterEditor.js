@@ -243,14 +243,14 @@ class FilterEditor extends React.PureComponent {
     return (
       <Paper className='style-contentContainer' zDepth={0}>
         <Subheader className='style-listHeader'>{formatMessage(messages.filterlabel)}</Subheader>
-        <list>
+        <List>
           <ListItem>
             <SelectField value={this.state.logical} onChange={this._onChangeLogical.bind(this)}>
               {logicalItems}
             </SelectField>
           </ListItem>
           {filterItems}
-        </list>
+        </List>
 
 
         <ToolbarGroup style={{width: '100%', justifyContent: 'flex-end'}}>
