@@ -11,7 +11,7 @@ raf.polyfill();
 
 describe('LayerStore', function() {
 
-  var target, map, level1, level2, level3, level3a;
+  var target, map, level1, level2, level3, level3a, count, onChangeCb;
   var width = 360;
   var height = 180;
 
@@ -51,6 +51,7 @@ describe('LayerStore', function() {
         resolution: 1
       })
     });
+    LayerStore.bindMap(map);
   });
 
   afterEach(function() {
@@ -58,20 +59,17 @@ describe('LayerStore', function() {
     document.body.removeChild(target);
   });
 
-  it('finds a layer in a group', function() {
-    LayerStore.bindMap(map);
+  it('LayerStore behaves as expected', function() {
+    // finds a layer in a group
     var layer = LayerStore.findLayer('level3');
     assert.equal(layer !== undefined, true);
     layer = LayerStore.findLayer('level2');
     assert.equal(layer !== undefined, true);
     layer = LayerStore.findLayer('level4');
     assert.equal(layer !== undefined, false);
-  });
-
-  it('fires change when layer gets added / removed on the map', function() {
-    LayerStore.bindMap(map);
-    var count = 0;
-    var onChangeCb = function() {
+    // fires change when layer gets added / removed on the map
+    count = 0;
+    onChangeCb = function() {
       count++;
     };
     LayerStore.addChangeListener(onChangeCb);
@@ -82,34 +80,21 @@ describe('LayerStore', function() {
     map.getLayers().pop();
     assert.equal(count, 2);
     assert.equal(LayerStore.getState().flatLayers.length, 2);
-  });
-
-  it('listens to the app dispatcher', function() {
-    LayerStore.bindMap(map);
+    // listens to the app dispatcher
     var vector = new ol.layer.Vector({id: '1'});
     map.addLayer(vector);
     assert.equal(LayerStore.findLayer('1'), vector);
     LayerActions.removeLayer(vector);
     assert.equal(LayerStore.findLayer('1'), undefined);
-  });
-
-  it('handles layer order changes', function() {
-    LayerStore.bindMap(map);
-    var count = 0;
-    var onChangeCb = function() {
-      count++;
-    };
-    LayerStore.addChangeListener(onChangeCb);
+    // handles layer order changes
+    count = 0;
     var idx = level2.getLayers().getArray().indexOf(level3a);
     assert.equal(idx, 1);
     LayerActions.moveLayer(1, 0, level3a, level2);
     assert.equal(count, 2);
     idx = level2.getLayers().getArray().indexOf(level3a);
     assert.equal(idx, 0);
-  });
-
-  it('removes layers from a group', function() {
-    LayerStore.bindMap(map);
+    // removes layers from a group
     // test remove layer from subgroup
     var length = level2.getLayers().getLength();
     assert.equal(length, 2);
@@ -128,13 +113,11 @@ describe('LayerStore', function() {
     LayerActions.removeLayer(level1);
     length = map.getLayers().getLength();
     assert.equal(length, 0);
-  });
-
-  it('_getWfsInfo does not fail on a WFS layer', function() {
-    var layer = WFSService.createLayer({Name: 'foo'}, 'http://localhost/geoserver/wfs', {title: 'Foo layer'}, ol.proj.get('EPSG:4326'));
+    // _getWfsInfo does not fail on a WFS layer
+    var wfsLayer = WFSService.createLayer({Name: 'foo'}, 'http://localhost/geoserver/wfs', {title: 'Foo layer'}, ol.proj.get('EPSG:4326'));
     var error = false;
     try {
-      LayerStore._getWfsInfo(layer);
+      LayerStore._getWfsInfo(wfsLayer);
     } catch (e) {
       error = true;
     }
