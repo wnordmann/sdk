@@ -11,7 +11,7 @@
  */
 
 import React from 'react';
-import { List, ListItem } from 'material-ui/List';
+import {List, ListItem} from 'material-ui/List';
 import MenuItem from 'material-ui/MenuItem';
 import Subheader from 'material-ui/Subheader';
 import Paper from 'material-ui/Paper';
