@@ -6,6 +6,7 @@ import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
+import ToolActions from '../../js/actions/ToolActions';
 import Select from '../../js/components/Select';
 
 raf.polyfill();
@@ -72,6 +73,17 @@ describe('SelectTool', function() {
     });
     selected = select._handleSelection(cluster, selected);
     assert.equal(selected.length, 3);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('disables the tool', function() {
+    var container = document.createElement('div');
+    var select = ReactDOM.render((
+      <Select intl={intl} map={map} />
+    ), container);
+    assert.equal(select.state.disabled, false);
+    ToolActions.disableAllTools();
+    assert.equal(select.state.disabled, true);
     ReactDOM.unmountComponentAtNode(container);
   });
 

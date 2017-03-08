@@ -6,6 +6,7 @@ import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
+import ToolActions from '../../js/actions/ToolActions';
 import WFST from '../../js/components/WFST';
 
 raf.polyfill();
@@ -96,6 +97,17 @@ describe('WFST', function() {
     ), container);
     wfst.state.layer = map.getLayers().item(0);
     wfst._onDrawEnd({feature: new ol.Feature({foo: 'bar'})});
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('disables the tool', function() {
+    var container = document.createElement('div');
+    var wfst = ReactDOM.render((
+      <WFST layerSelector={false} intl={intl}  map={map}/>
+    ), container);
+    assert.equal(wfst.state.disabled, false);
+    ToolActions.disableAllTools();
+    assert.equal(wfst.state.disabled, true);
     ReactDOM.unmountComponentAtNode(container);
   });
 

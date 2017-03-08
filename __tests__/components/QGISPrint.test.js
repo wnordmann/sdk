@@ -6,6 +6,7 @@ import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
+import ToolActions from '../../js/actions/ToolActions';
 import QGISPrint from '../../js/components/QGISPrint';
 
 raf.polyfill();
@@ -106,6 +107,17 @@ describe('QGISPrint', function() {
       <QGISPrint intl={intl} layouts={printLayouts} map={map}/>
     ), container);
     assert.equal(print._getTileLayers().length, 1);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('disables the tool', function() {
+    var container = document.createElement('div');
+    var print = ReactDOM.render((
+      <QGISPrint intl={intl} layouts={printLayouts} map={map}/>
+    ), container);
+    assert.equal(print.state.disabled, false);
+    ToolActions.disableAllTools();
+    assert.equal(print.state.disabled, true);
     ReactDOM.unmountComponentAtNode(container);
   });
 
