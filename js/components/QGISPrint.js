@@ -22,6 +22,8 @@ import MenuItem from 'material-ui/MenuItem';
 import JSPDF from 'jspdf';
 import LinearProgress from 'material-ui/LinearProgress';
 import Snackbar from 'material-ui/Snackbar';
+import AppDispatcher from '../dispatchers/AppDispatcher';
+import ToolUtil from '../toolutil';
 import TextField from 'material-ui/TextField';
 import PrintIcon from 'material-ui/svg-icons/action/print';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -186,9 +188,11 @@ class QGISPrint extends React.PureComponent {
 
   constructor(props, context) {
     super(props);
+    this._dispatchToken = ToolUtil.register(this);
     this._muiTheme = context.muiTheme || getMuiTheme();
     LayerStore.bindMap(this.props.map);
     this.state = {
+      disabled: false,
       layout: null,
       layoutName: null,
       loading: false,
@@ -197,6 +201,9 @@ class QGISPrint extends React.PureComponent {
       errorOpen: false,
       resolution: null
     };
+  }
+  componentWillUnmount() {
+    AppDispatcher.unregister(this._dispatchToken);
   }
   getChildContext() {
     return {muiTheme: this._muiTheme};
@@ -383,6 +390,12 @@ class QGISPrint extends React.PureComponent {
       errorOpen: false
     });
   }
+  disable() {
+    this.setState({disabled: true});
+  }
+  enable() {
+    this.setState({disabled: false});
+  }
   render() {
     const {formatMessage} = this.props.intl;
     var listitems = this.props.layouts.map(function(lyt, idx) {
@@ -439,14 +452,14 @@ class QGISPrint extends React.PureComponent {
     if (this.props.menu === false) {
       return (
         <span className={classNames('sdk-component qgis-print', this.props.className)}>
-          <Button onTouchTap={this._onPrintButtonClick.bind(this)} tooltip={formatMessage(messages.printbuttontitle)} mini={true} buttonType='Action'><PrintIcon/></Button>
+          <Button disabled={this.state.disabled} onTouchTap={this._onPrintButtonClick.bind(this)} tooltip={formatMessage(messages.printbuttontitle)} mini={true} buttonType='Action'><PrintIcon/></Button>
           {dialog}
         </span>
       );
     } else {
       return (
         <span className={classNames('sdk-component qgis-print', this.props.className)}>
-          <IconMenu anchorOrigin={{horizontal: 'left', vertical: 'top'}} targetOrigin={{horizontal: 'left', vertical: 'top'}} iconButtonElement={<Button label={formatMessage(messages.printmenutext)} />} value={this.state.layoutName}>
+          <IconMenu anchorOrigin={{horizontal: 'left', vertical: 'top'}} targetOrigin={{horizontal: 'left', vertical: 'top'}} iconButtonElement={<Button disabled={this.state.disabled} label={formatMessage(messages.printmenutext)} />} value={this.state.layoutName}>
             {listitems}
           </IconMenu>
           {dialog}
