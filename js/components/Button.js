@@ -92,11 +92,11 @@ class Button extends React.PureComponent {
   render() {
     var button, buttonStyle = Object.assign({}, this.props.buttonStyle);
     if (this.props.buttonType === 'Action') {
-      button = (<FloatingActionButton iconStyle={this.props.iconStyle} backgroundColor={this.props.backgroundColor} onTouchTap={this.props.onTouchTap} style={this.props.style} children={this.props.children} mini={this.props.mini}  />);
+      button = (<FloatingActionButton iconStyle={this.props.iconStyle} disabled={this.props.disabled} backgroundColor={this.props.backgroundColor} onTouchTap={this.props.onTouchTap} style={this.props.style} children={this.props.children} mini={this.props.mini}  />);
     } else if (this.props.buttonType === 'Flat') {
-      button = (<FlatButton disableTouchRipple={true} secondary={this.props.secondary} primary={this.props.primary} onTouchTap={this.props.onTouchTap} icon={this.props.icon} children={this.props.children} label={this.props.label} />);
+      button = (<FlatButton disableTouchRipple={true} disabled={this.props.disabled} secondary={this.props.secondary} primary={this.props.primary} onTouchTap={this.props.onTouchTap} icon={this.props.icon} children={this.props.children} label={this.props.label} />);
     } else if (this.props.buttonType === 'Icon') {
-      button = (<IconButton disableTouchRipple={true} onTouchTap={this.props.onTouchTap} style={this.props.style} children={this.props.children}/>);
+      button = (<IconButton disableTouchRipple={true} disabled={this.props.disabled} onTouchTap={this.props.onTouchTap} style={this.props.style} children={this.props.children}/>);
     } else {
       buttonStyle.margin = '10px 12px';
       button = (<RaisedButton disableTouchRipple={true} disabled={this.props.disabled} style={this.props.style} secondary={this.props.secondary} onTouchTap={this.props.onTouchTap} icon={this.props.icon} children={this.props.children} label={this.props.label} />);
