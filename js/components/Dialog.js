@@ -20,7 +20,13 @@ import IconButton from 'material-ui/IconButton';
 
 export default class Dialog extends React.PureComponent {
   static propTypes = {
-    inline: React.PropTypes.bool
+    className: React.PropTypes.string,
+    inline: React.PropTypes.bool,
+    onRequestClose: React.PropTypes.func,
+    title: React.PropTypes.string,
+    autoScrollBodyContent: React.PropTypes.bool,
+    actions: React.PropTypes.node,
+    children: React.PropTypes.node
   };
 
   static defaultProps = {
