@@ -125,23 +125,8 @@ describe('LayerList', function() {
         <LayerList intl={intl} map={map}/>
       </MuiThemeProvider>
     ), container);
-    var checkboxes = container.querySelectorAll('input');
-    var checkedCount = 0;
-    var i, ii;
-    for (i = 0, ii = checkboxes.length; i < ii; ++i) {
-      if (checkboxes[i].checked) {
-        checkedCount++;
-      }
-    }
-    assert.equal(checkedCount, 5);
-    group.getLayers().item(0).setVisible(false);
-    checkedCount = 0;
-    for (i = 0, ii = checkboxes.length; i < ii; ++i) {
-      if (checkboxes[i].checked) {
-        checkedCount++;
-      }
-    }
-    assert.equal(checkedCount, 1);
+    var faEyes = container.querySelectorAll('.fa-eye');
+    assert.equal(faEyes.length, 5);
     ReactDOM.unmountComponentAtNode(container);
   });
 

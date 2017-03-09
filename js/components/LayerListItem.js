@@ -1,5 +1,4 @@
-/*
- * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+/* Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -9,7 +8,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {DragSource, DropTarget} from 'react-dnd';
@@ -25,14 +23,9 @@ import LayerActions from '../actions/LayerActions';
 import SLDService from '../services/SLDService';
 import WMSService from '../services/WMSService';
 import Slider from 'material-ui/Slider';
-import Checkbox from 'material-ui/Checkbox';
 import {ListItem} from 'material-ui/List';
 import {RadioButton} from 'material-ui/RadioButton';
-import DownloadIcon from 'material-ui/svg-icons/file/file-download';
-import ZoomInIcon from 'material-ui/svg-icons/action/zoom-in';
-import FilterIcon from 'material-ui/svg-icons/content/filter-list';
 import LabelIcon from 'material-ui/svg-icons/content/text-format';
-import StyleIcon from 'material-ui/svg-icons/image/brush';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import TableIcon from 'material-ui/svg-icons/action/view-list';
@@ -40,6 +33,11 @@ import WMSLegend from './WMSLegend';
 import ArcGISRestLegend from './ArcGISRestLegend';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import Popover from 'material-ui/Popover';
+import Menu from 'material-ui/Menu';
+import MenuItem from 'material-ui/MenuItem';
+import Download from 'material-ui/svg-icons/file/file-download';
+import Divider from 'material-ui/Divider';
 
 const layerListItemSource = {
 
@@ -313,6 +311,7 @@ class LayerListItem extends React.PureComponent {
       filterOpen: false,
       labelOpen: false,
       tableOpen: false,
+      open: true,
       styleOpen: false,
       checked: props.layer.getVisible()
     };
@@ -347,23 +346,22 @@ class LayerListItem extends React.PureComponent {
       this.props.map.getView().un('change:resolution', this._changeResolution, this);
     }
   }
-  static formats = {
-    GeoJSON: {
-      format: new ol.format.GeoJSON(),
-      mimeType: 'text/json',
-      extension: 'geojson'
-    },
-    KML: {
-      format: new ol.format.KML(),
-      mimeType: 'application/vnd.google-earth.kml+xml',
-      extension: 'kml'
-    },
-    GPX: {
-      format: new ol.format.GPX(),
-      mimeType: 'application/gpx+xml',
-      extension: 'gpx'
-    }
-  };
+static formats = {
+  GeoJSON: {
+    format: new ol.format.GeoJSON(),
+    mimeType: 'text/json',
+    extension: 'geojson'
+  },
+  KML: {
+    format: new ol.format.KML(),
+    mimeType: 'application/vnd.google-earth.kml+xml',
+    extension: 'kml'
+  },
+  GPX: {
+    format: new ol.format.GPX(),
+    mimeType: 'application/gpx+xml',
+    extension: 'gpx'
+  }};
   _changeGroupVisible(evt) {
     this.setState({checked: evt.target.getVisible()});
   }
@@ -373,38 +371,51 @@ class LayerListItem extends React.PureComponent {
   _changeResolution() {
     this.setState({resolution: this.props.map.getView().getResolution()});
   }
-  _handleChange(event) {
-    var visible = event.target.checked;
+
+  _handleVisibility(event) {
     var i, ii;
+    var baseLayers = [];
+    var visible = event.target.className.indexOf('fa-eye-slash') > 0;
+
+    var forEachLayer = function(layers, layer) {
+      if (layer instanceof ol.layer.Group) {
+        layer.getLayers().forEach(function(groupLayer) {
+          forEachLayer(layers, groupLayer);
+        });
+      } else if (layer.get('type') === 'base') {
+        layers.push(layer);
+      }
+    };
+
     if (event.target.type === 'radio') {
-      var forEachLayer = function(layers, layer) {
-        if (layer instanceof ol.layer.Group) {
-          layer.getLayers().forEach(function(groupLayer) {
-            forEachLayer(layers, groupLayer);
-          });
-        } else if (layer.get('type') === 'base') {
-          layers.push(layer);
-        }
-      };
-      var baseLayers = [];
+      visible = event.target.checked;
+      var layers = this.props.map.getLayers();
       forEachLayer(baseLayers, this.props.map.getLayerGroup());
       for (i = 0, ii = baseLayers.length; i < ii; ++i) {
         baseLayers[i].setVisible(false);
       }
-      this.props.layer.setVisible(true);
-    } else {
-      this.props.layer.setVisible(visible);
-      if (this.props.layer instanceof ol.layer.Group) {
-        if (this.props.layer.get('type') !== 'base-group') {
-          this.props.layer.getLayers().forEach(function(child) {
-            child.setVisible(visible);
-          }, this);
+      layers.forEach(function(l) {
+        if (l instanceof ol.layer.Group) {
+          l.setVisible(true);
         }
+      })
+      this.props.layer.setVisible(visible);
+    } else if (this.props.layer instanceof ol.layer.Vector || this.props.layer instanceof ol.layer.Tile) {
+      this.props.layer.setVisible(visible);
+    } else if (this.props.layer instanceof ol.layer.Group) {
+      forEachLayer(baseLayers, this.props.map.getLayerGroup());
+      for (i = 0, ii = baseLayers.length; i < ii; ++i) {
+        baseLayers[i].setVisible(false);
       }
+      this.props.layer.setVisible(visible);
+      baseLayers[0].setVisible(visible)
     }
   }
+  _toggleNested(event) {
+    this.setState({open:!this.state.open})
+  }
   _download() {
-    var formatInfo = this.formats[this.props.downloadFormat];
+    var formatInfo = this.constructor.formats[this.props.downloadFormat];
     var format = formatInfo.format;
     var layer = this.props.layer;
     var source = layer.getSource();
@@ -527,6 +538,22 @@ class LayerListItem extends React.PureComponent {
     var resolution = map.getView().getResolution();
     return (resolution >= layer.getMinResolution() && resolution < layer.getMaxResolution());
   }
+
+  _handleMenuOpen = (event) => {
+    // This prevents ghost click.
+    event.preventDefault();
+
+    this.setState({
+      popover: true,
+      anchorEl: event.currentTarget
+    });
+  };
+  _handleRequestClose = () => {
+    this.setState({
+      popover: false
+    });
+  };
+
   render() {
     const {connectDragSource, connectDropTarget} = this.props;
     const layer = this.props.layer;
@@ -536,59 +563,54 @@ class LayerListItem extends React.PureComponent {
     var opacity;
     if (this.props.showOpacity && source && layer.get('type') !== 'base') {
       var val = layer.getOpacity();
-      opacity = (<Slider style={{width: '200px', 'marginLeft':'21px', 'marginTop':'4px', 'marginBottom':'0px'}} defaultValue={val} onChange={this._changeOpacity.bind(this)} />);
+      opacity = (<Slider sliderStyle={{marginTop: '0px', top: '14px', marginBottom: '0'}} defaultValue={val} onChange={this._changeOpacity.bind(this)} />);
     }
     var table;
     if (this.props.showTable && (this.props.layer instanceof ol.layer.Vector || this.props.layer.get('wfsInfo') !== undefined)) {
-      table = (<Button className='layer-list-item-table' onTouchTap={this._showTable.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.tablebuttonlabel)}><TableIcon /></Button>);
+      table = (<Button className='layer-list-item-table' onTouchTap={this._showTable.bind(this)} tooltipPosition='top-center' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.tablebuttonlabel)}><TableIcon /></Button>);
+    }
+
+    var downArrow = <i className="fa fa-angle-down" onClick={this._toggleNested.bind(this)}></i>;
+    var sideArrow = <i className="fa fa-angle-right" onClick={this._toggleNested.bind(this)}></i>;
+    var arrowIcon = this.state.open ? downArrow : sideArrow;
+
+    var layersIcon = <i className="ms ms-layers"></i>;
+    if (layer.get('type') !== 'base-group') {
+      arrowIcon = <i className="fa fa-fw" ></i>;
     }
     var zoomTo;
     if (layer.get('type') !== 'base' && layer.get('type') !== 'base-group' && ((source && source.getExtent) || layer.get('EX_GeographicBoundingBox')) && this.props.showZoomTo) {
-      zoomTo = (<Button className='layer-list-item-zoom' onTouchTap={this._zoomTo.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.zoombuttonlabel)}><ZoomInIcon /></Button>);
+      zoomTo = <i className="fa fa-crosshairs" onTouchTap={this._zoomTo.bind(this)}></i>;
     }
     var download;
     if (layer instanceof ol.layer.Vector && this.props.showDownload) {
-      download = (<Button className='layer-list-item-download' onTouchTap={this._download.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.downloadbuttonlabel)}><DownloadIcon /></Button>);
+      download = <MenuItem primaryText={formatMessage(messages.downloadbuttonlabel)} leftIcon={<Download />}onTouchTap={this._download.bind(this)}/>
     }
     var filter;
     if (layer instanceof ol.layer.Vector && this.props.allowFiltering) {
-      filter = (<Button className='layer-list-item-filter' onTouchTap={this._filter.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.filterbuttonlabel)}><FilterIcon /></Button>);
+      filter = <MenuItem primaryText={formatMessage(messages.filterbuttonlabel)} leftIcon={<i className='fa fa-filter'></i>} onTouchTap={this._filter.bind(this)} />
     }
     var label;
     if (layer instanceof ol.layer.Vector && this.props.allowLabeling) {
-      label = (<Button className='layer-list-item-label' onTouchTap={this._label.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.labelbuttonlabel)} ><LabelIcon /></Button>);
-    }
-    var styling;
-    var canStyle = layer.get('wfsInfo') && this.props.allowStyling;
-    if (canStyle) {
-      styling = (<Button className='layer-list-item-style' onTouchTap={this._style.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.stylingbuttonlabel)} ><StyleIcon /></Button>);
+      label = (<Button className='layer-list-item-label' onTouchTap={this._label.bind(this)} tooltipPosition='top-center' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.labelbuttonlabel)} ><LabelIcon /></Button>);
     }
     var remove;
     if (this.props.allowRemove && layer.get('type') !== 'base' && layer.get('isRemovable') === true) {
-      remove = (<Button className='layer-list-item-remove' onTouchTap={this._remove.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.removebuttonlabel)} ><DeleteIcon /></Button>);
+      remove = <MenuItem primaryText={formatMessage(messages.removebuttonlabel)} leftIcon={<DeleteIcon />}onTouchTap={this._remove.bind(this)} />
     }
     var edit;
     if (this.props.allowEditing && layer.get('isWFST') === true) {
-      edit = (<Button className='layer-list-item-edit' onTouchTap={this._edit.bind(this)} tooltipPosition='top' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.editbuttonlabel)} ><EditIcon /></Button>);
-    }
-    var input, labelStyle;
-    if (layer.get('type') === 'base' && this.props.group && this.props.group.get('type') === 'base-group') {
-      input = (<RadioButton disabled={this.state.disabled} checked={this.state.checked} label={this.props.title} value={this.props.title} onCheck={this._handleChange.bind(this)} disableTouchRipple={true}/>);
-    } else {
-      if (this.props.handleResolutionChange && this.props.layer.get('type') !== 'base-group' && !this.calculateInRange()) {
-        labelStyle = this.props.labelStyleOutOfScale;
-      }
-      if (this.props.layer.get('emptyTitle')) {
-        labelStyle = labelStyle || {};
-        labelStyle.fontStyle = 'italic';
-      }
+      edit = (<Button className='layer-list-item-edit' onTouchTap={this._edit.bind(this)} tooltipPosition='top-center' style={iconStyle} buttonType='Icon' tooltip={formatMessage(messages.editbuttonlabel)} ><EditIcon /></Button>);
     }
     var tableModal, labelModal, filterModal, styleModal;
     if (this.props.layer instanceof ol.layer.Vector) {
       labelModal = (<LabelModal {...this.props} open={this.state.labelOpen} onRequestClose={this._closeLabel.bind(this)} inline={this.props.inlineDialogs} layer={this.props.layer} />);
       filterModal = (<FilterModal {...this.props} open={this.state.filterOpen} onRequestClose={this._closeFilter.bind(this)} inline={this.props.inlineDialogs} layer={this.props.layer} />);
     }
+    var styling = <i className="fa fa-fw" ></i>;
+    var canStyle = layer.get('wfsInfo') && this.props.allowStyling;
     if (canStyle) {
+      styling = (<i className='ms ms-style' onTouchTap={this._style.bind(this)}> </i>);
       styleModal = (<StyleModal inline={this.props.inlineDialogs} {...this.props} open={this.state.styleOpen} onRequestClose={this._closeStyling.bind(this)} layer={this.props.layer} />);
     }
     if (this.props.showTable && (this.props.layer instanceof ol.layer.Vector || this.props.layer.get('wfsInfo') !== undefined)) {
@@ -611,25 +633,66 @@ class LayerListItem extends React.PureComponent {
         legend = <ArcGISRestLegend layer={this.props.layer} />;
       }
     }
-    var leftCheckbox;
-    if (!input) {
-      leftCheckbox = <Checkbox checked={this.state.checked} onCheck={this._handleChange.bind(this)} />;
+
+    var checked = <i className='fa fa-eye' onClick={this._handleVisibility.bind(this)}></i>;
+
+    var unchecked = <i className='fa fa-eye-slash' onClick={this._handleVisibility.bind(this)}></i>;
+    var baseVisibility = (<RadioButton
+      checkedIcon={checked}
+      uncheckedIcon={unchecked}
+      style={{margin:'0', width:'19px'}}
+      disabled={this.state.disabled}
+      checked={this.state.checked}
+      value={this.props.title}
+      onClick={this._handleVisibility.bind(this)}
+      disableTouchRipple={true}/>);
+
+    var visibility = this.state.checked ? checked : unchecked;
+
+    var popoverEllipsis = (
+      <div>
+        <i className="fa fa-ellipsis-v" onTouchTap={this._handleMenuOpen.bind(this)}></i>
+        <Popover
+            open={this.state.popover}
+            anchorEl={this.state.anchorEl}
+            anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
+            targetOrigin={{horizontal: 'right', vertical: 'top'}}
+            onRequestClose={this._handleRequestClose.bind(this)}
+          >
+            <Menu>
+              <MenuItem leftIcon={<i className='ms ms-opacity'></i>}>{opacity}</MenuItem>
+              <Divider/>
+              {download}
+              {filter}
+              {remove}
+            </Menu>
+          </Popover>
+      </div>
+      );
+    var innerDivNestedStyle
+    var rightIconButton = <div><span className="fixedContainer">{visibility}{zoomTo}{styling}{popoverEllipsis}</span></div>;
+    if (layer.get('type') === 'base') {
+      rightIconButton = <div><span className="fixedContainer">{baseVisibility}</span></div>;
+      innerDivNestedStyle = {
+        marginLeft: '18px'
+      };
     }
     return connectDragSource(connectDropTarget(
       <div>
-        <ListItem className={classNames({'sdk-component': true, 'layer-list-item': true}, this.props.className)} autoGenerateNestedIndicator={this.props.collapsible} primaryTogglesNestedList={false} leftCheckbox={leftCheckbox} primaryText={input ? undefined : this.props.title} nestedItems={this.props.nestedItems} nestedListStyle={{'marginLeft':'40px'}} initiallyOpen={true}>
-          {input}
-        </ListItem>
+        <ListItem
+          className={classNames({'sdk-component': true, 'menuItem': true, 'layer-list-item' : true}, this.props.className)}
+          innerDivStyle={innerDivNestedStyle}
+          autoGenerateNestedIndicator={this.props.collapsible}
+          insetChildren={false}
+          autoGenerateNestedIndicator={false}
+          primaryText={<span className="statusIcons">{arrowIcon}{layersIcon}<span> {this.props.title}</span></span>}
+          rightIcon={rightIconButton}
+          nestedItems={this.props.nestedItems}
+          open={this.state.open}/>
         <div style={{paddingLeft: 72}}>
           {legend}
-          {opacity}
-          {zoomTo}
           {table}
-          {download}
-          {filter}
           {label}
-          {styling}
-          {remove}
           {edit}
           <span>
             {filterModal}
