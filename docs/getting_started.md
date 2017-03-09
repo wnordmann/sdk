@@ -1,18 +1,18 @@
 # Getting Started
 
 ## JSFiddle
-Check out the following [JSFiddle example](https://jsfiddle.net/bartvde/4uwjvcej/).
+Check out the following [JSFiddle example](https://jsfiddle.net/4uwjvcej/).
 
 ## Requirements for development environment
 Make sure g++ is installed on your system.
 
 ## Node version manager (nvm)
 Install the node version manager from https://github.com/creationix/nvm
-For the SDK, you should be using node 6.0.0 so:
+For the SDK, you should be using node long-term support (LTS) so:
 
 ```
-nvm install 6.0.0
-nvm use 6.0.0
+nvm install --lts
+nvm use --lts
 ```
 
 ## Using the web-sdk application generator
@@ -71,8 +71,10 @@ $ node_modules/.bin/web-sdk ~/myapp
    create : ~/myapp/app.jsx
    create : ~/myapp/app.css
    create : ~/myapp/createbuild.js
+   create : ~/myapp/createpackage.js
    create : ~/myapp/debug-server.js
    create : ~/myapp/index.html
+   create : ~/myapp/proxy-config.json
    create : ~/myapp/package.json
 
    install dependencies:
@@ -82,7 +84,7 @@ $ node_modules/.bin/web-sdk ~/myapp
      $ npm start
 ```
 
-The application is generated and instructions are outputted on the next steps to undertake. Change to this directory and run:
+The application is generated and instructions are outputted on the next steps to undertake. Change to this directory and run (it is safe to ignore the WARNs):
 
 ```
 npm install
@@ -102,7 +104,7 @@ This will start up a debug server on port 3000:
 $ npm start
 
 > myapp@0.0.0 start ~/myapp
-> npm-run-all --parallel createdir start:debug
+> npm-run-all createdir start:debug
 
 
 > myapp@0.0.0 createdir ~/myapp
