@@ -98,7 +98,6 @@ class AppBarExampleIcon extends Component {
           fullWidth={true}
         />
         <div className="addLayer-colorPicker">
-
           <Checkbox
             label="Fill"
             style={{width: "70%"}}
