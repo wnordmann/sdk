@@ -686,7 +686,7 @@ static formats = {
           insetChildren={false}
           autoGenerateNestedIndicator={false}
           primaryText={<span className="statusIcons">{arrowIcon}{layersIcon}<span> {this.props.title}</span></span>}
-          rightIconButton={rightIconButton}
+          rightIcon={rightIconButton}
           nestedItems={this.props.nestedItems}
           open={this.state.open}/>
         <div style={{paddingLeft: 72}}>
