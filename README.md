@@ -4,7 +4,7 @@
 [![Travis CI Status](https://secure.travis-ci.org/boundlessgeo/sdk.svg)](http://travis-ci.org/#!/boundlessgeo/sdk)
 [![Coverage Status](https://coveralls.io/repos/github/boundlessgeo/sdk/badge.svg?branch=master)](https://coveralls.io/github/boundlessgeo/sdk?branch=master)
 
-Javascript SDK based on React, OpenLayers 3 and Flux.
+Javascript SDK based on React, OpenLayers and Flux.
 
 For the user interface, [material-ui](http://www.material-ui.com/) is used.
 
