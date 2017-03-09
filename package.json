@@ -23,7 +23,7 @@
     "build:copy:dist": "npm-run-all build copy:dist:release",
     "clean:build": "rimraf release",
     "release": "npm-run-all clean:build build:babel build:copy-files build:copy:css build:copy:locale build:copy:dist",
-    "cover": "mochify --extension .jsx --plugin [ mochify-istanbul --report text --report lcovonly --dir ./coverage --exclude **/js/constants/* --exclude **/js/**/*.css --exclude **/__tests__/**/* ] --transform ./scripts/test-transform.js __tests__/**/*.test.js",
+    "cover": "mochify --extension .jsx --plugin [ mochify-istanbul --report text --report lcovonly --dir ./coverage --exclude **/js/constants/* --exclude **/js/**/*.css --exclude **/js/**/*.scss --exclude **/__tests__/**/* ] --transform ./scripts/test-transform.js __tests__/**/*.test.js",
     "createdir:build:js": "mkdirp dist/js",
     "removedir:css": "rimraf dist/css",
     "createdir:css": "mkdirp dist/css",
