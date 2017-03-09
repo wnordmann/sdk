@@ -4,15 +4,7 @@
 
     npm run docs
 
-This depends on gitbook. The 3.1.0 release should be installed, verify with:
-
-    node_modules/.bin/gitbook ls
-
-If not install it manually:
-
-    node_modules/.bin/gitbook fetch 3.1.0
-
-The versions get installed at ~/.gitbook/versions/
+This depends on gitbook.
 
 The doc build also requires that [ebook-convert](https://calibre-ebook.com) from Calibre is installed and on the path.
 
@@ -42,12 +34,14 @@ Go to the directory of your sdk git checkout and type:
     cd release
     npm link
 
-Go to the node_modules/react directory of that subdirectory and type:
+Go to the node_modules/react directory of the root directory and type:
 
+    cd ../node_modules/react
     npm link
 
-Go to the node_modules/openlayers directory of that subdirectory and type:
+Go to the node_modules/openlayers directory of the root directory and type:
 
+    cd ../openlayers
     npm link
 
 In your sdk app type:

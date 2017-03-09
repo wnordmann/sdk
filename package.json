@@ -35,7 +35,7 @@
     "generate:docs": "node scripts/generate-api-doc.js",
     "generate:gitbook": "node_modules/.bin/gitbook build",
     "generate:pdf": "node_modules/.bin/gitbook pdf",
-    "docs": "node_modules/.bin/npm-run-all generate:docs generate:gitbook generate:pdf",
+    "docs": "node_modules/.bin/npm-run-all createdir:docs generate:docs generate:gitbook generate:pdf",
     "serve:gitbook": "node_modules/.bin/gitbook serve",
     "test:mochify": "node_modules/.bin/mochify --extension .jsx --reporter list --transform ./scripts/test-transform.js __tests__/**/*.test.js",
     "test:lint": "eslint __tests__ js --ext .jsx,.js",
