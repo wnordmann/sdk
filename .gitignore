@@ -10,4 +10,5 @@ _book
 book.pdf
 coverage
 locale
+docs/api
 dist
