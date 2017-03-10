@@ -16,8 +16,7 @@ nvm use --lts
 ```
 
 ## Using the web-sdk application generator
-The easiest way to get started is to use the web-sdk application generator. We will also outline the manual steps at the end of this section for advanced users, but the preferred way is to use the application generator.
-
+The easiest way to get started is to use the web-sdk application generator.
 
 ### Installing the generator
 Run the following command:
@@ -26,24 +25,10 @@ Run the following command:
 npm install -g boundless-web-sdk-generator
 ```
 
-To install the package globally might need ```sudo``` rights.
-
 You can then run the web-sdk command like this:
 
 ```
 web-sdk --help
-```
-
-If you have insufficient rights to install globally, install the package like this:
-
-```
-npm install boundless-web-sdk-generator
-```
-
-And run:
-
-```
-node_modules/.bin/web-sdk --help
 ```
 
 This will output the usage instructions:
@@ -62,10 +47,10 @@ $ web-sdk --help
 ```
 
 ### Creating the application
-Let's create our first application with the following command (when using a globally installed ```web-sdk``` you can simply use ```web-sdk ~/myapp```):
+Let's create our first application with the following command:
 
 ```
-$ node_modules/.bin/web-sdk ~/myapp
+$ web-sdk ~/myapp
 
    create : ~/myapp
    create : ~/myapp/app.jsx
@@ -98,7 +83,7 @@ We can now run the debug server with the following command:
 npm start
 ```
 
-This will start up a debug server on port 3000:
+This will start up a debug server on port 3000 by default:
 
 ```
 $ npm start
@@ -118,25 +103,15 @@ info serve-lib Parsing dependencies.
 info serve-lib Debug server running http://localhost:3000/loader.js (Ctrl+C to stop)
 ```
 
+If you want to run the debug server on a different port use:
+
+```
+$ npm start -- --port=5000
+```
+
 To create a zip file package for production use the following command:
 
 ```
-$ npm run package
-```
-
-You will be prompted for a destination file path and file name for the zip file, for instance ```~/myapp.zip```.
-
-## Using Boundless SDK from npm
-The following packages are relevant for the Boundless SDK:
-
-* ```boundless-sdk```, the main package containing the components 
-* ```boundless-sdk-tools```, package containing debug server
-* ```boundless-web-sdk-generator```, package containing CLI for creating apps
-
-So to install them you will need to use:
-
-```
-npm install boundless-sdk
-npm install boundless-sdk-tools
-npm install boundless-web-sdk-generator
+$ npm run build
+$ npm run createzip -- --output-file=/tmp/myapp.zip
 ```
