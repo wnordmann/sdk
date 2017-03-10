@@ -669,14 +669,18 @@ static formats = {
           </Popover>
       </div>
       );
-    var innerDivNestedStyle
+    var innerDivNestedStyle = {
+      marginRight:'100px'
+    }
     var rightIconButton = <div><span className="fixedContainer">{visibility}{zoomTo}{styling}{popoverEllipsis}</span></div>;
     if (layer.get('type') === 'base') {
       rightIconButton = <div><span className="fixedContainer">{baseVisibility}</span></div>;
       innerDivNestedStyle = {
-        marginLeft: '18px'
+        marginLeft: '18px',
+        marginRight:'100px'
       };
     }
+
     return connectDragSource(connectDropTarget(
       <div>
         <ListItem
