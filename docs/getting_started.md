@@ -115,3 +115,26 @@ To create a zip file package for production use the following command:
 $ npm run build
 $ npm run createzip -- --output-file=/tmp/myapp.zip
 ```
+
+### Proxying a local GeoServer
+This section will explain how to use the debug server in combination with a local GeoServer instance. This is only needed if for instance you add your local GeoServer to the list of sources for the Add Layer dialog, basically if you're using a component that needs to do an XHR (AJAX) request to GeoServer, such as GetCapabilities.
+
+The file ```proxy-config.json``` contains the configuration for the proxy. The default configuration will proxy a GeoServer on port 8080, and will assume that the debug server of your application is running on port 3000. If this differs, adapt the configuration in ```proxy-config.json```.
+
+The proxy server will run on port 4000 by default (you can adapt this in package.json). To start up the proxy do the following in two separate terminals:
+
+first of all, start off the debug server like you would normally do:
+
+```
+$ npm start
+```
+
+then, start the proxy server with the following command:
+
+```
+$ npm run start:proxy
+```
+
+Then, in your browser, point to http://localhost:4000 instead of https://localhost:3000
+
+In your application you will now be able to use a relative url for GeoServer, so ```/geoserver/ows```. When you deploy to production, you should create a war file with the ```createzip``` command and deploy it next to your GeoServer, or ensure your GeoServer has CORS headers enabled. Enabling CORS headers on your GeoServer will also mean the proxy is not needed in the debug server.
