@@ -3,7 +3,6 @@
 Boundless SDK
 
 * [Getting started](getting_started.md)
-* [QGIS Web Application Builder](wab.md)
 * [Tutorial](tutorial.md)
 * [Writing components](writing_components.md)
 * [For developers](developers.md)
