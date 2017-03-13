@@ -21,12 +21,12 @@ To begin, create a new application:
 ```
 web-sdk ~/myapp
 cd ~/myapp
-nvm use 6.0.0
+nvm use --lts
 npm i
 npm start
 ```
 
-Verify in the browser that the application is running successfully by navigating to http://localhost:3000/, replacing localhost with the name of the host where the SDK is being served.
+Verify in the browser that the application is running successfully by navigating to http://localhost:3000/
 
 ## Add a toolbar
 The first step is adding a toolbar so we have a container to put in our new MapTool. Open up app.jsx and add an import statement for the toolbar:
@@ -55,35 +55,28 @@ Open up app.css and change the .map selector to take into account the space that
 }
 ```
 
-Also move the layer list and zoom button to be a child of MapPanel:
-
-```html
-  <MapPanel id='map' map={map}>
-    <div><LayerList map={map} /></div>
-    <div id='zoom-buttons'><Zoom map={map} /></div>
-  </MapPanel>
-```
-
-Open up app.css to give the zoom buttons the correct z-index so it's on top of the map:
+Also move the zoom buttons and the layer list down:
 
 ```css
 #zoom-buttons {
-  z-index: 1100;
   margin-left: 20px;
   position: absolute;
-  top: 20px;
+  top: 76px;
+}
+div.layer-switcher {
+  top: 76px;
 }
 ```
 
 We have now prepared the application for writing our own tool and adding it to the toolbar.
 
-Create a new directory ```js/components``` and create a new file in it named ```DrawBox.jsx```. Copy and paste the following content:
+Create a new directory ```components``` and create a new file in it named ```DrawBox.js```. Copy and paste the following content:
 
 ```javascript
 import React from 'react';
 import ol from 'openlayers';
-import ToolUtil from 'boundless-sdk/js/toolutil.js';
-import RaisedButton from 'boundless-sdk/js/components/Button.jsx';
+import ToolUtil from 'boundless-sdk/toolutil.js';
+import RaisedButton from 'boundless-sdk/components/Button';
 
 class DrawBox extends React.Component {
   constructor(props) {
@@ -151,7 +144,7 @@ export default DrawBox;
 Open up app.jsx and add an import for our new DrawBox component:
 
 ```javascript
-import DrawBox from './js/components/DrawBox.jsx';
+import DrawBox from './components/DrawBox';
 ```
 
 and add a DrawBox to the Toolbar:
@@ -162,12 +155,12 @@ and add a DrawBox to the Toolbar:
   </Toolbar>
 ```
 
-Save and reload the browser. You will now see a button in the Toolbar that reads Draw Box. Let's examine the code in more detail.
+Save the file and reload the browser. You will now see a button in the Toolbar that reads Draw Box. Let's examine the code in more detail.
 
-Any MapTool kind of component will have the following:
+Any MapTool kind of component (generally speaking tools / components that use OpenLayers interactions) will have the following:
 
 ```javascript
-import ToolUtil from 'boundless-sdk/js/toolutil.js';
+import ToolUtil from 'boundless-sdk/toolutil';
 
   constructor(props) {
     super(props);
@@ -185,7 +178,7 @@ import ToolUtil from 'boundless-sdk/js/toolutil.js';
   }
 ```
 
-In the constructor, we will register for all the events on the application dispatcher that are tool related. This means we will get deactivated automatically when another tool in the same toggleGroup gets activated. In the componentWillUnmount function we will unregister those listeners. Any map tool will have to have an activate and deactivate function. In our case, when the button is pressed, we will activate our instance of ````ol.interaction.Draw```. Optionally it can also have an enable and disable function to handle disabling itself in 3D mode and enabling itself in 2D mode.
+In the constructor, we will register for all the events on the application dispatcher that are tool related. This means we will get deactivated automatically when another tool in the same toggleGroup gets activated. In the componentWillUnmount function we will unregister those listeners. Any map tool will have to have an activate and deactivate function. In our case, when the button is pressed, we will activate our instance of ````ol.interaction.Draw```. Optionally it can also have an enable and disable function to handle disabling itself in 3D (Globe) mode and enabling itself in 2D mode.
 
 In our constructor we are creating a vector source to keep our boxes, and a draw interaction that can draw box geometries. Using a vector layer the boxes are displayed on the map, using a stroke color that can be configured by the end user and defaults to red.
 
@@ -196,10 +189,14 @@ Open up app.jsx and change our DrawBox to have a blue stroke color:
 ```
 
 ## Component that shows output
-In this exercise we will be creating a new component that will show the area of a box that is drawn by the DrawBox tool. In order to have 2 components communicate, we need to use the AppDispatcher. First, we need to prepare the HTML structure of the application for the box info panel. Open up app.jsx and wrap the Toolbar and MapPanel in a new div:
+In this exercise we will be creating a new component that will show the area of a box that is drawn by the DrawBox tool. In order to have 2 components communicate, we need to use the AppDispatcher. First, we need to prepare the HTML structure of the application for the box info panel. Open up app.jsx and wrap the existing content in a new div:
 
 ```html
   <div className='row container'>
+    <Toolbar><DrawBox strokeColor='#0000FF' map={map} /></Toolbar>
+    <MapPanel id='map' map={map} />
+    <div><LayerList collapsible={false} map={map} /></div>
+    <div id='zoom-buttons'><Zoom map={map} /></div>
   </div>
 ```
 
@@ -208,28 +205,6 @@ After this div, add a new row for our box info:
 ```
   <div className='row boxinfo'>
   </div>
-```
-
-The complete render function will now look like:
-
-```javascript
-  render() {
-    return (
-      <div id='content'>
-        <div className='row container'>
-          <Toolbar>
-            <DrawBox strokeColor='#0000FF' map={map} />
-          </Toolbar>
-          <MapPanel id='map' map={map}>
-            <div><LayerList map={map} /></div>
-            <div id='zoom-buttons'><Zoom map={map} /></div>
-          </MapPanel>
-        </div>
-        <div className='row boxinfo'>
-        </div>
-      </div>
-    );
-  }
 ```
 
 Open up app.css and give some space to our boxinfo container:
@@ -252,11 +227,11 @@ And change the height of the map to:
 height: calc(75% - 56px);
 ```
 
-We have now prepared a container for our new component. Create a new file ```js/components/BoxInfo.jsx``` and open it up in your favourite text editor:
+We have now prepared a container for our new component. Create a new file ```components/BoxInfo.js``` and open it up in your favorite text editor:
 
 ```javascript
 import React from 'react';
-import AppDispatcher from 'boundless-sdk/js/dispatchers/AppDispatcher.js';
+import AppDispatcher from 'boundless-sdk/dispatchers/AppDispatcher';
 
 class BoxInfo extends React.Component {
   constructor(props) {
@@ -312,7 +287,7 @@ export default BoxInfo;
 Later on we will examine this code in more detail, but for now just copy and paste this code. Open up app.jsx and add the BoxInfo component:
 
 ```javascript
-import BoxInfo from './js/components/BoxInfo.jsx';
+import BoxInfo from './components/BoxInfo';
 
 ..
   <div className='row boxinfo'>
@@ -320,10 +295,10 @@ import BoxInfo from './js/components/BoxInfo.jsx';
   </div>
 ```
 
-Now when drawing a box we want to display the area in the box info tool, but nothing will happen as yet. This is because we are not firing DRAWBOX as yet through the AppDispatcher from the DrawBox tool. Open up DrawBox.jsx and make the following changes:
+Now when drawing a box we want to display the area in the box info tool, but nothing will happen as yet. This is because we are not firing DRAWBOX as yet through the AppDispatcher from the DrawBox tool. Open up DrawBox.js and make the following changes:
 
 ```javascript
-import AppDispatcher from 'boundless-sdk/js//dispatchers/AppDispatcher.js';
+import AppDispatcher from 'boundless-sdk/dispatchers/AppDispatcher';
 
   source.on('addfeature', function(evt) {
     AppDispatcher.handleAction({
@@ -333,7 +308,7 @@ import AppDispatcher from 'boundless-sdk/js//dispatchers/AppDispatcher.js';
   }, this);
 ```
 
-Add the ```addfeature``` listener in the constructor. Reload the browser and a draw a box. After drawing the box, its area should get displayed. Now we will investigate the BoxInfo code in more detail. In the constructor we register a listener on the AppDispatcher for ```DRAWBOX```, the geometry will get sent in the payload. We will keep information from the last 5 drawn boxes, and it will get displayed by calling ```setState``` with the boxInfo array. The BoxInfo component can get configured with 2 properties:
+Add the ```addfeature``` listener in the constructor. Reload the browser and draw a box. After drawing the box, its area should get displayed. Now we will investigate the BoxInfo code in more detail. In the constructor we register a listener on the AppDispatcher for ```DRAWBOX```, the geometry will get sent in the payload. We will keep information from the last 5 drawn boxes, and it will get displayed by calling ```setState``` with the boxInfo array. The BoxInfo component can get configured with 2 properties:
 
 * title, the title to display in the header of the panel
 * tplText, the template text to display for each box
@@ -347,10 +322,10 @@ Now open up app.jsx and edit our BoxInfo definition:
 and verify that these changes have effect.
 
 ## Modify the DrawBox component so it shows a popup
-In this exercise we will be changing the DrawBox component so that it will also show an InfoPopup after drawing a box with its area. Open up ```js/components/DrawBox.jsx``` in your favourite text editor and make the following addition for the import:
+In this exercise we will be changing the DrawBox component so that it will also show an InfoPopup after drawing a box with its area. Open up ```components/DrawBox.js``` in your favorite text editor and make the following addition for the import:
 
 ```javascript
-import ToolActions from 'boundless-sdk/js/actions/ToolActions.js';
+import ToolActions from 'boundless-sdk/actions/ToolActions';
 ```
 
 Also modify the ```addfeature``` listener of the vector source:
@@ -362,7 +337,7 @@ Also modify the ```addfeature``` listener of the vector source:
       ..
 ```
 
-This will set the AREA as an attribute on the feature and will call the showPopup function of ToolActions to display the popup for this feature. However our changes are not yet complete, we need to make 2 more changes. Open up ```js/components/DrawBox.jsx``` and change the definition of the layer:
+This will set the AREA as an attribute on the feature and will call the showPopup function of ToolActions to display the popup for this feature. However our changes are not yet complete, we need to make 2 more changes. Open up ```components/DrawBox.js``` and change the definition of the layer:
 
 ```javascript
   popupInfo: '#AllAttributes',
@@ -371,7 +346,7 @@ This will set the AREA as an attribute on the feature and will call the showPopu
 This will indicate that all the feature's attributes need to get displayed in the popup, in our case this is only AREA. Now open up app.jsx:
 
 ```javascript
-import InfoPopup from 'boundless-sdk/js/components/InfoPopup.jsx';
+import InfoPopup from 'boundless-sdk/components/InfoPopup';
 ```
 
 In the render function add the InfoPopup after the MapPanel:
@@ -386,4 +361,4 @@ And then change the DrawBox configuration so it is in the same toggleGroup:
 <DrawBox toggleGroup='navigation' strokeColor='#0000FF' map={map} />
 ```
 
-Now reload the application and a draw a box. It should a popup with its area as well.
+Now reload the application and a draw a box. It should show a popup with its area as well.

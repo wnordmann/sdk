@@ -5,7 +5,7 @@ In the getting started section we have learned how to create a skeleton applicat
 
 The skeleton application contains two base map layers, OSM streets and ESRI world imagery, and a single widget, the ```LayerList``` widget.
 
-The main file of the application is ```app.jsx```. Open up this file in your favorite text editor. Look for the definition of ```ol.Map```. The map gets defined with a layer group, that combines the OSM streets and ESRI world imagery layers. The view is defined with an initial  center and zoom level. If you are not familiar with OpenLayers 3, the recommendation is to use the workshop at http://openlayers.org/workshop/ to get up to speed with OpenLayers 3.
+The main file of the application is ```app.jsx```. Open up this file in your favorite text editor. Look for the definition of ```ol.Map```. The map gets defined with a layer group, that combines the OSM streets and ESRI world imagery layers. The view is defined with an initial  center and zoom level. If you are not familiar with OpenLayers, the recommendation is to use the workshop at http://openlayers.org/workshop/ to get up to speed with OpenLayers.
 
 ## 2. Adding a vector layer from a GeoJSON file
 Create a subdirectory called ```data``` in the root of the application directory, download USA states data as GeoJSON from: http://data.okfn.org/data/datasets/geo-boundaries-us-110m and save it to the ```data``` subdirectory.
@@ -86,7 +86,7 @@ var map = new ol.Map({
 In this step we'll learn how to add another component to the application, besides the LayerList component which is already in the application. First, we'll add an import statement at the top of ```app.jsx```:
 
 ```javascript
-import FeatureTable from 'boundless-sdk/js/components/FeatureTable.jsx';
+import FeatureTable from 'boundless-sdk/components/FeatureTable';
 ```
 
 In the render function of our application, we need to add the definition of our new component, FeatureTable:
@@ -97,7 +97,7 @@ The feature table needs to get configured with at least a layer and a map:
   <MapPanel id='map' className='row' map={map} />
   <div><LayerList map={map} /></div>
   <div id='zoom-buttons'><Zoom map={map} /></div>
-  <div id='table' className='row'><FeatureTable resizeTo='table' map={map} layer={map.getLayers().item(1)} /></div>
+  <div id='table' className='row'><FeatureTable map={map} layer={map.getLayers().item(1)} /></div>
 ```
 
 Our div with id ```table``` does not yet have a size, so open up ```app.css``` and give it some space on the page:
@@ -113,7 +113,7 @@ Our div with id ```table``` does not yet have a size, so open up ```app.css``` a
 
 We have reduced the map div to 50% height and allocated the other 50% for the table.
 
-If you reload the debug server at http://localhost:3000/ you'll see that we now have a feature table at the bottom of the page. With the ```resizeTo``` property we have told the FeatureTable to resize itself to the div with id ```table```.
+If you reload the debug server at http://localhost:3000/ you'll see that we now have a feature table at the bottom of the page.
 
 When you click a row in the feature table, it will select the corresponding geometry in the map.
 
@@ -124,13 +124,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import {addLocaleData, IntlProvider} from 'react-intl';
-import Zoom from 'boundless-sdk/js/components/Zoom.jsx';
-import MapPanel from 'boundless-sdk/js/components/MapPanel.jsx';
-import FeatureTable from 'boundless-sdk/js/components/FeatureTable.jsx';
-import LayerList from 'boundless-sdk/js/components/LayerList.jsx';
+import Zoom from 'boundless-sdk/components/Zoom';
+import MapPanel from 'boundless-sdk/components/MapPanel';
+import FeatureTable from 'boundless-sdk/components/FeatureTable';
+import LayerList from 'boundless-sdk/components/LayerList';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import enLocaleData from 'react-intl/locale-data/en.js';
-import enMessages from 'boundless-sdk/locale/en.js';
+import enLocaleData from 'react-intl/locale-data/en';
+import enMessages from 'boundless-sdk/locale/en';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 
@@ -198,7 +198,7 @@ class MyApp extends React.Component {
         <MapPanel id='map' className='row' map={map} />
         <div><LayerList map={map} /></div>
         <div id='zoom-buttons'><Zoom map={map} /></div>
-        <div id='table' className='row'><FeatureTable resizeTo='table' map={map} layer={map.getLayers().item(1)} /></div>
+        <div id='table' className='row'><FeatureTable map={map} layer={map.getLayers().item(1)} /></div>
       </div>
     );
   }
@@ -258,7 +258,7 @@ In this step we'll be adding a button to the application that will open up a dia
 Again, we will start by adding an ```import``` statement to import our component (and the Toolbar to put the button into):
 
 ```javascript
-import AddLayer from 'boundless-sdk/js/components/AddLayer.jsx';
+import AddLayer from 'boundless-sdk/components/AddLayer';
 import Toolbar from 'material-ui/Toolbar/Toolbar';
 ```
 
@@ -282,7 +282,7 @@ Open up app.css and take the 56px of the toolbar from the map's height, and move
   top: 76px;
 }
 div.layer-switcher {
-  top: 4em;
+  top: 76px;
 }
 ```
 
@@ -293,15 +293,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import {addLocaleData, IntlProvider} from 'react-intl';
-import Zoom from 'boundless-sdk/js/components/Zoom.jsx';
-import MapPanel from 'boundless-sdk/js/components/MapPanel.jsx';
-import FeatureTable from 'boundless-sdk/js/components/FeatureTable.jsx';
-import LayerList from 'boundless-sdk/js/components/LayerList.jsx';
-import AddLayer from 'boundless-sdk/js/components/AddLayer.jsx';
+import Zoom from 'boundless-sdk/components/Zoom';
+import MapPanel from 'boundless-sdk/components/MapPanel';
+import FeatureTable from 'boundless-sdk/components/FeatureTable';
+import LayerList from 'boundless-sdk/components/LayerList';
+import AddLayer from 'boundless-sdk/components/AddLayer';
 import Toolbar from 'material-ui/Toolbar/Toolbar';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import enLocaleData from 'react-intl/locale-data/en.js';
-import enMessages from 'boundless-sdk/locale/en.js';
+import enLocaleData from 'react-intl/locale-data/en';
+import enMessages from 'boundless-sdk/locale/en';
 
 // Needed for onTouchTap
 // Can go away when react 1.0 release
@@ -368,7 +368,7 @@ class MyApp extends React.Component {
         <MapPanel id='map' className='row' map={map} />
         <div><LayerList map={map} /></div>
         <div id='zoom-buttons'><Zoom map={map} /></div>
-        <div id='table' className='row'><FeatureTable resizeTo='table' map={map} layer={map.getLayers().item(1)} /></div>
+        <div id='table' className='row'><FeatureTable map={map} layer={map.getLayers().item(1)} /></div>
       </div>
     );
   }
@@ -421,7 +421,7 @@ html, body {
   top: 76px;
 }
 div.layer-switcher {
-  top: 4em;
+  top: 76px;
 }
 ```
 
