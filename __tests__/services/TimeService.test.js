@@ -1,7 +1,7 @@
 /* global describe, it */
 
 import {assert} from 'chai';
-import TimeService from '../../js/services/TimeService';
+import TimeService from '../../src/services/TimeService';
 
 describe('TimeService', function() {
 

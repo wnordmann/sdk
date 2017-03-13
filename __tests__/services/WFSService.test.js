@@ -3,7 +3,7 @@
 import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
-import WFSService from '../../js/services/WFSService';
+import WFSService from '../../src/services/WFSService';
 
 raf.polyfill();
 

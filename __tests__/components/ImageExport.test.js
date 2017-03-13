@@ -7,7 +7,7 @@ import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
 import TestUtils from 'react-addons-test-utils';
-import ImageExport from '../../js/components/ImageExport';
+import ImageExport from '../../src/components/ImageExport';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 

@@ -4,7 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {assert} from 'chai';
 import intl from '../mock-i18n';
-import Geocoding from '../../js/components/Geocoding';
+import Geocoding from '../../src/components/Geocoding';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 

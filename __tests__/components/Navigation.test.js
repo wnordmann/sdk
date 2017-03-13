@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import {assert} from 'chai';
 import intl from '../mock-i18n';
 import TestUtils from 'react-addons-test-utils';
-import Navigation from '../../js/components/Navigation';
+import Navigation from '../../src/components/Navigation';
 
 describe('Navigation', function() {
 

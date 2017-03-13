@@ -9,7 +9,7 @@ import intl from '../mock-i18n';
 import 'phantomjs-polyfill-object-assign';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import LayerList from '../../js/components/LayerList';
+import LayerList from '../../src/components/LayerList';
 
 raf.polyfill();
 

@@ -3,7 +3,7 @@
 import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
-import MapConfigService from '../../js/services/MapConfigService';
+import MapConfigService from '../../src/services/MapConfigService';
 
 raf.polyfill();
 

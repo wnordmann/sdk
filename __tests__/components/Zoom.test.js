@@ -11,7 +11,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import 'phantomjs-polyfill-object-assign';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-import Zoom from '../../js/components/Zoom';
+import Zoom from '../../src/components/Zoom';
 
 raf.polyfill();
 

@@ -3,8 +3,8 @@
 import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
-import FeatureStore from '../../js/stores/FeatureStore';
-import SelectActions from '../../js/actions/SelectActions';
+import FeatureStore from '../../src/stores/FeatureStore';
+import SelectActions from '../../src/actions/SelectActions';
 
 raf.polyfill();
 

@@ -10,7 +10,7 @@ import intl from '../mock-i18n';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AddLayer from '../../js/components/AddLayer';
+import AddLayer from '../../src/components/AddLayer';
 
 raf.polyfill();
 injectTapEventPlugin();

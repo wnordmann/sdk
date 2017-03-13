@@ -3,9 +3,9 @@
 import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
-import LayerStore from '../../js/stores/LayerStore';
-import LayerActions from '../../js/actions/LayerActions';
-import WFSService from '../../js/services/WFSService';
+import LayerStore from '../../src/stores/LayerStore';
+import LayerActions from '../../src/actions/LayerActions';
+import WFSService from '../../src/services/WFSService';
 
 raf.polyfill();
 

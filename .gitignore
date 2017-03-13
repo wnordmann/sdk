@@ -3,9 +3,9 @@ npm-debug.log
 tmp
 release
 build
-js/components/c3.min.css
-js/components/slick.css
-js/components/react-table.css
+src/components/c3.min.css
+src/components/slick.css
+src/components/react-table.css
 _book
 book.pdf
 coverage

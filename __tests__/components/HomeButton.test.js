@@ -8,7 +8,7 @@ import ol from 'openlayers';
 import intl from '../mock-i18n';
 import TestUtils from 'react-addons-test-utils';
 import 'phantomjs-polyfill-object-assign';
-import HomeButton from '../../js/components/HomeButton';
+import HomeButton from '../../src/components/HomeButton';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 

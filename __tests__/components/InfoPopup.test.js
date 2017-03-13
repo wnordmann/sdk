@@ -6,7 +6,7 @@ import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
-import InfoPopup from '../../js/components/InfoPopup';
+import InfoPopup from '../../src/components/InfoPopup';
 
 raf.polyfill();
 

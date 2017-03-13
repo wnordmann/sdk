@@ -4,7 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {assert} from 'chai';
 import intl from '../mock-i18n';
-import LoginModal from '../../js/components/LoginModal';
+import LoginModal from '../../src/components/LoginModal';
 
 describe('LoginModal', function() {
 

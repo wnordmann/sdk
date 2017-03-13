@@ -3,7 +3,7 @@
 import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
-import OpenLayersService from '../../js/services/OpenLayersService';
+import OpenLayersService from '../../src/services/OpenLayersService';
 
 raf.polyfill();
 

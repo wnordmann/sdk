@@ -6,8 +6,8 @@ import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
-import ToolActions from '../../js/actions/ToolActions';
-import WFST from '../../js/components/WFST';
+import ToolActions from '../../src/actions/ToolActions';
+import WFST from '../../src/components/WFST';
 
 raf.polyfill();
 

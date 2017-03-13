@@ -3,7 +3,7 @@
 import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
-import RESTService from '../../js/services/RESTService';
+import RESTService from '../../src/services/RESTService';
 import URL from 'url-parse';
 
 raf.polyfill();

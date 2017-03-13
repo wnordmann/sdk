@@ -7,7 +7,7 @@ import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
 import 'phantomjs-polyfill-object-assign';
-import QueryBuilder from '../../js/components/QueryBuilder';
+import QueryBuilder from '../../src/components/QueryBuilder';
 
 raf.polyfill();
 

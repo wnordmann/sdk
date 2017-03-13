@@ -1,7 +1,7 @@
 /* global describe, it */
 
 import {assert} from 'chai';
-import Util from '../../js/util';
+import Util from '../../src/util';
 
 describe('util', function() {
 

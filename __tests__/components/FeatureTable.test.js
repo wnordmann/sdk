@@ -10,7 +10,7 @@ import 'phantomjs-polyfill-find';
 import 'phantomjs-polyfill-object-assign';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import FeatureTable from '../../js/components/FeatureTable';
+import FeatureTable from '../../src/components/FeatureTable';
 
 raf.polyfill();
 

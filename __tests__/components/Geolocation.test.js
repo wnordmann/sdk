@@ -8,7 +8,7 @@ import ol from 'openlayers';
 import intl from '../mock-i18n';
 import TestUtils from 'react-addons-test-utils';
 import 'phantomjs-polyfill-object-assign';
-import Geolocation from '../../js/components/Geolocation';
+import Geolocation from '../../src/components/Geolocation';
 
 raf.polyfill();
 

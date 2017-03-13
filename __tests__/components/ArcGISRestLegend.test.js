@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
-import ArcGISRestLegend from '../../js/components/ArcGISRestLegend';
+import ArcGISRestLegend from '../../src/components/ArcGISRestLegend';
 
 raf.polyfill();
 

@@ -7,7 +7,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import TestUtils from 'react-addons-test-utils';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-import Dialog from '../../js/components/Dialog';
+import Dialog from '../../src/components/Dialog';
 
 describe('Dialog', function() {
 

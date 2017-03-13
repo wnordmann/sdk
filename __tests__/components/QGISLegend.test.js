@@ -7,7 +7,7 @@ import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
 import 'phantomjs-polyfill-object-assign';
-import QGISLegend from '../../js/components/QGISLegend';
+import QGISLegend from '../../src/components/QGISLegend';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 

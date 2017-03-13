@@ -7,7 +7,7 @@ import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
 import 'phantomjs-polyfill-object-assign';
-import EditPopup from '../../js/components/EditPopup';
+import EditPopup from '../../src/components/EditPopup';
 
 raf.polyfill();
 
