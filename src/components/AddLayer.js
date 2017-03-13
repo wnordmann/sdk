@@ -187,7 +187,7 @@ class AddLayer extends React.PureComponent {
               var fill = new ol.style.Fill({color: util.transformColor(me.state.fillColor)});
               var stroke = new ol.style.Stroke({color: util.transformColor(me.state.strokeColor), width: me.props.strokeWidth});
               var style = new ol.style.Style({
-                ill: fill,
+                fill: fill,
                 stroke: stroke,
                 image: new ol.style.Circle({stroke: stroke, fill: fill, radius: me.props.pointRadius})
               });
