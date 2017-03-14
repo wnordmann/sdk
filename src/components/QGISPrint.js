@@ -328,7 +328,8 @@ class QGISPrint extends React.PureComponent {
     var layout = this.state.layout;
     this._layoutSafeName = layout.name.replace(/[^a-z0-9]/gi, '').toLowerCase();
     var elements = layout.elements;
-    this._pdf = new JSPDF('landscape', 'mm', [layout.width, layout.height]);
+    var orientation = (layout.width > layout.height) ? 'landscape' : 'portrait';
+    this._pdf = new JSPDF(orientation, 'mm', [layout.width, layout.height]);
     this._images = [];
     this._elementsLoaded = 0;
     var size = (map.getSize());
