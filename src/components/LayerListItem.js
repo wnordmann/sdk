@@ -26,7 +26,6 @@ import Slider from 'material-ui/Slider';
 import {ListItem} from 'material-ui/List';
 import {RadioButton} from 'material-ui/RadioButton';
 import LabelIcon from 'material-ui/svg-icons/content/text-format';
-import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import TableIcon from 'material-ui/svg-icons/action/view-list';
 import WMSLegend from './WMSLegend';
@@ -36,7 +35,6 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
-import Download from 'material-ui/svg-icons/file/file-download';
 import Divider from 'material-ui/Divider';
 
 const layerListItemSource = {
@@ -167,9 +165,7 @@ const messages = defineMessages({
 });
 
 /**
- * An item in the LayerList component.
- *
- * ![Layer List Item](../LayerListItem.png)
+$$docs/LayerListItemDetail.md$$
  */
 class LayerListItem extends React.PureComponent {
   static propTypes = {
@@ -585,7 +581,7 @@ static formats = {
     }
     var download;
     if (layer instanceof ol.layer.Vector && this.props.showDownload) {
-      download = <MenuItem primaryText={formatMessage(messages.downloadbuttonlabel)} leftIcon={<Download />}onTouchTap={this._download.bind(this)}/>
+      download = <MenuItem primaryText={formatMessage(messages.downloadbuttonlabel)} leftIcon={<i className='fa fa-download'></i>}onTouchTap={this._download.bind(this)}/>
     }
     var filter;
     if (layer instanceof ol.layer.Vector && this.props.allowFiltering) {
@@ -597,7 +593,7 @@ static formats = {
     }
     var remove;
     if (this.props.allowRemove && layer.get('type') !== 'base' && layer.get('isRemovable') === true) {
-      remove = <MenuItem primaryText={formatMessage(messages.removebuttonlabel)} leftIcon={<DeleteIcon />}onTouchTap={this._remove.bind(this)} />
+      remove = <MenuItem primaryText={formatMessage(messages.removebuttonlabel)} leftIcon={<i className='fa fa-trash'></i>}onTouchTap={this._remove.bind(this)} />
     }
     var edit;
     if (this.props.allowEditing && layer.get('isWFST') === true) {
