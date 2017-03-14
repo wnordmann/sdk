@@ -6,8 +6,8 @@ import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
-import ToolActions from '../../js/actions/ToolActions';
-import QGISPrint from '../../js/components/QGISPrint';
+import ToolActions from '../../src/actions/ToolActions';
+import QGISPrint from '../../src/components/QGISPrint';
 
 raf.polyfill();
 

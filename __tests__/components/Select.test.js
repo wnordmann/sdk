@@ -6,8 +6,8 @@ import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
-import ToolActions from '../../js/actions/ToolActions';
-import Select from '../../js/components/Select';
+import ToolActions from '../../src/actions/ToolActions';
+import Select from '../../src/components/Select';
 
 raf.polyfill();
 

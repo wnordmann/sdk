@@ -6,7 +6,7 @@ import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
 import parse from 'url-parse';
-import WMSLegend from '../../js/components/WMSLegend';
+import WMSLegend from '../../src/components/WMSLegend';
 
 raf.polyfill();
 

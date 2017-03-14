@@ -6,7 +6,7 @@ import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
-import AddLayerModal from '../../js/components/AddLayerModal';
+import AddLayerModal from '../../src/components/AddLayerModal';
 
 raf.polyfill();
 

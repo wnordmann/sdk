@@ -6,7 +6,7 @@ import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
-import ZoomToLatLon from '../../js/components/ZoomToLatLon';
+import ZoomToLatLon from '../../src/components/ZoomToLatLon';
 
 raf.polyfill();
 

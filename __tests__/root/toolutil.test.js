@@ -6,8 +6,8 @@ import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
-import AppDispatcher from '../../js/dispatchers/AppDispatcher';
-import ToolUtil from '../../js/toolutil';
+import AppDispatcher from '../../src/dispatchers/AppDispatcher';
+import ToolUtil from '../../src/toolutil';
 
 raf.polyfill();
 

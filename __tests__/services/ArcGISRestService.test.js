@@ -3,7 +3,7 @@
 import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
-import ArcGISRestService from '../../js/services/ArcGISRestService';
+import ArcGISRestService from '../../src/services/ArcGISRestService';
 
 raf.polyfill();
 

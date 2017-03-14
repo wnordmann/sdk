@@ -6,7 +6,7 @@ import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
-import MapConfig from '../../js/components/MapConfig';
+import MapConfig from '../../src/components/MapConfig';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 

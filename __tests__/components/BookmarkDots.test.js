@@ -8,7 +8,7 @@ import intl from '../mock-i18n';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-import Bookmarks from '../../js/components/Bookmarks';
+import Bookmarks from '../../src/components/Bookmarks';
 
 raf.polyfill();
 

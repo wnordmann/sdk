@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import {assert} from 'chai';
 import intl from '../mock-i18n';
 import 'phantomjs-polyfill-object-assign';
-import StrokeEditor from '../../js/components/StrokeEditor';
+import StrokeEditor from '../../src/components/StrokeEditor';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 

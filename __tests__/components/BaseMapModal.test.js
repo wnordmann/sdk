@@ -7,7 +7,7 @@ import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
 import 'phantomjs-polyfill-object-assign';
-import BaseMapModal from '../../js/components/BaseMapModal';
+import BaseMapModal from '../../src/components/BaseMapModal';
 
 raf.polyfill();
 

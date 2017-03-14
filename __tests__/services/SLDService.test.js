@@ -5,7 +5,7 @@ import chai from 'chai';
 import chaiXml from 'chai-xml';
 import raf from 'raf';
 import ol from 'openlayers';
-import SLDService from '../../js/services/SLDService';
+import SLDService from '../../src/services/SLDService';
 
 raf.polyfill();
 chai.use(chaiXml);

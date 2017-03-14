@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import {assert} from 'chai';
 import intl from '../mock-i18n';
 import 'phantomjs-polyfill-object-assign';
-import FillEditor from '../../js/components/FillEditor';
+import FillEditor from '../../src/components/FillEditor';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 

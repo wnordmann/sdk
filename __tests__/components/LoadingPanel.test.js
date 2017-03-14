@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
-import LoadingPanel from '../../js/components/LoadingPanel';
+import LoadingPanel from '../../src/components/LoadingPanel';
 
 raf.polyfill();
 

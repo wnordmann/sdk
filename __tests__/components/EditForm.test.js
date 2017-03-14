@@ -7,7 +7,7 @@ import intl from '../mock-i18n';
 import raf from 'raf';
 import ol from 'openlayers';
 import 'phantomjs-polyfill-object-assign';
-import EditForm from '../../js/components/EditForm';
+import EditForm from '../../src/components/EditForm';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 

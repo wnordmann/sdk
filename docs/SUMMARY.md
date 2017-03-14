@@ -3,10 +3,9 @@
 Boundless SDK
 
 * [Getting started](getting_started.md)
-* [QGIS Web Application Builder](wab.md)
 * [Tutorial](tutorial.md)
-* [Writing components](writing_components.md)
 * [For developers](developers.md)
+* [Writing components](writing_components.md)
 * [API](api.md)
     * [AddLayer](api/AddLayer.md)
     * [AddLayerModal](api/AddLayerModal.md)

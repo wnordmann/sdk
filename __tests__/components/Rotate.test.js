@@ -11,7 +11,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import 'phantomjs-polyfill-object-assign';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-import Rotate from '../../js/components/Rotate';
+import Rotate from '../../src/components/Rotate';
 
 raf.polyfill();
 

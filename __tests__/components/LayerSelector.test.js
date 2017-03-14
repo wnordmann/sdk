@@ -6,7 +6,7 @@ import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
-import LayerSelector from '../../js/components/LayerSelector';
+import LayerSelector from '../../src/components/LayerSelector';
 
 raf.polyfill();
 

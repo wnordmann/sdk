@@ -1,6 +1,6 @@
 var fs = require('fs');
 var path = require('path');
-var components = 'js/components/';
+var components = 'src/components/';
 
 var files = [{
   module: 'react-table',

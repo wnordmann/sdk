@@ -7,7 +7,7 @@ import TestUtils from 'react-addons-test-utils';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Dialog from 'material-ui/Dialog';
-import Button from '../../js/components/Button';
+import Button from '../../src/components/Button';
 
 describe('Button', function() {
 

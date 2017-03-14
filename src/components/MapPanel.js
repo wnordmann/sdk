@@ -100,6 +100,8 @@ class MapPanel extends React.Component {
       // https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onpopstate
       this._onPopState = this._onPopState.bind(this);
       global.addEventListener('popstate', this._onPopState);
+    } else if (this.props.extent) {
+      map.getView().fit(this.props.extent, this.props.map.getSize(), {constrainResolution: false});
     }
   }
   componentWillUnmount() {

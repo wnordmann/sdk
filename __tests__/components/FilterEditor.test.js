@@ -3,7 +3,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import intl from '../mock-i18n';
-import FilterEditor from '../../js/components/FilterEditor';
+import FilterEditor from '../../src/components/FilterEditor';
 import {assert} from 'chai';
 
 describe('FilterEditor', function() {

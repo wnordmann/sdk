@@ -7,7 +7,7 @@ import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
 import 'phantomjs-polyfill-object-assign';
-import LabelModal from '../../js/components/LabelModal';
+import LabelModal from '../../src/components/LabelModal';
 
 raf.polyfill();
 

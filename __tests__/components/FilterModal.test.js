@@ -7,7 +7,7 @@ import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
 import 'phantomjs-polyfill-object-assign';
-import FilterModal from '../../js/components/FilterModal';
+import FilterModal from '../../src/components/FilterModal';
 
 raf.polyfill();
 
