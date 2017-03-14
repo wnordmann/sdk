@@ -7,6 +7,7 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 "use strict";
+var fs = require('fs');
 
 function stringOfLength(string, length) {
   var newString = '';
@@ -22,7 +23,20 @@ function generateTitle(name) {
 }
 
 function generateDesciption(description) {
-  return description + '\n';
+  var includeFlag = description.indexOf('$$');
+  if (includeFlag >= 0) {
+    includeFlag += 2;
+    var includeFile = description.indexOf('$$', includeFlag) - 2;
+    var filePath = description.substr(includeFlag, includeFile);
+    fs.readFile(filePath, 'utf-8', function(err,src) {
+      if (err) {
+        throw err;
+      }
+      return src + '\n' + description + '\n'
+    })
+  }else {
+    return description + '\n';
+  }
 }
 
 function generatePropType(type) {
