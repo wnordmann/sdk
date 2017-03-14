@@ -563,7 +563,8 @@ static formats = {
     var opacity;
     if (this.props.showOpacity && source && layer.get('type') !== 'base') {
       var val = layer.getOpacity();
-      opacity = (<Slider sliderStyle={{marginTop: '0px', top: '14px', marginBottom: '0'}} defaultValue={val} onChange={this._changeOpacity.bind(this)} />);
+      var slider = (<Slider sliderStyle={{marginTop: '0px', top: '14px', marginBottom: '0'}} defaultValue={val} onChange={this._changeOpacity.bind(this)} />);
+      opacity = <MenuItem leftIcon={<i className='ms ms-opacity'></i>}>{slider}</MenuItem>
     }
     var table;
     if (this.props.showTable && (this.props.layer instanceof ol.layer.Vector || this.props.layer.get('wfsInfo') !== undefined)) {
@@ -660,7 +661,7 @@ static formats = {
             onRequestClose={this._handleRequestClose.bind(this)}
           >
             <Menu>
-              <MenuItem leftIcon={<i className='ms ms-opacity'></i>}>{opacity}</MenuItem>
+              {opacity}
               <Divider/>
               {download}
               {filter}
