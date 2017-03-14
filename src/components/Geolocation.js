@@ -56,6 +56,10 @@ class Geolocation extends React.PureComponent {
      */
     map: React.PropTypes.instanceOf(ol.Map).isRequired,
     /**
+     * The zoom level used when centering the view.
+     */
+    zoom: React.PropTypes.number,
+    /**
      * Style for the button.
      */
     style: React.PropTypes.object,
@@ -90,6 +94,8 @@ class Geolocation extends React.PureComponent {
     return {muiTheme: this.state.muiTheme};
   }
   _geolocate() {
+    var map = this.props.map;
+    var view = map.getView();
     if (this._geolocation) {
       this._geolocation.setTracking(!this._geolocation.getTracking());
       if (this._geolocation.getTracking()) {
@@ -98,10 +104,9 @@ class Geolocation extends React.PureComponent {
       this._featuresOverlay.getSource().clear();
       this._featuresOverlay.setVisible(this._geolocation.getTracking());
     } else {
-      var map = this.props.map;
       this._geolocation = new ol.Geolocation({
         tracking: true,
-        projection: map.getView().getProjection()
+        projection: view.getProjection()
       });
       var accuracyFeature = new ol.Feature();
       this._geolocation.on('change:accuracyGeometry', function() {
@@ -129,7 +134,10 @@ class Geolocation extends React.PureComponent {
         positionFeature.setGeometry(coordinates ? new ol.geom.Point(coordinates) : null);
         this._featuresOverlay.getSource().addFeature(positionFeature);
         if (!this._hasBeenCentered) {
-          map.getView().setCenter(coordinates);
+          view.setCenter(coordinates);
+          if (this.props.zoom !== undefined) {
+            view.setZoom(this.props.zoom);
+          }
           this._hasBeenCentered = true;
         }
       }, this);
