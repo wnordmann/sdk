@@ -170,9 +170,16 @@ class Bookmarks extends React.PureComponent {
       this.props.map.addLayer(this._layer);
     }
   }
-  _handleChange(event, value) {
+  _handleChange(evt, value) {
+    var bookmark;
+    for (var i = 0, ii = this.props.bookmarks.length; i < ii; ++i) {
+      if (this.props.bookmarks[i].name === value) {
+        bookmark = this.props.bookmarks[i];
+        break;
+      }
+    }
     this.setState({value: value});
-    this._selectBookmark(value);
+    this._selectBookmark(bookmark);
   }
   _selectBookmark(bookmark) {
     var map = this.props.map;
@@ -272,7 +279,7 @@ class Bookmarks extends React.PureComponent {
             { menuChildren }
         </IconMenu>
       );
-    }else {
+    } else {
       var getHTML = function(bookmark) {
         return {__html: bookmark.description};
       };
