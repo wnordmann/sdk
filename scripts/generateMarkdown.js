@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree. An additional grant
  * of patent rights can be found in the PATENTS file in the same directory.
  */
-"use strict";
+'use strict';
 var fs = require('fs');
 
 function stringOfLength(string, length) {
@@ -23,20 +23,19 @@ function generateTitle(name) {
 }
 
 function generateDesciption(description) {
-  var includeFlag = description.indexOf('$$');
+  const includeFlag = description.indexOf('$$');
   if (includeFlag >= 0) {
-    includeFlag += 2;
-    var includeFile = description.indexOf('$$', includeFlag) - 2;
-    var filePath = description.substr(includeFlag, includeFile);
-    fs.readFile(filePath, 'utf-8', function(err,src) {
-      if (err) {
-        throw err;
-      }
-      return src + '\n' + description + '\n'
-    })
-  }else {
-    return description + '\n';
+    const includeFile = description.indexOf('$$', includeFlag + 2) - 2;
+    const filePath = description.substr(includeFlag + 2, includeFile);
+    const descriptionOut = description.substr(0,includeFlag) + description.substr(includeFlag + filePath.length + 4, description.length);
+    if (fs.existsSync(filePath)) {
+      const text = fs.readFileSync(filePath, 'utf-8');
+      return text + '\n'  + descriptionOut + '\n';
+    }
   }
+  //}else {
+    return description + '\n';
+  //}
 }
 
 function generatePropType(type) {

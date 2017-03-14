@@ -29,7 +29,7 @@ var BaseLayers = [
 
 Turns Layer visibility on and off
 
-Only one base layer can be on at once.  All base layers can be turned off by selecting the visibility eye on the BaseMap parent 
+Only one base layer can be on at once.  All base layers can be turned off by selecting the visibility eye on the BaseMap parent
 
 
 
@@ -52,6 +52,23 @@ Option can be disable with *allowFiltering*
 
 
 ![Layer List Item UI Functions](../LayerListItemWithNotes.png)
+
+
+### `Visibility`
+
+Turns Layer visibility on and off
+
+
+### `Zoom to Layers`
+
+Zooms to the bounds of selected layer
+
+Option can be disable with *showZoomTo*
+
+
+### `Style Editor`
+
+Opens the [StyleModal](StyleModal.html)
 
 
 ### `Opacity`
@@ -94,3 +111,10 @@ Zooms to the bounds of selected layer
 Can not zoom to a base layer
 
 Option can be disable with *showZoomTo*
+
+
+### `Download`
+
+Download layer from Map, has no impact on services
+
+Option can be disable with *showDownload* Prop
