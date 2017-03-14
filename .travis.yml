@@ -1,31 +1,32 @@
 sudo: false
+
 language: node_js
+
 node_js:
-- '6'
+  - "6"
+
 cache:
   directories:
-  - node_modules
+    - node_modules
 env:
   global:
-  - ENCRYPTION_LABEL: d1139ddcac92
-  - COMMIT_AUTHOR_EMAIL: bartvde@boundlessgeo.com
+  - ENCRYPTION_LABEL: "d1139ddcac92"
+  - COMMIT_AUTHOR_EMAIL: "bartvde@boundlessgeo.com"
+
 before_install:
-- npm prune
+  - "npm prune"
+
 before_script:
-- export DISPLAY=:99.0
+  - "export DISPLAY=:99.0"
+
 script:
-- npm run test
+  - "npm run test"
+
 after_success:
-- bash ./deploy.sh
-- npm run cover
-- cat coverage/lcov.info | ./node_modules/.bin/coveralls
+  - "bash ./deploy.sh"
+  - "npm run cover"
+  - "cat coverage/lcov.info | ./node_modules/.bin/coveralls"
+
 branches:
   only:
-  - master
-before_deploy: npm run release && cd release
-deploy:
-  provider: npm
-  api_key:
-    secure: KYmwFtdAS2kqiPuWzu8/rJcJU6pcpzBqSJDiJbLiohrWTmtWE5lMB0F42xlk/tCd5CjSeeYtIZ4k/rqlUpsLxlHsvJWYeKa5K9jjwR1kKITdAmSTeJaxCQ6ll8FHzAKfhZN6u8uGPO75hE0ouoG72J+SD39POa06uf5az+vWOah0Y8iismwU5LxbyfQNq8OEj2CzRBFHvvyUqwcDKp14uvq2c7PEwt5YOgvyFXbAXix5RS9r8BvP02KGMEAYQ/fAAbaNB6GqprB7RxHMwagHSAnksXnUSLtZr5ks3f+c+x9VowFBk+KHaOpiRUu8zcBhw3HoUeNYP7D3SWgUMmyjz7Mqe4JNZGqnzvp6oO0fvizW8dC/cK0lkL2I0Hcg2aIIDOtybCz9VcZGr7JNfwjOgk3Pq+auPg9TZrY+/TZqYXRsew2/sfT7L393ONl8RsHbY0m6Mm2DX2sq1bVmP7OMI0wOHc04TSSGcXYmn81mq+iYEjowcMuuF5R0vJDohF4YwpzJey/kZjFrYnXOF3QNevZA24C3og1J/W15thWIbjVVBPyus2lkDqzftH1Qg7CLxWZV04GRQ7eHmhfz8SSI7KKSIS96HKqUtyPh161rHUHFtsftSgPKstSQML6iy7isx5p0XW4kHwkLRVBqDwak5Bj640XMtV/aC1ev70ZYCjU=
-  on:
-    tags: true
+    - master
