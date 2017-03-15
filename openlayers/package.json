@@ -1,0 +1,26 @@
+{
+  "name": "openlayers-for-sdk",
+  "version": "0.1.0",
+  "description": "OpenLayers builds for Boundless SDK",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/boundlessgeo/sdk.git"
+  },
+  "keywords": [
+    "openlayers",
+    "boundless",
+    "sdk",
+    "web",
+    "react"
+  ],
+  "author": "Boundless Spatial Inc.",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/boundlessgeo/sdk/issues"
+  },
+  "homepage": "https://github.com/boundlessgeo/sdk#readme"
+}
