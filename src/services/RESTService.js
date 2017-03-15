@@ -38,11 +38,15 @@ class RESTService {
     var id;
     if (layer.get('name')) {
       id = layer.get('name').split(':').pop();
-    } else {
+    } else if (layer.get('wfsInfo')) {
       id = layer.get('wfsInfo').featureType;
     }
-    urlObj.set('pathname', urlObj.pathname + this._getTrailingChar(urlObj) + 'layers/' + id + '.json');
-    return util.getProxiedUrl(urlObj.toString(), opt_proxy);
+    if (id) {
+      urlObj.set('pathname', urlObj.pathname + this._getTrailingChar(urlObj) + 'layers/' + id + '.json');
+      return util.getProxiedUrl(urlObj.toString(), opt_proxy);
+    } else {
+      return null;
+    }
   }
   _parseStyleName(jsonData) {
     var styleName = jsonData.layer.defaultStyle.name;
@@ -56,12 +60,16 @@ class RESTService {
   }
   getStyleName(layer, onSuccess, onFailure, opt_proxy, opt_requestHeaders) {
     var url = this._getStyleNameUrl(layer, opt_proxy);
-    util.doGET(url, function(xmlhttp) {
-      var styleName = this._parseStyleName(JSON.parse(xmlhttp.responseText));
-      onSuccess.call(this, styleName);
-    }, function(xmlhttp) {
-      onFailure.call(this, xmlhttp);
-    }, this, opt_requestHeaders);
+    if (url) {
+      util.doGET(url, function(xmlhttp) {
+        var styleName = this._parseStyleName(JSON.parse(xmlhttp.responseText));
+        onSuccess.call(this, styleName);
+      }, function(xmlhttp) {
+        onFailure.call(this, xmlhttp);
+      }, this, opt_requestHeaders);
+    } else {
+      onFailure.call(this);
+    }
   }
   _createStylePayload(styleName) {
     return  '<style><name>' + styleName + '</name><filename>' + styleName + '.sld</filename></style>';
