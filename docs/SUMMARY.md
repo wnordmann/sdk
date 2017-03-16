@@ -14,6 +14,7 @@ Boundless SDK
 * [API](api.md)
     * [AddLayer](api/AddLayer.md)
     * [AddLayerModal](api/AddLayerModal.md)
+    * [BasemapSelector](api/BasemapSelector.md)
     * [Bookmarks](api/Bookmarks.md)
     * [Button](api/Button.md)
     * [Chart](api/Chart.md)
