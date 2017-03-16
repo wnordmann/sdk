@@ -27,7 +27,7 @@ const messages = defineMessages({
 
 /**
  * Button that shows a base map dialog for selecting the base map.
- * Alternative to defining Baselayers in ol.map 
+ * Alternative to defining Baselayers in ol.Map 
  * ```xml
  * <BaseMapSelector map={map} />
  * ```

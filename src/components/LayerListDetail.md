@@ -48,7 +48,7 @@ Vector Layers
 ---------------
 ![vectorLayers](../LayerListItemVectorLayers.png)
 
-Vector Layers can be added using the [AddLayer](,,/AddLayer.html) component
+Vector Layers can be added using the [AddLayer](,,/AddLayer.html) component which leverages the [AddLayerModal](,,/AddLayerModal.html) component and also using the WFS Service
 
 
 Or vector layers can be added directly to the ol.Map
@@ -61,11 +61,10 @@ var vectorLayer = new ol.layer.Vector({
         url: './data/KML_Samples.kml'
       }),
 
-      style: style_kml_samplesplacemarksany,
-      selectedStyle: selectionStyle_kml_samplesplacemarksany,
+      style: style_kml_samples,
+      selectedStyle: selectionStyle_kml_samples,
       title: 'States',
       id: 'States',
-      filters: [],
       timeInfo: null,
       isSelectable: true,
       popupInfo: ''
@@ -79,7 +78,7 @@ var vectorLayer = new ol.layer.Vector({
 #### `Opacity`
 Changes the opacity of selected layer
 
-Option can be disable with *showOpacity* Prop, default to true
+Option can be disable with *showOpacity* Prop, defaults to true
 ```xml
 <LayerList showOpacity={true} map={map} />
 ```
@@ -88,7 +87,7 @@ Option can be disable with *showOpacity* Prop, default to true
 
 Download layer from Map
 
-Function can be disable with *showDownload* Prop, default to false
+Function can be disabled with *showDownload* Prop, defaults to false
 ```xml
 <LayerList showDownload={true} map={map} />
 ```
@@ -97,7 +96,7 @@ Function can be disable with *showDownload* Prop, default to false
 
 Opens the [FilterModal](FilterModal.html) to filter the data in the vector layer
 
-Option can be disable with *allowFiltering* Prop, default to false
+Option can be disabled with *allowFiltering* Prop, defaults to false
 ```xml
 <LayerList allowFiltering={true} map={map} />
 ```
@@ -110,6 +109,14 @@ Removes selected layer, only available when layer is added with the [AddLayer](,
 Option can be disable with *allowRemove* Prop, default to true
 ```xml
 <LayerList allowRemove={false} map={map} />
+```
+
+### `Style Layers`
+Styles Raster Layers using the [StyleModal](/../styleModal.html)
+
+Option can be disabled with *allowStyling* Prop, defaults to false
+```xml
+<LayerList allowStyling={true} map={map} />
 ```
 
 #### `Visibility`
@@ -125,7 +132,7 @@ Option can be disable with *showZoomTo* Prop, default to true
 <LayerList showZoomTo={true} map={map} />
 ```
 
-Rastor Layers
+Raster Layers
 ---------------
 ![rastorLayers](../LayerListRastor.png)
 
@@ -138,7 +145,7 @@ Raster Layers can be added using the addLayer Prop
 ### `Opacity`
 Changes the opacity of selected layer
 
-Option can be disable with *showOpacity* Prop, default to true
+Option can be disabled with *showOpacity* Prop, defaults to true
 ```xml
 <LayerList showOpacity={true} map={map} />
 ```
@@ -153,9 +160,9 @@ Turns Layer visibility on and off
 
 
 ### `Zoom to Layers`
-Zooms to the bounds of selected layer
+Zooms to the bounds of selected layer, only shown if the layer has a Prop of  EX_GeographicBoundingBox or Vector source
 
-Option can be disable with *showZoomTo* Prop, default to true
+Option can be disabled with *showZoomTo* Prop, defaults to true
 ```xml
 <LayerList showZoomTo={true} map={map} />
 ```
@@ -163,7 +170,7 @@ Option can be disable with *showZoomTo* Prop, default to true
 ### `Style Layers`
 Styles Raster Layers using the [StyleModal](/../styleModal.html)
 
-Option can be disable with *allowStyling* Prop, default to false
+Option can be disabled with *allowStyling* Prop, defaults to false
 ```xml
 <LayerList allowStyling={true} map={map} />
 ```

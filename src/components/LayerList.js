@@ -58,7 +58,7 @@ const messages = defineMessages({
 });
 
 /**
- * $$docs/LayerListDetail.md$$
+ * $$src/components/LayerListDetail.md$$
  *
  */
 class LayerList extends React.PureComponent {

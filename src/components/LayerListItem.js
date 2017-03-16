@@ -165,7 +165,7 @@ const messages = defineMessages({
 });
 
 /**
-$$docs/LayerListItemDetail.md$$
+$$src/components/LayerListItemDetail.md$$
  */
 class LayerListItem extends React.PureComponent {
   static propTypes = {

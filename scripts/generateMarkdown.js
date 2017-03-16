@@ -33,9 +33,7 @@ function generateDesciption(description) {
       return text + '\n'  + descriptionOut + '\n';
     }
   }
-  //}else {
-    return description + '\n';
-  //}
+  return description + '\n';
 }
 
 function generatePropType(type) {
@@ -50,7 +48,7 @@ function generatePropType(type) {
     values = type.value && type.value.name ? type.value.name : type.value;
   }
 
-  return 'type: `' + type.name + (values ? ' ' + values: '') + '`\n';
+  return 'type: `' + type.name + (values ? ' ' + values:'') + '`\n';
 }
 
 function generatePropDefaultValue(value) {
