@@ -2,7 +2,7 @@
 =============================
 
 Button that shows a base map dialog for selecting the base map.
-As alternative to use layer list
+Alternative to defining Baselayers in ol.map 
 ```xml
 <BaseMapSelector map={map} />
 ```

@@ -1,3 +1,0 @@
-# LayerList
-`LayerList` (component)
-=======================

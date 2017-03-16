@@ -670,7 +670,6 @@ static formats = {
       marginRight:'100px'
     }
     var rightIconButton = <div><span className="fixedContainer">{visibility}{zoomTo}{styling}{popoverEllipsis}</span></div>;
-console.log(layer.get('type');
     if (layer.get('type') === 'base-group') {
       rightIconButton = <div><span className="fixedContainer">{visibility}</span></div>;
     }
