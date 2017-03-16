@@ -645,8 +645,7 @@ static formats = {
       disableTouchRipple={true}/>);
 
     var visibility = this.state.checked ? checked : unchecked;
-
-    var popoverEllipsis = (
+    var popoverEllipsis = this.props.layer.get('type') !== 'base-group' ? (
       <div>
         <i className="fa fa-ellipsis-v" onTouchTap={this._handleMenuOpen.bind(this)}></i>
         <Popover
@@ -665,7 +664,7 @@ static formats = {
             </Menu>
           </Popover>
       </div>
-      );
+      ) : undefined;
     var innerDivNestedStyle = {
       marginRight:'100px'
     }
