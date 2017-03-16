@@ -6,7 +6,8 @@
  * LICENSE file in the root directory of this source tree. An additional grant
  * of patent rights can be found in the PATENTS file in the same directory.
  */
-"use strict";
+'use strict';
+var fs = require('fs');
 
 function stringOfLength(string, length) {
   var newString = '';
@@ -22,6 +23,16 @@ function generateTitle(name) {
 }
 
 function generateDesciption(description) {
+  const includeFlag = description.indexOf('$$');
+  if (includeFlag >= 0) {
+    const includeFile = description.indexOf('$$', includeFlag + 2) - 2;
+    const filePath = description.substr(includeFlag + 2, includeFile);
+    const descriptionOut = description.substr(0,includeFlag) + description.substr(includeFlag + filePath.length + 4, description.length);
+    if (fs.existsSync(filePath)) {
+      const text = fs.readFileSync(filePath, 'utf-8');
+      return text + '\n'  + descriptionOut + '\n';
+    }
+  }
   return description + '\n';
 }
 
@@ -37,7 +48,7 @@ function generatePropType(type) {
     values = type.value && type.value.name ? type.value.name : type.value;
   }
 
-  return 'type: `' + type.name + (values ? ' ' + values: '') + '`\n';
+  return 'type: `' + type.name + (values ? ' ' + values:'') + '`\n';
 }
 
 function generatePropDefaultValue(value) {

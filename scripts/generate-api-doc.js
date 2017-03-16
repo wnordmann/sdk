@@ -24,7 +24,6 @@ fs.readdir(dir, function(err, files) {
         if (componentInfo  && componentInfo[0].description !== '') {
           var name = file.split('.')[0];
           var markdown = generateMarkdown(name, componentInfo[0]);
-          console.log('Writing: ' + output + name + '.md');
           fs.writeFileSync(output + name + '.md', markdown);
         }
       });

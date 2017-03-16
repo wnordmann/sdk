@@ -165,7 +165,7 @@ const messages = defineMessages({
 });
 
 /**
-$$docs/LayerListItemDetail.md$$
+$$src/components/LayerListItemDetail.md$$
  */
 class LayerListItem extends React.PureComponent {
   static propTypes = {
@@ -669,6 +669,9 @@ static formats = {
       marginRight:'100px'
     }
     var rightIconButton = <div><span className="fixedContainer">{visibility}{zoomTo}{styling}{popoverEllipsis}</span></div>;
+    if (layer.get('type') === 'base-group') {
+      rightIconButton = <div><span className="fixedContainer">{visibility}</span></div>;
+    }
     if (layer.get('type') === 'base') {
       rightIconButton = <div><span className="fixedContainer">{baseVisibility}</span></div>;
       innerDivNestedStyle = {
@@ -702,7 +705,7 @@ static formats = {
           </span>
         </div>
       </div>
-    ));
+));
   }
 }
 

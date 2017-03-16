@@ -58,13 +58,8 @@ const messages = defineMessages({
 });
 
 /**
- * A list of layers in the map. Allows setting visibility and opacity.
+ * $$src/components/LayerListDetail.md$$
  *
- * ```xml
- * <LayerList allowFiltering={true} showOpacity={true} showDownload={true} showGroupContent={true} showZoomTo={true} allowReordering={true} map={map} />
- * ```
- *
- * ![Layer List](../LayerList.png)
  */
 class LayerList extends React.PureComponent {
   static propTypes = {
