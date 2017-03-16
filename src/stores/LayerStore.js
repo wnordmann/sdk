@@ -55,7 +55,12 @@ class LayerStore extends EventEmitter {
     if (!(layer instanceof ol.layer.Group)) {
       var source = layer.getSource();
       if ((source instanceof ol.source.ImageWMS || source instanceof ol.source.TileWMS) || layer.get('isWFST')) {
-        if (!layer.get('wfsInfo')) {
+        if (!layer.get('wfsInfo') || (layer.get('wfsInfo') && !layer.get('wfsInfo').featureNS)) {
+          // QGIS WAB does not know featureNS, but has the rest of the info
+          if (layer.get('wfsInfo') && !layer.get('wfsInfo').featureNS) {
+            layer.set('url', layer.get('wfsInfo').url);
+            layer.set('name', layer.get('wfsInfo').featurePrefix + ':' + layer.get('wfsInfo').featureType);
+          }
           this._getWfsInfo(layer);
         }
         if (!layer.get('styleName')) {

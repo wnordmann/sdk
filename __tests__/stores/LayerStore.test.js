@@ -122,6 +122,23 @@ describe('LayerStore', function() {
       error = true;
     }
     assert.equal(error, false);
+    // QGIS WAB no featureNS handled
+    var wab = new ol.layer.Vector({
+      title: 'topp:states',
+      id: 'topp_states20170316114032352',
+      wfsInfo: {
+        featureNS: '',
+        featureType: 'states',
+        featurePrefix: 'topp',
+        geometryType: 'MultiPolygon',
+        geometryName: 'the_geom',
+        url: 'http://localhost:8080/geoserver/wfs'
+      },
+      isWFST: true
+    });
+    map.addLayer(wab);
+    assert.equal(wab.get('name'), 'topp:states');
+    assert.equal(wab.get('url'), 'http://localhost:8080/geoserver/wfs');
   });
 
 });
