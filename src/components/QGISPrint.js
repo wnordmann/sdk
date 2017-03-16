@@ -336,6 +336,13 @@ class QGISPrint extends React.PureComponent {
     var extent = map.getView().calculateExtent(size);
     this._tileLayers = this._getTileLayers();
     this._tiledLayersLoaded = 0;
+    var preCompose = function(event) {
+      var ctx = event.context;
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    };
+
     var postCompose = function(event) {
       this._canvas = event.context.canvas;
       this._sources = [];
@@ -355,6 +362,7 @@ class QGISPrint extends React.PureComponent {
         this._mapElement = element;
         var width = Math.round(element.width * resolution / MM_PER_INCH);
         var height = Math.round(element.height * resolution / MM_PER_INCH);
+        map.once('precompose', preCompose, this);
         map.once('postcompose', postCompose, this);
         this._origSize = map.getSize();
         this._origExtent = map.getView().calculateExtent(this._origSize);
