@@ -20,6 +20,8 @@ import ToolUtil from '../toolutil';
 import WFSService from '../services/WFSService';
 import FeatureStore from '../stores/FeatureStore';
 import RaisedButton from './Button';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
@@ -33,6 +35,16 @@ const messages = defineMessages({
     id: 'select.menubuttontitle',
     description: 'Menu button title for select function',
     defaultMessage: 'Select features by rectangle'
+  },
+  selectbyrectangletext: {
+    id: 'select.selectbyrectangletext',
+    description: 'Text for select by rectangle option',
+    defaultMessage: 'Select by rectangle'
+  },
+  clearselectiontext: {
+    id: 'select.clearselectiontext',
+    description: 'Text for clear option',
+    defaultMessage: 'Clear selection'
   }
 });
 
@@ -166,10 +178,20 @@ class Select extends React.PureComponent {
   enable() {
     this.setState({disabled: false});
   }
+  _clear() {
+    this.props.map.getLayers().forEach(function(lyr) {
+      if (lyr.getVisible() && lyr.get('isSelectable') === true) {
+        SelectActions.clear(lyr);
+      }
+    });
+  }
   render() {
     const {formatMessage} = this.props.intl;
     return (
-     <RaisedButton {...this.props} className={classNames('sdk-component select', this.props.className)} secondary={this.state.secondary} disabled={this.state.disabled} label={formatMessage(messages.menubuttontext)} tooltip={formatMessage(messages.menubuttontitle)} onTouchTap={this._selectByRectangle.bind(this)} />
+      <IconMenu style={this.props.style} anchorOrigin={{horizontal: 'left', vertical: 'top'}} targetOrigin={{horizontal: 'left', vertical: 'top'}} className={classNames('sdk-component select', this.props.className)} iconButtonElement={<RaisedButton secondary={this.state.secondary} tooltip={formatMessage(messages.menubuttontitle)} disabled={this.state.disabled} label={formatMessage(messages.menubuttontext)} />}>
+        <MenuItem disabled={this.state.disabled} onTouchTap={this._selectByRectangle.bind(this)} primaryText={formatMessage(messages.selectbyrectangletext)}/>
+        <MenuItem disabled={this.state.disabled} onTouchTap={this._clear.bind(this)} primaryText={formatMessage(messages.clearselectiontext)}/>
+      </IconMenu>
     );
   }
 }
