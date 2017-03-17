@@ -36,6 +36,7 @@ import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
+import FileSaver from 'file-saver';
 
 const layerListItemSource = {
 
@@ -420,11 +421,8 @@ static formats = {
     }
     var features = source.getFeatures();
     var output = format.writeFeatures(features, {featureProjection: this.props.map.getView().getProjection()});
-    var dl = document.createElement('a');
-    var mimeType = formatInfo.mimeType;
-    dl.setAttribute('href', 'data:' + mimeType + ';charset=utf-8,' + encodeURIComponent(output));
-    dl.setAttribute('download', layer.get('title') + '.' + formatInfo.extension);
-    dl.click();
+    var blob = new Blob([output], {type: formatInfo.mimeType + ';charset=utf-8'});
+    FileSaver.saveAs(blob, layer.get('title') + '.' + formatInfo.extension);
   }
   _filter() {
     this.setState({
