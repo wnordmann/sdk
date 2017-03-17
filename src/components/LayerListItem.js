@@ -579,7 +579,15 @@ static formats = {
     }
     var download;
     if (layer instanceof ol.layer.Vector && this.props.showDownload) {
-      download = <MenuItem primaryText={formatMessage(messages.downloadbuttonlabel)} leftIcon={<i className='fa fa-download'></i>}onTouchTap={this._download.bind(this)}/>
+      var disabled = false;
+      if (this.props.downloadFormat === 'GPX') {
+        var features = layer.getSource().getFeatures();
+        if (features.length > 0) {
+          var geom = features[0].getGeometry();
+          disabled = (geom instanceof ol.geom.Polygon || geom instanceof ol.geom.MultiPolygon);
+        }
+      }
+      download = <MenuItem disabled={disabled} primaryText={formatMessage(messages.downloadbuttonlabel)} leftIcon={<i className='fa fa-download'></i>}onTouchTap={this._download.bind(this)}/>
     }
     var filter;
     if (layer instanceof ol.layer.Vector && this.props.allowFiltering) {
