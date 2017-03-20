@@ -59,3 +59,9 @@ ssh-add deploy_key
 
 # Now that we're all set up, we can push.
 git push $SSH_REPO $TARGET_BRANCH
+
+# if tag, push tag to gh-pages as well
+if [ -n "$TRAVIS_TAG" ]; then
+    git tag -a $TRAVIS_TAG -m '$TRAVIS_TAG'
+    git push $SSH_REPO $TRAVIS_TAG
+fi
