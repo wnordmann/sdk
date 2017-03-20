@@ -16,7 +16,7 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import ArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
 import ArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
-import RaisedButton from 'material-ui/RaisedButton';
+import Button from './Button';
 import Carousel from 'nuka-carousel';
 import Dots from './BookmarkDots.js';
 import './Bookmarks.css';
@@ -272,8 +272,8 @@ class Bookmarks extends React.PureComponent {
         <IconMenu
           anchorOrigin = {{horizontal: 'left',vertical: 'top'}}
           targetOrigin = {{horizontal: 'left',vertical: 'top'}}
-          className = { classNames('sdk-component story-panel', this.props.className) }
-          iconButtonElement = { <RaisedButton label = {formatMessage(messages.dropdowntext)}/>}
+          className = { classNames('sdk-component story-panel-menu', this.props.className) }
+          iconButtonElement = { <Button label = {formatMessage(messages.dropdowntext)}/>}
           value={this.state.value}
           onChange={this._handleChange.bind(this)}>
             { menuChildren }
