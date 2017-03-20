@@ -62,3 +62,8 @@ ssh-add deploy_key
 
 # Now that we're all set up, we can push.
 git push $SSH_REPO $TARGET_BRANCH
+
+if [ "$TRAVIS_TAG" != "" ]; then
+  git tag -a "${TRAVIS_TAG}-artefacts" -m "WAB artefacts release for $TRAVIS_TAG"
+  git push $SSH_REPO "${TRAVIS_TAG}-artefacts"
+fi
