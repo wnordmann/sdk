@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import lightTheme from './lightTheme.js';
 import './main.scss';
 import 'font-awesome-webpack';
+import Divider from 'material-ui/Divider';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -24,7 +25,19 @@ export default class DrawerSimpleExample extends React.Component {
       <MuiThemeProvider muiTheme={getMuiTheme(lightTheme)}>
         <AppBar
           title="Quickview Application"
-          iconElementRight={<IconButton><NavigationMoreVert /></IconButton>}
+          iconElementRight={
+            <div className="headerIcons">
+              <Divider />
+              <IconButton
+                 iconClassName="headerIcons ms ms-measure-distance"
+                />
+              <IconButton
+                 iconClassName="headerIcons ms ms-measure-distance"
+                />
+              <IconButton>
+                <NavigationMoreVert />
+              </IconButton>
+            </div>}
         />
       </ MuiThemeProvider>
     );
