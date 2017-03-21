@@ -27,7 +27,6 @@ export default class DrawerSimpleExample extends React.Component {
           title="Quickview Application"
           iconElementRight={
             <div className="headerIcons">
-              <Divider />
               <IconButton
                  iconClassName="headerIcons ms ms-measure-distance"
                 />
