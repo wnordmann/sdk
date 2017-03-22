@@ -20,8 +20,6 @@ import TextField from 'material-ui/TextField';
 import Button from './Button';
 import MenuItem from 'material-ui/MenuItem';
 import SelectField from 'material-ui/SelectField';
-import {List, ListItem} from 'material-ui/List';
-import Checkbox from 'material-ui/Checkbox';
 import WMSService from '../services/WMSService';
 import WFSService from '../services/WFSService';
 import ArcGISRestService from '../services/ArcGISRestService';
@@ -37,6 +35,16 @@ const messages = defineMessages({
     id: 'addwmslayermodal.servertypelabel',
     description: 'Label for the combo for server type',
     defaultMessage: 'Type'
+  },
+  selectlayercombo: {
+    id: 'addwmslayermodal.selectlayercombo',
+    description: 'Text for select layer combo box',
+    defaultMessage: 'Select layer'
+  },
+  sourcecombo: {
+    id: 'addwmslayermodal.sourcecombo',
+    description: 'Text for source combo box',
+    defaultMessage: 'Select layer source'
   },
   newservername: {
     id: 'addwmslayermodal.newservername',
@@ -73,11 +81,6 @@ const messages = defineMessages({
     description: 'Title to show if layer has no title',
     defaultMessage: 'No Title'
   },
-  filtertitle: {
-    id: 'addwmslayermodal.filtertitle',
-    description: 'Title for the filter field',
-    defaultMessage: 'Filter'
-  },
   errormsg: {
     id: 'addwmslayermodal.errormsg',
     description: 'Error message to show the user when an XHR request fails',
@@ -107,6 +110,11 @@ const messages = defineMessages({
     id: 'addwmslayermodal.closebutton',
     description: 'Text for close button',
     defaultMessage: 'Close'
+  },
+  addserveroption: {
+    id: 'addwmslayermodal.addserveroption',
+    description: 'Combo box option for add new server',
+    defaultMessage: 'Add New Server'
   }
 });
 
@@ -172,7 +180,6 @@ class AddLayerModal extends React.PureComponent {
       newType: AddLayerModal.addNewTypes[0],
       newModalOpen: false,
       source: 0,
-      filter: null,
       error: false,
       errorOpen: false,
       layerInfo: null
@@ -180,11 +187,6 @@ class AddLayerModal extends React.PureComponent {
   }
   getChildContext() {
     return {muiTheme: this._muiTheme};
-  }
-  componentWillReceiveProps(newProps) {
-    if (newProps.open) {
-      this._getCaps();
-    }
   }
   componentWillUnmount() {
     if (this._request) {
@@ -271,18 +273,11 @@ class AddLayerModal extends React.PureComponent {
     }
     return olLayer;
   }
-  _getLayersMarkup(layer) {
-    var filter = this.state.filter;
-    var childList;
+  _getLayersMarkup(layer, menuItems) {
     if (layer.Layer) {
-      var children = layer.Layer.map(function(child) {
-        return this._getLayersMarkup(child);
+      layer.Layer.map(function(child) {
+        this._getLayersMarkup(child, menuItems);
       }, this);
-      childList = children;
-    }
-    var onCheck;
-    if (layer.Name !== undefined) {
-      onCheck = this._onCheck.bind(this, layer);
     }
     var layerTitle = this._getLayerTitle(layer);
     var primaryText;
@@ -291,7 +286,6 @@ class AddLayerModal extends React.PureComponent {
     } else {
       primaryText = layerTitle.title;
     }
-    var displayValue = 'block';
     var search = [layer.Title];
     if (layer.Abstract !== undefined) {
       search.push(layer.Abstract);
@@ -299,21 +293,11 @@ class AddLayerModal extends React.PureComponent {
     if (layer.KeywordList) {
       search = search.concat(layer.KeywordList);
     }
-    if (filter !== null) {
-      var match = false;
-      for (var i = 0, ii = search.length; i < ii; ++i) {
-        if (search[i].toUpperCase().indexOf(filter.toUpperCase()) !== -1) {
-          match = true;
-          break;
-        }
-      }
-      if (match === false) {
-        displayValue = 'none';
-      }
+    if (layer.Name) {
+      menuItems.push(
+        <MenuItem key={layer.Name} value={layer.Name} primaryText={primaryText} />
+      );
     }
-    return (
-      <ListItem style={{display: displayValue}} leftCheckbox={<Checkbox onCheck={onCheck} />} initiallyOpen={true} key={layer.Name} primaryText={primaryText} secondaryText={layer.Name} nestedItems={childList} />
-    );
   }
   _onCheck(layer, proxy, checked) {
     if (checked) {
@@ -351,9 +335,6 @@ class AddLayerModal extends React.PureComponent {
     this.setState({
       errorOpen: false
     });
-  }
-  _onFilterChange(proxy, value) {
-    this.setState({filter: value});
   }
   _onTypeChange(evt, idx, value) {
     this.setState({newType: value});
@@ -397,7 +378,13 @@ class AddLayerModal extends React.PureComponent {
       });
     }, this);
   }
+  _onChangeSelectLayer(evt, idx, value) {
+    this.setState({
+      layer: value
+    });
+  }
   render() {
+    const {formatMessage} = this.props.intl;
     var selectOptions = this.state.sources.map(function(source, idx) {
       return (<MenuItem key={idx} value={idx} primaryText={source.title} />);
     });
@@ -405,14 +392,13 @@ class AddLayerModal extends React.PureComponent {
       return (<MenuItem key={newType} value={newType} primaryText={newType} />);
     });
     if (this.props.allowUserInput) {
-      selectOptions.push(<MenuItem key='new' value='new' primaryText='Add New Server' />);
+      selectOptions.push(<MenuItem key='new' value='new' primaryText={formatMessage(messages.addserveroption)} />);
     }
     this._checkedLayers = [];
-    const {formatMessage} = this.props.intl;
-    var layers;
+    var layers, layerMenuItems = [];
     if (this.state.layerInfo) {
-      var layerInfo = this._getLayersMarkup(this.state.layerInfo);
-      layers = <List>{layerInfo}</List>;
+      this._getLayersMarkup(this.state.layerInfo, layerMenuItems);
+      layers = <SelectField fullWidth={true} value={this.state.layer} onChange={this._onChangeSelectLayer.bind(this)} floatingLabelText={formatMessage(messages.selectlayercombo)}>{layerMenuItems}</SelectField>;
     }
     var loadingIndicator;
     if (this.state.loading === true) {
@@ -438,8 +424,8 @@ class AddLayerModal extends React.PureComponent {
       <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.closeNewServer.bind(this)} />
     ];
     return (
-      <Dialog inline={this.props.inline} className={classNames('sdk-component add-layer-modal', this.props.className)}  actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title)} open={this.props.open} onRequestClose={this.close.bind(this)}>
-        <SelectField value={this.state.source} onChange={this._onSourceChange.bind(this)}>
+      <Dialog inline={this.props.inline} className={classNames('sdk-component add-layer-modal noBorderPaper', this.props.className)}  actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title)} open={this.props.open} onRequestClose={this.close.bind(this)}>
+        <SelectField fullWidth={true} floatingLabelText={formatMessage(messages.sourcecombo)} value={this.state.source} onChange={this._onSourceChange.bind(this)}>
           {selectOptions}
         </SelectField><Button buttonType='Icon' key='refresh' tooltip={formatMessage(messages.refresh)} onTouchTap={this._refreshService.bind(this)}><RefreshIcon /></Button><br/>
         <Dialog inline={this.props.inline} open={this.state.newModalOpen} actions={newActions} autoScrollBodyContent={true} onRequestClose={this.closeNewServer.bind(this)} modal={true} title={formatMessage(messages.newservermodaltitle)}>
@@ -447,7 +433,6 @@ class AddLayerModal extends React.PureComponent {
           <TextField fullWidth={true} ref='newservername' floatingLabelText={formatMessage(messages.newservername)} /><br/>
           <TextField fullWidth={true} ref='newserverurl' floatingLabelText={formatMessage(messages.newserverurl)} />
         </Dialog>
-        <TextField floatingLabelText={formatMessage(messages.filtertitle)} onChange={this._onFilterChange.bind(this)} />
         {layers}
         {loadingIndicator}
         {error}
