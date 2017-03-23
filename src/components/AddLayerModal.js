@@ -11,11 +11,14 @@
  */
 
 import React from 'react';
+import Dropzone from 'react-dropzone';
+import util from '../util';
 import ol from 'openlayers';
 import Dialog from './Dialog';
 import Snackbar from 'material-ui/Snackbar';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import TextField from 'material-ui/TextField';
+import IconButton from 'material-ui/IconButton';
 import Button from './Button';
 import MenuItem from 'material-ui/MenuItem';
 import SelectField from 'material-ui/SelectField';
@@ -23,11 +26,18 @@ import WMSService from '../services/WMSService';
 import WFSService from '../services/WFSService';
 import ArcGISRestService from '../services/ArcGISRestService';
 import WMTSService from '../services/WMTSService';
+import FontIcon from 'material-ui/FontIcon';
 import CircularProgress from 'material-ui/CircularProgress';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import FillEditor from './FillEditor';
+import StrokeEditor from './StrokeEditor';
 
 import classNames from 'classnames';
 import './AddLayerModal.css';
+
+const newOption = 'NEW';
+const uploadOption = 'UPLOAD';
+const ID_PREFIX = 'sdk-addlayer-';
 
 const messages = defineMessages({
   servertypelabel: {
@@ -124,6 +134,11 @@ const messages = defineMessages({
     id: 'addwmslayermodal.addserveroption',
     description: 'Combo box option for add new server',
     defaultMessage: 'Add New Server'
+  },
+  uploadoption: {
+    id: 'addwmslayermodal.uploadoption',
+    description: 'Combo box option for add local layer',
+    defaultMessage: 'Local'
   }
 });
 
@@ -159,6 +174,10 @@ class AddLayerModal extends React.PureComponent {
      */
     allowUserInput: React.PropTypes.bool,
     /**
+     * Should we allow people to upload their local vector files?
+     */
+    allowUpload: React.PropTypes.bool,
+    /**
      * @ignore
      */
     intl: intlShape.isRequired
@@ -175,21 +194,32 @@ class AddLayerModal extends React.PureComponent {
   };
 
   static defaultProps = {
-    allowUserInput: false
+    allowUserInput: false,
+    allowUpload: true
+  };
+
+  static formats = {
+    'geojson': new ol.format.GeoJSON(),
+    'json': new ol.format.GeoJSON(),
+    'kml': new ol.format.KML({extractStyles: false}),
+    'gpx': new ol.format.GPX()
   };
 
   constructor(props, context) {
     super(props);
+    this._counter = 0;
     this._proxy = context.proxy;
     this._requestHeaders = context.requestHeaders;
     this._muiTheme = context.muiTheme || getMuiTheme();
     this.state = {
       loading: false,
+      fileName: '',
       newUrl: '',
       newName: '',
       sources: this.props.sources.slice(),
       newType: AddLayerModal.addNewTypes[0],
       newModalOpen: false,
+      showUpload: false,
       source: null,
       error: false,
       errorOpen: false,
@@ -200,7 +230,17 @@ class AddLayerModal extends React.PureComponent {
     return {muiTheme: this._muiTheme};
   }
   componentWillReceiveProps(props) {
-    this.setState({source: null, layer: null, layerInfo: null, newModalOpen: false, newUrl: '', newName: ''});
+    this.setState({
+      fileName: '',
+      loading: false,
+      source: null,
+      layer: null,
+      layerInfo: null,
+      newModalOpen: false,
+      showUpload: false,
+      newUrl: '',
+      newName: ''
+    });
   }
   componentWillUnmount() {
     if (this._request) {
@@ -317,14 +357,18 @@ class AddLayerModal extends React.PureComponent {
     this.props.onRequestClose();
   }
   addLayers() {
-    var layer = this._onLayerClick(this.state.layer);
-    var extent = layer.get('EX_GeographicBoundingBox');
-    if (extent) {
-      var map = this.props.map;
-      var view = map.getView();
-      map.getView().fit(ol.proj.transformExtent(extent, 'EPSG:4326', view.getProjection()), map.getSize());
+    if (this.state.showUpload) {
+      this._readVectorFile();
+    } else {
+      var layer = this._onLayerClick(this.state.layer);
+      var extent = layer.get('EX_GeographicBoundingBox');
+      if (extent) {
+        var map = this.props.map;
+        var view = map.getView();
+        map.getView().fit(ol.proj.transformExtent(extent, 'EPSG:4326', view.getProjection()), map.getSize());
+      }
+      this.close();
     }
-    this.close();
   }
   _handleRequestClose() {
     this.setState({
@@ -346,7 +390,9 @@ class AddLayerModal extends React.PureComponent {
     this.setState({newName: value});
   }
   _onSourceChange(evt, idx, value) {
-    if (value === 'new') {
+    if (value === uploadOption) {
+      this.setState({showUpload: true});
+    } else if (value === newOption) {
       this.setState({newModalOpen: true, layer: null, source: value});
     } else {
       this.setState({source: value}, function() {
@@ -389,6 +435,94 @@ class AddLayerModal extends React.PureComponent {
       layer: value
     });
   }
+  _readFile(text) {
+    this._text = text;
+  }
+  _generateId() {
+    return ID_PREFIX + this._counter;
+  }
+  _readVectorFile() {
+    this.setState({
+      loading: true
+    });
+    var me = this;
+    global.setTimeout(function() {
+      var text = me._text;
+      var filename = me.state.fileName;
+      if (text && filename) {
+        var ext = filename.split('.').pop().toLowerCase();
+        var format = AddLayerModal.formats[ext];
+        var map = me.props.map;
+        if (format) {
+          try {
+            var crs = format.readProjection(text);
+            if (crs === undefined) {
+              me.setState({loading: false, error: true, fileName: '', errorOpen: true, msg: 'Unsupported projection'});
+              return;
+            }
+            var features = format.readFeatures(text, {dataProjection: crs,
+              featureProjection: map.getView().getProjection()});
+            if (features && features.length > 0) {
+              var fill = me.state.hasFill ? new ol.style.Fill({color: util.transformColor(me.state.fillColor)}) : undefined;
+              var stroke = me.state.hasStroke ? new ol.style.Stroke({color: util.transformColor(me.state.strokeColor), width: me.state.strokeWidth}) : undefined;
+              var style = new ol.style.Style({
+                fill: fill,
+                stroke: stroke,
+                image: new ol.style.Circle({stroke: stroke, fill: fill, radius: me.props.pointRadius})
+              });
+              me._counter++;
+              var lyr = new ol.layer.Vector({
+                id: me._generateId(),
+                style: style,
+                source: new ol.source.Vector({
+                  features: features,
+                  wrapX: false
+                }),
+                title: filename,
+                isRemovable: true,
+                isSelectable: true
+              });
+              map.addLayer(lyr);
+              var extent = lyr.getSource().getExtent();
+              var valid = true;
+              for (var i = 0, ii = extent.length; i < ii; ++i) {
+                var value = extent[i];
+                if (Math.abs(value) == Infinity || isNaN(value) || (value < -20037508.342789244 || value > 20037508.342789244)) {
+                  valid = false;
+                  break;
+                }
+              }
+              if (valid) {
+                map.getView().fit(extent, map.getSize());
+              }
+              me.close();
+            }
+          } catch (e) {
+            if (global && global.console) {
+              me.setState({loading: false, error: true, fileName: '', errorOpen: true, msg: e.message});
+            }
+          }
+        }
+      }
+    }, 0);
+  }
+  _onDrop(files) {
+    if (files.length === 1) {
+      var r = new FileReader(), file = files[0];
+      var me = this;
+      this.setState({fileName: file.name});
+      r.onload = function(e) {
+        me._readFile(e.target.result);
+      };
+      r.readAsText(file);
+    }
+  }
+  _onChangeFill(state) {
+    this.setState(state);
+  }
+  _onChangeStroke(state) {
+    this.setState(state);
+  }
   render() {
     const {formatMessage} = this.props.intl;
     var selectOptions = this.state.sources.map(function(source, idx) {
@@ -397,8 +531,11 @@ class AddLayerModal extends React.PureComponent {
     var typeOptions = AddLayerModal.addNewTypes.map(function(newType) {
       return (<MenuItem key={newType} value={newType} primaryText={newType} />);
     });
+    if (this.props.allowUpload) {
+      selectOptions.push(<MenuItem key={uploadOption} value={uploadOption} primaryText={formatMessage(messages.uploadoption)} />);
+    }
     if (this.props.allowUserInput) {
-      selectOptions.push(<MenuItem key='new' value='new' primaryText={formatMessage(messages.addserveroption)} />);
+      selectOptions.push(<MenuItem key={newOption} value={newOption} primaryText={formatMessage(messages.addserveroption)} />);
     }
     var layers, layerMenuItems = [];
     if (this.state.layerInfo) {
@@ -424,6 +561,27 @@ class AddLayerModal extends React.PureComponent {
       <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />,
       <Button buttonType='Flat' primary={true} label={formatMessage(messages.addbutton)} onTouchTap={this.addLayers.bind(this)} />
     ];
+    var upload;
+    if (this.state.showUpload) {
+      upload = (<span>
+        <div className="addLayer-fileField">
+          <Dropzone className='dropzone' multiple={false} onDrop={this._onDrop.bind(this)}>
+          <TextField
+            value={this.state.fileName}
+            floatingLabelFixed={true}
+            hintText="Select location"
+            floatingLabelText="fileName.kml"
+            fullWidth={true}
+          />
+          <IconButton tooltip="Upload file" className="icon">
+            <FontIcon className="ms ms-directory" />
+          </IconButton>
+          </Dropzone>
+        </div>
+        <FillEditor onChange={this._onChangeFill.bind(this)} />
+        <StrokeEditor onChange={this._onChangeStroke.bind(this)} />
+      </span>);
+    }
     var newDialog;
     if (this.state.newModalOpen) {
       newDialog = (
@@ -436,15 +594,14 @@ class AddLayerModal extends React.PureComponent {
     }
     return (
       <Dialog inline={this.props.inline} className={classNames('sdk-component add-layer-modal', this.props.className)} actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title)} open={this.props.open} onRequestClose={this.close.bind(this)}>
-        <div style={{margin: 20}}>
-          <SelectField fullWidth={true} floatingLabelText={formatMessage(messages.sourcecombo)} value={this.state.source} onChange={this._onSourceChange.bind(this)}>
-            {selectOptions}
-          </SelectField>
-          {newDialog}
-          {layers}
-          {loadingIndicator}
-          {error}
-        </div>
+        <SelectField fullWidth={true} floatingLabelText={formatMessage(messages.sourcecombo)} value={this.state.source} onChange={this._onSourceChange.bind(this)}>
+          {selectOptions}
+        </SelectField>
+        {newDialog}
+        {upload}
+        {layers}
+        {loadingIndicator}
+        {error}
       </Dialog>
     );
   }
