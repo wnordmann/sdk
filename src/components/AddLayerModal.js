@@ -139,6 +139,21 @@ const messages = defineMessages({
     id: 'addwmslayermodal.uploadoption',
     description: 'Combo box option for add local layer',
     defaultMessage: 'Local'
+  },
+  uploadhinttext: {
+    id: 'addwmslayermodal.uploadhinttext',
+    description: 'Hint text for upload',
+    defaultMessage: 'Select location'
+  },
+  uploadlabeltext: {
+    id: 'addwmslayermodal.uploadlabeltext',
+    description: 'Label text for upload',
+    defaultMessage: 'fileName.kml'
+  },
+  uploadicontooltip: {
+    id: 'addwmslayermodal.uploadicontooltip',
+    description: 'Tooltip for upload icon button',
+    defaultMessage: 'Upload file'
   }
 });
 
@@ -468,7 +483,7 @@ class AddLayerModal extends React.PureComponent {
               var style = new ol.style.Style({
                 fill: fill,
                 stroke: stroke,
-                image: new ol.style.Circle({stroke: stroke, fill: fill, radius: me.props.pointRadius})
+                image: new ol.style.Circle({stroke: stroke, fill: fill, radius: 7})
               });
               me._counter++;
               var lyr = new ol.layer.Vector({
@@ -569,11 +584,11 @@ class AddLayerModal extends React.PureComponent {
           <TextField
             value={this.state.fileName}
             floatingLabelFixed={true}
-            hintText="Select location"
-            floatingLabelText="fileName.kml"
+            hintText={formatMessage(messages.uploadhinttext)}
+            floatingLabelText={formatMessage(messages.uploadlabeltext)}
             fullWidth={true}
           />
-          <IconButton tooltip="Upload file" className="icon">
+          <IconButton tooltip={formatMessage(messages.uploadicontooltip)} className="icon">
             <FontIcon className="ms ms-directory" />
           </IconButton>
           </Dropzone>
