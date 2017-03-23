@@ -6,9 +6,11 @@ import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 import AddLayerModal from '../../src/components/AddLayerModal';
 
 raf.polyfill();
+injectTapEventPlugin();
 
 describe('AddLayerModal', function() {
 
