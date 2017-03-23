@@ -50,10 +50,20 @@ const messages = defineMessages({
     description: 'Title for new server name text field',
     defaultMessage: 'Name'
   },
+  newservernamehint: {
+    id: 'addwmslayermodal.newservernamehint',
+    description: 'Hint text for new server name text field',
+    defaultMessage: 'Enter server name'
+  },
   newserverurl: {
     id: 'addwmslayermodal.newserverurl',
     description: 'Title for new server url text field',
     defaultMessage: 'URL'
+  },
+  newserverurlhint: {
+    id: 'addwmslayermodal.newserverurlhint',
+    description: 'Hint text for new server url text field',
+    defaultMessage: 'Enter server URL'
   },
   newservermodaltitle: {
     id: 'addwmslayermodal.newservermodaltitle',
@@ -316,12 +326,17 @@ class AddLayerModal extends React.PureComponent {
       errorOpen: false
     });
   }
-  _onTypeChange(evt, idx, value) {
+  _onNewTypeChange(evt, idx, value) {
     this.setState({newType: value});
+  }
+  _onNewUrlChange(evt, value) {
+    if (evt.key === 'Enter') {
+      this.addServer();
+    }
   }
   _onSourceChange(evt, idx, value) {
     if (value === 'new') {
-      this.setState({newModalOpen: true});
+      this.setState({newModalOpen: true, source: value});
     } else {
       this.setState({source: value}, function() {
         this._refreshService();
@@ -347,7 +362,7 @@ class AddLayerModal extends React.PureComponent {
       type: serverType,
       url: url
     });
-    this.setState({source: sources.length - 1, newModalOpen: false, sources: sources}, function() {
+    this.setState({source: sources.length - 1, sources: sources}, function() {
       var me = this;
       this._refreshService(function() {
         var sources = me.state.sources.slice();
@@ -398,21 +413,23 @@ class AddLayerModal extends React.PureComponent {
       <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />,
       <Button buttonType='Flat' primary={true} label={formatMessage(messages.addbutton)} onTouchTap={this.addLayers.bind(this)} />
     ];
-    var newActions = [
-      <Button buttonType='Flat' primary={true} label={formatMessage(messages.addserverbutton)} onTouchTap={this.addServer.bind(this)} />,
-      <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.closeNewServer.bind(this)} />
-    ];
+    var newDialog;
+    if (this.state.newModalOpen) {
+      newDialog = (
+        <div>
+          <SelectField fullWidth={true} floatingLabelText={formatMessage(messages.servertypelabel)} value={this.state.newType} onChange={this._onNewTypeChange.bind(this)}>{typeOptions}</SelectField><br/>
+          <TextField hintText={formatMessage(messages.newservernamehint)} ref='newservername' fullWidth={true} floatingLabelText={formatMessage(messages.newservername)} /><br/>
+          <TextField hintText={formatMessage(messages.newserverurlhint)} ref='newserverurl' onKeyPress={this._onNewUrlChange.bind(this)} fullWidth={true} floatingLabelText={formatMessage(messages.newserverurl)} />
+        </div>
+      );
+    }
     return (
       <Dialog inline={this.props.inline} className={classNames('sdk-component add-layer-modal', this.props.className)} actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title)} open={this.props.open} onRequestClose={this.close.bind(this)}>
         <div style={{margin: 20}}>
           <SelectField fullWidth={true} floatingLabelText={formatMessage(messages.sourcecombo)} value={this.state.source} onChange={this._onSourceChange.bind(this)}>
             {selectOptions}
           </SelectField>
-          <Dialog inline={this.props.inline} open={this.state.newModalOpen} actions={newActions} autoScrollBodyContent={true} onRequestClose={this.closeNewServer.bind(this)} modal={true} title={formatMessage(messages.newservermodaltitle)}>
-            <SelectField floatingLabelText={formatMessage(messages.servertypelabel)} value={this.state.newType} onChange={this._onTypeChange.bind(this)}>{typeOptions}</SelectField><br/>
-            <TextField fullWidth={true} ref='newservername' floatingLabelText={formatMessage(messages.newservername)} /><br/>
-            <TextField fullWidth={true} ref='newserverurl' floatingLabelText={formatMessage(messages.newserverurl)} />
-          </Dialog>
+          {newDialog}
           {layers}
           {loadingIndicator}
           {error}
