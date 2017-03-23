@@ -15,7 +15,6 @@ import ol from 'openlayers';
 import Dialog from './Dialog';
 import Snackbar from 'material-ui/Snackbar';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import RefreshIcon from 'material-ui/svg-icons/navigation/refresh';
 import TextField from 'material-ui/TextField';
 import Button from './Button';
 import MenuItem from 'material-ui/MenuItem';
@@ -74,7 +73,7 @@ const messages = defineMessages({
   title: {
     id: 'addwmslayermodal.title',
     description: 'Title for the modal Add layer dialog',
-    defaultMessage: 'Add Layers'
+    defaultMessage: 'New Layer'
   },
   nolayertitle: {
     id: 'addwmslayermodal.nolayertitle',
@@ -104,12 +103,12 @@ const messages = defineMessages({
   addbutton: {
     id: 'addwmslayermodal.addbutton',
     description: 'Text for the add button',
-    defaultMessage: 'Add'
+    defaultMessage: 'Save'
   },
   closebutton: {
     id: 'addwmslayermodal.closebutton',
     description: 'Text for close button',
-    defaultMessage: 'Close'
+    defaultMessage: 'Cancel'
   },
   addserveroption: {
     id: 'addwmslayermodal.addserveroption',
@@ -179,7 +178,7 @@ class AddLayerModal extends React.PureComponent {
       sources: this.props.sources.slice(),
       newType: AddLayerModal.addNewTypes[0],
       newModalOpen: false,
-      source: 0,
+      source: null,
       error: false,
       errorOpen: false,
       layerInfo: null
@@ -295,39 +294,20 @@ class AddLayerModal extends React.PureComponent {
     }
     if (layer.Name) {
       menuItems.push(
-        <MenuItem key={layer.Name} value={layer.Name} primaryText={primaryText} />
+        <MenuItem key={layer.Name} value={layer} primaryText={primaryText} />
       );
-    }
-  }
-  _onCheck(layer, proxy, checked) {
-    if (checked) {
-      this._checkedLayers.push(layer);
-    } else {
-      var idx = this._checkedLayers.indexOf(layer)
-      if (idx > -1) {
-        this._checkedLayers.splice(idx, 1);
-      }
     }
   }
   close() {
     this.props.onRequestClose();
   }
   addLayers() {
-    var doZoom = false;
-    var initial = ol.extent.createEmpty();
-    var finalExtent;
-    for (var i = 0, ii = this._checkedLayers.length; i < ii; ++i) {
-      var layer = this._onLayerClick(this._checkedLayers[i]);
-      var extent = layer.get('EX_GeographicBoundingBox');
-      if (extent) {
-        finalExtent = ol.extent.extend(initial, extent);
-        doZoom = true;
-      }
-    }
-    if (doZoom) {
+    var layer = this._onLayerClick(this.state.layer);
+    var extent = layer.get('EX_GeographicBoundingBox');
+    if (extent) {
       var map = this.props.map;
       var view = map.getView();
-      map.getView().fit(ol.proj.transformExtent(finalExtent, 'EPSG:4326', view.getProjection()), map.getSize());
+      map.getView().fit(ol.proj.transformExtent(extent, 'EPSG:4326', view.getProjection()), map.getSize());
     }
     this.close();
   }
@@ -394,7 +374,6 @@ class AddLayerModal extends React.PureComponent {
     if (this.props.allowUserInput) {
       selectOptions.push(<MenuItem key='new' value='new' primaryText={formatMessage(messages.addserveroption)} />);
     }
-    this._checkedLayers = [];
     var layers, layerMenuItems = [];
     if (this.state.layerInfo) {
       this._getLayersMarkup(this.state.layerInfo, layerMenuItems);
@@ -416,26 +395,28 @@ class AddLayerModal extends React.PureComponent {
       />);
     }
     var actions = [
-      <Button buttonType='Flat' primary={true} label={formatMessage(messages.addbutton)} onTouchTap={this.addLayers.bind(this)} />,
-      <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
+      <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />,
+      <Button buttonType='Flat' primary={true} label={formatMessage(messages.addbutton)} onTouchTap={this.addLayers.bind(this)} />
     ];
     var newActions = [
       <Button buttonType='Flat' primary={true} label={formatMessage(messages.addserverbutton)} onTouchTap={this.addServer.bind(this)} />,
       <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.closeNewServer.bind(this)} />
     ];
     return (
-      <Dialog inline={this.props.inline} className={classNames('sdk-component add-layer-modal noBorderPaper', this.props.className)}  actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title)} open={this.props.open} onRequestClose={this.close.bind(this)}>
-        <SelectField fullWidth={true} floatingLabelText={formatMessage(messages.sourcecombo)} value={this.state.source} onChange={this._onSourceChange.bind(this)}>
-          {selectOptions}
-        </SelectField><Button buttonType='Icon' key='refresh' tooltip={formatMessage(messages.refresh)} onTouchTap={this._refreshService.bind(this)}><RefreshIcon /></Button><br/>
-        <Dialog inline={this.props.inline} open={this.state.newModalOpen} actions={newActions} autoScrollBodyContent={true} onRequestClose={this.closeNewServer.bind(this)} modal={true} title={formatMessage(messages.newservermodaltitle)}>
-          <SelectField floatingLabelText={formatMessage(messages.servertypelabel)} value={this.state.newType} onChange={this._onTypeChange.bind(this)}>{typeOptions}</SelectField><br/>
-          <TextField fullWidth={true} ref='newservername' floatingLabelText={formatMessage(messages.newservername)} /><br/>
-          <TextField fullWidth={true} ref='newserverurl' floatingLabelText={formatMessage(messages.newserverurl)} />
-        </Dialog>
-        {layers}
-        {loadingIndicator}
-        {error}
+      <Dialog inline={this.props.inline} className={classNames('sdk-component add-layer-modal', this.props.className)} actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title)} open={this.props.open} onRequestClose={this.close.bind(this)}>
+        <div style={{margin: 20}}>
+          <SelectField fullWidth={true} floatingLabelText={formatMessage(messages.sourcecombo)} value={this.state.source} onChange={this._onSourceChange.bind(this)}>
+            {selectOptions}
+          </SelectField>
+          <Dialog inline={this.props.inline} open={this.state.newModalOpen} actions={newActions} autoScrollBodyContent={true} onRequestClose={this.closeNewServer.bind(this)} modal={true} title={formatMessage(messages.newservermodaltitle)}>
+            <SelectField floatingLabelText={formatMessage(messages.servertypelabel)} value={this.state.newType} onChange={this._onTypeChange.bind(this)}>{typeOptions}</SelectField><br/>
+            <TextField fullWidth={true} ref='newservername' floatingLabelText={formatMessage(messages.newservername)} /><br/>
+            <TextField fullWidth={true} ref='newserverurl' floatingLabelText={formatMessage(messages.newserverurl)} />
+          </Dialog>
+          {layers}
+          {loadingIndicator}
+          {error}
+        </div>
       </Dialog>
     );
   }
