@@ -185,6 +185,8 @@ class AddLayerModal extends React.PureComponent {
     this._muiTheme = context.muiTheme || getMuiTheme();
     this.state = {
       loading: false,
+      newUrl: '',
+      newName: '',
       sources: this.props.sources.slice(),
       newType: AddLayerModal.addNewTypes[0],
       newModalOpen: false,
@@ -196,6 +198,9 @@ class AddLayerModal extends React.PureComponent {
   }
   getChildContext() {
     return {muiTheme: this._muiTheme};
+  }
+  componentWillReceiveProps(props) {
+    this.setState({source: null, layer: null, layerInfo: null, newModalOpen: false, newUrl: '', newName: ''});
   }
   componentWillUnmount() {
     if (this._request) {
@@ -329,14 +334,20 @@ class AddLayerModal extends React.PureComponent {
   _onNewTypeChange(evt, idx, value) {
     this.setState({newType: value});
   }
-  _onNewUrlChange(evt, value) {
+  _onNewUrlKeyPress(evt, value) {
     if (evt.key === 'Enter') {
       this.addServer();
     }
   }
+  _onNewUrlChange(evt, value) {
+    this.setState({newUrl: value});
+  }
+  _onNewNameChange(evt, value) {
+    this.setState({newName: value});
+  }
   _onSourceChange(evt, idx, value) {
     if (value === 'new') {
-      this.setState({newModalOpen: true, source: value});
+      this.setState({newModalOpen: true, layer: null, source: value});
     } else {
       this.setState({source: value}, function() {
         this._refreshService();
@@ -350,8 +361,8 @@ class AddLayerModal extends React.PureComponent {
     this._getCaps(onFailure);
   }
   addServer() {
-    var name = this.refs.newservername.getValue();
-    var url = this.refs.newserverurl.getValue();
+    var name = this.state.newName;
+    var url = this.state.newUrl;
     var serverType = this.state.newType;
     var sources = this.state.sources.slice();
     if (url.indexOf('http://') === -1 && url.indexOf('https://') === -1 && url[0] !== '/') {
@@ -417,9 +428,9 @@ class AddLayerModal extends React.PureComponent {
     if (this.state.newModalOpen) {
       newDialog = (
         <div>
-          <SelectField fullWidth={true} floatingLabelText={formatMessage(messages.servertypelabel)} value={this.state.newType} onChange={this._onNewTypeChange.bind(this)}>{typeOptions}</SelectField><br/>
-          <TextField hintText={formatMessage(messages.newservernamehint)} ref='newservername' fullWidth={true} floatingLabelText={formatMessage(messages.newservername)} /><br/>
-          <TextField hintText={formatMessage(messages.newserverurlhint)} ref='newserverurl' onKeyPress={this._onNewUrlChange.bind(this)} fullWidth={true} floatingLabelText={formatMessage(messages.newserverurl)} />
+          <SelectField fullWidth={true} floatingLabelText={formatMessage(messages.servertypelabel)} value={this.state.newType} onChange={this._onNewTypeChange.bind(this)}>{typeOptions}</SelectField>
+          <TextField hintText={formatMessage(messages.newservernamehint)} value={this.state.newName} onChange={this._onNewNameChange.bind(this)} fullWidth={true} floatingLabelText={formatMessage(messages.newservername)} />
+          <TextField hintText={formatMessage(messages.newserverurlhint)} value={this.state.newUrl} onKeyPress={this._onNewUrlKeyPress.bind(this)} onChange={this._onNewUrlChange.bind(this)} fullWidth={true} floatingLabelText={formatMessage(messages.newserverurl)} />
         </div>
       );
     }
