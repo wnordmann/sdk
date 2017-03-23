@@ -593,8 +593,8 @@ class AddLayerModal extends React.PureComponent {
           </IconButton>
           </Dropzone>
         </div>
-        <FillEditor onChange={this._onChangeFill.bind(this)} />
-        <StrokeEditor onChange={this._onChangeStroke.bind(this)} />
+        <FillEditor disabled={true} onChange={this._onChangeFill.bind(this)} />
+        <StrokeEditor disabled={true} onChange={this._onChangeStroke.bind(this)} />
       </span>);
     }
     var newDialog;
