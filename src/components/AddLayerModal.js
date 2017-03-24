@@ -233,7 +233,7 @@ class AddLayerModal extends React.PureComponent {
       newName: '',
       sources: this.props.sources.slice(),
       newType: AddLayerModal.addNewTypes[0],
-      newModalOpen: false,
+      showNew: false,
       showUpload: false,
       source: null,
       error: false,
@@ -251,7 +251,7 @@ class AddLayerModal extends React.PureComponent {
       source: null,
       layer: null,
       layerInfo: null,
-      newModalOpen: false,
+      showNew: false,
       showUpload: false,
       newUrl: '',
       newName: ''
@@ -406,17 +406,14 @@ class AddLayerModal extends React.PureComponent {
   }
   _onSourceChange(evt, idx, value) {
     if (value === uploadOption) {
-      this.setState({showUpload: true});
+      this.setState({layerInfo: null, showNew: false, showUpload: true, layer: null, source: value});
     } else if (value === newOption) {
-      this.setState({newModalOpen: true, layer: null, source: value});
+      this.setState({layerInfo: null, showUpload: false, showNew: true, layer: null, source: value});
     } else {
-      this.setState({source: value}, function() {
+      this.setState({layerInfo: null, showUpload: false, showNew: false, source: value}, function() {
         this._refreshService();
       }, this);
     }
-  }
-  closeNewServer() {
-    this.setState({newModalOpen: false});
   }
   _refreshService(onFailure) {
     this._getCaps(onFailure);
@@ -593,26 +590,22 @@ class AddLayerModal extends React.PureComponent {
           </IconButton>
           </Dropzone>
         </div>
-        <div className='addLayer-colorPicker'>
-          <FillEditor disabled={true} onChange={this._onChangeFill.bind(this)} />
-        </div>
-        <div className='addLayer-colorPicker'>
-          <StrokeEditor disabled={true} onChange={this._onChangeStroke.bind(this)} />
-        </div>
+        <FillEditor disabled={true} onChange={this._onChangeFill.bind(this)} />
+        <StrokeEditor disabled={true} onChange={this._onChangeStroke.bind(this)} />
       </div>);
     }
     var newDialog;
-    if (this.state.newModalOpen) {
+    if (this.state.showNew) {
       newDialog = (
         <div>
           <SelectField fullWidth={true} floatingLabelText={formatMessage(messages.servertypelabel)} value={this.state.newType} onChange={this._onNewTypeChange.bind(this)}>{typeOptions}</SelectField>
-          <TextField hintText={formatMessage(messages.newservernamehint)} value={this.state.newName} onChange={this._onNewNameChange.bind(this)} fullWidth={true} floatingLabelText={formatMessage(messages.newservername)} />
-          <TextField hintText={formatMessage(messages.newserverurlhint)} value={this.state.newUrl} onKeyPress={this._onNewUrlKeyPress.bind(this)} onChange={this._onNewUrlChange.bind(this)} fullWidth={true} floatingLabelText={formatMessage(messages.newserverurl)} />
+          <TextField floatingLabelFixed={true} hintText={formatMessage(messages.newservernamehint)} value={this.state.newName} onChange={this._onNewNameChange.bind(this)} fullWidth={true} floatingLabelText={formatMessage(messages.newservername)} />
+          <TextField floatingLabelFixed={true} hintText={formatMessage(messages.newserverurlhint)} value={this.state.newUrl} onKeyPress={this._onNewUrlKeyPress.bind(this)} onChange={this._onNewUrlChange.bind(this)} fullWidth={true} floatingLabelText={formatMessage(messages.newserverurl)} />
         </div>
       );
     }
     return (
-      <Dialog inline={this.props.inline} className={classNames('sdk-component add-layer-modal', this.props.className)} actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title)} open={this.props.open} onRequestClose={this.close.bind(this)}>
+      <Dialog bodyStyle={{padding: 20}} inline={this.props.inline} className={classNames('sdk-component add-layer-modal', this.props.className)} actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title)} open={this.props.open} onRequestClose={this.close.bind(this)}>
         <SelectField fullWidth={true} floatingLabelText={formatMessage(messages.sourcecombo)} value={this.state.source} onChange={this._onSourceChange.bind(this)}>
           {selectOptions}
         </SelectField>
