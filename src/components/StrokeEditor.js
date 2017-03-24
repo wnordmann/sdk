@@ -128,7 +128,7 @@ class StrokeEditor extends React.PureComponent {
     return (
       <Paper zDepth={0} className={classNames('sdk-component stroke-editor', this.props.className)}>
         <ListItem disabled={this.props.disabled} innerDivStyle={ boxStyle } primaryText={<Checkbox onCheck={this._onStrokeCheck.bind(this)} checked={this.state.hasStroke} label={formatMessage(messages.strokelabel)} />} rightIconButton={ <ColorPicker onChange={this._onChangeStroke.bind(this)} initialColor={this.state.strokeColor} /> } />
-        <ListItem innerDivStyle={ listStyle }>
+        <ListItem disabled={this.props.disabled} innerDivStyle={ listStyle }>
           <TextField defaultValue={this.state.strokeWidth} onChange={this._onChangeStrokeWidth.bind(this)} hintText={formatMessage(messages.strokewidthlabel)} floatingLabelText={formatMessage(messages.strokewidthlabel)} floatingLabelFixed={true} fullWidth={true} />
         </ListItem>
       </Paper>

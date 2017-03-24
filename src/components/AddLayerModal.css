@@ -1,3 +1,26 @@
+.addLayer-fileField {
+  position: relative; }
+  .addLayer-fileField .icon {
+    position: absolute !important;
+    right: 0px;
+    top: 20px;
+    padding: 10px; }
+
+.addLayer-colorPicker {
+  position: relative;
+  padding-top: 20px; }
+  .addLayer-colorPicker .icon {
+    position: absolute !important;
+    right: 0px;
+    top: 0px;
+    padding: 10px 0 10px 10px; }
+
+.footerButtons {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: right;
+  margin-bottom: 10px; }
+
 .layer-title-empty {
-  font-style: italic;
-}
+  font-style: italic; }

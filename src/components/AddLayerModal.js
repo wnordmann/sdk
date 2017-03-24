@@ -578,8 +578,8 @@ class AddLayerModal extends React.PureComponent {
     ];
     var upload;
     if (this.state.showUpload) {
-      upload = (<span>
-        <div className="addLayer-fileField">
+      upload = (<div className='noBorderPaper'>
+        <div className='addLayer-fileField'>
           <Dropzone className='dropzone' multiple={false} onDrop={this._onDrop.bind(this)}>
           <TextField
             value={this.state.fileName}
@@ -588,14 +588,18 @@ class AddLayerModal extends React.PureComponent {
             floatingLabelText={formatMessage(messages.uploadlabeltext)}
             fullWidth={true}
           />
-          <IconButton tooltip={formatMessage(messages.uploadicontooltip)} className="icon">
-            <FontIcon className="ms ms-directory" />
+          <IconButton tooltip={formatMessage(messages.uploadicontooltip)} tooltipPosition='top-left' className='icon'>
+            <FontIcon className='ms ms-directory' />
           </IconButton>
           </Dropzone>
         </div>
-        <FillEditor disabled={true} onChange={this._onChangeFill.bind(this)} />
-        <StrokeEditor disabled={true} onChange={this._onChangeStroke.bind(this)} />
-      </span>);
+        <div className='addLayer-colorPicker'>
+          <FillEditor disabled={true} onChange={this._onChangeFill.bind(this)} />
+        </div>
+        <div className='addLayer-colorPicker'>
+          <StrokeEditor disabled={true} onChange={this._onChangeStroke.bind(this)} />
+        </div>
+      </div>);
     }
     var newDialog;
     if (this.state.newModalOpen) {
