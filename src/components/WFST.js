@@ -337,6 +337,7 @@ class WFST extends React.PureComponent {
     feature.on('change', function(evt) {
       this._dirty[evt.target.getId()] = true;
     }, this);
+    this.setState({feature: feature});
   }
   _onGeomUpdate() {
     if (!(this.state.layer.getSource() instanceof ol.source.Vector)) {
