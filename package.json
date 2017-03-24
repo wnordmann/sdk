@@ -25,7 +25,7 @@
     "release": "npm-run-all clean:build build:babel build:copy-files build:copy:css build:copy:locale build:copy:dist",
     "cover": "mochify --extension .jsx --plugin [ mochify-istanbul --report text --report lcovonly --dir ./coverage --exclude **/src/constants/* --exclude **/src/**/*.css --exclude **/src/**/*.scss --exclude **/__tests__/**/* ] --transform ./scripts/test-transform.js __tests__/**/*.test.js",
     "createdir:build:js": "mkdirp dist/js",
-    "build:scss": ""node-sass ./src/components/ -o ./src/components",
+    "build:scss": "node-sass ./src/components/ -o ./src/components",
     "build:css": "npm-run-all build:scss build:copy:css",
     "removedir:css": "rimraf dist/css",
     "createdir:css": "mkdirp dist/css",
