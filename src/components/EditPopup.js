@@ -13,9 +13,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
+import LayerSelector from './LayerSelector';
 import LayerStore from '../stores/LayerStore';
 import AppDispatcher from '../dispatchers/AppDispatcher';
 import ToolUtil from '../toolutil';
+import ToolConstants from '../constants/ToolConstants';
 import {injectIntl, intlShape} from 'react-intl';
 import Button from './Button';
 import CloserIcon from 'material-ui/svg-icons/navigation/close';
@@ -80,9 +82,25 @@ class EditPopup extends React.Component {
       element: ReactDOM.findDOMNode(this).parentNode
     });
     this.props.map.addOverlay(this.overlayPopup);
+    var me = this;
+    this._dispatchToken2 = AppDispatcher.register((payload) => {
+      let action = payload.action;
+      switch (action.type) {
+        case ToolConstants.SHOW_EDIT_POPUP:
+          me.setState({
+            feature: action.feature
+          });
+          me.setVisible(true);
+          me.overlayPopup.setPosition(action.feature.getGeometry().getInteriorPoint().getCoordinates());
+          break;
+        default:
+          break;
+      }
+    });
   }
   componentWillUnmount() {
     AppDispatcher.unregister(this._dispatchToken);
+    AppDispatcher.unregister(this._dispatchToken2);
   }
   activate(interactions) {
     this.active = true;
@@ -174,15 +192,26 @@ class EditPopup extends React.Component {
       }
     }
   }
+  _filterLayerList(lyr) {
+    return lyr.get('isWFST') && lyr.get('wfsInfo') !== undefined;
+  }
+  _onLayerSelectChange(layer) {
+    this.setState({layer: layer});
+  }
   render() {
+    var id = this.state.layer ? this.state.layer.get('id') : undefined;
+    var layerSelector = (
+      <LayerSelector value={id} onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList} map={this.props.map} />
+    );
     var editForm;
-    if (this.state.feature) {
+    if (this.state.feature && this.state.layer) {
       editForm = (<EditForm map={this.props.map} ref='editForm' intl={this.props.intl} feature={this.state.feature} layer={this.state.layer} onSuccess={this._onSuccess.bind(this)} />);
     }
     return (
       <div className={classNames('sdk-component edit-popup', this.props.className)}>
         <Button buttonType='Icon' buttonStyle={{float: 'right'}} ref="popupCloser" onTouchTap={this.setVisible.bind(this, false)}><CloserIcon /></Button>
         <div className='popup-content' ref='content'>
+          {layerSelector}
           {editForm}
         </div>
       </div>

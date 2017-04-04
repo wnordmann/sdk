@@ -124,6 +124,8 @@ class EditForm extends React.Component {
       values: props.feature ? props.feature.getProperties() : {},
       feature: props.feature
     };
+    // TODO, see if we can do this differently
+    this._geomDirty = true;
   }
   componentWillReceiveProps(newProps) {
     if (newProps.feature !== this.state.feature) {
@@ -142,10 +144,34 @@ class EditForm extends React.Component {
       msg: msg
     });
   }
+  _redraw() {
+    this.state.layer.getSource().updateParams({'_olSalt': Math.random()});
+  }
   save(evt) {
     const {formatMessage} = this.props.intl;
-    if (this.state.dirty) {
-      var values = {}, key, hasChange = this._geomDirty;
+    var id = this.state.feature.getId();
+    var key;
+    if (id === undefined) {
+      for (key in this.state.dirty) {
+        feature.set(key, this.state.values[key]);
+      }
+      var me = this;
+      WFSService.insertFeature(this.state.layer, this.props.map.getView(), this.state.feature, function(insertId) {
+        if (insertId == 'new0') {
+          // reload data if we're dealing with a shapefile store
+          var source = me.state.layer.getSource();
+          if (source instanceof ol.source.Vector) {
+            source.clear();
+          } else {
+            me._redraw();
+          }
+        } else {
+          this.state.feature.setId(insertId);
+          FeatureStore.addFeature(this.state.layer, this.state.feature);
+        }
+      });
+    } else if (this.state.dirty) {
+      var values = {}, hasChange = this._geomDirty;
       for (key in this.state.dirty) {
         hasChange = true;
         values[key] = this.state.values[key];

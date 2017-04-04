@@ -21,13 +21,17 @@ import LayerSelector from './LayerSelector';
 import FeatureStore from '../stores/FeatureStore';
 import ToolUtil from '../toolutil';
 import RaisedButton from './Button';
-import DrawIcon from 'material-ui/svg-icons/image/brush';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import Snackbar from 'material-ui/Snackbar';
 import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
-import EditForm from './EditForm';
+import ToolActions from '../actions/ToolActions';
+import EditPopup from './EditPopup';
 import WFSService from '../services/WFSService';
 import Paper from 'material-ui/Paper';
+import DrawIcon from 'material-ui/svg-icons/content/create';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton';
 
 var SelectFeature = function(handleEvent, scope) {
   this._scope = scope;
@@ -194,7 +198,28 @@ class WFST extends React.PureComponent {
       open: false,
       visible: this.props.visible
     };
-    this._interactions = {};
+    this._tempSource = new ol.source.Vector();
+    this._tempLayer = new ol.layer.Vector({
+      title: null,
+      source: this._tempSource
+    });
+    this._interactions = {
+      polygon: new ol.interaction.Draw({
+        source: this._tempSource,
+        type: 'Polygon'
+      }),
+      linestring: new ol.interaction.Draw({
+        source: this._tempSource,
+        type: 'LineString'
+      }),
+      point: new ol.interaction.Draw({
+        source: this._tempSource,
+        type: 'Point'
+      })
+    };
+    for (var key in this._interactions) {
+      this._interactions[key].on('drawend', this._onDrawEnd, this);
+    }
     var features = WFST.select.getFeatures();
     this._modify = new ol.interaction.Modify({
       features: features,
@@ -208,6 +233,9 @@ class WFST extends React.PureComponent {
   }
   getChildContext() {
     return {muiTheme: this.state.muiTheme};
+  }
+  componentDidMount() {
+    this.props.map.addLayer(this._tempLayer);
   }
   componentWillUnmount() {
     AppDispatcher.unregister(this._dispatchToken);
@@ -235,6 +263,7 @@ class WFST extends React.PureComponent {
   }
   deactivate() {
     ToolUtil.deactivate(this);
+    //this._tempSource.clear();
     WFST.select.getFeatures().clear();
     this.setState({feature: null, modifySecondary: false, drawSecondary: false});
   }
@@ -377,6 +406,8 @@ class WFST extends React.PureComponent {
     }
   }
   _onDrawEnd(evt) {
+    ToolActions.showEditPopup(evt.feature);
+    return;
     var me = this;
     this._request = WFSService.insertFeature(this.state.layer, this.props.map.getView(), evt.feature, function(insertId) {
       delete me._request;
@@ -400,6 +431,18 @@ class WFST extends React.PureComponent {
   }
   _redraw() {
     this.state.layer.getSource().updateParams({'_olSalt': Math.random()});
+  }
+  _drawPoly() {
+    this.deactivate();
+    this.activate([this._interactions.polygon]);
+  }
+  _drawLine() {
+    this.deactivate();
+    this.activate([this._interactions.linestring]);
+  }
+  _drawPoint() {
+    this.deactivate();
+    this.activate([this._interactions.point]);
   }
   _drawFeature() {
     var layer = this.state.layer;
@@ -455,7 +498,12 @@ class WFST extends React.PureComponent {
     this.setState({active: active});
   }
   render() {
-    if (!this.state.visible) {
+    return <IconMenu iconButtonElement={<IconButton><DrawIcon /></IconButton>}>
+      <MenuItem onTouchTap={this._drawPoly.bind(this)} primaryText="Draw Polygon" />
+      <MenuItem onTouchTap={this._drawLine.bind(this)} primaryText="Draw Line" />
+      <MenuItem onTouchTap={this._drawPoint.bind(this)} primaryText="Draw Point" />
+    </IconMenu>;
+/*    if (!this.state.visible) {
       return (<article />);
     } else {
       const {formatMessage} = this.props.intl;
@@ -508,7 +556,7 @@ class WFST extends React.PureComponent {
           {editForm}
         </Paper>
       );
-    }
+    }*/
   }
 }
 
