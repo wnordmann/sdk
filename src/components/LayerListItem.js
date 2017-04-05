@@ -673,16 +673,17 @@ static formats = {
     var innerDivNestedStyle = {
       marginRight:'100px'
     }
+    var flexContainer = {
+      display: 'flex',
+      flexDirection: 'row-reverse',
+      padding: '16px'
+    };
     var rightIconButtons = <span className="fixedContainer">{styling}{zoomTo}{visibility}{popoverEllipsis}</span>;
     if (layer.get('type') === 'base-group') {
       rightIconButtons = <span className="fixedContainer">{visibility}</span>;
     }
     if (layer.get('type') === 'base') {
       rightIconButtons = <span className="fixedContainer">{baseVisibility}</span>;
-      // innerDivNestedStyle = {
-      //   marginLeft: '18px',
-      //   marginRight:'100px'
-      // };
     }
 
     return connectDragSource(connectDropTarget(
@@ -691,6 +692,7 @@ static formats = {
           className={classNames({'': true, 'menuItem': true, '' : true}, this.props.className)}
           autoGenerateNestedIndicator={this.props.collapsible}
           insetChildren={false}
+          innerDivStyle={flexContainer}
           autoGenerateNestedIndicator={false}
           primaryText={<span className="statusIcons">{arrowIcon}{layersIcon}<span> {this.props.title}</span></span>}
           rightIconButton={

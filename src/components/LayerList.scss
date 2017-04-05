@@ -1,7 +1,10 @@
 
 .menuItem {
+  display: flex;
   .statusIcons {
+    background-color: blue;
     display: flex;
+    flex: 2;
     i {
       width: 24px;
     }
@@ -20,12 +23,14 @@
   }
   .fixedContainer {
     top: 16px !important;
-    // background-color: green;
-    width: 78px;
+    background-color: green;
     display: flex !important;
-    text-align: right;
+    position: static !important;
+    justify-content: flex-end;
+    width: 110px;
     i {
-      flex: 1;
+      padding: 0 6px;
+      background-color: orange;
     }
   }
   .settings {
@@ -36,7 +41,7 @@
   }
 }
 .menuItem + div {
-  padding: 0 0 0 10px !important;
+  // padding: 0 0 0 10px !important;
 }
 .noBorderPaper {
   margin: 20px;
@@ -106,6 +111,6 @@
 
 }
 
-.fa, .ms {
-  padding: 4px 0 0 4px;
-}
+// .fa, .ms {
+//   padding: 4px 0 0 4px;
+// }
