@@ -108,6 +108,7 @@ class EditPopup extends React.Component {
   componentDidMount() {
     this.overlayPopup = new ol.Overlay({
       autoPan: true,
+      stopEvent: false,
       element: ReactDOM.findDOMNode(this).parentNode
     });
     this.props.map.addOverlay(this.overlayPopup);

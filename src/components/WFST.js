@@ -406,10 +406,20 @@ class WFST extends React.PureComponent {
       }, this._proxy, this._requestHeaders);
     }
   }
+  _setActiveInteractions(active) {
+    this.props.map.getInteractions().forEach(function(interaction) {
+      if (interaction instanceof ol.interaction.Draw || interaction instanceof ol.interaction.DoubleClickZoom) {
+        interaction.setActive(active);
+      }
+    });
+  }
   _onDrawEnd(evt) {
     var tempSource = this._tempSource;
+    this._setActiveInteractions(false);
+    var me = this;
     ToolActions.showEditPopup(evt.feature, function() {
       tempSource.clear();
+      me._setActiveInteractions(true);
     });
     return;
     var me = this;
