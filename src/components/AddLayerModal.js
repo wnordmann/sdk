@@ -567,7 +567,7 @@ class AddLayerModal extends React.PureComponent {
     var layers, layerMenuItems = [];
     if (this.state.layerInfo) {
       this._getLayersMarkup(this.state.layerInfo, layerMenuItems);
-      layers = <div className='noBorderPaper'><SelectField fullWidth={true} value={this.state.layer} onChange={this._onChangeSelectLayer.bind(this)} floatingLabelText={formatMessage(messages.selectlayercombo)}>{layerMenuItems}</SelectField></div>;
+      layers = <SelectField fullWidth={true} value={this.state.layer} onChange={this._onChangeSelectLayer.bind(this)} floatingLabelText={formatMessage(messages.selectlayercombo)}>{layerMenuItems}</SelectField>;
     }
     var loadingIndicator;
     if (this.state.loading === true) {
@@ -590,7 +590,7 @@ class AddLayerModal extends React.PureComponent {
     ];
     var upload;
     if (this.state.showUpload) {
-      upload = (<div className='noBorderPaper'>
+      upload = (<div>
         <div className='addLayer-fileField'>
           <Dropzone className='dropzone' multiple={false} onDrop={this._onDrop.bind(this)}>
           <TextField
@@ -612,7 +612,7 @@ class AddLayerModal extends React.PureComponent {
     var newDialog;
     if (this.state.showNew) {
       newDialog = (
-        <div className='noBorderPaper'>
+        <div>
           <SelectField fullWidth={true} floatingLabelText={formatMessage(messages.servertypelabel)} value={this.state.newType} onChange={this._onNewTypeChange.bind(this)}>{typeOptions}</SelectField>
           <TextField floatingLabelFixed={true} hintText={formatMessage(messages.newservernamehint)} value={this.state.newName} onChange={this._onNewNameChange.bind(this)} fullWidth={true} floatingLabelText={formatMessage(messages.newservername)} />
           <TextField floatingLabelFixed={true} hintText={formatMessage(messages.newserverurlhint)} value={this.state.newUrl} onKeyPress={this._onNewUrlKeyPress.bind(this)} onChange={this._onNewUrlChange.bind(this)} fullWidth={true} floatingLabelText={formatMessage(messages.newserverurl)} />
@@ -628,8 +628,10 @@ class AddLayerModal extends React.PureComponent {
               title={formatMessage(messages.title)}
               iconElementLeft={<IconButton label={formatMessage(messages.closebutton)} > <NavigationArrowBack/> </IconButton>}
               onLeftIconButtonTouchTap={this.close.bind(this)}/>
-            {select}
-            {content}
+            <div className="noBorderPaper">
+              {select}
+              {content}
+            </div>
             <div className='footerButtons'>
               {actions}
             </div>
