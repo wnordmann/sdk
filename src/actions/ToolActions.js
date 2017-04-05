@@ -21,10 +21,11 @@ export default {
       layer: layer
     });
   },
-  showEditPopup: (feature) => {
+  showEditPopup: (feature, callback) => {
     AppDispatcher.handleAction({
       type: ToolConstants.SHOW_EDIT_POPUP,
-      feature: feature
+      feature: feature,
+      callback: callback
     });
   },
   startPlayback: () => {

@@ -407,7 +407,10 @@ class WFST extends React.PureComponent {
     }
   }
   _onDrawEnd(evt) {
-    ToolActions.showEditPopup(evt.feature);
+    var tempSource = this._tempSource;
+    ToolActions.showEditPopup(evt.feature, function() {
+      tempSource.clear();
+    });
     return;
     var me = this;
     this._request = WFSService.insertFeature(this.state.layer, this.props.map.getView(), evt.feature, function(insertId) {

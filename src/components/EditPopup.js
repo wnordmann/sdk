@@ -119,6 +119,7 @@ class EditPopup extends React.Component {
           me.setState({
             feature: action.feature
           });
+          me._callback = action.callback;
           me.setVisible(true);
           me.overlayPopup.setPosition(action.feature.getGeometry().getInteriorPoint().getCoordinates());
           break;
@@ -199,6 +200,8 @@ class EditPopup extends React.Component {
     if (cancelButton.onclick === null) {
       cancelButton.onclick = function() {
         me.setVisible(false);
+        me._callback();
+        delete me._callback;
         return false;
       };
     }
@@ -250,6 +253,9 @@ class EditPopup extends React.Component {
           this.state.feature.setId(insertId);
           FeatureStore.addFeature(this.state.layer, this.state.feature);
         }
+        me._callback();
+        delete me._callback;
+        me.setVisible(false);
       }, onFailure);
     } else {
       // handle update
