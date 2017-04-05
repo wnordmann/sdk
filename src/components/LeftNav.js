@@ -48,12 +48,12 @@ class LeftNav extends React.PureComponent {
     constructor(props, context) {
       super(props);
     }
-    componentWillMount() {
+    componentDidMount() {
       if (this.props.tabList) {
         this.setState({
           menuText: this.props.tabList[0].props.label,
           selectedIndex: this.props.tabList[0].props.value,
-          appBarIcon: this.props.tabList[0].props.icon,
+          appBarIcon: this.getIconFromTab(this.props.tabList[0]),
           appBarOnTouch: this.props.tabList[0].props.onActive
         });
       }
@@ -92,6 +92,20 @@ class LeftNav extends React.PureComponent {
         appBarOnTouch: this.rightIcon[value.props.value].onTouchTap
       });
     };
+    getIconFromTab = (tabComponent) =>{
+      if (tabComponent.type.name === 'Tab') {
+        const tabChild = tabComponent.props.children;
+        if (tabChild.props.icon) { //Tab children contains Icon
+          return tabChild.props.icon;
+        }else if (tabChild.type === 'div') { //Tab children components are often wrapped in a parent Div
+          const divChild = tabChild.props.children;
+          if (divChild.props.icon) { //Div children contains Icon
+            return divChild.props.icon;
+          }
+        }
+      }
+      return <span/>;
+    };
     close = (event, value) => {
       this.props.onRequestClose();
     }
@@ -114,8 +128,8 @@ class LeftNav extends React.PureComponent {
       if (this.props.tabList) {
         tabs = (<Tabs tabItemContainerStyle = { noDisplayStyle } inkBarStyle = { noDisplayStyle } value = { this.state.selectedIndex }>{this.props.tabList}</Tabs>);
         this.props.tabList.forEach((tab) => {
-          if (tab.props.icon) {
-            icons[tab.props.value] = {icon: tab.props.icon, onTouchTap: tab.props.onActive};
+          if (tab.props.onActive) {
+            icons[tab.props.value] = {icon: this.getIconFromTab(tab), onTouchTap: tab.props.onActive};
           }else {
             icons[tab.props.value] = {icon: <span/>, onTouchTap: null};
           }

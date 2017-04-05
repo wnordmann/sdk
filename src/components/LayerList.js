@@ -136,6 +136,10 @@ class LayerList extends React.PureComponent {
      */
     collapsible: React.PropTypes.bool,
     /**
+     * Icon for the conmpoent
+     */
+    icon: React.PropTypes.node,
+    /**
      * Should we allow adding base maps from a selector modal?
      */
     addBaseMap: React.PropTypes.shape({
