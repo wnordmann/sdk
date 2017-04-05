@@ -673,28 +673,31 @@ static formats = {
     var innerDivNestedStyle = {
       marginRight:'100px'
     }
-    var rightIconButton = <div><span className="fixedContainer">{visibility}{zoomTo}{styling}{popoverEllipsis}</span></div>;
+    var rightIconButtons = <span className="fixedContainer">{styling}{zoomTo}{visibility}{popoverEllipsis}</span>;
     if (layer.get('type') === 'base-group') {
-      rightIconButton = <div><span className="fixedContainer">{visibility}</span></div>;
+      rightIconButtons = <span className="fixedContainer">{visibility}</span>;
     }
     if (layer.get('type') === 'base') {
-      rightIconButton = <div><span className="fixedContainer">{baseVisibility}</span></div>;
-      innerDivNestedStyle = {
-        marginLeft: '18px',
-        marginRight:'100px'
-      };
+      rightIconButtons = <span className="fixedContainer">{baseVisibility}</span>;
+      // innerDivNestedStyle = {
+      //   marginLeft: '18px',
+      //   marginRight:'100px'
+      // };
     }
 
     return connectDragSource(connectDropTarget(
       <div>
         <ListItem
-          className={classNames({'sdk-component': true, 'menuItem': true, 'layer-list-item' : true}, this.props.className)}
-          innerDivStyle={innerDivNestedStyle}
+          className={classNames({'': true, 'menuItem': true, '' : true}, this.props.className)}
           autoGenerateNestedIndicator={this.props.collapsible}
           insetChildren={false}
           autoGenerateNestedIndicator={false}
           primaryText={<span className="statusIcons">{arrowIcon}{layersIcon}<span> {this.props.title}</span></span>}
-          rightIcon={rightIconButton}
+          rightIconButton={
+            <span className="fixedContainer">
+              {rightIconButtons}
+            </span>
+            }
           nestedItems={this.props.nestedItems}
           open={this.state.open}/>
         <div style={{paddingLeft: 72}}>
