@@ -15,17 +15,42 @@ import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import LayerSelector from './LayerSelector';
 import LayerStore from '../stores/LayerStore';
+import FeatureStore from '../stores/FeatureStore';
 import AppDispatcher from '../dispatchers/AppDispatcher';
 import ToolUtil from '../toolutil';
 import ToolConstants from '../constants/ToolConstants';
-import {injectIntl, intlShape} from 'react-intl';
+import {injectIntl, intlShape, defineMessages} from 'react-intl';
 import Button from './Button';
 import CloserIcon from 'material-ui/svg-icons/navigation/close';
 import classNames from 'classnames';
 import WFSService from '../services/WFSService';
-import EditForm from './EditForm';
+import TextField from 'material-ui/TextField';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import Snackbar from 'material-ui/Snackbar';
 import './BasePopup.css';
+
+const messages = defineMessages({
+  cancel: {
+    id: 'editpopup.cancel',
+    description: 'Text to show on the cancel button',
+    defaultMessage: 'Cancel'
+  },
+  save: {
+    id: 'editpopup.save',
+    description: 'Text to show on the save button',
+    defaultMessage: 'Add'
+  },
+  layer: {
+    id: 'editpopup.layer',
+    description: 'Label text for layer combo',
+    defaultMessage: 'Assign to layer'
+  },
+  errormsg: {
+    id: 'editpopup.errormsg',
+    description: 'Error message to show the user when a request fails',
+    defaultMessage: 'Error saving this feature to GeoServer. {msg}'
+  }
+});
 
 /**
  * Popup that can be used for feature editing (attribute form).
@@ -67,8 +92,12 @@ class EditPopup extends React.Component {
     this._requestHeaders = context.requestHeaders;
     this._dispatchToken = ToolUtil.register(this);
     this.state = {
+      error: false,
+      open: false,
       feature: null,
-      layer: null
+      layer: null,
+      dirty: {},
+      values: {}
     };
     this.props.map.on('singleclick', this._onMapClick, this);
     this.active = true;
@@ -166,30 +195,19 @@ class EditPopup extends React.Component {
     ReactDOM.findDOMNode(this).parentNode.style.display = visible ? 'block' : 'none';
     var me = this;
     // regular jsx onClick does not work when stopEvent is true
-    var closer = ReactDOM.findDOMNode(this.refs.popupCloser);
-    if (closer.onclick === null) {
-      closer.onclick = function() {
+    var cancelButton = ReactDOM.findDOMNode(this.refs.cancelButton);
+    if (cancelButton.onclick === null) {
+      cancelButton.onclick = function() {
         me.setVisible(false);
         return false;
       };
     }
-    var editForm = this.refs.editForm;
-    if (editForm) {
-      var formInstance = editForm.getWrappedInstance();
-      var saveButton = ReactDOM.findDOMNode(formInstance.refs.saveButton).querySelector('button');
-      if (saveButton && saveButton.onclick === null) {
-        saveButton.onclick = function() {
-          formInstance.save();
-          return false;
-        };
-      }
-      var deleteButton = ReactDOM.findDOMNode(formInstance.refs.deleteButton).querySelector('button');
-      if (deleteButton && deleteButton.onclick === null) {
-        deleteButton.onclick = function() {
-          formInstance.deleteFeature();
-          return false;
-        };
-      }
+    var saveButton = ReactDOM.findDOMNode(this.refs.saveButton);
+    if (saveButton.onclick === null) {
+      saveButton.onclick = function() {
+        me.save();
+        return false;
+      };
     }
   }
   _filterLayerList(lyr) {
@@ -198,22 +216,101 @@ class EditPopup extends React.Component {
   _onLayerSelectChange(layer) {
     this.setState({layer: layer});
   }
+  _redraw() {
+    this.state.layer.getSource().updateParams({'_olSalt': Math.random()});
+  }
+  _setError(msg) {
+    this.setState({
+      open: true,
+      error: true,
+      msg: msg
+    });
+  }
+  save() {
+    var id = this.state.feature.getId();
+    var me = this;
+    var onFailure = function(xmlhttp, msg) {
+      me._setError(msg || (xmlhttp.status + ' ' + xmlhttp.statusText));
+    };
+    // INSERT
+    if (id === undefined) {
+      for (var key in this.state.dirty) {
+        this.state.feature.set(key, this.state.values[key]);
+      }
+      WFSService.insertFeature(this.state.layer, this.props.map.getView(), this.state.feature, function(insertId) {
+        if (insertId == 'new0') {
+          // reload data if we're dealing with a shapefile store
+          var source = me.state.layer.getSource();
+          if (source instanceof ol.source.Vector) {
+            source.clear();
+          } else {
+            me._redraw();
+          }
+        } else {
+          this.state.feature.setId(insertId);
+          FeatureStore.addFeature(this.state.layer, this.state.feature);
+        }
+      }, onFailure);
+    } else {
+      // handle update
+    } 
+  }
+  _onChangeField(evt) {
+    var dirty = this.state.dirty;
+    var values = this.state.values;
+    values[evt.target.id] = evt.target.value;
+    dirty[evt.target.id] = true;
+    this.setState({values: values, dirty: dirty});
+  }
+  _handleRequestClose() {
+    this.setState({
+      open: false
+    });
+  }
   render() {
-    var id = this.state.layer ? this.state.layer.get('id') : undefined;
-    var layerSelector = (
-      <LayerSelector value={id} onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList} map={this.props.map} />
-    );
+    const {formatMessage} = this.props.intl;
+    var error;
+    if (this.state.error === true) {
+      error = (<Snackbar
+        open={this.state.open}
+        bodyStyle={{ height: 'auto', lineHeight: '28px', padding: 24, whiteSpace: 'pre-line' }}
+        message={formatMessage(messages.errormsg, {msg: this.state.msg})}
+        autoHideDuration={5000}
+        onRequestClose={this._handleRequestClose.bind(this)}
+      />);
+    }
     var editForm;
     if (this.state.feature && this.state.layer) {
-      editForm = (<EditForm map={this.props.map} ref='editForm' intl={this.props.intl} feature={this.state.feature} layer={this.state.layer} onSuccess={this._onSuccess.bind(this)} />);
+      var inputs = [];
+      var feature = this.state.feature, layer = this.state.layer;
+      var fid = feature.getId();
+      feature.on('change', this._onChangeGeom, this);
+      var keys = layer.get('wfsInfo').attributes;
+      for (var i = 0, ii = keys.length; i < ii; ++i) {
+        var key = keys[i];
+        var value = this.state.values[key] || '';
+        inputs.push(<TextField floatingLabelFixed={true} floatingLabelText={key} key={key} id={key} onChange={this._onChangeField.bind(this)} value={value} />);
+      }
+      editForm = (
+        <div className={classNames('sdk-component edit-form', this.props.className)}>
+          <span className='edit-form-fid'>{fid}</span><br/>
+          {inputs}
+        </div>
+      );
     }
+    var id = this.state.layer ? this.state.layer.get('id') : undefined;
+    var layerSelector = (
+      <LayerSelector labelText={formatMessage(messages.layer)} value={id} onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList} map={this.props.map} />
+    );
+    var buttons = (<span style={{float: 'right'}}><Button buttonType='Flat' primary={true} ref='cancelButton' label={formatMessage(messages.cancel)} /><Button buttonType='Flat' primary={true} ref='saveButton' label={formatMessage(messages.save)} /></span>);
     return (
       <div className={classNames('sdk-component edit-popup', this.props.className)}>
-        <Button buttonType='Icon' buttonStyle={{float: 'right'}} ref="popupCloser" onTouchTap={this.setVisible.bind(this, false)}><CloserIcon /></Button>
+        {error}
         <div className='popup-content' ref='content'>
           {layerSelector}
           {editForm}
         </div>
+        {buttons}
       </div>
     );
   }

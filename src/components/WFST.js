@@ -200,6 +200,7 @@ class WFST extends React.PureComponent {
     };
     this._tempSource = new ol.source.Vector();
     this._tempLayer = new ol.layer.Vector({
+      zIndex: 1000,
       title: null,
       source: this._tempSource
     });
