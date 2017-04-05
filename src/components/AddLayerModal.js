@@ -225,7 +225,8 @@ class AddLayerModal extends React.PureComponent {
   static defaultProps = {
     allowUserInput: false,
     allowUpload: true,
-    open: false
+    open: false,
+    isDrawer: false
   };
   static formats = {
     'geojson': new ol.format.GeoJSON(),
