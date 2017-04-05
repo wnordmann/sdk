@@ -22,6 +22,7 @@ import Button from './Button';
 import MenuItem from 'material-ui/MenuItem';
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
+import Dialog from 'material-ui/Dialog';
 import SelectField from 'material-ui/SelectField';
 import WMSService from '../services/WMSService';
 import WFSService from '../services/WFSService';
@@ -198,6 +199,10 @@ class AddLayerModal extends React.PureComponent {
     *  Controls opening the modal
     */
     open : React.PropTypes.bool,
+    /**
+    * Drawer where true, modal when false, default false
+    */
+    isDrawer : React.PropTypes.bool,
      /**
       * Should we allow people to upload their local vector files?
       */
@@ -217,13 +222,11 @@ class AddLayerModal extends React.PureComponent {
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
   };
-
   static defaultProps = {
     allowUserInput: false,
     allowUpload: true,
     open: false
   };
-
   static formats = {
     'geojson': new ol.format.GeoJSON(),
     'json': new ol.format.GeoJSON(),
@@ -615,26 +618,31 @@ class AddLayerModal extends React.PureComponent {
         </div>
       );
     }
+    var content = (<div>{newDialog}{upload}{layers}{loadingIndicator}{error}</div>);
+    var select = (<SelectField fullWidth={true} floatingLabelText={formatMessage(messages.sourcecombo)} value={this.state.source} onChange={this._onSourceChange.bind(this)}>
+                {selectOptions}
+              </SelectField>);
+    var drawer = (<Drawer width={360} className={classNames('sdk-component add-layer-modal', this.props.className)} actions={actions} autoScrollBodyContent={true} title={formatMessage(messages.title)} open={this.props.open} onRequestClose={this.close.bind(this)}>
+            <AppBar
+              title={formatMessage(messages.title)}
+              iconElementLeft={<IconButton label={formatMessage(messages.closebutton)} > <NavigationArrowBack/> </IconButton>}
+              onLeftIconButtonTouchTap={this.close.bind(this)}/>
+            {select}
+            {content}
+            <div className='footerButtons'>
+              {actions}
+            </div>
+          </Drawer>);
+    var dialog = (<Dialog bodyStyle={{padding: 20}} inline={this.props.inline} className={classNames('sdk-component add-layer-modal', this.props.className)} actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title)} open={this.props.open} onRequestClose={this.close.bind(this)}>
+        {select}
+        {content}
+      </Dialog>);
+    var displayContainer = this.props.isDrawer ? drawer : dialog;
+
     return (
-      <Drawer width={360} className={classNames('sdk-component add-layer-modal', this.props.className)} actions={actions} autoScrollBodyContent={true} title={formatMessage(messages.title)} open={this.props.open} onRequestClose={this.close.bind(this)}>
-        <AppBar
-          title={formatMessage(messages.title)}
-          iconElementLeft={<IconButton label={formatMessage(messages.closebutton)} > <NavigationArrowBack/> </IconButton>}
-          onLeftIconButtonTouchTap={this.close.bind(this)}/>
-        <div className='noBorderPaper'>
-          <SelectField fullWidth={true} floatingLabelText={formatMessage(messages.sourcecombo)} value={this.state.source} onChange={this._onSourceChange.bind(this)}>
-            {selectOptions}
-          </SelectField>
-        </div>
-        {newDialog}
-        {upload}
-        {layers}
-        {loadingIndicator}
-        {error}
-        <div className='footerButtons'>
-          {actions}
-        </div>
-      </Drawer>
+      <div>
+        {displayContainer}
+      </div>
     );
   }
 }
