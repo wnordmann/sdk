@@ -670,17 +670,13 @@ static formats = {
           </Popover>
       </div>
       ) : undefined;
-    // var innerDivNestedStyle = {
-    //   marginRight:'100px'
-    // }
+
     var flexContainer = {
       display: 'flex',
       flexDirection: 'row-reverse',
       padding: '16px'
     };
-    // var innerDivNestedStyle = {
-    //   marginRight:'100px'
-    // }
+
     var rightIconButtons = <span className="fixedContainer">{styling}{zoomTo}{visibility}{popoverEllipsis}</span>;
     if (layer.get('type') === 'base-group') {
       rightIconButtons = <span className="fixedContainer">{visibility}</span>;
@@ -696,13 +692,8 @@ static formats = {
           autoGenerateNestedIndicator={this.props.collapsible}
           insetChildren={false}
           innerDivStyle={flexContainer}
-          autoGenerateNestedIndicator={false}
           primaryText={<span className="statusIcons">{arrowIcon}{layersIcon}<span> {this.props.title}</span></span>}
-          rightIconButton=
-
-              {rightIconButtons}
-
-            
+          rightIconButton={rightIconButtons}
           nestedItems={this.props.nestedItems}
           open={this.state.open} />
         <div style={{paddingLeft: 72}}>
