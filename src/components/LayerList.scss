@@ -1,8 +1,8 @@
 
 .menuItem {
-  display: flex;
+  display: flex !important;
   .statusIcons {
-    // background-color: blue;
+    background-color: blue;
     display: flex;
     flex: 2;
     i {
@@ -23,14 +23,26 @@
   }
   .fixedContainer {
     top: 16px !important;
-    // background-color: green;
+    background-color: green;
     display: flex !important;
     position: static !important;
     justify-content: flex-end;
     width: 110px;
     i {
       padding: 0 6px;
-      // background-color: orange;
+      background-color: orange;
+      position: static !important;
+    }
+    .iconContainer {
+      margin:0 ;
+      width: 19px !important;
+      div {
+        background-color: brown;
+        display: block !important;
+        div {
+          height: 12px !important;
+        }
+      }
     }
   }
   .settings {
