@@ -49,6 +49,11 @@ const messages = defineMessages({
     id: 'editpopup.errormsg',
     description: 'Error message to show the user when a request fails',
     defaultMessage: 'Error saving this feature to GeoServer. {msg}'
+  },
+  updatemsg: {
+    id: 'editpopup.updatemsg',
+    description: 'Text to show if the transaction fails',
+    defaultMessage: 'Error updating the feature\'s attributes using WFS-T.'
   }
 });
 
@@ -118,7 +123,9 @@ class EditPopup extends React.Component {
       switch (action.type) {
         case ToolConstants.SHOW_EDIT_POPUP:
           me.setState({
-            feature: action.feature
+            feature: action.feature,
+            layer: action.layer,
+            values: action.feature.getProperties()
           });
           me._callback = action.callback;
           me.setVisible(true);
@@ -232,13 +239,13 @@ class EditPopup extends React.Component {
   }
   save() {
     var id = this.state.feature.getId();
-    var me = this;
+    var me = this, key;
     var onFailure = function(xmlhttp, msg) {
       me._setError(msg || (xmlhttp.status + ' ' + xmlhttp.statusText));
     };
     // INSERT
     if (id === undefined) {
-      for (var key in this.state.dirty) {
+      for (key in this.state.dirty) {
         this.state.feature.set(key, this.state.values[key]);
       }
       WFSService.insertFeature(this.state.layer, this.props.map.getView(), this.state.feature, function(insertId) {
@@ -258,9 +265,26 @@ class EditPopup extends React.Component {
         delete me._callback;
         me.setVisible(false);
       }, onFailure);
-    } else {
-      // handle update
-    } 
+    } else { // UPDATE
+      var values = {};
+      for (key in this.state.dirty) {
+        values[key] = this.state.values[key];
+      }
+      var onSuccess = function(result) {
+        if (result && result.transactionSummary.totalUpdated === 1) {
+          for (key in me.state.dirty) {
+            me.state.feature.set(key, values[key]);
+          }
+          me.setState({dirty: {}});
+        } else {
+          me._setError(formatMessage(messages.updatemsg));
+        }
+      };
+      var onFailure = function(xmlhttp, msg) {
+        me._setError(msg || (xmlhttp.status + ' ' + xmlhttp.statusText));
+      };
+      WFSService.updateFeature(this.state.layer, this.props.map.getView(), this.state.feature, values, onSuccess, onFailure);
+    }
   }
   _onChangeField(evt) {
     var dirty = this.state.dirty;
@@ -291,7 +315,6 @@ class EditPopup extends React.Component {
       var inputs = [];
       var feature = this.state.feature, layer = this.state.layer;
       var fid = feature.getId();
-      feature.on('change', this._onChangeGeom, this);
       var keys = layer.get('wfsInfo').attributes;
       for (var i = 0, ii = keys.length; i < ii; ++i) {
         var key = keys[i];
@@ -306,7 +329,7 @@ class EditPopup extends React.Component {
       );
     }
     var id = this.state.layer ? this.state.layer.get('id') : undefined;
-    var layerSelector = (
+    var layerSelector = this.state.layer ? undefined : (
       <LayerSelector labelText={formatMessage(messages.layer)} value={id} onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList.bind(this)} map={this.props.map} />
     );
     var buttons = (<span style={{float: 'right'}}><Button buttonType='Flat' primary={true} onTouchTap={this._onCancel.bind(this)} label={formatMessage(messages.cancel)} /><Button buttonType='Flat' primary={true} onTouchTap={this.save.bind(this)} label={formatMessage(messages.save)} /></span>);

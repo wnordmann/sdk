@@ -87,7 +87,8 @@ class LayerSelector extends React.PureComponent {
     this._muiTheme = context.muiTheme || getMuiTheme();
     LayerStore.bindMap(this.props.map);
     this.state = {
-      layers: []
+      layers: [],
+      value: props.value
     };
   }
   getChildContext() {

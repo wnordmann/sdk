@@ -417,7 +417,7 @@ class WFST extends React.PureComponent {
     var tempSource = this._tempSource;
     this._setActiveInteractions(false);
     var me = this;
-    ToolActions.showEditPopup(evt.feature, function() {
+    ToolActions.showEditPopup(evt.feature, undefined, function() {
       tempSource.clear();
       me._setActiveInteractions(true);
     });

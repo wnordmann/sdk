@@ -20,6 +20,8 @@ import debounce from  'debounce';
 import ReactTable from 'react-table'
 import Button from './Button';
 import ActionSearch from 'material-ui/svg-icons/action/search';
+import ToolActions from '../actions/ToolActions';
+import DrawIcon from 'material-ui/svg-icons/content/create';
 import ClearIcon from 'material-ui/svg-icons/content/clear';
 import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
@@ -394,6 +396,10 @@ class FeatureTable extends React.Component {
   _redraw() {
     this._layer.getSource().updateParams({'_olSalt': Math.random()});
   }
+  _onEditFeature(feature) {
+    ToolActions.showEditPopup(feature, this._layer, function() {
+    });
+  }
   _onDelete(feature) {
     var me = this;
     const {formatMessage} = this.props.intl;
@@ -452,7 +458,14 @@ class FeatureTable extends React.Component {
       header: '',
       sortable: false,
       render: function(props) {
-        return (<ActionDelete onTouchTap={me._onDelete.bind(me, props.row)} />);
+        return (<ActionDelete style={{cursor: 'pointer'}} onTouchTap={me._onDelete.bind(me, props.row)} />);
+      }
+    }, {
+      id: 'edit',
+      header: '',
+      sortable: false,
+      render: function(props) {
+        return (<DrawIcon style={{cursor: 'pointer'}} onTouchTap={me._onEditFeature.bind(me, props.row)} />);
       }
     }];
     for (var key in schema) {

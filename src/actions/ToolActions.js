@@ -21,10 +21,11 @@ export default {
       layer: layer
     });
   },
-  showEditPopup: (feature, callback) => {
+  showEditPopup: (feature, layer, callback) => {
     AppDispatcher.handleAction({
       type: ToolConstants.SHOW_EDIT_POPUP,
       feature: feature,
+      layer: layer,
       callback: callback
     });
   },
