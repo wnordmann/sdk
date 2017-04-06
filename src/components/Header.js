@@ -14,6 +14,13 @@ import React from 'react';
 import {Menu, Popover, AppBar}from 'material-ui';
 import IconButton from 'material-ui/IconButton';
 import NavigationMoreVert from 'material-ui/svg-icons/navigation/more-vert';
+/**
+ * A header toolbar for holding buttons
+ *
+ * ```xml
+ * <StyleModal layer={this.props.layer} />
+ * ```
+ */
 
 class Header extends React.Component {
   static propTypes = {

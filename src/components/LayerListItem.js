@@ -692,8 +692,7 @@ static formats = {
           autoGenerateNestedIndicator={this.props.collapsible}
           insetChildren={false}
           innerDivStyle={flexContainer}
-          primaryText={<span className="statusIcons">{arrowIcon}{layersIcon}<span> {this.props.title}</span></span>}
-          rightIconButton={rightIconButtons}
+          primaryText={<span className="statusIcons">{arrowIcon}{layersIcon}<span> {this.props.title}</span>{rightIconButtons}</span>}
           nestedItems={this.props.nestedItems}
           open={this.state.open} />
         <div style={{paddingLeft: 72}}>

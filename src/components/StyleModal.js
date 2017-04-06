@@ -67,7 +67,7 @@ const messages = defineMessages({
 });
 
 /**
- * A modal for editing the style of a layer.
+ * A modal or drawer for editing the style of a layer.
  *
  * ```xml
  * <StyleModal layer={this.props.layer} />
