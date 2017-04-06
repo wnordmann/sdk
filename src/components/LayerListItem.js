@@ -610,7 +610,7 @@ static formats = {
     var canStyle = layer.get('wfsInfo') && this.props.allowStyling;
     if (canStyle) {
       styling = (<i className='ms ms-style' onTouchTap={this._style.bind(this)}> </i>);
-      styleModal = (<StyleModal isDrawer={true} inline={this.props.inlineDialogs} {...this.props} open={this.state.styleOpen} onRequestClose={this._closeStyling.bind(this)} layer={this.props.layer} />);
+      styleModal = (<StyleModal inline={this.props.inlineDialogs} {...this.props} open={this.state.styleOpen} onRequestClose={this._closeStyling.bind(this)} layer={this.props.layer} />);
     }
     if (this.props.showTable && (this.props.layer instanceof ol.layer.Vector || this.props.layer.get('wfsInfo') !== undefined)) {
       var actions = [
@@ -670,17 +670,16 @@ static formats = {
           </Popover>
       </div>
       ) : undefined;
-    // var innerDivNestedStyle = {
-    //   marginRight:'100px'
-    // }
+    var innerDivNestedStyle = {
+      marginRight:'100px'
+    }
     var flexContainer = {
       display: 'flex',
-      flexDirection: 'row-reverse',
-      padding: '16px'
+      // flexDirection: 'row-reverse',
+      padding: '16px',
+      width: '100%'.
+      backgroundColor: 'light-green'
     };
-    // var innerDivNestedStyle = {
-    //   marginRight:'100px'
-    // }
     var rightIconButtons = <span className="fixedContainer">{styling}{zoomTo}{visibility}{popoverEllipsis}</span>;
     if (layer.get('type') === 'base-group') {
       rightIconButtons = <span className="fixedContainer">{visibility}</span>;
@@ -692,17 +691,12 @@ static formats = {
     return connectDragSource(connectDropTarget(
       <div>
         <ListItem
-          className={classNames({'sdk-component': true, 'menuItem': true, 'layer-list-item' : true}, this.props.className)}
+          className={classNames({'': true, 'menuItem': true, '' : true}, this.props.className)}
           autoGenerateNestedIndicator={this.props.collapsible}
           insetChildren={false}
           innerDivStyle={flexContainer}
           autoGenerateNestedIndicator={false}
-          primaryText={<span className="statusIcons">{arrowIcon}{layersIcon}<span> {this.props.title}</span></span>}
-          rightIconButton=
-
-              {rightIconButtons}
-
-            
+          primaryText={<span><span className="statusIcons">{arrowIcon}{layersIcon}<span> {this.props.title}</span></span>{rightIconButtons}</span>}
           nestedItems={this.props.nestedItems}
           open={this.state.open} />
         <div style={{paddingLeft: 72}}>
