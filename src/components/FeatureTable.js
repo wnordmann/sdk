@@ -15,6 +15,7 @@ import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import classNames from 'classnames';
+import WFSService from '../services/WFSService';
 import debounce from  'debounce';
 import ReactTable from 'react-table'
 import Button from './Button';
@@ -23,6 +24,7 @@ import ClearIcon from 'material-ui/svg-icons/content/clear';
 import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
 import Checkbox from 'material-ui/Checkbox';
+import ActionDelete from 'material-ui/svg-icons/action/delete';
 import FeatureStore from '../stores/FeatureStore';
 import SelectActions from '../actions/SelectActions';
 import LayerSelector from './LayerSelector';
@@ -107,6 +109,11 @@ const messages = defineMessages({
     id: 'featuretable.filterbuttontext',
     description: 'Text for the filter button',
     defaultMessage: 'Filter results based on your criteria'
+  },
+  deletemsg: {
+    id: 'featuretable.deletemsg',
+    description: 'Error message to show when delete fails',
+    defaultMessage: 'There was an issue deleting the feature.'
   }
 });
 
@@ -384,6 +391,34 @@ class FeatureTable extends React.Component {
       });
     }, this, this._proxy, this._requestHeaders);
   }
+  _redraw() {
+    this._layer.getSource().updateParams({'_olSalt': Math.random()});
+  }
+  _onDelete(feature) {
+    var me = this;
+    const {formatMessage} = this.props.intl;
+    if (this._layer.get('wfsInfo')) {
+      WFSService.deleteFeature(this._layer, feature, function() {
+        FeatureStore.removeFeature(me._layer, feature);
+        var source = me._layer.getSource();
+        if (source instanceof ol.source.Vector) {
+          source.removeFeature(feature);
+        } else {
+          me._redraw();
+        }
+      }, function(xmlhttp, msg) {
+        var msg = msg || formatMessage(messages.deletemsg) + xmlhttp.status + ' ' + xmlhttp.statusText;
+        me.setState({
+          errorOpen: true,
+          error: true,
+          msg: msg
+        });
+      });
+    } else {
+      FeatureStore.removeFeature(me._layer, feature);
+      me._layer.getSource().removeFeature(feature);
+    }
+  }
   render() {
     const {formatMessage} = this.props.intl;
     var schema, id;
@@ -407,10 +442,17 @@ class FeatureTable extends React.Component {
     var columns = [{
       id: 'selector',
       header: '',
-      sortable: sortable,
+      sortable: false,
       render: function(props) {
         var selected = me.state.selected.indexOf(props.row) !== -1;
         return (<Checkbox disableTouchRipple={true} checked={selected} onCheck={me._onSelect.bind(me, props)} />);
+      }
+    }, {
+      id: 'delete',
+      header: '',
+      sortable: false,
+      render: function(props) {
+        return (<ActionDelete onTouchTap={me._onDelete.bind(me, props.row)} />);
       }
     }];
     for (var key in schema) {
