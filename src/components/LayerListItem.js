@@ -675,9 +675,8 @@ static formats = {
     // }
     var flexContainer = {
       display: 'flex',
-      // flexDirection: 'row-reverse',
-      padding: '16px'
-      // backgroundColor: 'light-green'
+      padding: '16px',
+      width: '100%'
     };
     // var innerDivNestedStyle = {
     //   marginRight:'100px'
