@@ -1,7 +1,6 @@
 .menuItem {
-  display: flex !important; }
+  display: flex; }
   .menuItem .statusIcons {
-    background-color: blue;
     display: flex;
     flex: 2; }
     .menuItem .statusIcons i {
@@ -10,23 +9,12 @@
       flex: 1; }
   .menuItem .fixedContainer {
     top: 16px !important;
-    background-color: green;
     display: flex !important;
     position: static !important;
     justify-content: flex-end;
     width: 110px; }
     .menuItem .fixedContainer i {
-      padding: 0 6px;
-      background-color: orange;
-      position: static !important; }
-    .menuItem .fixedContainer .iconContainer {
-      margin: 0;
-      width: 19px !important; }
-      .menuItem .fixedContainer .iconContainer div {
-        background-color: brown;
-        display: block !important; }
-        .menuItem .fixedContainer .iconContainer div div {
-          height: 12px !important; }
+      padding: 0 6px; }
 
 .noBorderPaper {
   margin: 20px; }

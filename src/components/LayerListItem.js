@@ -670,9 +670,9 @@ static formats = {
           </Popover>
       </div>
       ) : undefined;
-    var innerDivNestedStyle = {
-      marginRight:'100px'
-    }
+    // var innerDivNestedStyle = {
+    //   marginRight:'100px'
+    // }
     var flexContainer = {
       display: 'flex',
       // flexDirection: 'row-reverse',
@@ -680,6 +680,9 @@ static formats = {
       width: '100%'.
       backgroundColor: 'light-green'
     };
+    // var innerDivNestedStyle = {
+    //   marginRight:'100px'
+    // }
     var rightIconButtons = <span className="fixedContainer">{styling}{zoomTo}{visibility}{popoverEllipsis}</span>;
     if (layer.get('type') === 'base-group') {
       rightIconButtons = <span className="fixedContainer">{visibility}</span>;
@@ -691,7 +694,7 @@ static formats = {
     return connectDragSource(connectDropTarget(
       <div>
         <ListItem
-          className={classNames({'': true, 'menuItem': true, '' : true}, this.props.className)}
+          className={classNames({'sdk-component': true, 'menuItem': true, 'layer-list-item' : true}, this.props.className)}
           autoGenerateNestedIndicator={this.props.collapsible}
           insetChildren={false}
           innerDivStyle={flexContainer}
