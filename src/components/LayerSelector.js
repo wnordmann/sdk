@@ -121,7 +121,7 @@ class LayerSelector extends React.PureComponent {
       }
     }, this);
     return (
-      <SelectField className={classNames('sdk-component layer-selector', this.props.className)} floatingLabelText={this.props.labelText ? this.props.labelText : formatMessage(messages.labeltext)} hintText={formatMessage(messages.emptytext)} value={this.state.value} onChange={this._onItemChange.bind(this)}>
+      <SelectField className={classNames('sdk-component layer-selector', this.props.className)} floatingLabelFixed={true} floatingLabelText={this.props.labelText ? this.props.labelText : formatMessage(messages.labeltext)} hintText={formatMessage(messages.emptytext)} value={this.state.value} onChange={this._onItemChange.bind(this)}>
         {selectItems}
       </SelectField>
     );
