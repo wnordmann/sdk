@@ -103,20 +103,7 @@ class LayerSelector extends React.PureComponent {
   }
   _onChange() {
     var flatLayers = LayerStore.getState().flatLayers;
-    var layers = [];
-    for (var i = 0, ii = flatLayers.length; i < ii; ++i) {
-      var lyr = flatLayers[i];
-      if (!this.props.filter || this.props.filter(lyr) === true) {
-        layers.push(lyr);
-      }
-    }
-    if (layers.length > 0) {
-      this.setState({layers: layers, value: layers[0].get('id')});
-      this.props.onChange.call(this, layers[0]);
-    } else {
-      this.setState({layers: layers});
-      this.props.onChange.call(this, null);
-    }
+    this.setState({layers: flatLayers});
   }
   _onItemChange(evt, index, value) {
     var layer = LayerStore.findLayer(value);
@@ -126,13 +113,15 @@ class LayerSelector extends React.PureComponent {
   render() {
     const {formatMessage} = this.props.intl;
     var selectItems = this.state.layers.map(function(lyr, idx) {
-      var title = lyr.get('title'), id = lyr.get('id');
-      return (
-        <MenuItem key={id} value={id} label={title} primaryText={title} />
-      );
-    });
+      if (!this.props.filter || this.props.filter(lyr) === true) {
+        var title = lyr.get('title'), id = lyr.get('id');
+        return (
+          <MenuItem key={id} value={id} label={title} primaryText={title} />
+        );
+      }
+    }, this);
     return (
-      <SelectField className={classNames('sdk-component layer-selector', this.props.className)} floatingLabelText={this.props.labelText ? this.props.labelText : formatMessage(messages.labeltext)} hintText={formatMessage(messages.emptytext)} value={this.props.value} onChange={this._onItemChange.bind(this)}>
+      <SelectField className={classNames('sdk-component layer-selector', this.props.className)} floatingLabelText={this.props.labelText ? this.props.labelText : formatMessage(messages.labeltext)} hintText={formatMessage(messages.emptytext)} value={this.state.value} onChange={this._onItemChange.bind(this)}>
         {selectItems}
       </SelectField>
     );

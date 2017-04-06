@@ -122,7 +122,7 @@ class EditPopup extends React.Component {
           });
           me._callback = action.callback;
           me.setVisible(true);
-          me.overlayPopup.setPosition(action.feature.getGeometry().getInteriorPoint().getCoordinates());
+          me.overlayPopup.setPosition(ol.extent.getCenter(action.feature.getGeometry().getExtent()));
           break;
         default:
           break;
@@ -202,7 +202,20 @@ class EditPopup extends React.Component {
     ReactDOM.findDOMNode(this).parentNode.style.display = visible ? 'block' : 'none';
   }
   _filterLayerList(lyr) {
-    return lyr.get('isWFST') && lyr.get('wfsInfo') !== undefined;
+    if (this.state.feature) {
+      var geom = this.state.feature.getGeometry();
+      var geomType;
+      if (geom instanceof ol.geom.Polygon) {
+        geomType = 'Polygon';
+      } else if (geom instanceof ol.geom.LineString) {
+        geomType = 'Line';
+      } else if (geom instanceof ol.geom.Point) {
+        geomType = 'Point';
+      }
+      return lyr.get('isWFST') && lyr.get('wfsInfo') !== undefined && lyr.get('wfsInfo').geometryType.indexOf(geomType) !== -1;
+    } else {
+      return lyr.get('isWFST') && lyr.get('wfsInfo') !== undefined;
+    }
   }
   _onLayerSelectChange(layer) {
     this.setState({layer: layer});
@@ -294,7 +307,7 @@ class EditPopup extends React.Component {
     }
     var id = this.state.layer ? this.state.layer.get('id') : undefined;
     var layerSelector = (
-      <LayerSelector labelText={formatMessage(messages.layer)} value={id} onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList} map={this.props.map} />
+      <LayerSelector labelText={formatMessage(messages.layer)} value={id} onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList.bind(this)} map={this.props.map} />
     );
     var buttons = (<span style={{float: 'right'}}><Button buttonType='Flat' primary={true} onTouchTap={this._onCancel.bind(this)} label={formatMessage(messages.cancel)} /><Button buttonType='Flat' primary={true} onTouchTap={this.save.bind(this)} label={formatMessage(messages.save)} /></span>);
     return (
