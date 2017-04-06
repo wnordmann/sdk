@@ -695,13 +695,13 @@ static formats = {
           innerDivStyle={flexContainer}
           autoGenerateNestedIndicator={false}
           primaryText={<span className="statusIcons">{arrowIcon}{layersIcon}<span> {this.props.title}</span></span>}
-          rightIconButton={
-            <span className="fixedContainer">
+          rightIconButton=
+
               {rightIconButtons}
-            </span>
-            }
+
+            
           nestedItems={this.props.nestedItems}
-          open={this.state.open}/>
+          open={this.state.open} />
         <div style={{paddingLeft: 72}}>
           {legend}
           <span>
