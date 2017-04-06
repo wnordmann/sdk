@@ -18,7 +18,7 @@ import NavigationMoreVert from 'material-ui/svg-icons/navigation/more-vert';
  * A header toolbar for holding buttons
  *
  * ```xml
- * <StyleModal layer={this.props.layer} />
+ * <Header  />
  * ```
  */
 
@@ -72,6 +72,7 @@ class Header extends React.Component {
     });
   };
   render() {
+    console.log(this.props.children);
     return (
       <AppBar
           title={this.props.title}
