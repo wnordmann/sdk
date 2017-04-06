@@ -919,7 +919,7 @@
   operation: <span class="hljs-number">2</span>
 }];
 </code></pre>
-<pre><code class="lang-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Chart</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">&apos;chartPanel&apos;</span> <span class="hljs-attr">charts</span>=<span class="hljs-string">{charts}</span>/&gt;</span>
+<pre><code class="lang-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Chart</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">&apos;chartPanel&apos;</span> <span class="hljs-attr">combo</span>=<span class="hljs-string">{true}</span> <span class="hljs-attr">charts</span>=<span class="hljs-string">{charts}</span>/&gt;</span>
 </code></pre>
 <h2 id="properties">Properties</h2>
 <h3 id="charts-required"><code>charts</code> (required)</h3>
@@ -939,9 +939,13 @@ A value of 0 means MIN, a value of 1 means MAX, a value of 2 means SUM and a val
 <h3 id="classname"><code>className</code></h3>
 <p>Css class name to apply on the menu or div.</p>
 <p>type: <code>string</code></p>
-<h3 id="onclose"><code>onClose</code></h3>
-<p>Callback function when the closer icon is pressed.</p>
-<p>type: <code>func</code></p>
+<h3 id="combo"><code>combo</code></h3>
+<p>If true, show a combo box to select charts instead of dropdown button.</p>
+<p>type: <code>bool</code>
+defaultValue: <code>false</code></p>
+<h3 id="container"><code>container</code></h3>
+<p>The id of the container to show when a chart is selected.</p>
+<p>type: <code>string</code></p>
 
                                 
                                 </section>
@@ -985,7 +989,7 @@ A value of 0 means MIN, a value of 1 means MAX, a value of 2 means SUM and a val
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Chart","level":"1.7.6","depth":2,"next":{"title":"Edit","level":"1.7.7","depth":2,"path":"api/Edit.md","ref":"api/Edit.md","articles":[]},"previous":{"title":"Button","level":"1.7.5","depth":2,"path":"api/Button.md","ref":"api/Button.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"api/Chart.md","mtime":"2017-04-06T08:15:55.894Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-04-06T08:16:37.296Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Chart","level":"1.7.6","depth":2,"next":{"title":"Edit","level":"1.7.7","depth":2,"path":"api/Edit.md","ref":"api/Edit.md","articles":[]},"previous":{"title":"Button","level":"1.7.5","depth":2,"path":"api/Button.md","ref":"api/Button.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"api/Chart.md","mtime":"2017-04-06T08:25:24.213Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-04-06T08:26:06.828Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
