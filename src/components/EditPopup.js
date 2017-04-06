@@ -190,29 +190,16 @@ class EditPopup extends React.Component {
       }
     }
   }
+  _onCancel() {
+    this.setVisible(false);
+    this._callback();
+    delete this._callback;
+  }
   _onSuccess() {
     this.setVisible(false);
   }
   setVisible(visible) {
     ReactDOM.findDOMNode(this).parentNode.style.display = visible ? 'block' : 'none';
-    var me = this;
-    // regular jsx onClick does not work when stopEvent is true
-    var cancelButton = ReactDOM.findDOMNode(this.refs.cancelButton);
-    if (cancelButton.onclick === null) {
-      cancelButton.onclick = function() {
-        me.setVisible(false);
-        me._callback();
-        delete me._callback;
-        return false;
-      };
-    }
-    var saveButton = ReactDOM.findDOMNode(this.refs.saveButton);
-    if (saveButton.onclick === null) {
-      saveButton.onclick = function() {
-        me.save();
-        return false;
-      };
-    }
   }
   _filterLayerList(lyr) {
     return lyr.get('isWFST') && lyr.get('wfsInfo') !== undefined;
@@ -309,7 +296,7 @@ class EditPopup extends React.Component {
     var layerSelector = (
       <LayerSelector labelText={formatMessage(messages.layer)} value={id} onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList} map={this.props.map} />
     );
-    var buttons = (<span style={{float: 'right'}}><Button buttonType='Flat' primary={true} ref='cancelButton' label={formatMessage(messages.cancel)} /><Button buttonType='Flat' primary={true} ref='saveButton' label={formatMessage(messages.save)} /></span>);
+    var buttons = (<span style={{float: 'right'}}><Button buttonType='Flat' primary={true} onTouchTap={this._onCancel.bind(this)} label={formatMessage(messages.cancel)} /><Button buttonType='Flat' primary={true} onTouchTap={this.save.bind(this)} label={formatMessage(messages.save)} /></span>);
     return (
       <div className={classNames('sdk-component edit-popup', this.props.className)}>
         {error}
