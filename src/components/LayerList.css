@@ -1,5 +1,6 @@
 .menuItem {
-  display: flex; }
+  display: flex !important;
+  flex: 1; }
   .menuItem .statusIcons {
     display: flex;
     flex: 2; }
@@ -14,7 +15,17 @@
     justify-content: flex-end;
     width: 110px; }
     .menuItem .fixedContainer i {
-      padding: 0 6px; }
+      padding: 0 6px;
+      position: static !important; }
+    .menuItem .fixedContainer .iconContainer {
+      margin: 0;
+      width: 19px !important; }
+      .menuItem .fixedContainer .iconContainer div {
+        display: block !important; }
+        .menuItem .fixedContainer .iconContainer div div {
+          height: 12px !important; }
+  .menuItem > div {
+    flex: 1; }
 
 .noBorderPaper {
   margin: 20px; }
