@@ -425,7 +425,7 @@ class FeatureTable extends React.Component {
           me._redraw();
         }
       }, function(xmlhttp, msg) {
-        var msg = msg || formatMessage(messages.deletemsg) + xmlhttp.status + ' ' + xmlhttp.statusText;
+        msg = msg || formatMessage(messages.deletemsg) + xmlhttp.status + ' ' + xmlhttp.statusText;
         me.setState({
           errorOpen: true,
           error: true,

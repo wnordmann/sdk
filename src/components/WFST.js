@@ -13,21 +13,13 @@
 import React from 'react';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import classNames from 'classnames';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import LayerConstants from '../constants/LayerConstants';
 import AppDispatcher from '../dispatchers/AppDispatcher';
-import LayerSelector from './LayerSelector';
 import FeatureStore from '../stores/FeatureStore';
 import ToolUtil from '../toolutil';
-import RaisedButton from './Button';
-import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
-import Snackbar from 'material-ui/Snackbar';
-import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import ToolActions from '../actions/ToolActions';
-import EditPopup from './EditPopup';
 import WFSService from '../services/WFSService';
-import Paper from 'material-ui/Paper';
 import DrawIcon from 'material-ui/svg-icons/content/create';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
@@ -421,27 +413,6 @@ class WFST extends React.PureComponent {
       tempSource.clear();
       me._setActiveInteractions(true);
     });
-    return;
-    var me = this;
-    this._request = WFSService.insertFeature(this.state.layer, this.props.map.getView(), evt.feature, function(insertId) {
-      delete me._request;
-      if (insertId == 'new0') {
-        // reload data if we're dealing with a shapefile store
-        var source = me.state.layer.getSource();
-        if (source instanceof ol.source.Vector) {
-          source.clear();
-        } else {
-          me._redraw();
-        }
-      } else {
-        evt.feature.setId(insertId);
-        FeatureStore.addFeature(this.state.layer, evt.feature);
-      }
-    }, function(xmlhttp, msg) {
-      delete me._request;
-      me.deactivate();
-      me._setError(msg || (xmlhttp.status + ' ' + xmlhttp.statusText));
-    }, this._proxy, this._requestHeaders);
   }
   _redraw() {
     this.state.layer.getSource().updateParams({'_olSalt': Math.random()});
@@ -512,65 +483,11 @@ class WFST extends React.PureComponent {
     this.setState({active: active});
   }
   render() {
-    return <IconMenu iconButtonElement={<IconButton><DrawIcon /></IconButton>}>
+    return (<IconMenu iconButtonElement={<IconButton><DrawIcon /></IconButton>}>
       <MenuItem onTouchTap={this._drawPoly.bind(this)} primaryText="Draw Polygon" />
       <MenuItem onTouchTap={this._drawLine.bind(this)} primaryText="Draw Line" />
       <MenuItem onTouchTap={this._drawPoint.bind(this)} primaryText="Draw Point" />
-    </IconMenu>;
-/*    if (!this.state.visible) {
-      return (<article />);
-    } else {
-      const {formatMessage} = this.props.intl;
-      var error;
-      if (this.state.error === true || this.state.info === true) {
-        error = (<Snackbar
-          open={this.state.open}
-          message={this.state.error ? formatMessage(messages.errormsg, {msg: this.state.msg}) : this.state.msg}
-          autoHideDuration={2000}
-          onRequestClose={this._handleRequestClose.bind(this)}
-        />);
-      }
-      var layerSelector;
-      if (this.props.layerSelector) {
-        var id;
-        if (this.state.layer) {
-          id = this.state.layer.get('id');
-        }
-        layerSelector = (
-          <LayerSelector value={id} disabled={this.state.disabled || !this.state.layer} style={{marginLeft: '36px'}} {...this.props} onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} />
-        );
-      } else if (this.state.layer) {
-        var label = formatMessage(messages.layerlabel) + ': ' + this.state.layer.get('title');
-        layerSelector = (<div>{label}</div>);
-      }
-      var editForm;
-      if (this.props.showEditForm && this.state.feature) {
-        editForm = (<EditForm map={this.props.map} onGeometryUpdate={this._onGeomUpdate.bind(this)} onSuccess={this._onSuccess.bind(this)} onDeleteSuccess={this._onDeleteSuccess.bind(this)} feature={this.state.feature} layer={this.state.layer} />);
-      }
-      return (
-        <Paper zDepth={0} className={classNames('sdk-component wfst', this.props.className)}>
-          <Snackbar
-            autoHideDuration={5000}
-            open={!this.state.layer && this.state.active}
-            bodyStyle={{lineHeight: '24px', height: 'auto'}}
-            style={{bottom: 'auto', top: 0, position: 'absolute'}}
-            message={formatMessage(messages.nodatamsg)}
-            onRequestClose={this._handleRequestCloseActive.bind(this)}
-          />
-          {layerSelector}
-          <Toolbar>
-            <ToolbarGroup firstChild={true}>
-              <RaisedButton secondary={this.state.drawSecondary} tooltip={formatMessage(messages.drawfeaturetitle)} label={formatMessage(messages.drawfeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._drawFeature.bind(this)} icon={<DrawIcon />} />
-            </ToolbarGroup>
-            <ToolbarGroup lastChild={true}>
-              <RaisedButton secondary={this.state.modifySecondary} tooltip={formatMessage(messages.modifyfeaturetitle)} label={formatMessage(messages.modifyfeature)} disabled={this.state.disabled || !this.state.layer} onTouchTap={this._modifyFeature.bind(this)} icon={<EditIcon />} />
-            </ToolbarGroup>
-          </Toolbar>
-          {error}
-          {editForm}
-        </Paper>
-      );
-    }*/
+    </IconMenu>);
   }
 }
 

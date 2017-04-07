@@ -21,7 +21,6 @@ import ToolUtil from '../toolutil';
 import ToolConstants from '../constants/ToolConstants';
 import {injectIntl, intlShape, defineMessages} from 'react-intl';
 import Button from './Button';
-import CloserIcon from 'material-ui/svg-icons/navigation/close';
 import classNames from 'classnames';
 import WFSService from '../services/WFSService';
 import TextField from 'material-ui/TextField';
@@ -242,6 +241,7 @@ class EditPopup extends React.Component {
     evt.target.un('change', this._onChangeGeom, this);
   }
   save() {
+    const {formatMessage} = this.props.intl;
     var id = this.state.feature.getId();
     var me = this, key;
     var onFailure = function(xmlhttp, msg) {
@@ -293,9 +293,6 @@ class EditPopup extends React.Component {
         delete me._callback;
         me.setVisible(false);
       };
-      var onFailure = function(xmlhttp, msg) {
-        me._setError(msg || (xmlhttp.status + ' ' + xmlhttp.statusText));
-      };
       WFSService.updateFeature(this.state.layer, this.props.map.getView(), this.state.feature, values, onSuccess, onFailure);
     }
   }
@@ -317,7 +314,7 @@ class EditPopup extends React.Component {
     if (this.state.error === true) {
       error = (<Snackbar
         open={this.state.open}
-        bodyStyle={{ height: 'auto', lineHeight: '28px', padding: 24, whiteSpace: 'pre-line' }}
+        bodyStyle={{height: 'auto', lineHeight: '28px', padding: 24, whiteSpace: 'pre-line'}}
         message={formatMessage(messages.errormsg, {msg: this.state.msg})}
         autoHideDuration={5000}
         onRequestClose={this._handleRequestClose.bind(this)}
@@ -344,7 +341,7 @@ class EditPopup extends React.Component {
     }
     var id = this.state.layer ? this.state.layer.get('id') : undefined;
     var layerSelector = this.state.layer ? undefined : (
-      <LayerSelector labelText={formatMessage(messages.layer)} value={id} onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList.bind(this)} map={this.props.map} />
+      <LayerSelector intl={this.props.intl} labelText={formatMessage(messages.layer)} value={id} onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList.bind(this)} map={this.props.map} />
     );
     var buttons = (<span style={{float: 'right'}}><Button buttonType='Flat' primary={true} onTouchTap={this._onCancel.bind(this)} label={formatMessage(messages.cancel)} /><Button buttonType='Flat' primary={true} onTouchTap={this.save.bind(this)} label={formatMessage(messages.save)} /></span>);
     return (
