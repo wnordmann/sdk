@@ -1,9 +1,12 @@
-
 .menuItem {
   display: flex !important;
   flex: 1;
+  color: #666666 !important;
+  font-size: 14px !important;
+  &.muted {
+    color: #a5a4a4 !important;
+  }
   .statusIcons {
-    // background-color: blue;
     display: flex;
     flex: 2;
     i {
@@ -23,21 +26,19 @@
   }
   .fixedContainer {
     top: 16px !important;
-    // background-color: green; 
     display: flex !important;
     position: static !important;
     justify-content: flex-end;
     width: 110px;
     i {
-      padding: 0 6px;
-      // background-color: orange;
+      width: 24px;
       position: static !important;
+      text-align: center;
     }
     .iconContainer {
       margin:0 ;
       width: 19px !important;
       div {
-        // background-color: brown;
         display: block !important;
         div {
           height: 12px !important;
@@ -52,7 +53,6 @@
 
   }
   &>div {
-    // background-color: green;
     flex: 1;
   }
 }
