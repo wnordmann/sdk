@@ -72,32 +72,15 @@ class Header extends React.Component {
     });
   };
   render() {
-    console.log(this.props.children);
     return (
       <AppBar
           title={this.props.title}
           iconElementRight={
             <div className="headerIcons">
-              <IconButton
-                 iconClassName="headerIcons ms ms-select-box"
-                />
-              <IconButton
-                 iconClassName="headerIcons ms ms-measure-distance"
-                />
-              <IconButton onTouchTap={this.handleMenuTouchTap} >
-                <NavigationMoreVert />
-                <Popover
-                  open={this.state.menuOpen}
-                  anchorEl={this.state.anchorEl}
-                  anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
-                  targetOrigin={{horizontal: 'right', vertical: 'top'}}
-                  onRequestClose={this.handleMenuRequestClose}
-                >
-                  <Menu onItemTouchTap = { this.handleMenuChange } children={this.props.leftMenuItems}/>
-                </Popover>
-              </IconButton>
-            </div>}
-            onLeftIconButtonTouchTap={this.props.onLeftIconTouchTap}
+              {this.props.children}
+            </div>
+          }
+          onLeftIconButtonTouchTap={this.props.onLeftIconTouchTap}
         />
     );
   }

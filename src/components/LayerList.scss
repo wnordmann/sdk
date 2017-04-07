@@ -3,7 +3,7 @@
   display: flex !important;
   flex: 1;
   .statusIcons {
-    background-color: blue;
+    // background-color: blue;
     display: flex;
     flex: 2;
     i {
@@ -23,14 +23,14 @@
   }
   .fixedContainer {
     top: 16px !important;
-    background-color: green;
+    // background-color: green; 
     display: flex !important;
     position: static !important;
     justify-content: flex-end;
     width: 110px;
     i {
       padding: 0 6px;
-      background-color: orange;
+      // background-color: orange;
       position: static !important;
     }
     .iconContainer {

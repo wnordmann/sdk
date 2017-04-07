@@ -13,11 +13,13 @@
 import React from 'react';
 import ol from 'openlayers';
 import classNames from 'classnames';
-import RaisedButton from './Button';
-import {ToolbarGroup} from 'material-ui/Toolbar';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
 import Snackbar from 'material-ui/Snackbar';
+import IconButton from 'material-ui/IconButton';
 import MapConfigService from '../services/MapConfigService';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import NavigationMoreVert from 'material-ui/svg-icons/navigation/more-vert';
 
 const messages = defineMessages({
   savetext: {
@@ -59,6 +61,11 @@ const messages = defineMessages({
     id: 'mapconfig.loadfailure',
     description: 'Info text to show if load is not successfull',
     defaultMessage: 'There was an error loading the map from the browser\'s local storage'
+  },
+  dropdowntext: {
+    id: 'mapconfig.dropdowntext',
+    description: 'Text to use on the Map Config drop down',
+    defaultMessage: 'Map Config'
   }
 });
 
@@ -149,6 +156,16 @@ class MapConfig extends React.PureComponent {
       info: false
     });
   }
+  _handleChange(event, value) {
+    if (value === 1) {
+      this._load();
+    } else if (value === 2) {
+      this._save();
+    } else {
+      this._clear();
+    }
+    this.setState({value: value});
+  }
   render() {
     const {formatMessage} = this.props.intl;
     var info;
@@ -156,11 +173,19 @@ class MapConfig extends React.PureComponent {
       info = (<Snackbar autoHideDuration={2000} message={this.state.msg} open={this.state.info} onRequestClose={this._onRequestClose.bind(this)} />);
     }
     return (
-      <ToolbarGroup lastChild={this.props.lastChild} firstChild={this.props.firstChild} className={classNames('sdk-component map-config', this.props.className)}>
-        {info}
-        <RaisedButton tooltip={formatMessage(messages.loadtitle)} disabled={this.state.disabled} label={formatMessage(messages.loadtext)} onTouchTap={this._load.bind(this)} />
-        <RaisedButton label={formatMessage(messages.savetext)} tooltip={formatMessage(messages.savetitle)} onTouchTap={this._save.bind(this)} />
-      </ToolbarGroup>
+    <span>
+      <IconMenu
+        style={this.props.style}
+        className={classNames('sdk-component map-config', this.props.className)}
+        anchorOrigin={{horizontal: 'left', vertical: 'top'}} targetOrigin={{horizontal: 'left', vertical: 'top'}}
+        iconButtonElement={<IconButton  disabled={this.state.disabled}><NavigationMoreVert/></IconButton>}
+        value={this.state.value}
+        onChange={this._handleChange.bind(this)}>
+        <MenuItem disabled={this.state.disabled} value={1} primaryText={formatMessage(messages.loadtext)}  />
+        <MenuItem disabled={this.state.disabled} value={2} primaryText={formatMessage(messages.savetext)} />
+      </IconMenu>
+      {info}
+    </span>
     );
   }
 }
