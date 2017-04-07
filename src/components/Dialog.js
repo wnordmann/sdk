@@ -35,7 +35,6 @@ export default class Dialog extends React.PureComponent {
     open: false,
     bodyStyle: {}
   };
-
   render() {
     if (this.props.inline) {
       const style = {

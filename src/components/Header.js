@@ -11,9 +11,8 @@
  */
 
 import React from 'react';
-import {Menu, Popover, AppBar}from 'material-ui';
-import IconButton from 'material-ui/IconButton';
-import NavigationMoreVert from 'material-ui/svg-icons/navigation/more-vert';
+import {AppBar}from 'material-ui';
+
 /**
  * A header toolbar for holding buttons
  *
