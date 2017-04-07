@@ -38,6 +38,7 @@ import Paper from 'material-ui/Paper';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
+import ToolUtil from '../toolutil';
 import './react-table.css';
 import './FeatureTable.css';
 
@@ -383,7 +384,32 @@ class FeatureTable extends React.Component {
     this._layer.getSource().updateParams({'_olSalt': Math.random()});
   }
   _onEditFeature(feature) {
+    if (!this._modifyCollection) {
+      this._modifyCollection = new ol.Collection();
+    }
+    if (!this._modifyLayer) {
+      this._modifyLayer = new ol.layer.Vector({
+        title: null,
+        zIndex: 1000,
+        source: new ol.source.Vector({
+          features: this._modifyCollection
+        })
+      });
+      this.props.map.addLayer(this._modifyLayer);
+    }
+    this._modifyCollection.clear();
+    if (!this._modify) {
+      this._modify = new ol.interaction.Modify({
+        features: this._modifyCollection,
+        wrapX: false
+      });
+    }
+    ToolUtil.activate(this, [this._modify]);
+    this._modifyCollection.push(feature);
+    var me = this;
     ToolActions.showEditPopup(feature, this._layer, function() {
+      me._modifyCollection.clear();
+      ToolUtil.deactivate(me);
     });
   }
   _onDelete(feature) {

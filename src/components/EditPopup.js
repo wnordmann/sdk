@@ -237,6 +237,10 @@ class EditPopup extends React.Component {
       msg: msg
     });
   }
+  _onChangeGeom(evt) {
+    this._geomDirty = true;
+    evt.target.un('change', this._onChangeGeom, this);
+  }
   save() {
     var id = this.state.feature.getId();
     var me = this, key;
@@ -270,15 +274,24 @@ class EditPopup extends React.Component {
       for (key in this.state.dirty) {
         values[key] = this.state.values[key];
       }
+      if (this._geomDirty) {
+        values[this.state.feature.getGeometryName()] = this.state.feature.getGeometry();
+      }
       var onSuccess = function(result) {
         if (result && result.transactionSummary.totalUpdated === 1) {
           for (key in me.state.dirty) {
             me.state.feature.set(key, values[key]);
           }
           me.setState({dirty: {}});
+          if (!(me.state.layer.getSource() instanceof ol.source.Vector)) {
+            me._redraw();
+          }
         } else {
           me._setError(formatMessage(messages.updatemsg));
         }
+        me._callback();
+        delete me._callback;
+        me.setVisible(false);
       };
       var onFailure = function(xmlhttp, msg) {
         me._setError(msg || (xmlhttp.status + ' ' + xmlhttp.statusText));
@@ -312,6 +325,7 @@ class EditPopup extends React.Component {
     }
     var editForm;
     if (this.state.feature && this.state.layer) {
+      this.state.feature.on('change', this._onChangeGeom, this);
       var inputs = [];
       var feature = this.state.feature, layer = this.state.layer;
       var fid = feature.getId();
