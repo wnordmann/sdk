@@ -635,17 +635,17 @@ static formats = {
 
     var checked = <i className='fa fa-eye' onClick={this._handleVisibility.bind(this)}></i>;
 
-    var unchecked = <i className='fa fa-eye-slash' onClick={this._handleVisibility.bind(this)}></i>;
-    var baseVisibility = (<RadioButton
-      checkedIcon={checked}
-      uncheckedIcon={unchecked}
-      style={{margin:'0', width:'19px'}}
-      disabled={this.state.disabled}
-      checked={this.state.checked}
-      value={this.props.title}
-      onClick={this._handleVisibility.bind(this)}
-      disableTouchRipple={true}/>);
-
+    var unchecked = <i classNames='fa fa-eye-slash' onClick={this._handleVisibility.bind(this)}></i>;
+    // var baseVisibility = (<RadioButton
+    //   checkedIcon={checked}
+    //   uncheckedIcon={unchecked}
+    //   style={{margin:'0', width:'19px'}}
+    //   disabled={this.state.disabled}
+    //   checked={this.state.checked}
+    //   value={this.props.title}
+    //   onClick={this._handleVisibility.bind(this)}
+    //   disableTouchRipple={true}/>);
+    var baseVisibility = <i className='fa fa-eye' onClick={this._handleVisibility.bind(this)}></i>;
     var visibility = this.state.checked ? checked : unchecked;
     var popoverEllipsis = (!(this.props.layer instanceof ol.layer.Group) && (opacity || download || filter || remove || table || label || edit)) ? (
       <div>
