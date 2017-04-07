@@ -675,8 +675,7 @@ static formats = {
     // }
     var flexContainer = {
       display: 'flex',
-      padding: '16px',
-      width: '100%'
+      padding: '16px'
     };
     // var innerDivNestedStyle = {
     //   marginRight:'100px'
