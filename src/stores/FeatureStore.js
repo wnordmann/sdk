@@ -74,7 +74,12 @@ class FeatureStore extends EventEmitter {
       styles.Polygon.push.apply(styles.Polygon, styles.LineString);
       styles.GeometryCollection.push.apply(styles.GeometryCollection, styles.LineString);
       return function(feature, resolution) {
-        return styles[feature.getGeometry().getType()];
+        var geom = feature.getGeometry();
+        if (geom) {
+          return styles[geom.getType()];
+        } else {
+          return null;
+        }
       };
     };
     this._regexes = {
