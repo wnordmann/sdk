@@ -12,7 +12,7 @@
 
 import React from 'react';
 import {AppBar}from 'material-ui';
-
+import './Header.css';
 /**
  * A header toolbar for holding buttons
  *

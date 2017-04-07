@@ -188,7 +188,8 @@ class Select extends React.PureComponent {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <IconMenu style={this.props.style} anchorOrigin={{horizontal: 'left', vertical: 'top'}} targetOrigin={{horizontal: 'left', vertical: 'top'}} className={classNames('sdk-component select', this.props.className)}
+      <IconMenu style={this.props.style} anchorOrigin={{horizontal: 'right', vertical: 'bottom'}} targetOrigin={{horizontal: 'right', vertical: 'top'}}
+        className={classNames('sdk-component select', this.props.className)}
          iconButtonElement={<IconButton tooltip={formatMessage(messages.menubuttontitle)} disabled={this.state.disabled} iconClassName="headerIcons ms ms-select-box"/>}>
         <MenuItem disabled={this.state.disabled} onTouchTap={this._selectByRectangle.bind(this)} primaryText={formatMessage(messages.selectbyrectangletext)}/>
         <MenuItem disabled={this.state.disabled} onTouchTap={this._clear.bind(this)} primaryText={formatMessage(messages.clearselectiontext)}/>

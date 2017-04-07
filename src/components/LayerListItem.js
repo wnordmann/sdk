@@ -685,9 +685,9 @@ static formats = {
     return connectDragSource(connectDropTarget(
       <div>
         <ListItem
-          className={classNames({'sdk-component': true, 'menuItemContainer': true, 'layer-list-item' : true}, this.props.className)}
+          className={classNames({'sdk-component': true, 'menuItemContainer': true}, this.props.className)}
           autoGenerateNestedIndicator={this.props.collapsible}
-          insetChildren={false}
+          insetChildren={true}
           innerDivStyle={flexContainer}
           autoGenerateNestedIndicator={false}
           primaryText={<span className="menuItem"><span className="statusIcons">{arrowIcon}{layersIcon}<span> {this.props.title}</span></span>{rightIconButtons}</span>}

@@ -317,7 +317,7 @@ class Measure extends React.PureComponent {
     return (
       <IconMenu
         style={this.props.style}
-        anchorOrigin={{horizontal: 'left', vertical: 'top'}} targetOrigin={{horizontal: 'left', vertical: 'top'}}
+        anchorOrigin={{horizontal: 'right', vertical: 'bottom'}} targetOrigin={{horizontal: 'right', vertical: 'top'}}
         className={classNames('sdk-component measure', this.props.className)}
         iconButtonElement={<IconButton tooltip={formatMessage(messages.dropdowntitle)} disabled={this.state.disabled} iconClassName="headerIcons ms ms-measure-distance" />}
         value={this.state.value}
