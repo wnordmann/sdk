@@ -47,11 +47,6 @@ const messages = defineMessages({
     description: 'Label for the collapsble options',
     defaultMessage: 'Options'
   },
-  nodatamsg: {
-    id: 'featuretable.nodatamsg',
-    description: 'Message to display if there are no layers with data',
-    defaultMessage: 'You haven\’t loaded any layers with feature data yet, so there is no data to display in the table. When you add a layer with feature data, that data will show here.'
-  },
   errormsg: {
     id: 'featuretable.errormsg',
     description: 'Error message to show when filtering fails',
@@ -204,7 +199,6 @@ class FeatureTable extends React.Component {
     this.state = {
       pageSize: props.pageSize,
       pages: -1,
-      active: false,
       errorOpen: false,
       error: false,
       muiTheme: context.muiTheme || getMuiTheme(),
@@ -359,14 +353,6 @@ class FeatureTable extends React.Component {
       errorOpen: false
     });
   }
-  _handleRequestCloseActive() {
-    this.setState({
-      active: false
-    });
-  }
-  setActive(active) {
-    this.setState({active: active});
-  }
   _onSelect(props) {
     SelectActions.toggleFeature(this._layer, props.row);
   }
@@ -520,14 +506,6 @@ class FeatureTable extends React.Component {
     }
     return (
       <Paper zDepth={0} className={classNames('sdk-component feature-table', this.props.className)}>
-        <Snackbar
-          autoHideDuration={5000}
-          open={!this._layer && this.state.active}
-          bodyStyle={{lineHeight: '24px', height: 'auto'}}
-          style={{bottom: 'auto', top: 0, position: 'absolute'}}
-          message={formatMessage(messages.nodatamsg)}
-          onRequestClose={this._handleRequestCloseActive.bind(this)}
-        />
         <ToolbarGroup ref='form'>
           <LayerSelector {...this.props} id='table-layerSelector' disabled={!this._layer} ref='layerSelector' onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList} map={this.props.map} value={id} />
           <TextField style={{display: this._layer instanceof ol.layer.Vector ? 'block' : 'none'}} floatingLabelText={formatMessage(messages.filterlabel)} id='featuretable-filter' disabled={!this._layer} ref='filter' onChange={this._filterByText.bind(this)} hintText={formatMessage(messages.filterplaceholder)} />
