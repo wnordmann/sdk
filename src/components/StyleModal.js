@@ -337,7 +337,6 @@ class StyleModal extends React.PureComponent {
     );
     var dialog = (
       <Dialog ref='dialog'
-        inline={this.props.inline}
         className={classNames('sdk-component style-modal', this.props.className)}
         actions={actions}
         autoScrollBodyContent={true}

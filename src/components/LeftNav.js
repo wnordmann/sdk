@@ -1,7 +1,6 @@
 import React from 'react';
 import Drawer from 'material-ui/Drawer';
 import {MenuItem, Menu, Tabs, Popover, AppBar}from 'material-ui';
-// import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import NavigationArrowDropDown from 'material-ui/svg-icons/navigation/arrow-drop-down';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import IconButton from 'material-ui/IconButton';
@@ -32,24 +31,20 @@ class LeftNav extends React.PureComponent {
        */
       tabList: React.PropTypes.node,
       /**
-       * NavItem components to be added to LeftNav
-       */
-      navitems: React.PropTypes.node,
-      /**
        * If true drawer is opened
        */
       open: React.PropTypes.bool,
       /**
        *  Callback for closing the drawer
        */
-      onRequestClose: React.PropTypes.func
+      onRequestClose: React.PropTypes.func.isRequired
 
     };
     constructor(props, context) {
-      super(props);
+      super();
     }
     componentDidMount() {
-      if (this.props.tabList) {
+      if (this.props.tabList && this.props.tabList.length > 0) {
         this.setState({
           menuText: this.props.tabList[0].props.label,
           selectedIndex: this.props.tabList[0].props.value,
@@ -65,11 +60,6 @@ class LeftNav extends React.PureComponent {
       menuOpen: false
     };
 
-    handleToggle = () => {
-      this.setState({
-        menuOpen: !this.state.open
-      });
-    };
     handleMenuTouchTap = (event) => {
       // This prevents ghost click.
       event.preventDefault();
@@ -149,7 +139,7 @@ class LeftNav extends React.PureComponent {
                   <Menu onItemTouchTap = { this.handleMenuChange } children={menuItems}/>
                </Popover></span>}
             iconElementLeft = { <IconButton> <NavigationArrowBack/> </IconButton>}
-            onLeftIconButtonTouchTap={this.close}
+            onLeftIconButtonTouchTap={this.close.bind(this)}
 
             iconElementRight = {this.state.appBarIcon}
             onRightIconButtonTouchTap = {this.state.appBarOnTouch} />

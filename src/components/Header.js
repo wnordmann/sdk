@@ -34,7 +34,8 @@ class Header extends React.Component {
     */
     leftMenuItems: React.PropTypes.node,
     /**
-    * Map Save Callback
+    * @ignore
+    * Callback for left Icon
     **/
     onLeftIconTouchTap: React.PropTypes.func,
     /**
@@ -53,11 +54,6 @@ class Header extends React.Component {
     menuOpen: false
   };
 
-  handleToggle = () => {
-    this.setState({
-      menuOpen: !this.state.open
-    });
-  };
   handleMenuTouchTap = (event) => {
     // This prevents ghost click.
     event.preventDefault();

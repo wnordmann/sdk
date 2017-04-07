@@ -136,7 +136,7 @@ class LayerList extends React.PureComponent {
      */
     collapsible: React.PropTypes.bool,
     /**
-     * Icon for the conmpoent
+     * Icon for the component
      */
     icon: React.PropTypes.node,
     /**

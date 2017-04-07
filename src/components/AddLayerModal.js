@@ -198,9 +198,9 @@ class AddLayerModal extends React.PureComponent {
     /**
     *  Controls opening the modal
     */
-    open : React.PropTypes.bool,
+    open : React.PropTypes.bool.isRequired,
     /**
-    * Drawer where true, modal when false, default false
+    * Drawer where true, modal when false
     */
     isDrawer : React.PropTypes.bool,
      /**
@@ -636,7 +636,7 @@ class AddLayerModal extends React.PureComponent {
               {actions}
             </div>
           </Drawer>);
-    var dialog = (<Dialog bodyStyle={{padding: 20}} inline={this.props.inline} className={classNames('sdk-component add-layer-modal', this.props.className)} actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title)} open={this.props.open} onRequestClose={this.close.bind(this)}>
+    var dialog = (<Dialog bodyStyle={{padding: 20}} className={classNames('sdk-component add-layer-modal', this.props.className)} actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title)} open={this.props.open} onRequestClose={this.close.bind(this)}>
         {select}
         {content}
       </Dialog>);

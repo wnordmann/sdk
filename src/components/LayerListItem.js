@@ -670,16 +670,10 @@ static formats = {
           </Popover>
       </div>
       ) : undefined;
-    // var innerDivNestedStyle = {
-    //   marginRight:'100px'
-    // }
     var flexContainer = {
       display: 'flex',
       padding: '16px'
     };
-    // var innerDivNestedStyle = {
-    //   marginRight:'100px'
-    // }
     var rightIconButtons = <span className="fixedContainer">{styling}{zoomTo}{visibility}{popoverEllipsis}</span>;
     if (layer.get('type') === 'base-group') {
       rightIconButtons = <span className="fixedContainer">{visibility}</span>;
