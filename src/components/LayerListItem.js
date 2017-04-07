@@ -24,7 +24,6 @@ import SLDService from '../services/SLDService';
 import WMSService from '../services/WMSService';
 import Slider from 'material-ui/Slider';
 import {ListItem} from 'material-ui/List';
-import {RadioButton} from 'material-ui/RadioButton';
 import WMSLegend from './WMSLegend';
 import ArcGISRestLegend from './ArcGISRestLegend';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -307,7 +306,8 @@ class LayerListItem extends React.PureComponent {
       tableOpen: false,
       open: true,
       styleOpen: false,
-      checked: props.layer.getVisible()
+      checked: props.layer.getVisible(),
+      baseVisibility:[]
     };
   }
   getChildContext() {
@@ -635,7 +635,7 @@ static formats = {
 
     var checked = <i className='fa fa-eye' onClick={this._handleVisibility.bind(this)}></i>;
 
-    var unchecked = <i classNames='fa fa-eye-slash' onClick={this._handleVisibility.bind(this)}></i>;
+    var unchecked = <i className='fa fa-eye-slash' onClick={this._handleVisibility.bind(this)}></i>;
     // var baseVisibility = (<RadioButton
     //   checkedIcon={checked}
     //   uncheckedIcon={unchecked}
@@ -645,7 +645,7 @@ static formats = {
     //   value={this.props.title}
     //   onClick={this._handleVisibility.bind(this)}
     //   disableTouchRipple={true}/>);
-    var baseVisibility = <i className='fa fa-eye' onClick={this._handleVisibility.bind(this)}></i>;
+    var baseVisibility = <i className={classNames({'fa':true, 'fa-eye':true})} onClick={this._handleVisibility.bind(this)}></i>;
     var visibility = this.state.checked ? checked : unchecked;
     var popoverEllipsis = (!(this.props.layer instanceof ol.layer.Group) && (opacity || download || filter || remove || table || label || edit)) ? (
       <div>
