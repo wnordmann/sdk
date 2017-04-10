@@ -262,11 +262,13 @@ class LayerList extends React.PureComponent {
     };
     var baseLayers = [];
     forEachLayer(baseLayers, this.props.map.getLayerGroup());
-    for (var i = 0; i < baseLayers.length; i++) {
-      baseLayers[i].setVisible(false);
+    if (baseLayers.length > 0) {
+      for (var i = 0; i < baseLayers.length; i++) {
+        baseLayers[i].setVisible(false);
+      }
+      baseLayers[0].setVisible(true);
+      this.setState({baseLayer: baseLayers[0].get('id')});
     }
-    baseLayers[0].setVisible(true);
-    this.setState({baseLayer: baseLayers[0].get('id')});
   }
   _onChange() {
     this.setState(LayerStore.getState());
