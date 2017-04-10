@@ -218,7 +218,9 @@ class EditPopup extends React.Component {
       } else if (geom instanceof ol.geom.Point) {
         geomType = 'Point';
       }
-      return lyr.get('isWFST') && lyr.get('wfsInfo') !== undefined && lyr.get('wfsInfo').geometryType.indexOf(geomType) !== -1;
+      var local = lyr.get('geometryType') && lyr.get('geometryType').indexOf(geomType) !== -1;
+      var wfs = lyr.get('isWFST') && lyr.get('wfsInfo') !== undefined && lyr.get('wfsInfo').geometryType.indexOf(geomType) !== -1;
+      return local || wfs;
     } else {
       return lyr.get('isWFST') && lyr.get('wfsInfo') !== undefined;
     }
@@ -252,23 +254,30 @@ class EditPopup extends React.Component {
       for (key in this.state.dirty) {
         this.state.feature.set(key, this.state.values[key]);
       }
-      WFSService.insertFeature(this.state.layer, this.props.map.getView(), this.state.feature, function(insertId) {
-        if (insertId == 'new0') {
-          // reload data if we're dealing with a shapefile store
-          var source = me.state.layer.getSource();
-          if (source instanceof ol.source.Vector) {
-            source.clear();
+      if (this.state.layer.get('wfsInfo')) {
+        WFSService.insertFeature(this.state.layer, this.props.map.getView(), this.state.feature, function(insertId) {
+          if (insertId == 'new0') {
+            // reload data if we're dealing with a shapefile store
+            var source = me.state.layer.getSource();
+            if (source instanceof ol.source.Vector) {
+              source.clear();
+            } else {
+              me._redraw();
+            }
           } else {
-            me._redraw();
+            this.state.feature.setId(insertId);
+            FeatureStore.addFeature(this.state.layer, this.state.feature);
           }
-        } else {
-          this.state.feature.setId(insertId);
-          FeatureStore.addFeature(this.state.layer, this.state.feature);
-        }
+          me._callback();
+          delete me._callback;
+          me.setVisible(false);
+        }, onFailure);
+      } else {
+        this.state.layer.getSource().addFeature(this.state.feature);
         me._callback();
         delete me._callback;
         me.setVisible(false);
-      }, onFailure);
+      }
     } else { // UPDATE
       var values = {};
       for (key in this.state.dirty) {
@@ -326,7 +335,7 @@ class EditPopup extends React.Component {
       var inputs = [];
       var feature = this.state.feature, layer = this.state.layer;
       var fid = feature.getId();
-      var keys = layer.get('wfsInfo').attributes;
+      var keys = layer.get('wfsInfo') ? layer.get('wfsInfo').attributes : layer.get('attributes');
       for (var i = 0, ii = keys.length; i < ii; ++i) {
         var key = keys[i];
         var value = this.state.values[key] || '';
