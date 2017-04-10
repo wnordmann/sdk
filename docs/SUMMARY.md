@@ -13,8 +13,6 @@ Boundless SDK
     * [Bookmarks](api/Bookmarks.md)
     * [Button](api/Button.md)
     * [Chart](api/Chart.md)
-    * [Edit](api/Edit.md)
-    * [EditForm](api/EditForm.md)
     * [EditPopup](api/EditPopup.md)
     * [FeatureTable](api/FeatureTable.md)
     * [FillEditor](api/FillEditor.md)
