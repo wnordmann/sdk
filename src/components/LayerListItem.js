@@ -657,6 +657,7 @@ static formats = {
 
     var unchecked = <i className='fa fa-eye-slash' onClick={this._handleVisibility.bind(this)}></i>;
     var baseVisibility = <i onClick={this._handleBaseVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye':this.props.currentBaseLayer === this.props.layer.get('id'), 'fa-eye-slash':this.props.currentBaseLayer !== this.props.layer.get('id')})}></i>;
+    var fixedWidth =  <i className='fa fa-fw'></i>;
     var visibility = this.state.checked ? checked : unchecked;
     var popoverEllipsis = (!(this.props.layer instanceof ol.layer.Group) && (opacity || download || filter || remove || table || label || edit)) ? (
       <div>
@@ -687,10 +688,10 @@ static formats = {
     };
     var rightIconButtons = <span className="fixedContainer">{styling}{zoomTo}{visibility}{popoverEllipsis}</span>;
     if (layer.get('type') === 'base-group') {
-      rightIconButtons = <span className="fixedContainer">{baseVisibility}</span>;
+      rightIconButtons = <span className="fixedContainer">{baseVisibility}{fixedWidth}</span>;
     }
     if (layer.get('type') === 'base') {
-      rightIconButtons = <span className="fixedContainer">{baseVisibility}</span>;
+      rightIconButtons = <span className="fixedContainer">{baseVisibility}{fixedWidth}</span>;
     }
 
     return connectDragSource(connectDropTarget(
