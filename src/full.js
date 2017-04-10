@@ -55,9 +55,6 @@ global.Button = Button;
 import Chart from './components/Chart';
 global.Chart = Chart;
 
-import Edit from './components/Edit';
-global.Edit = Edit;
-
 import EditPopup from './components/EditPopup';
 global.EditPopup = EditPopup;
 
