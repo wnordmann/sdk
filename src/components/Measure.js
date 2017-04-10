@@ -17,11 +17,11 @@ import './Measure.css';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import classNames from 'classnames';
-import RaisedButton from './Button';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import AppDispatcher from '../dispatchers/AppDispatcher';
 import ToolUtil from '../toolutil';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import IconButton from 'material-ui/IconButton';
 
 const messages = defineMessages({
   dropdowntext: {
@@ -315,7 +315,13 @@ class Measure extends React.PureComponent {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <IconMenu style={this.props.style} anchorOrigin={{horizontal: 'left', vertical: 'top'}} targetOrigin={{horizontal: 'left', vertical: 'top'}} className={classNames('sdk-component measure', this.props.className)} iconButtonElement={<RaisedButton secondary={this.state.secondary} tooltip={formatMessage(messages.dropdowntitle)} disabled={this.state.disabled} label={formatMessage(messages.dropdowntext)} />} value={this.state.value} onChange={this._handleChange.bind(this)}>
+      <IconMenu
+        style={this.props.style}
+        anchorOrigin={{horizontal: 'right', vertical: 'bottom'}} targetOrigin={{horizontal: 'right', vertical: 'top'}}
+        className={classNames('sdk-component measure', this.props.className)}
+        iconButtonElement={<IconButton tooltip={formatMessage(messages.dropdowntitle)} disabled={this.state.disabled} iconClassName="headerIcons ms ms-measure-distance" />}
+        value={this.state.value}
+        onChange={this._handleChange.bind(this)}>
         <MenuItem disabled={this.state.disabled} value={1} primaryText={formatMessage(messages.measuredistancetext)}/>
         <MenuItem disabled={this.state.disabled} value={2} primaryText={formatMessage(messages.measureareatext)}/>
         <MenuItem disabled={this.state.disabled} primaryText={formatMessage(messages.cleartext)}/>

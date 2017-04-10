@@ -19,11 +19,11 @@ import AppDispatcher from '../dispatchers/AppDispatcher';
 import ToolUtil from '../toolutil';
 import WFSService from '../services/WFSService';
 import FeatureStore from '../stores/FeatureStore';
-import RaisedButton from './Button';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import IconButton from 'material-ui/IconButton';
 
 const messages = defineMessages({
   menubuttontext: {
@@ -188,7 +188,9 @@ class Select extends React.PureComponent {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <IconMenu style={this.props.style} anchorOrigin={{horizontal: 'left', vertical: 'top'}} targetOrigin={{horizontal: 'left', vertical: 'top'}} className={classNames('sdk-component select', this.props.className)} iconButtonElement={<RaisedButton secondary={this.state.secondary} tooltip={formatMessage(messages.menubuttontitle)} disabled={this.state.disabled} label={formatMessage(messages.menubuttontext)} />}>
+      <IconMenu style={this.props.style} anchorOrigin={{horizontal: 'right', vertical: 'bottom'}} targetOrigin={{horizontal: 'right', vertical: 'top'}}
+        className={classNames('sdk-component select', this.props.className)}
+         iconButtonElement={<IconButton tooltip={formatMessage(messages.menubuttontitle)} disabled={this.state.disabled} iconClassName="headerIcons ms ms-select-box"/>}>
         <MenuItem disabled={this.state.disabled} onTouchTap={this._selectByRectangle.bind(this)} primaryText={formatMessage(messages.selectbyrectangletext)}/>
         <MenuItem disabled={this.state.disabled} onTouchTap={this._clear.bind(this)} primaryText={formatMessage(messages.clearselectiontext)}/>
       </IconMenu>

@@ -31,7 +31,6 @@ import LayersIcon from 'material-ui/svg-icons/maps/layers';
 import BaseMapIcon from 'material-ui/svg-icons/maps/satellite';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Paper from 'material-ui/Paper';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
 import './LayerList.css';
 
 const messages = defineMessages({
@@ -137,6 +136,10 @@ class LayerList extends React.PureComponent {
      */
     collapsible: React.PropTypes.bool,
     /**
+     * Icon for the component
+     */
+    icon: React.PropTypes.node,
+    /**
      * Should we allow adding base maps from a selector modal?
      */
     addBaseMap: React.PropTypes.shape({
@@ -231,7 +234,8 @@ class LayerList extends React.PureComponent {
     LayerStore.bindMap(this.props.map);
     this.state = {
       addLayerOpen: false,
-      muiTheme: context.muiTheme || getMuiTheme()
+      muiTheme: context.muiTheme || getMuiTheme(),
+      baseLayer: ''
     };
     this.moveLayer = debounce(this.moveLayer, 100);
   }
@@ -245,6 +249,26 @@ class LayerList extends React.PureComponent {
   }
   componentWillUnmount() {
     LayerStore.removeChangeListener(this._onChangeCb);
+  }
+  componentDidMount() {
+    var forEachLayer = function(layers, layer) {
+      if (layer instanceof ol.layer.Group) {
+        layer.getLayers().forEach(function(groupLayer) {
+          forEachLayer(layers, groupLayer);
+        });
+      } else if (layer.get('type') === 'base') {
+        layers.push(layer);
+      }
+    };
+    var baseLayers = [];
+    forEachLayer(baseLayers, this.props.map.getLayerGroup());
+    if (baseLayers.length > 0) {
+      for (var i = 0; i < baseLayers.length; i++) {
+        baseLayers[i].setVisible(false);
+      }
+      baseLayers[0].setVisible(true);
+      this.setState({baseLayer: baseLayers[0].get('id')});
+    }
   }
   _onChange() {
     this.setState(LayerStore.getState());
@@ -263,6 +287,16 @@ class LayerList extends React.PureComponent {
     }
     return layerNodes;
   }
+  _showAddLayer() {
+    this.setState({
+      addLayerOpen: true
+    });
+  }
+  _closeAddLayer() {
+    this.setState({
+      addLayerOpen: false
+    });
+  }
   _showPanel(evt) {
     if (!this.state.visible) {
       this.setState({visible: true});
@@ -273,6 +307,9 @@ class LayerList extends React.PureComponent {
     if (newVisible || this._modalOpen !== true) {
       this.setState({visible: newVisible});
     }
+  }
+  _setBaseLayer(layer) {
+    this.setState({baseLayer: layer});
   }
   getLayerNode(lyr, group, idx) {
     if (this.props.addBaseMap && lyr.get('type') === 'base' && !lyr.getVisible()) {
@@ -285,24 +322,14 @@ class LayerList extends React.PureComponent {
       if (lyr instanceof ol.layer.Group) {
         var children = this.props.showGroupContent ? this.renderLayerGroup(lyr) : [];
         return (
-          <LayerListItem index={idx} moveLayer={this.moveLayer} {...this.props} key={lyr.get('id')} layer={lyr} group={group} nestedItems={children} title={lyr.get('title')} disableTouchRipple={true}/>
+          <LayerListItem setBaseLayer={this._setBaseLayer.bind(this)} currentBaseLayer={this.state.baseLayer} index={idx} moveLayer={this.moveLayer} {...this.props} key={lyr.get('id')} layer={lyr} group={group} nestedItems={children} title={lyr.get('title')} disableTouchRipple={true}/>
         );
       } else {
         return (
-          <LayerListItem index={idx} moveLayer={this.moveLayer} {...this.props} key={lyr.get('id')} layer={lyr} group={group} title={lyr.get('title')} disableTouchRipple={true}/>
+          <LayerListItem setBaseLayer={this._setBaseLayer.bind(this)} currentBaseLayer={this.state.baseLayer} index={idx} moveLayer={this.moveLayer} {...this.props} key={lyr.get('id')} layer={lyr} group={group} title={lyr.get('title')} disableTouchRipple={true}/>
         );
       }
     }
-  }
-  _showAddLayer() {
-    this.setState({
-      addLayerOpen: true
-    });
-  }
-  _closeAddLayer() {
-    this.setState({
-      addLayerOpen: false
-    });
   }
   _showAddBaseMap() {
     this.refs.addbasemapmodal.getWrappedInstance().open();
@@ -325,10 +352,7 @@ class LayerList extends React.PureComponent {
     if (this.props.addLayer || this.props.addBaseMap) {
       var layerAdd, baseAdd;
       if (this.props.addLayer) {
-        layerAdd =  <FloatingActionButton className='layerAddButton' onTouchTap={this._showAddLayer.bind(this)}><i className='ms ms-layers-add'/></FloatingActionButton>
-
-        // layerAdd = <RaisedButton icon={<NoteAdd />} label={formatMessage(messages.addlayertext)} onTouchTap={this._showAddLayer.bind(this)} disableTouchRipple={true}/>;
-        layerModal = <AddLayerModal open={this.state.addLayerOpen} inline={this.props.inlineDialogs} srsName={this.props.map.getView().getProjection().getCode()} allowUserInput={this.props.addLayer.allowUserInput} onRequestClose={this._closeAddLayer.bind(this)} sources={this.props.addLayer.sources} map={this.props.map} />;
+        layerModal = <AddLayerModal isDrawer={this.props.addLayer.isDrawer} open={this.props.addLayer.open} inline={this.props.inlineDialogs} srsName={this.props.map.getView().getProjection().getCode()} allowUserInput={this.props.addLayer.allowUserInput} onRequestClose={this.props.addLayer.onRequestClose.bind(this)} sources={this.props.addLayer.sources} map={this.props.map}  />;
       }
       if (this.props.addBaseMap) {
         baseAdd = <RaisedButton icon={<BaseMapIcon />} label={formatMessage(messages.addbasemaptext)} onTouchTap={this._showAddBaseMap.bind(this)} disableTouchRipple={true}/>;

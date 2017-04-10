@@ -1,7 +1,14 @@
-// Begin styles for the menuItems in the Drawer Component
 .menuItem {
+  display: flex !important;
+  flex: 1;
+  color: #666666 !important;
+  font-size: 14px !important;
+  &.muted {
+    color: #a5a4a4 !important;
+  }
   .statusIcons {
     display: flex;
+    flex: 2;
     i {
       width: 24px;
     }
@@ -15,17 +22,28 @@
   }
   .viz {
     &.closed {
-
     }
   }
   .fixedContainer {
-    top: 6px !important;
-    right: 14px !important;
-    width: 130px;
+    top: 16px !important;
     display: flex !important;
+    position: static !important;
+    justify-content: flex-end;
+    width: 110px;
     i {
-      flex: 1;
-      padding: 10px;
+      width: 24px;
+      position: static !important;
+      text-align: center;
+    }
+    .iconContainer {
+      margin:0 ;
+      width: 19px !important;
+      div {
+        display: block !important;
+        div {
+          height: 12px !important;
+        }
+      }
     }
   }
   .settings {
@@ -34,51 +52,57 @@
   .zoomTo {
 
   }
+  &>div {
+    flex: 1;
+  }
 }
 .menuItem + div {
-  padding: 0 0 0 10px !important;
+  // padding: 0 0 0 10px !important;
+}
+.noBorderPaper {
+  margin: 20px;
 }
 
-.layer-switcher {
-  text-align: left;
-  max-width: 450px;
-}
-.layer-switcher .layer-tree-panel {
-  display: none;
-}
-.layer-switcher.shown .layer-tree-panel {
-  display: block;
-}
-.layerlistbutton {
-  float: right;
-}
-.layer-list-header {
-  padding: 16px;
-}
-.layer-tree-panel {
-  border: 1px solid #cccccc;
-  max-height: 450px;
-  margin-right: 38px;
-  overflow-y: auto;
-}
-.layer-tree-panel li {
-  list-style-type: none;
-}
-
-.layer-tree-panel li span {
-  display: inline-block;
-  padding: 3px 8px;
-  text-decoration: none;
-}
-.layer-tree-panel li.parent_li>span {
-  cursor: pointer;
-}
-.layer-tree-panel >ul>li::before, .layer-tree-panel >ul>li::after {
-  border: 0;
-}
-.layer-tree-panel  li:last-child::before {
-  height: 30px;
-}
+// .layer-switcher {
+//   text-align: left;
+//   max-width: 450px;
+// }
+// .layer-switcher .layer-tree-panel {
+//   display: none;
+// }
+// .layer-switcher.shown .layer-tree-panel {
+//   display: block;
+// }
+// .layerlistbutton {
+//   float: right;
+// }
+// .layer-list-header {
+//   padding: 16px;
+// }
+// .layer-tree-panel {
+//   border: 1px solid #cccccc;
+//   max-height: 450px;
+//   margin-right: 38px;
+//   overflow-y: auto;
+// }
+// .layer-tree-panel li {
+//   list-style-type: none;
+// }
+//
+// .layer-tree-panel li span {
+//   display: inline-block;
+//   padding: 3px 8px;
+//   text-decoration: none;
+// }
+// .layer-tree-panel li.parent_li>span {
+//   cursor: pointer;
+// }
+// .layer-tree-panel >ul>li::before, .layer-tree-panel >ul>li::after {
+//   border: 0;
+// }
+// .layer-tree-panel  li:last-child::before {
+//   height: 30px;
+// }
 .iconSpan {
   width: 48px;
 }
@@ -103,6 +127,6 @@
 
 }
 
-.fa, .ms {
-  padding: 4px 0 0 4px;
-}
+// .fa, .ms {
+//   padding: 4px 0 0 4px;
+// }

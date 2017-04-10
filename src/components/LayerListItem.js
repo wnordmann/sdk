@@ -24,7 +24,6 @@ import SLDService from '../services/SLDService';
 import WMSService from '../services/WMSService';
 import Slider from 'material-ui/Slider';
 import {ListItem} from 'material-ui/List';
-import {RadioButton} from 'material-ui/RadioButton';
 import WMSLegend from './WMSLegend';
 import ArcGISRestLegend from './ArcGISRestLegend';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -272,6 +271,14 @@ class LayerListItem extends React.PureComponent {
      */
     inlineDialogs: React.PropTypes.bool,
     /**
+    *  State from parent component to manage baseLayers
+    */
+    currentBaseLayer: React.PropTypes.string,
+    /**
+    *  Callback from parent component to manage baseLayers
+    */
+    setBaseLayer: React.PropTypes.func,
+    /**
      * @ignore
      */
     intl: intlShape.isRequired
@@ -365,7 +372,33 @@ static formats = {
   _changeResolution() {
     this.setState({resolution: this.props.map.getView().getResolution()});
   }
+  _handleBaseVisibility(event) {
+    var i, ii;
+    var baseLayers = [];
 
+    var forEachLayer = function(layers, layer) {
+      if (layer instanceof ol.layer.Group) {
+        layer.getLayers().forEach(function(groupLayer) {
+          forEachLayer(layers, groupLayer);
+        });
+      } else if (layer.get('type') === 'base') {
+        layers.push(layer);
+      }
+    };
+
+    var layers = this.props.map.getLayers();
+    forEachLayer(baseLayers, this.props.map.getLayerGroup());
+    for (i = 0, ii = baseLayers.length; i < ii; ++i) {
+      baseLayers[i].setVisible(false);
+    }
+    layers.forEach(function(l) {
+      if (l instanceof ol.layer.Group) {
+        l.setVisible(true);
+      }
+    })
+    this.props.layer.setVisible(true);
+    this.props.setBaseLayer(this.props.layer.get('id'))
+  }
   _handleVisibility(event) {
     var i, ii;
     var baseLayers = [];
@@ -381,20 +414,7 @@ static formats = {
       }
     };
 
-    if (event.target.type === 'radio') {
-      visible = event.target.checked;
-      var layers = this.props.map.getLayers();
-      forEachLayer(baseLayers, this.props.map.getLayerGroup());
-      for (i = 0, ii = baseLayers.length; i < ii; ++i) {
-        baseLayers[i].setVisible(false);
-      }
-      layers.forEach(function(l) {
-        if (l instanceof ol.layer.Group) {
-          l.setVisible(true);
-        }
-      })
-      this.props.layer.setVisible(visible);
-    } else if (this.props.layer instanceof ol.layer.Vector || this.props.layer instanceof ol.layer.Tile) {
+    if (this.props.layer instanceof ol.layer.Vector || this.props.layer instanceof ol.layer.Tile) {
       this.props.layer.setVisible(visible);
     } else if (this.props.layer instanceof ol.layer.Group) {
       forEachLayer(baseLayers, this.props.map.getLayerGroup());
@@ -610,7 +630,7 @@ static formats = {
     var canStyle = layer.get('wfsInfo') && this.props.allowStyling;
     if (canStyle) {
       styling = (<i className='ms ms-style' onTouchTap={this._style.bind(this)}> </i>);
-      styleModal = (<StyleModal inline={this.props.inlineDialogs} {...this.props} open={this.state.styleOpen} onRequestClose={this._closeStyling.bind(this)} layer={this.props.layer} />);
+      styleModal = (<StyleModal isDrawer={true} {...this.props} open={this.state.styleOpen} onRequestClose={this._closeStyling.bind(this)} layer={this.props.layer} />);
     }
     if (this.props.showTable && (this.props.layer instanceof ol.layer.Vector || this.props.layer.get('wfsInfo') !== undefined)) {
       var actions = [
@@ -636,16 +656,7 @@ static formats = {
     var checked = <i className='fa fa-eye' onClick={this._handleVisibility.bind(this)}></i>;
 
     var unchecked = <i className='fa fa-eye-slash' onClick={this._handleVisibility.bind(this)}></i>;
-    var baseVisibility = (<RadioButton
-      checkedIcon={checked}
-      uncheckedIcon={unchecked}
-      style={{margin:'0', width:'19px'}}
-      disabled={this.state.disabled}
-      checked={this.state.checked}
-      value={this.props.title}
-      onClick={this._handleVisibility.bind(this)}
-      disableTouchRipple={true}/>);
-
+    var baseVisibility = <i onClick={this._handleBaseVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye':this.props.currentBaseLayer === this.props.layer.get('id'), 'fa-eye-slash':this.props.currentBaseLayer !== this.props.layer.get('id')})}></i>;
     var visibility = this.state.checked ? checked : unchecked;
     var popoverEllipsis = (!(this.props.layer instanceof ol.layer.Group) && (opacity || download || filter || remove || table || label || edit)) ? (
       <div>
@@ -670,33 +681,29 @@ static formats = {
           </Popover>
       </div>
       ) : undefined;
-    var innerDivNestedStyle = {
-      marginRight:'100px'
-    }
-    var rightIconButton = <div><span className="fixedContainer">{visibility}{zoomTo}{styling}{popoverEllipsis}</span></div>;
+    var flexContainer = {
+      display: 'flex',
+      padding: '16px'
+    };
+    var rightIconButtons = <span className="fixedContainer">{styling}{zoomTo}{visibility}{popoverEllipsis}</span>;
     if (layer.get('type') === 'base-group') {
-      rightIconButton = <div><span className="fixedContainer">{visibility}</span></div>;
+      rightIconButtons = <span className="fixedContainer">{baseVisibility}</span>;
     }
     if (layer.get('type') === 'base') {
-      rightIconButton = <div><span className="fixedContainer">{baseVisibility}</span></div>;
-      innerDivNestedStyle = {
-        marginLeft: '18px',
-        marginRight:'100px'
-      };
+      rightIconButtons = <span className="fixedContainer">{baseVisibility}</span>;
     }
 
     return connectDragSource(connectDropTarget(
       <div>
         <ListItem
-          className={classNames({'sdk-component': true, 'menuItem': true, 'layer-list-item' : true}, this.props.className)}
-          innerDivStyle={innerDivNestedStyle}
+          className={classNames({'sdk-component': true, 'menuItemContainer': true, 'layer-list-item': true}, this.props.className)}
           autoGenerateNestedIndicator={this.props.collapsible}
-          insetChildren={false}
+          insetChildren={true}
+          innerDivStyle={flexContainer}
           autoGenerateNestedIndicator={false}
-          primaryText={<span className="statusIcons">{arrowIcon}{layersIcon}<span> {this.props.title}</span></span>}
-          rightIcon={rightIconButton}
+          primaryText={<span className="menuItem"><span className="statusIcons">{arrowIcon}{layersIcon}<span> {this.props.title}</span></span>{rightIconButtons}</span>}
           nestedItems={this.props.nestedItems}
-          open={this.state.open}/>
+          open={this.state.open} />
         <div style={{paddingLeft: 72}}>
           {legend}
           <span>

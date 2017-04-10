@@ -44,15 +44,15 @@ describe('MapConfig', function() {
   });
 
 
-  it('creates two buttons', function() {
+  it('generates the menu', function() {
     var container = document.createElement('div');
     ReactDOM.render((
       <MuiThemeProvider muiTheme={getMuiTheme()}>
         <MapConfig intl={intl} map={map}/>
       </MuiThemeProvider>
     ), container);
-    var buttons = container.querySelectorAll('button');
-    assert.equal(buttons.length, 2);
+    var menus = container.querySelectorAll('[type=button]');
+    assert.equal(menus.length, 1);
     ReactDOM.unmountComponentAtNode(container);
   });
 
