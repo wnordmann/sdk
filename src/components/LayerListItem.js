@@ -574,7 +574,7 @@ static formats = {
     if (this.props.showOpacity && source && layer.get('type') !== 'base') {
       var val = layer.getOpacity();
       var slider = (<Slider sliderStyle={{marginTop: '0px', top: '14px', marginBottom: '0'}} defaultValue={val} onChange={this._changeOpacity.bind(this)} />);
-      opacity = <MenuItem leftIcon={<i className='ms ms-opacity'></i>}>{slider}</MenuItem>
+      opacity = <MenuItem leftIcon={<i className='menuIcon ms ms-opacity'></i>}>{slider}</MenuItem>
     }
     var table;
     if (this.props.showTable && (this.props.layer instanceof ol.layer.Vector || this.props.layer.get('wfsInfo') !== undefined)) {
@@ -615,7 +615,7 @@ static formats = {
     }
     var remove;
     if (this.props.allowRemove && layer.get('type') !== 'base' && layer.get('isRemovable') === true) {
-      remove = <MenuItem primaryText={formatMessage(messages.removebuttonlabel)} leftIcon={<i className='fa fa-trash'></i>}onTouchTap={this._remove.bind(this)} />
+      remove = <MenuItem primaryText={formatMessage(messages.removebuttonlabel)} leftIcon={<i className='menuIcon fa fa-trash'></i>}onTouchTap={this._remove.bind(this)} />
     }
     var edit;
     if (this.props.allowEditing && layer.get('isWFST') === true) {
