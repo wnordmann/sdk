@@ -234,7 +234,8 @@ class LayerList extends React.PureComponent {
     LayerStore.bindMap(this.props.map);
     this.state = {
       addLayerOpen: false,
-      muiTheme: context.muiTheme || getMuiTheme()
+      muiTheme: context.muiTheme || getMuiTheme(),
+      baseLayer: ''
     };
     this.moveLayer = debounce(this.moveLayer, 100);
   }
@@ -248,6 +249,24 @@ class LayerList extends React.PureComponent {
   }
   componentWillUnmount() {
     LayerStore.removeChangeListener(this._onChangeCb);
+  }
+  componentDidMount() {
+    var forEachLayer = function(layers, layer) {
+      if (layer instanceof ol.layer.Group) {
+        layer.getLayers().forEach(function(groupLayer) {
+          forEachLayer(layers, groupLayer);
+        });
+      } else if (layer.get('type') === 'base') {
+        layers.push(layer);
+      }
+    };
+    var baseLayers = [];
+    forEachLayer(baseLayers, this.props.map.getLayerGroup());
+    for (var i = 0; i < baseLayers.length; i++) {
+      baseLayers[i].setVisible(false);
+    }
+    baseLayers[0].setVisible(true);
+    this.setState({baseLayer: baseLayers[0].get('id')});
   }
   _onChange() {
     this.setState(LayerStore.getState());
@@ -287,6 +306,9 @@ class LayerList extends React.PureComponent {
       this.setState({visible: newVisible});
     }
   }
+  _setBaseLayer(layer) {
+    this.setState({baseLayer: layer});
+  }
   getLayerNode(lyr, group, idx) {
     if (this.props.addBaseMap && lyr.get('type') === 'base' && !lyr.getVisible()) {
       return undefined;
@@ -298,11 +320,11 @@ class LayerList extends React.PureComponent {
       if (lyr instanceof ol.layer.Group) {
         var children = this.props.showGroupContent ? this.renderLayerGroup(lyr) : [];
         return (
-          <LayerListItem index={idx} moveLayer={this.moveLayer} {...this.props} key={lyr.get('id')} layer={lyr} group={group} nestedItems={children} title={lyr.get('title')} disableTouchRipple={true}/>
+          <LayerListItem setBaseLayer={this._setBaseLayer.bind(this)} currentBaseLayer={this.state.baseLayer} index={idx} moveLayer={this.moveLayer} {...this.props} key={lyr.get('id')} layer={lyr} group={group} nestedItems={children} title={lyr.get('title')} disableTouchRipple={true}/>
         );
       } else {
         return (
-          <LayerListItem index={idx} moveLayer={this.moveLayer} {...this.props} key={lyr.get('id')} layer={lyr} group={group} title={lyr.get('title')} disableTouchRipple={true}/>
+          <LayerListItem setBaseLayer={this._setBaseLayer.bind(this)} currentBaseLayer={this.state.baseLayer} index={idx} moveLayer={this.moveLayer} {...this.props} key={lyr.get('id')} layer={lyr} group={group} title={lyr.get('title')} disableTouchRipple={true}/>
         );
       }
     }

@@ -271,6 +271,14 @@ class LayerListItem extends React.PureComponent {
      */
     inlineDialogs: React.PropTypes.bool,
     /**
+    *  State from parent component to manage baseLayers
+    */
+    currentBaseLayer: React.PropTypes.string,
+    /**
+    *  Callback from parent component to manage baseLayers
+    */
+    setBaseLayer: React.PropTypes.func,
+    /**
      * @ignore
      */
     intl: intlShape.isRequired
@@ -306,8 +314,7 @@ class LayerListItem extends React.PureComponent {
       tableOpen: false,
       open: true,
       styleOpen: false,
-      checked: props.layer.getVisible(),
-      baseVisibility:[]
+      checked: props.layer.getVisible()
     };
   }
   getChildContext() {
@@ -365,7 +372,33 @@ static formats = {
   _changeResolution() {
     this.setState({resolution: this.props.map.getView().getResolution()});
   }
+  _handleBaseVisibility(event) {
+    var i, ii;
+    var baseLayers = [];
 
+    var forEachLayer = function(layers, layer) {
+      if (layer instanceof ol.layer.Group) {
+        layer.getLayers().forEach(function(groupLayer) {
+          forEachLayer(layers, groupLayer);
+        });
+      } else if (layer.get('type') === 'base') {
+        layers.push(layer);
+      }
+    };
+
+    var layers = this.props.map.getLayers();
+    forEachLayer(baseLayers, this.props.map.getLayerGroup());
+    for (i = 0, ii = baseLayers.length; i < ii; ++i) {
+      baseLayers[i].setVisible(false);
+    }
+    layers.forEach(function(l) {
+      if (l instanceof ol.layer.Group) {
+        l.setVisible(true);
+      }
+    })
+    this.props.layer.setVisible(true);
+    this.props.setBaseLayer(this.props.layer.get('id'))
+  }
   _handleVisibility(event) {
     var i, ii;
     var baseLayers = [];
@@ -381,20 +414,7 @@ static formats = {
       }
     };
 
-    if (event.target.type === 'radio') {
-      visible = event.target.checked;
-      var layers = this.props.map.getLayers();
-      forEachLayer(baseLayers, this.props.map.getLayerGroup());
-      for (i = 0, ii = baseLayers.length; i < ii; ++i) {
-        baseLayers[i].setVisible(false);
-      }
-      layers.forEach(function(l) {
-        if (l instanceof ol.layer.Group) {
-          l.setVisible(true);
-        }
-      })
-      this.props.layer.setVisible(visible);
-    } else if (this.props.layer instanceof ol.layer.Vector || this.props.layer instanceof ol.layer.Tile) {
+    if (this.props.layer instanceof ol.layer.Vector || this.props.layer instanceof ol.layer.Tile) {
       this.props.layer.setVisible(visible);
     } else if (this.props.layer instanceof ol.layer.Group) {
       forEachLayer(baseLayers, this.props.map.getLayerGroup());
@@ -636,16 +656,7 @@ static formats = {
     var checked = <i className='fa fa-eye' onClick={this._handleVisibility.bind(this)}></i>;
 
     var unchecked = <i className='fa fa-eye-slash' onClick={this._handleVisibility.bind(this)}></i>;
-    // var baseVisibility = (<RadioButton
-    //   checkedIcon={checked}
-    //   uncheckedIcon={unchecked}
-    //   style={{margin:'0', width:'19px'}}
-    //   disabled={this.state.disabled}
-    //   checked={this.state.checked}
-    //   value={this.props.title}
-    //   onClick={this._handleVisibility.bind(this)}
-    //   disableTouchRipple={true}/>);
-    var baseVisibility = <i className={classNames({'fa':true, 'fa-eye':true})} onClick={this._handleVisibility.bind(this)}></i>;
+    var baseVisibility = <i onClick={this._handleBaseVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye':this.props.currentBaseLayer === this.props.layer.get('id'), 'fa-eye-slash':this.props.currentBaseLayer !== this.props.layer.get('id')})}></i>;
     var visibility = this.state.checked ? checked : unchecked;
     var popoverEllipsis = (!(this.props.layer instanceof ol.layer.Group) && (opacity || download || filter || remove || table || label || edit)) ? (
       <div>
@@ -676,7 +687,7 @@ static formats = {
     };
     var rightIconButtons = <span className="fixedContainer">{styling}{zoomTo}{visibility}{popoverEllipsis}</span>;
     if (layer.get('type') === 'base-group') {
-      rightIconButtons = <span className="fixedContainer">{visibility}</span>;
+      rightIconButtons = <span className="fixedContainer">{baseVisibility}</span>;
     }
     if (layer.get('type') === 'base') {
       rightIconButtons = <span className="fixedContainer">{baseVisibility}</span>;
