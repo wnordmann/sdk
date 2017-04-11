@@ -32,6 +32,7 @@ import BaseMapIcon from 'material-ui/svg-icons/maps/satellite';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Paper from 'material-ui/Paper';
 import './LayerList.css';
+import './Main.css';
 
 const messages = defineMessages({
   layertitle: {
