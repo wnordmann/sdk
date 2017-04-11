@@ -6,14 +6,12 @@ import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
-import 'phantomjs-polyfill-object-assign';
-import Edit from '../../src/components/Edit';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import ToolActions from '../../src/actions/ToolActions';
+import DrawFeature from '../../src/components/DrawFeature';
 
 raf.polyfill();
 
-describe('Edit', function() {
+describe('DrawFeature', function() {
   var target, map, layer;
   var width = 360;
   var height = 180;
@@ -29,6 +27,13 @@ describe('Edit', function() {
     document.body.appendChild(target);
     layer = new ol.layer.Tile({
       id: 'foo',
+      name: 'geonode:foo',
+      isWFST: true,
+      wfsInfo: {
+        geometryType: 'MultiPoint',
+        geometryName: 'the_geom'
+      },
+      title: 'My Layer',
       source: new ol.source.OSM()
     });
     map = new ol.Map({
@@ -50,16 +55,25 @@ describe('Edit', function() {
   });
 
 
-  it('generates the correct layer selector', function() {
+  it('activates draw feature', function() {
     var container = document.createElement('div');
-    ReactDOM.render((
-      <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <Edit map={map} intl={intl} />
-      </MuiThemeProvider>
+    var draw = ReactDOM.render((
+      <DrawFeature intl={intl}  map={map}/>
     ), container);
-    assert.equal(container.querySelector('.edit-layer-selector') !== null, true);
-    var options = container.querySelectorAll('.edit-layer-selector-option');
-    assert.equal(options.length, 0);
+    draw._drawPoly();
+    var drawInteraction = draw._interactions.polygon;
+    assert.equal(drawInteraction instanceof ol.interaction.Draw, true);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('disables the tool', function() {
+    var container = document.createElement('div');
+    var draw = ReactDOM.render((
+      <DrawFeature intl={intl}  map={map}/>
+    ), container);
+    assert.equal(draw.state.disabled, false);
+    ToolActions.disableAllTools();
+    assert.equal(draw.state.disabled, true);
     ReactDOM.unmountComponentAtNode(container);
   });
 

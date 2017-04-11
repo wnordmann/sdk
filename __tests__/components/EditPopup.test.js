@@ -53,15 +53,23 @@ describe('EditPopup', function() {
     ReactDOM.unmountComponentAtNode(container);
   });
 
-  it('save button should be available', function() {
+  it('generates the correct inputs', function() {
     var container = document.createElement('div');
+    var feature = new ol.Feature({foo: 'bar'});
+    feature.setId('foo.1');
+    var layer = new ol.layer.Vector({
+      wfsInfo: {
+        attributes: ['foo']
+      },
+      source: new ol.source.Vector({})
+    });
     var popup = ReactDOM.render((
-      <EditPopup intl={intl} map={map} />
+        <EditPopup map={map} intl={intl} />
     ), container);
-    popup.setState({layer: new ol.layer.Vector({wfsInfo: {attributes: ['foo']}}), feature: new ol.Feature({foo: 'bar'})});
-    var formInstance = popup.refs.editForm;
-    var saveButton = ReactDOM.findDOMNode(formInstance.refs.saveButton);
-    assert.equal(saveButton !== null, true);
+    popup.setState({layer: layer, feature: feature, values: feature.getProperties()});
+    var inputs = container.querySelectorAll('input');
+    assert.equal(inputs[0].id, 'foo');
+    assert.equal(inputs[0].value, 'bar');
     ReactDOM.unmountComponentAtNode(container);
   });
 

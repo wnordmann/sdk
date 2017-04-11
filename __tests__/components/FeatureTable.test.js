@@ -78,10 +78,10 @@ describe('FeatureTable', function() {
       </MuiThemeProvider>
     ), container);
     var tds = container.querySelectorAll('td');
-    assert.equal(tds[1].firstChild.innerHTML, 'bar1');
-    assert.equal(tds[4].firstChild.innerHTML, 'bar2');
-    assert.equal(tds[7].firstChild.innerHTML, 'bar3');
-    assert.equal(tds[10].firstChild.innerHTML, 'bar4');
+    assert.equal(tds[3].firstChild.innerHTML, 'bar1');
+    assert.equal(tds[8].firstChild.innerHTML, 'bar2');
+    assert.equal(tds[13].firstChild.innerHTML, 'bar3');
+    assert.equal(tds[18].firstChild.innerHTML, 'bar4');
     ReactDOM.unmountComponentAtNode(container);
   });
 

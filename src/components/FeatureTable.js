@@ -15,14 +15,19 @@ import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import classNames from 'classnames';
+import AppDispatcher from '../dispatchers/AppDispatcher';
+import WFSService from '../services/WFSService';
 import debounce from  'debounce';
 import ReactTable from 'react-table'
 import Button from './Button';
 import ActionSearch from 'material-ui/svg-icons/action/search';
+import ToolActions from '../actions/ToolActions';
+import DrawIcon from 'material-ui/svg-icons/content/create';
 import ClearIcon from 'material-ui/svg-icons/content/clear';
 import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
 import Checkbox from 'material-ui/Checkbox';
+import ActionDelete from 'material-ui/svg-icons/action/delete';
 import FeatureStore from '../stores/FeatureStore';
 import SelectActions from '../actions/SelectActions';
 import LayerSelector from './LayerSelector';
@@ -34,6 +39,7 @@ import Paper from 'material-ui/Paper';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
+import ToolUtil from '../toolutil';
 import './react-table.css';
 import './FeatureTable.css';
 
@@ -42,11 +48,6 @@ const messages = defineMessages({
     id: 'featuretable.optionslabel',
     description: 'Label for the collapsble options',
     defaultMessage: 'Options'
-  },
-  nodatamsg: {
-    id: 'featuretable.nodatamsg',
-    description: 'Message to display if there are no layers with data',
-    defaultMessage: 'You haven\’t loaded any layers with feature data yet, so there is no data to display in the table. When you add a layer with feature data, that data will show here.'
   },
   errormsg: {
     id: 'featuretable.errormsg',
@@ -107,6 +108,11 @@ const messages = defineMessages({
     id: 'featuretable.filterbuttontext',
     description: 'Text for the filter button',
     defaultMessage: 'Filter results based on your criteria'
+  },
+  deletemsg: {
+    id: 'featuretable.deletemsg',
+    description: 'Error message to show when delete fails',
+    defaultMessage: 'There was an issue deleting the feature.'
   }
 });
 
@@ -125,6 +131,14 @@ const messages = defineMessages({
  */
 class FeatureTable extends React.Component {
   static propTypes = {
+    /**
+     * The toggleGroup to use. When this tool is activated, all other tools in the same toggleGroup will be deactivated.
+     */
+    toggleGroup: React.PropTypes.string,
+    /**
+     * Identifier to use for this tool. Can be used to group tools together.
+     */
+    toolId: React.PropTypes.string,
     /**
      * The ol3 map in which the source for the table resides.
      */
@@ -164,7 +178,11 @@ class FeatureTable extends React.Component {
     /**
      * Callback that gets called when the height needs updating of the parent container.
      */
-    onUpdate: React.PropTypes.func
+    onUpdate: React.PropTypes.func,
+    /**
+     * Should we allow edit (modify, delete) from the table? Needs an EditPopup component in the application.
+     */
+    allowEdit: React.PropTypes.bool
   };
 
   static contextTypes = {
@@ -178,6 +196,7 @@ class FeatureTable extends React.Component {
   };
 
   static defaultProps = {
+    allowEdit: true,
     pageSize: 20,
     pointZoom: 16,
     sortable: true,
@@ -186,6 +205,7 @@ class FeatureTable extends React.Component {
 
   constructor(props, context) {
     super(props);
+    this._dispatchToken = ToolUtil.register(this);
     this._proxy = context.proxy;
     this._requestHeaders = context.proxy;
     this._onChange = this._onChange.bind(this);
@@ -195,7 +215,6 @@ class FeatureTable extends React.Component {
     this.state = {
       pageSize: props.pageSize,
       pages: -1,
-      active: false,
       errorOpen: false,
       error: false,
       muiTheme: context.muiTheme || getMuiTheme(),
@@ -221,8 +240,15 @@ class FeatureTable extends React.Component {
     }
   }
   componentWillUnmount() {
+    AppDispatcher.unregister(this._dispatchToken);
     FeatureStore.removeChangeListener(this._onChange);
     global.removeEventListener('resize', this.setDimensionsOnState);
+  }
+  activate(interactions) {
+    ToolUtil.activate(this, interactions);
+  }
+  deactivate() {
+    ToolUtil.deactivate(this);
   }
   _attachResizeEvent() {
     global.addEventListener('resize', this.setDimensionsOnState);
@@ -350,14 +376,6 @@ class FeatureTable extends React.Component {
       errorOpen: false
     });
   }
-  _handleRequestCloseActive() {
-    this.setState({
-      active: false
-    });
-  }
-  setActive(active) {
-    this.setState({active: active});
-  }
   _onSelect(props) {
     SelectActions.toggleFeature(this._layer, props.row);
   }
@@ -384,6 +402,63 @@ class FeatureTable extends React.Component {
       });
     }, this, this._proxy, this._requestHeaders);
   }
+  _redraw() {
+    this._layer.getSource().updateParams({'_olSalt': Math.random()});
+  }
+  _onEditFeature(feature) {
+    if (!this._modifyCollection) {
+      this._modifyCollection = new ol.Collection();
+    }
+    if (!this._modifyLayer) {
+      this._modifyLayer = new ol.layer.Vector({
+        title: null,
+        zIndex: 1000,
+        source: new ol.source.Vector({
+          features: this._modifyCollection
+        })
+      });
+      this.props.map.addLayer(this._modifyLayer);
+    }
+    this._modifyCollection.clear();
+    if (!this._modify) {
+      this._modify = new ol.interaction.Modify({
+        features: this._modifyCollection,
+        wrapX: false
+      });
+    }
+    this.activate(this._modify);
+    this._modifyCollection.push(feature);
+    var me = this;
+    ToolActions.showEditPopup(feature, this._layer, function() {
+      me._modifyCollection.clear();
+      me.deactivate();
+    });
+  }
+  _onDelete(feature) {
+    var me = this;
+    const {formatMessage} = this.props.intl;
+    if (this._layer.get('wfsInfo')) {
+      WFSService.deleteFeature(this._layer, feature, function() {
+        FeatureStore.removeFeature(me._layer, feature);
+        var source = me._layer.getSource();
+        if (source instanceof ol.source.Vector) {
+          source.removeFeature(feature);
+        } else {
+          me._redraw();
+        }
+      }, function(xmlhttp, msg) {
+        msg = msg || formatMessage(messages.deletemsg) + xmlhttp.status + ' ' + xmlhttp.statusText;
+        me.setState({
+          errorOpen: true,
+          error: true,
+          msg: msg
+        });
+      });
+    } else {
+      FeatureStore.removeFeature(me._layer, feature);
+      me._layer.getSource().removeFeature(feature);
+    }
+  }
   render() {
     const {formatMessage} = this.props.intl;
     var schema, id;
@@ -407,12 +482,29 @@ class FeatureTable extends React.Component {
     var columns = [{
       id: 'selector',
       header: '',
-      sortable: sortable,
+      sortable: false,
       render: function(props) {
         var selected = me.state.selected.indexOf(props.row) !== -1;
         return (<Checkbox disableTouchRipple={true} checked={selected} onCheck={me._onSelect.bind(me, props)} />);
       }
     }];
+    if (this.props.allowEdit) {
+      columns.push({
+        id: 'delete',
+        header: '',
+        sortable: false,
+        render: function(props) {
+          return (<ActionDelete style={{cursor: 'pointer'}} onTouchTap={me._onDelete.bind(me, props.row)} />);
+        }
+      }, {
+        id: 'edit',
+        header: '',
+        sortable: false,
+        render: function(props) {
+          return (<DrawIcon style={{cursor: 'pointer'}} onTouchTap={me._onEditFeature.bind(me, props.row)} />);
+        }
+      });
+    }
     for (var key in schema) {
       if (schema[key] === 'link') {
         columns.push({
@@ -465,14 +557,6 @@ class FeatureTable extends React.Component {
     }
     return (
       <Paper zDepth={0} className={classNames('sdk-component feature-table', this.props.className)}>
-        <Snackbar
-          autoHideDuration={5000}
-          open={!this._layer && this.state.active}
-          bodyStyle={{lineHeight: '24px', height: 'auto'}}
-          style={{bottom: 'auto', top: 0, position: 'absolute'}}
-          message={formatMessage(messages.nodatamsg)}
-          onRequestClose={this._handleRequestCloseActive.bind(this)}
-        />
         <ToolbarGroup ref='form'>
           <LayerSelector {...this.props} id='table-layerSelector' disabled={!this._layer} ref='layerSelector' onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList} map={this.props.map} value={id} />
           <TextField style={{display: this._layer instanceof ol.layer.Vector ? 'block' : 'none'}} floatingLabelText={formatMessage(messages.filterlabel)} id='featuretable-filter' disabled={!this._layer} ref='filter' onChange={this._filterByText.bind(this)} hintText={formatMessage(messages.filterplaceholder)} />

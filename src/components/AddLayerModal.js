@@ -40,6 +40,7 @@ import './AddLayerModal.css';
 
 const newOption = 'NEW';
 const uploadOption = 'UPLOAD';
+const createOption = 'CREATE';
 const ID_PREFIX = 'sdk-addlayer-';
 
 const messages = defineMessages({
@@ -47,6 +48,26 @@ const messages = defineMessages({
     id: 'addwmslayermodal.servertypelabel',
     description: 'Label for the combo for server type',
     defaultMessage: 'Type'
+  },
+  createtitlehinttext: {
+    id: 'addwmslayermodal.createtitlehinttext',
+    description: 'Hint text for the layer title field',
+    defaultMessage: 'Enter layer title'
+  },
+  createtitlelabeltext: {
+    id: 'addwmslayermodal.createtitlelabeltext',
+    description: 'Label text for layer title field',
+    defaultMessage: 'Layer title'
+  },
+  attributeslabel: {
+    id: 'addwmslayermodal.attributeslabel',
+    description: 'Label for attributes input field',
+    defaultMessage: 'Attributes (comma-separated names)'
+  },
+  attributeshint: {
+    id: 'addwmslayermodal.attributeshint',
+    description: 'Hint text for attributes input field',
+    defaultMessage: 'Use comma-separated names'
   },
   selectlayercombo: {
     id: 'addwmslayermodal.selectlayercombo',
@@ -143,6 +164,11 @@ const messages = defineMessages({
     description: 'Combo box option for add local layer',
     defaultMessage: 'Local'
   },
+  createlayeroption: {
+    id: 'addwmslayermodal.createlayeroption',
+    description: 'Combo box option for create local layer',
+    defaultMessage: 'Create new layer'
+  },
   uploadhinttext: {
     id: 'addwmslayermodal.uploadhinttext',
     description: 'Hint text for upload',
@@ -157,6 +183,26 @@ const messages = defineMessages({
     id: 'addwmslayermodal.uploadicontooltip',
     description: 'Tooltip for upload icon button',
     defaultMessage: 'Upload file'
+  },
+  pointgeomtype: {
+    id: 'addwmslayermodal.pointgeomtype',
+    description: 'Title for point geometry option in combo box',
+    defaultMessage: 'Point'
+  },
+  linegeomtype: {
+    id: 'addwmslayermodal.linegeomtype',
+    description: 'Title for line geometry option in combo box',
+    defaultMessage: 'LineString'
+  },
+  polygeomtype: {
+    id: 'addwmslayermodal.polygeomtype',
+    description: 'Title for polygon geometry option in combo box',
+    defaultMessage: 'Polygon'
+  },
+  geometrytypelabel: {
+    id: 'addwmslayermodal.geometrytypelabel',
+    description: 'Label for the geometry type combo',
+    defaultMessage: 'Geometry type'
   }
 });
 
@@ -208,6 +254,10 @@ class AddLayerModal extends React.PureComponent {
       */
     allowUpload: React.PropTypes.bool,
     /**
+     * Should we allow people to create new vector layers?
+     */
+    allowCreate: React.PropTypes.bool,
+    /**
      * @ignore
      */
     intl: intlShape.isRequired
@@ -226,7 +276,8 @@ class AddLayerModal extends React.PureComponent {
     allowUserInput: false,
     allowUpload: true,
     open: false,
-    isDrawer: false
+    isDrawer: false,
+    allowCreate: true
   };
   static formats = {
     'geojson': new ol.format.GeoJSON(),
@@ -244,8 +295,10 @@ class AddLayerModal extends React.PureComponent {
     this.state = {
       loading: false,
       fileName: '',
+      attributes: '',
       newUrl: '',
       newName: '',
+      createTitle: '',
       sources: this.props.sources.slice(),
       newType: AddLayerModal.addNewTypes[0],
       showNew: false,
@@ -386,8 +439,36 @@ class AddLayerModal extends React.PureComponent {
   close() {
     this.props.onRequestClose();
   }
+  _createLayer() {
+    var layerName = this.state.createTitle;
+    var geometryType = this.state.geometryType;
+    var attributes = this.state.attributes;
+    if (layerName !== '') {
+      var fill = this.state.fillColor ? new ol.style.Fill({color: this.state.fillColor}) : undefined;
+      var stroke = this.state.strokeColor ? new ol.style.Stroke({color: this.state.strokeColor, width: this.state.strokeWidth}) : undefined;
+      var style = new ol.style.Style({
+        fill: fill,
+        stroke: stroke,
+        image: (fill || stroke) ? new ol.style.Circle({stroke: stroke, fill: fill, radius: 7}) : undefined
+      });
+      var layer = new ol.layer.Vector({
+        title: layerName,
+        id: this._generateId(),
+        geometryType: geometryType,
+        attributes: attributes.split(','),
+        isSelectable: true,
+        isRemovable: true,
+        style: style,
+        source: new ol.source.Vector({wrapX: false, useSpatialIndex: false})
+      });
+      this.props.map.addLayer(layer);
+      this.close();
+    }
+  }
   addLayers() {
-    if (this.state.showUpload) {
+    if (this.state.showCreate) {
+      this._createLayer();
+    } else if (this.state.showUpload) {
       this._readVectorFile();
     } else {
       var layer = this._onLayerClick(this.state.layer);
@@ -420,12 +501,14 @@ class AddLayerModal extends React.PureComponent {
     this.setState({newName: value});
   }
   _onSourceChange(evt, idx, value) {
-    if (value === uploadOption) {
-      this.setState({layerInfo: null, showNew: false, showUpload: true, layer: null, source: value});
+    if (value === createOption) {
+      this.setState({layerInfo: null, showNew: false, showUpload: false, showCreate: true, layer: null, source: value});
+    } else if (value === uploadOption) {
+      this.setState({layerInfo: null, showNew: false, showUpload: true, showCreate: false, layer: null, source: value});
     } else if (value === newOption) {
-      this.setState({layerInfo: null, showUpload: false, showNew: true, layer: null, source: value});
+      this.setState({layerInfo: null, showUpload: false, showNew: true, showCreate: false, layer: null, source: value});
     } else {
-      this.setState({layerInfo: null, showUpload: false, showNew: false, source: value}, function() {
+      this.setState({layerInfo: null, showUpload: false, showNew: false, showCreate: false, source: value}, function() {
         this._refreshService();
       }, this);
     }
@@ -550,6 +633,21 @@ class AddLayerModal extends React.PureComponent {
   _onChangeStroke(state) {
     this.setState(state);
   }
+  _changeGeometryType(evt, idx, value) {
+    this.setState({
+      geometryType: value
+    });
+  }
+  _onChangeCreateTitle(evt, value) {
+    this.setState({
+      createTitle: value
+    });
+  }
+  _onChangeAttributes(evt, value) {
+    this.setState({
+      attributes: value
+    });
+  }
   render() {
     const {formatMessage} = this.props.intl;
     var selectOptions = this.state.sources.map(function(source, idx) {
@@ -560,6 +658,9 @@ class AddLayerModal extends React.PureComponent {
     });
     if (this.props.allowUpload) {
       selectOptions.push(<MenuItem key={uploadOption} value={uploadOption} primaryText={formatMessage(messages.uploadoption)} />);
+    }
+    if (this.props.allowCreate) {
+      selectOptions.push(<MenuItem key={createOption} value={createOption} primaryText={formatMessage(messages.createlayeroption)} />);
     }
     if (this.props.allowUserInput) {
       selectOptions.push(<MenuItem key={newOption} value={newOption} primaryText={formatMessage(messages.addserveroption)} />);
@@ -588,6 +689,27 @@ class AddLayerModal extends React.PureComponent {
       <Button key='closeButton' buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />,
       <Button key='saveButton' buttonType='Flat' primary={true} label={formatMessage(messages.addbutton)} onTouchTap={this.addLayers.bind(this)} />
     ];
+    var create;
+    if (this.state.showCreate) {
+      create = (<div className='noBorderPaper'>
+        <TextField
+          value={this.state.createTitle}
+          floatingLabelFixed={true}
+          onChange={this._onChangeCreateTitle.bind(this)}
+          hintText={formatMessage(messages.createtitlehinttext)}
+          floatingLabelText={formatMessage(messages.createtitlelabeltext)}
+          fullWidth={true}
+        />
+        <SelectField fullWidth={true} value={this.state.geometryType} onChange={this._changeGeometryType.bind(this)} floatingLabelText={formatMessage(messages.geometrytypelabel)}>
+          <MenuItem key='Point' value='Point' primaryText={formatMessage(messages.pointgeomtype)} />
+          <MenuItem key='LineString' value='LineString' primaryText={formatMessage(messages.linegeomtype)} />
+          <MenuItem key='Polygon' value='Polygon' primaryText={formatMessage(messages.polygeomtype)} />
+        </SelectField>
+        <TextField fullWidth={true} floatingLabelFixed={true} value={this.state.attributes} hintText={formatMessage(messages.attributeshint)} floatingLabelText={formatMessage(messages.attributeslabel)} onChange={this._onChangeAttributes.bind(this)} />
+        <FillEditor disabled={true} onChange={this._onChangeFill.bind(this)} />
+        <StrokeEditor disabled={true} onChange={this._onChangeStroke.bind(this)} />
+      </div>);
+    }
     var upload;
     if (this.state.showUpload) {
       upload = (<div>
@@ -619,7 +741,7 @@ class AddLayerModal extends React.PureComponent {
         </div>
       );
     }
-    var content = (<div>{newDialog}{upload}{layers}{loadingIndicator}{error}</div>);
+    var content = (<div>{newDialog}{upload}{create}{layers}{loadingIndicator}{error}</div>);
     var select = (<SelectField fullWidth={true} floatingLabelText={formatMessage(messages.sourcecombo)} value={this.state.source} onChange={this._onSourceChange.bind(this)}>
                 {selectOptions}
               </SelectField>);
