@@ -17,12 +17,16 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppDispatcher from '../dispatchers/AppDispatcher';
 import ToolUtil from '../toolutil';
 import ToolActions from '../actions/ToolActions';
-import DrawIcon from 'material-ui/svg-icons/content/create';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 
 const messages = defineMessages({
+  dropdowntitle: {
+    id: 'drawfeature.dropdowntitle',
+    description: 'Text for draw feature',
+    defaultMessage: 'Draw Feature'
+  },
   polygon: {
     id: 'drawfeature.polygon',
     description: 'Text for draw polygon menu item',
@@ -175,10 +179,13 @@ class DrawFeature extends React.PureComponent {
   }
   render() {
     const {formatMessage} = this.props.intl;
-    return (<IconMenu disabled={this.state.disabled} iconButtonElement={<IconButton><DrawIcon /></IconButton>}>
-      <MenuItem onTouchTap={this._drawPoly.bind(this)} primaryText={formatMessage(messages.polygon)} />
-      <MenuItem onTouchTap={this._drawLine.bind(this)} primaryText={formatMessage(messages.linestring)} />
-      <MenuItem onTouchTap={this._drawPoint.bind(this)} primaryText={formatMessage(messages.point)} />
+    return (<IconMenu
+      anchorOrigin={{horizontal: 'right', vertical: 'bottom'}} targetOrigin={{horizontal: 'right', vertical: 'top'}}
+      iconButtonElement={<IconButton tooltip={formatMessage(messages.dropdowntitle)} disabled={this.state.disabled} iconClassName="headerIcons ms ms-draw" />}
+      disabled={this.state.disabled}>
+      <MenuItem leftIcon={<i className='ms ms-draw-polygon'/>} primaryText={formatMessage(messages.polygon)} onTouchTap={this._drawPoly.bind(this)} />
+      <MenuItem leftIcon={<i className='ms ms-draw-line'/>} onTouchTap={this._drawLine.bind(this)} primaryText={formatMessage(messages.linestring)} />
+      <MenuItem leftIcon={<i className='ms ms-draw-point'/>} onTouchTap={this._drawPoint.bind(this)} primaryText={formatMessage(messages.point)} />
     </IconMenu>);
   }
 }
