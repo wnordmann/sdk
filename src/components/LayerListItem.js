@@ -314,7 +314,8 @@ class LayerListItem extends React.PureComponent {
       tableOpen: false,
       open: true,
       styleOpen: false,
-      checked: props.layer.getVisible()
+      checked: props.layer.getVisible(),
+      previousBase: ''
     };
   }
   getChildContext() {
@@ -376,18 +377,8 @@ static formats = {
     var i, ii;
     var baseLayers = [];
 
-    var forEachLayer = function(layers, layer) {
-      if (layer instanceof ol.layer.Group) {
-        layer.getLayers().forEach(function(groupLayer) {
-          forEachLayer(layers, groupLayer);
-        });
-      } else if (layer.get('type') === 'base') {
-        layers.push(layer);
-      }
-    };
-
     var layers = this.props.map.getLayers();
-    forEachLayer(baseLayers, this.props.map.getLayerGroup());
+    this.forEachLayer(baseLayers, this.props.map.getLayerGroup());
     for (i = 0, ii = baseLayers.length; i < ii; ++i) {
       baseLayers[i].setVisible(false);
     }
@@ -399,25 +390,46 @@ static formats = {
     this.props.layer.setVisible(true);
     this.props.setBaseLayer(this.props.layer.get('id'))
   }
+  forEachLayer(layers, layer) {
+    var self = this;
+    if (layer instanceof ol.layer.Group) {
+      layer.getLayers().forEach(function(groupLayer) {
+        self.forEachLayer(layers, groupLayer);
+      });
+    } else if (layer.get('type') === 'base') {
+      layers.push(layer);
+    }
+  }
+  _handleBaseParentVisibility(event) {
+    var i, ii;
+    var baseLayers = [];
+
+    if (event.target.className.indexOf('fa-eye-slash') > 0) {
+      this.setState({previousBase: this.props.currentBaseLayer});
+      this.props.setBaseLayer('baseParent')
+      this.forEachLayer(baseLayers, this.props.map.getLayerGroup());
+      for (i = 0, ii = baseLayers.length; i < ii; ++i) {
+        baseLayers[i].setVisible(false);
+      }
+    } else {
+      this.props.setBaseLayer(this.state.previousBase);
+      this.forEachLayer(baseLayers, this.props.map.getLayerGroup());
+      for (i = 0, ii = baseLayers.length; i < ii; ++i) {
+        if (baseLayers[i].get('id') === this.state.previousBase) {
+          baseLayers[i].setVisible(true);
+        }
+      }
+    }
+  }
   _handleVisibility(event) {
     var i, ii;
     var baseLayers = [];
     var visible = event.target.className.indexOf('fa-eye-slash') > 0;
 
-    var forEachLayer = function(layers, layer) {
-      if (layer instanceof ol.layer.Group) {
-        layer.getLayers().forEach(function(groupLayer) {
-          forEachLayer(layers, groupLayer);
-        });
-      } else if (layer.get('type') === 'base') {
-        layers.push(layer);
-      }
-    };
-
     if (this.props.layer instanceof ol.layer.Vector || this.props.layer instanceof ol.layer.Tile) {
       this.props.layer.setVisible(visible);
     } else if (this.props.layer instanceof ol.layer.Group) {
-      forEachLayer(baseLayers, this.props.map.getLayerGroup());
+      this.forEachLayer(baseLayers, this.props.map.getLayerGroup());
       for (i = 0, ii = baseLayers.length; i < ii; ++i) {
         baseLayers[i].setVisible(false);
       }
@@ -574,7 +586,7 @@ static formats = {
     if (this.props.showOpacity && source && layer.get('type') !== 'base') {
       var val = layer.getOpacity();
       var slider = (<Slider sliderStyle={{marginTop: '0px', top: '14px', marginBottom: '0'}} defaultValue={val} onChange={this._changeOpacity.bind(this)} />);
-      opacity = <MenuItem leftIcon={<i className='ms ms-opacity'></i>}>{slider}</MenuItem>
+      opacity = <MenuItem leftIcon={<i className='menuIcon ms ms-opacity'></i>}>{slider}</MenuItem>
     }
     var table;
     if (this.props.showTable && (this.props.layer instanceof ol.layer.Vector || this.props.layer.get('wfsInfo') !== undefined)) {
@@ -615,7 +627,7 @@ static formats = {
     }
     var remove;
     if (this.props.allowRemove && layer.get('type') !== 'base' && layer.get('isRemovable') === true) {
-      remove = <MenuItem primaryText={formatMessage(messages.removebuttonlabel)} leftIcon={<i className='fa fa-trash'></i>}onTouchTap={this._remove.bind(this)} />
+      remove = <MenuItem primaryText={formatMessage(messages.removebuttonlabel)} leftIcon={<i className='menuIcon fa fa-trash'></i>}onTouchTap={this._remove.bind(this)} />
     }
     var edit;
     if (this.props.allowEditing && layer.get('isWFST') === true) {
@@ -657,6 +669,8 @@ static formats = {
 
     var unchecked = <i className='fa fa-eye-slash' onClick={this._handleVisibility.bind(this)}></i>;
     var baseVisibility = <i onClick={this._handleBaseVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye':this.props.currentBaseLayer === this.props.layer.get('id'), 'fa-eye-slash':this.props.currentBaseLayer !== this.props.layer.get('id')})}></i>;
+    var baseParentVisibility = <i onClick={this._handleBaseParentVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye':this.props.currentBaseLayer === 'baseParent', 'fa-eye-slash':this.props.currentBaseLayer !== 'baseParent'})}></i>;
+    var fixedWidth =  <i className='fa fa-fw'></i>;
     var visibility = this.state.checked ? checked : unchecked;
     var popoverEllipsis = (!(this.props.layer instanceof ol.layer.Group) && (opacity || download || filter || remove || table || label || edit)) ? (
       <div>
@@ -687,10 +701,10 @@ static formats = {
     };
     var rightIconButtons = <span className="fixedContainer">{styling}{zoomTo}{visibility}{popoverEllipsis}</span>;
     if (layer.get('type') === 'base-group') {
-      rightIconButtons = <span className="fixedContainer">{baseVisibility}</span>;
+      rightIconButtons = <span className="fixedContainer">{baseParentVisibility}{fixedWidth}</span>;
     }
     if (layer.get('type') === 'base') {
-      rightIconButtons = <span className="fixedContainer">{baseVisibility}</span>;
+      rightIconButtons = <span className="fixedContainer">{baseVisibility}{fixedWidth}</span>;
     }
 
     return connectDragSource(connectDropTarget(
