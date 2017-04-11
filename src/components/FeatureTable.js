@@ -178,7 +178,11 @@ class FeatureTable extends React.Component {
     /**
      * Callback that gets called when the height needs updating of the parent container.
      */
-    onUpdate: React.PropTypes.func
+    onUpdate: React.PropTypes.func,
+    /**
+     * Should we allow edit (modify, delete) from the table? Needs an EditPopup component in the application.
+     */
+    allowEdit: React.PropTypes.bool
   };
 
   static contextTypes = {
@@ -192,6 +196,7 @@ class FeatureTable extends React.Component {
   };
 
   static defaultProps = {
+    allowEdit: true,
     pageSize: 20,
     pointZoom: 16,
     sortable: true,
@@ -482,21 +487,24 @@ class FeatureTable extends React.Component {
         var selected = me.state.selected.indexOf(props.row) !== -1;
         return (<Checkbox disableTouchRipple={true} checked={selected} onCheck={me._onSelect.bind(me, props)} />);
       }
-    }, {
-      id: 'delete',
-      header: '',
-      sortable: false,
-      render: function(props) {
-        return (<ActionDelete style={{cursor: 'pointer'}} onTouchTap={me._onDelete.bind(me, props.row)} />);
-      }
-    }, {
-      id: 'edit',
-      header: '',
-      sortable: false,
-      render: function(props) {
-        return (<DrawIcon style={{cursor: 'pointer'}} onTouchTap={me._onEditFeature.bind(me, props.row)} />);
-      }
     }];
+    if (this.props.allowEdit) {
+      columns.push({
+        id: 'delete',
+        header: '',
+        sortable: false,
+        render: function(props) {
+          return (<ActionDelete style={{cursor: 'pointer'}} onTouchTap={me._onDelete.bind(me, props.row)} />);
+        }
+      }, {
+        id: 'edit',
+        header: '',
+        sortable: false,
+        render: function(props) {
+          return (<DrawIcon style={{cursor: 'pointer'}} onTouchTap={me._onEditFeature.bind(me, props.row)} />);
+        }
+      });
+    }
     for (var key in schema) {
       if (schema[key] === 'link') {
         columns.push({
