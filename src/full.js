@@ -134,8 +134,8 @@ global.Select = Select;
 import ToolActions from './actions/ToolActions';
 global.ToolActions = ToolActions;
 
-import WFST from './components/WFST';
-global.WFST = WFST;
+import DrawFeature from './components/DrawFeature';
+global.DrawFeature = DrawFeature;
 
 import Zoom from './components/Zoom';
 global.Zoom = Zoom;
