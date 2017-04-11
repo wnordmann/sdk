@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {assert} from 'chai';
+import {assert, Simulate} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
@@ -61,6 +61,20 @@ describe('LayerList', function() {
     ), container);
     var items = container.querySelectorAll('.layer-list-item');
     assert.equal(items.length, 1);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('generates a drawer than can close', function() {
+    var container = document.createElement('div');
+    var drawerOpen = true;
+    ReactDOM.render((
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <LayerList intl={intl} map={map} open={drawerOpen}/>
+      </MuiThemeProvider>
+    ), container);
+    var button = container.querySelectorAll('.layerlistbutton');
+    Simulate.click(button);
+    assert.equal(drawerOpen, false);
     ReactDOM.unmountComponentAtNode(container);
   });
 
