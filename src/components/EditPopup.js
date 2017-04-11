@@ -104,7 +104,6 @@ class EditPopup extends React.Component {
       values: {}
     };
     this.props.map.on('singleclick', this._onMapClick, this);
-    this.active = true;
   }
   getChildContext() {
     return {muiTheme: this._muiTheme};

@@ -15,6 +15,7 @@ import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import classNames from 'classnames';
+import AppDispatcher from '../dispatchers/AppDispatcher';
 import WFSService from '../services/WFSService';
 import debounce from  'debounce';
 import ReactTable from 'react-table'
@@ -131,6 +132,14 @@ const messages = defineMessages({
 class FeatureTable extends React.Component {
   static propTypes = {
     /**
+     * The toggleGroup to use. When this tool is activated, all other tools in the same toggleGroup will be deactivated.
+     */
+    toggleGroup: React.PropTypes.string,
+    /**
+     * Identifier to use for this tool. Can be used to group tools together.
+     */
+    toolId: React.PropTypes.string,
+    /**
      * The ol3 map in which the source for the table resides.
      */
     map: React.PropTypes.instanceOf(ol.Map).isRequired,
@@ -191,6 +200,7 @@ class FeatureTable extends React.Component {
 
   constructor(props, context) {
     super(props);
+    this._dispatchToken = ToolUtil.register(this);
     this._proxy = context.proxy;
     this._requestHeaders = context.proxy;
     this._onChange = this._onChange.bind(this);
@@ -225,8 +235,15 @@ class FeatureTable extends React.Component {
     }
   }
   componentWillUnmount() {
+    AppDispatcher.unregister(this._dispatchToken);
     FeatureStore.removeChangeListener(this._onChange);
     global.removeEventListener('resize', this.setDimensionsOnState);
+  }
+  activate(interactions) {
+    ToolUtil.activate(this, interactions);
+  }
+  deactivate() {
+    ToolUtil.deactivate(this);
   }
   _attachResizeEvent() {
     global.addEventListener('resize', this.setDimensionsOnState);
@@ -404,12 +421,12 @@ class FeatureTable extends React.Component {
         wrapX: false
       });
     }
-    ToolUtil.activate(this, [this._modify]);
+    this.activate(this._modify);
     this._modifyCollection.push(feature);
     var me = this;
     ToolActions.showEditPopup(feature, this._layer, function() {
       me._modifyCollection.clear();
-      ToolUtil.deactivate(me);
+      me.deactivate();
     });
   }
   _onDelete(feature) {
