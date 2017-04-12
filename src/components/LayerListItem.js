@@ -715,7 +715,7 @@ static formats = {
           insetChildren={true}
           innerDivStyle={flexContainer}
           autoGenerateNestedIndicator={false}
-          primaryText={<span className="menuItem"><span className="statusIcons">{arrowIcon}{layersIcon}<span> {this.props.title}</span></span>{rightIconButtons}</span>}
+          primaryText={<span className="menuItem"><span className="statusIcons">{arrowIcon}{layersIcon} <span className={'layer-list-name'}>{this.props.title}</span></span>{rightIconButtons}</span>}
           nestedItems={this.props.nestedItems}
           open={this.state.open} />
         <div style={{paddingLeft: 72}}>

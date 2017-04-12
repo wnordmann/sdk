@@ -737,6 +737,26 @@ class AddLayerModal extends React.PureComponent {
     var select = (<SelectField fullWidth={true} floatingLabelText={formatMessage(messages.sourcecombo)} value={this.state.source} onChange={this._onSourceChange.bind(this)}>
                 {selectOptions}
               </SelectField>);
+    var drawer = (<Drawer width={360} className={classNames('sdk-component add-layer-modal', this.props.className)} actions={actions} autoScrollBodyContent={true} title={formatMessage(messages.title)} open={this.props.open} onRequestClose={this.close.bind(this)}>
+            <AppBar
+              title={formatMessage(messages.title)}
+              iconElementLeft={<IconButton label={formatMessage(messages.closebutton)} > <NavigationArrowBack/> </IconButton>}
+              onLeftIconButtonTouchTap={this.close.bind(this)}
+              className={'left-drawer-titleBar'}
+              />
+            <div className="noBorderPaper">
+              {select}
+              {content}
+            </div>
+            <div className='footerButtons'>
+              {actions}
+            </div>
+          </Drawer>);
+    var dialog = (<Dialog bodyStyle={{padding: 20}} className={classNames('sdk-component add-layer-modal', this.props.className)} actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.title)} open={this.props.open} onRequestClose={this.close.bind(this)}>
+        {select}
+        {content}
+      </Dialog>);
+    var displayContainer = this.props.isDrawer ? drawer : dialog;
     return (
         <Dialog autoScrollBodyContent={true} bodyStyle={{padding: 20}} inline={this.props.inline} title={formatMessage(messages.title)} className='add-layer-modal' actions={actions} open={this.props.open} onRequestClose={this.close.bind(this)}>
           {select}
