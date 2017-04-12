@@ -19,6 +19,7 @@ import LayerConstants from '../constants/LayerConstants';
 import WFSService from '../services/WFSService';
 import RESTService from '../services/RESTService';
 import debounce from  'debounce';
+import FeatureStore from '../stores/FeatureStore';
 
 let config = {
   layers: []
@@ -94,8 +95,10 @@ class LayerStore extends EventEmitter {
       }
     }
     var name = layer.get('name') ? layer.get('name') : source.getParams().LAYERS;
+    var me = this;
     WFSService.describeFeatureType(url, name, function(wfsInfo) {
       this.set('wfsInfo', wfsInfo);
+      FeatureStore.addLayer(this, false, me._proxy, me._requestHeaders);
     }, function() {
       this.set('isSelectable', false);
       this.set('wfsInfo', undefined);
