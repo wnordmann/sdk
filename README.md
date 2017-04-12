@@ -12,6 +12,9 @@ For example usage see [the corresponding apps repository](https://github.com/bou
 
 For online docs see [HTML](https://boundlessgeo.github.io/sdk/book/index.html)
 
+## Docs
+Do not browse the docs from the docs subdirectory in github, those are incomplete (a lot of files are generated). So either browse them online, run ```npm run docs``` to generate them locally or run ```npm run serve:gitbook``` which will run the docs on http://localhost:4000
+
 ## Node version manager (nvm)
 Install the node version manager from https://github.com/creationix/nvm
 For the SDK, you should be using node long-term support (LTS) so:
