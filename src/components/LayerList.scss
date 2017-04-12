@@ -21,6 +21,12 @@
       &.down {}
       &.up {}
     }
+    .layer-list-name {
+      overflow: hidden;
+      width: 170px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
   .viz {
     &.closed {

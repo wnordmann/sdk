@@ -627,7 +627,9 @@ class AddLayerModal extends React.PureComponent {
             <AppBar
               title={formatMessage(messages.title)}
               iconElementLeft={<IconButton label={formatMessage(messages.closebutton)} > <NavigationArrowBack/> </IconButton>}
-              onLeftIconButtonTouchTap={this.close.bind(this)}/>
+              onLeftIconButtonTouchTap={this.close.bind(this)}
+              className={'left-drawer-titleBar'}
+              />
             <div className="noBorderPaper">
               {select}
               {content}
