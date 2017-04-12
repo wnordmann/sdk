@@ -405,19 +405,19 @@ static formats = {
     var baseLayers = [];
 
     if (event.target.className.indexOf('fa-eye-slash') > 0) {
-      this.setState({previousBase: this.props.currentBaseLayer});
-      this.props.setBaseLayer('baseParent')
-      this.forEachLayer(baseLayers, this.props.map.getLayerGroup());
-      for (i = 0, ii = baseLayers.length; i < ii; ++i) {
-        baseLayers[i].setVisible(false);
-      }
-    } else {
       this.props.setBaseLayer(this.state.previousBase);
       this.forEachLayer(baseLayers, this.props.map.getLayerGroup());
       for (i = 0, ii = baseLayers.length; i < ii; ++i) {
         if (baseLayers[i].get('id') === this.state.previousBase) {
           baseLayers[i].setVisible(true);
         }
+      }
+    } else {
+      this.setState({previousBase: this.props.currentBaseLayer});
+      this.props.setBaseLayer('baseParent')
+      this.forEachLayer(baseLayers, this.props.map.getLayerGroup());
+      for (i = 0, ii = baseLayers.length; i < ii; ++i) {
+        baseLayers[i].setVisible(false);
       }
     }
   }
@@ -669,7 +669,7 @@ static formats = {
 
     var unchecked = <i className='fa fa-eye-slash' onClick={this._handleVisibility.bind(this)}></i>;
     var baseVisibility = <i onClick={this._handleBaseVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye':this.props.currentBaseLayer === this.props.layer.get('id'), 'fa-eye-slash':this.props.currentBaseLayer !== this.props.layer.get('id')})}></i>;
-    var baseParentVisibility = <i onClick={this._handleBaseParentVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye':this.props.currentBaseLayer === 'baseParent', 'fa-eye-slash':this.props.currentBaseLayer !== 'baseParent'})}></i>;
+    var baseParentVisibility = <i onClick={this._handleBaseParentVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye-slash':this.props.currentBaseLayer === 'baseParent', 'fa-eye':this.props.currentBaseLayer !== 'baseParent'})}></i>;
     var fixedWidth =  <i className='fa fa-fw'></i>;
     var visibility = this.state.checked ? checked : unchecked;
     var popoverEllipsis = (!(this.props.layer instanceof ol.layer.Group) && (opacity || download || filter || remove || table || label || edit)) ? (
