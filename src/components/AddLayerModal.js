@@ -34,6 +34,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import FillEditor from './FillEditor';
 import StrokeEditor from './StrokeEditor';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
+import FeatureStore from '../stores/FeatureStore';
 
 import classNames from 'classnames';
 import './AddLayerModal.css';
@@ -593,6 +594,7 @@ class AddLayerModal extends React.PureComponent {
                 isSelectable: true
               });
               map.addLayer(lyr);
+              FeatureStore.addLayer(lyr);
               var extent = lyr.getSource().getExtent();
               var valid = true;
               for (var i = 0, ii = extent.length; i < ii; ++i) {
