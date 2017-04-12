@@ -551,6 +551,7 @@ class AddLayerModal extends React.PureComponent {
     this._text = text;
   }
   _generateId() {
+    this._counter++;
     return ID_PREFIX + this._counter;
   }
   _readVectorFile() {
