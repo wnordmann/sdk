@@ -445,8 +445,8 @@ class AddLayerModal extends React.PureComponent {
     var geometryType = this.state.geometryType;
     var attributes = this.state.attributes;
     if (layerName !== '') {
-      var fill = this.state.fillColor ? new ol.style.Fill({color: this.state.fillColor}) : undefined;
-      var stroke = this.state.strokeColor ? new ol.style.Stroke({color: this.state.strokeColor, width: this.state.strokeWidth}) : undefined;
+      var fill = this.state.fillColor ? new ol.style.Fill({color: util.transformColor(this.state.fillColor)}) : undefined;
+      var stroke = this.state.strokeColor ? new ol.style.Stroke({color: util.transformColor(this.state.strokeColor), width: this.state.strokeWidth}) : undefined;
       var style = new ol.style.Style({
         fill: fill,
         stroke: stroke,
@@ -463,6 +463,7 @@ class AddLayerModal extends React.PureComponent {
         source: new ol.source.Vector({wrapX: false, useSpatialIndex: false})
       });
       this.props.map.addLayer(layer);
+      FeatureStore.addLayer(layer);
       this.close();
     }
   }
