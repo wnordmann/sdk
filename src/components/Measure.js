@@ -22,6 +22,8 @@ import AppDispatcher from '../dispatchers/AppDispatcher';
 import ToolUtil from '../toolutil';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Button from './Button';
+import Divider from 'material-ui/Divider';
+import Delete from 'material-ui/svg-icons/action/delete';
 
 const messages = defineMessages({
   dropdowntext: {
@@ -322,9 +324,10 @@ class Measure extends React.PureComponent {
         iconButtonElement={<Button buttonType='Icon' tooltip={formatMessage(messages.dropdowntitle)} disabled={this.state.disabled} iconClassName="headerIcons ms ms-measure-distance" />}
         value={this.state.value}
         onChange={this._handleChange.bind(this)}>
-        <MenuItem disabled={this.state.disabled} value={1} primaryText={formatMessage(messages.measuredistancetext)}/>
-        <MenuItem disabled={this.state.disabled} value={2} primaryText={formatMessage(messages.measureareatext)}/>
-        <MenuItem disabled={this.state.disabled} primaryText={formatMessage(messages.cleartext)}/>
+        <MenuItem disabled={this.state.disabled} value={1} primaryText={formatMessage(messages.measuredistancetext)} leftIcon={<i className="ms ms-measure-distance"></i>} />
+        <MenuItem disabled={this.state.disabled} value={2} primaryText={formatMessage(messages.measureareatext)} leftIcon={<i className="ms ms-measure-area"></i>} />
+        <Divider />
+        <MenuItem disabled={this.state.disabled} primaryText={formatMessage(messages.cleartext)} leftIcon={<Delete />} />
       </IconMenu>
     );
   }
