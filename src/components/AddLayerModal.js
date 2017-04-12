@@ -472,7 +472,7 @@ class AddLayerModal extends React.PureComponent {
       this._createLayer();
     } else if (this.state.showUpload) {
       this._readVectorFile();
-    } else {
+    } else if (this.state.layer) {
       var layer = this._onLayerClick(this.state.layer);
       var extent = layer.get('EX_GeographicBoundingBox');
       if (extent) {
@@ -491,10 +491,8 @@ class AddLayerModal extends React.PureComponent {
   _onNewTypeChange(evt, idx, value) {
     this.setState({newType: value});
   }
-  _onNewUrlKeyPress(evt, value) {
-    if (evt.key === 'Enter') {
-      this.addServer();
-    }
+  _onNewUrlBlur() {
+    this.addServer();
   }
   _onNewUrlChange(evt, value) {
     this.setState({newUrl: value});
@@ -741,7 +739,7 @@ class AddLayerModal extends React.PureComponent {
         <div>
           <SelectField fullWidth={true} floatingLabelText={formatMessage(messages.servertypelabel)} value={this.state.newType} onChange={this._onNewTypeChange.bind(this)}>{typeOptions}</SelectField>
           <TextField floatingLabelFixed={true} hintText={formatMessage(messages.newservernamehint)} value={this.state.newName} onChange={this._onNewNameChange.bind(this)} fullWidth={true} floatingLabelText={formatMessage(messages.newservername)} />
-          <TextField floatingLabelFixed={true} hintText={formatMessage(messages.newserverurlhint)} value={this.state.newUrl} onKeyPress={this._onNewUrlKeyPress.bind(this)} onChange={this._onNewUrlChange.bind(this)} fullWidth={true} floatingLabelText={formatMessage(messages.newserverurl)} />
+          <TextField floatingLabelFixed={true} hintText={formatMessage(messages.newserverurlhint)} value={this.state.newUrl} onBlur={this._onNewUrlBlur.bind(this)} onChange={this._onNewUrlChange.bind(this)} fullWidth={true} floatingLabelText={formatMessage(messages.newserverurl)} />
         </div>
       );
     }
