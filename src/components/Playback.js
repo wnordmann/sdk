@@ -230,6 +230,19 @@ class Playback extends React.PureComponent {
   _onDateChange(evt, value) {
     this.setState({date: value.getTime()});
   }
+  style={
+    background-color: rgba(255,255,255,.4);
+  border-radius: 4px;
+  position: absolute;
+  top: 10px;
+  left: 100px;
+  padding-top: 7px;
+  padding-left: 12px;
+  height: 50px;
+  width: 370px;
+  z-index: 1001;
+
+  }
   render() {
     var buttonIcon;
     if (this.state.play === true) {
