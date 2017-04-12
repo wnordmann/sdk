@@ -34,6 +34,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import FillEditor from './FillEditor';
 import StrokeEditor from './StrokeEditor';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
+import FeatureStore from '../stores/FeatureStore';
 
 import classNames from 'classnames';
 import './AddLayerModal.css';
@@ -444,8 +445,8 @@ class AddLayerModal extends React.PureComponent {
     var geometryType = this.state.geometryType;
     var attributes = this.state.attributes;
     if (layerName !== '') {
-      var fill = this.state.fillColor ? new ol.style.Fill({color: this.state.fillColor}) : undefined;
-      var stroke = this.state.strokeColor ? new ol.style.Stroke({color: this.state.strokeColor, width: this.state.strokeWidth}) : undefined;
+      var fill = this.state.fillColor ? new ol.style.Fill({color: util.transformColor(this.state.fillColor)}) : undefined;
+      var stroke = this.state.strokeColor ? new ol.style.Stroke({color: util.transformColor(this.state.strokeColor), width: this.state.strokeWidth}) : undefined;
       var style = new ol.style.Style({
         fill: fill,
         stroke: stroke,
@@ -462,6 +463,7 @@ class AddLayerModal extends React.PureComponent {
         source: new ol.source.Vector({wrapX: false, useSpatialIndex: false})
       });
       this.props.map.addLayer(layer);
+      FeatureStore.addLayer(layer);
       this.close();
     }
   }
@@ -593,6 +595,7 @@ class AddLayerModal extends React.PureComponent {
                 isSelectable: true
               });
               map.addLayer(lyr);
+              FeatureStore.addLayer(lyr);
               var extent = lyr.getSource().getExtent();
               var valid = true;
               for (var i = 0, ii = extent.length; i < ii; ++i) {
