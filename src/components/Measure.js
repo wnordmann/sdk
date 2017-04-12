@@ -49,7 +49,7 @@ const messages = defineMessages({
   cleartext: {
     id: 'measure.cleartext',
     description: 'Text for the clear measurements menu option',
-    defaultMessage: 'Remove measurements'
+    defaultMessage: 'Remove'
   }
 });
 
