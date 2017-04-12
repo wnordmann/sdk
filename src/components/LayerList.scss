@@ -13,6 +13,7 @@
     flex: 2;
     i {
       width: 24px;
+      font-size: 16px;
     }
     .content {
       flex: 1;
@@ -104,6 +105,7 @@
 
 }
 
-// .fa, .ms {
-//   padding: 4px 0 0 4px;
-// }
+.ms {
+  font-size: 24px;
+  color: #757575;
+}
