@@ -116,7 +116,7 @@ class LeftNav extends React.PureComponent {
       var menuItems = [];
       var icons = {}
       if (this.props.tabList) {
-        tabs = (<Tabs tabItemContainerStyle = { noDisplayStyle } inkBarStyle = { noDisplayStyle } value = { this.state.selectedIndex }>{this.props.tabList}</Tabs>);
+        tabs = (<Tabs style={{height: 'calc(100% - 64px)'}} tabTemplateStyle={{height: '100%'}} contentContainerStyle={{height: '100%'}} tabItemContainerStyle = { noDisplayStyle } inkBarStyle = { noDisplayStyle } value = { this.state.selectedIndex }>{this.props.tabList}</Tabs>);
         this.props.tabList.forEach((tab) => {
           if (tab.props.onActive) {
             icons[tab.props.value] = {icon: this.getIconFromTab(tab), onTouchTap: tab.props.onActive};
