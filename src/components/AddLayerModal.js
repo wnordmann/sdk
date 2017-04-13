@@ -22,7 +22,7 @@ import Button from './Button';
 import MenuItem from 'material-ui/MenuItem';
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
-import Dialog from 'material-ui/Dialog';
+import Dialog from './Dialog';
 import SelectField from 'material-ui/SelectField';
 import WMSService from '../services/WMSService';
 import WFSService from '../services/WFSService';
@@ -747,7 +747,7 @@ class AddLayerModal extends React.PureComponent {
     var select = (<SelectField fullWidth={true} floatingLabelText={formatMessage(messages.sourcecombo)} value={this.state.source} onChange={this._onSourceChange.bind(this)}>
                 {selectOptions}
               </SelectField>);
-    var drawer = (<Drawer width={360} className={classNames('sdk-component add-layer-modal', this.props.className)} actions={actions} autoScrollBodyContent={true} title={formatMessage(messages.title)} open={this.props.open} onRequestClose={this.close.bind(this)}>
+/*    var drawer = (<Drawer width={360} className={classNames('sdk-component add-layer-modal', this.props.className)} actions={actions} autoScrollBodyContent={true} title={formatMessage(messages.title)} open={this.props.open} onRequestClose={this.close.bind(this)}>
             <AppBar
               title={formatMessage(messages.title)}
               iconElementLeft={<IconButton label={formatMessage(messages.closebutton)} > <NavigationArrowBack/> </IconButton>}
@@ -765,10 +765,13 @@ class AddLayerModal extends React.PureComponent {
         {content}
       </Dialog>);
     var displayContainer = this.props.isDrawer ? drawer : dialog;
-
+*/
     return (
       <div>
-        {displayContainer}
+        <Dialog inline={this.props.isDrawer} title={formatMessage(messages.title)} className='add-layer-modal' actions={actions} open={this.props.open} onRequestClose={this.close.bind(this)}>
+          {select}
+          {content}
+        </Dialog>
       </div>
     );
   }

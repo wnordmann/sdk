@@ -15,4 +15,5 @@ dist
 src/components/AddLayerModal.css
 src/components/LayerList.css
 src/components/Main.css
-Header.css
+src/components/Header.css
+src/components/Dialog.css

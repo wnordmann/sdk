@@ -17,8 +17,20 @@ import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import AppBar from 'material-ui/AppBar';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import IconButton from 'material-ui/IconButton';
+import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
+import Drawer from 'material-ui/Drawer';
+import './Dialog.css';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
-export default class Dialog extends React.PureComponent {
+const messages = defineMessages({
+  closebutton: {
+    id: 'dialog.closebutton',
+    description: 'Text for close button',
+    defaultMessage: 'Cancel'
+  }
+});
+
+class Dialog extends React.PureComponent {
   static propTypes = {
     className: React.PropTypes.string,
     inline: React.PropTypes.bool,
@@ -27,32 +39,36 @@ export default class Dialog extends React.PureComponent {
     autoScrollBodyContent: React.PropTypes.bool,
     actions: React.PropTypes.node,
     children: React.PropTypes.node,
-    bodyStyle: React.PropTypes.object
+    /**
+     * @ignore
+     */
+    intl: intlShape.isRequired
   };
 
   static defaultProps = {
     inline: false,
-    open: false,
-    bodyStyle: {}
+    open: false
   };
   render() {
+    const {formatMessage} = this.props.intl;
     if (this.props.inline) {
-      const style = {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        height: '100%',
-        width: '100%',
-        zIndex : 10,
-        display: this.props.open ? 'block' : 'none'
-      };
-      const bodyStyle = Object.assign(this.props.bodyStyle, {
-        overflow: this.props.autoScrollBodyContent ? 'auto' : 'visible',
-        height: 'calc(100% - 120px)'
-      });
-      return (<Paper className={this.props.className} style={style} zDepth={0}><AppBar showMenuIconButton={false} iconElementRight={<IconButton onTouchTap={this.props.onRequestClose}><NavigationClose /></IconButton>} title={this.props.title}/><Paper zDepth={0} style={bodyStyle}>{this.props.children}</Paper><Toolbar><ToolbarGroup style={{width: '100%', justifyContent: 'flex-end'}}>{React.Children.toArray(this.props.actions)}</ToolbarGroup></Toolbar></Paper>);
+      return (
+        <Drawer width={360} className={this.props.className} autoScrollBodyContent={this.props.autoScrollBodyContent} title={this.props.title} open={this.props.open} onRequestClose={this.props.onRequestClose}>
+          <AppBar
+            title={this.props.title}
+            iconElementLeft={<IconButton label={formatMessage(messages.closebutton)} > <NavigationArrowBack/> </IconButton>} onLeftIconButtonTouchTap={this.props.onRequestClose}/>
+          <div className="noBorderPaper">
+            {this.props.children}
+          </div>
+          <div className='footerButtons'>
+            {this.props.actions}
+          </div>
+        </Drawer>
+      );
     } else {
       return (<MuiDialog {...this.props} />);
     }
   }
 }
+
+export default injectIntl(Dialog);
