@@ -12,10 +12,7 @@
 
 import React from 'react';
 import MuiDialog from 'material-ui/Dialog';
-import Paper from 'material-ui/Paper';
-import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import AppBar from 'material-ui/AppBar';
-import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import IconButton from 'material-ui/IconButton';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import Drawer from 'material-ui/Drawer';

@@ -20,8 +20,6 @@ import TextField from 'material-ui/TextField';
 import IconButton from 'material-ui/IconButton';
 import Button from './Button';
 import MenuItem from 'material-ui/MenuItem';
-import AppBar from 'material-ui/AppBar';
-import Drawer from 'material-ui/Drawer';
 import Dialog from './Dialog';
 import SelectField from 'material-ui/SelectField';
 import WMSService from '../services/WMSService';
@@ -33,10 +31,7 @@ import CircularProgress from 'material-ui/CircularProgress';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import FillEditor from './FillEditor';
 import StrokeEditor from './StrokeEditor';
-import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import FeatureStore from '../stores/FeatureStore';
-
-import classNames from 'classnames';
 import './AddLayerModal.css';
 
 const newOption = 'NEW';

@@ -12,11 +12,7 @@
 
 import React from 'react';
 import ol from 'openlayers';
-import classNames from 'classnames';
 import Dialog from './Dialog';
-import Drawer from 'material-ui/Drawer';
-import AppBar from 'material-ui/AppBar';
-import IconButton from 'material-ui/IconButton';
 import {List, ListItem} from 'material-ui/List';
 import LayerActions from '../actions/LayerActions';
 import Button from './Button';
@@ -31,7 +27,6 @@ import FilterService from '../services/FilterService';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import NewRuleModal from './NewRuleModal';
 import './StyleModal.css';
-import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 
 const messages = defineMessages({
   title: {
@@ -315,6 +310,7 @@ class StyleModal extends React.PureComponent {
           <List>
             {ruleItems}
           </List>
+          {error}
         </Dialog>
         <NewRuleModal intl={this.props.intl} inline={this.props.inline} open={this.state.newRuleOpen} onRequestClose={this.closeNew.bind(this)} onAdd={this._addNewRule.bind(this)} />
       </span>
