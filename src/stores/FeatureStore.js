@@ -216,11 +216,15 @@ class FeatureStore extends EventEmitter {
     this._config[id].features.clear();
     this._config[id].features.addFeatures(features);
   }
-  loadFeatures(layer, startIndex, pageSize, sortingInfo, onSuccess, onFailure, scope, opt_proxy, opt_requestHeaders) {
+  loadFeatures(layer, startIndex, pageSize, sortingInfo, onSuccess, onFailure, scope, opt_proxy, opt_requestHeaders, opt_clear) {
     var srsName = this._map.getView().getProjection().getCode();
     var me = this;
     var success = function(features) {
-      me.appendFeatures(layer, features);
+      if (opt_clear) {
+        me._setFeatures(layer, features);
+      } else {
+        me.appendFeatures(layer, features);
+      }
       me.emitChange();
       if (onSuccess) {
         onSuccess.call(scope);
