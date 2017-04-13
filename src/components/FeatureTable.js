@@ -386,6 +386,18 @@ class FeatureTable extends React.Component {
     const {formatMessage} = this.props.intl;
     this.setState({loading: true});
     var start = state.page * state.pageSize;
+    var clear = false;
+    var sortingInfo = state.sorting.length > 0 ? state.sorting[0] : {};
+    if (sortingInfo.id !== this._id || sortingInfo.asc !== this._asc) {
+      clear = true;
+    }
+    if (state.sorting.length > 0) {
+      this._asc = state.sorting[0].asc;
+      this._id = state.sorting[0].id;
+    } else {
+      delete this._asc;
+      delete this._id;
+    }
     FeatureStore.loadFeatures(this._layer, start, state.pageSize, state.sorting, function() {
       this.setState({
         page: state.page,
@@ -400,7 +412,7 @@ class FeatureTable extends React.Component {
         msg: formatMessage(messages.loaderrormsg, {msg: msg || (xmlhttp.status + ' ' + xmlhttp.statusText)}),
         loading: false
       });
-    }, this, this._proxy, this._requestHeaders);
+    }, this, this._proxy, this._requestHeaders, clear);
   }
   _redraw() {
     this._layer.getSource().updateParams({'_olSalt': Math.random()});
