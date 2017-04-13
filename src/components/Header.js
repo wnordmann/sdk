@@ -71,7 +71,7 @@ class Header extends React.Component {
       <AppBar
           title={this.props.title}
           iconElementRight={
-            <div className="headerIcons">
+            <div>
               {this.props.children}
             </div>
           }
