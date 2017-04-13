@@ -20,17 +20,8 @@ import IconButton from 'material-ui/IconButton';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import Drawer from 'material-ui/Drawer';
 import './Dialog.css';
-import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
-const messages = defineMessages({
-  closebutton: {
-    id: 'dialog.closebutton',
-    description: 'Text for close button',
-    defaultMessage: 'Cancel'
-  }
-});
-
-class Dialog extends React.PureComponent {
+export default class Dialog extends React.PureComponent {
   static propTypes = {
     className: React.PropTypes.string,
     inline: React.PropTypes.bool,
@@ -38,11 +29,7 @@ class Dialog extends React.PureComponent {
     title: React.PropTypes.string,
     autoScrollBodyContent: React.PropTypes.bool,
     actions: React.PropTypes.node,
-    children: React.PropTypes.node,
-    /**
-     * @ignore
-     */
-    intl: intlShape.isRequired
+    children: React.PropTypes.node
   };
 
   static defaultProps = {
@@ -50,13 +37,12 @@ class Dialog extends React.PureComponent {
     open: false
   };
   render() {
-    const {formatMessage} = this.props.intl;
     if (this.props.inline) {
       return (
         <Drawer width={360} className={this.props.className} autoScrollBodyContent={this.props.autoScrollBodyContent} title={this.props.title} open={this.props.open} onRequestClose={this.props.onRequestClose}>
           <AppBar
             title={this.props.title}
-            iconElementLeft={<IconButton label={formatMessage(messages.closebutton)} > <NavigationArrowBack/> </IconButton>} onLeftIconButtonTouchTap={this.props.onRequestClose}/>
+            iconElementLeft={<IconButton> <NavigationArrowBack/> </IconButton>} onLeftIconButtonTouchTap={this.props.onRequestClose}/>
           <div className="noBorderPaper">
             {this.props.children}
           </div>
@@ -70,5 +56,3 @@ class Dialog extends React.PureComponent {
     }
   }
 }
-
-export default injectIntl(Dialog);
