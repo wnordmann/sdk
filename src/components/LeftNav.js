@@ -143,7 +143,7 @@ class LeftNav extends React.PureComponent {
 
             iconElementRight = {this.state.appBarIcon}
             onRightIconButtonTouchTap = {this.state.appBarOnTouch}
-            className={'left-drawer-titleBar'} />
+            className='left-drawer-titleBar' />
           { tabs }
           { this.props.children }
         </Drawer>
