@@ -77,7 +77,6 @@ class NewRuleModal extends React.PureComponent {
   render() {
     const {formatMessage} = this.props.intl;
     var actions = [
-      <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.props.onRequestClose} />,
       <Button buttonType='Flat' primary={true} label={formatMessage(messages.addrulebutton)} onTouchTap={this.props.onAdd.bind(this, this.state.rulename)} />
     ];
     return (

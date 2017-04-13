@@ -12,11 +12,7 @@
 
 import React from 'react';
 import ol from 'openlayers';
-import classNames from 'classnames';
 import Dialog from './Dialog';
-import Drawer from 'material-ui/Drawer';
-import AppBar from 'material-ui/AppBar';
-import IconButton from 'material-ui/IconButton';
 import {List, ListItem} from 'material-ui/List';
 import LayerActions from '../actions/LayerActions';
 import Button from './Button';
@@ -31,7 +27,6 @@ import FilterService from '../services/FilterService';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import NewRuleModal from './NewRuleModal';
 import './StyleModal.css';
-import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 
 const messages = defineMessages({
   title: {
@@ -87,10 +82,6 @@ class StyleModal extends React.PureComponent {
      * Css class name to apply on the root element of this component.
      */
     className: React.PropTypes.string,
-    /**
-    * Drawer where true, modal when false, default false
-    */
-    isDrawer : React.PropTypes.bool,
     /**
      * @ignore
      */
@@ -310,50 +301,17 @@ class StyleModal extends React.PureComponent {
       return (<span key={key}><ListItem onNestedListToggle={this._resizeDialog.bind(this)} nestedItems={[editor]} primaryTogglesNestedList={true} primaryText={rule.name} /><Divider /></span>);
     }, this);
     var actions = [
-      <Button key={1} buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />,
-      <Button key={2} buttonType='Flat' label={formatMessage(messages.addrulebutton)} tooltipPosition='top' tooltip={formatMessage(messages.addrulebuttontitle)} onTouchTap={this._addRule.bind(this)} />,
-      <Button key={3} buttonType='Flat' primary={true} label={formatMessage(messages.savebutton)} onTouchTap={this._saveStyle.bind(this)} />
+      <Button buttonType='Flat' label={formatMessage(messages.addrulebutton)} tooltipPosition='top' tooltip={formatMessage(messages.addrulebuttontitle)} onTouchTap={this._addRule.bind(this)} />,
+      <Button buttonType='Flat' primary={true} label={formatMessage(messages.savebutton)} onTouchTap={this._saveStyle.bind(this)} />
     ];
-    var drawer = (
-      <Drawer
-        width={360}
-        className={classNames('sdk-component style-modal', this.props.className)}
-        open={this.props.open}
-        onRequestClose={this.close.bind(this)}>
-        <AppBar
-          title={formatMessage(messages.title, {layer: this.props.layer.get('title')})}
-          iconElementLeft={<IconButton label={formatMessage(messages.closebutton)} > <NavigationArrowBack/> </IconButton>}
-          onLeftIconButtonTouchTap={this.close.bind(this)}/>
-        <div className="noBorderPaper">
+    return (
+      <span>
+        <Dialog ref='dialog' autoScrollBodyContent={true} inline={this.props.inline} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} className='style-modal' actions={actions} open={this.props.open} onRequestClose={this.close.bind(this)}>
           <List>
             {ruleItems}
           </List>
           {error}
-        </div>
-        <div className='footerButtons'>
-          {actions}
-        </div>
-      </Drawer>
-    );
-    var dialog = (
-      <Dialog ref='dialog'
-        className={classNames('sdk-component style-modal', this.props.className)}
-        actions={actions}
-        autoScrollBodyContent={true}
-        modal={true}
-        title={formatMessage(messages.title, {layer: this.props.layer.get('title')})}
-        open={this.props.open}
-        onRequestClose={this.close.bind(this)}>
-        <List>
-          {ruleItems}
-        </List>
-        {error}
-      </Dialog>
-    );
-    var displayContainer = this.props.isDrawer ? drawer : dialog;
-    return (
-      <span>
-        {displayContainer}
+        </Dialog>
         <NewRuleModal intl={this.props.intl} inline={this.props.inline} open={this.state.newRuleOpen} onRequestClose={this.closeNew.bind(this)} onAdd={this._addNewRule.bind(this)} />
       </span>
     );

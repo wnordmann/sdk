@@ -642,7 +642,7 @@ static formats = {
     var canStyle = layer.get('wfsInfo') && this.props.allowStyling;
     if (canStyle) {
       styling = (<i className='ms ms-style' onTouchTap={this._style.bind(this)}> </i>);
-      styleModal = (<StyleModal isDrawer={true} {...this.props} open={this.state.styleOpen} onRequestClose={this._closeStyling.bind(this)} layer={this.props.layer} />);
+      styleModal = (<StyleModal {...this.props} open={this.state.styleOpen} inline={this.props.inlineDialogs} onRequestClose={this._closeStyling.bind(this)} layer={this.props.layer} />);
     }
     if (this.props.showTable && (this.props.layer instanceof ol.layer.Vector || this.props.layer.get('wfsInfo') !== undefined)) {
       var actions = [

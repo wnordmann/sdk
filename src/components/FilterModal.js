@@ -24,20 +24,20 @@ import FilterHelp from './FilterHelp';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const messages = defineMessages({
+  closebutton: {
+    id: 'filtermodal.closebutton',
+    description: 'Text for close button',
+    defaultMessage: 'Cancel'
+  },
   inputlabel: {
     id: 'filtermodal.inputlabel',
-    description: 'Label for filter input in modal dialog, only used for screen readers',
-    defaultMessage: 'Text to filter features in layer by'
+    description: 'Label for filter input',
+    defaultMessage: 'Filter'
   },
   addfiltertext: {
     id: 'filtermodal.addfiltertext',
     description: 'Title for the add filter button',
     defaultMessage: 'Add'
-  },
-  removefiltertext: {
-    id: 'filtermodal.removefiltertext',
-    description: 'Title for the remove filter button',
-    defaultMessage: 'Remove'
   },
   title: {
     id: 'filtermodal.title',
@@ -48,11 +48,6 @@ const messages = defineMessages({
     id: 'filtermodal.errortext',
     description: 'Error text',
     defaultMessage: 'Invalid filter, should be for instance foo == "Bar"'
-  },
-  closebutton: {
-    id: 'filtermodal.closebutton',
-    description: 'Text for close button',
-    defaultMessage: 'Close'
   }
 });
 
@@ -208,13 +203,13 @@ class FilterModal extends React.PureComponent {
       return (<ListItem key={filterName} rightIcon={<DeleteIcon />} primaryText={f.title} ref={filterName} onTouchTap={this._removeFilter.bind(this, f)} />);
     }, this);
     var actions = [
-      <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
+      <Button key='closeButton' buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />,
+      <Button buttonType='Flat' primary={true} label={formatMessage(messages.addfiltertext)} onTouchTap={this._addFilter.bind(this)} />
     ];
     return (
       <Dialog inline={this.props.inline} className={classNames('sdk-component filter-modal', this.props.className)} actions={actions} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} modal={true} open={this.props.open} onRequestClose={this.close.bind(this)}>
-        <TextField name='filter' errorText={errorText} style={{width: 512}} ref='filterTextBox' />
+        <TextField floatingLabelText={formatMessage(messages.inputlabel)} floatingLabelFixed={true} name='filter' errorText={errorText} fullWidth={true} ref='filterTextBox' />
         <FilterHelp intl={this.props.intl} />
-        <Button buttonStyle={{float: 'right', top: -45}} label={formatMessage(messages.addfiltertext)} onTouchTap={this._addFilter.bind(this)} />
         <List>
           {filters}
         </List>
