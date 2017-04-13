@@ -273,7 +273,6 @@ class AddLayerModal extends React.PureComponent {
     allowUserInput: false,
     allowUpload: true,
     open: false,
-    isDrawer: false,
     allowCreate: true
   };
   static formats = {
