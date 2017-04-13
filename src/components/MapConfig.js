@@ -176,8 +176,8 @@ class MapConfig extends React.PureComponent {
     <span>
       <IconMenu
         style={this.props.style}
-        className={classNames('sdk-component map-config', this.props.className)}
-        anchorOrigin={{horizontal: 'left', vertical: 'top'}} targetOrigin={{horizontal: 'left', vertical: 'top'}}
+        className={classNames('sdk-component map-config headerIcons', this.props.className)}
+        anchorOrigin={{horizontal: 'right', vertical: 'bottom'}} targetOrigin={{horizontal: 'right', vertical: 'top'}}
         iconButtonElement={<IconButton  disabled={this.state.disabled}><NavigationMoreVert/></IconButton>}
         value={this.state.value}
         onChange={this._handleChange.bind(this)}>
