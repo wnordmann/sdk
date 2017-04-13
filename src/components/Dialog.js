@@ -61,7 +61,7 @@ class Dialog extends React.PureComponent {
             {this.props.children}
           </div>
           <div className='footerButtons'>
-            {this.props.actions}
+            {React.Children.toArray(this.props.actions)}
           </div>
         </Drawer>
       );

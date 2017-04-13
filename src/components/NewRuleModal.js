@@ -77,7 +77,7 @@ class NewRuleModal extends React.PureComponent {
   render() {
     const {formatMessage} = this.props.intl;
     var actions = [
-      <Button key={0} buttonType='Flat' primary={true} label={formatMessage(messages.addrulebutton)} onTouchTap={this.props.onAdd.bind(this, this.state.rulename)} />
+      <Button buttonType='Flat' primary={true} label={formatMessage(messages.addrulebutton)} onTouchTap={this.props.onAdd.bind(this, this.state.rulename)} />
     ];
     return (
       <Dialog inline={this.props.inline} actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.dialogtitle)} open={this.props.open} onRequestClose={this.props.onRequestClose}>
