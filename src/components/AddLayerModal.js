@@ -148,7 +148,7 @@ const messages = defineMessages({
   addbutton: {
     id: 'addwmslayermodal.addbutton',
     description: 'Text for the add button',
-    defaultMessage: 'Save'
+    defaultMessage: 'Add'
   },
   closebutton: {
     id: 'addwmslayermodal.closebutton',
@@ -163,12 +163,12 @@ const messages = defineMessages({
   uploadoption: {
     id: 'addwmslayermodal.uploadoption',
     description: 'Combo box option for add local layer',
-    defaultMessage: 'Local'
+    defaultMessage: 'Upload Local File'
   },
   createlayeroption: {
     id: 'addwmslayermodal.createlayeroption',
     description: 'Combo box option for create local layer',
-    defaultMessage: 'Create new layer'
+    defaultMessage: 'Create New Layer'
   },
   uploadhinttext: {
     id: 'addwmslayermodal.uploadhinttext',
