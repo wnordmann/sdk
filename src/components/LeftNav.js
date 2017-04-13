@@ -1,6 +1,10 @@
 import React from 'react';
 import Drawer from 'material-ui/Drawer';
-import {MenuItem, Menu, Tabs, Popover, AppBar}from 'material-ui';
+import Menu from 'material-ui/Menu';
+import MenuItem from 'material-ui/MenuItem';
+import {Tabs} from 'material-ui/Tabs';
+import AppBar from 'material-ui/AppBar';
+import Popover from 'material-ui/Popover';
 import NavigationArrowDropDown from 'material-ui/svg-icons/navigation/arrow-drop-down';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import IconButton from 'material-ui/IconButton';
