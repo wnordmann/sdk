@@ -314,7 +314,7 @@ class StyleModal extends React.PureComponent {
           title={formatMessage(messages.title, {layer: this.props.layer.get('title')})}
           iconElementLeft={<IconButton label={formatMessage(messages.closebutton)} > <NavigationArrowBack/> </IconButton>}
           onLeftIconButtonTouchTap={this.close.bind(this)}
-          className={'left-drawer-titleBar'}
+          className='left-drawer-titleBar'
           />
         <div className="noBorderPaper">
           <List>
