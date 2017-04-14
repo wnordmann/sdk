@@ -21,7 +21,7 @@ import PauseIcon from 'material-ui/svg-icons/av/pause';
 import Slider from 'material-ui/Slider';
 import DatePicker from 'material-ui/DatePicker';
 import LayerStore from '../stores/LayerStore';
-import {injectIntl, intlShape} from 'react-intl';
+import {injectIntl, intlShape, formatDate} from 'react-intl';
 
 /**
  * Adds a slider to the map that can be used to select a given date, and modifies the visibility of layers and features depending on their timestamp and the current time.
@@ -261,22 +261,32 @@ class Playback extends React.PureComponent {
     var slider;
     var datePicker;
     var title;
-    if (this.props.title){
-      title = (<span>{this.props.title}</span>);
+
+    if (this.props.title) {
+      title = (<div>{this.props.title}</div>);
     } else {
-      title = (<span>Playback</span>);
+      title = (<div>Playback</div>);
     }
     if (this.state.date !== undefined) {
       playButton = (<Button buttonType='Icon' key='play' style={{'float': 'left'}} onTouchTap={this._playPause.bind(this)}>{buttonIcon}</Button>);
       this._refreshTimeLayers();
       if (this.state.dates) {
-        slider = (<Slider step={1} key='slider' style={{width: 200, 'float': 'left', marginTop: 8}} min={0} max={this.state.dates.length - 1} value={this.state.dateStep} onChange={this._onRangeChangeValues.bind(this)} />);
+        slider = (<Slider step={1} key='slider' style={{width: 150, 'float': 'left', marginTop: 8}} min={0} max={this.state.dates.length - 1} value={this.state.dateStep} onChange={this._onRangeChangeValues.bind(this)} />);
         datePicker = (<DatePicker name='date' key='date' disabled={true} autoOk={true} style={{width: 200, paddingLeft: 15, overflow: 'hidden'}} value={new Date(this.state.date)} />);
       } else if (this.state.minDate !== undefined && this.state.maxDate !== undefined) {
         var minDate = new Date(this.state.minDate);
         var maxDate = new Date(this.state.maxDate);
         slider = (<Slider step={this.state.interval} key='slider' style={{width: 200, 'float': 'left', marginTop: 8}} min={this.state.minDate} max={this.state.maxDate} value={this.state.date} onChange={this._onRangeChange.bind(this)} />);
-        datePicker = (<DatePicker name='date' key='date' autoOk={true} minDate={minDate} maxDate={maxDate} style={{width: 85, paddingLeft: 18, overflow: 'hidden'}} onChange={this._onDateChange.bind(this)} value={new Date(this.state.date)} />);
+        datePicker = (<DatePicker
+            DateTimeFormat={formatDate}
+            name='date'
+            key='date'
+            autoOk={true}
+            minDate={minDate}
+            maxDate={maxDate}
+            style={{width: 85, paddingLeft: 18, overflow: 'hidden'}}
+            onChange={this._onDateChange.bind(this)}
+            value={new Date(this.state.date)} />);
       }
     }
     // var controls;
@@ -296,8 +306,8 @@ class Playback extends React.PureComponent {
     return (
       <div className={classNames('sdk-component playback', this.props.className)} style={style}>
         {title}
-        {slider}
         {datePicker}
+        {slider}
         {playButton}
       </div>
     );
