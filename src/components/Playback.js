@@ -248,8 +248,6 @@ class Playback extends React.PureComponent {
       display: 'flex',
       bottom: 0,
       alignSelf: 'center'
-
-
     };
     var buttonIcon;
     if (this.state.play === true) {
@@ -276,7 +274,7 @@ class Playback extends React.PureComponent {
       } else if (this.state.minDate !== undefined && this.state.maxDate !== undefined) {
         var minDate = new Date(this.state.minDate);
         var maxDate = new Date(this.state.maxDate);
-        slider = (<Slider step={this.state.interval} key='slider' style={{width: 200, 'float': 'left', marginTop: 8}} min={this.state.minDate} max={this.state.maxDate} value={this.state.date} onChange={this._onRangeChange.bind(this)} />);
+        slider = (<Slider step={this.state.interval} key='slider' style={{width: 150}} min={this.state.minDate} max={this.state.maxDate} value={this.state.date} onChange={this._onRangeChange.bind(this)} />);
         datePicker = (<DatePicker
             DateTimeFormat={formatDate}
             name='date'
