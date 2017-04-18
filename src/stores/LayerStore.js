@@ -160,7 +160,9 @@ class LayerStore extends EventEmitter {
     return config;
   }
   emitChange() {
-    this.emit('CHANGE');
+    if (this._silent !== true) {
+      this.emit('CHANGE');
+    }
   }
   addChangeListener(cb) {
     this.on('CHANGE', cb);
@@ -173,6 +175,9 @@ class LayerStore extends EventEmitter {
   }
   removeErrorListener(cb) {
     this.removeListener('ERROR', cb);
+  }
+  silent(silent) {
+    this._silent = silent;
   }
 }
 
@@ -198,7 +203,9 @@ AppDispatcher.register((payload) => {
       } else {
         layers = _LayerStore.getMap().getLayers();
       }
+      _LayerStore.silent(true);
       layers.remove(action.layer);
+      _LayerStore.silent(false);
       layers.insertAt(action.hoverIndex, action.layer);
       break;
     default:
