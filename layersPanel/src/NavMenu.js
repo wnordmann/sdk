@@ -47,6 +47,11 @@ class AppBarExampleIcon extends Component {
     var boxStyle = {
       marginLeft: 0
     };
+    var flexContainer = {
+      display: 'flex',
+      flexDirection: 'row-reverse',
+      padding: '16px'
+    };
     var noPadding = {
       padding: 0
     };
@@ -57,15 +62,18 @@ class AppBarExampleIcon extends Component {
         primaryText={<span className="statusIcons"><i className="fa fa-angle-down"></i><i className="ms ms-layers"></i><span> ESMR117</span></span>}
         primaryTogglesNestedList={true}
         insetChildren={false}
+        innerDivStyle={flexContainer}
         rightIconButton={<span className="fixedContainer"><i className="fa fa-eye"></i><i className="fa fa-crosshairs"></i><i className="fa fa-cog"></i></span>}
         nestedItems={[
           <ListItem
             className={'menuItem'}
+            innerDivStyle={flexContainer}
             primaryText={<span className="statusIcons"><i className="fa fa-angle-down"></i><i className="ms ms-layers"></i><span> ESMR117</span></span>}
             rightIconButton={<span className="fixedContainer"><i className="fa fa-eye"></i><i className="fa fa-crosshairs"></i><i className="fa fa-cog"></i></span>}
           />,
           <ListItem
             className={'menuItem'}
+            innerDivStyle={flexContainer}
             primaryText={<span className="statusIcons"><i className="fa fa-angle-down"></i><i className="ms ms-layers"></i><span> ESMR117</span></span>}
             rightIconButton={<span className="fixedContainer"><i className="fa fa-eye"></i><i className="fa fa-crosshairs"></i><i className="fa fa-cog"></i></span>}
           />,
