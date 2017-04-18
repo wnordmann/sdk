@@ -146,5 +146,8 @@ global.DrawFeature = DrawFeature;
 import Zoom from './components/Zoom';
 global.Zoom = Zoom;
 
+import ZoomToLatLon from './components/ZoomToLatLon';
+global.ZoomToLatLon = ZoomToLatLon;
+
 import ZoomSlider from './components/ZoomSlider';
 global.ZoomSlider = ZoomSlider;
