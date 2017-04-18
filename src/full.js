@@ -76,6 +76,9 @@ global.Geolocation = Geolocation;
 import Globe from './components/Globe';
 global.Globe = Globe;
 
+import Header from './components/Header';
+global.Header = Header;
+
 import HomeButton from './components/HomeButton';
 global.HomeButton = HomeButton;
 
@@ -87,6 +90,9 @@ global.InfoPopup = InfoPopup;
 
 import LayerList from './components/LayerList';
 global.LayerList = LayerList;
+
+import LeftNav from './components/LeftNav';
+global.LeftNav = LeftNav;
 
 import LoadingPanel from './components/LoadingPanel';
 global.LoadingPanel = LoadingPanel;
