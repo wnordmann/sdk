@@ -91,7 +91,7 @@ describe('LayerStore', function() {
     var idx = level2.getLayers().getArray().indexOf(level3a);
     assert.equal(idx, 1);
     LayerActions.moveLayer(1, 0, level3a, level2);
-    assert.equal(count, 2);
+    assert.equal(count, 1);
     idx = level2.getLayers().getArray().indexOf(level3a);
     assert.equal(idx, 0);
     // removes layers from a group
