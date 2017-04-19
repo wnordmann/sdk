@@ -34,6 +34,7 @@ import StrokeEditor from './StrokeEditor';
 import FeatureStore from '../stores/FeatureStore';
 import './AddLayerModal.css';
 
+
 const newOption = 'NEW';
 const uploadOption = 'UPLOAD';
 const createOption = 'CREATE';
@@ -738,10 +739,10 @@ class AddLayerModal extends React.PureComponent {
                 {selectOptions}
               </SelectField>);
     return (
-        <Dialog autoScrollBodyContent={true} bodyStyle={{padding: 20}} inline={this.props.inline} title={formatMessage(messages.title)} className='add-layer-modal' actions={actions} open={this.props.open} onRequestClose={this.close.bind(this)}>
-          {select}
-          {content}
-        </Dialog>
+      <Dialog autoScrollBodyContent={true} bodyStyle={{padding: 20}} inline={this.props.inline} title={formatMessage(messages.title)} className='add-layer-modal' actions={actions} open={this.props.open} onRequestClose={this.close.bind(this)}>
+       {select}
+       {content}
+      </Dialog>
     );
   }
 }

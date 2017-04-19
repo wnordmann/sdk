@@ -301,8 +301,9 @@ class StyleModal extends React.PureComponent {
       return (<span key={key}><ListItem onNestedListToggle={this._resizeDialog.bind(this)} nestedItems={[editor]} primaryTogglesNestedList={true} primaryText={rule.name} /><Divider /></span>);
     }, this);
     var actions = [
-      <Button buttonType='Flat' label={formatMessage(messages.addrulebutton)} tooltipPosition='top' tooltip={formatMessage(messages.addrulebuttontitle)} onTouchTap={this._addRule.bind(this)} />,
-      <Button buttonType='Flat' primary={true} label={formatMessage(messages.savebutton)} onTouchTap={this._saveStyle.bind(this)} />
+      <Button key={1} buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />,
+      <Button key={2} buttonType='Flat' label={formatMessage(messages.addrulebutton)} tooltipPosition='top' tooltip={formatMessage(messages.addrulebuttontitle)} onTouchTap={this._addRule.bind(this)} />,
+      <Button key={3} buttonType='Flat' primary={true} label={formatMessage(messages.savebutton)} onTouchTap={this._saveStyle.bind(this)} />
     ];
     return (
       <span>
@@ -314,7 +315,7 @@ class StyleModal extends React.PureComponent {
         </Dialog>
         <NewRuleModal intl={this.props.intl} inline={this.props.inline} open={this.state.newRuleOpen} onRequestClose={this.closeNew.bind(this)} onAdd={this._addNewRule.bind(this)} />
       </span>
-    );
+   );
   }
 }
 

@@ -10,11 +10,12 @@ import 'phantomjs-polyfill-object-assign';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import LayerList from '../../src/components/LayerList';
+// import TestUtils from 'react-addons-test-utils';
 
 raf.polyfill();
 
 describe('LayerList', function() {
-  var target, map, layer;
+  var target, map, layer, group;
   var width = 360;
   var height = 180;
 
@@ -40,6 +41,43 @@ describe('LayerList', function() {
         center: [0, 0],
         zoom: 1
       })
+    });
+    group =  new ol.layer.Group({
+      title: 'Overlays',
+      layers: [
+        new ol.layer.Group({
+          title: 'Overlay 1',
+          layers: [
+            new ol.layer.Tile({
+              title: 'States',
+              source: new ol.source.TileWMS({
+                url: '/geoserver/wms',
+                params: {
+                  LAYERS: 'usa:states'
+                }
+              })
+            }),
+            new ol.layer.Tile({
+              title: 'Countries',
+              source: new ol.source.TileWMS({
+                url: '/geoserver/wms',
+                params: {
+                  LAYERS: 'opengeo:countries'
+                }
+              })
+            }),
+            new ol.layer.Tile({
+              title: 'DEM',
+              source: new ol.source.TileWMS({
+                url: '/geoserver/wms',
+                params: {
+                  LAYERS: 'usgs:dem'
+                }
+              })
+            })
+          ]
+        })
+      ]
     });
     map.once('postrender', function() {
       done();
@@ -80,43 +118,20 @@ describe('LayerList', function() {
   });
 
   it('handles group layers', function() {
-    var group =  new ol.layer.Group({
-      title: 'Overlays',
-      layers: [
-        new ol.layer.Group({
-          title: 'Overlay 1',
-          layers: [
-            new ol.layer.Tile({
-              title: 'States',
-              source: new ol.source.TileWMS({
-                url: '/geoserver/wms',
-                params: {
-                  LAYERS: 'usa:states'
-                }
-              })
-            }),
-            new ol.layer.Tile({
-              title: 'Countries',
-              source: new ol.source.TileWMS({
-                url: '/geoserver/wms',
-                params: {
-                  LAYERS: 'opengeo:countries'
-                }
-              })
-            }),
-            new ol.layer.Tile({
-              title: 'DEM',
-              source: new ol.source.TileWMS({
-                url: '/geoserver/wms',
-                params: {
-                  LAYERS: 'usgs:dem'
-                }
-              })
-            })
-          ]
-        })
-      ]
-    });
+    map.removeLayer(layer);
+    map.addLayer(group);
+    var container = document.createElement('div');
+    ReactDOM.render((
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <LayerList intl={intl} map={map}/>
+      </MuiThemeProvider>
+    ), container);
+    var faEyes = container.querySelectorAll('.fa-eye');
+    assert.equal(faEyes.length, 5);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('turns off other layers when base map parent is selected', function() {
     map.removeLayer(layer);
     map.addLayer(group);
     var container = document.createElement('div');

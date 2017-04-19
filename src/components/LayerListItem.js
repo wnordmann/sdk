@@ -405,19 +405,19 @@ static formats = {
     var baseLayers = [];
 
     if (event.target.className.indexOf('fa-eye-slash') > 0) {
-      this.setState({previousBase: this.props.currentBaseLayer});
-      this.props.setBaseLayer('baseParent')
-      this.forEachLayer(baseLayers, this.props.map.getLayerGroup());
-      for (i = 0, ii = baseLayers.length; i < ii; ++i) {
-        baseLayers[i].setVisible(false);
-      }
-    } else {
       this.props.setBaseLayer(this.state.previousBase);
       this.forEachLayer(baseLayers, this.props.map.getLayerGroup());
       for (i = 0, ii = baseLayers.length; i < ii; ++i) {
         if (baseLayers[i].get('id') === this.state.previousBase) {
           baseLayers[i].setVisible(true);
         }
+      }
+    } else {
+      this.setState({previousBase: this.props.currentBaseLayer});
+      this.props.setBaseLayer('baseParent')
+      this.forEachLayer(baseLayers, this.props.map.getLayerGroup());
+      for (i = 0, ii = baseLayers.length; i < ii; ++i) {
+        baseLayers[i].setVisible(false);
       }
     }
   }
@@ -593,8 +593,8 @@ static formats = {
       table = (<MenuItem onTouchTap={this._showTable.bind(this)} primaryText={formatMessage(messages.tablebuttonlabel)} leftIcon={<i className='fa fa-table'></i>} />);
     }
 
-    var downArrow = <i className="fa fa-angle-down" onClick={this._toggleNested.bind(this)}></i>;
-    var sideArrow = <i className="fa fa-angle-right" onClick={this._toggleNested.bind(this)}></i>;
+    var downArrow = <i className="fa fa-angle-down" onTouchTap={this._toggleNested.bind(this)}></i>;
+    var sideArrow = <i className="fa fa-angle-right" onTouchTap={this._toggleNested.bind(this)}></i>;
     var arrowIcon = this.state.open ? downArrow : sideArrow;
 
     var layersIcon = <i className="ms ms-layers"></i>;
@@ -665,11 +665,11 @@ static formats = {
       }
     }
 
-    var checked = <i className='fa fa-eye' onClick={this._handleVisibility.bind(this)}></i>;
+    var checked = <i className='fa fa-eye' onTouchTap={this._handleVisibility.bind(this)}></i>;
 
-    var unchecked = <i className='fa fa-eye-slash' onClick={this._handleVisibility.bind(this)}></i>;
-    var baseVisibility = <i onClick={this._handleBaseVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye':this.props.currentBaseLayer === this.props.layer.get('id'), 'fa-eye-slash':this.props.currentBaseLayer !== this.props.layer.get('id')})}></i>;
-    var baseParentVisibility = <i onClick={this._handleBaseParentVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye':this.props.currentBaseLayer === 'baseParent', 'fa-eye-slash':this.props.currentBaseLayer !== 'baseParent'})}></i>;
+    var unchecked = <i className='fa fa-eye-slash' onTouchTap={this._handleVisibility.bind(this)}></i>;
+    var baseVisibility = <i onTouchTap={this._handleBaseVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye':this.props.currentBaseLayer === this.props.layer.get('id'), 'fa-eye-slash':this.props.currentBaseLayer !== this.props.layer.get('id')})}></i>;
+    var baseParentVisibility = <i id='baseParentVisibility' onTouchTap={this._handleBaseParentVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye-slash':this.props.currentBaseLayer === 'baseParent', 'fa-eye':this.props.currentBaseLayer !== 'baseParent'})}></i>;
     var fixedWidth =  <i className='fa fa-fw'></i>;
     var visibility = this.state.checked ? checked : unchecked;
     var popoverEllipsis = (!(this.props.layer instanceof ol.layer.Group) && (opacity || download || filter || remove || table || label || edit)) ? (
@@ -699,14 +699,17 @@ static formats = {
       display: 'flex',
       padding: '16px'
     };
+    var muted;
     var rightIconButtons = <span className="fixedContainer">{styling}{zoomTo}{visibility}{popoverEllipsis}</span>;
     if (layer.get('type') === 'base-group') {
       rightIconButtons = <span className="fixedContainer">{baseParentVisibility}{fixedWidth}</span>;
-    }
-    if (layer.get('type') === 'base') {
+      muted = this.props.currentBaseLayer === 'baseParent';
+    }else if (layer.get('type') === 'base') {
       rightIconButtons = <span className="fixedContainer">{baseVisibility}{fixedWidth}</span>;
+      muted = this.props.currentBaseLayer !== this.props.layer.get('id');
+    } else {
+      muted = !this.state.checked
     }
-
     return connectDragSource(connectDropTarget(
       <div>
         <ListItem
@@ -715,7 +718,7 @@ static formats = {
           insetChildren={true}
           innerDivStyle={flexContainer}
           autoGenerateNestedIndicator={false}
-          primaryText={<span className="menuItem"><span className="statusIcons">{arrowIcon}{layersIcon}<span> {this.props.title}</span></span>{rightIconButtons}</span>}
+          primaryText={<span className={classNames({'menuItem':true, muted})}><span className="statusIcons">{arrowIcon}{layersIcon} <span className={'layer-list-name'}>{this.props.title}</span></span>{rightIconButtons}</span>}
           nestedItems={this.props.nestedItems}
           open={this.state.open} />
         <div style={{paddingLeft: 72}}>
@@ -727,8 +730,9 @@ static formats = {
             {tableModal}
           </span>
         </div>
-      </div>
+    </div>
 ));
+
   }
 }
 
