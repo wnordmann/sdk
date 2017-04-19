@@ -6,11 +6,21 @@ import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import Dialog from 'material-ui/Dialog';
 import Button from './Button';
-import {Tabs, Tab} from 'material-ui/Tabs';
+import Toggle from 'material-ui/Toggle';
 import classNames from 'classnames';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const messages = defineMessages({
+  dd: {
+    id: 'zoomtolonlat.dd',
+    description: 'Abbreviation for Decimal Degrees',
+    defaultMessage: 'DD'
+  },
+  dms: {
+    id: 'zoomtolonlat.dms',
+    description: 'Abbreviation for degrees / minutes / seconds',
+    defaultMessage: 'DMS'
+  },
   west: {
     id: 'zoomtolatlon.west',
     description: 'Label for West direction',
@@ -34,7 +44,7 @@ const messages = defineMessages({
   modaltitle: {
     id: 'zoomtolatlon.modaltitle',
     description: 'Title for the modal dialog',
-    defaultMessage: 'Zoom to latitude longitude'
+    defaultMessage: 'Zoom to latitude/longitude'
   },
   ddtitle: {
     id: 'zoomtolatlon.ddtitle',
@@ -45,11 +55,6 @@ const messages = defineMessages({
     id: 'zoomtolatlon.dmstitle',
     description: 'Title for the degrees minutes seconds tab',
     defaultMessage: 'Degrees minutes seconds (DMS)'
-  },
-  buttontext: {
-    id: 'zoomtolatlon.buttontext',
-    description: 'Text for the button',
-    defaultMessage: 'Lat/Lon'
   },
   buttontitle: {
     id: 'zoomtolatlon.buttontitle',
@@ -86,11 +91,6 @@ const messages = defineMessages({
     description: 'Label for the longitude input field',
     defaultMessage: 'Longitude'
   },
-  zoombuttontitle: {
-    id: 'zoomtolatlon.zoombuttontitle',
-    description: 'Title for zoom button',
-    defaultMessage: 'Zoom to latitude / longitude'
-  },
   zoombuttontext: {
     id: 'zoomtolatlon.zoombuttontext',
     description: 'Text for zoom button',
@@ -99,12 +99,7 @@ const messages = defineMessages({
   closebuttontext: {
     id: 'zoomtolatlon.closebuttontext',
     description: 'Text for close button',
-    defaultMessage: 'Close'
-  },
-  closebuttontitle: {
-    id: 'zoomtolatlon.closebuttontitle',
-    description: 'Tooltip for close button',
-    defaultMessage: 'Close dialog'
+    defaultMessage: 'Cancel'
   }
 });
 
@@ -152,8 +147,8 @@ class ZoomToLatLon extends React.PureComponent {
     super(props);
     this._muiTheme = context.muiTheme || getMuiTheme();
     this.state = {
+      dms: false,
       open: false,
-      value: 1,
       londirection: 'E',
       latdirection: 'N'
     };
@@ -176,7 +171,7 @@ class ZoomToLatLon extends React.PureComponent {
   }
   _zoomToLatLon() {
     var lat, lon;
-    if (this.state.value === 1) {
+    if (!this.state.dms) {
       lat = parseFloat(this.refs.lat.getValue());
       lon = parseFloat(this.refs.lon.getValue());
     } else {
@@ -211,42 +206,59 @@ class ZoomToLatLon extends React.PureComponent {
   _onEastWestChange(evt, idx, value) {
     this.setState({londirection: value});
   }
+  _onToggle() {
+    var dms = this.state.dms;
+    this.setState({dms: !dms});
+  }
   render() {
     const {formatMessage} = this.props.intl;
+    const styles = {
+      thumbOff: {
+        backgroundColor: this._muiTheme.toggle.thumbOnColor
+      },
+      trackOff: {
+        backgroundColor: this._muiTheme.toggle.trackOnColor
+      }
+    };
     var actions = [
-      <Button buttonType='Flat' tooltip={formatMessage(messages.zoombuttontitle)} label={formatMessage(messages.zoombuttontext)} onTouchTap={this._zoomToLatLon.bind(this)} />,
-      <Button buttonType='Flat' tooltip={formatMessage(messages.closebuttontitle)} label={formatMessage(messages.closebuttontext)} onTouchTap={this.closeDialog.bind(this)} />
+      <span style={{position: 'absolute', bottom: 10, display: 'flex'}}><span style={{width: 50}}>{formatMessage(messages.dd)}</span><Toggle style={{width: 50}} thumbStyle={styles.thumbOff} trackStyle={styles.trackOff} toggled={this.state.dms} onToggle={this._onToggle.bind(this)}/><span style={{width: 50}}>{formatMessage(messages.dms)}</span></span>,
+      <Button primary={true} buttonType='Flat' label={formatMessage(messages.closebuttontext)} onTouchTap={this.closeDialog.bind(this)} />,
+      <Button primary={true} buttonType='Flat' label={formatMessage(messages.zoombuttontext)} onTouchTap={this._zoomToLatLon.bind(this)} />
     ];
+    var body;
+    if (!this.state.dms) {
+      body = (<span>
+        <TextField ref='lat' floatingLabelFixed={true} floatingLabelText={formatMessage(messages.latitudelabel)} /><br/>
+        <TextField ref='lon' floatingLabelFixed={true} floatingLabelText={formatMessage(messages.longitudelabel)} />
+      </span>);
+    } else {
+      body = (<span>
+        <p style={{color: this._muiTheme.rawTheme.palette.accent1Color}}>{formatMessage(messages.latitudelabel)}</p>
+        <SelectField style={{top: -6, width: 100}} value={this.state.latdirection} onChange={this._onNorthSouthChange.bind(this)} floatingLabelText={formatMessage(messages.directionlabel)}>
+          <MenuItem value='N' primaryText={formatMessage(messages.north)} />
+          <MenuItem value='S' primaryText={formatMessage(messages.south)} />
+        </SelectField>
+        <TextField ref='latd' style={{width: 150}} hintText={formatMessage(messages.degreeslabel)} />
+        <TextField ref='latm' style={{width: 150}} hintText={formatMessage(messages.minuteslabel)} />
+        <TextField ref='lats' style={{width: 150}} hintText={formatMessage(messages.secondslabel)} />
+        <br/>
+        <p style={{color: this._muiTheme.rawTheme.palette.accent1Color}}>{formatMessage(messages.longitudelabel)}</p>
+        <SelectField style={{top: -6, width: 100}} value={this.state.londirection} onChange={this._onEastWestChange.bind(this)} floatingLabelText={formatMessage(messages.directionlabel)}>
+          <MenuItem value='W' primaryText={formatMessage(messages.west)} />
+          <MenuItem value='E' primaryText={formatMessage(messages.east)} />
+        </SelectField>
+        <TextField ref='lond' style={{width: 150}} hintText={formatMessage(messages.degreeslabel)} />
+        <TextField ref='lonm' style={{width: 150}} hintText={formatMessage(messages.minuteslabel)} />
+        <TextField ref='lons' style={{width: 150}} hintText={formatMessage(messages.secondslabel)} />
+      </span>);
+    }
     return (
-      <Button {...this.props} className={classNames('sdk-component zoom-to-latlon', this.props.className)} onTouchTap={this.openDialog.bind(this)} label={formatMessage(messages.buttontext)} tooltip={formatMessage(messages.buttontitle)}>
+      <span>
+        <Button buttonType='Icon' {...this.props} iconClassName='headerIcons ms ms-zoom-to' className={classNames('sdk-component zoom-to-latlon', this.props.className)} onTouchTap={this.openDialog.bind(this)} tooltip={formatMessage(messages.buttontitle)}/>
         <Dialog actions={actions} open={this.state.open} autoScrollBodyContent={true} onRequestClose={this.closeDialog.bind(this)} modal={true} title={formatMessage(messages.modaltitle)}>
-          <Tabs value={this.state.value} onChange={this.handleChange.bind(this)}>
-            <Tab value={1} label={formatMessage(messages.ddtitle)} disableTouchRipple={true}>
-              <TextField ref='lat' floatingLabelText={formatMessage(messages.latitudelabel)} /><br/>
-              <TextField ref='lon' floatingLabelText={formatMessage(messages.longitudelabel)} />
-            </Tab>
-            <Tab value={2} label={formatMessage(messages.dmstitle)} disableTouchRipple={true}>
-              <p>{formatMessage(messages.latitudelabel)}</p>
-              <SelectField style={{top: -8, width: 100}} value={this.state.latdirection} onChange={this._onNorthSouthChange.bind(this)} floatingLabelText={formatMessage(messages.directionlabel)}>
-                <MenuItem value='N' primaryText={formatMessage(messages.north)} />
-                <MenuItem value='S' primaryText={formatMessage(messages.south)} />
-              </SelectField>
-              <TextField ref='latd' style={{width: 150}} floatingLabelText={formatMessage(messages.degreeslabel)} />
-              <TextField ref='latm' style={{width: 150}} floatingLabelText={formatMessage(messages.minuteslabel)} />
-              <TextField ref='lats' style={{width: 150}} floatingLabelText={formatMessage(messages.secondslabel)} />
-              <br/>
-              <p>{formatMessage(messages.longitudelabel)}</p>
-              <SelectField style={{top: -8, width: 100}} value={this.state.londirection} onChange={this._onEastWestChange.bind(this)} floatingLabelText={formatMessage(messages.directionlabel)}>
-                <MenuItem value='W' primaryText={formatMessage(messages.west)} />
-                <MenuItem value='E' primaryText={formatMessage(messages.east)} />
-              </SelectField>
-              <TextField ref='lond' style={{width: 150}} floatingLabelText={formatMessage(messages.degreeslabel)} />
-              <TextField ref='lonm' style={{width: 150}} floatingLabelText={formatMessage(messages.minuteslabel)} />
-              <TextField ref='lons' style={{width: 150}} floatingLabelText={formatMessage(messages.secondslabel)} />
-            </Tab>
-          </Tabs>
+          {body}
         </Dialog>
-      </Button>
+      </span>
     );
   }
 }
