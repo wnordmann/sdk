@@ -19,7 +19,7 @@ import ToolUtil from '../toolutil';
 import ToolActions from '../actions/ToolActions';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
-import IconButton from 'material-ui/IconButton';
+import Button from './Button';
 
 const messages = defineMessages({
   dropdowntitle: {
@@ -181,7 +181,7 @@ class DrawFeature extends React.PureComponent {
     const {formatMessage} = this.props.intl;
     return (<IconMenu
       anchorOrigin={{horizontal: 'right', vertical: 'bottom'}} targetOrigin={{horizontal: 'right', vertical: 'top'}}
-      iconButtonElement={<IconButton tooltip={formatMessage(messages.dropdowntitle)} disabled={this.state.disabled} iconClassName="headerIcons ms ms-draw" />}
+      iconButtonElement={<Button buttonType='Icon' tooltip={formatMessage(messages.dropdowntitle)} disabled={this.state.disabled} iconClassName="headerIcons ms ms-draw" />}
       disabled={this.state.disabled}>
       <MenuItem leftIcon={<i className='ms ms-draw-polygon'/>} primaryText={formatMessage(messages.polygon)} onTouchTap={this._drawPoly.bind(this)} />
       <MenuItem leftIcon={<i className='ms ms-draw-line'/>} onTouchTap={this._drawLine.bind(this)} primaryText={formatMessage(messages.linestring)} />

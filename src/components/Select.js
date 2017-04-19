@@ -23,7 +23,7 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import IconButton from 'material-ui/IconButton';
+import Button from './Button';
 
 const messages = defineMessages({
   menubuttontext: {
@@ -190,7 +190,7 @@ class Select extends React.PureComponent {
     return (
       <IconMenu style={this.props.style} anchorOrigin={{horizontal: 'right', vertical: 'bottom'}} targetOrigin={{horizontal: 'right', vertical: 'top'}}
         className={classNames('sdk-component select', this.props.className)}
-         iconButtonElement={<IconButton tooltip={formatMessage(messages.menubuttontitle)} disabled={this.state.disabled} iconClassName="headerIcons ms ms-select-box"/>}>
+         iconButtonElement={<Button buttonType='Icon' tooltip={formatMessage(messages.menubuttontitle)} disabled={this.state.disabled} iconClassName="headerIcons ms ms-select-box"/>}>
         <MenuItem disabled={this.state.disabled} onTouchTap={this._selectByRectangle.bind(this)} primaryText={formatMessage(messages.selectbyrectangletext)}/>
         <MenuItem disabled={this.state.disabled} onTouchTap={this._clear.bind(this)} primaryText={formatMessage(messages.clearselectiontext)}/>
       </IconMenu>
