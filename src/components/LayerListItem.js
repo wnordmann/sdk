@@ -710,7 +710,6 @@ static formats = {
     } else {
       muted = !this.state.checked
     }
-    // muted = false;
     return connectDragSource(connectDropTarget(
       <div>
         <ListItem
