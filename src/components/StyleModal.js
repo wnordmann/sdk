@@ -301,35 +301,21 @@ class StyleModal extends React.PureComponent {
       return (<span key={key}><ListItem onNestedListToggle={this._resizeDialog.bind(this)} nestedItems={[editor]} primaryTogglesNestedList={true} primaryText={rule.name} /><Divider /></span>);
     }, this);
     var actions = [
-      <Button buttonType='Flat' label={formatMessage(messages.addrulebutton)} tooltipPosition='top' tooltip={formatMessage(messages.addrulebuttontitle)} onTouchTap={this._addRule.bind(this)} />,
-      <Button buttonType='Flat' primary={true} label={formatMessage(messages.savebutton)} onTouchTap={this._saveStyle.bind(this)} />
+      <Button key={1} buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />,
+      <Button key={2} buttonType='Flat' label={formatMessage(messages.addrulebutton)} tooltipPosition='top' tooltip={formatMessage(messages.addrulebuttontitle)} onTouchTap={this._addRule.bind(this)} />,
+      <Button key={3} buttonType='Flat' primary={true} label={formatMessage(messages.savebutton)} onTouchTap={this._saveStyle.bind(this)} />
     ];
-    var drawer = (
-      <Drawer
-        width={360}
-        className={classNames('sdk-component style-modal', this.props.className)}
-        open={this.props.open}
-        onRequestClose={this.close.bind(this)}>
-        <AppBar
-          title={formatMessage(messages.title, {layer: this.props.layer.get('title')})}
-          iconElementLeft={<IconButton label={formatMessage(messages.closebutton)} > <NavigationArrowBack/> </IconButton>}
-          onLeftIconButtonTouchTap={this.close.bind(this)}
-          className='left-drawer-titleBar'
-          />
-        <div className="noBorderPaper">
+    return (
+      <span>
+        <Dialog ref='dialog' autoScrollBodyContent={true} inline={this.props.inline} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} className='style-modal' actions={actions} open={this.props.open} onRequestClose={this.close.bind(this)}>
           <List>
             {ruleItems}
           </List>
           {error}
-        </div>
-      </Drawer>);
-    return (
-      <span>
-        <Dialog ref='dialog' autoScrollBodyContent={true} inline={this.props.inline} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} className='style-modal' actions={actions} open={this.props.open} onRequestClose={this.close.bind(this)}>
         </Dialog>
         <NewRuleModal intl={this.props.intl} inline={this.props.inline} open={this.state.newRuleOpen} onRequestClose={this.closeNew.bind(this)} onAdd={this._addNewRule.bind(this)} />
       </span>
-    );
+   );
   }
 }
 
