@@ -29,16 +29,11 @@ class Header extends React.Component {
      */
     title: React.PropTypes.string,
     /**
-    * Array of menu items to add to the header
-    */
-    leftMenuItems: React.PropTypes.node,
-    /**
-    * @ignore
     * Callback for left Icon
     **/
     onLeftIconTouchTap: React.PropTypes.func,
     /**
-     * Child nodes
+     * @ignore
      */
     children: React.PropTypes.node
   };
