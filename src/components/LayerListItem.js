@@ -593,8 +593,8 @@ static formats = {
       table = (<MenuItem onTouchTap={this._showTable.bind(this)} primaryText={formatMessage(messages.tablebuttonlabel)} leftIcon={<i className='fa fa-table'></i>} />);
     }
 
-    var downArrow = <i className="fa fa-angle-down" onClick={this._toggleNested.bind(this)}></i>;
-    var sideArrow = <i className="fa fa-angle-right" onClick={this._toggleNested.bind(this)}></i>;
+    var downArrow = <i className="fa fa-angle-down" onTouchTap={this._toggleNested.bind(this)}></i>;
+    var sideArrow = <i className="fa fa-angle-right" onTouchTap={this._toggleNested.bind(this)}></i>;
     var arrowIcon = this.state.open ? downArrow : sideArrow;
 
     var layersIcon = <i className="ms ms-layers"></i>;
@@ -665,7 +665,7 @@ static formats = {
       }
     }
 
-    var checked = <i className='fa fa-eye' onClick={this._handleVisibility.bind(this)}></i>;
+    var checked = <i className='fa fa-eye' onTouchTap={this._handleVisibility.bind(this)}></i>;
 
     var unchecked = <i className='fa fa-eye-slash' onTouchTap={this._handleVisibility.bind(this)}></i>;
     var baseVisibility = <i onTouchTap={this._handleBaseVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye':this.props.currentBaseLayer === this.props.layer.get('id'), 'fa-eye-slash':this.props.currentBaseLayer !== this.props.layer.get('id')})}></i>;
@@ -731,8 +731,9 @@ static formats = {
             {tableModal}
           </span>
         </div>
-      </div>
+    </div>
 ));
+
   }
 }
 
