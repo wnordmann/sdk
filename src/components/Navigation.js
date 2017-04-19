@@ -13,17 +13,12 @@
 import React from 'react';
 import AppDispatcher from '../dispatchers/AppDispatcher';
 import ToolUtil from '../toolutil';
-import RaisedButton from './Button';
+import Button from './Button';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import classNames from 'classnames';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const messages = defineMessages({
-  buttontext: {
-    id: 'navigation.buttontext',
-    description: 'Text of the Navigation button',
-    defaultMessage: 'Navigation'
-  },
   buttontitle: {
     id: 'navigation.buttontitle',
     description: 'Title of the Navigation button',
@@ -107,7 +102,7 @@ class Navigation extends React.PureComponent {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <RaisedButton {...this.props} className={classNames('sdk-component navigation', this.props.className)} secondary={this.state.secondary} onTouchTap={this._onClick.bind(this)} label={formatMessage(messages.buttontext)} tooltip={formatMessage(messages.buttontitle)} />
+      <Button buttonType='Icon' {...this.props} iconClassName='headerIcons ms ms-pan' className={classNames('sdk-component navigation', this.props.className)} secondary={this.state.secondary} onTouchTap={this._onClick.bind(this)} tooltip={formatMessage(messages.buttontitle)} />
     );
   }
 }
