@@ -24,7 +24,6 @@ import MenuItem from 'material-ui/MenuItem';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Button from './Button';
-import IconButton from 'material-ui/IconButton';
 import Divider from 'material-ui/Divider';
 import Delete from 'material-ui/svg-icons/action/delete';
 
