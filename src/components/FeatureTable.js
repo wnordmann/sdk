@@ -38,6 +38,7 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import ToolUtil from '../toolutil';
+import FilterHelp from './FilterHelp';
 import './react-table.css';
 import './FeatureTable.css';
 
@@ -538,7 +539,7 @@ class FeatureTable extends React.Component {
     }
     var table;
     if (this._element && columns.length > 0 && this.state.features !== null) {
-      var height = this.props.height ? this.props.height : this._element.offsetHeight;
+      var height = this.props.height ? this.props.height : this._element.offsetHeight - 20;
       height -= this._formNode.offsetHeight;
       var data;
       if (this._filtered || this._selectedOnly) {
@@ -566,10 +567,10 @@ class FeatureTable extends React.Component {
       />);
     }
     return (
-      <Paper zDepth={0} className={classNames('sdk-component feature-table', this.props.className)}>
+      <Paper zDepth={0} className={classNames('sdk-component feature-table', this.props.className)} style={{marginLeft: 10, marginRight: 10}}>
         <ToolbarGroup ref='form'>
           <LayerSelector {...this.props} id='table-layerSelector' disabled={!this._layer} ref='layerSelector' onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList} map={this.props.map} value={id} />
-          <TextField style={{display: this._layer instanceof ol.layer.Vector ? 'block' : 'none'}} floatingLabelText={formatMessage(messages.filterlabel)} id='featuretable-filter' disabled={!this._layer} ref='filter' onChange={this._filterByText.bind(this)} hintText={formatMessage(messages.filterplaceholder)} />
+          <ToolbarGroup style={{display: this._layer instanceof ol.layer.Vector ? 'block' : 'none'}}><TextField floatingLabelFixed={true} floatingLabelText={formatMessage(messages.filterlabel)} id='featuretable-filter' disabled={!this._layer} ref='filter' onChange={this._filterByText.bind(this)} hintText={formatMessage(messages.filterplaceholder)} /><FilterHelp intl={this.props.intl} /></ToolbarGroup>
           <ToolbarGroup style={{justifyContent: 'flex-end'}}>
             <Button buttonType='Icon' disabled={!this._layer} iconClassName='ms ms-crosshair' tooltip={formatMessage(messages.zoombuttontitle)} onTouchTap={this._zoomSelected.bind(this)}/>
             <IconMenu anchorOrigin={{horizontal: 'right', vertical: 'top'}} targetOrigin={{horizontal: 'right', vertical: 'top'}} iconButtonElement={<Button buttonType='Icon'><MoreVertIcon /></Button>}>
