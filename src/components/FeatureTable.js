@@ -20,10 +20,8 @@ import WFSService from '../services/WFSService';
 import debounce from  'debounce';
 import ReactTable from 'react-table'
 import Button from './Button';
-import ActionSearch from 'material-ui/svg-icons/action/search';
 import ToolActions from '../actions/ToolActions';
 import DrawIcon from 'material-ui/svg-icons/content/create';
-import ClearIcon from 'material-ui/svg-icons/content/clear';
 import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
 import Checkbox from 'material-ui/Checkbox';
@@ -573,9 +571,9 @@ class FeatureTable extends React.Component {
           <LayerSelector {...this.props} id='table-layerSelector' disabled={!this._layer} ref='layerSelector' onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList} map={this.props.map} value={id} />
           <TextField style={{display: this._layer instanceof ol.layer.Vector ? 'block' : 'none'}} floatingLabelText={formatMessage(messages.filterlabel)} id='featuretable-filter' disabled={!this._layer} ref='filter' onChange={this._filterByText.bind(this)} hintText={formatMessage(messages.filterplaceholder)} />
           <ToolbarGroup style={{justifyContent: 'flex-end'}}>
-            <Button buttonType='Icon' disabled={!this._layer} tooltip={formatMessage(messages.zoombuttontitle)} onTouchTap={this._zoomSelected.bind(this)}><ActionSearch /></Button>
-            <Button disabled={!this._layer} buttonType='Icon' tooltip={formatMessage(messages.clearbuttontitle)} onTouchTap={this._clearSelected.bind(this)}><ClearIcon /></Button>
+            <Button buttonType='Icon' disabled={!this._layer} iconClassName='ms ms-crosshair' tooltip={formatMessage(messages.zoombuttontitle)} onTouchTap={this._zoomSelected.bind(this)}/>
             <IconMenu anchorOrigin={{horizontal: 'right', vertical: 'top'}} targetOrigin={{horizontal: 'right', vertical: 'top'}} iconButtonElement={<Button buttonType='Icon'><MoreVertIcon /></Button>}>
+              <MenuItem primaryText={formatMessage(messages.clearbuttontitle)} disabled={!this._layer} onTouchTap={this._clearSelected.bind(this)}/>
               <MenuItem primaryText={<Toggle label={formatMessage(messages.onlyselected)} disabled={!this._layer} defaultToggled={this._selectedOnly} onToggle={this._filter.bind(this)}/>} />
             </IconMenu>
           </ToolbarGroup>
