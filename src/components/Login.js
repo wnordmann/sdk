@@ -12,8 +12,6 @@
 
 import React from 'react';
 import classNames from 'classnames';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
 import Button from './Button';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import LoginModal from './LoginModal';
@@ -139,13 +137,11 @@ class Login extends React.PureComponent {
     const {formatMessage} = this.props.intl;
     if (this.state.user !== null) {
       return (
-        <IconMenu anchorOrigin={{horizontal: 'left', vertical: 'top'}} targetOrigin={{horizontal: 'left', vertical: 'top'}} className={classNames('sdk-component login', this.props.className)} iconButtonElement={<Button label={this.state.user} />} onItemTouchTap={this._doLogout.bind(this)}>
-          <MenuItem primaryText={formatMessage(messages.logouttext)}/>
-        </IconMenu>
+        <Button buttonType='Icon' iconClassName='headerIcons fa fa-sign-out' className={classNames('sdk-component login', this.props.className)} onItemTouchTap={this._doLogout.bind(this)} tooltip={formatMessage(messages.logouttext)}/>
       );
     } else {
       return (
-        <Button className={classNames('sdk-component login', this.props.className)} label={formatMessage(messages.buttontext)} onTouchTap={this._showLoginDialog.bind(this)}>
+        <Button buttonType='Icon' iconClassName='headerIcons fa fa-sign-in' className={classNames('sdk-component login', this.props.className)} tooltip={formatMessage(messages.buttontext)} onTouchTap={this._showLoginDialog.bind(this)}>
           <LoginModal close={this._onClose.bind(this)} open={this.state.modalOpen} {...this.props} />
         </Button>
       );

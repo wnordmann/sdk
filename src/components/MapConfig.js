@@ -16,10 +16,9 @@ import classNames from 'classnames';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import Snackbar from 'material-ui/Snackbar';
-import IconButton from 'material-ui/IconButton';
+import Button from './Button';
 import MapConfigService from '../services/MapConfigService';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import NavigationMoreVert from 'material-ui/svg-icons/navigation/more-vert';
 
 const messages = defineMessages({
   savetext: {
@@ -178,7 +177,7 @@ class MapConfig extends React.PureComponent {
         style={this.props.style}
         className={classNames('sdk-component map-config headerIcons', this.props.className)}
         anchorOrigin={{horizontal: 'right', vertical: 'bottom'}} targetOrigin={{horizontal: 'right', vertical: 'top'}}
-        iconButtonElement={<IconButton  disabled={this.state.disabled}><NavigationMoreVert/></IconButton>}
+        iconButtonElement={<Button tooltip={formatMessage(messages.dropdowntext)} buttonType='Icon' disabled={this.state.disabled} iconClassName='headerIcons ms ms-map-o'/>}
         value={this.state.value}
         onChange={this._handleChange.bind(this)}>
         <MenuItem disabled={this.state.disabled} value={1} primaryText={formatMessage(messages.loadtext)}  />
