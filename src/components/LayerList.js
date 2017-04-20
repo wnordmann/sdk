@@ -235,6 +235,7 @@ class LayerList extends React.PureComponent {
     super(props);
     LayerStore.bindMap(this.props.map);
     this.state = {
+      visible: props.showOnStart,
       addLayerOpen: false,
       muiTheme: context.muiTheme || getMuiTheme(),
       baseLayer: ''
@@ -245,9 +246,6 @@ class LayerList extends React.PureComponent {
     this._onChangeCb = this._onChange.bind(this);
     LayerStore.addChangeListener(this._onChangeCb);
     this._onChange();
-    if (this.props.showOnStart) {
-      this._showPanel();
-    }
   }
   componentWillUnmount() {
     LayerStore.removeChangeListener(this._onChangeCb);
@@ -299,11 +297,6 @@ class LayerList extends React.PureComponent {
       addLayerOpen: false
     });
   }
-  _showPanel(evt) {
-    if (!this.state.visible) {
-      this.setState({visible: true});
-    }
-  }
   _togglePanel() {
     var newVisible = !this.state.visible;
     if (newVisible || this._modalOpen !== true) {
@@ -344,7 +337,6 @@ class LayerList extends React.PureComponent {
     var layers = this.state.layers.slice(0).reverse();
     var divClass = {
       'layer-switcher': true,
-      'shown': this.state.visible,
       'sdk-component': true,
       'layer-list': true
     };
@@ -370,7 +362,7 @@ class LayerList extends React.PureComponent {
     return (
       <div ref='parent' className={classNames(divClass, this.props.className)}>
         <Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={this._togglePanel.bind(this)}><LayersIcon /></Button>
-        <Paper zDepth={0} className='layer-tree-panel'>
+        <Paper style={{display : this.state.visible ? 'block' : 'none'}} zDepth={0} className='layer-tree-panel'>
           {tipLabel}
           <List className='layer-list-list'>
             {this.renderLayers(layers)}
