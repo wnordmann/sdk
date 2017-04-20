@@ -24,6 +24,9 @@ import MenuItem from 'material-ui/MenuItem';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Button from './Button';
+import IconButton from 'material-ui/IconButton';
+import Divider from 'material-ui/Divider';
+import Delete from 'material-ui/svg-icons/action/delete';
 
 
 const messages = defineMessages({
@@ -192,8 +195,9 @@ class Select extends React.PureComponent {
       <IconMenu style={this.props.style} anchorOrigin={{horizontal: 'right', vertical: 'bottom'}} targetOrigin={{horizontal: 'right', vertical: 'top'}}
         className={classNames('sdk-component select', this.props.className)}
          iconButtonElement={<Button buttonType='Icon' tooltip={formatMessage(messages.menubuttontitle)} disabled={this.state.disabled} iconClassName="headerIcons ms ms-select-box"/>}>
-        <MenuItem disabled={this.state.disabled} onTouchTap={this._selectByRectangle.bind(this)} primaryText={formatMessage(messages.selectbyrectangletext)}/>
-        <MenuItem disabled={this.state.disabled} onTouchTap={this._clear.bind(this)} primaryText={formatMessage(messages.clearselectiontext)}/>
+         <MenuItem disabled={this.state.disabled} onTouchTap={this._selectByRectangle.bind(this)} primaryText={formatMessage(messages.selectbyrectangletext)} leftIcon={<i className={'ms ms-select-box'}></i>} />
+         <Divider />
+         <MenuItem disabled={this.state.disabled} onTouchTap={this._clear.bind(this)} primaryText={formatMessage(messages.clearselectiontext)} leftIcon={<Delete />} />
       </IconMenu>
     );
   }
