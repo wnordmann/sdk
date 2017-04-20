@@ -40,7 +40,6 @@ import MenuItem from 'material-ui/MenuItem';
 import ToolUtil from '../toolutil';
 import FilterHelp from './FilterHelp';
 import './react-table.css';
-import './FeatureTable.css';
 
 const messages = defineMessages({
   optionslabel: {
