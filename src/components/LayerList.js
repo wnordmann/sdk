@@ -31,9 +31,8 @@ import LayersIcon from 'material-ui/svg-icons/maps/layers';
 import BaseMapIcon from 'material-ui/svg-icons/maps/satellite';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Paper from 'material-ui/Paper';
-import './Main.css';
-import './LayerList.css';
 
+import './LayerList.css';
 
 const messages = defineMessages({
   layertitle: {
@@ -346,7 +345,7 @@ class LayerList extends React.PureComponent {
     if (this.props.addLayer || this.props.addBaseMap) {
       var layerAdd, baseAdd;
       if (this.props.addLayer) {
-        layerModal = <AddLayerModal open={this.props.addLayer.open} inline={this.props.inlineDialogs} srsName={this.props.map.getView().getProjection().getCode()} allowUserInput={this.props.addLayer.allowUserInput} onRequestClose={this.props.addLayer.onRequestClose.bind(this)} sources={this.props.addLayer.sources} map={this.props.map}  />;
+        layerModal = <AddLayerModal isDrawer={this.props.addLayer.isDrawer} open={this.props.addLayer.open} inline={this.props.inlineDialogs} srsName={this.props.map.getView().getProjection().getCode()} allowUserInput={this.props.addLayer.allowUserInput} onRequestClose={this.props.addLayer.onRequestClose.bind(this)} sources={this.props.addLayer.sources} map={this.props.map}  />;
       }
       if (this.props.addBaseMap) {
         baseAdd = <RaisedButton icon={<BaseMapIcon />} label={formatMessage(messages.addbasemaptext)} onTouchTap={this._showAddBaseMap.bind(this)} disableTouchRipple={true}/>;

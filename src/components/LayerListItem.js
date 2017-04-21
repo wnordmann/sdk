@@ -8,9 +8,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
-import React from 'react';
+import React, {PropTypes} from 'react';
 import ReactDOM from 'react-dom';
-import {DragSource, DropTarget} from 'react-dnd';
+import {DragSource, DropTarget, DragLayer} from 'react-dnd';
 import ol from 'openlayers';
 import Dialog from './Dialog';
 import Button from './Button';
@@ -96,12 +96,39 @@ const layerListItemTarget = {
   }
 };
 
+class CustomDragLayer{
+  renderItem(type, item) {
+    return (<span>{item.title}</span>);
+  }
+}
+
+CustomDragLayer.propTypes = {
+  item: PropTypes.object,
+  itemType: PropTypes.string,
+  currentOffset: PropTypes.shape({
+    x: PropTypes.number.isRequired,
+    y: PropTypes.number.isRequired
+  }),
+  isDragging: PropTypes.bool.isRequired
+};
+
 function collect(connect, monitor) {
   return {
     connectDragSource: connect.dragSource()
   };
 }
-
+function collectCutomDragLayer(monitor) {
+  var item = monitor.getItem();
+  if (item) {
+    console.log(item.layer.get('title'));
+  }
+  return {
+    item: monitor.getItem(),
+    itemType: monitor.getItemType(),
+    currentOffset: monitor.getSourceClientOffset(),
+    isDragging: monitor.isDragging()
+  };
+}
 function collectDrop(connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget()
@@ -322,6 +349,8 @@ class LayerListItem extends React.PureComponent {
     return {muiTheme: this._muiTheme};
   }
   componentDidMount() {
+
+    //this.props.connectDragPreview(<div><BaseMapIcon /></div>);
     if (this.props.group) {
       if (this.props.group.get('type') !== 'base-group') {
         this.props.group.on('change:visible', this._changeGroupVisible, this);
@@ -577,8 +606,13 @@ static formats = {
     });
   };
 
+  renderItem(type, item) {
+    return (<div>TEST</div>);
+  }
+
   render() {
     const {connectDragSource, connectDropTarget} = this.props;
+
     const layer = this.props.layer;
     const source = layer.getSource ? layer.getSource() : undefined;
     const {formatMessage} = this.props.intl;
@@ -736,4 +770,11 @@ static formats = {
   }
 }
 
-export default injectIntl(DropTarget('layerlistitem', layerListItemTarget, collectDrop)(DragSource('layerlistitem', layerListItemSource, collect)(LayerListItem)));
+export default injectIntl
+  (DragLayer(collectCutomDragLayer)
+    (DropTarget('layerlistitem', layerListItemTarget, collectDrop)
+      (DragSource('layerlistitem', layerListItemSource, collect)
+        (LayerListItem)
+      )
+    )
+  );
