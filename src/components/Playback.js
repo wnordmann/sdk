@@ -22,6 +22,7 @@ import Slider from 'material-ui/Slider';
 import DatePicker from 'material-ui/DatePicker';
 import LayerStore from '../stores/LayerStore';
 import {injectIntl, intlShape, formatDate} from 'react-intl';
+import './Playback.css';
 
 /**
  * Adds a slider to the map that can be used to select a given date, and modifies the visibility of layers and features depending on their timestamp and the current time.
@@ -248,9 +249,9 @@ class Playback extends React.PureComponent {
     var title;
 
     if (this.props.title) {
-      title = (<div>{this.props.title}</div>);
+      title = (this.props.title);
     } else {
-      title = (<div>Playback</div>);
+      title = ('Playback');
     }
     if (this.state.date !== undefined) {
       playButton = (<Button buttonType='Icon' key='play' style={{'float': 'left'}} onTouchTap={this._playPause.bind(this)}>{buttonIcon}</Button>);
@@ -261,7 +262,7 @@ class Playback extends React.PureComponent {
       } else if (this.state.minDate !== undefined && this.state.maxDate !== undefined) {
         var minDate = new Date(this.state.minDate);
         var maxDate = new Date(this.state.maxDate);
-        slider = (<Slider step={this.state.interval} key='slider' style={{width: 150}} min={this.state.minDate} max={this.state.maxDate} value={this.state.date} onChange={this._onRangeChange.bind(this)} />);
+        slider = (<Slider sliderStyle={{margin:20 10, width: 140, }} step={this.state.interval} key='slider'  min={this.state.minDate} max={this.state.maxDate} value={this.state.date} onChange={this._onRangeChange.bind(this)} />);
         datePicker = (<DatePicker
             DateTimeFormat={formatDate}
             name='date'
@@ -269,18 +270,25 @@ class Playback extends React.PureComponent {
             autoOk={true}
             minDate={minDate}
             maxDate={maxDate}
-            style={{width: 85, paddingLeft: 18, overflow: 'hidden'}}
+            style={{width: 140, overflow: 'hidden'}}
             onChange={this._onDateChange.bind(this)}
             value={new Date(this.state.date)} />);
       }
     }
 
     return (
-      <div className={classNames('sdk-component playback', this.props.className)} className={'sdk-playback'}>
-        {title}
-        {datePicker}
-        {slider}
-        {playButton}
+      <div className={classNames('sdk-component sdk-playback', this.props.className)}>
+        <div className='playback-col-a'>
+          <h3>{title}</h3>
+          <div className='date'>
+            <div><i className='fa fa-calendar'></i></div>
+            <div>{datePicker}</div>
+          </div>
+        </div>
+        <div className='playback-col-b'>
+          <div className='slider'>{slider}</div>
+          <div className='playButton'>{playButton}</div>
+        </div>
       </div>
     );
   }

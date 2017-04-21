@@ -1,12 +1,54 @@
 .sdk-playback {
-  background-color: rgba(255,255,255,.4);
+  background-color: rgba(255, 255, 255, .9);
+  bottom: 0;
   border-radius: 4px;
   position: absolute;
-  top: 10px;
-  left: 100px;
-  padding-top: 7px;
-  padding-left: 12px;
-  height: 50px;
-  width: 370px;
+  padding: 7px;
+  max-width: 420px;
   z-index: 1001;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  display: flex;
+  .playback-col-a{
+    flex: 2;
+    // background-color: orange;
+    margin: 4px 10px;
+    h3  {
+      margin: 0px;
+    }
+    .date {
+      display: flex;
+      &:nth-child(2) div div div {
+        height: initial !important;
+        font-size: 14px !important;
+      }
+      i {
+        padding-right: 10px;
+        font-size: 14px !important;
+      }
+      input {
+        height: auto !important;
+      }
+      hr {
+        display: none;
+      }
+    }
+  }
+  .playback-col-b{
+    flex: 3;
+    // background-color: blue;
+    display: flex;
+    .slider {
+      // background-color: green;
+      flex: 4;
+      height: 52px !important;
+    }
+    .playButton {
+      flex: 1;
+      margin-top: 4px;
+      height: 52px !important;
+    }
+  }
 }
