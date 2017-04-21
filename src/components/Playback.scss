@@ -13,7 +13,6 @@
   display: flex;
   .playback-col-a{
     flex: 2;
-    // background-color: orange;
     margin: 4px 10px;
     h3  {
       margin: 0px;
@@ -38,10 +37,8 @@
   }
   .playback-col-b{
     flex: 3;
-    // background-color: blue;
     display: flex;
     .slider {
-      // background-color: green;
       flex: 4;
       height: 52px !important;
     }
