@@ -8,7 +8,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
-import React, {PropTypes} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import {DragSource, DropTarget, DragLayer} from 'react-dnd';
 import ol from 'openlayers';
@@ -33,6 +33,7 @@ import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
 import FileSaver from 'file-saver';
+import {createDragPreview} from 'react-dnd-text-dragpreview'
 
 const layerListItemSource = {
 
@@ -96,32 +97,18 @@ const layerListItemTarget = {
   }
 };
 
-class CustomDragLayer{
-  renderItem(type, item) {
-    return (<span>{item.title}</span>);
-  }
-}
-
-CustomDragLayer.propTypes = {
-  item: PropTypes.object,
-  itemType: PropTypes.string,
-  currentOffset: PropTypes.shape({
-    x: PropTypes.number.isRequired,
-    y: PropTypes.number.isRequired
-  }),
-  isDragging: PropTypes.bool.isRequired
-};
-
 function collect(connect, monitor) {
   return {
-    connectDragSource: connect.dragSource()
+    connectDragSource: connect.dragSource(),
+    connectDragPreview: connect.dragPreview()
   };
 }
+// provides custom message for dragPreview
+function formatDragMessage(props) {
+  const title = props.layer.get('title');
+  return `Moving Layer - ${title}`;
+}
 function collectCutomDragLayer(monitor) {
-  var item = monitor.getItem();
-  if (item) {
-    console.log(item.layer.get('title'));
-  }
   return {
     item: monitor.getItem(),
     itemType: monitor.getItemType(),
@@ -133,6 +120,17 @@ function collectDrop(connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget()
   };
+}
+
+const dragPreviewStyle = {
+  backgroundColor: 'rgb(68, 67, 67)',
+  borderColor: '#F96816',
+  color: 'white',
+  fontSize: 15,
+  paddingTop: 4,
+  paddingRight: 7,
+  paddingBottom: 6,
+  paddingLeft: 7
 }
 
 const messages = defineMessages({
@@ -350,7 +348,9 @@ class LayerListItem extends React.PureComponent {
   }
   componentDidMount() {
 
-    //this.props.connectDragPreview(<div><BaseMapIcon /></div>);
+    this.dragPreview = createDragPreview(formatDragMessage(this.props), dragPreviewStyle)
+    this.props.connectDragPreview(this.dragPreview)
+
     if (this.props.group) {
       if (this.props.group.get('type') !== 'base-group') {
         this.props.group.on('change:visible', this._changeGroupVisible, this);
@@ -606,12 +606,14 @@ static formats = {
     });
   };
 
-  renderItem(type, item) {
-    return (<div>TEST</div>);
+  renderItem(item, isDragging) {
+    if (isDragging) {
+      return (<div>{item}</div>);
+    }
   }
 
   render() {
-    const {connectDragSource, connectDropTarget} = this.props;
+    const {connectDragSource, connectDropTarget, isDragging, Item} = this.props;
 
     const layer = this.props.layer;
     const source = layer.getSource ? layer.getSource() : undefined;
@@ -764,6 +766,7 @@ static formats = {
             {tableModal}
           </span>
         </div>
+        {this.renderItem(Item, isDragging)}
     </div>
 ));
 
@@ -771,10 +774,8 @@ static formats = {
 }
 
 export default injectIntl
-  (DragLayer(collectCutomDragLayer)
     (DropTarget('layerlistitem', layerListItemTarget, collectDrop)
       (DragSource('layerlistitem', layerListItemSource, collect)
         (LayerListItem)
       )
-    )
   );
