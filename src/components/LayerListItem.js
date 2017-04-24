@@ -10,7 +10,7 @@
  */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {DragSource, DropTarget, DragLayer} from 'react-dnd';
+import {DragSource, DropTarget} from 'react-dnd';
 import ol from 'openlayers';
 import Dialog from './Dialog';
 import Button from './Button';
@@ -769,9 +769,4 @@ static formats = {
   }
 }
 
-export default injectIntl
-    (DropTarget('layerlistitem', layerListItemTarget, collectDrop)
-      (DragSource('layerlistitem', layerListItemSource, collect)
-        (LayerListItem)
-      )
-  );
+export default injectIntl(DropTarget('layerlistitem', layerListItemTarget, collectDrop)(DragSource('layerlistitem', layerListItemSource, collect)(LayerListItem)));
