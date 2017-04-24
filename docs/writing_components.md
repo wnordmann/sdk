@@ -75,8 +75,8 @@ Create a new directory ```components``` and create a new file in it named ```Dra
 ```javascript
 import React from 'react';
 import ol from 'openlayers';
-import ToolUtil from 'boundless-sdk/toolutil.js';
-import RaisedButton from 'boundless-sdk/components/Button';
+import ToolUtil from '@boundlessgeo/sdk/toolutil.js';
+import RaisedButton from '@boundlessgeo/sdk/components/Button';
 
 class DrawBox extends React.Component {
   constructor(props) {
@@ -160,7 +160,7 @@ Save the file and reload the browser. You will now see a button in the Toolbar t
 Any MapTool kind of component (generally speaking tools / components that use OpenLayers interactions) will have the following:
 
 ```javascript
-import ToolUtil from 'boundless-sdk/toolutil';
+import ToolUtil from '@boundlessgeo/sdk/toolutil';
 
   constructor(props) {
     super(props);
@@ -231,7 +231,7 @@ We have now prepared a container for our new component. Create a new file ```com
 
 ```javascript
 import React from 'react';
-import AppDispatcher from 'boundless-sdk/dispatchers/AppDispatcher';
+import AppDispatcher from '@boundlessgeo/sdk/dispatchers/AppDispatcher';
 
 class BoxInfo extends React.Component {
   constructor(props) {
@@ -298,7 +298,7 @@ import BoxInfo from './components/BoxInfo';
 Now when drawing a box we want to display the area in the box info tool, but nothing will happen as yet. This is because we are not firing DRAWBOX as yet through the AppDispatcher from the DrawBox tool. Open up DrawBox.js and make the following changes:
 
 ```javascript
-import AppDispatcher from 'boundless-sdk/dispatchers/AppDispatcher';
+import AppDispatcher from '@boundlessgeo/sdk/dispatchers/AppDispatcher';
 
   source.on('addfeature', function(evt) {
     AppDispatcher.handleAction({
@@ -325,7 +325,7 @@ and verify that these changes have effect.
 In this exercise we will be changing the DrawBox component so that it will also show an InfoPopup after drawing a box with its area. Open up ```components/DrawBox.js``` in your favorite text editor and make the following addition for the import:
 
 ```javascript
-import ToolActions from 'boundless-sdk/actions/ToolActions';
+import ToolActions from '@boundlessgeo/sdk/actions/ToolActions';
 ```
 
 Also modify the ```addfeature``` listener of the vector source:
@@ -346,7 +346,7 @@ This will set the AREA as an attribute on the feature and will call the showPopu
 This will indicate that all the feature's attributes need to get displayed in the popup, in our case this is only AREA. Now open up app.jsx:
 
 ```javascript
-import InfoPopup from 'boundless-sdk/components/InfoPopup';
+import InfoPopup from '@boundlessgeo/sdk/components/InfoPopup';
 ```
 
 In the render function add the InfoPopup after the MapPanel:

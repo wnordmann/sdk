@@ -22,7 +22,7 @@ The easiest way to get started is to use the web-sdk application generator.
 Run the following command:
 
 ```
-npm install -g boundless-web-sdk-generator
+npm install -g @boundlessgeo/sdk-generator
 ```
 
 You can then run the web-sdk command like this:

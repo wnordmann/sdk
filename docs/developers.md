@@ -91,7 +91,7 @@ At the application level:
 ```javascript
 import {addLocaleData, IntlProvider} from â€˜react-intl';
 import enLocaleData from 'react-intl/dist/locale-data/en';
-import enMessages from 'boundless-sdk/locale/en';
+import enMessages from '@boundlessgeo/sdk/locale/en';
 
 addLocaleData(
   enLocaleData
@@ -146,13 +146,13 @@ By using import statements to css files, browserify bundles up the css (but wonâ
 Can be used by any SDK application, is part of the SDK tools. In ```package.json```:
 
 ```
-  "boundless-sdk-tools": "^0.10.0"
+  "@boundlessgeo/sdk-tools": "^0.10.0"
 ```
 
 To use it in a node script file:
 
 ```javascript
-var tools = require('boundless-sdk-tools');
+var tools = require('@boundlessgeo/sdk-tools');
 tools.startServer();
 ```
 
