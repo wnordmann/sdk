@@ -57,7 +57,7 @@ function createPackageFile() {
     } = packageData;
 
     const minimalPackage = {
-      name: 'boundless-sdk',
+      name: '@boundlessgeo/sdk',
       author,
       version,
       description,
