@@ -108,31 +108,22 @@ function formatDragMessage(props) {
   const title = props.layer.get('title');
   return `Moving Layer - ${title}`;
 }
-function collectCutomDragLayer(monitor) {
-  return {
-    item: monitor.getItem(),
-    itemType: monitor.getItemType(),
-    currentOffset: monitor.getSourceClientOffset(),
-    isDragging: monitor.isDragging()
-  };
-}
 function collectDrop(connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget()
   };
 }
 
-const dragPreviewStyle = {
+const dragPreviewStyleDefault = {
   backgroundColor: 'rgb(68, 67, 67)',
-  borderColor: '#F96816',
   color: 'white',
-  fontSize: 15,
+  fontSize: 14,
   paddingTop: 4,
   paddingRight: 7,
   paddingBottom: 6,
-  paddingLeft: 7
+  paddingLeft: 7,
+  fontFamily: 'Roboto'
 }
-
 const messages = defineMessages({
   closebutton: {
     id: 'layerlist.closebutton',
@@ -300,6 +291,10 @@ class LayerListItem extends React.PureComponent {
     */
     currentBaseLayer: React.PropTypes.string,
     /**
+    *  Style for text of dragged layer
+    */
+    dragPreviewStyle: React.PropTypes.object,
+    /**
     *  Callback from parent component to manage baseLayers
     */
     setBaseLayer: React.PropTypes.func,
@@ -347,6 +342,7 @@ class LayerListItem extends React.PureComponent {
     return {muiTheme: this._muiTheme};
   }
   componentDidMount() {
+    var dragPreviewStyle = this.props.dragPreviewStyle  || dragPreviewStyleDefault;
 
     this.dragPreview = createDragPreview(formatDragMessage(this.props), dragPreviewStyle)
     this.props.connectDragPreview(this.dragPreview)
