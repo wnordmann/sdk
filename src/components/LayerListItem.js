@@ -103,11 +103,7 @@ function collect(connect, monitor) {
     connectDragPreview: connect.dragPreview()
   };
 }
-// provides custom message for dragPreview
-function formatDragMessage(props) {
-  const title = props.layer.get('title');
-  return `Moving Layer - ${title}`;
-}
+
 function collectDrop(connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget()
@@ -174,6 +170,11 @@ const messages = defineMessages({
     id: 'layerlist.tablebuttonlabel',
     description: 'Tooltip for the table button',
     defaultMessage: 'Show table'
+  },
+  draglayerlabel: {
+    id: 'layerlist.draglayerlabel',
+    description: 'Text on label when dragging',
+    defaultMessage: 'Moving Layer'
   }
 });
 
@@ -186,6 +187,10 @@ class LayerListItem extends React.PureComponent {
      * @ignore
      */
     connectDragSource: React.PropTypes.func.isRequired,
+    /**
+     * @ignore
+     */
+    connectDragPreview: React.PropTypes.func.isRequired,
     /**
      * @ignore
      */
@@ -320,9 +325,19 @@ class LayerListItem extends React.PureComponent {
     },
     connectDropTarget: function(a) {
       return a;
+    },
+    connectDragPreview: function(a) {
+      return a;
     }
   };
 
+  // provides custom message for dragPreview
+  formatDragMessage(props) {
+    const {formatMessage} = this.props.intl;
+    const title = props.layer.get('title');
+    //IE might not like es6 template strings
+    return `${formatMessage(messages.draglayerlabel)} - ${title}`;
+  }
   constructor(props, context) {
     super(props);
     this._proxy = context.proxy;
@@ -344,8 +359,8 @@ class LayerListItem extends React.PureComponent {
   componentDidMount() {
     var dragPreviewStyle = this.props.dragPreviewStyle  || dragPreviewStyleDefault;
 
-    this.dragPreview = createDragPreview(formatDragMessage(this.props), dragPreviewStyle)
-    this.props.connectDragPreview(this.dragPreview)
+    const dragPreview = createDragPreview(this.formatDragMessage(this.props), dragPreviewStyle)
+    this.props.connectDragPreview(dragPreview)
 
     if (this.props.group) {
       if (this.props.group.get('type') !== 'base-group') {
@@ -610,7 +625,6 @@ static formats = {
 
   render() {
     const {connectDragSource, connectDropTarget, isDragging, Item} = this.props;
-
     const layer = this.props.layer;
     const source = layer.getSource ? layer.getSource() : undefined;
     const {formatMessage} = this.props.intl;
