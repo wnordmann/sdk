@@ -33,6 +33,7 @@ import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
 import FileSaver from 'file-saver';
+import {createDragPreview} from 'react-dnd-text-dragpreview'
 
 const layerListItemSource = {
 
@@ -98,7 +99,8 @@ const layerListItemTarget = {
 
 function collect(connect, monitor) {
   return {
-    connectDragSource: connect.dragSource()
+    connectDragSource: connect.dragSource(),
+    connectDragPreview: connect.dragPreview()
   };
 }
 
@@ -108,6 +110,16 @@ function collectDrop(connect, monitor) {
   };
 }
 
+const dragPreviewStyleDefault = {
+  backgroundColor: 'rgb(68, 67, 67)',
+  color: 'white',
+  fontSize: 14,
+  paddingTop: 4,
+  paddingRight: 7,
+  paddingBottom: 6,
+  paddingLeft: 7,
+  fontFamily: 'Roboto'
+}
 const messages = defineMessages({
   closebutton: {
     id: 'layerlist.closebutton',
@@ -158,6 +170,11 @@ const messages = defineMessages({
     id: 'layerlist.tablebuttonlabel',
     description: 'Tooltip for the table button',
     defaultMessage: 'Show table'
+  },
+  draglayerlabel: {
+    id: 'layerlist.draglayerlabel',
+    description: 'Text on label when dragging',
+    defaultMessage: 'Moving Layer'
   }
 });
 
@@ -170,6 +187,10 @@ class LayerListItem extends React.PureComponent {
      * @ignore
      */
     connectDragSource: React.PropTypes.func.isRequired,
+    /**
+     * @ignore
+     */
+    connectDragPreview: React.PropTypes.func.isRequired,
     /**
      * @ignore
      */
@@ -275,6 +296,10 @@ class LayerListItem extends React.PureComponent {
     */
     currentBaseLayer: React.PropTypes.string,
     /**
+    *  Style for text of dragged layer
+    */
+    dragPreviewStyle: React.PropTypes.object,
+    /**
     *  Callback from parent component to manage baseLayers
     */
     setBaseLayer: React.PropTypes.func,
@@ -300,9 +325,19 @@ class LayerListItem extends React.PureComponent {
     },
     connectDropTarget: function(a) {
       return a;
+    },
+    connectDragPreview: function(a) {
+      return a;
     }
   };
 
+  // provides custom message for dragPreview
+  formatDragMessage(props) {
+    const {formatMessage} = this.props.intl;
+    const title = props.layer.get('title');
+    //IE might not like es6 template strings
+    return `${formatMessage(messages.draglayerlabel)} - ${title}`;
+  }
   constructor(props, context) {
     super(props);
     this._proxy = context.proxy;
@@ -322,6 +357,11 @@ class LayerListItem extends React.PureComponent {
     return {muiTheme: this._muiTheme};
   }
   componentDidMount() {
+    var dragPreviewStyle = this.props.dragPreviewStyle  || dragPreviewStyleDefault;
+
+    const dragPreview = createDragPreview(this.formatDragMessage(this.props), dragPreviewStyle)
+    this.props.connectDragPreview(dragPreview)
+
     if (this.props.group) {
       if (this.props.group.get('type') !== 'base-group') {
         this.props.group.on('change:visible', this._changeGroupVisible, this);
@@ -577,8 +617,14 @@ static formats = {
     });
   };
 
+  renderItem(item, isDragging) {
+    if (isDragging) {
+      return (<div>{item}</div>);
+    }
+  }
+
   render() {
-    const {connectDragSource, connectDropTarget} = this.props;
+    const {connectDragSource, connectDropTarget, isDragging, Item} = this.props;
     const layer = this.props.layer;
     const source = layer.getSource ? layer.getSource() : undefined;
     const {formatMessage} = this.props.intl;
@@ -730,6 +776,7 @@ static formats = {
             {tableModal}
           </span>
         </div>
+        {this.renderItem(Item, isDragging)}
     </div>
 ));
 

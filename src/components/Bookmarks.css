@@ -14,3 +14,9 @@
   min-width: 400px;
   z-index: 100;
 }
+.navNext {
+  cursor: pointer;
+}
+.navPrev {
+  cursor: pointer;
+}

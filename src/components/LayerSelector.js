@@ -91,6 +91,13 @@ class LayerSelector extends React.PureComponent {
       value: props.value
     };
   }
+  componentWillReceiveProps(props) {
+    if (this.props.value !== props.value) {
+      this.setState({
+        value: props.value
+      });
+    }
+  }
   getChildContext() {
     return {muiTheme: this._muiTheme};
   }
