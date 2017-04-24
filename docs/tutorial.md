@@ -86,7 +86,7 @@ var map = new ol.Map({
 In this step we'll learn how to add another component to the application, besides the LayerList component which is already in the application. First, we'll add an import statement at the top of ```app.jsx```:
 
 ```javascript
-import FeatureTable from 'boundless-sdk/components/FeatureTable';
+import FeatureTable from '@boundlessgeo/sdk/components/FeatureTable';
 ```
 
 In the render function of our application, we need to add the definition of our new component, FeatureTable:
@@ -124,13 +124,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import {addLocaleData, IntlProvider} from 'react-intl';
-import Zoom from 'boundless-sdk/components/Zoom';
-import MapPanel from 'boundless-sdk/components/MapPanel';
-import FeatureTable from 'boundless-sdk/components/FeatureTable';
-import LayerList from 'boundless-sdk/components/LayerList';
+import Zoom from '@boundlessgeo/sdk/components/Zoom';
+import MapPanel from '@boundlessgeo/sdk/components/MapPanel';
+import FeatureTable from '@boundlessgeo/sdk/components/FeatureTable';
+import LayerList from '@boundlessgeo/sdk/components/LayerList';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import enLocaleData from 'react-intl/locale-data/en';
-import enMessages from 'boundless-sdk/locale/en';
+import enMessages from '@boundlessgeo/sdk/locale/en';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 
@@ -258,7 +258,7 @@ In this step we'll be adding a button to the application that will open up a dia
 Again, we will start by adding an ```import``` statement to import our component (and the Toolbar to put the button into):
 
 ```javascript
-import AddLayer from 'boundless-sdk/components/AddLayer';
+import AddLayer from '@boundlessgeo/sdk/components/AddLayer';
 import Toolbar from 'material-ui/Toolbar/Toolbar';
 ```
 
@@ -293,15 +293,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import {addLocaleData, IntlProvider} from 'react-intl';
-import Zoom from 'boundless-sdk/components/Zoom';
-import MapPanel from 'boundless-sdk/components/MapPanel';
-import FeatureTable from 'boundless-sdk/components/FeatureTable';
-import LayerList from 'boundless-sdk/components/LayerList';
-import AddLayer from 'boundless-sdk/components/AddLayer';
+import Zoom from '@boundlessgeo/sdk/components/Zoom';
+import MapPanel from '@boundlessgeo/sdk/components/MapPanel';
+import FeatureTable from '@boundlessgeo/sdk/components/FeatureTable';
+import LayerList from '@boundlessgeo/sdk/components/LayerList';
+import AddLayer from '@boundlessgeo/sdk/components/AddLayer';
 import Toolbar from 'material-ui/Toolbar/Toolbar';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import enLocaleData from 'react-intl/locale-data/en';
-import enMessages from 'boundless-sdk/locale/en';
+import enMessages from '@boundlessgeo/sdk/locale/en';
 
 // Needed for onTouchTap
 // Can go away when react 1.0 release
