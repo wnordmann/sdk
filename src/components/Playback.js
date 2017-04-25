@@ -21,8 +21,16 @@ import PauseIcon from 'material-ui/svg-icons/av/pause';
 import Slider from 'material-ui/Slider';
 import DatePicker from 'material-ui/DatePicker';
 import LayerStore from '../stores/LayerStore';
-import {injectIntl, intlShape, formatDate} from 'react-intl';
+import {defineMessages, injectIntl, intlShape, formatDate} from 'react-intl';
 import './Playback.css';
+
+const messages = defineMessages({
+  defaulttitle: {
+    id: 'playback.defaulttitle',
+    description: 'Text to show as the default playback title',
+    defaultMessage: 'Playback'
+  }
+});
 
 /**
  * Adds a slider to the map that can be used to select a given date, and modifies the visibility of layers and features depending on their timestamp and the current time.
@@ -64,7 +72,7 @@ class Playback extends React.PureComponent {
     /**
      * Title of the playback
      */
-    Title: React.PropTypes.string,
+    title: React.PropTypes.string,
     /**
      * @ignore
      */
@@ -237,6 +245,7 @@ class Playback extends React.PureComponent {
   }
 
   render() {
+    const {formatMessage} = this.props.intl;
     var buttonIcon;
     if (this.state.play === true) {
       buttonIcon = <PlayIcon />;
@@ -246,13 +255,7 @@ class Playback extends React.PureComponent {
     var playButton;
     var slider;
     var datePicker;
-    var title;
-
-    if (this.props.title) {
-      title = (this.props.title);
-    } else {
-      title = ('Playback');
-    }
+    var title = this.props.title ? this.props.title : formatMessage(messages.defaulttitle);
     if (this.state.date !== undefined) {
       playButton = (<Button buttonType='Icon' key='play' style={{'float': 'left'}} onTouchTap={this._playPause.bind(this)}>{buttonIcon}</Button>);
       this._refreshTimeLayers();
