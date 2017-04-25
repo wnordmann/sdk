@@ -180,7 +180,11 @@ class FeatureTable extends React.Component {
     /**
      * Should we allow edit (modify, delete) from the table? Needs an EditPopup component in the application.
      */
-    allowEdit: React.PropTypes.bool
+    allowEdit: React.PropTypes.bool,
+    /**
+     * Style for modify interaction.
+     */
+    modifyStyle: React.PropTypes.object
   };
 
   static contextTypes = {
@@ -423,6 +427,7 @@ class FeatureTable extends React.Component {
       this._modifyLayer = new ol.layer.Vector({
         title: null,
         zIndex: 1000,
+        style: this.props.modifyStyle,
         source: new ol.source.Vector({
           features: this._modifyCollection
         })
