@@ -442,9 +442,14 @@ class FeatureTable extends React.Component {
       });
     }
     this.activate(this._modify);
+    this._geom = feature.getGeometry().clone();
     this._modifyCollection.push(feature);
     var me = this;
-    ToolActions.showEditPopup(feature, this._layer, function() {
+    ToolActions.showEditPopup(feature, this._layer, function(cancel) {
+      if (cancel) {
+        feature.setGeometry(me._geom);
+        delete me._geom;
+      }
       me._modifyCollection.clear();
       me.deactivate();
     });

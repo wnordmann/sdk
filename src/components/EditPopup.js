@@ -197,7 +197,7 @@ class EditPopup extends React.Component {
   }
   _onCancel() {
     this.setVisible(false);
-    this._callback();
+    this._callback(true);
     delete this._callback;
   }
   _onSuccess() {
