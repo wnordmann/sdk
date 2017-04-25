@@ -24,11 +24,9 @@ import LayerListItem from './LayerListItem';
 import Label from './Label';
 import AddLayerModal from './AddLayerModal';
 import BaseMapModal from './BaseMapModal';
-import RaisedButton from 'material-ui/RaisedButton';
 import Button from './Button';
 import {List} from 'material-ui/List';
 import LayersIcon from 'material-ui/svg-icons/maps/layers';
-import BaseMapIcon from 'material-ui/svg-icons/maps/satellite';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Paper from 'material-ui/Paper';
 
@@ -345,10 +343,11 @@ class LayerList extends React.PureComponent {
     if (this.props.addLayer || this.props.addBaseMap) {
       var layerAdd, baseAdd;
       if (this.props.addLayer) {
-        layerModal = <AddLayerModal open={this.props.addLayer.open} inline={this.props.inlineDialogs} srsName={this.props.map.getView().getProjection().getCode()} allowUserInput={this.props.addLayer.allowUserInput} onRequestClose={this.props.addLayer.onRequestClose.bind(this)} sources={this.props.addLayer.sources} map={this.props.map}  />;
+        layerAdd = <Button buttonType='Icon' iconClassName='ms ms-ogc-web-services' onTouchTap={this._showAddLayer.bind(this)} tooltip={formatMessage(messages.addlayertext)} />;
+        layerModal = <AddLayerModal open={this.props.addLayer.open !== undefined ? this.props.addLayer.open : this.state.addLayerOpen} inline={this.props.inlineDialogs} srsName={this.props.map.getView().getProjection().getCode()} allowUserInput={this.props.addLayer.allowUserInput} onRequestClose={this.props.addLayer.onRequestClose ? this.props.addLayer.onRequestClose : this._closeAddLayer.bind(this)} sources={this.props.addLayer.sources} map={this.props.map}  />;
       }
       if (this.props.addBaseMap) {
-        baseAdd = <RaisedButton icon={<BaseMapIcon />} label={formatMessage(messages.addbasemaptext)} onTouchTap={this._showAddBaseMap.bind(this)} disableTouchRipple={true}/>;
+        baseAdd = <Button buttonType='Icon' iconClassName='ms ms-layers-base' tooltip={formatMessage(messages.addbasemaptext)} onTouchTap={this._showAddBaseMap.bind(this)} disableTouchRipple={true}/>;
         baseModal = <BaseMapModal tileServices={this.props.addBaseMap.tileServices} map={this.props.map} ref='addbasemapmodal' />;
       }
       addLayer = (
