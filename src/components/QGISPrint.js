@@ -468,7 +468,7 @@ class QGISPrint extends React.PureComponent {
     } else {
       return (
         <span className={classNames('sdk-component qgis-print', this.props.className)}>
-          <IconMenu menuStyle={{width: 150}} anchorOrigin={{horizontal: 'left', vertical: 'top'}} targetOrigin={{horizontal: 'left', vertical: 'top'}} iconButtonElement={<Button disabled={this.state.disabled} label={formatMessage(messages.printmenutext)} />} value={this.state.layoutName}>
+          <IconMenu menuStyle={{width: 150}} anchorOrigin={{horizontal: 'right', vertical: 'bottom'}} targetOrigin={{horizontal: 'right', vertical: 'top'}} iconButtonElement={<Button buttonType='Icon' disabled={this.state.disabled} tooltip={formatMessage(messages.printmenutext)}><PrintIcon/></Button>} value={this.state.layoutName}>
             {listitems}
           </IconMenu>
           {dialog}

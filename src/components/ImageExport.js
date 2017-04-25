@@ -13,7 +13,7 @@
 import React from 'react';
 import ol from 'openlayers';
 import 'blueimp-canvas-to-blob';
-import RaisedButton from './Button';
+import Button from './Button';
 import classNames from 'classnames';
 import CameraIcon from 'material-ui/svg-icons/image/camera-alt';
 import FileSaver from 'browser-filesaver';
@@ -71,7 +71,7 @@ class ImageExport extends React.PureComponent {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <RaisedButton className={classNames('sdk-component image-export', this.props.className)} icon={<CameraIcon />} label={formatMessage(messages.buttontext)} onTouchTap={this._handleClick.bind(this)} />
+      <Button buttonType='Icon' className={classNames('sdk-component image-export', this.props.className)} tooltip={formatMessage(messages.buttontext)} onTouchTap={this._handleClick.bind(this)}><CameraIcon /></Button>
     );
   }
 }
