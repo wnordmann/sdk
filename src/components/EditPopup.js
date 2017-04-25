@@ -127,7 +127,7 @@ class EditPopup extends React.Component {
           });
           me._callback = action.callback;
           me.setVisible(true);
-          me.overlayPopup.setPosition(ol.extent.getCenter(action.feature.getGeometry().getExtent()));
+          me.overlayPopup.setPosition(ol.extent.getTopRight(action.feature.getGeometry().getExtent()));
           break;
         default:
           break;
@@ -283,7 +283,8 @@ class EditPopup extends React.Component {
         values[key] = this.state.values[key];
       }
       if (this._geomDirty) {
-        values[this.state.feature.getGeometryName()] = this.state.feature.getGeometry();
+        var geomName = this.state.layer.get('wfsInfo') ? this.state.layer.get('wfsInfo').geometryName : this.state.feature.getGeometryName();
+        values[geomName] = this.state.feature.getGeometry();
       }
       var onSuccess = function(result) {
         if (result && result.transactionSummary.totalUpdated === 1) {
