@@ -343,7 +343,13 @@ class LayerList extends React.PureComponent {
     if (this.props.addLayer || this.props.addBaseMap) {
       var layerAdd, baseAdd;
       if (this.props.addLayer) {
-        layerAdd = !this.props.addLayer.onRequestClose ? (<Button buttonType='Icon' iconClassName='ms ms-ogc-web-services' onTouchTap={this._showAddLayer.bind(this)} tooltip={formatMessage(messages.addlayertext)} />) : undefined;
+        if (!this.props.addLayer.onRequestClose) {
+          layerAdd = (<Button
+            buttonType='Icon'
+            iconClassName='ms ms-ogc-web-services'
+            onTouchTap={this._showAddLayer.bind(this)}
+            tooltip={formatMessage(messages.addlayertext)} />);
+        }
         layerModal = <AddLayerModal open={this.props.addLayer.open !== undefined ? this.props.addLayer.open : this.state.addLayerOpen} inline={this.props.inlineDialogs} srsName={this.props.map.getView().getProjection().getCode()} allowUserInput={this.props.addLayer.allowUserInput} onRequestClose={this.props.addLayer.onRequestClose ? this.props.addLayer.onRequestClose : this._closeAddLayer.bind(this)} sources={this.props.addLayer.sources} map={this.props.map}  />;
       }
       if (this.props.addBaseMap) {
