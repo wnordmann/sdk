@@ -262,7 +262,7 @@ class Playback extends React.PureComponent {
       } else if (this.state.minDate !== undefined && this.state.maxDate !== undefined) {
         var minDate = new Date(this.state.minDate);
         var maxDate = new Date(this.state.maxDate);
-        slider = (<Slider sliderStyle={{margin:20 10, width: 140, }} step={this.state.interval} key='slider'  min={this.state.minDate} max={this.state.maxDate} value={this.state.date} onChange={this._onRangeChange.bind(this)} />);
+        slider = (<Slider sliderStyle={{marginTop:20, marginRight: 10, marginBottom: 20, marginLeft: 10, width: 140 }} step={this.state.interval} key='slider'  min={this.state.minDate} max={this.state.maxDate} value={this.state.date} onChange={this._onRangeChange.bind(this)} />);
         datePicker = (<DatePicker
             DateTimeFormat={formatDate}
             name='date'
