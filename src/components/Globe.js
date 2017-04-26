@@ -61,7 +61,7 @@ class Globe extends React.PureComponent {
      */
     map: React.PropTypes.instanceOf(ol.Map).isRequired,
     /**
-     * Style for the button.
+     * Style config.
      */
     style: React.PropTypes.object,
     /**
@@ -140,7 +140,7 @@ class Globe extends React.PureComponent {
       tooltip = formatMessage(messages.globetext);
     }
     return (
-      <Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} secondary={true} className={classNames('sdk-component globe', this.props.className)} tooltip={tooltip} onTouchTap={this._toggle.bind(this)}>{icon}</Button>
+      <Button style={this.props.style} tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} secondary={true} className={classNames('sdk-component globe', this.props.className)} tooltip={tooltip} onTouchTap={this._toggle.bind(this)}>{icon}</Button>
     );
   }
 }
