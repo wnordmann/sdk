@@ -295,7 +295,7 @@ class AddLayerModal extends React.PureComponent {
       newUrl: '',
       newName: '',
       createTitle: '',
-      sources: this.props.sources.slice(),
+      sources: this.props.sources ? this.props.sources.slice() : [],
       newType: AddLayerModal.addNewTypes[0],
       showNew: false,
       showUpload: false,
