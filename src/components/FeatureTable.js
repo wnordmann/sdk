@@ -162,6 +162,10 @@ class FeatureTable extends React.Component {
      */
     className: React.PropTypes.string,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * @ignore
      */
     intl: intlShape.isRequired,
@@ -575,8 +579,9 @@ class FeatureTable extends React.Component {
         columns={columns}
       />);
     }
+    var style = Object.assign({marginLeft: 10, marginRight: 10}, this.props.style);
     return (
-      <Paper zDepth={0} className={classNames('sdk-component feature-table', this.props.className)} style={{marginLeft: 10, marginRight: 10}}>
+      <Paper zDepth={0} className={classNames('sdk-component feature-table', this.props.className)} style={style}>
         <ToolbarGroup ref='form'>
           <LayerSelector {...this.props} id='table-layerSelector' disabled={!this._layer} ref='layerSelector' onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList} map={this.props.map} value={id} />
           <ToolbarGroup style={{display: this._layer instanceof ol.layer.Vector ? 'block' : 'none'}}><TextField floatingLabelFixed={true} floatingLabelText={formatMessage(messages.filterlabel)} id='featuretable-filter' disabled={!this._layer} ref='filter' onChange={this._filterByText.bind(this)} hintText={formatMessage(messages.filterplaceholder)} /><FilterHelp intl={this.props.intl} /></ToolbarGroup>
