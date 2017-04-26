@@ -75,6 +75,10 @@ class StyleModal extends React.PureComponent {
      */
     inline: React.PropTypes.bool,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * The layer associated with the style modal.
      */
     layer: React.PropTypes.instanceOf(ol.layer.Base).isRequired,
@@ -306,7 +310,7 @@ class StyleModal extends React.PureComponent {
       <Button key={3} buttonType='Flat' primary={true} label={formatMessage(messages.savebutton)} onTouchTap={this._saveStyle.bind(this)} />
     ];
     return (
-      <span>
+      <span style={this.props.style}>
         <Dialog ref='dialog' autoScrollBodyContent={true} inline={this.props.inline} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} className='style-modal' actions={actions} open={this.props.open} onRequestClose={this.close.bind(this)}>
           <List>
             {ruleItems}
