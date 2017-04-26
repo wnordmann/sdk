@@ -139,9 +139,13 @@ class LayerList extends React.PureComponent {
      */
     icon: React.PropTypes.node,
     /**
-     * Should we allow adding base maps from a selector modal?
+     * Add basemap functionality that adds a button that will open the BaseMapModal componenet
      */
-    addBaseMap: React.PropTypes.shape({
+    addBaseMap: React.PropTypes.bool,
+    /**
+    *  Tile services for the BaseMapModal component.  There is a built in default tileService if none provided
+    */
+    baseMapTileServices: React.PropTypes.shape({
       tileServices: React.PropTypes.arrayOf(React.PropTypes.shape({
         name: React.PropTypes.string.isRequired,
         description: React.PropTypes.string.isRequired,
@@ -354,7 +358,7 @@ class LayerList extends React.PureComponent {
       }
       if (this.props.addBaseMap) {
         baseAdd = <Button buttonType='Icon' iconClassName='ms ms-layers-base' tooltip={formatMessage(messages.addbasemaptext)} onTouchTap={this._showAddBaseMap.bind(this)} disableTouchRipple={true}/>;
-        baseModal = <BaseMapModal tileServices={this.props.addBaseMap.tileServices} map={this.props.map} ref='addbasemapmodal' />;
+        baseModal = <BaseMapModal tileServices={this.props.baseMapTileServices} map={this.props.map} ref='addbasemapmodal' />;
       }
       addLayer = (
         <span>

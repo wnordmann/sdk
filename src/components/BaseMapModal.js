@@ -31,15 +31,21 @@ const messages = defineMessages({
     defaultMessage: 'Close'
   }
 });
-
+/**
+ * A modal of basemap thumbnails for selecting a basemap to be used in the map.  This will force the map to a single basemap
+ *
+ * ```xml
+ * <BaseMapModal tileServices={baseMapTileServices} map={map}  />;
+ * ```
+ */
 class BaseMapModal extends React.Component {
   static propTypes = {
     /**
      * The OpenLayers Map.
      */
-    map: React.PropTypes.instanceOf(ol.Map),
+    map: React.PropTypes.instanceOf(ol.Map).isRequired,
     /**
-     * Tile services to display as options in this dialog.
+     * Tile services to display as options in this dialog.  There is a built in default tileService if none provided
      */
     tileServices: React.PropTypes.arrayOf(React.PropTypes.shape({
       name: React.PropTypes.string.isRequired,
