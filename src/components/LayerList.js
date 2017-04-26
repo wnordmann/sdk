@@ -62,6 +62,14 @@ const messages = defineMessages({
 class LayerList extends React.PureComponent {
   static propTypes = {
     /**
+     * Should we allow upload of vector layers?
+     */
+    showUpload: React.PropTypes.bool,
+    /**
+     * Should we allow creation of new vector layers?
+     */
+    showNew: React.PropTypes.bool,
+    /**
      * The map whose layers should show up in this layer list.
      */
     map: React.PropTypes.instanceOf(ol.Map).isRequired,
@@ -340,17 +348,17 @@ class LayerList extends React.PureComponent {
     var tipLabel = this.props.tipLabel ? (<div className='layer-list-header'><Label>{this.props.tipLabel}</Label></div>) : undefined;
     var addLayer, layerModal, baseModal;
 
-    if (this.props.addLayer || this.props.addBaseMap) {
+    if (this.props.addLayer || this.props.addBaseMap || this.props.showUpload || this.props.showNew) {
       var layerAdd, baseAdd;
-      if (this.props.addLayer) {
-        if (!this.props.addLayer.onRequestClose) {
+      if (this.props.addLayer || this.props.showUpload || this.props.showNew) {
+        if ((this.props.addLayer && !this.props.addLayer.onRequestClose) || this.props.showUpload || this.props.showNew) {
           layerAdd = (<Button
             buttonType='Icon'
             iconClassName='ms ms-ogc-web-services'
             onTouchTap={this._showAddLayer.bind(this)}
             tooltip={formatMessage(messages.addlayertext)} />);
         }
-        layerModal = <AddLayerModal open={this.props.addLayer.open !== undefined ? this.props.addLayer.open : this.state.addLayerOpen} inline={this.props.inlineDialogs} srsName={this.props.map.getView().getProjection().getCode()} allowUserInput={this.props.addLayer.allowUserInput} onRequestClose={this.props.addLayer.onRequestClose ? this.props.addLayer.onRequestClose : this._closeAddLayer.bind(this)} sources={this.props.addLayer.sources} map={this.props.map}  />;
+        layerModal = <AddLayerModal allowUpload={!!this.props.showUpload} allowCreate={!!this.props.showNew} open={(this.props.addLayer && this.props.addLayer.open !== undefined) ? this.props.addLayer.open : this.state.addLayerOpen} inline={this.props.inlineDialogs} srsName={this.props.map.getView().getProjection().getCode()} allowUserInput={this.props.addLayer && this.props.addLayer.allowUserInput} onRequestClose={this.props.addLayer && this.props.addLayer.onRequestClose ? this.props.addLayer.onRequestClose : this._closeAddLayer.bind(this)} sources={this.props.addLayer ? this.props.addLayer.sources : undefined} map={this.props.map}  />;
       }
       if (this.props.addBaseMap) {
         baseAdd = <Button buttonType='Icon' iconClassName='ms ms-layers-base' tooltip={formatMessage(messages.addbasemaptext)} onTouchTap={this._showAddBaseMap.bind(this)} disableTouchRipple={true}/>;
