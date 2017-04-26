@@ -14,7 +14,6 @@ docs/api
 dist
 src/components/AddLayerModal.css
 src/components/LayerList.css
-src/components/Main.css
 src/components/Header.css
 src/components/Dialog.css
 Playback.css
