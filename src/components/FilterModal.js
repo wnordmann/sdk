@@ -69,6 +69,10 @@ class FilterModal extends React.PureComponent {
      */
     className: React.PropTypes.string,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * @ignore
      */
     intl: intlShape.isRequired
@@ -207,7 +211,7 @@ class FilterModal extends React.PureComponent {
       <Button buttonType='Flat' primary={true} label={formatMessage(messages.addfiltertext)} onTouchTap={this._addFilter.bind(this)} />
     ];
     return (
-      <Dialog inline={this.props.inline} className={classNames('sdk-component filter-modal', this.props.className)} actions={actions} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} modal={true} open={this.props.open} onRequestClose={this.close.bind(this)}>
+      <Dialog style={this.props.style} inline={this.props.inline} className={classNames('sdk-component filter-modal', this.props.className)} actions={actions} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} modal={true} open={this.props.open} onRequestClose={this.close.bind(this)}>
         <TextField floatingLabelText={formatMessage(messages.inputlabel)} floatingLabelFixed={true} name='filter' errorText={errorText} fullWidth={true} ref='filterTextBox' />
         <FilterHelp intl={this.props.intl} />
         <List>

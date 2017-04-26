@@ -47,6 +47,10 @@ class Fullscreen extends React.PureComponent {
      */
     className: React.PropTypes.string,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * @ignore
      */
     intl: intlShape.isRequired
@@ -113,7 +117,7 @@ class Fullscreen extends React.PureComponent {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} secondary={true} className={classNames('sdk-component full-screen', this.props.className)} tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._goFullscreen.bind(this)} ><FullScreenIcon /></Button>
+      <Button style={this.props.style} tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} secondary={true} className={classNames('sdk-component full-screen', this.props.className)} tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._goFullscreen.bind(this)} ><FullScreenIcon /></Button>
     );
   }
 }

@@ -43,6 +43,10 @@ class FillEditor extends React.PureComponent {
      * Css class name to apply on the root element of this component.
      */
     className: React.PropTypes.string,
+    /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
     /*
      * If true, the element will not be clickable and will not display hover effects.
      */
@@ -100,7 +104,7 @@ class FillEditor extends React.PureComponent {
     };
     const {formatMessage} = this.props.intl;
     return (
-      <Paper zDepth={0} className={classNames('sdk-component fill-editor', this.props.className)}>
+      <Paper style={this.props.style} zDepth={0} className={classNames('sdk-component fill-editor', this.props.className)}>
         <ListItem disabled={this.props.disabled} innerDivStyle={ boxStyle } primaryText={<Checkbox onCheck={this._onFillCheck.bind(this)} checked={this.state.hasFill} label={formatMessage(messages.filllabel)} />} rightIconButton={ <ColorPicker onChange={this._onChangeFill.bind(this)} initialColor={this.state.fillColor} /> } />
       </Paper>
     );

@@ -97,6 +97,10 @@ class FilterEditor extends React.PureComponent {
      */
     className: React.PropTypes.string,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * @ignore
      */
     intl: intlShape.isRequired
@@ -241,7 +245,7 @@ class FilterEditor extends React.PureComponent {
     const {formatMessage} = this.props.intl;
     // TODO multiple rows
     return (
-      <Paper className='style-contentContainer' zDepth={0}>
+      <Paper style={this.props.style} className='style-contentContainer' zDepth={0}>
         <Subheader className='style-listHeader'>{formatMessage(messages.filterlabel)}</Subheader>
         <List>
           <ListItem>
