@@ -41,6 +41,10 @@ class Header extends React.Component {
     **/
     onLeftIconTouchTap: React.PropTypes.func,
     /**
+     * Determines if the left icon will display next to the title.
+     */
+    showLeftIcon: React.PropTypes.bool,
+    /**
      * Child nodes
      */
     children: React.PropTypes.node
@@ -48,6 +52,11 @@ class Header extends React.Component {
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
   };
+
+  static defaultProps = {
+    showLeftIcon: true
+  }
+
   constructor(props) {
     super(props);
   }
@@ -73,6 +82,7 @@ class Header extends React.Component {
     return (
       <AppBar
           style={this.props.style}
+          showMenuIconButton={this.props.showLeftIcon}
           title={this.props.title}
           iconElementRight={
             <div>
