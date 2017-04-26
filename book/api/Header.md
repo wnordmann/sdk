@@ -25,6 +25,14 @@ type: `node`
 
 
 
+### `showLeftIcon`
+
+Determines if the left icon will display next to the title.
+
+type: `bool`
+defaultValue: `true`
+
+
 ### `style`
 
 Style config.
