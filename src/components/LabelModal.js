@@ -57,6 +57,10 @@ class LabelModal extends React.PureComponent {
      */
     className: React.PropTypes.string,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * The layer associated with the style modal.
      */
     layer: React.PropTypes.instanceOf(ol.layer.Vector).isRequired,
@@ -174,7 +178,7 @@ class LabelModal extends React.PureComponent {
       <Button buttonType='Flat' label={formatMessage(messages.clearbutton)} onTouchTap={this._clearLabel.bind(this)} />
     ];
     return (
-      <Dialog inline={this.props.inline} open={this.props.open} className={classNames('sdk-component label-modal', this.props.className)} autoScrollBodyContent={true} modal={true} actions={actions} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} onRequestClose={this.close.bind(this)} >
+      <Dialog style={this.props.style} inline={this.props.inline} open={this.props.open} className={classNames('sdk-component label-modal', this.props.className)} autoScrollBodyContent={true} modal={true} actions={actions} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} onRequestClose={this.close.bind(this)} >
         <LabelEditor {...this.props} initialState={this._labelState} onChange={this._onChangeLabel.bind(this)} attributes={this.state.attributes} />
       </Dialog>
     );

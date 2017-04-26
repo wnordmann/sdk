@@ -65,6 +65,10 @@ class LayerSelector extends React.PureComponent {
      */
     className: React.PropTypes.string,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * Optional label text for combo box, will override the default.
      */
     labelText: React.PropTypes.string,
@@ -129,7 +133,7 @@ class LayerSelector extends React.PureComponent {
       }
     }, this);
     return (
-      <SelectField className={classNames('sdk-component layer-selector', this.props.className)} floatingLabelFixed={true} floatingLabelText={this.props.labelText ? this.props.labelText : formatMessage(messages.labeltext)} hintText={formatMessage(messages.emptytext)} value={this.state.value} onChange={this._onItemChange.bind(this)}>
+      <SelectField style={this.props.style} className={classNames('sdk-component layer-selector', this.props.className)} floatingLabelFixed={true} floatingLabelText={this.props.labelText ? this.props.labelText : formatMessage(messages.labeltext)} hintText={formatMessage(messages.emptytext)} value={this.state.value} onChange={this._onItemChange.bind(this)}>
         {selectItems}
       </SelectField>
     );
