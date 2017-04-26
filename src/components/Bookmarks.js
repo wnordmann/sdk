@@ -50,6 +50,10 @@ class Bookmarks extends React.PureComponent {
      */
     className: React.PropTypes.string,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * The bookmark data. An array of objects with name (string, required), description (string, required) and extent (array of number, required) keys.
      * The extent should be in the view projection.
      */
@@ -301,7 +305,7 @@ class Bookmarks extends React.PureComponent {
         Decorators.push({component: Dots, position: 'BottomCenter'});
       }
       return (
-        <div className = { classNames('sdk-component story-panel', this.props.className) } >
+        <div style={this.props.style} className = { classNames('sdk-component story-panel', this.props.className) } >
           <Carousel { ...carouselProps }
             decorators = { Decorators }
             arrows = { true }
