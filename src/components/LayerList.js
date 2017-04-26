@@ -358,7 +358,10 @@ class LayerList extends React.PureComponent {
       }
       if (this.props.addBaseMap) {
         baseAdd = <Button buttonType='Icon' iconClassName='ms ms-layers-base' tooltip={formatMessage(messages.addbasemaptext)} onTouchTap={this._showAddBaseMap.bind(this)} disableTouchRipple={true}/>;
-        baseModal = <BaseMapModal tileServices={this.props.baseMapTileServices} map={this.props.map} ref='addbasemapmodal' />;
+        //Fallback to handle original implementation of BaseMapModal using single prop addBaseMap.tileServices
+        //over new implementation using 2 props addBaseMap and baseMapTileServices
+        var tileServices = this.props.baseMapTileServices || this.props.addBaseMap.tileServices;
+        baseModal = <BaseMapModal tileServices={tileServices} map={this.props.map} ref='addbasemapmodal' />;
       }
       addLayer = (
         <span>
