@@ -41,6 +41,13 @@ type: `bool`
 defaultValue: `true`
 
 
+### `style`
+
+Style config.
+
+type: `object`
+
+
 ### `tabList`
 
 array of <tab> components to be added to <Tabs>

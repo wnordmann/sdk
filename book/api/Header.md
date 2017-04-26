@@ -25,6 +25,13 @@ type: `node`
 
 
 
+### `style`
+
+Style config.
+
+type: `object`
+
+
 ### `title`
 
 Title of the Header

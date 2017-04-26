@@ -25,6 +25,13 @@ The ol3 map to use.
 type: `instanceOf ol.Map`
 
 
+### `style`
+
+Style config.
+
+type: `object`
+
+
 ### `tooltipPosition`
 
 Position of the tooltip.

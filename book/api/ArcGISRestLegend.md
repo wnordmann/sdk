@@ -23,3 +23,10 @@ The layer that has a WMS source.
 
 type: `instanceOf ol.layer.Layer`
 
+
+### `style`
+
+Style config.
+
+type: `object`
+
