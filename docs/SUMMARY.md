@@ -9,6 +9,7 @@ Boundless SDK
 * [Writing components](writing_components.md)
 * [API](api.md)
     * [AddLayerModal](api/AddLayerModal.md)
+    * [BaseMapModal](api/BaseMapModal.md)
     * [BaseMapSelector](api/BaseMapSelector.md)
     * [Bookmarks](api/Bookmarks.md)
     * [Button](api/Button.md)

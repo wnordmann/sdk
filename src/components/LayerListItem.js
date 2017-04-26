@@ -711,10 +711,10 @@ static formats = {
       }
     }
 
+    var showBasemapEye = this.props.layer.get('visible') || this.props.currentBaseLayer === this.props.layer.get('id');
     var checked = <i className='fa fa-eye' onTouchTap={this._handleVisibility.bind(this)}></i>;
-
     var unchecked = <i className='fa fa-eye-slash' onTouchTap={this._handleVisibility.bind(this)}></i>;
-    var baseVisibility = <i onTouchTap={this._handleBaseVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye':this.props.currentBaseLayer === this.props.layer.get('id'), 'fa-eye-slash':this.props.currentBaseLayer !== this.props.layer.get('id')})}></i>;
+    var baseVisibility = <i onTouchTap={this._handleBaseVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye':showBasemapEye, 'fa-eye-slash':!showBasemapEye})}></i>;
     var baseParentVisibility = <i id='baseParentVisibility' onTouchTap={this._handleBaseParentVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye-slash':this.props.currentBaseLayer === 'baseParent', 'fa-eye':this.props.currentBaseLayer !== 'baseParent'})}></i>;
     var fixedWidth =  <i className='fa fa-fw'></i>;
     var visibility = this.state.checked ? checked : unchecked;
@@ -752,7 +752,7 @@ static formats = {
       muted = this.props.currentBaseLayer === 'baseParent';
     }else if (layer.get('type') === 'base') {
       rightIconButtons = <span className="fixedContainer">{baseVisibility}{fixedWidth}</span>;
-      muted = this.props.currentBaseLayer !== this.props.layer.get('id');
+      muted = !showBasemapEye;
     } else {
       muted = !this.state.checked
     }

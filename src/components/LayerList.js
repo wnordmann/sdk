@@ -147,18 +147,20 @@ class LayerList extends React.PureComponent {
      */
     icon: React.PropTypes.node,
     /**
-     * Should we allow adding base maps from a selector modal?
+     * Add basemap functionality that adds a button that will open the BaseMapModal componenet
      */
-    addBaseMap: React.PropTypes.shape({
-      tileServices: React.PropTypes.arrayOf(React.PropTypes.shape({
-        name: React.PropTypes.string.isRequired,
-        description: React.PropTypes.string.isRequired,
-        endpoint: React.PropTypes.string,
-        standard: React.PropTypes.string.isRequired,
-        attribution: React.PropTypes.string,
-        thumbnail: React.PropTypes.string.isRequired
-      }))
-    }),
+    addBaseMap: React.PropTypes.bool,
+    /**
+    *  Tile services for the BaseMapModal component.  There is a built in default tileService if none provided
+    */
+    baseMapTileServices: React.PropTypes.arrayOf(React.PropTypes.shape({
+      name: React.PropTypes.string.isRequired,
+      description: React.PropTypes.string.isRequired,
+      endpoint: React.PropTypes.string,
+      standard: React.PropTypes.string.isRequired,
+      attribution: React.PropTypes.string,
+      thumbnail: React.PropTypes.string.isRequired
+    })),
     /**
      * Should we allow adding layers?
      */
@@ -362,7 +364,10 @@ class LayerList extends React.PureComponent {
       }
       if (this.props.addBaseMap) {
         baseAdd = <Button buttonType='Icon' iconClassName='ms ms-layers-base' tooltip={formatMessage(messages.addbasemaptext)} onTouchTap={this._showAddBaseMap.bind(this)} disableTouchRipple={true}/>;
-        baseModal = <BaseMapModal tileServices={this.props.addBaseMap.tileServices} map={this.props.map} ref='addbasemapmodal' />;
+        //Fallback to handle original implementation of BaseMapModal using single prop addBaseMap.tileServices
+        //over new implementation using 2 props addBaseMap and baseMapTileServices
+        var tileServices = this.props.baseMapTileServices || this.props.addBaseMap.tileServices;
+        baseModal = <BaseMapModal tileServices={tileServices} map={this.props.map} ref='addbasemapmodal' />;
       }
       addLayer = (
         <span>
