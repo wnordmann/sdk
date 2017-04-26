@@ -72,6 +72,10 @@ class Measure extends React.PureComponent {
      */
     map: React.PropTypes.instanceOf(ol.Map).isRequired,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * The toggleGroup to use. When this tool is activated, all other tools in the same toggleGroup will be deactivated.
      */
     toggleGroup: React.PropTypes.string,

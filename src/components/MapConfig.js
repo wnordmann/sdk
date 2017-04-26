@@ -90,6 +90,10 @@ class MapConfig extends React.PureComponent {
      */
     className: React.PropTypes.string,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * Are we the last child of the toolbar?
      */
     lastChild: React.PropTypes.bool,

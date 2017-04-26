@@ -70,6 +70,10 @@ class Playback extends React.PureComponent {
      */
     className: React.PropTypes.string,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * Title of the playback
      */
     title: React.PropTypes.string,
@@ -280,7 +284,7 @@ class Playback extends React.PureComponent {
     }
 
     return (
-      <div className={classNames('sdk-component sdk-playback', this.props.className)}>
+      <div style={this.props.style} className={classNames('sdk-component sdk-playback', this.props.className)}>
         <div className='playback-col-a'>
           <h3>{title}</h3>
           <div className='date'>

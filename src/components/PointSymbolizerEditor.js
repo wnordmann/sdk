@@ -93,6 +93,10 @@ class PointSymbolizerEditor extends React.PureComponent {
      */
     className: React.PropTypes.string,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * Initial state for the point symbolizer.
      */
     initialState: React.PropTypes.object,
@@ -184,7 +188,7 @@ class PointSymbolizerEditor extends React.PureComponent {
       return (<MenuItem key={idx} value={symbol} primaryText={symbol} />);
     });
     return (
-      <Paper zDepth={0} className={classNames('sdk-component point-symbolizer-editor style-contentContainer', this.props.className)}>
+      <Paper style={this.props.style} zDepth={0} className={classNames('sdk-component point-symbolizer-editor style-contentContainer', this.props.className)}>
         <Subheader className="style-listHeader">{formatMessage(messages.header)}</Subheader>
         <ListItem innerDivStyle={ listStyle } insetChildren={false}>
           <SelectField fullWidth={true} style={this.state.externalGraphic ? {display: 'none'} : undefined} floatingLabelText={formatMessage(messages.symboltype)} value={this.state.symbolType} onChange={this._onChangeSymbol.bind(this)}>
