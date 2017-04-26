@@ -43,6 +43,10 @@ class BaseMapSelector extends React.PureComponent {
      */
     className: React.PropTypes.string,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * @ignore
      */
     intl: intlShape.isRequired
@@ -61,7 +65,7 @@ class BaseMapSelector extends React.PureComponent {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <Button className={classNames('sdk-component basemapselector', this.props.className)} label={formatMessage(messages.buttontext)} onTouchTap={this._showBaseMapDialog.bind(this)}>
+      <Button style={this.props.style} className={classNames('sdk-component basemapselector', this.props.className)} label={formatMessage(messages.buttontext)} onTouchTap={this._showBaseMapDialog.bind(this)}>
         <BaseMapModal ref='basemapmodal' {...this.props} />
       </Button>
     );
