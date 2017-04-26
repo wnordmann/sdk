@@ -72,6 +72,10 @@ class LoginModal extends React.PureComponent {
      */
     close: React.PropTypes.func,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * @ignore
      */
     intl: intlShape.isRequired
@@ -135,7 +139,7 @@ class LoginModal extends React.PureComponent {
       <Button buttonType='Flat' primary={true} label={formatMessage(messages.loginbutton)} onTouchTap={this._doLogin.bind(this)} />
     ];
     return (
-      <Dialog contentStyle={{width: 500}} className={classNames('sdk-component login-modal', this.props.className)} actions={actions} title={formatMessage(messages.title)} open={this.state.open} onRequestClose={this.close.bind(this)}>
+      <Dialog style={this.props.style} contentStyle={{width: 500}} className={classNames('sdk-component login-modal', this.props.className)} actions={actions} title={formatMessage(messages.title)} open={this.state.open} onRequestClose={this.close.bind(this)}>
         <TextField style={{width: 450}} floatingLabelText={formatMessage(messages.usernamelabel)} ref='username' /><br/>
         <TextField errorText={this.state.errorMsg} style={{width: 450}} onKeyDown={this._onEnter.bind(this)} type="password" floatingLabelText={formatMessage(messages.passwordlabel)} ref='password' />
       </Dialog>

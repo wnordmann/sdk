@@ -58,6 +58,10 @@ class MapPanel extends React.Component {
      */
     useHistory: React.PropTypes.bool,
     /**
+     * Style config
+     */
+    style: React.PropTypes.object,
+    /**
      * @ignore
      */
     children: React.PropTypes.node,
@@ -189,7 +193,10 @@ class MapPanel extends React.Component {
       />);
     }
     return (
-      <div id={this.props.id} ref='map' className={classNames('sdk-component map-panel', this.props.className)}>{error}{this.props.children}</div>
+      <div style={this.props.style} id={this.props.id} ref='map' className={classNames('sdk-component map-panel', this.props.className)}>
+        {error}
+        {this.props.children}
+      </div>
     );
   }
 }

@@ -54,6 +54,10 @@ class NewRuleModal extends React.PureComponent {
      */
     inline: React.PropTypes.bool,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * @ignore
      */
     intl: intlShape.isRequired
@@ -80,7 +84,7 @@ class NewRuleModal extends React.PureComponent {
       <Button buttonType='Flat' primary={true} label={formatMessage(messages.addrulebutton)} onTouchTap={this.props.onAdd.bind(this, this.state.rulename)} />
     ];
     return (
-      <Dialog inline={this.props.inline} actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.dialogtitle)} open={this.props.open} onRequestClose={this.props.onRequestClose}>
+      <Dialog style={this.props.style} inline={this.props.inline} actions={actions} autoScrollBodyContent={true} modal={true} title={formatMessage(messages.dialogtitle)} open={this.props.open} onRequestClose={this.props.onRequestClose}>
         <TextField value={this.state.rulename} onChange={this.onChange.bind(this)} fullWidth={true} ref='name' floatingLabelText={formatMessage(messages.rulelabel)} />
       </Dialog>
     );

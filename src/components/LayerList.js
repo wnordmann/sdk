@@ -66,7 +66,7 @@ class LayerList extends React.PureComponent {
      */
     map: React.PropTypes.instanceOf(ol.Map).isRequired,
     /**
-     * Style for the button.
+     * Style config.
      */
     style: React.PropTypes.object,
     /**
@@ -364,7 +364,7 @@ class LayerList extends React.PureComponent {
       );
     }
     return (
-      <div ref='parent' className={classNames(divClass, this.props.className)}>
+      <div style={this.props.style} ref='parent' className={classNames(divClass, this.props.className)}>
         <Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={this._togglePanel.bind(this)}><LayersIcon /></Button>
         <Paper style={{display : this.state.visible ? 'block' : 'none'}} zDepth={0} className='layer-tree-panel'>
           {tipLabel}

@@ -50,6 +50,10 @@ class BaseMapModal extends React.Component {
       thumbnail: React.PropTypes.string.isRequired
     })),
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * @ignore
      */
     intl: intlShape.isRequired
@@ -137,7 +141,7 @@ class BaseMapModal extends React.Component {
     var actions = [
       <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
     ];
-    return (<Dialog autoScrollBodyContent={true} actions={actions} title={formatMessage(messages.title)} modal={true} open={this.state.open} onRequestClose={this.close.bind(this)}>
+    return (<Dialog style={this.props.style} autoScrollBodyContent={true} actions={actions} title={formatMessage(messages.title)} modal={true} open={this.state.open} onRequestClose={this.close.bind(this)}>
       <GridList cols={2} cellHeight={120}>
         {this.props.tileServices.map((tileService) => (
           <GridTile style={{cursor: 'pointer'}} onTouchTap={this._tileClick.bind(this, tileService)}

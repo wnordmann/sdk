@@ -23,11 +23,14 @@ import './Header.css';
 
 class Header extends React.Component {
   static propTypes = {
-
     /**
      * Title of the Header
      */
     title: React.PropTypes.string,
+    /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
     /**
     * Array of menu items to add to the header
     */
@@ -69,6 +72,7 @@ class Header extends React.Component {
   render() {
     return (
       <AppBar
+          style={this.props.style}
           title={this.props.title}
           iconElementRight={
             <div>

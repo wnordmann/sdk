@@ -49,6 +49,10 @@ class WMSLegend extends React.PureComponent {
      */
     className: React.PropTypes.string,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * The format to use for the WMS GetLegendGraphic call.
      */
     format: React.PropTypes.string
@@ -124,7 +128,7 @@ class WMSLegend extends React.PureComponent {
     }
     url.set('query', query);
     var legendUrl = (!this.state.dynamic && params.STYLES === undefined && params.SLD_BODY === undefined && layer.get('legendUrl')) ? layer.get('legendUrl') : url.toString();
-    return (<img className={classNames('sdk-component wms-legend', this.props.className)} src={legendUrl} />);
+    return (<img style={this.props.style} className={classNames('sdk-component wms-legend', this.props.className)} src={legendUrl} />);
   }
 }
 

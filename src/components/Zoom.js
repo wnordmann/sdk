@@ -56,10 +56,6 @@ class Zoom extends React.PureComponent {
      */
     className: React.PropTypes.string,
     /**
-     * Style for the buttons.
-     */
-    style: React.PropTypes.object,
-    /**
      * The ol3 map to use for zooming.
      */
     map: React.PropTypes.instanceOf(ol.Map).isRequired,
@@ -75,6 +71,10 @@ class Zoom extends React.PureComponent {
      * Position of the tooltip.
      */
     tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left']),
+    /**
+     * Style config
+     */
+    style: React.PropTypes.object,
     /**
      * @ignore
      */
@@ -127,7 +127,7 @@ class Zoom extends React.PureComponent {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <div className={classNames('sdk-component zoom', this.props.className)}>
+      <div style={this.props.style} className={classNames('sdk-component zoom', this.props.className)}>
         <Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} tooltip={this.props.zoomInTipLabel ? this.props.zoomInTipLabel : formatMessage(messages.zoomintitle)} onTouchTap={this._zoomIn.bind(this)}><ZoomIn /></Button><br/>
         <Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} style={{marginTop: 15}} tooltip={this.props.zoomOutTipLabel ? this.props.zoomOutTipLabel : formatMessage(messages.zoomouttitle)} onTouchTap={this._zoomOut.bind(this)}><ZoomOut /></Button>
       </div>

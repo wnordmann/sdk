@@ -43,13 +43,9 @@ class Button extends React.PureComponent {
      */
     onTouchTap: React.PropTypes.func,
     /**
-     * Style config object for the button.
+     * Style config.
      */
     style: React.PropTypes.object,
-    /**
-     * Style config object for the wrapping span element.
-     */
-    buttonStyle: React.PropTypes.object,
     /**
      * @ignore
      */
@@ -94,18 +90,18 @@ class Button extends React.PureComponent {
   };
 
   render() {
-    var button, buttonStyle = Object.assign({}, this.props.buttonStyle);
+    var button;
     if (this.props.buttonType === 'Action') {
-      button = (<FloatingActionButton iconStyle={this.props.iconStyle} disabled={this.props.disabled} backgroundColor={this.props.backgroundColor} onTouchTap={this.props.onTouchTap} style={this.props.style} children={this.props.children} mini={this.props.mini}  />);
+      button = (<FloatingActionButton iconStyle={this.props.iconStyle} disabled={this.props.disabled} backgroundColor={this.props.backgroundColor} onTouchTap={this.props.onTouchTap} children={this.props.children} mini={this.props.mini}  />);
     } else if (this.props.buttonType === 'Flat') {
       button = (<FlatButton disableTouchRipple={true} disabled={this.props.disabled} secondary={this.props.secondary} primary={this.props.primary} onTouchTap={this.props.onTouchTap} icon={this.props.icon} children={this.props.children} label={this.props.label} />);
     } else if (this.props.buttonType === 'Icon') {
       var iconClassName = {
         'active': this.props.secondary
       };
-      button = (<IconButton iconClassName={classNames(this.props.iconClassName, iconClassName)} disableTouchRipple={true} disabled={this.props.disabled} onTouchTap={this.props.onTouchTap} style={this.props.style} children={this.props.children}/>);
+      button = (<IconButton iconClassName={classNames(this.props.iconClassName, iconClassName)} disableTouchRipple={true} disabled={this.props.disabled} onTouchTap={this.props.onTouchTap} children={this.props.children}/>);
     } else {
-      button = (<RaisedButton disableTouchRipple={true} disabled={this.props.disabled} style={this.props.style} secondary={this.props.secondary} onTouchTap={this.props.onTouchTap} icon={this.props.icon} children={this.props.children} label={this.props.label} />);
+      button = (<RaisedButton disableTouchRipple={true} disabled={this.props.disabled} secondary={this.props.secondary} onTouchTap={this.props.onTouchTap} icon={this.props.icon} children={this.props.children} label={this.props.label} />);
     }
     var className = {
       'sdk-component': true,
@@ -114,7 +110,7 @@ class Button extends React.PureComponent {
     };
     className['hint--' + this.props.tooltipPosition] = this.props.tooltip !== undefined;
     return (
-      <span style={buttonStyle} className={classNames(className, this.props.className)} aria-label={this.props.tooltip}>
+      <span style={this.props.style} className={classNames(className, this.props.className)} aria-label={this.props.tooltip}>
         {button}
       </span>
     );

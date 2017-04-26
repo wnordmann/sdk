@@ -17,6 +17,10 @@ export default class ZoomSlider extends React.PureComponent {
      */
     refreshRate: React.PropTypes.number,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * The map to use.
      */
     map: React.PropTypes.instanceOf(ol.Map).isRequired
@@ -61,7 +65,7 @@ export default class ZoomSlider extends React.PureComponent {
   }
   render() {
     return (
-      <Slider onChange={this._onChange.bind(this)} value={this.state.value} />
+      <Slider style={this.props.style} onChange={this._onChange.bind(this)} value={this.state.value} />
     );
   }
 }

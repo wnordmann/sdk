@@ -44,6 +44,10 @@ class Geocoding extends React.PureComponent {
      */
     className: React.PropTypes.string,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * @ignore
      */
     intl: intlShape.isRequired
@@ -96,7 +100,7 @@ class Geocoding extends React.PureComponent {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <TextField className={classNames('sdk-component geocoding', this.props.className)} ref='query' value={this.state.value} hintText={formatMessage(messages.placeholder)} onChange={this._searchAddress.bind(this)}/>
+      <TextField style={this.props.style} className={classNames('sdk-component geocoding', this.props.className)} ref='query' value={this.state.value} hintText={formatMessage(messages.placeholder)} onChange={this._searchAddress.bind(this)}/>
     );
   }
 }

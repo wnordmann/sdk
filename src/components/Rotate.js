@@ -41,7 +41,7 @@ class Rotate extends React.PureComponent {
      */
     duration: React.PropTypes.number,
     /**
-     * Style for the buttons.
+     * Style config.
      */
     style: React.PropTypes.object,
     /**
@@ -111,7 +111,7 @@ class Rotate extends React.PureComponent {
         transform: 'rotate(' + this.state.rotation + 'rad)'
       };
       return (
-        <Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} secondary={true} className={classNames('sdk-component rotate', this.props.className)} iconStyle={iconStyle} tooltip={formatMessage(messages.rotatetitle)} onTouchTap={this._resetNorth.bind(this)}><NorthIcon /></Button>
+        <Button style={this.props.style} tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} secondary={true} className={classNames('sdk-component rotate', this.props.className)} iconStyle={iconStyle} tooltip={formatMessage(messages.rotatetitle)} onTouchTap={this._resetNorth.bind(this)}><NorthIcon /></Button>
       );
     }
   }

@@ -64,7 +64,7 @@ class Geolocation extends React.PureComponent {
      */
     zoom: React.PropTypes.number,
     /**
-     * Style for the button.
+     * Style config.
      */
     style: React.PropTypes.object,
     /**
@@ -177,7 +177,7 @@ class Geolocation extends React.PureComponent {
         tooltip += ' (' + formatMessage(messages.trackingtitle) + ')';
       }
       return (
-        <Button tooltipPosition={this.props.tooltipPosition} iconStyle={iconStyle} buttonType='Action' mini={true} secondary={true} className={classNames('sdk-component geolocation', this.props.className)} tooltip={tooltip} onTouchTap={this._geolocate.bind(this)}><MyLocation /></Button>
+        <Button style={this.props.style} tooltipPosition={this.props.tooltipPosition} iconStyle={iconStyle} buttonType='Action' mini={true} secondary={true} className={classNames('sdk-component geolocation', this.props.className)} tooltip={tooltip} onTouchTap={this._geolocate.bind(this)}><MyLocation /></Button>
       );
     }
   }

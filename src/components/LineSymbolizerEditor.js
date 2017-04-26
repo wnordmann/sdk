@@ -38,6 +38,10 @@ class LineSymbolizerEditor extends React.PureComponent {
      */
     initialState: React.PropTypes.object,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * @ignore
      */
     intl: intlShape.isRequired
@@ -45,7 +49,7 @@ class LineSymbolizerEditor extends React.PureComponent {
 
   render() {
     return (
-      <Paper zDepth={0} className={classNames('sdk-component line-symbolizer-editor', this.props.className)}>
+      <Paper style={this.props.style} zDepth={0} className={classNames('sdk-component line-symbolizer-editor', this.props.className)}>
         <StrokeEditor onChange={this.props.onChange} initialStrokeColor={this.props.initialState ? this.props.initialState.strokeColor : undefined} initialStrokeWidth={this.props.initialState ? this.props.initialState.strokeWidth : undefined} />
       </Paper>
     );

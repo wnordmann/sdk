@@ -57,6 +57,10 @@ class GeocodingResults extends React.PureComponent {
      */
     className: React.PropTypes.string,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * @ignore
      */
     intl: intlShape.isRequired
@@ -165,7 +169,7 @@ class GeocodingResults extends React.PureComponent {
       }
     }
     return (
-      <Paper zDepth={0} className={classNames('sdk-component geocoding-results', this.props.className)}>
+      <Paper style={this.props.style} zDepth={0} className={classNames('sdk-component geocoding-results', this.props.className)}>
         <Paper zDepth={0} className='geocoding-results-header'>{subheader}</Paper>
         <List className='geocoding-results-list'>
          {resultNodes}

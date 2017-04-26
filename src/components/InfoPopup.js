@@ -86,6 +86,10 @@ class InfoPopup extends React.Component {
      */
     className: React.PropTypes.string,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * @ignore
      */
     intl: intlShape.isRequired
@@ -387,8 +391,8 @@ class InfoPopup extends React.Component {
       contentDiv = (<div className='popup-content auto' ref='content' dangerouslySetInnerHTML={{__html: content}}></div>);
     }
     return (
-      <div className={classNames('sdk-component info-popup', this.props.className)}>
-        <Button buttonType='Icon' buttonStyle={{float: 'right'}} style={{'position':'absolute', 'right':'10px', 'top':'10px', 'zIndex':'1000'}} ref="popupCloser" onTouchTap={this.setVisible.bind(this, false)}><CloserIcon /></Button>
+      <div style={this.props.style} className={classNames('sdk-component info-popup', this.props.className)}>
+        <Button buttonType='Icon' style={{float: 'right'}} ref="popupCloser" onTouchTap={this.setVisible.bind(this, false)}><CloserIcon /></Button>
         {contentDiv}
       </div>
     );

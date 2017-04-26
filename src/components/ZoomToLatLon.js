@@ -118,6 +118,10 @@ class ZoomToLatLon extends React.PureComponent {
      */
     map: React.PropTypes.instanceOf(ol.Map).isRequired,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * The zoom level used when centering the view.
      */
     zoom: React.PropTypes.number,
@@ -253,7 +257,7 @@ class ZoomToLatLon extends React.PureComponent {
       </span>);
     }
     return (
-      <span>
+      <span style={this.props.style}>
         <Button buttonType='Icon' {...this.props} iconClassName='headerIcons ms ms-zoom-to' className={classNames('sdk-component zoom-to-latlon', this.props.className)} onTouchTap={this.openDialog.bind(this)} tooltip={formatMessage(messages.buttontitle)}/>
         <Dialog actions={actions} open={this.state.open} autoScrollBodyContent={true} onRequestClose={this.closeDialog.bind(this)} modal={true} title={formatMessage(messages.modaltitle)}>
           {body}

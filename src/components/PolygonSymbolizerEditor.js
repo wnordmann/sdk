@@ -34,6 +34,10 @@ class PolygonSymbolizerEditor extends React.PureComponent {
      */
     className: React.PropTypes.string,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * Initial state for the polygon symbolizer.
      */
     initialState: React.PropTypes.object
@@ -44,7 +48,7 @@ class PolygonSymbolizerEditor extends React.PureComponent {
   }
   render() {
     return (
-      <Paper zDepth={0} className={classNames('sdk-component polygon-symbolizer-editor', this.props.className)}>
+      <Paper style={this.props.style} zDepth={0} className={classNames('sdk-component polygon-symbolizer-editor', this.props.className)}>
         <FillEditor initialHasFill={this.props.initialState ? this.props.initialState.hasFill : undefined} onChange={this.props.onChange} initialFillColor={this.props.initialState ? this.props.initialState.fillColor : undefined} />
         <StrokeEditor initialHasStroke={this.props.initialState ? this.props.initialState.hasStroke : undefined} onChange={this.props.onChange} initialStrokeColor={this.props.initialState ? this.props.initialState.strokeColor : undefined} initialStrokeWidth={this.props.initialState ? this.props.initialState.strokeWidth : undefined} />
       </Paper>

@@ -49,7 +49,7 @@ class HomeButton extends React.PureComponent {
      */
     extent: React.PropTypes.arrayOf(React.PropTypes.number),
     /**
-     * Style for the button.
+     * Style config.
      */
     style: React.PropTypes.object,
     /**
@@ -92,7 +92,7 @@ class HomeButton extends React.PureComponent {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} secondary={true} className={classNames('sdk-component home-button', this.props.className)} tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._goHome.bind(this)} ><HomeIcon /></Button>
+      <Button style={this.props.style} tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} secondary={true} className={classNames('sdk-component home-button', this.props.className)} tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._goHome.bind(this)} ><HomeIcon /></Button>
     );
   }
 }

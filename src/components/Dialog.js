@@ -18,14 +18,43 @@ import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import Drawer from 'material-ui/Drawer';
 import './Dialog.css';
 
+/**
+ * Intermediate class for dialogs. Allows components to use dialogs that can
+ * easily switch between modal dialogs and inline dialogs (Drawer).
+ */
 export default class Dialog extends React.PureComponent {
   static propTypes = {
+    /**
+     * Css classname to use.
+     */
     className: React.PropTypes.string,
+    /**
+     * Should the dialog show inline, or as a modal dialog?
+     */
     inline: React.PropTypes.bool,
+    /**
+     * Function to call when dialog closes.
+     */
     onRequestClose: React.PropTypes.func,
+    /**
+     * Title of the dialog.
+     */
     title: React.PropTypes.string,
+    /**
+     * Should we auto scroll the content of the dialog body?
+     */
     autoScrollBodyContent: React.PropTypes.bool,
+    /**
+     * Action buttons for the dialog.
+     */
     actions: React.PropTypes.node,
+    /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
+     * @ignore
+     */
     children: React.PropTypes.node
   };
 
@@ -36,7 +65,7 @@ export default class Dialog extends React.PureComponent {
   render() {
     if (this.props.inline) {
       return (
-        <Drawer width={360} className={this.props.className} autoScrollBodyContent={this.props.autoScrollBodyContent} title={this.props.title} open={this.props.open} onRequestClose={this.props.onRequestClose}>
+        <Drawer style={this.props.style} width={360} className={this.props.className} autoScrollBodyContent={this.props.autoScrollBodyContent} title={this.props.title} open={this.props.open} onRequestClose={this.props.onRequestClose}>
           <AppBar
             title={this.props.title}
             iconElementLeft={<IconButton> <NavigationArrowBack/> </IconButton>} onLeftIconButtonTouchTap={this.props.onRequestClose}/>

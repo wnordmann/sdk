@@ -77,6 +77,10 @@ class DrawFeature extends React.PureComponent {
      */
     className: React.PropTypes.string,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * @ignore
      */
     intl: intlShape.isRequired
@@ -180,6 +184,7 @@ class DrawFeature extends React.PureComponent {
   render() {
     const {formatMessage} = this.props.intl;
     return (<IconMenu
+      style={this.props.style}
       anchorOrigin={{horizontal: 'right', vertical: 'bottom'}} targetOrigin={{horizontal: 'right', vertical: 'top'}}
       iconButtonElement={<Button buttonType='Icon' tooltip={formatMessage(messages.dropdowntitle)} disabled={this.state.disabled} iconClassName="headerIcons ms ms-draw" />}
       disabled={this.state.disabled}>

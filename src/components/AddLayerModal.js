@@ -251,6 +251,10 @@ class AddLayerModal extends React.PureComponent {
      */
     allowCreate: React.PropTypes.bool,
     /**
+     * Style config
+     */
+    style: React.PropTypes.object,
+    /**
      * @ignore
      */
     intl: intlShape.isRequired
@@ -739,7 +743,7 @@ class AddLayerModal extends React.PureComponent {
                 {selectOptions}
               </SelectField>);
     return (
-      <Dialog autoScrollBodyContent={true} bodyStyle={{padding: 20}} inline={this.props.inline} title={formatMessage(messages.title)} className='add-layer-modal' actions={actions} open={this.props.open} onRequestClose={this.close.bind(this)}>
+      <Dialog style={this.props.style} autoScrollBodyContent={true} bodyStyle={{padding: 20}} inline={this.props.inline} title={formatMessage(messages.title)} className='add-layer-modal' actions={actions} open={this.props.open} onRequestClose={this.close.bind(this)}>
        {select}
        {content}
       </Dialog>
