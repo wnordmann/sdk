@@ -22,6 +22,10 @@ export default class ColorPicker extends React.Component {
      */
     onChange: React.PropTypes.func.isRequired,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * Initial color.
      */
     initialColor: React.PropTypes.object
@@ -98,7 +102,7 @@ export default class ColorPicker extends React.Component {
       }
     });
     return (
-      <div>
+      <div style={this.props.style}>
           <div style={ styles.swatch } onClick={ this.handleClick.bind(this) }>
             <div style={ styles.color } />
           </div>

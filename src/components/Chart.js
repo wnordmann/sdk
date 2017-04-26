@@ -99,6 +99,10 @@ class Chart extends React.Component {
      */
     className: React.PropTypes.string,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * Callback function when the closer icon is pressed.
      */
     onClose: React.PropTypes.func,
@@ -277,7 +281,7 @@ class Chart extends React.Component {
     });
     var closer = this.props.onClose ? (<Button buttonType='Icon' style={{float: 'right'}} ref="popupCloser" onTouchTap={this.props.onClose}><CloserIcon /></Button>) : undefined;
     return (
-      <Paper zDepth={0} className={classNames('sdk-component chart', this.props.className)}>
+      <Paper style={this.props.style} zDepth={0} className={classNames('sdk-component chart', this.props.className)}>
         <SelectField style={{width: 350}} floatingLabelText={formatMessage(messages.combotext)} floatingLabelFixed={true} value={this.state.value} onChange={this._selectChart.bind(this)}>
           {options}
         </SelectField>
