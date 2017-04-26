@@ -74,6 +74,10 @@ class EditPopup extends React.Component {
      */
     className: React.PropTypes.string,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * @ignore
      */
     intl: intlShape.isRequired
@@ -354,7 +358,7 @@ class EditPopup extends React.Component {
     );
     var buttons = (<span style={{float: 'right'}}><Button buttonType='Flat' primary={true} onTouchTap={this._onCancel.bind(this)} label={formatMessage(messages.cancel)} /><Button buttonType='Flat' primary={true} onTouchTap={this.save.bind(this)} label={formatMessage(messages.save)} /></span>);
     return (
-      <div className={classNames('sdk-component edit-popup', this.props.className)}>
+      <div style={this.props.style} className={classNames('sdk-component edit-popup', this.props.className)}>
         {error}
         <div className='popup-content' ref='content'>
           {layerSelector}
