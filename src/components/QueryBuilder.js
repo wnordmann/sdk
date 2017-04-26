@@ -105,7 +105,11 @@ class QueryBuilder extends React.PureComponent {
     /**
      * Css class name to apply on the root element of this component.
      */
-    className: React.PropTypes.string
+    className: React.PropTypes.string,
+    /**
+     * Style config.
+     */
+    style: React.PropTypes.object
   };
 
   static contextTypes = {
@@ -218,7 +222,7 @@ class QueryBuilder extends React.PureComponent {
       />);
     }
     return (
-      <Paper zDepth={0} className={classNames('sdk-component query-builder', this.props.className)}>
+      <Paper style={this.props.style} zDepth={0} className={classNames('sdk-component query-builder', this.props.className)}>
         <LayerSelector {...this.props} value={id} onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /><br/>
         <TextField floatingLabelText={formatMessage(messages.filterlabel)} errorText={this.state.errorText} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} /><FilterHelp intl={this.props.intl} /><br/>
         <Toolbar>

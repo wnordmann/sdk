@@ -76,7 +76,7 @@ class QGISLegend extends React.PureComponent {
      */
     legendData: React.PropTypes.object.isRequired,
     /**
-     * Style for the button.
+     * Style config.
      */
     style: React.PropTypes.object,
     /**
@@ -172,7 +172,7 @@ class QGISLegend extends React.PureComponent {
     };
     var items = this._renderItems(this.props.legendData, this.props.legendBasePath);
     return (
-      <div className={classNames(divClass, this.props.className)}>
+      <div style={this.props.style} className={classNames(divClass, this.props.className)}>
         <Button buttonType='Action' mini={true} secondary={true} className='legendbutton' tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._togglePanel.bind(this)}><LegendIcon /></Button>
         <Paper zDepth={0} className='legend-panel'>{items}</Paper>
       </div>

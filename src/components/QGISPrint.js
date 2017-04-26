@@ -159,7 +159,7 @@ class QGISPrint extends React.PureComponent {
      */
     className: React.PropTypes.string,
     /**
-     * Style config object for IconMenu.
+     * Style config.
      */
     style: React.PropTypes.object,
     /**
@@ -460,14 +460,14 @@ class QGISPrint extends React.PureComponent {
     }
     if (this.props.menu === false) {
       return (
-        <span className={classNames('sdk-component qgis-print', this.props.className)}>
+        <span style={this.props.style} className={classNames('sdk-component qgis-print', this.props.className)}>
           <Button disabled={this.state.disabled} onTouchTap={this._onPrintButtonClick.bind(this)} tooltip={formatMessage(messages.printbuttontitle)} mini={true} buttonType='Action'><PrintIcon/></Button>
           {dialog}
         </span>
       );
     } else {
       return (
-        <span className={classNames('sdk-component qgis-print', this.props.className)}>
+        <span style={this.props.style} className={classNames('sdk-component qgis-print', this.props.className)}>
           <IconMenu menuStyle={{width: 150}} anchorOrigin={{horizontal: 'right', vertical: 'bottom'}} targetOrigin={{horizontal: 'right', vertical: 'top'}} iconButtonElement={<Button buttonType='Icon' disabled={this.state.disabled} tooltip={formatMessage(messages.printmenutext)}><PrintIcon/></Button>} value={this.state.layoutName}>
             {listitems}
           </IconMenu>
