@@ -27,6 +27,10 @@ class LeftNav extends React.PureComponent {
        */
       width: React.PropTypes.number,
       /**
+       * Style config.
+       */
+      style: React.PropTypes.object,
+      /**
        * Contents of the Drawer
        */
       children: React.PropTypes.node,
@@ -132,7 +136,7 @@ class LeftNav extends React.PureComponent {
       }
       this.rightIcon = icons;
       return (
-        <Drawer width = { this.props.width } open = { this.props.open } >
+        <Drawer style={this.props.style} width = { this.props.width } open = { this.props.open } >
           <AppBar title = { <span><span onTouchTap = { this.handleMenuTouchTap }> {this.state.menuText} <NavigationArrowDropDown style = { iconStyles }/></span>
             <Popover
               open = { this.state.menuOpen }

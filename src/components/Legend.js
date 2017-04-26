@@ -59,6 +59,10 @@ class Legend extends React.PureComponent {
      */
     className: React.PropTypes.string,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * @ignore
      */
     intl: intlShape.isRequired
@@ -104,7 +108,7 @@ class Legend extends React.PureComponent {
     }
     var subHeader = legends.length === 0 ? (<Paper zDepth={0} className='legend-header'><Label>{formatMessage(messages.emptyheader)}</Label></Paper>) : undefined;
     return (
-      <Paper zDepth={0} className={classNames('sdk-component legend', this.props.className)}>
+      <Paper style={this.props.style} zDepth={0} className={classNames('sdk-component legend', this.props.className)}>
         {subHeader}
         <List className='legend-list'>{legends}</List>
       </Paper>

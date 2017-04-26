@@ -34,6 +34,10 @@ class LoadingPanel extends React.PureComponent {
      */
     className: React.PropTypes.string,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * Map for whose layers to listen to load events.
      */
     map: React.PropTypes.instanceOf(ol.Map).isRequired
@@ -132,12 +136,12 @@ class LoadingPanel extends React.PureComponent {
   render() {
     if (this.state.show && !this.state.forceHide) {
       return (
-        <div className={classNames('sdk-component loading-panel', this.props.className)}>
+        <div style={this.props.style} className={classNames('sdk-component loading-panel', this.props.className)}>
           <CircularProgress size={60} thickness={7} />
         </div>
       );
     } else {
-      return (<article className={classNames('sdk-component loading-panel hidden', this.props.className)}/>);
+      return (<article style={this.props.style} className={classNames('sdk-component loading-panel hidden', this.props.className)}/>);
     }
   }
 }
