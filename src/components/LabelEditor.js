@@ -83,6 +83,10 @@ class LabelEditor extends React.PureComponent {
      */
     className: React.PropTypes.string,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
     * @ignore
     */
     intl: intlShape.isRequired
@@ -145,7 +149,7 @@ class LabelEditor extends React.PureComponent {
       attributeItems.push(<MenuItem key={i + 1} value={attribute} primaryText={attribute} />);
     }
     return (
-      <Paper zDepth={0} className={classNames('sdk-component label-editor style-contentContainer', this.props.className)}>
+      <Paper style={this.props.style} zDepth={0} className={classNames('sdk-component label-editor style-contentContainer', this.props.className)}>
         <Subheader className='style-listHeader'>{formatMessage(messages.header)}</Subheader>
         <ListItem insetChildren={true} innerDivStyle={ listStyle }>
           <SelectField floatingLabelFixed={true} fullWidth={true} floatingLabelText={formatMessage(messages.attributelabel)} hintText={formatMessage(messages.emptytext)} value={this.state.labelAttribute} onChange={this._onItemChange.bind(this)}>
