@@ -31,6 +31,10 @@ class ArcGISRestLegend extends React.PureComponent {
      */
     layer: React.PropTypes.instanceOf(ol.layer.Layer).isRequired,
     /**
+     * Style config.
+     */
+    style: React.PropTypes.object,
+    /**
      * Css class name to apply on the root element of this component.
      */
     className: React.PropTypes.string
@@ -78,7 +82,7 @@ class ArcGISRestLegend extends React.PureComponent {
       }
     }
     return (
-      <div className={classNames('sdk-component wms-legend', this.props.className)}>
+      <div style={this.props.style} className={classNames('sdk-component wms-legend', this.props.className)}>
         {markup}
       </div>
     );
