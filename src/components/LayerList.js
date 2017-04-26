@@ -145,16 +145,14 @@ class LayerList extends React.PureComponent {
     /**
     *  Tile services for the BaseMapModal component.  There is a built in default tileService if none provided
     */
-    baseMapTileServices: React.PropTypes.shape({
-      tileServices: React.PropTypes.arrayOf(React.PropTypes.shape({
-        name: React.PropTypes.string.isRequired,
-        description: React.PropTypes.string.isRequired,
-        endpoint: React.PropTypes.string,
-        standard: React.PropTypes.string.isRequired,
-        attribution: React.PropTypes.string,
-        thumbnail: React.PropTypes.string.isRequired
-      }))
-    }),
+    baseMapTileServices: React.PropTypes.arrayOf(React.PropTypes.shape({
+      name: React.PropTypes.string.isRequired,
+      description: React.PropTypes.string.isRequired,
+      endpoint: React.PropTypes.string,
+      standard: React.PropTypes.string.isRequired,
+      attribution: React.PropTypes.string,
+      thumbnail: React.PropTypes.string.isRequired
+    })),
     /**
      * Should we allow adding layers?
      */
