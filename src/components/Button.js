@@ -3,6 +3,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import IconButton from 'material-ui/IconButton';
+import FocusRipple from 'material-ui/internal/FocusRipple';
 import classNames from 'classnames';
 
 /**
@@ -96,10 +97,7 @@ class Button extends React.PureComponent {
     } else if (this.props.buttonType === 'Flat') {
       button = (<FlatButton disableTouchRipple={true} disabled={this.props.disabled} secondary={this.props.secondary} primary={this.props.primary} onTouchTap={this.props.onTouchTap} icon={this.props.icon} children={this.props.children} label={this.props.label} />);
     } else if (this.props.buttonType === 'Icon') {
-      var iconClassName = {
-        'active': this.props.secondary
-      };
-      button = (<IconButton iconClassName={classNames(this.props.iconClassName, iconClassName)} disableTouchRipple={true} disabled={this.props.disabled} onTouchTap={this.props.onTouchTap} children={this.props.children}/>);
+      button = (<IconButton iconClassName={this.props.iconClassName} disableTouchRipple={true} disabled={this.props.disabled} onTouchTap={this.props.onTouchTap} children={this.props.children}><FocusRipple show={this.props.secondary} /></IconButton>);
     } else {
       button = (<RaisedButton disableTouchRipple={true} disabled={this.props.disabled} secondary={this.props.secondary} onTouchTap={this.props.onTouchTap} icon={this.props.icon} children={this.props.children} label={this.props.label} />);
     }
