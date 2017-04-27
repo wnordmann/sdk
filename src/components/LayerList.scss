@@ -29,6 +29,16 @@
       white-space: nowrap;
     }
   }
+  &.n1 {
+    .statusIcons {
+      .fa-fw {
+        width: 3em !important;
+      }
+      .layer-list-name {
+        width: 146px;
+      }
+    }
+  }
   .viz {
     &.closed {
     }
@@ -84,4 +94,9 @@
 
 .iconSpan {
   width: 48px;
+}
+
+.fa-fw-2 {
+  width: 2.4em;
+  text-align: center;
 }
