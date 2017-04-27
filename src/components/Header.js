@@ -36,6 +36,10 @@ class Header extends React.Component {
     */
     leftMenuItems: React.PropTypes.node,
     /**
+     * Element to be displayed on the left side of the header
+     */
+    iconElementLeft: React.PropTypes.element,
+    /**
     * @ignore
     * Callback for left Icon
     **/
@@ -82,6 +86,7 @@ class Header extends React.Component {
     return (
       <AppBar
           style={this.props.style}
+          iconElementLeft={this.props.iconElementLeft}
           showMenuIconButton={this.props.showLeftIcon}
           title={this.props.title}
           iconElementRight={
