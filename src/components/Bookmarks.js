@@ -100,11 +100,11 @@ class Bookmarks extends React.PureComponent {
      */
     menu: React.PropTypes.bool,
     /**
-     * Should we display a marker for the bookmark?
+     * Animation duration.
      */
     speed: React.PropTypes.number,
     /**
-     *   Animation duration.
+     *   Should we display a marker for the bookmark? Animation duration.
      */
     showMarker: React.PropTypes.bool,
     /**
