@@ -58,7 +58,7 @@ class Header extends React.Component {
   };
 
   static defaultProps = {
-    showLeftIcon: true,
+    showLeftIcon: true
   }
 
   constructor(props) {
