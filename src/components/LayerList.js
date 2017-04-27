@@ -253,6 +253,9 @@ class LayerList extends React.PureComponent {
     this._onChangeCb = this._onChange.bind(this);
     LayerStore.addChangeListener(this._onChangeCb);
     this._onChange();
+    if (this.props.inlineDialogs) {
+      this.setState({visible: true});
+    }
   }
   componentWillUnmount() {
     LayerStore.removeChangeListener(this._onChangeCb);
@@ -352,8 +355,6 @@ class LayerList extends React.PureComponent {
 
     if (!this.props.inlineDialogs) {
       button = (<Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={this._togglePanel.bind(this)}><LayersIcon /></Button>);
-    }else {
-      this.setState({visible: true});
     }
 
     if (this.props.addLayer || this.props.addBaseMap || this.props.showUpload || this.props.showNew) {
