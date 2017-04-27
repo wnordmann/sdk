@@ -252,16 +252,16 @@ class Playback extends React.PureComponent {
     const {formatMessage} = this.props.intl;
     var buttonIcon;
     if (this.state.play === true) {
-      buttonIcon = <PlayIcon />;
+      buttonIcon = 'fa fa-play';
     } else {
-      buttonIcon = <PauseIcon />;
+      buttonIcon = 'fa fa-pause';
     }
     var playButton;
     var slider;
     var datePicker;
     var title = this.props.title ? this.props.title : formatMessage(messages.defaulttitle);
     if (this.state.date !== undefined) {
-      playButton = (<Button buttonType='Icon' key='play' style={{'float': 'left'}} onTouchTap={this._playPause.bind(this)}>{buttonIcon}</Button>);
+      playButton = (<Button buttonType='Icon' key='play' style={{'float': 'left'}} onTouchTap={this._playPause.bind(this)} iconClassName={buttonIcon}/>);
       this._refreshTimeLayers();
       if (this.state.dates) {
         slider = (<Slider step={1} key='slider' style={{width: 150, 'float': 'left', marginTop: 8}} min={0} max={this.state.dates.length - 1} value={this.state.dateStep} onChange={this._onRangeChangeValues.bind(this)} />);
