@@ -746,6 +746,7 @@ static formats = {
       padding: '16px'
     };
     var muted;
+    var isNested = false;
     var rightIconButtons = <span className="fixedContainer">{styling}{zoomTo}{visibility}{popoverEllipsis}</span>;
     if (layer.get('type') === 'base-group') {
       rightIconButtons = <span className="fixedContainer">{baseParentVisibility}{fixedWidth}</span>;
@@ -753,6 +754,7 @@ static formats = {
     }else if (layer.get('type') === 'base') {
       rightIconButtons = <span className="fixedContainer">{baseVisibility}{fixedWidth}</span>;
       muted = !showBasemapEye;
+      isNested = true;
     } else {
       muted = !this.state.checked
     }
@@ -760,11 +762,10 @@ static formats = {
       <div>
         <ListItem
           className={classNames({'sdk-component': true, 'menuItemContainer': true, 'layer-list-item': true}, this.props.className)}
-          autoGenerateNestedIndicator={this.props.collapsible}
           insetChildren={true}
           innerDivStyle={flexContainer}
           autoGenerateNestedIndicator={false}
-          primaryText={<span className={classNames({'menuItem':true, muted})}><span className="statusIcons">{arrowIcon}{layersIcon} <span className={'layer-list-name'}>{this.props.title}</span></span>{rightIconButtons}</span>}
+          primaryText={<span className={classNames({'menuItem':true, muted, 'n1':isNested})}><span className="statusIcons">{arrowIcon}{layersIcon} <span className={'layer-list-name'}>{this.props.title}</span></span>{rightIconButtons}</span>}
           nestedItems={this.props.nestedItems}
           open={this.state.open} />
         <div style={{paddingLeft: 72}}>
