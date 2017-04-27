@@ -93,12 +93,14 @@ class LeftNav extends React.PureComponent {
     getIconFromTab = (tabComponent) =>{
       if (tabComponent.type.name === 'Tab') {
         const tabChild = tabComponent.props.children;
-        if (tabChild.props) { //Tab children contains Icon
-          return tabChild.props.icon;
-        }else if (tabChild.type === 'div') { //Tab children components are often wrapped in a parent Div
-          const divChild = tabChild.props.children;
-          if (divChild.props.icon) { //Div children contains Icon
-            return divChild.props.icon;
+        if (tabChild.props) {  //Tab Child has props
+          if (tabChild.props.icon) {  //Tab children contains Icon{
+            return tabChild.props.icon;
+          }else if (tabChild.type === 'div') { //Tab children components are often wrapped in a parent Div
+            const divChild = tabChild.props.children;
+            if (divChild.props.icon) { //Div children contains Icon
+              return divChild.props.icon;
+            }
           }
         }
       }
