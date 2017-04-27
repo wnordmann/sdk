@@ -75,7 +75,7 @@ class ImageExport extends React.PureComponent {
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <Button style={this.props.style} buttonType='Icon' className={classNames('sdk-component image-export', this.props.className)} iconClassName='headerIcons ms ms-camera' tooltip={formatMessage(messages.buttontext)} onTouchTap={this._handleClick.bind(this)}><CameraIcon /></Button>
+      <Button style={this.props.style} buttonType='Icon' className={classNames('sdk-component image-export', this.props.className)} iconClassName='headerIcons ms ms-camera' tooltip={formatMessage(messages.buttontext)} onTouchTap={this._handleClick.bind(this)}/>
     );
   }
 }
