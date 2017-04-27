@@ -340,7 +340,13 @@ class LayerList extends React.PureComponent {
       'layer-list': true
     };
     var tipLabel = this.props.tipLabel ? (<div className='layer-list-header'><Label>{this.props.tipLabel}</Label></div>) : undefined;
-    var addLayer, layerModal, baseModal;
+    var addLayer, layerModal, baseModal, button;
+
+    if (!this.props.inlineDialogs) {
+      button = (<Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={this._togglePanel.bind(this)}><LayersIcon /></Button>);
+    }else {
+      this.setState({visible: true});
+    }
 
     if (this.props.addLayer || this.props.addBaseMap) {
       var layerAdd, baseAdd;
@@ -370,9 +376,9 @@ class LayerList extends React.PureComponent {
     }
     return (
       <div ref='parent' className={classNames(divClass, this.props.className)}>
-        <Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={this._togglePanel.bind(this)}><LayersIcon /></Button>
         <Paper style={{display : this.state.visible ? 'block' : 'none'}} zDepth={0} className='layer-tree-panel'>
           {tipLabel}
+          {button}
           <List className='layer-list-list'>
             {this.renderLayers(layers)}
           </List>
