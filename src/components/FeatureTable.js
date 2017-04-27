@@ -587,7 +587,7 @@ class FeatureTable extends React.Component {
           <ToolbarGroup style={{display: this._layer instanceof ol.layer.Vector ? 'block' : 'none'}}><TextField floatingLabelFixed={true} floatingLabelText={formatMessage(messages.filterlabel)} id='featuretable-filter' disabled={!this._layer} ref='filter' onChange={this._filterByText.bind(this)} hintText={formatMessage(messages.filterplaceholder)} /><FilterHelp intl={this.props.intl} /></ToolbarGroup>
           <ToolbarGroup style={{justifyContent: 'flex-end'}}>
             <Button buttonType='Icon' disabled={!this._layer} iconClassName='ms ms-crosshair' tooltip={formatMessage(messages.zoombuttontitle)} onTouchTap={this._zoomSelected.bind(this)}/>
-            <IconMenu anchorOrigin={{horizontal: 'right', vertical: 'top'}} targetOrigin={{horizontal: 'right', vertical: 'top'}} iconButtonElement={<Button buttonType='Icon'><MoreVertIcon /></Button>}>
+            <IconMenu anchorOrigin={{horizontal: 'right', vertical: 'top'}} targetOrigin={{horizontal: 'right', vertical: 'top'}} iconButtonElement={<Button buttonType='Icon' iconClassName='fa fa-ellipsis-v'/>}>
               <MenuItem primaryText={formatMessage(messages.clearbuttontitle)} disabled={!this._layer} onTouchTap={this._clearSelected.bind(this)}/>
               <MenuItem primaryText={<Toggle label={formatMessage(messages.onlyselected)} disabled={!this._layer} defaultToggled={this._selectedOnly} onToggle={this._filter.bind(this)}/>} />
             </IconMenu>
