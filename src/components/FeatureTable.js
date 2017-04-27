@@ -34,7 +34,6 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Snackbar from 'material-ui/Snackbar';
 import FilterService from '../services/FilterService';
 import Paper from 'material-ui/Paper';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import ToolUtil from '../toolutil';

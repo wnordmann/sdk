@@ -16,8 +16,6 @@ import classNames from 'classnames';
 import ToolActions from '../actions/ToolActions';
 import TimeService from '../services/TimeService';
 import Button from './Button';
-import PlayIcon from 'material-ui/svg-icons/av/play-arrow';
-import PauseIcon from 'material-ui/svg-icons/av/pause';
 import Slider from 'material-ui/Slider';
 import DatePicker from 'material-ui/DatePicker';
 import LayerStore from '../stores/LayerStore';
