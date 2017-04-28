@@ -199,10 +199,15 @@ class EditPopup extends React.Component {
       }
     }
   }
+  _doCallback() {
+    if (this._callback) {
+      this._callback(true);
+      delete this._callback;
+    }
+  }
   _onCancel() {
     this.setVisible(false);
-    this._callback(true);
-    delete this._callback;
+    this._doCallback();
   }
   _onSuccess() {
     this.setVisible(false);
@@ -271,14 +276,12 @@ class EditPopup extends React.Component {
             this.state.feature.setId(insertId);
             FeatureStore.addFeature(this.state.layer, this.state.feature);
           }
-          me._callback();
-          delete me._callback;
+          me._doCallback();
           me.setVisible(false);
         }, onFailure);
       } else {
         this.state.layer.getSource().addFeature(this.state.feature);
-        me._callback();
-        delete me._callback;
+        me._doCallback();
         me.setVisible(false);
       }
     } else { // UPDATE
@@ -287,8 +290,7 @@ class EditPopup extends React.Component {
           this.state.feature.set(key, this.state.values[key]);
         }
         me.setState({dirty: {}});
-        me._callback();
-        delete me._callback;
+        me._doCallback();
         me.setVisible(false);
       } else {
         var values = {};
@@ -311,8 +313,7 @@ class EditPopup extends React.Component {
           } else {
             me._setError(formatMessage(messages.updatemsg));
           }
-          me._callback();
-          delete me._callback;
+          me._doCallback();
           me.setVisible(false);
         };
         WFSService.updateFeature(this.state.layer, this.props.map.getView(), this.state.feature, values, onSuccess, onFailure);
