@@ -282,31 +282,41 @@ class EditPopup extends React.Component {
         me.setVisible(false);
       }
     } else { // UPDATE
-      var values = {};
-      for (key in this.state.dirty) {
-        values[key] = this.state.values[key];
-      }
-      if (this._geomDirty) {
-        var geomName = this.state.layer.get('wfsInfo') ? this.state.layer.get('wfsInfo').geometryName : this.state.feature.getGeometryName();
-        values[geomName] = this.state.feature.getGeometry();
-      }
-      var onSuccess = function(result) {
-        if (result && result.transactionSummary.totalUpdated === 1) {
-          for (key in me.state.dirty) {
-            me.state.feature.set(key, values[key]);
-          }
-          me.setState({dirty: {}});
-          if (!(me.state.layer.getSource() instanceof ol.source.Vector)) {
-            me._redraw();
-          }
-        } else {
-          me._setError(formatMessage(messages.updatemsg));
+      if (!this.state.layer.get('wfsInfo')) {
+        for (key in this.state.dirty) {
+          this.state.feature.set(key, this.state.values[key]);
         }
+        me.setState({dirty: {}});
         me._callback();
         delete me._callback;
         me.setVisible(false);
-      };
-      WFSService.updateFeature(this.state.layer, this.props.map.getView(), this.state.feature, values, onSuccess, onFailure);
+      } else {
+        var values = {};
+        for (key in this.state.dirty) {
+          values[key] = this.state.values[key];
+        }
+        if (this._geomDirty) {
+          var geomName = this.state.layer.get('wfsInfo') ? this.state.layer.get('wfsInfo').geometryName : this.state.feature.getGeometryName();
+          values[geomName] = this.state.feature.getGeometry();
+        }
+        var onSuccess = function(result) {
+          if (result && result.transactionSummary.totalUpdated === 1) {
+            for (key in me.state.dirty) {
+              me.state.feature.set(key, values[key]);
+            }
+            me.setState({dirty: {}});
+            if (!(me.state.layer.getSource() instanceof ol.source.Vector)) {
+              me._redraw();
+            }
+          } else {
+            me._setError(formatMessage(messages.updatemsg));
+          }
+          me._callback();
+          delete me._callback;
+          me.setVisible(false);
+        };
+        WFSService.updateFeature(this.state.layer, this.props.map.getView(), this.state.feature, values, onSuccess, onFailure);
+      }
     }
   }
   _onChangeField(evt) {
