@@ -367,7 +367,7 @@ class LayerList extends React.PureComponent {
             onTouchTap={this._showAddLayer.bind(this)}
             tooltip={formatMessage(messages.addlayertext)} />);
         }
-        layerModal = <AddLayerModal allowUpload={!!this.props.showUpload} allowCreate={!!this.props.showNew} open={(this.props.addLayer && this.props.addLayer.open !== undefined) ? this.props.addLayer.open : this.state.addLayerOpen} inline={this.props.inlineDialogs} srsName={this.props.map.getView().getProjection().getCode()} allowUserInput={this.props.addLayer && this.props.addLayer.allowUserInput} onRequestClose={this.props.addLayer && this.props.addLayer.onRequestClose ? this.props.addLayer.onRequestClose : this._closeAddLayer.bind(this)} sources={this.props.addLayer ? this.props.addLayer.sources : undefined} map={this.props.map}  />;
+        layerModal = <AddLayerModal allowUpload={this.props.showUpload} allowCreate={this.props.showNew} open={(this.props.addLayer && this.props.addLayer.open !== undefined) ? this.props.addLayer.open : this.state.addLayerOpen} inline={this.props.inlineDialogs} srsName={this.props.map.getView().getProjection().getCode()} allowUserInput={this.props.addLayer && this.props.addLayer.allowUserInput} onRequestClose={this.props.addLayer && this.props.addLayer.onRequestClose ? this.props.addLayer.onRequestClose : this._closeAddLayer.bind(this)} sources={this.props.addLayer ? this.props.addLayer.sources : undefined} map={this.props.map}  />;
       }
       if (this.props.addBaseMap) {
         baseAdd = <Button buttonType='Icon' iconClassName='ms ms-layers-base' tooltip={formatMessage(messages.addbasemaptext)} onTouchTap={this._showAddBaseMap.bind(this)} disableTouchRipple={true}/>;
