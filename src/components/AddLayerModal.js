@@ -577,11 +577,22 @@ class AddLayerModal extends React.PureComponent {
                 image: new ol.style.Circle({stroke: stroke, fill: fill, radius: 7})
               });
               me._counter++;
-              var attributes = features[0].getKeys();
-              attributes.splice(attributes.indexOf(features[0].getGeometryName()), 1);
+              var feature = features[0];
+              var attributes = feature.getKeys();
+              attributes.splice(attributes.indexOf(feature.getGeometryName()), 1);
+              var geom = feature.getGeometry();
+              var geomType;
+              if (geom instanceof ol.geom.Polygon || geom instanceof ol.geom.MultiPolygon) {
+                geomType = 'Polygon';
+              } else if (geom instanceof ol.geom.LineString || geom instanceof ol.geom.MultiLineString) {
+                geomType = 'Line';
+              } else if (geom instanceof ol.geom.Point || geom instanceof ol.geom.MultiPoint) {
+                geomType = 'Point';
+              }
               var lyr = new ol.layer.Vector({
                 id: me._generateId(),
                 attributes: attributes,
+                geometryType: geomType,
                 style: style,
                 source: new ol.source.Vector({
                   features: features,
