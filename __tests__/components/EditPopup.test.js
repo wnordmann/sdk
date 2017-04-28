@@ -7,6 +7,7 @@ import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
 import 'phantomjs-polyfill-object-assign';
+import TestUtils from 'react-addons-test-utils';
 import EditPopup from '../../src/components/EditPopup';
 
 raf.polyfill();
@@ -58,9 +59,7 @@ describe('EditPopup', function() {
     var feature = new ol.Feature({foo: 'bar'});
     feature.setId('foo.1');
     var layer = new ol.layer.Vector({
-      wfsInfo: {
-        attributes: ['foo']
-      },
+      attributes: ['foo'],
       source: new ol.source.Vector({})
     });
     var popup = ReactDOM.render((
@@ -70,6 +69,44 @@ describe('EditPopup', function() {
     var inputs = container.querySelectorAll('input');
     assert.equal(inputs[0].id, 'foo');
     assert.equal(inputs[0].value, 'bar');
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('saves changes to feature', function() {
+    var container = document.createElement('div');
+    var feature = new ol.Feature({foo: 'bar'});
+    feature.setId('foo.1');
+    var layer = new ol.layer.Vector({
+      attributes: ['foo'],
+      source: new ol.source.Vector({})
+    });
+    var popup = ReactDOM.render((
+        <EditPopup map={map} intl={intl} />
+    ), container);
+    popup.setState({layer: layer, feature: feature, values: feature.getProperties()});
+    popup.setState({dirty: {foo: true}, values: {foo: 'bar2'}});
+    var buttons = container.querySelectorAll('button');
+    TestUtils.Simulate.touchTap(buttons[1]);
+    assert.equal(feature.get('foo'), 'bar2');
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('cancels changes to feature', function() {
+    var container = document.createElement('div');
+    var feature = new ol.Feature({foo: 'bar'});
+    feature.setId('foo.1');
+    var layer = new ol.layer.Vector({
+      attributes: ['foo'],
+      source: new ol.source.Vector({})
+    });
+    var popup = ReactDOM.render((
+        <EditPopup map={map} intl={intl} />
+    ), container);
+    popup.setState({layer: layer, feature: feature, values: feature.getProperties()});
+    popup.setState({dirty: {foo: true}, values: {foo: 'bar2'}});
+    var buttons = container.querySelectorAll('button');
+    TestUtils.Simulate.touchTap(buttons[0]);
+    assert.equal(feature.get('foo'), 'bar');
     ReactDOM.unmountComponentAtNode(container);
   });
 
