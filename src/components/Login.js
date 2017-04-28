@@ -141,7 +141,7 @@ class Login extends React.PureComponent {
     const {formatMessage} = this.props.intl;
     if (this.state.user !== null) {
       return (
-        <Button style={this.props.style} buttonType='Icon' iconClassName='headerIcons fa fa-sign-out' className={classNames('sdk-component login', this.props.className)} onItemTouchTap={this._doLogout.bind(this)} tooltip={formatMessage(messages.logouttext)}/>
+        <Button style={this.props.style} buttonType='Icon' iconClassName='headerIcons fa fa-sign-out' className={classNames('sdk-component login', this.props.className)} onTouchTap={this._doLogout.bind(this)} tooltip={formatMessage(messages.logouttext)}/>
       );
     } else {
       return (
