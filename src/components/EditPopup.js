@@ -367,7 +367,7 @@ class EditPopup extends React.Component {
     var layerSelector = this.state.layer ? undefined : (
       <LayerSelector intl={this.props.intl} labelText={formatMessage(messages.layer)} value={id} onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList.bind(this)} map={this.props.map} />
     );
-    var buttons = (<span style={{float: 'right'}}><Button buttonType='Flat' primary={true} onTouchTap={this._onCancel.bind(this)} label={formatMessage(messages.cancel)} /><Button buttonType='Flat' primary={true} onTouchTap={this.save.bind(this)} label={formatMessage(messages.save)} /></span>);
+    var buttons = (<span style={{float: 'right'}}><Button buttonType='Flat' primary={true} onTouchTap={this._onCancel.bind(this)} label={formatMessage(messages.cancel)} /><Button disabled={!this.state.layer} buttonType='Flat' primary={true} onTouchTap={this.save.bind(this)} label={formatMessage(messages.save)} /></span>);
     return (
       <div style={this.props.style} className={classNames('sdk-component edit-popup', this.props.className)}>
         {error}
