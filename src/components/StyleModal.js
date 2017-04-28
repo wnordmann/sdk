@@ -292,7 +292,6 @@ class StyleModal extends React.PureComponent {
       error = (<Snackbar
         open={this.state.errorOpen}
         bodyStyle={{lineHeight: '24px', height: 'auto'}}
-        style={{bottom: 'auto', top: 0, position: 'absolute'}}
         message={formatMessage(messages.errormsg, {msg: this.state.msg})}
         autoHideDuration={2000}
         onRequestClose={this._handleRequestClose.bind(this)}
