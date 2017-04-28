@@ -98,7 +98,7 @@ class DrawFeature extends React.PureComponent {
     super(props);
     this._dispatchToken = ToolUtil.register(this);
     this.state = {
-      active: false,
+      secondary: false,
       muiTheme: context.muiTheme || getMuiTheme(),
       disabled: false,
       error: false,
@@ -140,9 +140,11 @@ class DrawFeature extends React.PureComponent {
   }
   activate(interactions) {
     ToolUtil.activate(this, interactions);
+    this.setState({secondary: true});
   }
   deactivate() {
     ToolUtil.deactivate(this);
+    this.setState({secondary: false});
   }
   _setActiveInteractions(active) {
     this.props.map.getInteractions().forEach(function(interaction) {
@@ -178,15 +180,12 @@ class DrawFeature extends React.PureComponent {
   enable() {
     this.setState({disabled: false});
   }
-  setActive(active) {
-    this.setState({active: active});
-  }
   render() {
     const {formatMessage} = this.props.intl;
     return (<IconMenu
       style={this.props.style}
       anchorOrigin={{horizontal: 'right', vertical: 'bottom'}} targetOrigin={{horizontal: 'right', vertical: 'top'}}
-      iconButtonElement={<Button buttonType='Icon' tooltip={formatMessage(messages.dropdowntitle)} disabled={this.state.disabled} iconClassName="headerIcons ms ms-draw" />}
+      iconButtonElement={<Button secondary={this.state.secondary} buttonType='Icon' tooltip={formatMessage(messages.dropdowntitle)} disabled={this.state.disabled} iconClassName="headerIcons ms ms-draw" />}
       disabled={this.state.disabled}>
       <MenuItem leftIcon={<i className='ms ms-draw-polygon'/>} primaryText={formatMessage(messages.polygon)} onTouchTap={this._drawPoly.bind(this)} />
       <MenuItem leftIcon={<i className='ms ms-draw-line'/>} onTouchTap={this._drawLine.bind(this)} primaryText={formatMessage(messages.linestring)} />
