@@ -279,7 +279,7 @@ class Chart extends React.Component {
       var title = chart.title;
       return (<MenuItem key={idx} value={title} primaryText={title} />);
     });
-    var closer = this.props.onClose ? (<Button buttonType='Icon' style={{float: 'right'}} ref="popupCloser" onTouchTap={this.props.onClose}><CloserIcon /></Button>) : undefined;
+    var closer = this.props.onClose ? (<Button buttonType='Icon' style={{float: 'right', zIndex: 1000}} ref="popupCloser" onTouchTap={this.props.onClose}><CloserIcon /></Button>) : undefined;
     return (
       <Paper style={this.props.style} zDepth={0} className={classNames('sdk-component chart', this.props.className)}>
         <SelectField style={{width: 350}} floatingLabelText={formatMessage(messages.combotext)} floatingLabelFixed={true} value={this.state.value} onChange={this._selectChart.bind(this)}>
