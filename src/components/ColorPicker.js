@@ -108,7 +108,7 @@ export default class ColorPicker extends React.Component {
           </div>
           { this.state.displayColorPicker ? <Popover onRequestClose={this.handleClose.bind(this)} anchorEl={this.state.anchorEl} open={this.state.displayColorPicker} style={ styles.popover }>
             <div style={ styles.cover } onClick={ this.handleClose.bind(this) }/>
-            <SketchPicker color={ this.state.color } onChangeComplete={ this.handleChange.bind(this) } />
+            <SketchPicker presetColors={[]} color={ this.state.color } onChangeComplete={ this.handleChange.bind(this) } />
           </Popover> : null }
 
         </div>
