@@ -392,7 +392,7 @@ class InfoPopup extends React.Component {
     }
     return (
       <div style={this.props.style} className={classNames('sdk-component info-popup', this.props.className)}>
-        <Button buttonType='Icon' style={{float: 'right'}} ref="popupCloser" onTouchTap={this.setVisible.bind(this, false)}><CloserIcon /></Button>
+        <Button buttonType='Icon' style={{zIndex: 1000, float: 'right'}} ref="popupCloser" onTouchTap={this.setVisible.bind(this, false)}><CloserIcon /></Button>
         {contentDiv}
       </div>
     );
