@@ -17,6 +17,7 @@ describe('AddLayerModal', function() {
   var target, map;
   var width = 360;
   var height = 180;
+  var wmsUrl = 'http://localhost:8080/geoserver/wms';
 
   beforeEach(function(done) {
     target = document.createElement('div');
@@ -46,9 +47,8 @@ describe('AddLayerModal', function() {
 
   it('clears layerInfo on error', function(done) {
     var container = document.createElement('div');
-    var url = 'http://localhost:8080/geoserver/wms';
     var modal = ReactDOM.render((
-      <AddLayerModal map={map} allowUserInput={true} sources={[{url: url, type: 'WMS', title: 'My WMS'}]} intl={intl} />
+      <AddLayerModal map={map} allowUserInput={true} sources={[{url: wmsUrl, type: 'WMS', title: 'My WMS'}]} intl={intl} />
     ), container);
     modal._setError('Error');
     assert.equal(modal.state.layerInfo, null);
@@ -60,9 +60,8 @@ describe('AddLayerModal', function() {
 
   it('generates correct layer title info', function(done) {
     var container = document.createElement('div');
-    var url = 'http://localhost:8080/geoserver/wms';
     var modal = ReactDOM.render((
-      <AddLayerModal map={map} allowUserInput={true} sources={[{url: url, type: 'WMS', title: 'My WMS'}]} intl={intl} />
+      <AddLayerModal map={map} allowUserInput={true} sources={[{url: wmsUrl, type: 'WMS', title: 'My WMS'}]} intl={intl} />
     ), container);
     var title = modal._getLayerTitle({Title: ''});
     assert.equal(title.empty, true);
@@ -77,13 +76,12 @@ describe('AddLayerModal', function() {
 
   it('returns the correct url if no url input field', function(done) {
     var container = document.createElement('div');
-    var url = 'http://localhost:8080/geoserver/wms';
     var modal = ReactDOM.render((
-      <AddLayerModal map={map} allowUserInput={false} sources={[{url: url, type: 'WMS', title: 'My WMS'}]} intl={intl} />
+      <AddLayerModal map={map} allowUserInput={false} sources={[{url: wmsUrl, type: 'WMS', title: 'My WMS'}]} intl={intl} />
     ), container);
     modal.setState({source: 0}, function() {
       var result = modal.state.sources[modal.state.source].url;
-      assert.equal(result, url);
+      assert.equal(result, wmsUrl);
       window.setTimeout(function() {
         ReactDOM.unmountComponentAtNode(container);
         done();
@@ -92,9 +90,8 @@ describe('AddLayerModal', function() {
   });
   it('returns a new generate ID', function(done) {
     var container = document.createElement('div');
-    var url = 'http://localhost:8080/geoserver/wms';
     var modal = ReactDOM.render((
-      <AddLayerModal map={map} allowUserInput={true} sources={[{url: url, type: 'WMS', title: 'My WMS'}]} intl={intl} />
+      <AddLayerModal map={map} allowUserInput={true} sources={[{url: wmsUrl, type: 'WMS', title: 'My WMS'}]} intl={intl} />
     ), container);
     var id = modal._generateId();
     assert.equal(id, 'sdk-addlayer-1');
@@ -105,13 +102,23 @@ describe('AddLayerModal', function() {
   });
   it('change of source to Create', function(done) {
     var container = document.createElement('div');
-    var url = 'http://localhost:8080/geoserver/wms';
     var modal = ReactDOM.render((
-      <AddLayerModal map={map} allowUserInput={true} sources={[{url: url, type: 'WMS', title: 'My WMS'}]} intl={intl} />
+      <AddLayerModal map={map} allowUserInput={true} sources={[{url: wmsUrl, type: 'WMS', title: 'My WMS'}]} intl={intl} />
     ), container);
+    //TestCreate
     modal._onSourceChange(null, 1, 'CREATE');
     var result = modal.state;
     var expectedState = {layerInfo: null, showNew: false, showUpload: false, showCreate: true, layer: null, source: 'CREATE'};
+    assert.include(result, expectedState);
+    //TestUpload
+    modal._onSourceChange(null, 1, 'UPLOAD');
+    result = modal.state;
+    expectedState = {layerInfo: null, showNew: false, showUpload: true, showCreate: false, layer: null, source: 'UPLOAD'};
+    assert.include(result, expectedState);
+    //TestNew
+    modal._onSourceChange(null, 1, 'NEW');
+    result = modal.state;
+    expectedState = {layerInfo: null, showUpload: false, showNew: true, showCreate: false, layer: null, source: 'NEW'};
     assert.include(result, expectedState);
     window.setTimeout(function() {
       ReactDOM.unmountComponentAtNode(container);
