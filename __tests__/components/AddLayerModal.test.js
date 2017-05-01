@@ -103,15 +103,16 @@ describe('AddLayerModal', function() {
       done();
     }, 500);
   });
-  it('change change of source to Create', function(done) {
+  it('change of source to Create', function(done) {
     var container = document.createElement('div');
     var url = 'http://localhost:8080/geoserver/wms';
     var modal = ReactDOM.render((
       <AddLayerModal map={map} allowUserInput={true} sources={[{url: url, type: 'WMS', title: 'My WMS'}]} intl={intl} />
     ), container);
     modal._onSourceChange(null, 1, 'CREATE');
-    var result = modal.state.showNew;
-    assert.isFalse(result);
+    var result = modal.state;
+    var expectedState = {layerInfo: null, showNew: false, showUpload: false, showCreate: true, layer: null, source: 'CREATE'};
+    assert.include(result, expectedState);
     window.setTimeout(function() {
       ReactDOM.unmountComponentAtNode(container);
       done();
