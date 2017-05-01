@@ -717,8 +717,8 @@ class AddLayerModal extends React.PureComponent {
           <MenuItem key='Polygon' value='Polygon' primaryText={formatMessage(messages.polygeomtype)} />
         </SelectField>
         <TextField fullWidth={true} floatingLabelFixed={true} value={this.state.attributes} hintText={formatMessage(messages.attributeshint)} floatingLabelText={formatMessage(messages.attributeslabel)} onChange={this._onChangeAttributes.bind(this)} />
-        <FillEditor disabled={true} onChange={this._onChangeFill.bind(this)} />
-        <StrokeEditor disabled={true} onChange={this._onChangeStroke.bind(this)} />
+        <FillEditor disabled={true} onChange={this._onChangeFill.bind(this)} intl={this.props.intl}/>
+        <StrokeEditor disabled={true} onChange={this._onChangeStroke.bind(this)}  intl={this.props.intl}/>
       </div>);
     }
     var upload;
@@ -738,8 +738,8 @@ class AddLayerModal extends React.PureComponent {
           </IconButton>
           </Dropzone>
         </div>
-        <FillEditor className='addLayer-colorPicker' disabled={true} onChange={this._onChangeFill.bind(this)} />
-        <StrokeEditor disabled={true} onChange={this._onChangeStroke.bind(this)} />
+        <FillEditor className='addLayer-colorPicker' disabled={true} onChange={this._onChangeFill.bind(this)} intl={this.props.intl} />
+        <StrokeEditor disabled={true} onChange={this._onChangeStroke.bind(this)}  intl={this.props.intl}/>
       </div>);
     }
     var newDialog;

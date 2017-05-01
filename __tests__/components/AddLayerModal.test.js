@@ -90,5 +90,31 @@ describe('AddLayerModal', function() {
       }, 500);
     });
   });
-
+  it('returns a new generate ID', function(done) {
+    var container = document.createElement('div');
+    var url = 'http://localhost:8080/geoserver/wms';
+    var modal = ReactDOM.render((
+      <AddLayerModal map={map} allowUserInput={true} sources={[{url: url, type: 'WMS', title: 'My WMS'}]} intl={intl} />
+    ), container);
+    var id = modal._generateId();
+    assert.equal(id, 'sdk-addlayer-1');
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+  it('change change of source to Create', function(done) {
+    var container = document.createElement('div');
+    var url = 'http://localhost:8080/geoserver/wms';
+    var modal = ReactDOM.render((
+      <AddLayerModal map={map} allowUserInput={true} sources={[{url: url, type: 'WMS', title: 'My WMS'}]} intl={intl} />
+    ), container);
+    modal._onSourceChange(null, 1, 'CREATE');
+    var result = modal.state.showNew;
+    assert.isFalse(result);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
 });
