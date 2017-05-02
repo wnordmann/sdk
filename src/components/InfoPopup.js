@@ -178,10 +178,12 @@ class InfoPopup extends React.Component {
     }
     return layers;
   }
-  _createSimpleTable(response, attributeFilterList) {
-    if (!Array.isArray(attributeFilterList)) {
-      attributeFilterList = [];
+  _createSimpleTable(response, /*attributeFilterList*/ includeAttributes) {
+    /*
+    if (!Array.isArray(includeAttributes)) {
+      includeAttributes = feature.getKeys();
     }
+    */
     var features = response.features;
     var layer = response.layer;
     this._count++;
@@ -191,25 +193,14 @@ class InfoPopup extends React.Component {
     for (var i = 0, ii = features.length; i < ii; ++i) {
       var feature = features[i];
       fid = feature.getId();
-      var keys = feature.getKeys();
-      // var geom = feature.getGeometryName();
+      if (!Array.isArray(includeAttributes)) {
+        includeAttributes = feature.getKeys();
+      }
       var style = {wordWrap: 'break-word', whiteSpace: 'normal'};
-      // for (var j = 0, jj = keys.length; j < jj; ++j) {
-      //   var key = keys[j];
-      //   if (key !== geom && key !== 'boundedBy') {
-      //     rows.push(<TableRow key={key}><TableRowColumn style={style}>{key}</TableRowColumn><TableRowColumn style={style}>{feature.get(key)}</TableRowColumn></TableRow>);
-      //   }
-      // }
-      attributeFilterList.push(feature.getGeometryName());
-      attributeFilterList.push('boundedBy');
-      var filteredKeys = keys.filter(
-        function(obj) {
-          return this.indexOf(obj) < 0;
+      includeAttributes.forEach(function(key) {
+        if (key !== feature.getGeometryName() && key !== 'boundedBy') {
+          rows.push(<TableRow key={key}><TableRowColumn style={style}>{key}</TableRowColumn><TableRowColumn style={style}>{feature.get(key)}</TableRowColumn></TableRow>);
         }
-        ,attributeFilterList
-      );
-      filteredKeys.forEach(function(key) {
-        rows.push(<TableRow key={key}><TableRowColumn style={style}>{key}</TableRowColumn><TableRowColumn style={style}>{feature.get(key)}</TableRowColumn></TableRow>);
       });
     }
     return (<Table key={this._count}>
@@ -335,7 +326,8 @@ class InfoPopup extends React.Component {
           if (popupDef === ALL_ATTRS) {
             me._contentAsObject = true;
             popupTexts.push(me._createSimpleTable({features: [feature], layer: layer}));
-          }else if (Array.isArray(popupDef)) {
+          } else if (Array.isArray(popupDef)) {
+            me._contentAsObject = true;
             popupTexts.push(me._createSimpleTable({features: [feature], layer: layer}, popupDef));
           }else if (popupDef && !cluster) {
             var featureKeys = feature.getKeys();
