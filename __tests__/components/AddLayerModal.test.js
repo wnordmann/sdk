@@ -95,6 +95,8 @@ describe('AddLayerModal', function() {
     ), container);
     var id = modal._generateId();
     assert.equal(id, 'sdk-addlayer-1');
+    id = modal._generateId();
+    assert.equal(id, 'sdk-addlayer-2');
     window.setTimeout(function() {
       ReactDOM.unmountComponentAtNode(container);
       done();
