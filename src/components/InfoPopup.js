@@ -178,12 +178,7 @@ class InfoPopup extends React.Component {
     }
     return layers;
   }
-  _createSimpleTable(response, /*attributeFilterList*/ includeAttributes) {
-    /*
-    if (!Array.isArray(includeAttributes)) {
-      includeAttributes = feature.getKeys();
-    }
-    */
+  _createSimpleTable(response, includeAttributes) {
     var features = response.features;
     var layer = response.layer;
     this._count++;

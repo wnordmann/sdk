@@ -5,10 +5,10 @@
   height: auto;
 }
 .popup-header {
-  height: 120px;
+  height: 80px;
 }
 .popup-body {
-  height: calc(100% - 120px);
+  height: calc(100% - 80px);
   overflow: auto;
 }
 
