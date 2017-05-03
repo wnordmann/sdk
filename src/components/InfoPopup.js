@@ -178,9 +178,10 @@ class InfoPopup extends React.Component {
     }
     return layers;
   }
-  _createSimpleTable(response, includeAttributes) {
+  _createSimpleTable(response) {
     var features = response.features;
     var layer = response.layer;
+    var includeAttributes = layer.get('infoPopup');
     this._count++;
     const {formatMessage} = this.props.intl;
     var fid;
@@ -244,7 +245,7 @@ class InfoPopup extends React.Component {
       var features = response.features;
       if (features.length) {
         var popupContent;
-        if (popupDef === ALL_ATTRS) {
+        if (popupDef === ALL_ATTRS || Array.isArray(popupDef)) {
           me._contentAsObject = true;
           popupContent = me._createSimpleTable(response);
         } else {
@@ -281,14 +282,14 @@ class InfoPopup extends React.Component {
       } else {
         service = WMTSService;
       }
-      if (popupDef === ALL_ATTRS) {
+      if (popupDef === ALL_ATTRS || Array.isArray(popupDef)) {
         called = true;
         var infoFormat = this.props.infoFormat;
         var callback = (infoFormat === 'text/plain' || infoFormat === 'text/html') ? onReadyAll : onReady;
         service.getFeatureInfo(layer, evt.coordinate, map, infoFormat, callback, function() {
           map.getTarget().style.cursor = me._cursor;
         }, this._proxy, this._requestHeaders);
-      } else if (popupDef) {
+      } else if (popupDef.length > 0) {
         called = true;
         service.getFeatureInfo(layer, evt.coordinate, map, 'application/json', onReady, undefined, this._proxy, this.requestHeaders);
       }
@@ -318,12 +319,9 @@ class InfoPopup extends React.Component {
             }
           }
           var popupDef = layer.get('popupInfo');
-          if (popupDef === ALL_ATTRS) {
+          if (popupDef === ALL_ATTRS || Array.isArray(popupDef)) {
             me._contentAsObject = true;
             popupTexts.push(me._createSimpleTable({features: [feature], layer: layer}));
-          } else if (Array.isArray(popupDef)) {
-            me._contentAsObject = true;
-            popupTexts.push(me._createSimpleTable({features: [feature], layer: layer}, popupDef));
           }else if (popupDef && !cluster) {
             var featureKeys = feature.getKeys();
             for (var i = 0, ii = featureKeys.length; i < ii; i++) {
