@@ -14,9 +14,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import IconButton from 'material-ui/IconButton';
 import NavigationMoreVert from 'material-ui/svg-icons/navigation/more-vert';
-// import AppBar from './appbar.js';
+import GeoCoded from './GeoCoded.js';
 import AppBar from 'material-ui/AppBar';
-// require('./mapskin/fonts/mapskin.css');
 
 export default class DrawerSimpleExample extends React.Component {
 
@@ -64,22 +63,8 @@ export default class DrawerSimpleExample extends React.Component {
               <IconButton
                  iconClassName="headerIcons ms ms-measure-distance"
                 />
-              <IconButton onTouchTap={this.handleTouchTap} >
+              <IconButton>
                 <NavigationMoreVert />
-                <Popover
-                  open={this.state.open}
-                  anchorEl={this.state.anchorEl}
-                  anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
-                  targetOrigin={{horizontal: 'right', vertical: 'top'}}
-                  onRequestClose={this.handleRequestClose}
-
-                >
-                  <Menu>
-                    <MenuItem primaryText="Load" />
-                    <MenuItem primaryText="Save" />
-                    <MenuItem primaryText="Login" />
-                  </Menu>
-                </Popover>
               </IconButton>
             </div>}
         />
@@ -91,7 +76,19 @@ export default class DrawerSimpleExample extends React.Component {
                 hintText="Placename search"
                 hintStyle= {{color: '#ffffff'}}
                 className="headerText"
+                onTouchTap={this.handleTouchTap}
               />
+            <Popover
+              open={this.state.open}
+              anchorEl={this.state.anchorEl}
+              anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+              targetOrigin={{horizontal: 'left', vertical: 'top'}}
+              onRequestClose={this.handleRequestClose}
+            >
+              <Menu>
+                <GeoCoded />
+              </Menu>
+            </Popover>
               <IconButton
                  iconClassName="headerIcons fa fa-search"
                 />
@@ -101,22 +98,8 @@ export default class DrawerSimpleExample extends React.Component {
               <IconButton
                  iconClassName="headerIcons ms ms-measure-distance"
                 />
-              <IconButton onTouchTap={this.handleTouchTap} >
+              <IconButton>
                 <NavigationMoreVert />
-                <Popover
-                  open={this.state.open}
-                  anchorEl={this.state.anchorEl}
-                  anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
-                  targetOrigin={{horizontal: 'right', vertical: 'top'}}
-                  onRequestClose={this.handleRequestClose}
-
-                >
-                  <Menu>
-                    <MenuItem primaryText="Load" />
-                    <MenuItem primaryText="Save" />
-                    <MenuItem primaryText="Login" />
-                  </Menu>
-                </Popover>
               </IconButton>
             </div>}
         />
