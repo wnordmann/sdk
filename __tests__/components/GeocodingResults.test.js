@@ -75,9 +75,8 @@ describe('GeocodingResults', function() {
       <GeocodingResults intl={intl} map={map}/>
     ), container);
     var display = result._formatDisplayName(mockResponse[0]);
-    assert.equal(display.type, 'span');
-    assert.equal(display.props.children[1], ', City of St. Louis, Missouri, United States of America');
-    assert.equal(display.props.children[0].props.children, 'St. Louis');
+    var mockJsx = (<span><strong>{'St. Louis'}</strong>{', City of St. Louis, Missouri, United States of America'}</span>)
+    assert.deepEqual(display, mockJsx);
     ReactDOM.unmountComponentAtNode(container);
   });
 });
