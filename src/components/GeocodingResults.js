@@ -128,6 +128,15 @@ class GeocodingResults extends React.PureComponent {
   _setVisible(visible) {
     ReactDOM.findDOMNode(this).parentNode.style.display = visible ? 'block' : 'none';
   }
+  _formatDisplayName(result) {
+    const placeType = result.address[Object.keys(result.address)[0]];
+    if (placeType) {
+      const displayName = result.display_name.slice(placeType.length);
+      return (<span><strong>{placeType}</strong>{displayName}</span>)
+    }
+
+    return (<span>{result.display_name}</span>);
+  }
   _zoomTo(result) {
     this._setVisible(false);
     var map = this.props.map;
@@ -161,7 +170,8 @@ class GeocodingResults extends React.PureComponent {
           if (result.icon) {
             icon = (<img src={result.icon}/>);
           }
-          return (<ListItem leftIcon={icon} primaryText={result.display_name} key={result.place_id} onTouchTap={this._zoomTo.bind(this, result)} />
+          return (<ListItem leftIcon={icon} primaryText={this._formatDisplayName(result)} key={result.place_id} onTouchTap={this._zoomTo.bind(this, result)} />
+          // return (<ListItem leftIcon={icon} primaryText={result.display_name} key={result.place_id} onTouchTap={this._zoomTo.bind(this, result)} />
           );
         }, this);
       } else {
