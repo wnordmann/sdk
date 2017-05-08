@@ -11,7 +11,6 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import classNames from 'classnames';
 import AppDispatcher from '../dispatchers/AppDispatcher';
@@ -19,6 +18,8 @@ import GeocodingConstants from '../constants/GeocodingConstants';
 import GeocodingActions from '../actions/GeocodingActions';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import Popover from 'material-ui/Popover';
+import Menu from 'material-ui/Menu';
 import './Geocoding.css';
 
 const messages = defineMessages({
@@ -97,6 +98,7 @@ class GeocodingResults extends React.PureComponent {
       }
     });
     this.state = {
+      open: false,
       searchResults: null
     };
   }
@@ -124,7 +126,9 @@ class GeocodingResults extends React.PureComponent {
     AppDispatcher.unregister(this._dispatchToken);
   }
   _setVisible(visible) {
-    ReactDOM.findDOMNode(this).parentNode.style.display = visible ? 'block' : 'none';
+    this.setState({
+      open: visible
+    });
   }
   _formatDisplayName(result) {
     const placeType = result.address[Object.keys(result.address)[0]];
@@ -157,6 +161,12 @@ class GeocodingResults extends React.PureComponent {
     source.addFeature(feature);
     GeocodingActions.zoomToResult(result);
   }
+
+  handleRequestClose = () => {
+    this.setState({
+      open: false
+    });
+  };
   render() {
     const {formatMessage} = this.props.intl;
     var resultNodes;
@@ -178,9 +188,19 @@ class GeocodingResults extends React.PureComponent {
         resultNodes = formatMessage(messages.noresults);
       }
     }
-    return (<div className={classNames('sdk-component geocoding-results', this.props.className)}>
-              {resultNodes}
-            </div>);
+    return (
+      <Popover open={this.state.open}
+        anchorEl={this.state.anchorEl}
+        anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+        targetOrigin={{horizontal: 'left', vertical: 'top'}}
+        onRequestClose={this.handleRequestClose}>
+        <Menu>
+          <div className={classNames('sdk-component geocoding-results geocoding', this.props.className)}>
+            {resultNodes}
+          </div>
+        </Menu>
+      </Popover>
+    );
   }
 }
 
