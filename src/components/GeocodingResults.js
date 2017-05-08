@@ -165,7 +165,7 @@ class GeocodingResults extends React.PureComponent {
         resultNodes = this.state.searchResults.map(function(result) {
           var icon;
           if (result.icon) {
-            icon = (<div className="locationIcon"><img src={result.icon}/></div>);
+            icon = (<div className="locationIcon"><i><img src={result.icon}/></i></div>);
           }else {
             icon = (<div className="locationIcon"><i className="fa fa-fw"></i></div>);
           }
