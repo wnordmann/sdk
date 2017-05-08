@@ -15,13 +15,11 @@ import ReactDOM from 'react-dom';
 import ol from 'openlayers';
 import classNames from 'classnames';
 import AppDispatcher from '../dispatchers/AppDispatcher';
-import {List, ListItem} from 'material-ui/List';
 import GeocodingConstants from '../constants/GeocodingConstants';
 import GeocodingActions from '../actions/GeocodingActions';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import Paper from 'material-ui/Paper';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import './GeocodingResults.css';
+import './Geocoding.css';
 
 const messages = defineMessages({
   noresults: {
@@ -132,7 +130,7 @@ class GeocodingResults extends React.PureComponent {
     const placeType = result.address[Object.keys(result.address)[0]];
     if (placeType) {
       const displayName = result.display_name.slice(placeType.length);
-      return (<span><strong>{placeType}</strong>{displayName}</span>)
+      return (<div className="locationDetails"><span className="place">{placeType}</span>{displayName}</div>)
     }
 
     return (<span>{result.display_name}</span>);
@@ -162,29 +160,27 @@ class GeocodingResults extends React.PureComponent {
   render() {
     const {formatMessage} = this.props.intl;
     var resultNodes;
-    var subheader;
     if (this.state.searchResults !== null) {
       if (this.state.searchResults.length > 0) {
         resultNodes = this.state.searchResults.map(function(result) {
           var icon;
           if (result.icon) {
-            icon = (<img src={result.icon}/>);
+            icon = (<div className="locationIcon"><img src={result.icon}/></div>);
+          }else {
+            icon = (<div className="locationIcon"><i className="fa fa-fw"></i></div>);
           }
-          return (<ListItem leftIcon={icon} primaryText={this._formatDisplayName(result)} key={result.place_id} onTouchTap={this._zoomTo.bind(this, result)} />
-          );
+          return (<div className="locationResult" key={result.place_id} onTouchTap={this._zoomTo.bind(this, result)}>
+                    {icon}
+                    {this._formatDisplayName(result)}
+                  </div>);
         }, this);
       } else {
-        subheader = formatMessage(messages.noresults);
+        resultNodes = formatMessage(messages.noresults);
       }
     }
-    return (
-      <Paper style={this.props.style} zDepth={0} className={classNames('sdk-component geocoding-results', this.props.className)}>
-        <Paper zDepth={0} className='geocoding-results-header'>{subheader}</Paper>
-        <List className='geocoding-results-list'>
-         {resultNodes}
-        </List>
-      </Paper>
-    );
+    return (<div className={classNames('sdk-component geocoding-results', this.props.className)}>
+              {resultNodes}
+            </div>);
   }
 }
 
