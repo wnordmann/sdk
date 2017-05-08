@@ -171,7 +171,6 @@ class GeocodingResults extends React.PureComponent {
             icon = (<img src={result.icon}/>);
           }
           return (<ListItem leftIcon={icon} primaryText={this._formatDisplayName(result)} key={result.place_id} onTouchTap={this._zoomTo.bind(this, result)} />
-          // return (<ListItem leftIcon={icon} primaryText={result.display_name} key={result.place_id} onTouchTap={this._zoomTo.bind(this, result)} />
           );
         }, this);
       } else {
