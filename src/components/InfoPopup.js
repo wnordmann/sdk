@@ -55,13 +55,8 @@ const messages = defineMessages({
 const ALL_ATTRS = '#AllAttributes';
 
 /**
- * Popup to show feature info. This can be through WMS / WMTS GetFeatureInfo or local vector data.
+ * $$src/components/InfoPopupDetail.md$$
  *
- * ```xml
- * <InfoPopup toggleGroup='navigation' map={map} />
- * ```
- *
- * ![Info Popup](../InfoPopup.png)
  */
 class InfoPopup extends React.Component {
   static propTypes = {
