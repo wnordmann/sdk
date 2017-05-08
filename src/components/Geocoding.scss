@@ -1,4 +1,5 @@
-.geocoding {
+.geocoding-results {
+
   .locationResult {
     max-width: 280px;
     color: #8C8C8C;
@@ -7,12 +8,13 @@
     margin-bottom: 5px;
 
     .locationIcon {
-      width: 80px;
+      width: 50px;
       display: flex;
       justify-content: center;
       padding-top: 4px;
     }
     .locationDetails {
+      flex: 1;
       .place {
         color: #333333;
         font-weight: bold;
