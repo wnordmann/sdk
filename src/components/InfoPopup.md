@@ -102,13 +102,13 @@ Custom Content (custom format)
 
   * To include custom text in the popup without a table format, enter the string to include
 
-    * `popupInfo: '<div style="color:blue;">Custom Content</div>'`
+    * `popupInfo: '<a href="#">Custom Content</a>'`
 
           ```javascript
           new ol.layer.Vector({
             title: 'airports',
             id: 'lyr03',
-            popupInfo: '<div style="color:blue;">Custom Content</div>',
+            popupInfo: '<a href="#">Custom Content</a>',
             isSelectable: true,
             geometryType: 'Point',style: styleAirports,
             source: new ol.source.Vector({
