@@ -590,7 +590,9 @@ static formats = {
     this.props.layer.setOpacity(value);
   }
   _onTableUpdate() {
-    this.refs.tablemodal.forceUpdate();
+    if (this.refs.tablemodal) {
+      this.refs.tablemodal.forceUpdate();
+    }
   }
   calculateInRange() {
     if (!this.props.handleResolutionChange) {
