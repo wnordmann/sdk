@@ -17,7 +17,8 @@ new ol.layer.Vector({
   id: 'lyr03',
   popupInfo: '#AllAttributes',
   isSelectable: true,
-  geometryType: 'Point',style: styleAirports,
+  geometryType: 'Point',
+  style: styleAirports,
   source: new ol.source.Vector({
     format: new ol.format.GeoJSON(),
     url: './data/airports.json'
@@ -58,7 +59,8 @@ Select Attributes (table)
             id: 'lyr03',
             popupInfo: [‘cat’, ‘TYPE’],
             isSelectable: true,
-            geometryType: 'Point',style: styleAirports,
+            geometryType: 'Point',
+            style: styleAirports,
             source: new ol.source.Vector({
               format: new ol.format.GeoJSON(),
               url: './data/airports.json'
@@ -83,7 +85,8 @@ Select Attributes (custom format)
             id: 'lyr03',
             popupInfo: '<b>cat</b>: [cat]<br/><b>IKO</b>: [IKO]',
             isSelectable: true,
-            geometryType: 'Point',style: styleAirports,
+            geometryType: 'Point',
+            style: styleAirports,
             source: new ol.source.Vector({
               format: new ol.format.GeoJSON(),
               url: './data/airports.json'
@@ -110,7 +113,8 @@ Custom Content (custom format)
             id: 'lyr03',
             popupInfo: '<a href="#">Custom Content</a>',
             isSelectable: true,
-            geometryType: 'Point',style: styleAirports,
+            geometryType: 'Point',
+            style: styleAirports,
             source: new ol.source.Vector({
               format: new ol.format.GeoJSON(),
               url: './data/airports.json'
