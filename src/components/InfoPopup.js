@@ -189,12 +189,13 @@ class InfoPopup extends React.Component {
     for (var i = 0, ii = features.length; i < ii; ++i) {
       var feature = features[i];
       fid = feature.getId();
+      var geom = feature.getGeometryName();
       if (!Array.isArray(popupDef)) {
         popupDef = feature.getKeys();
       }
       var style = {wordWrap: 'break-word', whiteSpace: 'normal'};
       popupDef.forEach(function(key) {
-        if (key !== feature.getGeometryName() && key !== 'boundedBy') {
+        if (key !== geom && key !== 'boundedBy') {
           rows.push(<TableRow key={key}><TableRowColumn style={style}>{key}</TableRowColumn><TableRowColumn style={style}>{feature.get(key)}</TableRowColumn></TableRow>);
         }
       });
@@ -238,10 +239,35 @@ class InfoPopup extends React.Component {
       }
       finishedQuery();
     };
+    const {formatMessage} = this.props.intl;
     var popupDef;
     this._noFeaturesFound = false;
-
     var onReady = function(response) {
+      var features = response.features;
+      if (features.length) {
+        var popupContent;
+        if (popupDef === ALL_ATTRS) {
+          me._contentAsObject = true;
+          popupContent = me._createSimpleTable(response);
+        } else {
+          for (var j = 0, jj = features.length; j < jj; ++j) {
+            popupContent = popupDef;
+            var feature = features[j];
+            var values = feature.getProperties();
+            for (var key in values) {
+              var value = values[key];
+              if (value) {
+                popupContent = popupContent.replace('[' + key + ']', value);
+              } else {
+                popupContent = popupContent.replace('[' + key + ']', formatMessage(messages.nulltext));
+              }
+            }
+          }
+        }
+        popupTexts.push(popupContent);
+      } else {
+        me._noFeaturesFound = true;
+      }
       finishedQuery();
     };
     var called = false;
@@ -276,6 +302,7 @@ class InfoPopup extends React.Component {
   }
   _onMapClick(evt) {
     if (this.active) {
+      const {formatMessage} = this.props.intl;
       var map = this.props.map;
       var pixel = map.getEventPixel(evt.originalEvent);
       var coord = evt.coordinate;
@@ -297,6 +324,15 @@ class InfoPopup extends React.Component {
             me._contentAsObject = true;
             popupTexts.push(me._createSimpleTable({features: [feature], layer: layer}));
           } else if (popupDef && !cluster) {
+            var featureKeys = feature.getKeys();
+            for (var i = 0, ii = featureKeys.length; i < ii; i++) {
+              var value = feature.get(featureKeys[i]);
+              if (value) {
+                popupDef = popupDef.replace('[' + featureKeys[i] + ']', feature.get(featureKeys[i]));
+              } else {
+                popupDef = popupDef.replace('[' + featureKeys[i] + ']', formatMessage(messages.nulltext));
+              }
+            }
             popupTexts.push(popupDef);
           }
         }
