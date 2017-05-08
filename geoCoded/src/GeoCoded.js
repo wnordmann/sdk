@@ -23,13 +23,13 @@ class AppBarExampleIcon extends Component {
 render () {
 
   return (
-    <div className="geoCodedResults">
+    <div className="geoCodingResults">
       <div className="locationResult">
         <div className="locationIcon">
           <i className="fa fa-search"></i>
         </div>
         <div className="locationDetails">
-          <span className="place">Lambert Int Airport</span> 10701 Lambert International Blvd, St. Louis, MO 63145
+          <span className="place">Lambert</span> 10701 Lambert International Blvd
         </div>
       </div>
       <div className="locationResult">

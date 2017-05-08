@@ -1,4 +1,4 @@
-.geoCodedResults {
+.geoCodingResults {
   .locationResult {
     max-width: 280px;
     color: #8C8C8C;
@@ -7,17 +7,18 @@
     margin-bottom: 5px;
 
     .locationIcon {
-      width: 80px;
+      width: 50px;
       display: flex;
       justify-content: center;
       padding-top: 4px;
     }
     .locationDetails {
+      flex: 1;
       .place {
         color: #333333;
         font-weight: bold;
       }
-      border-bottom: 1px solid #c5c5c5;
+      border-bottom: 1px solid #E6E6E6;
       padding-bottom: 5px;
     }
     &:last-child {
@@ -26,5 +27,8 @@
     &:last-child .locationDetails {
       border-bottom: none;
     }
+    // &:hover {
+    //   background-color: #c4c4c4;
+    // }
   }
 }
