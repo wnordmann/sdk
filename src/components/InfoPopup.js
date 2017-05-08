@@ -181,6 +181,7 @@ class InfoPopup extends React.Component {
   _createSimpleTable(response) {
     var features = response.features;
     var layer = response.layer;
+    var popupDef = layer.get('popupInfo');
     this._count++;
     const {formatMessage} = this.props.intl;
     var fid;
@@ -188,15 +189,16 @@ class InfoPopup extends React.Component {
     for (var i = 0, ii = features.length; i < ii; ++i) {
       var feature = features[i];
       fid = feature.getId();
-      var keys = feature.getKeys();
       var geom = feature.getGeometryName();
+      if (!Array.isArray(popupDef)) {
+        popupDef = feature.getKeys();
+      }
       var style = {wordWrap: 'break-word', whiteSpace: 'normal'};
-      for (var j = 0, jj = keys.length; j < jj; ++j) {
-        var key = keys[j];
+      popupDef.forEach(function(key) {
         if (key !== geom && key !== 'boundedBy') {
           rows.push(<TableRow key={key}><TableRowColumn style={style}>{key}</TableRowColumn><TableRowColumn style={style}>{feature.get(key)}</TableRowColumn></TableRow>);
         }
-      }
+      });
     }
     return (<Table key={this._count}>
       <TableHeader className='popup-table-header' style={{'backgroundColor':'white'}} displaySelectAll={false} adjustForCheckbox={false}>
@@ -281,14 +283,14 @@ class InfoPopup extends React.Component {
       } else {
         service = WMTSService;
       }
-      if (popupDef === ALL_ATTRS) {
+      if (popupDef === ALL_ATTRS || Array.isArray(popupDef)) {
         called = true;
         var infoFormat = this.props.infoFormat;
         var callback = (infoFormat === 'text/plain' || infoFormat === 'text/html') ? onReadyAll : onReady;
         service.getFeatureInfo(layer, evt.coordinate, map, infoFormat, callback, function() {
           map.getTarget().style.cursor = me._cursor;
         }, this._proxy, this._requestHeaders);
-      } else if (popupDef) {
+      } else if (popupDef.length > 0) {
         called = true;
         service.getFeatureInfo(layer, evt.coordinate, map, 'application/json', onReady, undefined, this._proxy, this.requestHeaders);
       }
@@ -318,7 +320,7 @@ class InfoPopup extends React.Component {
             }
           }
           var popupDef = layer.get('popupInfo');
-          if (popupDef === ALL_ATTRS) {
+          if (popupDef === ALL_ATTRS || Array.isArray(popupDef)) {
             me._contentAsObject = true;
             popupTexts.push(me._createSimpleTable({features: [feature], layer: layer}));
           } else if (popupDef && !cluster) {
