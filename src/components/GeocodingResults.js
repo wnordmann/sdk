@@ -86,12 +86,17 @@ class GeocodingResults extends React.PureComponent {
       let action = payload.action;
       switch (action.type) {
         case GeocodingConstants.SHOW_SEARCH_RESULTS:
-          me.setState({searchResults: action.searchResults});
+          me.setState({
+            searchResults: action.searchResults,
+            open: true
+          });
           me._setVisible(true);
           break;
         case GeocodingConstants.CLEAR_SEARCH_RESULT:
-          me.setState({searchResults: null});
-          me._setVisible(false);
+          me.setState({
+            searchResults: null,
+            visible:false
+          });
           break;
         default:
           break;
@@ -167,6 +172,15 @@ class GeocodingResults extends React.PureComponent {
       open: false
     });
   };
+  _handleMenuOpen = (event) => {
+    // This prevents ghost click.
+    event.preventDefault();
+
+    this.setState({
+      popover: true,
+      anchorEl: event.currentTarget
+    });
+  };
   render() {
     const {formatMessage} = this.props.intl;
     var resultNodes;
@@ -190,9 +204,7 @@ class GeocodingResults extends React.PureComponent {
     }
     return (
       <Popover open={this.state.open}
-        anchorEl={this.state.anchorEl}
-        anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
-        targetOrigin={{horizontal: 'right', vertical: 'top'}}
+        canAutoPosition={true}
         onRequestClose={this.handleRequestClose}>
         <Menu>
           <div className={classNames('sdk-component geocoding-results geocoding', this.props.className)}>
