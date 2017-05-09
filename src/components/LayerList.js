@@ -360,7 +360,7 @@ class LayerList extends React.PureComponent {
     if (this.props.addLayer || this.props.addBaseMap || this.props.showUpload || this.props.showNew) {
       var layerAdd, baseAdd;
       if (this.props.addLayer || this.props.showUpload || this.props.showNew) {
-        if ((this.props.addLayer && !this.props.addLayer.onRequestClose) || this.props.showUpload || this.props.showNew) {
+        if (!this.props.inlineDialogs) {
           layerAdd = (<Button
             buttonType='Icon'
             iconClassName='ms ms-ogc-web-services'
