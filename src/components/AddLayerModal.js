@@ -42,164 +42,174 @@ const ID_PREFIX = 'sdk-addlayer-';
 
 const messages = defineMessages({
   servertypelabel: {
-    id: 'addwmslayermodal.servertypelabel',
+    id: 'addlayermodal.servertypelabel',
     description: 'Label for the combo for server type',
     defaultMessage: 'Type'
   },
   createtitlehinttext: {
-    id: 'addwmslayermodal.createtitlehinttext',
+    id: 'addlayermodal.createtitlehinttext',
     description: 'Hint text for the layer title field',
     defaultMessage: 'Enter layer title'
   },
   createtitlelabeltext: {
-    id: 'addwmslayermodal.createtitlelabeltext',
+    id: 'addlayermodal.createtitlelabeltext',
     description: 'Label text for layer title field',
     defaultMessage: 'Layer title'
   },
   attributeslabel: {
-    id: 'addwmslayermodal.attributeslabel',
+    id: 'addlayermodal.attributeslabel',
     description: 'Label for attributes input field',
     defaultMessage: 'Attributes (comma-separated names)'
   },
   attributeshint: {
-    id: 'addwmslayermodal.attributeshint',
+    id: 'addlayermodal.attributeshint',
     description: 'Hint text for attributes input field',
     defaultMessage: 'Use comma-separated names'
   },
   selectlayercombo: {
-    id: 'addwmslayermodal.selectlayercombo',
+    id: 'addlayermodal.selectlayercombo',
     description: 'Text for select layer combo box',
     defaultMessage: 'Select layer'
   },
   sourcecombo: {
-    id: 'addwmslayermodal.sourcecombo',
+    id: 'addlayermodal.sourcecombo',
     description: 'Text for source combo box',
     defaultMessage: 'Select layer source'
   },
   newservername: {
-    id: 'addwmslayermodal.newservername',
+    id: 'addlayermodal.newservername',
     description: 'Title for new server name text field',
     defaultMessage: 'Name'
   },
   newservernamehint: {
-    id: 'addwmslayermodal.newservernamehint',
+    id: 'addlayermodal.newservernamehint',
     description: 'Hint text for new server name text field',
     defaultMessage: 'Enter server name'
   },
   newserverurl: {
-    id: 'addwmslayermodal.newserverurl',
+    id: 'addlayermodal.newserverurl',
     description: 'Title for new server url text field',
     defaultMessage: 'URL'
   },
   newserverurlhint: {
-    id: 'addwmslayermodal.newserverurlhint',
+    id: 'addlayermodal.newserverurlhint',
     description: 'Hint text for new server url text field',
     defaultMessage: 'Enter server URL'
   },
   newservermodaltitle: {
-    id: 'addwmslayermodal.newservermodaltitle',
+    id: 'addlayermodal.newservermodaltitle',
     description: 'Modal title for add new server',
     defaultMessage: 'Add Server'
   },
   addserverbutton: {
-    id: 'addwmslayermodal.addserverbutton',
+    id: 'addlayermodal.addserverbutton',
     description: 'Text for add server button',
     defaultMessage: 'Add'
   },
   refresh: {
-    id: 'addwmslayermodal.refresh',
+    id: 'addlayermodal.refresh',
     description: 'Refresh tooltip',
     defaultMessage: 'Refresh Layers'
   },
   title: {
-    id: 'addwmslayermodal.title',
+    id: 'addlayermodal.title',
     description: 'Title for the modal Add layer dialog',
     defaultMessage: 'New Layer'
   },
   nolayertitle: {
-    id: 'addwmslayermodal.nolayertitle',
+    id: 'addlayermodal.nolayertitle',
     description: 'Title to show if layer has no title',
     defaultMessage: 'No Title'
   },
   errormsg: {
-    id: 'addwmslayermodal.errormsg',
+    id: 'addlayermodal.errormsg',
     description: 'Error message to show the user when an XHR request fails',
     defaultMessage: 'Error. {msg}'
   },
   corserror: {
-    id: 'addwmslayermodal.corserror',
+    id: 'addlayermodal.corserror',
     description: 'Error message to show the user when an XHR request fails because of CORS or offline',
     defaultMessage: 'Could not connect to the server. Please verify that the server is online and/or CORS is enabled.'
   },
   inputfieldlabel: {
-    id: 'addwmslayermodal.inputfieldlabel',
+    id: 'addlayermodal.inputfieldlabel',
     description: 'Label for input field',
     defaultMessage: '{serviceType} URL'
   },
   connectbutton: {
-    id: 'addwmslayermodal.connectbutton',
+    id: 'addlayermodal.connectbutton',
     description: 'Text for connect button',
     defaultMessage: 'Connect'
   },
   addbutton: {
-    id: 'addwmslayermodal.addbutton',
+    id: 'addlayermodal.addbutton',
     description: 'Text for the add button',
     defaultMessage: 'Add'
   },
   closebutton: {
-    id: 'addwmslayermodal.closebutton',
+    id: 'addlayermodal.closebutton',
     description: 'Text for close button',
     defaultMessage: 'Cancel'
   },
   addserveroption: {
-    id: 'addwmslayermodal.addserveroption',
+    id: 'addlayermodal.addserveroption',
     description: 'Combo box option for add new server',
     defaultMessage: 'Add New Server'
   },
   uploadoption: {
-    id: 'addwmslayermodal.uploadoption',
+    id: 'addlayermodal.uploadoption',
     description: 'Combo box option for add local layer',
     defaultMessage: 'Upload Local File'
   },
   createlayeroption: {
-    id: 'addwmslayermodal.createlayeroption',
+    id: 'addlayermodal.createlayeroption',
     description: 'Combo box option for create local layer',
     defaultMessage: 'Create New Layer'
   },
   uploadhinttext: {
-    id: 'addwmslayermodal.uploadhinttext',
+    id: 'addlayermodal.uploadhinttext',
     description: 'Hint text for upload',
     defaultMessage: 'Select location'
   },
   uploadlabeltext: {
-    id: 'addwmslayermodal.uploadlabeltext',
+    id: 'addlayermodal.uploadlabeltext',
     description: 'Label text for upload',
-    defaultMessage: 'fileName.kml'
+    defaultMessage: 'Filename'
   },
   uploadicontooltip: {
-    id: 'addwmslayermodal.uploadicontooltip',
+    id: 'addlayermodal.uploadicontooltip',
     description: 'Tooltip for upload icon button',
     defaultMessage: 'Upload file'
   },
   pointgeomtype: {
-    id: 'addwmslayermodal.pointgeomtype',
+    id: 'addlayermodal.pointgeomtype',
     description: 'Title for point geometry option in combo box',
     defaultMessage: 'Point'
   },
   linegeomtype: {
-    id: 'addwmslayermodal.linegeomtype',
+    id: 'addlayermodal.linegeomtype',
     description: 'Title for line geometry option in combo box',
     defaultMessage: 'LineString'
   },
   polygeomtype: {
-    id: 'addwmslayermodal.polygeomtype',
+    id: 'addlayermodal.polygeomtype',
     description: 'Title for polygon geometry option in combo box',
     defaultMessage: 'Polygon'
   },
   geometrytypelabel: {
-    id: 'addwmslayermodal.geometrytypelabel',
+    id: 'addlayermodal.geometrytypelabel',
     description: 'Label for the geometry type combo',
     defaultMessage: 'Geometry type'
+  },
+  uploadunsupported: {
+    id: 'addlayermodal.uploadunsupported',
+    description: 'Error message for unsupported upload formats',
+    defaultMessage: 'Unsupported format for upload. Only KML, GPX and GeoJSON are supported.'
+  },
+  uploadunsupportedprojection: {
+    id: 'addlayermodal.uploadunsupportedprojection',
+    description: 'Error message for unsupported projection',
+    defaultMessage: 'Unsupported projection'
   }
 });
 
@@ -552,6 +562,7 @@ class AddLayerModal extends React.PureComponent {
       loading: true
     });
     var me = this;
+    const {formatMessage} = this.props.intl;
     global.setTimeout(function() {
       var text = me._text;
       var filename = me.state.fileName;
@@ -563,7 +574,7 @@ class AddLayerModal extends React.PureComponent {
           try {
             var crs = format.readProjection(text);
             if (crs === undefined) {
-              me.setState({loading: false, error: true, fileName: '', errorOpen: true, msg: 'Unsupported projection'});
+              me.setState({loading: false, error: true, fileName: '', errorOpen: true, msg: formatMessage(messages.uploadunsupportedprojection)});
               return;
             }
             var features = format.readFeatures(text, {dataProjection: crs,
@@ -619,23 +630,28 @@ class AddLayerModal extends React.PureComponent {
               me.close();
             }
           } catch (e) {
-            if (global && global.console) {
-              me.setState({loading: false, error: true, fileName: '', errorOpen: true, msg: e.message});
-            }
+            me.setState({loading: false, error: true, fileName: '', errorOpen: true, msg: e.message});
           }
         }
       }
     }, 0);
   }
   _onDrop(files) {
+    const {formatMessage} = this.props.intl;
     if (files.length === 1) {
       var r = new FileReader(), file = files[0];
       var me = this;
-      this.setState({fileName: file.name});
-      r.onload = function(e) {
-        me._readFile(e.target.result);
-      };
-      r.readAsText(file);
+      var ext = file.name.split('.').pop().toLowerCase();
+      var format = AddLayerModal.formats[ext];
+      if (format) {
+        this.setState({fileName: file.name});
+        r.onload = function(e) {
+          me._readFile(e.target.result);
+        };
+        r.readAsText(file);
+      } else {
+        me.setState({error: true, errorOpen: true, msg: formatMessage(messages.uploadunsupported)});
+      }
     }
   }
   _onChangeFill(state) {
@@ -725,7 +741,7 @@ class AddLayerModal extends React.PureComponent {
     if (this.state.showUpload) {
       upload = (<div>
         <div className='addLayer-fileField'>
-          <Dropzone className='dropzone' multiple={false} onDrop={this._onDrop.bind(this)}>
+          <Dropzone accept='.json,.geojson,.kml,.gpx' className='dropzone' multiple={false} onDrop={this._onDrop.bind(this)}>
           <TextField
             value={this.state.fileName}
             floatingLabelFixed={true}
