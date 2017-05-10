@@ -413,6 +413,47 @@ static formats = {
   _changeResolution() {
     this.setState({resolution: this.props.map.getView().getResolution()});
   }
+  _getLayerGroupId(target, groups) {
+    let groupId = '';
+    let returnGroupId = '';
+    var layers = groups.getLayers()
+    layers.forEach(function(group) {
+      if (group instanceof ol.layer.Group) {
+        groupId = group.get('id');
+        var groupLayers = group.getLayers();
+        groupLayers.forEach(function(layer) {
+          if (layer.get('id') === target) {
+            returnGroupId = groupId;
+          }
+        })
+      }
+    })
+    return returnGroupId;
+  }
+  _newHandleVisibility(event) {
+    const groups = this.props.map.getLayerGroup();
+    const visible = event.target.className.indexOf('fa-eye-slash') > 0;
+    const groupId = this._getLayerGroupId(this.props.layer.get('id'), groups);
+    if (this.props.layer instanceof ol.layer.Group) {
+      var layers = this.props.layer.getLayers();
+      layers.forEach(function(l) {
+        l.setVisible(visible);
+      })
+      //this.props.layer.setVisible(visible);
+    } else {
+      if (groupId) {
+        // var groupLayers = groups.getLayers();
+        // groupLayers.forEach(function(g) {
+        //   if (g.get('id') === groupId) {
+        //     console.log(g.get('visible'));
+        //   }
+        // })
+        this.props.layer.setVisible(visible);
+
+      }
+    }
+  }
+
   _handleBaseVisibility(event) {
     var i, ii;
     var baseLayers = [];
@@ -440,6 +481,7 @@ static formats = {
       layers.push(layer);
     }
   }
+
   _handleBaseParentVisibility(event) {
     var i, ii;
     var baseLayers = [];
@@ -459,22 +501,6 @@ static formats = {
       for (i = 0, ii = baseLayers.length; i < ii; ++i) {
         baseLayers[i].setVisible(false);
       }
-    }
-  }
-  _handleVisibility(event) {
-    var i, ii;
-    var baseLayers = [];
-    var visible = event.target.className.indexOf('fa-eye-slash') > 0;
-
-    if (this.props.layer instanceof ol.layer.Vector || this.props.layer instanceof ol.layer.Tile) {
-      this.props.layer.setVisible(visible);
-    } else if (this.props.layer instanceof ol.layer.Group) {
-      this.forEachLayer(baseLayers, this.props.map.getLayerGroup());
-      for (i = 0, ii = baseLayers.length; i < ii; ++i) {
-        baseLayers[i].setVisible(false);
-      }
-      this.props.layer.setVisible(visible);
-      baseLayers[0].setVisible(visible)
     }
   }
   _toggleNested(event) {
@@ -646,7 +672,7 @@ static formats = {
     var arrowIcon = this.state.open ? downArrow : sideArrow;
 
     var layersIcon = <i className="ms ms-layers"></i>;
-    if (!(layer instanceof ol.layer.Group)) {
+    if (layer.get('type') !== 'base-group' &&  !(layer instanceof ol.layer.Group)) {
       arrowIcon = <i className="fa fa-fw" ></i>;
     }
     var zoomTo;
@@ -714,8 +740,8 @@ static formats = {
     }
 
     var showBasemapEye = this.props.layer.get('visible') || this.props.currentBaseLayer === this.props.layer.get('id');
-    var checked = <i className='fa fa-eye' onTouchTap={this._handleVisibility.bind(this)}></i>;
-    var unchecked = <i className='fa fa-eye-slash' onTouchTap={this._handleVisibility.bind(this)}></i>;
+    var checked = <i className='fa fa-eye' onTouchTap={this._newHandleVisibility.bind(this)}></i>;
+    var unchecked = <i className='fa fa-eye-slash' onTouchTap={this._newHandleVisibility.bind(this)}></i>;
     var baseVisibility = <i onTouchTap={this._handleBaseVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye':showBasemapEye, 'fa-eye-slash':!showBasemapEye})}></i>;
     var baseParentVisibility = <i id='baseParentVisibility' onTouchTap={this._handleBaseParentVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye-slash':this.props.currentBaseLayer === 'baseParent', 'fa-eye':this.props.currentBaseLayer !== 'baseParent'})}></i>;
     var fixedWidth =  <i className='fa fa-fw'></i>;
@@ -757,7 +783,16 @@ static formats = {
       rightIconButtons = <span className="fixedContainer">{baseVisibility}{fixedWidth}</span>;
       muted = !showBasemapEye;
       isNested = true;
+    }else if (layer instanceof ol.layer.Group) {
+      rightIconButtons = <span className="fixedContainer">{visibility}{fixedWidth}</span>;
+      muted = !showBasemapEye;
+      isNested = true;
     } else {
+      const groups = this.props.map.getLayerGroup();
+      const id = layer.get('id');
+      if (this._getLayerGroupId(id, groups)) {
+        isNested = true;
+      }
       muted = !this.state.checked
     }
     return connectDragSource(connectDropTarget(
