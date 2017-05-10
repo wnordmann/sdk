@@ -505,6 +505,7 @@ class FeatureTable extends React.Component {
     var columns = [{
       id: 'selector',
       header: '',
+      width: 40,
       sortable: false,
       render: function(props) {
         var selected = me.state.selected.indexOf(props.row) !== -1;
@@ -515,6 +516,7 @@ class FeatureTable extends React.Component {
       columns.push({
         id: 'delete',
         header: '',
+        width: 40,
         sortable: false,
         render: function(props) {
           return (<ActionDelete style={{cursor: 'pointer'}} onTouchTap={me._onDelete.bind(me, props.row)} />);
@@ -522,6 +524,7 @@ class FeatureTable extends React.Component {
       }, {
         id: 'edit',
         header: '',
+        width: 40,
         sortable: false,
         render: function(props) {
           return (<DrawIcon style={{cursor: 'pointer'}} onTouchTap={me._onEditFeature.bind(me, props.row)} />);
