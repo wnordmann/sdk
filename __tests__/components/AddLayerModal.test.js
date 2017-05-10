@@ -123,6 +123,7 @@ describe('AddLayerModal', function() {
       }, 500);
     });
   });
+
   it('returns a new generate ID', function(done) {
     var container = document.createElement('div');
     var modal = ReactDOM.render((
@@ -137,6 +138,7 @@ describe('AddLayerModal', function() {
       done();
     }, 500);
   });
+
   it('change of source to Create', function(done) {
     var container = document.createElement('div');
     var modal = ReactDOM.render((
@@ -162,6 +164,7 @@ describe('AddLayerModal', function() {
       done();
     }, 500);
   });
+
   it('renders the add layer component', function() {
     const renderer = TestUtils.createRenderer();
     renderer.render(<AddLayerModal map={map} intl={intl} sources={[{url: wmsUrl, type: 'WMS', title: 'My WMS'}]}/>);
@@ -169,6 +172,7 @@ describe('AddLayerModal', function() {
     const expected = 'add-layer-modal';
     assert.equal(actual, expected);
   });
+
   it('is intially closed', function() {
     const renderer = TestUtils.createRenderer();
     renderer.render(<AddLayerModal map={map} intl={intl} sources={[{url: wmsUrl, type: 'WMS', title: 'My WMS'}]}/>);
@@ -176,6 +180,7 @@ describe('AddLayerModal', function() {
     const expected = false;
     assert.equal(actual, expected);
   });
+
   it('closes error on request close', function(done) {
     var source = [{url: wmsUrl, type: 'WMS', title: 'My WMS'}];
     var container = document.createElement('div');
@@ -198,6 +203,7 @@ describe('AddLayerModal', function() {
       done();
     }, 500);
   });
+
   it('changes new source type', function(done) {
     var source = [{url: wmsUrl, type: 'WMS', title: 'My WMS'}];
     var container = document.createElement('div');
@@ -216,6 +222,7 @@ describe('AddLayerModal', function() {
       done();
     }, 500);
   });
+
   it('changes source url', function(done) {
     var source = [{url: wmsUrl, type: 'WMS', title: 'My WMS'}];
     var container = document.createElement('div');
@@ -234,6 +241,7 @@ describe('AddLayerModal', function() {
       done();
     }, 500);
   });
+
   it('changes source name', function(done) {
     var source = [{url: wmsUrl, type: 'WMS', title: 'My WMS'}];
     var container = document.createElement('div');
@@ -252,6 +260,7 @@ describe('AddLayerModal', function() {
       done();
     }, 500);
   });
+
   it('adds sources and updates layer source', function(done) {
     var sources = [{url: wmsUrl, type: 'WMS', title: 'My WMS'}];
     var container = document.createElement('div');
@@ -271,6 +280,25 @@ describe('AddLayerModal', function() {
     assert.equal(actual, expected);
     actual = modal.state.source;
     expected = 1;
+    assert.equal(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('changes layer on select', function(done) {
+    var sources = [{url: wmsUrl, type: 'WMS', title: 'My WMS'}];
+    var container = document.createElement('div');
+    var modal = ReactDOM.render((
+      <AddLayerModal map={map} allowUserInput={true} sources={sources} intl={intl} />
+    ), container);
+    var actual = modal.state.layer;
+    var expected = null;
+    assert.equal(actual, expected);
+    modal._onChangeSelectLayer(null, null, 'foo');
+    actual = modal.state.layer;
+    expected = 'foo';
     assert.equal(actual, expected);
     window.setTimeout(function() {
       ReactDOM.unmountComponentAtNode(container);
