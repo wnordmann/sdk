@@ -77,11 +77,11 @@ describe('FeatureTable', function() {
         <FeatureTable layer={layer} intl={intl} map={map}/>
       </MuiThemeProvider>
     ), container);
-    var tds = container.querySelectorAll('td');
-    assert.equal(tds[3].firstChild.innerHTML, 'bar1');
-    assert.equal(tds[8].firstChild.innerHTML, 'bar2');
-    assert.equal(tds[13].firstChild.innerHTML, 'bar3');
-    assert.equal(tds[18].firstChild.innerHTML, 'bar4');
+    var tds = container.querySelectorAll('div.rt-td');
+    assert.equal(tds[3].innerHTML, 'bar1');
+    assert.equal(tds[8].innerHTML, 'bar2');
+    assert.equal(tds[13].innerHTML, 'bar3');
+    assert.equal(tds[18].innerHTML, 'bar4');
     ReactDOM.unmountComponentAtNode(container);
   });
 
