@@ -74,23 +74,6 @@ describe('FeatureTable', function() {
     }, 500);
   });
 
-  it('renders table cells correctly', function() {
-    var container = document.createElement('div');
-    var component = ReactDOM.render((
-      <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <FeatureTable layer={layer} intl={intl} map={map}/>
-      </MuiThemeProvider>
-    ), container);
-    console.log(component.props.children);
-    //var tds = document.querySelectorAll('table');
-    //console.log(tds);
-    //assert.equal(tds[3].firstChild.innerHTML, 'bar1');
-    //assert.equal(tds[8].firstChild.innerHTML, 'bar2');
-    //assert.equal(tds[13].firstChild.innerHTML, 'bar3');
-    //assert.equal(tds[18].firstChild.innerHTML, 'bar4');
-    ReactDOM.unmountComponentAtNode(container);
-  });
-
   it('renders the feature table', function() {
     const renderer = TestUtils.createRenderer();
     renderer.render(<FeatureTable map={map} intl={intl} layer={layer}/>);
