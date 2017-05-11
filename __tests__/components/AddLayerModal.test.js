@@ -305,5 +305,15 @@ describe('AddLayerModal', function() {
       done();
     }, 500);
   });
+/*
+  it('renders upload dropzone component', function() {
+    const renderer = TestUtils.createRenderer();
+    renderer.render(<AddLayerModal allowUpload={true} map={map} intl={intl} sources={[{url: wmsUrl, type: 'WMS', title: 'My WMS'}]}/>);
+    const actual = renderer.getRenderOutput().props.children[1].props;
+    console.log(actual);
+    //const expected = 'add-layer-modal';
+    //assert.equal(actual, expected);
+  });
+  */
 
 });
