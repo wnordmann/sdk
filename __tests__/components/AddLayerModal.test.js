@@ -20,6 +20,7 @@ describe('AddLayerModal', function() {
   var height = 180;
   var wmsUrl = 'http://localhost:8080/geoserver/wms';
   var wfsUrl = 'http://localhost:8080/geoserver/wfs';
+  var sources = [{url: wmsUrl, type: 'WMS', title: 'My WMS'}];
 
   beforeEach(function(done) {
     target = document.createElement('div');
@@ -50,7 +51,7 @@ describe('AddLayerModal', function() {
   it('clears layerInfo on error', function(done) {
     var container = document.createElement('div');
     var modal = ReactDOM.render((
-      <AddLayerModal map={map} allowUserInput={true} sources={[{url: wmsUrl, type: 'WMS', title: 'My WMS'}]} intl={intl} />
+      <AddLayerModal map={map} allowUserInput={true} sources={sources} intl={intl} />
     ), container);
     modal._setError('Error');
     assert.equal(modal.state.layerInfo, null);
@@ -63,7 +64,7 @@ describe('AddLayerModal', function() {
   it('opens error message on error', function(done) {
     var container = document.createElement('div');
     var modal = ReactDOM.render((
-      <AddLayerModal map={map} allowUserInput={true} sources={[{url: wmsUrl, type: 'WMS', title: 'My WMS'}]} intl={intl} />
+      <AddLayerModal map={map} allowUserInput={true} sources={sources} intl={intl} />
     ), container);
     modal._setError('Error');
     assert.equal(modal.state.errorOpen, true);
@@ -77,7 +78,7 @@ describe('AddLayerModal', function() {
   it('generates correct layer title info', function(done) {
     var container = document.createElement('div');
     var modal = ReactDOM.render((
-      <AddLayerModal map={map} allowUserInput={true} sources={[{url: wmsUrl, type: 'WMS', title: 'My WMS'}]} intl={intl} />
+      <AddLayerModal map={map} allowUserInput={true} sources={sources} intl={intl} />
     ), container);
     var title = modal._getLayerTitle({Title: ''});
     assert.equal(title.empty, true);
@@ -91,10 +92,9 @@ describe('AddLayerModal', function() {
   });
 
   it('creates a title', function(done) {
-    var source = [{url: wmsUrl, type: 'WMS', title: 'My WMS'}];
     var container = document.createElement('div');
     var modal = ReactDOM.render((
-      <AddLayerModal map={map} allowUserInput={true} sources={source} intl={intl} />
+      <AddLayerModal map={map} allowUserInput={true} sources={sources} intl={intl} />
     ), container);
     var actual = modal.state.createTitle;
     var expected = '';
@@ -112,7 +112,7 @@ describe('AddLayerModal', function() {
   it('returns the correct url if no url input field', function(done) {
     var container = document.createElement('div');
     var modal = ReactDOM.render((
-      <AddLayerModal map={map} allowUserInput={false} sources={[{url: wmsUrl, type: 'WMS', title: 'My WMS'}]} intl={intl} />
+      <AddLayerModal map={map} allowUserInput={false} sources={sources} intl={intl} />
     ), container);
     modal.setState({source: 0}, function() {
       var result = modal.state.sources[modal.state.source].url;
@@ -127,7 +127,7 @@ describe('AddLayerModal', function() {
   it('returns a new generate ID', function(done) {
     var container = document.createElement('div');
     var modal = ReactDOM.render((
-      <AddLayerModal map={map} allowUserInput={true} sources={[{url: wmsUrl, type: 'WMS', title: 'My WMS'}]} intl={intl} />
+      <AddLayerModal map={map} allowUserInput={true} sources={sources} intl={intl} />
     ), container);
     var id = modal._generateId();
     assert.equal(id, 'sdk-addlayer-1');
@@ -142,7 +142,7 @@ describe('AddLayerModal', function() {
   it('change of source to Create', function(done) {
     var container = document.createElement('div');
     var modal = ReactDOM.render((
-      <AddLayerModal map={map} allowUserInput={true} sources={[{url: wmsUrl, type: 'WMS', title: 'My WMS'}]} intl={intl} />
+      <AddLayerModal map={map} allowUserInput={true} sources={sources} intl={intl} />
     ), container);
     //TestCreate
     modal._onSourceChange(null, 1, 'CREATE');
@@ -167,7 +167,7 @@ describe('AddLayerModal', function() {
 
   it('renders the add layer component', function() {
     const renderer = TestUtils.createRenderer();
-    renderer.render(<AddLayerModal map={map} intl={intl} sources={[{url: wmsUrl, type: 'WMS', title: 'My WMS'}]}/>);
+    renderer.render(<AddLayerModal map={map} intl={intl} sources={sources}/>);
     const actual = renderer.getRenderOutput().props.className;
     const expected = 'add-layer-modal';
     assert.equal(actual, expected);
@@ -175,17 +175,16 @@ describe('AddLayerModal', function() {
 
   it('is intially closed', function() {
     const renderer = TestUtils.createRenderer();
-    renderer.render(<AddLayerModal map={map} intl={intl} sources={[{url: wmsUrl, type: 'WMS', title: 'My WMS'}]}/>);
+    renderer.render(<AddLayerModal map={map} intl={intl} sources={sources}/>);
     const actual = renderer.getRenderOutput().props.open;
     const expected = false;
     assert.equal(actual, expected);
   });
 
   it('closes error on request close', function(done) {
-    var source = [{url: wmsUrl, type: 'WMS', title: 'My WMS'}];
     var container = document.createElement('div');
     var modal = ReactDOM.render((
-      <AddLayerModal map={map} allowUserInput={true} sources={source} intl={intl} />
+      <AddLayerModal map={map} allowUserInput={true} sources={sources} intl={intl} />
     ), container);
     var actual = modal.state.errorOpen;
     var expected = false;
@@ -205,10 +204,9 @@ describe('AddLayerModal', function() {
   });
 
   it('changes new source type', function(done) {
-    var source = [{url: wmsUrl, type: 'WMS', title: 'My WMS'}];
     var container = document.createElement('div');
     var modal = ReactDOM.render((
-      <AddLayerModal map={map} allowUserInput={true} sources={source} intl={intl} />
+      <AddLayerModal map={map} allowUserInput={true} sources={sources} intl={intl} />
     ), container);
     var actual = modal.state.newType;
     var expected = 'WMS';
@@ -224,10 +222,9 @@ describe('AddLayerModal', function() {
   });
 
   it('changes source url', function(done) {
-    var source = [{url: wmsUrl, type: 'WMS', title: 'My WMS'}];
     var container = document.createElement('div');
     var modal = ReactDOM.render((
-      <AddLayerModal map={map} allowUserInput={true} sources={source} intl={intl} />
+      <AddLayerModal map={map} allowUserInput={true} sources={sources} intl={intl} />
     ), container);
     var actual = modal.state.newUrl;
     var expected = '';
@@ -243,10 +240,9 @@ describe('AddLayerModal', function() {
   });
 
   it('changes source name', function(done) {
-    var source = [{url: wmsUrl, type: 'WMS', title: 'My WMS'}];
     var container = document.createElement('div');
     var modal = ReactDOM.render((
-      <AddLayerModal map={map} allowUserInput={true} sources={source} intl={intl} />
+      <AddLayerModal map={map} allowUserInput={true} sources={sources} intl={intl} />
     ), container);
     var actual = modal.state.newName;
     var expected = '';
@@ -262,7 +258,6 @@ describe('AddLayerModal', function() {
   });
 
   it('adds sources and updates layer source', function(done) {
-    var sources = [{url: wmsUrl, type: 'WMS', title: 'My WMS'}];
     var container = document.createElement('div');
     var modal = ReactDOM.render((
       <AddLayerModal map={map} allowUserInput={true} sources={sources} intl={intl} />
@@ -288,7 +283,6 @@ describe('AddLayerModal', function() {
   });
 
   it('changes layer on select', function(done) {
-    var sources = [{url: wmsUrl, type: 'WMS', title: 'My WMS'}];
     var container = document.createElement('div');
     var modal = ReactDOM.render((
       <AddLayerModal map={map} allowUserInput={true} sources={sources} intl={intl} />
@@ -305,15 +299,5 @@ describe('AddLayerModal', function() {
       done();
     }, 500);
   });
-/*
-  it('renders upload dropzone component', function() {
-    const renderer = TestUtils.createRenderer();
-    renderer.render(<AddLayerModal allowUpload={true} map={map} intl={intl} sources={[{url: wmsUrl, type: 'WMS', title: 'My WMS'}]}/>);
-    const actual = renderer.getRenderOutput().props.children[1].props;
-    console.log(actual);
-    //const expected = 'add-layer-modal';
-    //assert.equal(actual, expected);
-  });
-  */
 
 });
