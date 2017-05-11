@@ -207,8 +207,8 @@ class PointSymbolizerEditor extends React.PureComponent {
         <ListItem innerDivStyle={ listStyle } style={!this.state.externalGraphic ? {display: 'none'} : {width: '100%'}} primaryText={formatMessage(messages.opacity)}>
           <Slider defaultValue={this.state.opacity} onChange={this._onOpacityChange.bind(this)} />
         </ListItem>
-        <FillEditor onChange={this.props.onChange} initialHasFill={this.props.initialState ? this.props.initialState.hasFill : undefined} initialFillColor={this.props.initialState ? this.props.initialState.fillColor : undefined} />
-        <StrokeEditor onChange={this.props.onChange} initialHasStroke={this.props.initialState ? this.props.initialState.hasStroke : undefined} initialStrokeWidth={this.props.initialState ? this.props.initialState.strokeWidth : undefined} initialStrokeColor={this.props.initialState ? this.props.initialState.strokeColor : undefined} />
+        <FillEditor intl={this.props.intl} onChange={this.props.onChange} initialHasFill={this.props.initialState ? this.props.initialState.hasFill : undefined} initialFillColor={this.props.initialState ? this.props.initialState.fillColor : undefined} />
+        <StrokeEditor intl={this.props.intl} onChange={this.props.onChange} initialHasStroke={this.props.initialState ? this.props.initialState.hasStroke : undefined} initialStrokeWidth={this.props.initialState ? this.props.initialState.strokeWidth : undefined} initialStrokeColor={this.props.initialState ? this.props.initialState.strokeColor : undefined} />
       </Paper>
     );
   }

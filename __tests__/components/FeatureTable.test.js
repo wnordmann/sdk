@@ -74,6 +74,21 @@ describe('FeatureTable', function() {
     }, 500);
   });
 
+  it('renders table cells correctly', function() {
+    var container = document.createElement('div');
+    ReactDOM.render((
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <FeatureTable layer={layer} intl={intl} map={map}/>
+      </MuiThemeProvider>
+    ), container);
+    var tds = container.querySelectorAll('div.rt-td');
+    assert.equal(tds[3].innerHTML, 'bar1');
+    assert.equal(tds[8].innerHTML, 'bar2');
+    assert.equal(tds[13].innerHTML, 'bar3');
+    assert.equal(tds[18].innerHTML, 'bar4');
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
   it('renders the feature table', function() {
     const renderer = TestUtils.createRenderer();
     renderer.render(<FeatureTable map={map} intl={intl} layer={layer}/>);
