@@ -850,7 +850,123 @@
                                 <section class="normal markdown-section">
                                 
                                 <h1 id="infopopup-component"><code>InfoPopup</code> (component)</h1>
-<p>$$src/components/InfoPopupDetail.md$$</p>
+<p>Popup to show feature info. This can be through WMS / WMTS GetFeatureInfo or local vector data.</p>
+<pre><code class="lang-xml"><span class="hljs-tag">&lt;<span class="hljs-name">InfoPopup</span> <span class="hljs-attr">toggleGroup</span>=<span class="hljs-string">&apos;navigation&apos;</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> /&gt;</span>
+</code></pre>
+<p><img src="../InfoPopup.png" alt="Info Popup"></p>
+<h5 id="how-to-render-content-on-the-popup">How to render content on the popup:</h5>
+<p>Content to be rendered on the popup must be added to the appropriate OpenLayers Layer Object with a key <code>popupinfo</code>.</p>
+<p>See <a href="http://openlayers.org/en/latest/apidoc/ol.layer.Vector.html" target="_blank">OpenLayers API</a> for reference on ol.layer.Vector use.</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">new</span> ol.layer.Vector({
+  title: <span class="hljs-string">&apos;airports&apos;</span>,
+  id: <span class="hljs-string">&apos;lyr03&apos;</span>,
+  popupInfo: <span class="hljs-string">&apos;#AllAttributes&apos;</span>,
+  isSelectable: <span class="hljs-literal">true</span>,
+  geometryType: <span class="hljs-string">&apos;Point&apos;</span>,
+  style: styleAirports,
+  source: <span class="hljs-keyword">new</span> ol.source.Vector({
+    format: <span class="hljs-keyword">new</span> ol.format.GeoJSON(),
+    url: <span class="hljs-string">&apos;./data/airports.json&apos;</span>
+  })
+})
+</code></pre>
+<p>There are several options for content.</p>
+<p>Boundless SDK</p>
+<ul>
+<li><em>All Attributes</em></li>
+<li><em>Select Attributes</em></li>
+<li><em>Custom Content</em></li>
+</ul>
+<h2 id="all-attributes-table">All Attributes (table)</h2>
+<ul>
+<li><p>To include a table with all of the attributes of the selected feature</p>
+<ul>
+<li><p><code>popupInfo: &#x2018;#AllAttributes&#x2019;</code></p>
+<p>  <img src="../InfoPopup.png" alt="Info Popup"></p>
+</li>
+<li><p>See <a href="http://boundlessgeo.github.io/sdk-apps/plugin" target="_blank">Boundless SDK Plugin Application</a> for more usage</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="select-attributes-table">Select Attributes (table)</h2>
+<ul>
+<li><p>To include a table with only attributes specified, declare an array containing the string names of the attributes to be included</p>
+<ul>
+<li><p><code>popupInfo: [&#x2018;cat&#x2019;, &#x2018;TYPE&#x2019;]</code></p>
+<pre><code>```javascript
+new ol.layer.Vector({
+  title: &apos;airports&apos;,
+  id: &apos;lyr03&apos;,
+  popupInfo: [&#x2018;cat&#x2019;, &#x2018;TYPE&#x2019;],
+  isSelectable: true,
+  geometryType: &apos;Point&apos;,
+  style: styleAirports,
+  source: new ol.source.Vector({
+    format: new ol.format.GeoJSON(),
+    url: &apos;./data/airports.json&apos;
+  })
+})
+```
+</code></pre><p>  <img src="../InfoPopup2.png" alt="Info Popup 2"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="select-attributes-custom-format">Select Attributes (custom format)</h2>
+<ul>
+<li><p>To include feature attributes and their values without the provided table format, the string must include attribute keys wrapped in square brackets individually</p>
+<ul>
+<li><p><code>popupInfo: &apos;&lt;b&gt;cat&lt;/b&gt;: [cat]&lt;br/&gt;&lt;b&gt;IKO&lt;/b&gt;: [IKO]&apos;</code></p>
+<pre><code>```javascript
+new ol.layer.Vector({
+  title: &apos;airports&apos;,
+  id: &apos;lyr03&apos;,
+  popupInfo: &apos;&lt;b&gt;cat&lt;/b&gt;: [cat]&lt;br/&gt;&lt;b&gt;IKO&lt;/b&gt;: [IKO]&apos;,
+  isSelectable: true,
+  geometryType: &apos;Point&apos;,
+  style: styleAirports,
+  source: new ol.source.Vector({
+    format: new ol.format.GeoJSON(),
+    url: &apos;./data/airports.json&apos;
+  })
+})
+```
+</code></pre><p>  <img src="../InfoPopup3.png" alt="Info Popup 3"></p>
+</li>
+<li><p>See <a href="http://boundlessgeo.github.io/sdk-apps/basic" target="_blank">Boundless SDK Basic Application</a> for more usage</p>
+</li>
+<li><p>It is not required to wrap the attribute value in HTML but HTML will be needed for any desired styling/formatting</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="custom-content-custom-format">Custom Content (custom format)</h2>
+<ul>
+<li><p>To include custom text in the popup without a table format, enter the string to include</p>
+<ul>
+<li><p><code>popupInfo: &apos;&lt;a href=&quot;#&quot;&gt;Custom Content&lt;/a&gt;&apos;</code></p>
+<pre><code>```javascript
+new ol.layer.Vector({
+  title: &apos;airports&apos;,
+  id: &apos;lyr03&apos;,
+  popupInfo: &apos;&lt;a href=&quot;#&quot;&gt;Custom Content&lt;/a&gt;&apos;,
+  isSelectable: true,
+  geometryType: &apos;Point&apos;,
+  style: styleAirports,
+  source: new ol.source.Vector({
+    format: new ol.format.GeoJSON(),
+    url: &apos;./data/airports.json&apos;
+  })
+})
+```
+</code></pre><p>  <img src="../InfoPopup4.png" alt="Info Popup 4"></p>
+</li>
+</ul>
+</li>
+<li><p>It is not required to use HTML to render the text content but HTML will be needed for any desired styling/formatting</p>
+</li>
+</ul>
 <h2 id="properties">Properties</h2>
 <h3 id="classname"><code>className</code></h3>
 <p>Css class name to apply on the root element of this component.</p>
@@ -916,7 +1032,7 @@ defaultValue: <code>&apos;nav&apos;</code></p>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"InfoPopup","level":"1.6.20","depth":2,"next":{"title":"LabelEditor","level":"1.6.21","depth":2,"path":"api/LabelEditor.md","ref":"api/LabelEditor.md","articles":[]},"previous":{"title":"ImageExport","level":"1.6.19","depth":2,"path":"api/ImageExport.md","ref":"api/ImageExport.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"api/InfoPopup.md","mtime":"2017-05-11T09:40:18.776Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-05-11T09:41:15.204Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"InfoPopup","level":"1.6.20","depth":2,"next":{"title":"LabelEditor","level":"1.6.21","depth":2,"path":"api/LabelEditor.md","ref":"api/LabelEditor.md","articles":[]},"previous":{"title":"ImageExport","level":"1.6.19","depth":2,"path":"api/ImageExport.md","ref":"api/ImageExport.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"api/InfoPopup.md","mtime":"2017-05-11T15:29:18.179Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-05-11T15:29:59.494Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
