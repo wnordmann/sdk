@@ -81,16 +81,5 @@ describe('FeatureTable', function() {
     const expected = 'sdk-component feature-table';
     assert.equal(actual, expected);
   });
-/*
-  it('renders table cells correctly', function() {
-    const renderer = TestUtils.createRenderer();
-    renderer.render(<FeatureTable map={map} intl={intl} layer={layer}/>);
-    const actual = renderer.getRenderOutput().props.children;
-    //console.log(actual, 'XXXXXX');
-    //console.log(renderer.getRenderOutput().props.children);
-    //const expected = 'sdk-component feature-table';
-    //assert.equal(actual, expected);
-  });
-  */
 
 });
