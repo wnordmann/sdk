@@ -20,7 +20,7 @@ import LayerSelector from './LayerSelector';
 import SelectActions from '../actions/SelectActions';
 import FilterService from '../services/FilterService';
 import FilterHelp from './FilterHelp';
-import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
+import {Toolbar, ToolbarGroup, ToolbarSeparator} from 'material-ui/Toolbar';
 import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
 import RaisedButton from './Button';
@@ -62,6 +62,16 @@ const messages = defineMessages({
     id: 'querybuilder.newbuttontext',
     description: 'Text for the new selection button',
     defaultMessage: 'New'
+  },
+  clearbuttontitle: {
+    id: 'querybuilder.clearbuttontitle',
+    description: 'Title for the clear selection button',
+    defaultMessage: 'Clear current selection'
+  },
+  clearbuttontext: {
+    id: 'querybuilder.clearbuttontext',
+    description: 'Text for the clar selection button',
+    defaultMessage: 'Clear'
   },
   addbuttontitle: {
     id: 'querybuilder.addbuttontitle',
@@ -165,6 +175,9 @@ class QueryBuilder extends React.PureComponent {
       }
     }
   }
+  _clear() {
+    FeatureStore.clearSelection(this._layer);
+  }
   _doQuery(selectIn, add) {
     var selection = [];
     this._setQueryFilter();
@@ -226,6 +239,10 @@ class QueryBuilder extends React.PureComponent {
         <LayerSelector {...this.props} value={id} onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /><br/>
         <TextField floatingLabelText={formatMessage(messages.filterlabel)} errorText={this.state.errorText} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} /><FilterHelp intl={this.props.intl} /><br/>
         <Toolbar>
+          <ToolbarGroup>
+            <RaisedButton label={formatMessage(messages.clearbuttontext)} tooltip={formatMessage(messages.clearbuttontitle)} onTouchTap={this._clear.bind(this)} />
+          </ToolbarGroup>
+          <ToolbarSeparator />
           <ToolbarGroup>
             <RaisedButton label={formatMessage(messages.newbuttontext)} tooltip={formatMessage(messages.newbuttontitle)} onTouchTap={this._newSelection.bind(this)} />
           </ToolbarGroup>
