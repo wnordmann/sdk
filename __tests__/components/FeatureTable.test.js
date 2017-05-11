@@ -11,6 +11,7 @@ import 'phantomjs-polyfill-object-assign';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import FeatureTable from '../../src/components/FeatureTable';
+import TestUtils from 'react-addons-test-utils';
 
 raf.polyfill();
 
@@ -57,7 +58,7 @@ describe('FeatureTable', function() {
   });
 
 
-  it('creates a link cell', function() {
+  it('creates a link cell', function(done) {
     var container = document.createElement('div');
     ReactDOM.render((
       <MuiThemeProvider muiTheme={getMuiTheme()}>
@@ -67,22 +68,18 @@ describe('FeatureTable', function() {
     var hyperlinks = container.querySelectorAll('a');
     assert.equal(hyperlinks.length, 4);
     assert.equal(hyperlinks[2].getAttribute('href'), 'http://www.foo.com/bar3');
-    ReactDOM.unmountComponentAtNode(container);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
   });
 
-  it('renders table cells correctly', function() {
-    var container = document.createElement('div');
-    ReactDOM.render((
-      <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <FeatureTable layer={layer} intl={intl} map={map}/>
-      </MuiThemeProvider>
-    ), container);
-    var tds = container.querySelectorAll('div.rt-td');
-    assert.equal(tds[3].innerHTML, 'bar1');
-    assert.equal(tds[8].innerHTML, 'bar2');
-    assert.equal(tds[13].innerHTML, 'bar3');
-    assert.equal(tds[18].innerHTML, 'bar4');
-    ReactDOM.unmountComponentAtNode(container);
+  it('renders the feature table', function() {
+    const renderer = TestUtils.createRenderer();
+    renderer.render(<FeatureTable map={map} intl={intl} layer={layer}/>);
+    const actual = renderer.getRenderOutput().props.className;
+    const expected = 'sdk-component feature-table';
+    assert.equal(actual, expected);
   });
 
 });

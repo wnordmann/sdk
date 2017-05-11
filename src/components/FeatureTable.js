@@ -553,7 +553,8 @@ class FeatureTable extends React.Component {
       }
     }
     var table;
-    if (this._element && columns.length > 0 && this.state.features !== null) {
+    var checkToCreateTable = this._element && columns.length > 0 && this.state.features !== null;
+    if (checkToCreateTable) {
       var height = this.props.height ? this.props.height : this._element.offsetHeight - 20;
       height -= this._formNode.offsetHeight;
       var data;

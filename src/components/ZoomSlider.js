@@ -2,6 +2,7 @@ import React from 'react';
 import ol from 'openlayers';
 import debounce from  'debounce';
 import Slider from 'material-ui/Slider';
+import classNames from 'classnames';
 
 /**
  * Horizontal slider to allow zooming the map. Make sure that the containing div has a size.
@@ -20,6 +21,10 @@ export default class ZoomSlider extends React.PureComponent {
      * Style config.
      */
     style: React.PropTypes.object,
+    /**
+    * Css class name to apply on the root element of this component.
+    */
+    className: React.PropTypes.string,
     /**
      * The map to use.
      */
@@ -65,7 +70,7 @@ export default class ZoomSlider extends React.PureComponent {
   }
   render() {
     return (
-      <Slider style={this.props.style} onChange={this._onChange.bind(this)} value={this.state.value} />
+      <Slider style={this.props.style} className={classNames('sdk-component zoom-slider', this.props.className)} onChange={this._onChange.bind(this)} value={this.state.value} />
     );
   }
 }
