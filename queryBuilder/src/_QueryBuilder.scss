@@ -1,0 +1,79 @@
+.queryBuilderResults {
+  width: 420px;
+  .queryHeader {
+    display: flex;
+    padding: 10px;
+    h4 {
+      width: 76%;
+      margin: 8px 0 0 10px;
+    }
+  }
+  .values {
+    display: flex;
+    .selectAttrib {
+      margin-right: 10px;
+    }
+    .selectOperator {
+      margin-right: 10px;
+    }
+    .selectValue {
+      margin-right: 10px;
+    }
+  }
+  .rulesList {
+    margin-bottom: 10px;
+    .filterRule {
+      display: flex;
+      padding-bottom: 4px;
+      .selectDrag, .selectRemove {
+        margin: 20px;
+        font-size: 21px;
+        color: #bfbfbf;
+      }
+      .values {
+        display: flex;
+        .selectAttrib {
+          width: 130px !important;
+          margin-right: 10px;
+        }
+        .selectOperator {
+          width: 66px !important;
+          margin-right: 10px;
+        }
+        .selectValue {
+          width: 80px !important;
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+
+  .addRule {
+    margin:  0px 20px 20px 20px;
+    .sub{
+      padding-left: 0 !important;
+      padding-top: 24px;
+      line-height: 10px !important;
+    }
+    .filterRule {
+      padding-bottom: 0;
+      margin: 0;
+      .values {
+        .selectAttrib {
+          width: 150px !important;
+        }
+        .selectOperator {
+          width: 66px !important;
+        }
+        .selectValue {
+          width: 142px !important;
+        }
+      }
+    }
+  }
+  .queryBuilderFooter {
+    text-align: right;
+    padding: 10px;
+    // margin-bottom: 6px;
+  }
+}
