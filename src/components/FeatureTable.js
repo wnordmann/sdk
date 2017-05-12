@@ -153,10 +153,6 @@ class FeatureTable extends React.Component {
      */
     refreshRate: React.PropTypes.number,
     /**
-     * Number of features per page.
-     */
-    pageSize: React.PropTypes.number,
-    /**
      * Css class name to apply on the root element of this component.
      */
     className: React.PropTypes.string,
@@ -202,7 +198,6 @@ class FeatureTable extends React.Component {
 
   static defaultProps = {
     allowEdit: true,
-    pageSize: 20,
     pointZoom: 16,
     sortable: true,
     refreshRate: 250
@@ -218,7 +213,6 @@ class FeatureTable extends React.Component {
     this._selectedOnly = false;
     this._pagesLoaded = {};
     this.state = {
-      pageSize: props.pageSize,
       pages: -1,
       errorOpen: false,
       error: false,
@@ -269,7 +263,7 @@ class FeatureTable extends React.Component {
       if (!this._layer.get('numberOfFeatures')) {
         this._layer.once('change:numberOfFeatures', function() {
           this.setState({
-            pages: Math.ceil(this._layer.get('numberOfFeatures') / this.state.pageSize)
+            pages: Math.ceil(this._layer.get('numberOfFeatures') / this._pageSize)
           });
         }, this);
       }
@@ -279,10 +273,6 @@ class FeatureTable extends React.Component {
     // TODO add clearing filter back
     //ReactDOM.findDOMNode(this.refs.filter).value = '';
     this._setLayer(layer);
-    if (this.refs.table) {
-      // start on first page
-      this.refs.table.setPage(0);
-    }
   }
   _onChange() {
     if (this._layer) {
@@ -555,8 +545,9 @@ class FeatureTable extends React.Component {
     var table;
     var checkToCreateTable = this._element && columns.length > 0 && this.state.features !== null;
     if (checkToCreateTable) {
-      var height = this.props.height ? this.props.height : this._element.offsetHeight - 20;
-      height -= this._formNode.offsetHeight;
+      if (!this._pageSize && this._formNode) {
+        this._pageSize = Math.floor((this._element.offsetHeight - this._formNode.offsetHeight - 29 - 31) / 42) - 1;
+      }
       var data;
       if (this._filtered || this._selectedOnly) {
         data = this.state.filter;
@@ -564,7 +555,7 @@ class FeatureTable extends React.Component {
         if (this._layer instanceof ol.layer.Vector) {
           data = this.state.features.getFeatures();
         } else {
-          data = FeatureStore.getFeaturesPerPage(this._layer, this.state.page, this.state.pageSize);
+          data = FeatureStore.getFeaturesPerPage(this._layer, this.state.page, this._pageSize);
         }
       }
       table = (<ReactTable
@@ -576,9 +567,7 @@ class FeatureTable extends React.Component {
         showPageSizeOptions={false}
         onChange={(this._layer instanceof ol.layer.Vector) ? undefined : this._onTableChange.bind(this)}
         showPageJump={false}
-        pageSize={this.state.pageSize}
-        tableStyle={{width: '98%'}}
-        style={{height: height, overflowY: 'auto'}}
+        pageSize={this._pageSize}
         columns={columns}
       />);
     }
