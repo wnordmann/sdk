@@ -545,7 +545,7 @@ class FeatureTable extends React.Component {
     var table;
     var checkToCreateTable = this._element && columns.length > 0 && this.state.features !== null;
     if (checkToCreateTable) {
-      if (!this._pageSize && this._formNode) {
+      if (!this._pageSize && this._formNode && this._element.offsetHeight > 0) {
         this._pageSize = Math.floor((this._element.offsetHeight - this._formNode.offsetHeight - 29 - 31) / 42) - 1;
       }
       var data;
