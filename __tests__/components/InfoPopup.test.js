@@ -38,6 +38,17 @@ describe('InfoPopup', function() {
         name: 'y',
         popupInfo: '#AllAttributes',
         source: new ol.source.TileWMS({url: 'http://foo', params: {LAYERS: 'y'}})
+      }),
+      new ol.layer.Vector({
+        id: 'lyr01',
+        isSelectable: true,
+        geometryType: 'Polygon',
+        attributes: ['cat', 'VEGDESC', 'VEG_ID', 'F_CODEDESC', 'F_CODE', 'AREA_KM2'],
+        title: 'trees',
+        source: new ol.source.Vector({
+          format: new ol.format.GeoJSON(),
+          url: './data/trees.json'
+        })
       })
     ];
     map = new ol.Map({
@@ -88,7 +99,26 @@ describe('InfoPopup', function() {
     ReactDOM.unmountComponentAtNode(container);
   });
 
-  it('deactivates when requested', function() {
+  it('sets correct initial properties', function() {
+    var container = document.createElement('div');
+    var popup = ReactDOM.render((
+      <InfoPopup intl={intl} map={map} />
+    ), container);
+    var actual = popup.active;
+    var expected = true;
+    assert.equal(actual, expected);
+    actual = popup._count;
+    expected = 0;
+    assert.equal(actual, expected);
+    actual = popup.state;
+    expected = {
+      popupTexts: []
+    };
+    assert.deepEqual(actual, expected);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('toggles activation', function() {
     var container = document.createElement('div');
     var popup = ReactDOM.render((
       <InfoPopup intl={intl} map={map} />
@@ -96,6 +126,8 @@ describe('InfoPopup', function() {
     assert.equal(popup.active, true);
     popup.deactivate();
     assert.equal(popup.active, false);
+    popup.activate(null);
+    assert.equal(popup.active, true);
     ReactDOM.unmountComponentAtNode(container);
   });
 
@@ -107,5 +139,62 @@ describe('InfoPopup', function() {
     assert.equal(actual, expected);
   });
 
+  it('updates count', function() {
+    var container = document.createElement('div');
+    layers.forEach(function(layer) {
+      map.addLayer(layer);
+    });
+    var feature = new ol.Feature({});
+    var popup = ReactDOM.render((
+      <InfoPopup intl={intl} map={map} />
+    ), container);
+    var actual = popup._count;
+    var expected = 0;
+    assert.equal(actual, expected);
+    popup._createSimpleTable({features: feature, layer: layers[2]});
+    actual = popup._count;
+    expected = 1;
+    assert.equal(actual, expected);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('sets default props', function() {
+    var container = document.createElement('div');
+    var popup = ReactDOM.render((
+      <InfoPopup intl={intl} map={map} />
+    ), container);
+    var actual = popup.props.hover;
+    var expected = false;
+    assert.equal(actual, expected);
+    actual = popup.props.toolId;
+    expected = 'nav';
+    assert.equal(actual, expected);
+    actual = popup.props.infoFormat;
+    expected = 'text/plain';
+    assert.equal(actual, expected);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('does not update popup content when deactivated', function() {
+    var container = document.createElement('div');
+    var popup = ReactDOM.render((
+      <InfoPopup intl={intl} map={map} />
+    ), container);
+    var actual = popup.state.contentAsObject;
+    var expected = undefined;
+    assert.equal(actual, expected);
+    actual = popup._contentAsObject;
+    expected = undefined;
+    assert.equal(actual, expected);
+    popup.deactivate();
+    popup._onMapClick(null);
+    actual = popup.state.contentAsObject;
+    expected = undefined;
+    assert.equal(actual, expected);
+    actual = popup._contentAsObject;
+    expected = undefined;
+    assert.equal(actual, expected);
+    ReactDOM.unmountComponentAtNode(container);
+  });
 
 });
