@@ -3,14 +3,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {assert} from 'chai';
-import raf from 'raf';
 import intl from '../mock-i18n';
-import 'phantomjs-polyfill-find';
-import 'phantomjs-polyfill-object-assign';
 import PointSymbolizerEditor from '../../src/components/PointSymbolizerEditor';
 import TestUtils from 'react-addons-test-utils';
-
-raf.polyfill();
 
 describe('PointSymbolizerEditor', function() {
 
