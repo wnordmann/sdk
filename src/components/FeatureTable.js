@@ -29,6 +29,7 @@ import ActionDelete from 'material-ui/svg-icons/action/delete';
 import FeatureStore from '../stores/FeatureStore';
 import SelectActions from '../actions/SelectActions';
 import LayerSelector from './LayerSelector';
+import {Toolbar} from 'material-ui/Toolbar';
 import {ToolbarGroup} from 'material-ui/Toolbar';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Snackbar from 'material-ui/Snackbar';
@@ -39,6 +40,7 @@ import MenuItem from 'material-ui/MenuItem';
 import ToolUtil from '../toolutil';
 import FilterHelp from './FilterHelp';
 import './react-table.css';
+import './FeatureTable.css';
 
 const messages = defineMessages({
   optionslabel: {
@@ -577,11 +579,14 @@ class FeatureTable extends React.Component {
     }
     var style = Object.assign({marginLeft: 10, marginRight: 10}, this.props.style);
     return (
-      <Paper zDepth={0} className={classNames('sdk-component feature-table', this.props.className)} style={style}>
-        <ToolbarGroup ref='form'>
-          <LayerSelector {...this.props} id='table-layerSelector' disabled={!this._layer} ref='layerSelector' onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList.bind(this)} map={this.props.map} value={id} />
-          <ToolbarGroup style={{display: this._layer instanceof ol.layer.Vector ? 'block' : 'none'}}><TextField floatingLabelFixed={true} floatingLabelText={formatMessage(messages.filterlabel)} id='featuretable-filter' disabled={!this._layer} ref='filter' onChange={this._filterByText.bind(this)} hintText={formatMessage(messages.filterplaceholder)} /><FilterHelp intl={this.props.intl} /></ToolbarGroup>
-          <ToolbarGroup style={{justifyContent: 'flex-end'}}>
+      <Paper zDepth={0} className={classNames('sdk-component featureTable', this.props.className)} style={style}>
+        <Toolbar ref='form' className="featureTableToolbar">
+          <ToolbarGroup firstChild={true}>
+            <LayerSelector {...this.props} id='table-layerSelector' disabled={!this._layer} ref='layerSelector' onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList.bind(this)} map={this.props.map} value={id} />
+          </ToolbarGroup>
+          <ToolbarGroup>
+            <TextField floatingLabelFixed={true} floatingLabelText={formatMessage(messages.filterlabel)} id='featuretable-filter' disabled={!this._layer} ref='filter' onChange={this._filterByText.bind(this)} hintText={formatMessage(messages.filterplaceholder)} />
+            <FilterHelp intl={this.props.intl} />
             <Button buttonType='Icon' disabled={!this._layer} iconClassName='ms ms-crosshair' tooltip={formatMessage(messages.zoombuttontitle)} onTouchTap={this._zoomSelected.bind(this)}/>
             <IconMenu anchorOrigin={{horizontal: 'right', vertical: 'top'}} targetOrigin={{horizontal: 'right', vertical: 'top'}} iconButtonElement={<Button buttonType='Icon' iconClassName='fa fa-ellipsis-v'/>}>
               <MenuItem primaryText={formatMessage(messages.clearbuttontitle)} disabled={!this._layer} onTouchTap={this._clearSelected.bind(this)}/>
@@ -589,11 +594,17 @@ class FeatureTable extends React.Component {
             </IconMenu>
           </ToolbarGroup>
           {error}
-        </ToolbarGroup>
-        {table}
+        </Toolbar>
+        <Paper>
+          {table}
+        </Paper>
       </Paper>
     );
   }
 }
 
 export default injectIntl(FeatureTable, {withRef: true});
+
+
+// style={{display: this._layer instanceof ol.layer.Vector ? 'block' : 'none'}} "part of line 586 not sure we need it"
+// style={{justifyContent: 'flex-end'}} "part of line 590 , last ToolbarGroup"
