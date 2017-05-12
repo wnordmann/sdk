@@ -3,10 +3,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {assert} from 'chai';
+import raf from 'raf';
 import intl from '../mock-i18n';
+import 'phantomjs-polyfill-find';
 import 'phantomjs-polyfill-object-assign';
 import PointSymbolizerEditor from '../../src/components/PointSymbolizerEditor';
 import TestUtils from 'react-addons-test-utils';
+
+raf.polyfill();
 
 describe('PointSymbolizerEditor', function() {
 
@@ -70,6 +74,40 @@ describe('PointSymbolizerEditor', function() {
     const actual = component.state;
     const expected = otherState;
     assert.deepEqual(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('changes opacity', function(done) {
+    var container = document.createElement('div');
+    var component = ReactDOM.render((
+      <PointSymbolizerEditor intl={intl} onChange={onChange} initialState={initialState}/>
+    ), container);
+    var actual = component.state.opacity;
+    var expected = undefined;
+    assert.equal(actual, expected);
+    component._onOpacityChange(null, .02);
+    actual = component.state.opacity;
+    expected = .02;
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('changes symbol type', function(done) {
+    var container = document.createElement('div');
+    var component = ReactDOM.render((
+      <PointSymbolizerEditor intl={intl} onChange={onChange} initialState={initialState}/>
+    ), container);
+    var actual = component.state.symbolType;
+    var expected = 'circle';
+    assert.equal(actual, expected);
+    component._onChangeSymbol(null, null, 'foo');
+    actual = component.state.symbolType;
+    expected = 'foo';
     window.setTimeout(function() {
       ReactDOM.unmountComponentAtNode(container);
       done();
