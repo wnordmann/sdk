@@ -289,7 +289,11 @@ class FeatureTable extends React.Component {
     this._updateStoreFilter();
   }
   _filterLayerList(lyr) {
-    return lyr.getVisible() && lyr.get('title') !== null && (lyr instanceof ol.layer.Vector || lyr.get('wfsInfo') !== undefined);
+    var filter =  lyr.getVisible() && lyr.get('title') !== null && (lyr instanceof ol.layer.Vector || lyr.get('wfsInfo') !== undefined);
+    if (filter && !this._layer) {
+      this._layer = lyr;
+    }
+    return filter;
   }
   _updateStoreFilter() {
     var lyr = this._layer;
@@ -575,7 +579,7 @@ class FeatureTable extends React.Component {
     return (
       <Paper zDepth={0} className={classNames('sdk-component feature-table', this.props.className)} style={style}>
         <ToolbarGroup ref='form'>
-          <LayerSelector {...this.props} id='table-layerSelector' disabled={!this._layer} ref='layerSelector' onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList} map={this.props.map} value={id} />
+          <LayerSelector {...this.props} id='table-layerSelector' disabled={!this._layer} ref='layerSelector' onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList.bind(this)} map={this.props.map} value={id} />
           <ToolbarGroup style={{display: this._layer instanceof ol.layer.Vector ? 'block' : 'none'}}><TextField floatingLabelFixed={true} floatingLabelText={formatMessage(messages.filterlabel)} id='featuretable-filter' disabled={!this._layer} ref='filter' onChange={this._filterByText.bind(this)} hintText={formatMessage(messages.filterplaceholder)} /><FilterHelp intl={this.props.intl} /></ToolbarGroup>
           <ToolbarGroup style={{justifyContent: 'flex-end'}}>
             <Button buttonType='Icon' disabled={!this._layer} iconClassName='ms ms-crosshair' tooltip={formatMessage(messages.zoombuttontitle)} onTouchTap={this._zoomSelected.bind(this)}/>
