@@ -604,7 +604,3 @@ class FeatureTable extends React.Component {
 }
 
 export default injectIntl(FeatureTable, {withRef: true});
-
-
-// style={{display: this._layer instanceof ol.layer.Vector ? 'block' : 'none'}} "part of line 586 not sure we need it"
-// style={{justifyContent: 'flex-end'}} "part of line 590 , last ToolbarGroup"
