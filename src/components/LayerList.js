@@ -240,7 +240,8 @@ class LayerList extends React.PureComponent {
       visible: props.showOnStart,
       addLayerOpen: false,
       muiTheme: context.muiTheme || getMuiTheme(),
-      baseLayer: ''
+      baseLayer: '',
+      selectedGroupLayer:[]
     };
     this.moveLayer = debounce(this.moveLayer, 100);
   }
@@ -311,6 +312,9 @@ class LayerList extends React.PureComponent {
   _setBaseLayer(layer) {
     this.setState({baseLayer: layer});
   }
+  _setSelectedGroupLayer(groupLayer) {
+    this.setState({selectedGroupLayer: groupLayer});
+  }
   getLayerNode(lyr, group, idx) {
     if (this.props.addBaseMap && lyr.get('type') === 'base' && !lyr.getVisible()) {
       return undefined;
@@ -322,11 +326,11 @@ class LayerList extends React.PureComponent {
       if (lyr instanceof ol.layer.Group) {
         var children = (lyr.get('showContent') === false) ? [] : this.renderLayerGroup(lyr);
         return (
-          <LayerListItem setBaseLayer={this._setBaseLayer.bind(this)} currentBaseLayer={this.state.baseLayer} index={idx} moveLayer={this.moveLayer} {...this.props} key={lyr.get('id')} layer={lyr} group={group} nestedItems={children} title={lyr.get('title')} disableTouchRipple={true}/>
+          <LayerListItem setBaseLayer={this._setBaseLayer.bind(this)} currentBaseLayer={this.state.baseLayer} setSelectedGroupLayer={this._setSelectedGroupLayer.bind(this)} selectedGroupLayer={this.state.selectedGroupLayer} index={idx} moveLayer={this.moveLayer} {...this.props} key={lyr.get('id')} layer={lyr} group={group} nestedItems={children} title={lyr.get('title')} disableTouchRipple={true}/>
         );
       } else {
         return (
-          <LayerListItem setBaseLayer={this._setBaseLayer.bind(this)} currentBaseLayer={this.state.baseLayer} index={idx} moveLayer={this.moveLayer} {...this.props} key={lyr.get('id')} layer={lyr} group={group} title={lyr.get('title')} disableTouchRipple={true}/>
+          <LayerListItem setBaseLayer={this._setBaseLayer.bind(this)} currentBaseLayer={this.state.baseLayer} setSelectedGroupLayer={this._setSelectedGroupLayer.bind(this)} selectedGroupLayer={this.state.selectedGroupLayer} index={idx} moveLayer={this.moveLayer} {...this.props} key={lyr.get('id')} layer={lyr} group={group} title={lyr.get('title')} disableTouchRipple={true}/>
         );
       }
     }

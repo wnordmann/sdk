@@ -296,6 +296,14 @@ class LayerListItem extends React.PureComponent {
     */
     currentBaseLayer: React.PropTypes.string,
     /**
+    *  State from of selected group layers
+    */
+    selectedGroupLayer: React.PropTypes.array,
+    /**
+    *  Callback from parent component to manage baseLayers
+    */
+    setSelectedGroupLayer: React.PropTypes.func,
+    /**
     *  Style for text of dragged layer
     */
     dragPreviewStyle: React.PropTypes.object,
@@ -430,26 +438,33 @@ static formats = {
     })
     return returnGroupId;
   }
-  _newHandleVisibility(event) {
+  _handleVisibility(event) {
     const groups = this.props.map.getLayerGroup();
     const visible = event.target.className.indexOf('fa-eye-slash') > 0;
     const groupId = this._getLayerGroupId(this.props.layer.get('id'), groups);
+    var index;
     if (this.props.layer instanceof ol.layer.Group) {
       var layers = this.props.layer.getLayers();
+      if (visible) {
+        index = this.props.selectedGroupLayer.indexOf(this.props.layer.get('id'));
+        var array = this.props.selectedGroupLayer;
+        array.splice(index, 1);
+        this.props.setSelectedGroupLayer(array);
+      } else {
+        this.props.setSelectedGroupLayer([this.props.layer.get('id'), ...this.props.selectedGroupLayer])
+      }
       layers.forEach(function(l) {
         l.setVisible(visible);
       })
-      //this.props.layer.setVisible(visible);
     } else {
       if (groupId) {
-        // var groupLayers = groups.getLayers();
-        // groupLayers.forEach(function(g) {
-        //   if (g.get('id') === groupId) {
-        //     console.log(g.get('visible'));
-        //   }
-        // })
+        index = this.props.selectedGroupLayer.indexOf(groupId);
+        if (index > -1) {
+          var groupArray = this.props.selectedGroupLayer;
+          groupArray.splice(index, 1);
+          this.props.setSelectedGroupLayer(groupArray);
+        }
         this.props.layer.setVisible(visible);
-
       }
     }
   }
@@ -738,14 +753,17 @@ static formats = {
         legend = <ArcGISRestLegend layer={this.props.layer} />;
       }
     }
-
+    var isLayerVisible = this.props.layer.get('visible');
+    if (this.props.layer instanceof ol.layer.Group) {
+      isLayerVisible = this.props.selectedGroupLayer.indexOf(this.props.layer.get('id')) === -1  ;
+    }
     var showBasemapEye = this.props.layer.get('visible') || this.props.currentBaseLayer === this.props.layer.get('id');
-    var checked = <i className='fa fa-eye' onTouchTap={this._newHandleVisibility.bind(this)}></i>;
-    var unchecked = <i className='fa fa-eye-slash' onTouchTap={this._newHandleVisibility.bind(this)}></i>;
+    var checked = <i className='fa fa-eye' onTouchTap={this._handleVisibility.bind(this)}></i>;
+    var unchecked = <i className='fa fa-eye-slash' onTouchTap={this._handleVisibility.bind(this)}></i>;
     var baseVisibility = <i onTouchTap={this._handleBaseVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye':showBasemapEye, 'fa-eye-slash':!showBasemapEye})}></i>;
     var baseParentVisibility = <i id='baseParentVisibility' onTouchTap={this._handleBaseParentVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye-slash':this.props.currentBaseLayer === 'baseParent', 'fa-eye':this.props.currentBaseLayer !== 'baseParent'})}></i>;
     var fixedWidth =  <i className='fa fa-fw'></i>;
-    var visibility = this.state.checked ? checked : unchecked;
+    var visibility = isLayerVisible ? checked : unchecked;
     var popoverEllipsis = (!(this.props.layer instanceof ol.layer.Group) && (opacity || download || filter || remove || table || label || edit)) ? (
       <div>
         <i className="fa fa-ellipsis-v" onTouchTap={this._handleMenuOpen.bind(this)}></i>
@@ -785,8 +803,6 @@ static formats = {
       isNested = true;
     }else if (layer instanceof ol.layer.Group) {
       rightIconButtons = <span className="fixedContainer">{visibility}{fixedWidth}</span>;
-      muted = !showBasemapEye;
-      isNested = true;
     } else {
       const groups = this.props.map.getLayerGroup();
       const id = layer.get('id');
