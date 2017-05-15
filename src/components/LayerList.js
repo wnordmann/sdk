@@ -111,10 +111,6 @@ class LayerList extends React.PureComponent {
      */
     allowRemove: React.PropTypes.bool,
     /**
-     * Should we show the contents of layer groups?
-     */
-    showGroupContent: React.PropTypes.bool,
-    /**
      * Should we show a download button for layers?
      */
     showDownload: React.PropTypes.bool,
@@ -229,7 +225,6 @@ class LayerList extends React.PureComponent {
     allowLabeling: false,
     allowRemove: true,
     allowStyling: false,
-    showGroupContent: true,
     showDownload: false,
     downloadFormat: 'GeoJSON',
     includeLegend: false,
@@ -325,7 +320,7 @@ class LayerList extends React.PureComponent {
     }
     if (lyr.get('title') !== null) {
       if (lyr instanceof ol.layer.Group) {
-        var children = this.props.showGroupContent ? this.renderLayerGroup(lyr) : [];
+        var children = (lyr.get('showContent') === false) ? [] : this.renderLayerGroup(lyr);
         return (
           <LayerListItem setBaseLayer={this._setBaseLayer.bind(this)} currentBaseLayer={this.state.baseLayer} index={idx} moveLayer={this.moveLayer} {...this.props} key={lyr.get('id')} layer={lyr} group={group} nestedItems={children} title={lyr.get('title')} disableTouchRipple={true}/>
         );
