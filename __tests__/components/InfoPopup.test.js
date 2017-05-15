@@ -38,17 +38,6 @@ describe('InfoPopup', function() {
         name: 'y',
         popupInfo: '#AllAttributes',
         source: new ol.source.TileWMS({url: 'http://foo', params: {LAYERS: 'y'}})
-      }),
-      new ol.layer.Vector({
-        id: 'lyr01',
-        isSelectable: true,
-        geometryType: 'Polygon',
-        attributes: ['cat', 'VEGDESC', 'VEG_ID', 'F_CODEDESC', 'F_CODE', 'AREA_KM2'],
-        title: 'trees',
-        source: new ol.source.Vector({
-          format: new ol.format.GeoJSON(),
-          url: './data/trees.json'
-        })
       })
     ];
     map = new ol.Map({
@@ -102,7 +91,7 @@ describe('InfoPopup', function() {
   it('sets correct initial properties', function() {
     var container = document.createElement('div');
     var popup = ReactDOM.render((
-      <InfoPopup intl={intl} map={map} />
+      <InfoPopup intl={intl} map={map} hover={true} infoFormat={'foo'}/>
     ), container);
     var actual = popup.active;
     var expected = true;
@@ -114,6 +103,12 @@ describe('InfoPopup', function() {
     expected = {
       popupTexts: []
     };
+    actual = popup.props.hover;
+    expected = true;
+    assert.equal(actual, expected);
+    actual = popup.props.infoFormat;
+    expected = 'foo';
+    assert.equal(actual, expected);
     assert.deepEqual(actual, expected);
     ReactDOM.unmountComponentAtNode(container);
   });
@@ -193,6 +188,22 @@ describe('InfoPopup', function() {
     assert.equal(actual, expected);
     actual = popup._contentAsObject;
     expected = undefined;
+    assert.equal(actual, expected);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('toggles popup visibility', function() {
+    var container = document.createElement('div');
+    var popup = ReactDOM.render((
+      <InfoPopup intl={intl} map={map} />
+    ), container);
+    popup.setVisible(true);
+    var actual = ReactDOM.findDOMNode(popup).parentNode.style.display;
+    var expected = 'block';
+    assert.equal(actual, expected);
+    popup.setVisible(false);
+    actual = ReactDOM.findDOMNode(popup).parentNode.style.display;
+    expected = 'none';
     assert.equal(actual, expected);
     ReactDOM.unmountComponentAtNode(container);
   });
