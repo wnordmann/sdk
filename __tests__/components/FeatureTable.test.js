@@ -78,7 +78,7 @@ describe('FeatureTable', function() {
     const renderer = TestUtils.createRenderer();
     renderer.render(<FeatureTable map={map} intl={intl} layer={layer}/>);
     const actual = renderer.getRenderOutput().props.className;
-    const expected = 'sdk-component feature-table';
+    const expected = 'sdk-component featureTable';
     assert.equal(actual, expected);
   });
 
