@@ -85,8 +85,7 @@ describe('EditPopup', function() {
     ), container);
     popup.setState({layer: layer, feature: feature, values: feature.getProperties()});
     popup.setState({dirty: {foo: true}, values: {foo: 'bar2'}});
-    var buttons = container.querySelectorAll('button');
-    TestUtils.Simulate.touchTap(buttons[1]);
+    popup.save();
     assert.equal(feature.get('foo'), 'bar2');
     ReactDOM.unmountComponentAtNode(container);
   });
@@ -104,8 +103,7 @@ describe('EditPopup', function() {
     ), container);
     popup.setState({layer: layer, feature: feature, values: feature.getProperties()});
     popup.setState({dirty: {foo: true}, values: {foo: 'bar2'}});
-    var buttons = container.querySelectorAll('button');
-    TestUtils.Simulate.touchTap(buttons[0]);
+    popup._onCancel();
     assert.equal(feature.get('foo'), 'bar');
     ReactDOM.unmountComponentAtNode(container);
   });
