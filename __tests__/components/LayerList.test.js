@@ -131,6 +131,36 @@ describe('LayerList', function() {
     ReactDOM.unmountComponentAtNode(container);
   });
 
+  it('handles showContent on group layer', function() {
+    map.removeLayer(layer);
+    group.set('showContent', false);
+    map.addLayer(group);
+    var container = document.createElement('div');
+    ReactDOM.render((
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <LayerList intl={intl} map={map}/>
+      </MuiThemeProvider>
+    ), container);
+    var faEyes = container.querySelectorAll('.fa-eye');
+    assert.equal(faEyes.length, 1);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('handles isGroupExpanded on group layer', function() {
+    map.removeLayer(layer);
+    group.getLayers().item(0).set('isGroupExpanded', false);
+    map.addLayer(group);
+    var container = document.createElement('div');
+    ReactDOM.render((
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <LayerList intl={intl} map={map}/>
+      </MuiThemeProvider>
+    ), container);
+    var faEyes = container.querySelectorAll('.fa-eye');
+    assert.equal(faEyes.length, 2);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
   it('turns off other layers when base map parent is selected', function() {
     map.removeLayer(layer);
     map.addLayer(group);

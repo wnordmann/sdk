@@ -347,7 +347,7 @@ class LayerListItem extends React.PureComponent {
       filterOpen: false,
       labelOpen: false,
       tableOpen: false,
-      open: true,
+      open: (props.layer.get('isGroupExpanded') === false) ? false : true,
       styleOpen: false,
       checked: props.layer.getVisible(),
       previousBase: ''
@@ -646,7 +646,7 @@ static formats = {
     var arrowIcon = this.state.open ? downArrow : sideArrow;
 
     var layersIcon = <i className="ms ms-layers"></i>;
-    if (layer.get('type') !== 'base-group') {
+    if (!(layer instanceof ol.layer.Group)) {
       arrowIcon = <i className="fa fa-fw" ></i>;
     }
     var zoomTo;
