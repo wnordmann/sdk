@@ -22,6 +22,7 @@ import Paper from 'material-ui/Paper';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import {ListItem} from 'material-ui/List';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const messages = defineMessages({
   header: {
@@ -106,8 +107,17 @@ class PointSymbolizerEditor extends React.PureComponent {
     intl: intlShape.isRequired
   };
 
-  constructor(props) {
+  static contextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
+  constructor(props, context) {
     super(props);
+    this._muiTheme = context.muiTheme || getMuiTheme();
     this.state = {
       symbolType: props.initialState && props.initialState.symbolType ? props.initialState.symbolType : 'circle',
       symbolSize: props.initialState && props.initialState.symbolSize ? props.initialState.symbolSize : '4',
@@ -115,6 +125,9 @@ class PointSymbolizerEditor extends React.PureComponent {
       externalGraphic: props.initialState ? props.initialState.externalGraphic : undefined,
       opacity: props.initialState ? props.initialState.opacity : undefined
     };
+  }
+  getChildContext() {
+    return {muiTheme: this._muiTheme};
   }
   componentDidMount() {
     if (this.state.externalGraphic) {
@@ -207,8 +220,8 @@ class PointSymbolizerEditor extends React.PureComponent {
         <ListItem innerDivStyle={ listStyle } style={!this.state.externalGraphic ? {display: 'none'} : {width: '100%'}} primaryText={formatMessage(messages.opacity)}>
           <Slider defaultValue={this.state.opacity} onChange={this._onOpacityChange.bind(this)} />
         </ListItem>
-        <FillEditor onChange={this.props.onChange} initialHasFill={this.props.initialState ? this.props.initialState.hasFill : undefined} initialFillColor={this.props.initialState ? this.props.initialState.fillColor : undefined} />
-        <StrokeEditor onChange={this.props.onChange} initialHasStroke={this.props.initialState ? this.props.initialState.hasStroke : undefined} initialStrokeWidth={this.props.initialState ? this.props.initialState.strokeWidth : undefined} initialStrokeColor={this.props.initialState ? this.props.initialState.strokeColor : undefined} />
+        <FillEditor intl={this.props.intl} onChange={this.props.onChange} initialHasFill={this.props.initialState ? this.props.initialState.hasFill : undefined} initialFillColor={this.props.initialState ? this.props.initialState.fillColor : undefined} />
+        <StrokeEditor intl={this.props.intl} onChange={this.props.onChange} initialHasStroke={this.props.initialState ? this.props.initialState.hasStroke : undefined} initialStrokeWidth={this.props.initialState ? this.props.initialState.strokeWidth : undefined} initialStrokeColor={this.props.initialState ? this.props.initialState.strokeColor : undefined} />
       </Paper>
     );
   }

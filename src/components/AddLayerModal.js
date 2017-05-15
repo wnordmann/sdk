@@ -279,6 +279,7 @@ class AddLayerModal extends React.PureComponent {
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
   };
+
   static defaultProps = {
     allowUserInput: false,
     allowUpload: true,
