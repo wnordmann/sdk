@@ -347,7 +347,7 @@ class LayerListItem extends React.PureComponent {
       filterOpen: false,
       labelOpen: false,
       tableOpen: false,
-      open: (props.layer.get('isGroupExpanded') === false) ? false: true,
+      open: (props.layer.get('isGroupExpanded') === false) ? false : true,
       styleOpen: false,
       checked: props.layer.getVisible(),
       previousBase: ''
