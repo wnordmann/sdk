@@ -107,5 +107,4 @@ describe('InfoPopup', function() {
     assert.equal(actual, expected);
   });
 
-
 });

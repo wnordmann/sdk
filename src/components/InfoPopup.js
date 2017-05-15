@@ -221,6 +221,7 @@ class InfoPopup extends React.Component {
     var allLayers = this._getLayers();
     var len = allLayers.length;
     var finishedQueries = 0;
+
     var finishedQuery = function() {
       finishedQueries++;
       if (len === finishedQueries) {
