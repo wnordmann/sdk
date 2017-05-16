@@ -270,19 +270,5 @@ describe('Playback', function() {
     }, 500);
   });
 
-  it('working test', function(done) {
-    var container = document.createElement('div');
-    var playback = ReactDOM.render((
-      <Playback intl={intl} map={map} minDate={500000} maxDate={1500000}/>
-    ), container);
-    playback._handleTimeLayer(layer);
-    //var actual = playback.state.date;
-    //var expected = 500000;
-    //assert.equal(actual, expected);
-    window.setTimeout(function() {
-      ReactDOM.unmountComponentAtNode(container);
-      done();
-    }, 500);
-  });
 
 });
