@@ -270,5 +270,24 @@ describe('Playback', function() {
     }, 500);
   });
 
+  it('updates layer source params', function(done) {
+    var container = document.createElement('div');
+    var tileLayer = new ol.layer.Tile({
+      source: new ol.source.TileWMS()});
+    var playback = ReactDOM.render((
+      <Playback intl={intl} map={map} minDate={500000} maxDate={1500000}/>
+    ), container);
+    var actual = tileLayer.getSource().getParams().TIME;
+    var expected = undefined;
+    assert.equal(actual, expected);
+    playback._handleTimeLayer(tileLayer);
+    actual = tileLayer.getSource().getParams().TIME;
+    expected = new Date(playback.state.date).toISOString();
+    assert.equal(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
 
 });
