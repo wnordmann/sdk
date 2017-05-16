@@ -15,6 +15,7 @@ import ol from 'openlayers';
 import classNames from 'classnames';
 import FilterService from '../services/FilterService';
 import Dialog from './Dialog';
+import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import Button from './Button';
 import {List, ListItem} from 'material-ui/List';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
@@ -207,13 +208,21 @@ class FilterModal extends React.PureComponent {
       return (<ListItem key={filterName} rightIcon={<DeleteIcon />} primaryText={f.title} ref={filterName} onTouchTap={this._removeFilter.bind(this, f)} />);
     }, this);
     var actions = [
-      <Button key='closeButton' buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />,
-      <Button buttonType='Flat' primary={true} label={formatMessage(messages.addfiltertext)} onTouchTap={this._addFilter.bind(this)} />
+      <Button key='closeButton' buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this.close.bind(this)} />
     ];
     return (
       <Dialog style={this.props.style} inline={this.props.inline} className={classNames('sdk-component filter-modal', this.props.className)} actions={actions} title={formatMessage(messages.title, {layer: this.props.layer.get('title')})} modal={true} open={this.props.open} onRequestClose={this.close.bind(this)}>
-        <TextField floatingLabelText={formatMessage(messages.inputlabel)} floatingLabelFixed={true} name='filter' errorText={errorText} fullWidth={true} ref='filterTextBox' />
-        <FilterHelp intl={this.props.intl} />
+        <Toolbar style={{marginBottom: 20, backgroundColor: '#ffffff !important'}}>
+          <ToolbarGroup firstChild={true} style={{width: 500}}>
+            <TextField floatingLabelText={formatMessage(messages.inputlabel)} floatingLabelFixed={true} name='filter' errorText={errorText} fullWidth={true} ref='filterTextBox' />
+          </ToolbarGroup>
+          <ToolbarGroup>
+            <FilterHelp intl={this.props.intl} />
+          </ToolbarGroup>
+          <ToolbarGroup lastChild={true}>
+            <Button buttonType='Flat' primary={true} label={formatMessage(messages.addfiltertext)} onTouchTap={this._addFilter.bind(this)} />
+          </ToolbarGroup>
+        </Toolbar>
         <List>
           {filters}
         </List>
