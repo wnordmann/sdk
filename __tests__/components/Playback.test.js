@@ -192,7 +192,6 @@ describe('Playback', function() {
 
   it('adds correct layers', function(done) {
     var container = document.createElement('div');
-    //map.addLayer(layer);
     var playback = ReactDOM.render((
       <Playback intl={intl} map={map} minDate={50000} minDate={324511200000} maxDate={1385938800000}/>
     ), container);
@@ -203,6 +202,83 @@ describe('Playback', function() {
     actual = playback._layers.length;
     expected = 1;
     assert.equal(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('changes date value', function(done) {
+    var container = document.createElement('div');
+    var playback = ReactDOM.render((
+      <Playback intl={intl} map={map} />
+    ), container);
+    var date = new Date(1999, 2, 2);
+    playback._onDateChange(null, date);
+    var actual = playback.state.date;
+    var expected = date.getTime();
+    assert.equal(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('changes dates and dateStep values', function(done) {
+    var container = document.createElement('div');
+    var playback = ReactDOM.render((
+      <Playback intl={intl} map={map} />
+    ), container);
+    var actual = playback.state.date;
+    var expected = undefined;
+    assert.equal(actual, expected);
+    actual = playback.state.dates;
+    expected = undefined;
+    assert.equal(actual, expected);
+    actual = playback.state.dateStep;
+    expected = undefined;
+    assert.equal(actual, expected);
+    playback.setState({dates: [100, 200]});
+    playback._onRangeChangeValues(null, 0);
+    actual = playback.state.dateStep;
+    expected = 0;
+    assert.equal(actual, expected);
+    actual = playback.state.date;
+    expected = 100;
+    assert.equal(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('changes date range value', function(done) {
+    var container = document.createElement('div');
+    var playback = ReactDOM.render((
+      <Playback intl={intl} map={map} minDate={500000} maxDate={1500000}/>
+    ), container);
+    var actual = playback.state.date;
+    var expected = 500000;
+    assert.equal(actual, expected);
+    playback._onRangeChange(null, 1000000);
+    actual = playback.state.date;
+    expected = 1000000;
+    assert.equal(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('working test', function(done) {
+    var container = document.createElement('div');
+    var playback = ReactDOM.render((
+      <Playback intl={intl} map={map} minDate={500000} maxDate={1500000}/>
+    ), container);
+    playback._handleTimeLayer(layer);
+    //var actual = playback.state.date;
+    //var expected = 500000;
+    //assert.equal(actual, expected);
     window.setTimeout(function() {
       ReactDOM.unmountComponentAtNode(container);
       done();

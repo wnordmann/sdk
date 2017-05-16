@@ -221,7 +221,6 @@ class InfoPopup extends React.Component {
     var allLayers = this._getLayers();
     var len = allLayers.length;
     var finishedQueries = 0;
-
     var finishedQuery = function() {
       finishedQueries++;
       if (len === finishedQueries) {
@@ -350,7 +349,6 @@ class InfoPopup extends React.Component {
   _updateScroll(evt) {
     var el = evt.target;
     var scrollPosition = el.getBoundingClientRect().top;
-
     var headers = el.querySelectorAll('.popup-table-header');
     var bodys = el.querySelectorAll('.popup-table-headerpadding');
     for (var i = 1; i < headers.length; i++) {
