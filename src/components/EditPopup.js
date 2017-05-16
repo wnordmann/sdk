@@ -10,7 +10,6 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-/*eslint no-console: 0 */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ol from 'openlayers';
@@ -38,7 +37,7 @@ const messages = defineMessages({
   save: {
     id: 'editpopup.save',
     description: 'Text to show on the save button',
-    defaultMessage: 'Save'
+    defaultMessage: 'Add'
   },
   layer: {
     id: 'editpopup.layer',
@@ -116,7 +115,7 @@ class EditPopup extends React.Component {
   componentDidMount() {
     this.overlayPopup = new ol.Overlay({
       autoPan: true,
-      stopEvent: true,
+      stopEvent: false,
       element: ReactDOM.findDOMNode(this).parentNode
     });
     this.props.map.addOverlay(this.overlayPopup);
@@ -138,20 +137,6 @@ class EditPopup extends React.Component {
           break;
       }
     });
-    var cancelButton = ReactDOM.findDOMNode(this.refs.cancel);
-    if (cancelButton.onclick === null) {
-      cancelButton.onclick = function() {
-        me._onCancel();
-        return false;
-      };
-    }
-    var saveButton = ReactDOM.findDOMNode(this.refs.save);
-    if (saveButton.onclick === null) {
-      saveButton.onclick = function() {
-        me.save();
-        return false;
-      };
-    }
   }
   componentWillUnmount() {
     AppDispatcher.unregister(this._dispatchToken);
@@ -295,11 +280,7 @@ class EditPopup extends React.Component {
           me.setVisible(false);
         }, onFailure);
       } else {
-        try {
-          this.state.layer.getSource().addFeature(this.state.feature);
-        } catch (e) {
-          console.log(e);
-        }
+        this.state.layer.getSource().addFeature(this.state.feature);
         me._doCallback();
         me.setVisible(false);
       }
@@ -386,7 +367,7 @@ class EditPopup extends React.Component {
     var layerSelector = this.state.layer ? undefined : (
       <LayerSelector intl={this.props.intl} labelText={formatMessage(messages.layer)} value={id} onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList.bind(this)} map={this.props.map} />
     );
-    var buttons = (<span style={{float: 'right'}}><Button ref='cancel' buttonType='Flat' primary={true} label={formatMessage(messages.cancel)} /><Button ref='save' disabled={!this.state.layer} buttonType='Flat' primary={true} label={formatMessage(messages.save)} /></span>);
+    var buttons = (<span style={{float: 'right'}}><Button buttonType='Flat' primary={true} onTouchTap={this._onCancel.bind(this)} label={formatMessage(messages.cancel)} /><Button disabled={!this.state.layer} buttonType='Flat' primary={true} onTouchTap={this.save.bind(this)} label={formatMessage(messages.save)} /></span>);
     return (
       <div style={this.props.style} className={classNames('sdk-component edit-popup', this.props.className)}>
         {error}
