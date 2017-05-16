@@ -417,6 +417,7 @@ static formats = {
   }
   _changeLayerVisible(evt) {
     this.setState({checked: evt.target.getVisible()});
+    this.forceUpdate();
   }
   _changeResolution() {
     this.setState({resolution: this.props.map.getView().getResolution()});
@@ -438,38 +439,28 @@ static formats = {
     })
     return returnGroupId;
   }
+  _getParentVisibilty(target, groups) {
+    let isParentVisible = true;
+    let returnVal = true;
+    let layers = groups.getLayers()
+    layers.forEach(function(group) {
+      if (group instanceof ol.layer.Group) {
+        isParentVisible = group.getVisible();
+        var children = group.getLayers();
+        children.forEach(function(layer) {
+          if (layer.get('id') === target) {
+            returnVal = isParentVisible;
+          }
+        })
+      }
+    })
+    return returnVal;
+  }
   _handleVisibility(event) {
-    // const groups = this.props.map.getLayerGroup();
-    // const visible = !this.props.layer.get('visible');
-    // const groupId = this._getLayerGroupId(this.props.layer.get('id'), groups);
-    // var index;
-    this.props.layer.setVisible(!this.props.layer.getVisible());
-    // this.setState({checked: this.props.layer.getVisible()});
-
-    // if (this.props.layer instanceof ol.layer.Group) {
-    //   var layers = this.props.layer.getLayers();
-    //   if (visible) {
-    //     index = this.props.selectedGroupLayer.indexOf(this.props.layer.get('id'));
-    //     var array = this.props.selectedGroupLayer;
-    //     array.splice(index, 1);
-    //     this.props.setSelectedGroupLayer(array);
-    //   } else {
-    //     this.props.setSelectedGroupLayer([this.props.layer.get('id'), ...this.props.selectedGroupLayer])
-    //   }
-    //   layers.forEach(function(l) {
-    //     l.setVisible(visible);
-    //   })
-    // } else {
-    //   if (groupId) {
-    //     index = this.props.selectedGroupLayer.indexOf(groupId);
-    //     if (index > -1) {
-    //       var groupArray = this.props.selectedGroupLayer;
-    //       groupArray.splice(index, 1);
-    //       this.props.setSelectedGroupLayer(groupArray);
-    //     }
-    //     this.props.layer.setVisible(visible);
-    //   }
-    // }
+    var parentVisibilty = this._getParentVisibilty(this.props.layer.get('id'), this.props.map.getLayerGroup());
+    if (parentVisibilty) {
+      this.props.layer.setVisible(!this.props.layer.getVisible());
+    }
   }
 
   _handleBaseVisibility(event) {
@@ -763,10 +754,11 @@ static formats = {
     var baseVisibility = <i onTouchTap={this._handleBaseVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye':showBasemapEye, 'fa-eye-slash':!showBasemapEye})}></i>;
     var baseParentVisibility = <i id='baseParentVisibility' onTouchTap={this._handleBaseParentVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye-slash':this.props.currentBaseLayer === 'baseParent', 'fa-eye':this.props.currentBaseLayer !== 'baseParent'})}></i>;
     var fixedWidth =  <i className='fa fa-fw'></i>;
-    if (!this.props.layer.getVisible() && this.state.checked) {
-      this.setState({checked: false});
-    }
+
     var isVisible = this.state.checked;
+    if (!this.props.layer.getVisible() && this.state.checked) {
+      isVisible = false;
+    }
     var visibility = isVisible ? checked : unchecked;
     var popoverEllipsis = (!(this.props.layer instanceof ol.layer.Group) && (opacity || download || filter || remove || table || label || edit)) ? (
       <div>
