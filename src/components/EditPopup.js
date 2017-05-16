@@ -213,6 +213,11 @@ class EditPopup extends React.Component {
     this.setVisible(false);
   }
   setVisible(visible) {
+    this.props.map.getInteractions().forEach(function(interaction) {
+      if (interaction instanceof ol.interaction.MouseWheelZoom) {
+        interaction.setActive(!visible);
+      }
+    });
     ReactDOM.findDOMNode(this).parentNode.style.display = visible ? 'block' : 'none';
   }
   _filterLayerList(lyr) {
