@@ -234,7 +234,7 @@ class FilterHelp extends React.Component {
     var introText = formatMessage(messages.introtextprefix) + ' ';
     introText += formatMessage(messages.introtextsuffix);
     return (
-      <span className='filter-help' style={this.props.style}>
+      <span className='filter-help'>
         <HelpOutline ref='help' onClick={this._onToggleHelp.bind(this)}/>
         <Popover style={this.props.style} open={this.state.help} onRequestClose={this._onToggleHelp.bind(this)} anchorEl={this.helpElement} anchorOrigin={{'horizontal':'left'}}>
           <p>
