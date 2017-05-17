@@ -258,7 +258,7 @@ class EditPopup extends React.Component {
   save() {
     const {formatMessage} = this.props.intl;
     var id = this.state.feature.getId();
-    var me = this, key;
+    var me = this, key, geomName;
     var onFailure = function(xmlhttp, msg) {
       me._setError(msg || (xmlhttp.status + ' ' + xmlhttp.statusText));
     };
@@ -270,9 +270,23 @@ class EditPopup extends React.Component {
       if (this.state.layer.get('wfsInfo')) {
         var geom = this.state.feature.getGeometry();
         var oldGeomName = this.state.feature.getGeometryName();
-        var geomName = this.state.layer.get('wfsInfo').geometryName;
+        geomName = this.state.layer.get('wfsInfo').geometryName;
+        var geometryType = this.state.layer.get('wfsInfo').geometryType;
+        var newGeom;
+        if (geometryType.indexOf('Multi') !== -1) {
+          if (geometryType === 'MultiPolygon') {
+            newGeom = new ol.geom.MultiPolygon();
+            newGeom.appendPolygon(geom);
+          } else if (geometryType === 'MultiLineString') {
+            newGeom = new ol.geom.MultiLineString();
+            newGeom.appendLineString(geom);
+          } else if (geometryType === 'MultiPoint') {
+            newGeom = new ol.geom.MultiPoint();
+            newGeom.appendPoint(geom);
+          }
+        }
         this.state.feature.setGeometryName(geomName);
-        this.state.feature.setGeometry(geom);
+        this.state.feature.setGeometry(newGeom ? newGeom : geom);
         this.state.feature.set(oldGeomName, undefined);
         WFSService.insertFeature(this.state.layer, this.props.map.getView(), this.state.feature, function(insertId) {
           if (insertId == 'new0') {
@@ -309,7 +323,7 @@ class EditPopup extends React.Component {
           values[key] = this.state.values[key];
         }
         if (this._geomDirty) {
-          var geomName = this.state.layer.get('wfsInfo') ? this.state.layer.get('wfsInfo').geometryName : this.state.feature.getGeometryName();
+          geomName = this.state.layer.get('wfsInfo') ? this.state.layer.get('wfsInfo').geometryName : this.state.feature.getGeometryName();
           values[geomName] = this.state.feature.getGeometry();
         }
         var onSuccess = function(result) {
