@@ -72,6 +72,32 @@ describe('EditPopup', function() {
     ReactDOM.unmountComponentAtNode(container);
   });
 
+  it('uses the correct geometry name and type on insert', function(done) {
+    var container = document.createElement('div');
+    var feature = new ol.Feature({foo: 'bar'});
+    feature.setGeometry(new ol.geom.Point([100, 200]));
+    var layer = new ol.layer.Vector({
+      wfsInfo: {
+        attributes: ['foo'],
+        geometryType: 'MultiPoint',
+        geometryName: 'the_geom'
+      },
+      source: new ol.source.Vector({})
+    });
+    var popup = ReactDOM.render((
+        <EditPopup map={map} intl={intl} />
+    ), container);
+    popup.setState({layer: layer, feature: feature});
+    var buttons = container.querySelectorAll('button');
+    TestUtils.Simulate.touchTap(buttons[1]);
+    assert.equal(feature.getGeometryName(), 'the_geom');
+    assert.equal(feature.getGeometry() instanceof ol.geom.MultiPoint, true);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
   it('saves changes to feature', function() {
     var container = document.createElement('div');
     var feature = new ol.Feature({foo: 'bar'});
