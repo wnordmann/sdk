@@ -208,4 +208,42 @@ describe('InfoPopup', function() {
     ReactDOM.unmountComponentAtNode(container);
   });
 
+  it('fires _onMapClick on singleclick when hover is false', function() {
+    var container = document.createElement('div');
+    var popup = ReactDOM.render((
+      <InfoPopup intl={intl} map={map} />
+    ), container);
+    var actual = popup._contentAsObject;
+    var expected = undefined;
+    assert.equal(actual, expected);
+    popup.props.map.dispatchEvent({type: 'pointermove', originalEvent: 'foo'});
+    actual = popup._contentAsObject;
+    expected = undefined;
+    assert.equal(actual, expected);
+    popup.props.map.dispatchEvent({type: 'singleclick', originalEvent: 'foo'});
+    actual = popup._contentAsObject;
+    expected = false;
+    assert.equal(actual, expected);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('fires _onMapClick on pointermove when hover is true', function() {
+    var container = document.createElement('div');
+    var popup = ReactDOM.render((
+      <InfoPopup intl={intl} map={map} hover={true}/>
+    ), container);
+    var actual = popup._contentAsObject;
+    var expected = undefined;
+    assert.equal(actual, expected);
+    popup.props.map.dispatchEvent({type: 'singleclick', originalEvent: 'foo'});
+    actual = popup._contentAsObject;
+    expected = undefined;
+    assert.equal(actual, expected);
+    popup.props.map.dispatchEvent({type: 'pointermove', originalEvent: 'foo'});
+    actual = popup._contentAsObject;
+    expected = false;
+    assert.equal(actual, expected);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
 });

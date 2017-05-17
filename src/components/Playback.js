@@ -21,6 +21,7 @@ import DatePicker from 'material-ui/DatePicker';
 import LayerStore from '../stores/LayerStore';
 import {defineMessages, injectIntl, intlShape, formatDate} from 'react-intl';
 import './Playback.css';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const messages = defineMessages({
   defaulttitle: {
@@ -85,14 +86,19 @@ class Playback extends React.PureComponent {
     muiTheme: React.PropTypes.object.isRequired
   };
 
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
   static defaultProps = {
     interval: 500,
     numIntervals: 100,
     autoPlay: false
   };
 
-  constructor(props) {
+  constructor(props, context) {
     super(props);
+    this._muiTheme = context.muiTheme || getMuiTheme();
     LayerStore.bindMap(this.props.map);
     var interval;
     if (this.props.maxDate !== undefined && this.props.minDate !== undefined) {
@@ -109,6 +115,9 @@ class Playback extends React.PureComponent {
     // TODO
     this._loading = 0;
     this._loaded = 0;
+  }
+  getChildContext() {
+    return {muiTheme: this._muiTheme};
   }
   componentDidMount() {
     this._onChangeCb = this._onChange.bind(this);
