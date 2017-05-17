@@ -181,7 +181,7 @@ const messages = defineMessages({
 /**
 $$src/components/LayerListItemDetail.md$$
  */
-class LayerListItem extends React.PureComponent {
+class LayerListItem extends React.Component {
   static propTypes = {
     /**
      * @ignore
@@ -198,6 +198,14 @@ class LayerListItem extends React.PureComponent {
     /**
      * @ignore
      */
+    isDragging: React.PropTypes.bool,
+    /**
+    * @ignore
+    */
+    Item: React.PropTypes.object,
+    /**
+    * @ignore
+    */
     moveLayer: React.PropTypes.func.isRequired,
     /**
      * @ignore
@@ -331,13 +339,7 @@ class LayerListItem extends React.PureComponent {
     }
   };
 
-  // provides custom message for dragPreview
-  formatDragMessage(props) {
-    const {formatMessage} = this.props.intl;
-    const title = props.layer.get('title');
-    //IE might not like es6 template strings
-    return `${formatMessage(messages.draglayerlabel)} - ${title}`;
-  }
+
   constructor(props, context) {
     super(props);
     this._proxy = context.proxy;
@@ -388,6 +390,14 @@ class LayerListItem extends React.PureComponent {
       this.props.map.getView().un('change:resolution', this._changeResolution, this);
     }
   }
+
+  // provides custom message for dragPreview
+  formatDragMessage(props) {
+    const {formatMessage} = this.props.intl;
+    const title = props.layer.get('title');
+    //IE might not like es6 template strings
+    return `${formatMessage(messages.draglayerlabel)} - ${title}`;
+  }
 static formats = {
   GeoJSON: {
     format: new ol.format.GeoJSON(),
@@ -409,10 +419,52 @@ static formats = {
   }
   _changeLayerVisible(evt) {
     this.setState({checked: evt.target.getVisible()});
+    // this.forceUpdate();
   }
   _changeResolution() {
     this.setState({resolution: this.props.map.getView().getResolution()});
   }
+  _getLayerGroupId(target, groups) {
+    let groupId;
+    let returnGroupId;
+    var layers = groups.getLayers()
+    layers.forEach(function(group) {
+      if (group instanceof ol.layer.Group) {
+        groupId = group.get('id');
+        var groupLayers = group.getLayers();
+        groupLayers.forEach(function(layer) {
+          if (layer.get('id') === target) {
+            returnGroupId = groupId;
+          }
+        })
+      }
+    })
+    return returnGroupId || '';
+  }
+  _getParentVisibilty(target, groups) {
+    let isParentVisible = true;
+    let returnVal = true;
+    let layers = groups.getLayers()
+    layers.forEach(function(group) {
+      if (group instanceof ol.layer.Group) {
+        isParentVisible = group.getVisible();
+        var children = group.getLayers();
+        children.forEach(function(layer) {
+          if (layer.get('id') === target) {
+            returnVal = isParentVisible;
+          }
+        })
+      }
+    })
+    return returnVal;
+  }
+  _handleVisibility(event) {
+    var parentVisibility = this._getParentVisibilty(this.props.layer.get('id'), this.props.map.getLayerGroup());
+    if (parentVisibility) {
+      this.props.layer.setVisible(!this.props.layer.getVisible());
+    }
+  }
+
   _handleBaseVisibility(event) {
     var i, ii;
     var baseLayers = [];
@@ -440,6 +492,7 @@ static formats = {
       layers.push(layer);
     }
   }
+
   _handleBaseParentVisibility(event) {
     var i, ii;
     var baseLayers = [];
@@ -459,22 +512,6 @@ static formats = {
       for (i = 0, ii = baseLayers.length; i < ii; ++i) {
         baseLayers[i].setVisible(false);
       }
-    }
-  }
-  _handleVisibility(event) {
-    var i, ii;
-    var baseLayers = [];
-    var visible = event.target.className.indexOf('fa-eye-slash') > 0;
-
-    if (this.props.layer instanceof ol.layer.Vector || this.props.layer instanceof ol.layer.Tile) {
-      this.props.layer.setVisible(visible);
-    } else if (this.props.layer instanceof ol.layer.Group) {
-      this.forEachLayer(baseLayers, this.props.map.getLayerGroup());
-      for (i = 0, ii = baseLayers.length; i < ii; ++i) {
-        baseLayers[i].setVisible(false);
-      }
-      this.props.layer.setVisible(visible);
-      baseLayers[0].setVisible(visible)
     }
   }
   _toggleNested(event) {
@@ -646,7 +683,7 @@ static formats = {
     var arrowIcon = this.state.open ? downArrow : sideArrow;
 
     var layersIcon = <i className="ms ms-layers"></i>;
-    if (!(layer instanceof ol.layer.Group)) {
+    if (layer.get('type') !== 'base-group' &&  !(layer instanceof ol.layer.Group)) {
       arrowIcon = <i className="fa fa-fw" ></i>;
     }
     var zoomTo;
@@ -721,7 +758,12 @@ static formats = {
     var baseVisibility = <i onTouchTap={this._handleBaseVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye':showBasemapEye, 'fa-eye-slash':!showBasemapEye})}></i>;
     var baseParentVisibility = <i id='baseParentVisibility' onTouchTap={this._handleBaseParentVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye-slash':this.props.currentBaseLayer === 'baseParent', 'fa-eye':this.props.currentBaseLayer !== 'baseParent'})}></i>;
     var fixedWidth =  <i className='fa fa-fw'></i>;
-    var visibility = this.state.checked ? checked : unchecked;
+
+    var isVisible = this.state.checked;
+    if (!this.props.layer.getVisible() && this.state.checked) {
+      isVisible = false;
+    }
+    var visibility = isVisible ? checked : unchecked;
     var popoverEllipsis = (!(this.props.layer instanceof ol.layer.Group) && (opacity || download || filter || remove || table || label || edit)) ? (
       <div>
         <i className="fa fa-ellipsis-v" onTouchTap={this._handleMenuOpen.bind(this)}></i>
@@ -759,8 +801,12 @@ static formats = {
       rightIconButtons = <span className="fixedContainer">{baseVisibility}{fixedWidth}</span>;
       muted = !showBasemapEye;
       isNested = true;
+    }else if (layer instanceof ol.layer.Group) {
+      rightIconButtons = <span className="fixedContainer">{visibility}{fixedWidth}</span>;
+      muted = !isVisible;
     } else {
-      muted = !this.state.checked
+      isNested = !!this._getLayerGroupId(layer.get('id'), this.props.map.getLayerGroup());
+      muted = !isVisible;
     }
     return connectDragSource(connectDropTarget(
       <div>
