@@ -12,7 +12,7 @@ import TestUtils from 'react-addons-test-utils';
 raf.polyfill();
 
 describe('Playback', function() {
-  var target, map, layer;
+  var target, map, layers;
   var width = 360;
   var height = 180;
 
@@ -32,21 +32,27 @@ describe('Playback', function() {
         zoom: 1
       })
     });
-    layer = new ol.layer.Vector({
-      opacity: 1.0,
-      source: new ol.source.Vector({
-        url: './data/fires.json',
-        format: new ol.format.GeoJSON()
+    layers = [
+      new ol.layer.Vector({
+        source: new ol.source.Vector({
+          url: './data/fires.json',
+          format: new ol.format.GeoJSON()
+        }),
+        timeInfo: {
+          start: 'STARTDATED',
+          end: 'OUTDATED'
+        },
+        style: null
       }),
-      id: 'lyr00',
-      timeInfo: {
-        start: 'STARTDATED',
-        end: 'OUTDATED'
-      },
-      style: null,
-      title: 'Fires',
-      isSelectable: true
-    })
+      new ol.layer.Tile({
+        source: new ol.source.TileWMS({
+          url: 'http://foo'})
+      }),
+      new ol.layer.Tile({
+        source: new ol.source.TileWMS({
+          url: 'http://bar'})
+      })
+    ];
     map.once('postrender', function() {
       done();
     });
@@ -138,7 +144,7 @@ describe('Playback', function() {
     ReactDOM.unmountComponentAtNode(container);
   });
 
-  it('sets initial properties', function() {
+  it('sets initial layers', function() {
     var container = document.createElement('div');
     var playback = ReactDOM.render((
       <Playback intl={intl} map={map}/>
@@ -193,12 +199,14 @@ describe('Playback', function() {
   it('adds correct layers', function(done) {
     var container = document.createElement('div');
     var playback = ReactDOM.render((
-      <Playback intl={intl} map={map} minDate={50000} minDate={324511200000} maxDate={1385938800000}/>
+      <Playback intl={intl} map={map} minDate={50000} maxDate={1385938800000}/>
     ), container);
     var actual = playback._layers.length;
     var expected = 0;
     assert.equal(actual, expected);
-    map.addLayer(layer);
+    layers.forEach(function(layer) {
+      map.addLayer(layer);
+    });
     actual = playback._layers.length;
     expected = 1;
     assert.equal(actual, expected);
@@ -272,16 +280,14 @@ describe('Playback', function() {
 
   it('updates layer source params', function(done) {
     var container = document.createElement('div');
-    var tileLayer = new ol.layer.Tile({
-      source: new ol.source.TileWMS()});
     var playback = ReactDOM.render((
       <Playback intl={intl} map={map} minDate={500000} maxDate={1500000}/>
     ), container);
-    var actual = tileLayer.getSource().getParams().TIME;
+    var actual = layers[1].getSource().getParams().TIME;
     var expected = undefined;
     assert.equal(actual, expected);
-    playback._handleTimeLayer(tileLayer);
-    actual = tileLayer.getSource().getParams().TIME;
+    playback._handleTimeLayer(layers[1]);
+    actual = layers[1].getSource().getParams().TIME;
     expected = new Date(playback.state.date).toISOString();
     assert.equal(actual, expected);
     window.setTimeout(function() {
@@ -289,5 +295,97 @@ describe('Playback', function() {
       done();
     }, 500);
   });
+
+  it('refreshes time layers', function(done) {
+    var container = document.createElement('div');
+    var playback = ReactDOM.render((
+      <Playback intl={intl} map={map} minDate={500000} maxDate={1500000}/>
+    ), container);
+    var actual = playback._layers.length;
+    var expected = 0;
+    assert.equal(actual, expected);
+    layers.forEach(function(layer) {
+      playback._layers.push(layer);
+    });
+    actual = playback._layers.length;
+    expected = 3;
+    assert.equal(actual, expected);
+    playback._refreshTimeLayers();
+    actual = playback._layers[1].getSource().getParams().TIME;
+    expected = playback._layers[2].getSource().getParams().TIME;
+    assert.equal(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('sets vector layer style', function(done) {
+    var container = document.createElement('div');
+    var playback = ReactDOM.render((
+      <Playback intl={intl} map={map} minDate={500000} maxDate={1500000}/>
+    ), container);
+    var actual = layers[0].getStyle();
+    var expected = null;
+    assert.equal(actual, expected);
+    playback._registerTime(layers[0]);
+    var newActual = layers[0].getStyle();
+    assert.notEqual(actual, newActual);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('toggles play/pause', function(done) {
+    var container = document.createElement('div');
+    var playback = ReactDOM.render((
+      <Playback intl={intl} map={map} minDate={50000} maxDate={150000}/>
+    ), container);
+    var actual = playback.state.play;
+    var expected = true;
+    assert.equal(actual, expected);
+    playback._playPause();
+    actual = playback.state.play;
+    expected = false;
+    assert.equal(actual, expected);
+    playback._playPause();
+    actual = playback.state.play;
+    expected = true;
+    assert.equal(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('updates date and dateStep on play', function(done) {
+    var container = document.createElement('div');
+    var playback = ReactDOM.render((
+      <Playback intl={intl} map={map} minDate={50000} maxDate={150000}/>
+    ), container);
+    playback.setState({dates: [100, 200], dateStep: 0});
+    playback._addLoaded();
+    playback._play();
+    var actual = playback.state.date;
+    var expected = playback.props.minDate;
+    assert.equal(actual, expected);
+    actual = playback.state.dateStep;
+    expected = 0;
+    assert.equal(actual, expected);
+    playback._addLoading();
+    playback._play();
+    actual = playback.state.date;
+    expected = playback.state.dates[1];
+    assert.equal(actual, expected);
+    actual = playback.state.dateStep;
+    expected = 1;
+    assert.equal(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
 
 });

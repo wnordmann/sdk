@@ -20,7 +20,7 @@ describe('PointSymbolizerEditor', function() {
     assert.equal(actual, expected);
   });
 
-  it('sets state when no initialState prop is defined', function() {
+  it('sets state when no initialState prop is defined', function(done) {
     var container = document.createElement('div');
     var component = ReactDOM.render((
       <PointSymbolizerEditor intl={intl} onChange={onChange}/>
@@ -34,7 +34,10 @@ describe('PointSymbolizerEditor', function() {
       opacity: undefined
     };
     assert.deepEqual(actual, expected);
-    ReactDOM.unmountComponentAtNode(container);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
   });
 
   it('sets state when initialState prop is null', function() {
