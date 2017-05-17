@@ -698,7 +698,9 @@ static formats = {
       ];
       tableModal = (
         <Dialog ref='tablemodal' inline={this.props.inlineDialogs} actions={actions} title={formatMessage(messages.tablemodaltitle)} open={this.state.tableOpen} onRequestClose={this._closeTable.bind(this)}>
-          <FeatureTable height={400} onUpdate={this._onTableUpdate.bind(this)} map={this.props.map} layer={this.props.layer} />
+          <div style={{height: 400}}>
+            <FeatureTable allowEdit={this.props.inlineDialogs} onUpdate={this._onTableUpdate.bind(this)} map={this.props.map} layer={this.props.layer} />
+          </div>
         </Dialog>
       );
     }
