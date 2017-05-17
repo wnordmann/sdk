@@ -268,6 +268,12 @@ class EditPopup extends React.Component {
         this.state.feature.set(key, this.state.values[key]);
       }
       if (this.state.layer.get('wfsInfo')) {
+        var geom = this.state.feature.getGeometry();
+        var oldGeomName = this.state.feature.getGeometryName();
+        var geomName = this.state.layer.get('wfsInfo').geometryName;
+        this.state.feature.setGeometryName(geomName);
+        this.state.feature.setGeometry(geom);
+        this.state.feature.set(oldGeomName, undefined);
         WFSService.insertFeature(this.state.layer, this.props.map.getView(), this.state.feature, function(insertId) {
           if (insertId == 'new0') {
             // reload data if we're dealing with a shapefile store
