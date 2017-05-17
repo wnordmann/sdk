@@ -221,7 +221,7 @@ describe('Playback', function() {
     var playback = ReactDOM.render((
       <Playback intl={intl} map={map} />
     ), container);
-    var date = new Date(1999, 2, 2);
+    var date = new Date(920354400000);
     playback._onDateChange(null, date);
     var actual = playback.state.date;
     var expected = date.getTime();
