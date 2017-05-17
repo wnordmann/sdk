@@ -181,7 +181,7 @@ const messages = defineMessages({
 /**
 $$src/components/LayerListItemDetail.md$$
  */
-class LayerListItem extends React.PureComponent {
+class LayerListItem extends React.Component {
   static propTypes = {
     /**
      * @ignore
@@ -198,6 +198,14 @@ class LayerListItem extends React.PureComponent {
     /**
      * @ignore
      */
+    isDragging: React.PropTypes.bool,
+    /**
+    * @ignore
+    */
+    Item: React.PropTypes.object,
+    /**
+    * @ignore
+    */
     moveLayer: React.PropTypes.func.isRequired,
     /**
      * @ignore
@@ -296,14 +304,6 @@ class LayerListItem extends React.PureComponent {
     */
     currentBaseLayer: React.PropTypes.string,
     /**
-    *  State from of selected group layers
-    */
-    selectedGroupLayer: React.PropTypes.array,
-    /**
-    *  Callback from parent component to manage baseLayers
-    */
-    setSelectedGroupLayer: React.PropTypes.func,
-    /**
     *  Style for text of dragged layer
     */
     dragPreviewStyle: React.PropTypes.object,
@@ -339,13 +339,7 @@ class LayerListItem extends React.PureComponent {
     }
   };
 
-  // provides custom message for dragPreview
-  formatDragMessage(props) {
-    const {formatMessage} = this.props.intl;
-    const title = props.layer.get('title');
-    //IE might not like es6 template strings
-    return `${formatMessage(messages.draglayerlabel)} - ${title}`;
-  }
+
   constructor(props, context) {
     super(props);
     this._proxy = context.proxy;
@@ -396,6 +390,14 @@ class LayerListItem extends React.PureComponent {
       this.props.map.getView().un('change:resolution', this._changeResolution, this);
     }
   }
+
+  // provides custom message for dragPreview
+  formatDragMessage(props) {
+    const {formatMessage} = this.props.intl;
+    const title = props.layer.get('title');
+    //IE might not like es6 template strings
+    return `${formatMessage(messages.draglayerlabel)} - ${title}`;
+  }
 static formats = {
   GeoJSON: {
     format: new ol.format.GeoJSON(),
@@ -417,14 +419,14 @@ static formats = {
   }
   _changeLayerVisible(evt) {
     this.setState({checked: evt.target.getVisible()});
-    this.forceUpdate();
+    // this.forceUpdate();
   }
   _changeResolution() {
     this.setState({resolution: this.props.map.getView().getResolution()});
   }
   _getLayerGroupId(target, groups) {
-    let groupId = '';
-    let returnGroupId = '';
+    let groupId;
+    let returnGroupId;
     var layers = groups.getLayers()
     layers.forEach(function(group) {
       if (group instanceof ol.layer.Group) {
@@ -437,7 +439,7 @@ static formats = {
         })
       }
     })
-    return returnGroupId;
+    return returnGroupId || '';
   }
   _getParentVisibilty(target, groups) {
     let isParentVisible = true;
@@ -457,8 +459,8 @@ static formats = {
     return returnVal;
   }
   _handleVisibility(event) {
-    var parentVisibilty = this._getParentVisibilty(this.props.layer.get('id'), this.props.map.getLayerGroup());
-    if (parentVisibilty) {
+    var parentVisibility = this._getParentVisibilty(this.props.layer.get('id'), this.props.map.getLayerGroup());
+    if (parentVisibility) {
       this.props.layer.setVisible(!this.props.layer.getVisible());
     }
   }
@@ -801,11 +803,7 @@ static formats = {
       rightIconButtons = <span className="fixedContainer">{visibility}{fixedWidth}</span>;
       muted = !isVisible;
     } else {
-      const groups = this.props.map.getLayerGroup();
-      const id = layer.get('id');
-      if (this._getLayerGroupId(id, groups)) {
-        isNested = true;
-      }
+      isNested = !!this._getLayerGroupId(layer.get('id'), this.props.map.getLayerGroup());
       muted = !isVisible;
     }
     return connectDragSource(connectDropTarget(
