@@ -126,10 +126,8 @@ class Playback extends React.PureComponent {
     if (this.props.autoPlay === true) {
       this._playPause();
     }
-    this._isMounted = true;
   }
   componentWillUnmount() {
-    this._isMounted = false;
     LayerStore.removeChangeListener(this._onChangeCb);
   }
   _onChange() {
