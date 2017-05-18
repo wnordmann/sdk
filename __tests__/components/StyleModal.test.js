@@ -8,6 +8,7 @@ import ol from 'openlayers';
 import intl from '../mock-i18n';
 import StyleModal from '../../src/components/StyleModal';
 import TestUtils from 'react-addons-test-utils';
+import OpenLayersService from '../../src/services/OpenLayersService';
 
 raf.polyfill();
 
@@ -15,6 +16,41 @@ describe('StyleModal', function() {
   var target, map, layers;
   var width = 360;
   var height = 180;
+  var styleState = {
+    name: 'Test Rule',
+    expression: null,
+    symbolizers: [{
+      labelAttribute: 'NAME10',
+      fontColor: {
+        hex: '000000',
+        rgb: {
+          r: 0,
+          g: 0,
+          b: 0,
+          a: 1
+        }
+      },
+      fontSize: '12'
+    }, {
+      fillColor: {
+        hex: '1f3dc5',
+        rgb: {
+          a: 0.5,
+          r: 31,
+          g: 61,
+          b: 197
+        }
+      },
+      strokeColor: {
+        hex: 'bb2828',
+        rgb: {
+          b: 40,
+          g: 40,
+          r: 187
+        }
+      }
+    }]
+  };
 
   beforeEach(function(done) {
     target = document.createElement('div');
@@ -26,7 +62,11 @@ describe('StyleModal', function() {
     style.height = height + 'px';
     layers = [
       new ol.layer.Vector({
-        souce: new ol.source.Vector()
+        source: new ol.source.Vector()
+      }),
+      new ol.layer.Tile({
+        source: new ol.source.TileWMS({
+          url: 'http://foo'})
       })
     ];
     document.body.appendChild(target);
@@ -252,6 +292,123 @@ describe('StyleModal', function() {
     actual = dialog.state.rule;
     expected = null;
     assert.equal(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('creates style using openlayers service', function(done) {
+    var container = document.createElement('div');
+    var dialog = ReactDOM.render((
+      <StyleModal intl={intl} layer={layers[0]}/>
+    ), container);
+    dialog.setState({geometryType: 'Polygon'});
+    var actual = dialog._createStyle(styleState);
+    var expected = OpenLayersService.createStyle(styleState, dialog.state.geometryType);
+    assert.deepEqual(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('error is initially undefined', function() {
+    const renderer = TestUtils.createRenderer();
+    renderer.render(<StyleModal intl={intl} layer={layers[0]}/>);
+    const actual = renderer.getRenderOutput().props.children[0].props.children[1];
+    const expected = undefined;
+    assert.equal(actual, expected);
+  });
+
+  it('returns undefined style without style rules', function(done) {
+    var container = document.createElement('div');
+    var dialog = ReactDOM.render((
+      <StyleModal intl={intl} layer={layers[0]}/>
+    ), container);
+    var actual = dialog._setStyleVector();
+    var expected = undefined;
+    assert.equal(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('sets rules on vector layers', function(done) {
+    var container = document.createElement('div');
+    var dialog = ReactDOM.render((
+      <StyleModal intl={intl} layer={layers[0]}/>
+    ), container);
+    var actual = dialog.state.rule;
+    var expected = 'Rule 1';
+    assert.equal(actual, expected);
+    layers[0].set('styleInfo', {featureTypeStyles: [{rules: [styleState]}]});
+    dialog._setRules();
+    actual = dialog.state.rule;
+    expected = 'Test Rule';
+    assert.equal(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('assigns a rule untitled if not named', function(done) {
+    var container = document.createElement('div');
+    var dialog = ReactDOM.render((
+      <StyleModal intl={intl} layer={layers[0]}/>
+    ), container);
+    var actual = dialog.state.rule;
+    var expected = 'Rule 1';
+    assert.equal(actual, expected);
+    layers[0].set('styleInfo', {featureTypeStyles: [{rules: [{symbolizers: [{}]}]}]});
+    dialog._setRules();
+    actual = dialog.state.rule;
+    expected = 'Untitled 1';
+    assert.equal(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('sets rules on non vector layers', function(done) {
+    var container = document.createElement('div');
+    var dialog = ReactDOM.render((
+      <StyleModal intl={intl} layer={layers[1]}/>
+    ), container);
+    var actual = dialog.state.rule;
+    var expected = 'Rule 1';
+    assert.equal(actual, expected);
+    layers[1].set('styleInfo', {featureTypeStyles: [{rules: [{symbolizers: [{}]}]}]});
+    dialog._setRules();
+    actual = dialog.state.rule;
+    expected = 'Untitled 1';
+    assert.equal(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('generates SLD and updates source params', function(done) {
+    var container = document.createElement('div');
+    var dialog = ReactDOM.render((
+      <StyleModal intl={intl} layer={layers[1]}/>
+    ), container);
+    var actual = dialog.props.layer.getSource().getParams().SLD_BODY;
+    var expected = undefined;
+    assert.deepEqual(actual, expected);
+    actual = dialog.props.layer.getSource().getParams().TILED;
+    assert.deepEqual(actual, expected);
+    layers[1].set('styleInfo', {featureTypeStyles: [{rules: [styleState]}]});
+    dialog.setState({geometryType: 'Polygon'});
+    dialog._generateSLD();
+    actual = dialog.props.layer.getSource().getParams().SLD_BODY;
+    assert.notEqual(actual, expected);
+    actual = dialog.props.layer.getSource().getParams().TILED;
+    assert.notEqual(actual, expected);
     window.setTimeout(function() {
       ReactDOM.unmountComponentAtNode(container);
       done();
