@@ -33,15 +33,15 @@
       .values {
         display: flex;
         .selectAttrib {
-          width: 130px !important;
+          width: 47% !important;
           margin-right: 10px;
         }
         .selectOperator {
-          width: 66px !important;
+          width: 24% !important;
           margin-right: 10px;
         }
         .selectValue {
-          width: 80px !important;
+          width: 29% !important;
           margin-right: 10px;
         }
       }
@@ -74,6 +74,5 @@
   .queryBuilderFooter {
     text-align: right;
     padding: 10px;
-    // margin-bottom: 6px;
   }
 }
