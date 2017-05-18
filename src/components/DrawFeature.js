@@ -14,6 +14,7 @@ import React from 'react';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import LayerStore from '../stores/LayerStore';
 import AppDispatcher from '../dispatchers/AppDispatcher';
 import ToolUtil from '../toolutil';
 import ToolActions from '../actions/ToolActions';
@@ -97,7 +98,11 @@ class DrawFeature extends React.PureComponent {
   constructor(props, context) {
     super(props);
     this._dispatchToken = ToolUtil.register(this);
+    LayerStore.bindMap(this.props.map);
     this.state = {
+      Polygon: false,
+      Point: false,
+      LineString: false,
       secondary: false,
       muiTheme: context.muiTheme || getMuiTheme(),
       disabled: false,
@@ -132,11 +137,39 @@ class DrawFeature extends React.PureComponent {
     return {muiTheme: this.state.muiTheme};
   }
   componentDidMount() {
+    this._onChangeCb = this._onChange.bind(this);
+    LayerStore.addChangeListener(this._onChangeCb);
     this.props.map.addLayer(this._tempLayer);
   }
   componentWillUnmount() {
+    LayerStore.removeChangeListener(this._onChangeCb);
     AppDispatcher.unregister(this._dispatchToken);
     this.deactivate();
+  }
+  _onChange() {
+    var flatLayers = LayerStore.getState().flatLayers;
+    var state = {
+      Polygon: false,
+      LineString: false,
+      Point: false
+    };
+    for (var i = 0, ii = flatLayers.length; i < ii; ++i) {
+      var lyr = flatLayers[i];
+      var geomType;
+      if (lyr.get('geometryType')) {
+        geomType = lyr.get('geometryType');
+      } else if (lyr.get('wfsInfo')) {
+        geomType = lyr.get('wfsInfo').geometryType;
+      }
+      if (geomType) {
+        for (var key in state) {
+          if (geomType.indexOf(key) !== -1) {
+            state[key] = true;
+          }
+        }
+      }
+    }
+    this.setState(state);
   }
   activate(interactions) {
     ToolUtil.activate(this, interactions);
@@ -187,9 +220,9 @@ class DrawFeature extends React.PureComponent {
       anchorOrigin={{horizontal: 'right', vertical: 'bottom'}} targetOrigin={{horizontal: 'right', vertical: 'top'}}
       iconButtonElement={<Button secondary={this.state.secondary} buttonType='Icon' tooltip={formatMessage(messages.dropdowntitle)} disabled={this.state.disabled} iconClassName="headerIcons ms ms-draw" />}
       disabled={this.state.disabled}>
-      <MenuItem leftIcon={<i className='ms ms-draw-polygon'/>} primaryText={formatMessage(messages.polygon)} onTouchTap={this._drawPoly.bind(this)} />
-      <MenuItem leftIcon={<i className='ms ms-draw-line'/>} onTouchTap={this._drawLine.bind(this)} primaryText={formatMessage(messages.linestring)} />
-      <MenuItem leftIcon={<i className='ms ms-draw-point'/>} onTouchTap={this._drawPoint.bind(this)} primaryText={formatMessage(messages.point)} />
+      <MenuItem disabled={!this.state.Polygon} leftIcon={<i className='ms ms-draw-polygon'/>} primaryText={formatMessage(messages.polygon)} onTouchTap={this._drawPoly.bind(this)} />
+      <MenuItem disabled={!this.state.LineString} leftIcon={<i className='ms ms-draw-line'/>} onTouchTap={this._drawLine.bind(this)} primaryText={formatMessage(messages.linestring)} />
+      <MenuItem disabled={!this.state.Point} leftIcon={<i className='ms ms-draw-point'/>} onTouchTap={this._drawPoint.bind(this)} primaryText={formatMessage(messages.point)} />
     </IconMenu>);
   }
 }
