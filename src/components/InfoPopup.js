@@ -129,7 +129,7 @@ class InfoPopup extends React.Component {
   }
   componentDidMount() {
     this.overlayPopup = new ol.Overlay({
-      autoPan: true,
+      autoPan: !this.props.hover,
       element: ReactDOM.findDOMNode(this).parentNode
     });
     this.props.map.addOverlay(this.overlayPopup);
