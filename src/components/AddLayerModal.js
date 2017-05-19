@@ -343,12 +343,14 @@ class AddLayerModal extends React.PureComponent {
     'ArcGISRest',
     'WMTS'
   ];
+
   static services = {
     'WMS': WMSService,
     'WFS': WFSService,
     'ArcGISRest': ArcGISRestService,
     'WMTS': WMTSService
   };
+
   _getCaps(onFailure) {
     this.setState({loading: true, layerInfo: null});
     var source = this.state.sources[this.state.source];
@@ -705,7 +707,7 @@ class AddLayerModal extends React.PureComponent {
     var error;
     if (this.state.error === true) {
       error = (<Snackbar
-        autoHideDuration={5000}
+        autoHideDuration={500000}
         style={{transitionProperty : 'none'}}
         bodyStyle={{lineHeight: '24px', height: 'auto'}}
         open={this.state.errorOpen}
@@ -774,7 +776,7 @@ class AddLayerModal extends React.PureComponent {
                 {selectOptions}
               </SelectField>);
     return (
-      <Dialog style={this.props.style} autoScrollBodyContent={true} bodyStyle={{padding: 20}} inline={this.props.inline} title={formatMessage(messages.title)} className='add-layer-modal' actions={actions} open={this.props.open} onRequestClose={this.close.bind(this)}>
+      <Dialog ref='dialog' style={this.props.style} autoScrollBodyContent={true} bodyStyle={{padding: 20}} inline={this.props.inline} title={formatMessage(messages.title)} className='add-layer-modal' actions={actions} open={this.props.open} onRequestClose={this.close.bind(this)}>
        {select}
        {content}
       </Dialog>

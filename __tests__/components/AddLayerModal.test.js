@@ -300,4 +300,53 @@ describe('AddLayerModal', function() {
     }, 500);
   });
 
+  it('get caps sets loading state to true', function(done) {
+    var container = document.createElement('div');
+    var modal = ReactDOM.render((
+      <AddLayerModal map={map} sources={sources} intl={intl} />
+    ), container);
+    modal.setState({source: 0});
+    modal._getCaps();
+    var actual = modal.state.loading;
+    var expected = true;
+    assert.equal(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('contains two children', function(done) {
+    var container = document.createElement('div');
+    var modal = ReactDOM.render((
+      <AddLayerModal map={map} sources={sources} intl={intl} />
+    ), container);
+    var actual = modal.refs.dialog.props.children.length;
+    var expected = 2;
+    assert.equal(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('initial content is undefined', function(done) {
+    var container = document.createElement('div');
+    var modal = ReactDOM.render((
+      <AddLayerModal map={map} sources={sources} intl={intl} />
+    ), container);
+    var initialContent = modal.refs.dialog.props.children[1].props.children;
+    var actual = initialContent.length;
+    var expected = 6;
+    assert.equal(actual, expected);
+    initialContent.forEach(function(child) {
+      assert.equal(child, undefined);
+    })
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+
 });
