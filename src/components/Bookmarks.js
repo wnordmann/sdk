@@ -277,7 +277,7 @@ class Bookmarks extends React.PureComponent {
           anchorOrigin = {{horizontal: 'left',vertical: 'top'}}
           targetOrigin = {{horizontal: 'left',vertical: 'top'}}
           className = { classNames('sdk-component story-panel-menu', this.props.className) }
-          iconButtonElement = { <Button label = {formatMessage(messages.dropdowntext)}/>}
+          iconButtonElement = { <Button buttonType='Icon' iconClassName='headerIcons fa fa-bookmark' tooltip = {formatMessage(messages.dropdowntext)}/>}
           value={this.state.value}
           onChange={this._handleChange.bind(this)}>
             { menuChildren }
