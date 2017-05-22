@@ -79,12 +79,23 @@ describe('QGISPrint', function() {
     document.body.removeChild(target);
   });
 
-  it('layoutName not set before user makes a selection', function() {
+  it('sets initial state', function() {
     var container = document.createElement('div');
     var print = ReactDOM.render((
-      <QGISPrint intl={intl} layouts={printLayouts} map={map}/>
+      <QGISPrint intl={intl} layouts={printLayouts} map={map} thumbnailPath={""}/>
     ), container);
-    assert.equal(print.state.layoutName, null);
+    var actual = print.state;
+    var expected = {
+      disabled: false,
+      layout: null,
+      layoutName: null,
+      loading: false,
+      error: false,
+      open: false,
+      errorOpen: false,
+      resolution: null
+    };
+    assert.deepEqual(actual, expected);
     ReactDOM.unmountComponentAtNode(container);
   });
 
@@ -108,6 +119,16 @@ describe('QGISPrint', function() {
       <QGISPrint intl={intl} layouts={printLayouts} map={map}/>
     ), container);
     assert.equal(print._getTileLayers().length, 1);
+    print.props.map.removeLayer(layer);
+    assert.equal(print._getTileLayers().length, 0);
+    print.props.map.addLayer(
+      new ol.layer.Vector({
+        id: 'foo',
+        source: new ol.source.Vector({
+        })
+      })
+    );
+    assert.equal(print._getTileLayers().length, 0);
     ReactDOM.unmountComponentAtNode(container);
   });
 
@@ -122,7 +143,7 @@ describe('QGISPrint', function() {
     ReactDOM.unmountComponentAtNode(container);
   });
 
-  it('adds elements loaded', function() {
+  it('adds elements loaded [0]', function() {
     var container = document.createElement('div');
     var print = ReactDOM.render((
       <QGISPrint intl={intl} layouts={printLayouts} map={map} thumbnailPath={""}/>
@@ -133,14 +154,42 @@ describe('QGISPrint', function() {
     ReactDOM.unmountComponentAtNode(container);
   });
 
-  it('opens on click', function() {
+  it('adds elements loaded [1]', function() {
     var container = document.createElement('div');
     var print = ReactDOM.render((
       <QGISPrint intl={intl} layouts={printLayouts} map={map} thumbnailPath={""}/>
     ), container);
-    assert.equal(print.state.open, false);
+    print.setState({layout: printLayouts[0]});
+    print._elementsLoaded = 0;
+    print._elementLoaded();
+    var actual = print._elementsLoaded;
+    var expected = 1;
+    assert.equal(actual, expected);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+
+  it('opens menu on click and sets layout', function() {
+    var container = document.createElement('div');
+    var print = ReactDOM.render((
+      <QGISPrint intl={intl} layouts={printLayouts} map={map} thumbnailPath={""}/>
+    ), container);
     print._onClick(printLayouts[0]);
     assert.equal(print.state.open, true);
+    assert.equal(print.state.layoutName, 'Layout 1');
+    assert.deepEqual(print.state.layout, printLayouts[0]);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('opens print dialog on click and sets layout', function() {
+    var container = document.createElement('div');
+    var print = ReactDOM.render((
+      <QGISPrint intl={intl} layouts={printLayouts} map={map} thumbnailPath={""}/>
+    ), container);
+    print._onPrintButtonClick();
+    assert.equal(print.state.open, true);
+    assert.equal(print.state.layoutName, 'Layout 1');
+    assert.deepEqual(print.state.layout, printLayouts[0]);
     ReactDOM.unmountComponentAtNode(container);
   });
 
@@ -150,6 +199,19 @@ describe('QGISPrint', function() {
     const actual = renderer.getRenderOutput().props.className;
     const expected = 'sdk-component qgis-print';
     assert.equal(actual, expected);
+  });
+
+  it('closes', function() {
+    var container = document.createElement('div');
+    var print = ReactDOM.render((
+      <QGISPrint intl={intl} layouts={printLayouts} map={map} thumbnailPath={""}/>
+    ), container);
+    print.setState({open: true});
+    print.close();
+    var actual = print.state.open;
+    var expected = false;
+    assert.equal(actual, expected);
+    ReactDOM.unmountComponentAtNode(container);
   });
 
 });
