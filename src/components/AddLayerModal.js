@@ -343,14 +343,12 @@ class AddLayerModal extends React.PureComponent {
     'ArcGISRest',
     'WMTS'
   ];
-
   static services = {
     'WMS': WMSService,
     'WFS': WFSService,
     'ArcGISRest': ArcGISRestService,
     'WMTS': WMTSService
   };
-
   _getCaps(onFailure) {
     this.setState({loading: true, layerInfo: null});
     var source = this.state.sources[this.state.source];
@@ -707,7 +705,7 @@ class AddLayerModal extends React.PureComponent {
     var error;
     if (this.state.error === true) {
       error = (<Snackbar
-        autoHideDuration={500000}
+        autoHideDuration={5000}
         style={{transitionProperty : 'none'}}
         bodyStyle={{lineHeight: '24px', height: 'auto'}}
         open={this.state.errorOpen}

@@ -48,6 +48,204 @@ describe('AddLayerModal', function() {
     document.body.removeChild(target);
   });
 
+  it('changes attributes state', function(done) {
+    var container = document.createElement('div');
+    var modal = ReactDOM.render((
+      <AddLayerModal map={map} sources={sources} intl={intl} onRequestClose={function() {}} />
+    ), container);
+    var actual = modal.state.attributes;
+    var expected = '';
+    assert.equal(actual, expected);
+    modal._onChangeAttributes(null, 'cat, TYPE');
+    actual = modal.state.attributes;
+    expected = 'cat, TYPE';
+    assert.equal(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('changes geometry type state', function(done) {
+    var container = document.createElement('div');
+    var modal = ReactDOM.render((
+      <AddLayerModal map={map} sources={sources} intl={intl} onRequestClose={function() {}} />
+    ), container);
+    var actual = modal.state.geometryType;
+    var expected = undefined;
+    assert.equal(actual, expected);
+    modal._changeGeometryType(null, null, 'Point');
+    actual = modal.state.geometryType;
+    expected = 'Point';
+    assert.equal(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('sets fill and stroke state', function(done) {
+    var container = document.createElement('div');
+    var modal = ReactDOM.render((
+      <AddLayerModal map={map} sources={sources} intl={intl} onRequestClose={function() {}} />
+    ), container);
+    var actual = modal.state.hasOwnProperty('hasFill');
+    var expected = false;
+    assert.equal(actual, expected);
+    actual = modal.state.hasOwnProperty('hasStroke');
+    assert.equal(actual, expected);
+    modal._onChangeFill({hasFill: true});
+    modal._onChangeStroke({hasStroke: true});
+    actual = modal.state.hasOwnProperty('hasFill');
+    expected = true;
+    assert.equal(actual, expected);
+    actual = modal.state.hasOwnProperty('hasStroke');
+    assert.equal(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('sets state to loading on upload', function(done) {
+    var container = document.createElement('div');
+    var modal = ReactDOM.render((
+      <AddLayerModal map={map} sources={sources} intl={intl} onRequestClose={function() {}} />
+    ), container);
+    var actual = modal.state.loading;
+    var expected = false;
+    assert.equal(actual, expected);
+    modal.setState({showUpload: true});
+    modal.addLayers();
+    actual = modal.state.loading;
+    expected = true;
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('reads file', function(done) {
+    var container = document.createElement('div');
+    var modal = ReactDOM.render((
+      <AddLayerModal map={map} sources={sources} intl={intl} onRequestClose={function() {}} />
+    ), container);
+    var actual = modal._text;
+    var expected = undefined;
+    assert.equal(actual, expected);
+    modal._readFile('foo');
+    actual = modal._text;
+    expected = 'foo';
+    assert.equal(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('creates layer [0]', function(done) {
+    var container = document.createElement('div');
+    var modal = ReactDOM.render((
+      <AddLayerModal map={map} sources={sources} intl={intl} onRequestClose={function() {}} />
+    ), container);
+    var actual = modal.props.map.getLayers().getLength();
+    var expected = 0;
+    assert.equal(actual, expected);
+    modal.setState({createTitle: 'My Layer'});
+    modal.addLayers();
+    assert.equal(actual, expected);
+    modal.setState({showCreate: true});
+    modal.addLayers();
+    actual = modal.props.map.getLayers().getLength();
+    expected = 1;
+    assert.equal(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('creates layer [1]', function(done) {
+    var container = document.createElement('div');
+    var modal = ReactDOM.render((
+      <AddLayerModal map={map} sources={sources} intl={intl} onRequestClose={function() {}}/>
+    ), container);
+    modal._createLayer();
+    var actual = modal.props.map.getLayers().getLength();
+    var expected = 0;
+    assert.equal(actual, expected);
+    modal.setState({createTitle: 'My Layer'});
+    modal._createLayer();
+    actual = modal.props.map.getLayers().getLength();
+    expected = 1;
+    assert.equal(actual, expected);
+    actual = modal.props.map.getLayers().getArray()[0].getStyle().getFill();
+    expected = null;
+    assert.equal(actual, expected);
+    actual = modal.props.map.getLayers().getArray()[0].getStyle().getStroke();
+    expected = null;
+    assert.equal(actual, expected);
+    modal.setState({fillColor: {}, strokeColor: {}});
+    modal._createLayer();
+    actual = modal.props.map.getLayers().getArray()[1].getStyle().getFill();
+    expected = null;
+    assert.notEqual(actual, expected);
+    actual = modal.props.map.getLayers().getArray()[1].getStyle().getStroke();
+    expected = null;
+    assert.notEqual(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('adds a menu item with valid layer name and title', function(done) {
+    var container = document.createElement('div');
+    var layer = {Title: ''};
+    var menuItems = [];
+    var modal = ReactDOM.render((
+      <AddLayerModal map={map} sources={sources} intl={intl} />
+    ), container);
+    modal._getLayersMarkup(layer, menuItems);
+    var actual = menuItems.length;
+    var expected = 0;
+    assert.equal(actual, expected);
+    layer.Name = 'My Layer';
+    modal._getLayersMarkup(layer, menuItems);
+    actual = menuItems.length;
+    expected = 1;
+    assert.equal(actual, expected);
+    actual = menuItems[0].props.primaryText.props.className;
+    expected = 'layer-title-empty';
+    assert.equal(actual, expected);
+    layer.Title = 'My Title';
+    modal._getLayersMarkup(layer, menuItems);
+    actual = menuItems[1].props.primaryText;
+    expected = 'My Title';
+    assert.equal(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
+  it('adds a menu items for layer children', function(done) {
+    var container = document.createElement('div');
+    var layer = {Layer: [{Title: 'My Title', Name: 'My Name'}]};
+    var menuItems = [];
+    var modal = ReactDOM.render((
+      <AddLayerModal map={map} sources={sources} intl={intl} />
+    ), container);
+    modal._getLayersMarkup(layer, menuItems);
+    var actual = menuItems.length;
+    var expected = 1;
+    assert.equal(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 500);
+  });
+
   it('clears layerInfo on error', function(done) {
     var container = document.createElement('div');
     var modal = ReactDOM.render((
@@ -341,12 +539,11 @@ describe('AddLayerModal', function() {
     assert.equal(actual, expected);
     initialContent.forEach(function(child) {
       assert.equal(child, undefined);
-    })
+    });
     window.setTimeout(function() {
       ReactDOM.unmountComponentAtNode(container);
       done();
     }, 500);
   });
-
 
 });
