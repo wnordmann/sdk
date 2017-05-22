@@ -26,7 +26,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Button from './Button';
 import Divider from 'material-ui/Divider';
 import Delete from 'material-ui/svg-icons/action/delete';
-
+import LayerStore from '../stores/LayerStore';
 
 const messages = defineMessages({
   menubuttontext: {
@@ -100,6 +100,7 @@ class Select extends React.PureComponent {
 
   constructor(props, context) {
     super(props);
+    LayerStore.bindMap(props.map);
     this._dispatchToken = ToolUtil.register(this);
     this._muiTheme = context.muiTheme || getMuiTheme();
     this._proxy = context.proxy;
@@ -142,7 +143,9 @@ class Select extends React.PureComponent {
   }
   _onBoxEnd(evt) {
     var box = evt.target.getGeometry().getExtent();
-    this.props.map.getLayers().forEach(function(lyr) {
+    var layers = LayerStore.getState().flatLayers;
+    for (var i = 0, ii = layers.length; i < ii; ++i) {
+      var lyr = layers[i];
       if (lyr.getVisible() && lyr.get('isSelectable') === true) {
         var selected = [];
         if (lyr.getSource() instanceof ol.source.Vector) {
@@ -161,7 +164,7 @@ class Select extends React.PureComponent {
           }, undefined, this._proxy, this._requestHeaders);
         }
       }
-    }, this);
+    }
   }
   activate(interactions) {
     ToolUtil.activate(this, interactions);
