@@ -89,14 +89,18 @@ class Header extends React.Component {
     });
   };
   render() {
-    var logo = (<Logo src={this.props.logo} onTouchTap={this.props.onLeftIconTouchTap} visible={this.props.showLeftIcon}/>);
+    var title
+    if (this.props.logo) {
+      title = (<Logo src={this.props.logo} onTouchTap={this.props.onLeftIconTouchTap} visible={this.props.showLeftIcon} tooltip={this.props.title}/>);
+    } else {
+      title = this.props.title;
+    }
 
     return (
       <AppBar
           style={this.props.style}
-          iconElementLeft={logo}
           showMenuIconButton={this.props.showLeftIcon}
-          title={this.props.title}
+          title={title}
           iconElementRight={
             <div>
               {this.props.children}
