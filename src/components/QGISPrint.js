@@ -461,14 +461,14 @@ class QGISPrint extends React.PureComponent {
     if (this.props.menu === false) {
       return (
         <span style={this.props.style} className={classNames('sdk-component qgis-print', this.props.className)}>
-          <Button disabled={this.state.disabled} onTouchTap={this._onPrintButtonClick.bind(this)} tooltip={formatMessage(messages.printbuttontitle)} mini={true} buttonType='Action'><PrintIcon/></Button>
+          <Button key='qgis-print btn' disabled={this.state.disabled} onTouchTap={this._onPrintButtonClick.bind(this)} tooltip={formatMessage(messages.printbuttontitle)} mini={true} buttonType='Action'><PrintIcon/></Button>
           {dialog}
         </span>
       );
     } else {
       return (
         <span style={this.props.style} className={classNames('sdk-component qgis-print', this.props.className)}>
-          <IconMenu menuStyle={{width: 150}} anchorOrigin={{horizontal: 'right', vertical: 'bottom'}} targetOrigin={{horizontal: 'right', vertical: 'top'}} iconButtonElement={<Button buttonType='Icon' iconClassName='headerIcons ms ms-printer' disabled={this.state.disabled} tooltip={formatMessage(messages.printmenutext)}/>} value={this.state.layoutName}>
+          <IconMenu key='qgis-print menu' menuStyle={{width: 150}} anchorOrigin={{horizontal: 'right', vertical: 'bottom'}} targetOrigin={{horizontal: 'right', vertical: 'top'}} iconButtonElement={<Button buttonType='Icon' iconClassName='headerIcons ms ms-printer' disabled={this.state.disabled} tooltip={formatMessage(messages.printmenutext)}/>} value={this.state.layoutName}>
             {listitems}
           </IconMenu>
           {dialog}
