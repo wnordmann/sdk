@@ -122,12 +122,15 @@ class Chart extends React.Component {
 
   constructor(props, context) {
     super(props);
+    this._muiTheme = context.muiTheme || getMuiTheme();
     this.state = {
       chart: this.props.charts[0],
       value: this.props.charts[0].title,
-      selected: null,
-      muiTheme: context.muiTheme || getMuiTheme()
+      selected: null
     };
+  }
+  getChildContext() {
+    return {muiTheme: this._muiTheme};
   }
   componentDidMount() {
     this._onChangeCb = this._onChange.bind(this);
