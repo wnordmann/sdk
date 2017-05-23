@@ -44,7 +44,8 @@ class Logo extends React.PureComponent {
     visible: React.PropTypes.bool
   };
   static defaultProps = {
-    visible : true
+    visible : true,
+    tooltipPosition: 'bottom'
   }
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
@@ -53,11 +54,17 @@ class Logo extends React.PureComponent {
   render() {
     var className = {
       'sdk-component': true,
-      'sdk-logo': true,
-      'hint--small': this.props.buttonType !== 'Action'
+      'sdk-logo': true
     };
     className['hint--' + this.props.tooltipPosition] = this.props.tooltip !== undefined;
-    return  (<img src={this.props.src} onTouchTap={this.props.onTouchTap} style={{marginTop:'12px', height:'40px'}} className={classNames(className, this.props.className)} aria-label={this.props.tooltip}/>)
+    return  (
+      <span
+        onTouchTap={this.props.onTouchTap}
+        className={classNames(className, this.props.className)}
+        aria-label={this.props.tooltip}
+        title={this.props.tooltip}>
+        <img src={this.props.src}  style={{marginTop:'12px', height:'40px'}} />
+      </span>)
   }
 }
 
