@@ -156,15 +156,17 @@ class DrawFeature extends React.PureComponent {
     for (var i = 0, ii = flatLayers.length; i < ii; ++i) {
       var lyr = flatLayers[i];
       var geomType;
-      if (lyr.get('geometryType')) {
-        geomType = lyr.get('geometryType');
-      } else if (lyr.get('wfsInfo')) {
-        geomType = lyr.get('wfsInfo').geometryType;
-      }
-      if (geomType) {
-        for (var key in state) {
-          if (geomType.indexOf(key) !== -1) {
-            state[key] = true;
+      if (lyr.get('disableEdit') !== true) {
+        if (lyr.get('geometryType')) {
+          geomType = lyr.get('geometryType');
+        } else if (lyr.get('wfsInfo')) {
+          geomType = lyr.get('wfsInfo').geometryType;
+        }
+        if (geomType) {
+          for (var key in state) {
+            if (geomType.indexOf(key) !== -1) {
+              state[key] = true;
+            }
           }
         }
       }

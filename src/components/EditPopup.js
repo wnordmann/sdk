@@ -233,7 +233,7 @@ class EditPopup extends React.Component {
       }
       var local = lyr.get('geometryType') && lyr.get('geometryType').indexOf(geomType) !== -1;
       var wfs = lyr.get('isWFST') && lyr.get('wfsInfo') !== undefined && lyr.get('wfsInfo').geometryType.indexOf(geomType) !== -1;
-      return local || wfs;
+      return (lyr.get('disableEdit') !== true) && (local || wfs);
     } else {
       return lyr.get('isWFST') && lyr.get('wfsInfo') !== undefined;
     }

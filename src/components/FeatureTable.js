@@ -504,7 +504,7 @@ class FeatureTable extends React.Component {
         return (<Checkbox disableTouchRipple={true} checked={selected} onCheck={me._onSelect.bind(me, props)} />);
       }
     }];
-    if (this.props.allowEdit) {
+    if (this.props.allowEdit && (this._layer && this._layer.get('disableEdit') !== true)) {
       columns.push({
         id: 'delete',
         header: '',
