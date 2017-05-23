@@ -12,6 +12,8 @@
 
 import React from 'react';
 import AppBar from 'material-ui/AppBar';
+import Logo from './Logo';
+
 import './Header.css';
 /**
  * A header toolbar for holding buttons
@@ -38,7 +40,11 @@ class Header extends React.Component {
     /**
      * Element to be displayed on the left side of the header
      */
-    iconElementLeft: React.PropTypes.element,
+    // iconElementLeft: React.PropTypes.element,
+    /**
+     * Image file to be used for logo
+     */
+    logo: React.PropTypes.string,
     /**
     * @ignore
     * Callback for left Icon
@@ -83,10 +89,12 @@ class Header extends React.Component {
     });
   };
   render() {
+    var logo = (<Logo src={this.props.logo} onTouchTap={this.props.onLeftIconTouchTap} visible={this.props.showLeftIcon}/>);
+
     return (
       <AppBar
           style={this.props.style}
-          iconElementLeft={this.props.iconElementLeft}
+          iconElementLeft={logo}
           showMenuIconButton={this.props.showLeftIcon}
           title={this.props.title}
           iconElementRight={
