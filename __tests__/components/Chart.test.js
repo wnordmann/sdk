@@ -99,11 +99,35 @@ describe('Chart', function() {
     ReactDOM.unmountComponentAtNode(container);
   });
 
-  it('NEW!', function() {
+  it('gets columns by display mode 2', function() {
     var container = document.createElement('div');
     var chart = ReactDOM.render((
         <Chart intl={intl} onClose={onClose} charts={charts} />
     ), container);
+    charts[0].displayMode = 2;
+    var actual = chart._getColumns();
+    var expected = [['x'], ['foo']];
+    assert.deepEqual(actual, expected);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('gets columns by display mode 1', function() {
+    var container = document.createElement('div');
+    var chart = ReactDOM.render((
+        <Chart intl={intl} onClose={onClose} charts={charts} />
+    ), container);
+    var actual = chart._getColumns();
+    var expected = [['x'], ['AREA_KM2']];
+    assert.deepEqual(actual, expected);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('gets columns by display mode 0', function() {
+    var container = document.createElement('div');
+    var chart = ReactDOM.render((
+        <Chart intl={intl} onClose={onClose} charts={charts} />
+    ), container);
+    charts[0].displayMode = 0;
     var actual = chart._getColumns();
     var expected = [['x'], ['AREA_KM2']];
     assert.deepEqual(actual, expected);
