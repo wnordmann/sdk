@@ -57,7 +57,7 @@ class Logo extends React.PureComponent {
       'hint--small': this.props.buttonType !== 'Action'
     };
     className['hint--' + this.props.tooltipPosition] = this.props.tooltip !== undefined;
-    return  (<img src={this.props.src} onTouchTap={this.props.onTouchTap} style={{margin:'5px', height:'40px'}} className={classNames(className, this.props.className)} aria-label={this.props.tooltip}/>)
+    return  (<img src={this.props.src} onTouchTap={this.props.onTouchTap} style={{marginTop:'12px', height:'40px'}} className={classNames(className, this.props.className)} aria-label={this.props.tooltip}/>)
   }
 }
 
