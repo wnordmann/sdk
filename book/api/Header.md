@@ -17,18 +17,18 @@ Child nodes
 type: `node`
 
 
-### `iconElementLeft`
-
-Element to be displayed on the left side of the header
-
-type: `element`
-
-
 ### `leftMenuItems`
 
 Array of menu items to add to the header
 
 type: `node`
+
+
+### `logo`
+
+Image file to be used for logo
+
+type: `string`
 
 
 
