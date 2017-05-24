@@ -25,16 +25,7 @@ describe('Chart', function() {
       valueFields: ['AREA_KM2'],
       displayMode: 1,
       operation: 2
-    },
-    {
-      title: 'Test Chart 2',
-      categoryField: 'USE',
-      layer: 'lyr03',
-      valueFields: [],
-      displayMode: 2,
-      operation: 2
-    }
-  ];
+    }];
     target = document.createElement('div');
     var style = target.style;
     style.position = 'absolute';
