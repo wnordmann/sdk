@@ -851,7 +851,7 @@
                                 
                                 <h1 id="layerselector-component"><code>LayerSelector</code> (component)</h1>
 <p>A combobox to select a layer.</p>
-<pre><code class="lang-xml"><span class="hljs-tag">&lt;<span class="hljs-name">LayerSelector</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> <span class="hljs-attr">onChange</span>=<span class="hljs-string">{this._onChange.bind(this)}</span> /&gt;</span>
+<pre><code class="lang-xml"><span class="hljs-tag">&lt;<span class="hljs-name">LayerSelector</span> <span class="hljs-attr">map</span>=<span class="hljs-string">{map}</span> <span class="hljs-attr">layers</span>=<span class="hljs-string">{layersArray}</span> <span class="hljs-attr">onChange</span>=<span class="hljs-string">{this._onChange.bind(this)}</span> /&gt;</span>
 </code></pre>
 <p><img src="../LayerSelector.png" alt="Layer Selector">
 <img src="../LayerSelectorOpen.png" alt="Opened Layer Selector"></p>
@@ -859,15 +859,12 @@
 <h3 id="classname"><code>className</code></h3>
 <p>Css class name to apply on the root element of this component.</p>
 <p>type: <code>string</code></p>
-<h3 id="filter"><code>filter</code></h3>
-<p>A filter function to filter out some of the layers by returning false.</p>
-<p>type: <code>func</code></p>
 <h3 id="labeltext"><code>labelText</code></h3>
 <p>Optional label text for combo box, will override the default.</p>
 <p>type: <code>string</code></p>
-<h3 id="map-required"><code>map</code> (required)</h3>
-<p>The map from which to extract the layers.</p>
-<p>type: <code>instanceOf ol.Map</code></p>
+<h3 id="layers-required"><code>layers</code> (required)</h3>
+<p>The layers to use.</p>
+<p>type: <code>array</code></p>
 <h3 id="onchange-required"><code>onChange</code> (required)</h3>
 <p>Change callback function.</p>
 <p>type: <code>func</code></p>
@@ -920,7 +917,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"LayerSelector","level":"1.6.25","depth":2,"next":{"title":"Legend","level":"1.6.26","depth":2,"path":"api/Legend.md","ref":"api/Legend.md","articles":[]},"previous":{"title":"LayerListItem","level":"1.6.24","depth":2,"path":"api/LayerListItem.md","ref":"api/LayerListItem.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"api/LayerSelector.md","mtime":"2017-05-24T07:25:16.138Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-05-24T07:25:53.702Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"LayerSelector","level":"1.6.25","depth":2,"next":{"title":"Legend","level":"1.6.26","depth":2,"path":"api/Legend.md","ref":"api/Legend.md","articles":[]},"previous":{"title":"LayerListItem","level":"1.6.24","depth":2,"path":"api/LayerListItem.md","ref":"api/LayerListItem.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"api/LayerSelector.md","mtime":"2017-05-24T13:08:18.927Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-05-24T13:08:57.731Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
