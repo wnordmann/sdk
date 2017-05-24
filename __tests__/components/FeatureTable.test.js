@@ -95,6 +95,7 @@ describe('FeatureTable', function() {
     const actual = renderer.getRenderOutput().props.className;
     const expected = 'sdk-component featureTable';
     assert.equal(actual, expected);
+    renderer.getMountedInstance().componentWillUnmount();
   });
 
 });

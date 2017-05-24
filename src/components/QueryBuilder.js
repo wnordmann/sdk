@@ -14,6 +14,7 @@ import React from 'react';
 import ol from 'openlayers';
 import Snackbar from 'material-ui/Snackbar';
 import FeatureStore from '../stores/FeatureStore';
+import LayerStore from '../stores/LayerStore';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import classNames from 'classnames';
 import LayerSelector from './LayerSelector';
@@ -133,16 +134,37 @@ class QueryBuilder extends React.PureComponent {
 
   constructor(props, context) {
     super(props);
+    LayerStore.bindMap(this.props.map);
     this._muiTheme = context.muiTheme || getMuiTheme();
     this._proxy = context.proxy;
     FeatureStore.bindMap(this.props.map, this._proxy);
     this.state = {
+      layers: [],
       showCount: false,
       errorText: null
     };
   }
+  componentWillMount() {
+    this._onChangeLayersCb = this._onChangeLayers.bind(this);
+    LayerStore.addChangeListener(this._onChangeLayersCb);
+    this._onChangeLayers();
+  }
+  componentWillUnmount() {
+    LayerStore.removeChangeListener(this._onChangeLayersCb);
+  }
   getChildContext() {
     return {muiTheme: this._muiTheme};
+  }
+  _onChangeLayers() {
+    var flatLayers = LayerStore.getState().flatLayers;
+    var layers = [];
+    for (var i = 0, ii = flatLayers.length; i < ii; ++i) {
+      var lyr = flatLayers[i];
+      if (lyr.get('isSelectable')) {
+        layers.push(lyr);
+      }
+    }
+    this.setState({layers: layers});
   }
   _onLayerSelectChange(layer) {
     this._layer = layer;
@@ -150,9 +172,6 @@ class QueryBuilder extends React.PureComponent {
   }
   _onSubmit(evt) {
     evt.preventDefault();
-  }
-  _filterLayerList(lyr) {
-    return lyr.get('isSelectable');
   }
   _setQueryFilter(evt) {
     const {formatMessage} = this.props.intl;
@@ -236,7 +255,7 @@ class QueryBuilder extends React.PureComponent {
     }
     return (
       <Paper style={this.props.style} zDepth={0} className={classNames('sdk-component query-builder', this.props.className)}>
-        <LayerSelector {...this.props} value={id} onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' filter={this._filterLayerList} map={this.props.map} /><br/>
+        <LayerSelector {...this.props} value={id} onChange={this._onLayerSelectChange.bind(this)} id='layerSelector' ref='layerSelector' layers={this.state.layers} /><br/>
         <TextField floatingLabelText={formatMessage(messages.filterlabel)} errorText={this.state.errorText} ref='queryExpression' onChange={this._setQueryFilter.bind(this)} /><FilterHelp intl={this.props.intl} /><br/>
         <Toolbar>
           <ToolbarGroup>

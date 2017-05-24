@@ -95,11 +95,13 @@ class EditPopup extends React.Component {
 
   constructor(props, context) {
     super(props);
+    LayerStore.bindMap(this.props.map);
     this._muiTheme = context.muiTheme || getMuiTheme();
     this._proxy = context.proxy;
     this._requestHeaders = context.requestHeaders;
     this._dispatchToken = ToolUtil.register(this);
     this.state = {
+      layers: [],
       error: false,
       open: false,
       feature: null,
@@ -113,6 +115,9 @@ class EditPopup extends React.Component {
     return {muiTheme: this._muiTheme};
   }
   componentDidMount() {
+    this._onChangeLayersCb = this._onChangeLayers.bind(this);
+    LayerStore.addChangeListener(this._onChangeLayersCb);
+    this._onChangeLayers();
     this.overlayPopup = new ol.Overlay({
       autoPan: true,
       stopEvent: false,
@@ -141,6 +146,7 @@ class EditPopup extends React.Component {
   componentWillUnmount() {
     AppDispatcher.unregister(this._dispatchToken);
     AppDispatcher.unregister(this._dispatchToken2);
+    LayerStore.removeChangeListener(this._onChangeLayersCb);
   }
   activate(interactions) {
     this.active = true;
@@ -219,6 +225,17 @@ class EditPopup extends React.Component {
       }
     });
     ReactDOM.findDOMNode(this).parentNode.style.display = visible ? 'block' : 'none';
+  }
+  _onChangeLayers() {
+    var flatLayers = LayerStore.getState().flatLayers;
+    var layers = [];
+    for (var i = 0, ii = flatLayers.length; i < ii; ++i) {
+      var lyr = flatLayers[i];
+      if (this._filterLayerList(lyr)) {
+        layers.push(lyr);
+      }
+    }
+    this.setState({layers: layers});
   }
   _filterLayerList(lyr) {
     if (this.state.feature) {
@@ -390,7 +407,7 @@ class EditPopup extends React.Component {
     }
     var id = this.state.layer ? this.state.layer.get('id') : undefined;
     var layerSelector = this.state.layer ? undefined : (
-      <LayerSelector intl={this.props.intl} labelText={formatMessage(messages.layer)} value={id} onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList.bind(this)} map={this.props.map} />
+      <LayerSelector intl={this.props.intl} labelText={formatMessage(messages.layer)} value={id} onChange={this._onLayerSelectChange.bind(this)} layers={this.state.layers} />
     );
     var buttons = (<span style={{float: 'right'}}><Button buttonType='Flat' primary={true} onTouchTap={this._onCancel.bind(this)} label={formatMessage(messages.cancel)} /><Button disabled={!this.state.layer} buttonType='Flat' primary={true} onTouchTap={this.save.bind(this)} label={formatMessage(messages.save)} /></span>);
     return (

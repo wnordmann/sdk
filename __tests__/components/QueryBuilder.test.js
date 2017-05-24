@@ -49,6 +49,7 @@ describe('Rotate', function() {
     const actual = renderer.getRenderOutput().props.className;
     const expected = 'sdk-component query-builder';
     assert.equal(actual, expected);
+    renderer.getMountedInstance().componentWillUnmount();
   });
 
 });
