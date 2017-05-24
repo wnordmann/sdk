@@ -5,7 +5,7 @@
  * boundless-sdk-build:
  *   license: Apache-2.0 (http://opensource.org/licenses/Apache-2.0)
  *   author: Boundless Spatial, Inc.
- *   version: 1.0.0
+ *   version: 1.0.1
  * 
  * JSONSelect:
  *   author: Lloyd Hilaiel <lloyd@hilaiel.com>
