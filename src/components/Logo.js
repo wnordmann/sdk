@@ -1,3 +1,15 @@
+/*
+ * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 import React from 'react';
 import classNames from 'classnames';
 
@@ -15,38 +27,25 @@ class Logo extends React.PureComponent {
      */
     tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left']),
     /**
-     * Should this button be disabled?
+     * Css class name.
      */
     className: React.PropTypes.string,
     /**
      * Source of the image file
      */
-    scr: React.PropTypes.string,
+    src: React.PropTypes.string,
     /**
-     * The tooltip to show for this button.
+     * The tooltip to show.
      */
     tooltip: React.PropTypes.string,
     /**
-     * Background color.
+     * Function to execute when clicked.
      */
-    backgroundColor: React.PropTypes.string,
-    /**
-     * Function to execute when the button is clicked.
-     */
-    onTouchTap: React.PropTypes.func,
-    /**
-     * Style config.
-     */
-    style: React.PropTypes.object,
-    /**
-    *  Change visibility of the component
-    */
-    visible: React.PropTypes.bool
+    onTouchTap: React.PropTypes.func
   };
   static defaultProps = {
-    visible : true,
     tooltipPosition: 'bottom'
-  }
+  };
   static childContextTypes = {
     muiTheme: React.PropTypes.object.isRequired
   };
@@ -63,7 +62,7 @@ class Logo extends React.PureComponent {
         className={classNames(className, this.props.className)}
         aria-label={this.props.tooltip}
         title={this.props.tooltip}>
-        <img src={this.props.src}  style={{marginTop:'12px', height:'40px'}} />
+        <img src={this.props.src}  style={{marginTop: 12, height: 40}} />
       </span>)
   }
 }

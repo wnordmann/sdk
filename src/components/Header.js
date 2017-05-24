@@ -38,10 +38,6 @@ class Header extends React.Component {
     */
     leftMenuItems: React.PropTypes.node,
     /**
-     * Element to be displayed on the left side of the header
-     */
-    // iconElementLeft: React.PropTypes.element,
-    /**
      * Image file to be used for logo
      */
     logo: React.PropTypes.string,
