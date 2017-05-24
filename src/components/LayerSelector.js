@@ -11,10 +11,9 @@
  */
 
 import React from 'react';
-import ol from 'openlayers';
 import classNames from 'classnames';
-import LayerStore from '../stores/LayerStore';
 import SelectField from 'material-ui/SelectField';
+import LayerStore from '../stores/LayerStore';
 import MenuItem from 'material-ui/MenuItem';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -36,7 +35,7 @@ const messages = defineMessages({
  * A combobox to select a layer.
  *
  * ```xml
- * <LayerSelector map={map} onChange={this._onChange.bind(this)} />
+ * <LayerSelector map={map} layers={layersArray} onChange={this._onChange.bind(this)} />
  * ```
  *
  * ![Layer Selector](../LayerSelector.png)
@@ -45,13 +44,9 @@ const messages = defineMessages({
 class LayerSelector extends React.PureComponent {
   static propTypes = {
     /**
-     * The map from which to extract the layers.
+     * The layers to use.
      */
-    map: React.PropTypes.instanceOf(ol.Map).isRequired,
-    /**
-     * A filter function to filter out some of the layers by returning false.
-     */
-    filter: React.PropTypes.func,
+    layers: React.PropTypes.array.isRequired,
     /**
      * The default value of the layer selector, i.e. the layer to select by default.
      */
@@ -89,9 +84,7 @@ class LayerSelector extends React.PureComponent {
   constructor(props, context) {
     super(props);
     this._muiTheme = context.muiTheme || getMuiTheme();
-    LayerStore.bindMap(this.props.map);
     this.state = {
-      layers: [],
       value: props.value
     };
   }
@@ -105,18 +98,6 @@ class LayerSelector extends React.PureComponent {
   getChildContext() {
     return {muiTheme: this._muiTheme};
   }
-  componentWillMount() {
-    this._onChangeCb = this._onChange.bind(this);
-    LayerStore.addChangeListener(this._onChangeCb);
-    this._onChange();
-  }
-  componentWillUnmount() {
-    LayerStore.removeChangeListener(this._onChangeCb);
-  }
-  _onChange() {
-    var flatLayers = LayerStore.getState().flatLayers;
-    this.setState({layers: flatLayers});
-  }
   _onItemChange(evt, index, value) {
     var layer = LayerStore.findLayer(value);
     this.props.onChange.call(this, layer);
@@ -124,14 +105,12 @@ class LayerSelector extends React.PureComponent {
   }
   render() {
     const {formatMessage} = this.props.intl;
-    var selectItems = this.state.layers.map(function(lyr, idx) {
-      if (!this.props.filter || this.props.filter(lyr) === true) {
-        var title = lyr.get('title'), id = lyr.get('id');
-        return (
-          <MenuItem key={id} value={id} label={title} primaryText={title} />
-        );
-      }
-    }, this);
+    var selectItems = this.props.layers.map(function(lyr, idx) {
+      var title = lyr.get('title'), id = lyr.get('id');
+      return (
+        <MenuItem key={id} value={id} label={title} primaryText={title} />
+      );
+    });
     return (
       <SelectField style={this.props.style} className={classNames('sdk-component layer-selector', this.props.className)} floatingLabelFixed={true} floatingLabelText={this.props.labelText ? this.props.labelText : formatMessage(messages.labeltext)} hintText={formatMessage(messages.emptytext)} value={this.state.value} onChange={this._onItemChange.bind(this)}>
         {selectItems}

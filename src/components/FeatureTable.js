@@ -39,6 +39,7 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import ToolUtil from '../toolutil';
 import FilterHelp from './FilterHelp';
+import LayerStore from '../stores/LayerStore';
 import './react-table.css';
 import './FeatureTable.css';
 
@@ -203,6 +204,7 @@ class FeatureTable extends React.Component {
 
   constructor(props, context) {
     super(props);
+    LayerStore.bindMap(this.props.map);
     this._dispatchToken = ToolUtil.register(this);
     this._proxy = context.proxy;
     this._requestHeaders = context.proxy;
@@ -211,6 +213,7 @@ class FeatureTable extends React.Component {
     this._selectedOnly = false;
     this._pagesLoaded = {};
     this.state = {
+      layers: [],
       pages: -1,
       errorOpen: false,
       error: false,
@@ -221,8 +224,11 @@ class FeatureTable extends React.Component {
     };
   }
   componentWillMount() {
+    this._onChangeLayersCb = this._onChangeLayers.bind(this);
+    LayerStore.addChangeListener(this._onChangeLayersCb);
     FeatureStore.addChangeListener(this._onChange);
     this._onChange();
+    this._onChangeLayers();
     this.setDimensionsOnState = debounce(this.setDimensionsOnState, this.props.refreshRate).bind(this);
   }
   componentDidMount() {
@@ -239,6 +245,7 @@ class FeatureTable extends React.Component {
   componentWillUnmount() {
     AppDispatcher.unregister(this._dispatchToken);
     FeatureStore.removeChangeListener(this._onChange);
+    LayerStore.removeChangeListener(this._onChangeLayersCb);
     global.removeEventListener('resize', this.setDimensionsOnState);
   }
   activate(interactions) {
@@ -272,6 +279,20 @@ class FeatureTable extends React.Component {
     //ReactDOM.findDOMNode(this.refs.filter).value = '';
     this._setLayer(layer);
   }
+  _onChangeLayers() {
+    var flatLayers = LayerStore.getState().flatLayers;
+    var layers = [];
+    for (var i = 0, ii = flatLayers.length; i < ii; ++i) {
+      var lyr = flatLayers[i];
+      if (lyr.getVisible() && lyr.get('title') !== null && (lyr instanceof ol.layer.Vector || lyr.get('wfsInfo') !== undefined)) {
+        if (!this._layer) {
+          this._layer = lyr;
+        }
+        layers.push(lyr);
+      }
+    }
+    this.setState({layers: layers});
+  }
   _onChange() {
     if (this._layer) {
       var state = FeatureStore.getState(this._layer);
@@ -285,13 +306,6 @@ class FeatureTable extends React.Component {
   _filter(evt, isInputChecked) {
     this._selectedOnly = isInputChecked;
     this._updateStoreFilter();
-  }
-  _filterLayerList(lyr) {
-    var filter =  lyr.getVisible() && lyr.get('title') !== null && (lyr instanceof ol.layer.Vector || lyr.get('wfsInfo') !== undefined);
-    if (filter && !this._layer) {
-      this._layer = lyr;
-    }
-    return filter;
   }
   _updateStoreFilter() {
     var lyr = this._layer;
@@ -581,7 +595,7 @@ class FeatureTable extends React.Component {
       <Paper zDepth={0} className={classNames('sdk-component featureTable', this.props.className)} style={style}>
         <Toolbar ref='form' className="featureTableToolbar">
           <ToolbarGroup firstChild={true}>
-            <LayerSelector {...this.props} id='table-layerSelector' disabled={!this._layer} ref='layerSelector' onChange={this._onLayerSelectChange.bind(this)} filter={this._filterLayerList.bind(this)} map={this.props.map} value={id} />
+            <LayerSelector {...this.props} id='table-layerSelector' disabled={!this._layer} ref='layerSelector' onChange={this._onLayerSelectChange.bind(this)} layers={this.state.layers} value={id} />
           </ToolbarGroup>
           <ToolbarGroup>
             <TextField floatingLabelFixed={true} floatingLabelText={formatMessage(messages.filterlabel)} id='featuretable-filter' disabled={!this._layer} ref='filter' onChange={this._filterByText.bind(this)} hintText={formatMessage(messages.filterplaceholder)} />
