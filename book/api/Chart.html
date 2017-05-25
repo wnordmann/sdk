@@ -850,7 +850,8 @@
                                 <section class="normal markdown-section">
                                 
                                 <h1 id="chart-component"><code>Chart</code> (component)</h1>
-<p>Allow for the creation of charts based on selected features of a layer.</p>
+<p>Chart to show feature info.</p>
+<p>Allow for the creation of charts based on selected features of a layer. Features of a given layer may be selected with the <a href="../QueryBuilder.js">QueryBuilder</a> component.</p>
 <pre><code class="lang-javascript"><span class="hljs-keyword">var</span> charts = [{
   title: <span class="hljs-string">&apos;Airports count per use category&apos;</span>,
   categoryField: <span class="hljs-string">&apos;USE&apos;</span>,
@@ -867,23 +868,37 @@
   operation: <span class="hljs-number">2</span>
 }];
 </code></pre>
-<pre><code class="lang-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Chart</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">&apos;chartPanel&apos;</span> <span class="hljs-attr">charts</span>=<span class="hljs-string">{charts}</span>/&gt;</span>
+<pre><code class="lang-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Chart</span> <span class="hljs-attr">charts</span>=<span class="hljs-string">{charts}</span>/&gt;</span>
 </code></pre>
+<h5 id="chart-1">Chart 1:</h5>
+<p><img src="../Chart.png" alt="Chart"></p>
+<p>This image implements the first chart in the list above. All of the features in the layer used have been selected via a QueryBuilder component and are styled as yellow circles.</p>
+<h5 id="chart-2">Chart 2:</h5>
+<p><img src="../Chart2.png" alt="Chart"></p>
+<p>This image implements the second chart in the list above. All of the features in the layer used have been selected via a QueryBuilder component and are styled as yellow polygons.</p>
 <h2 id="properties">Properties</h2>
 <h3 id="charts-required"><code>charts</code> (required)</h3>
 <p>An array of configuration objects. Configuration objects have title, categoryField, layer,
-valueFields, displayMode and operation keys.
-title (string, required) is the title to display for the chart.
-categoryField (string, optional) is the attribute to use as the category.
-layer (string, required) is the id property of the corresponding layer to use.
-valueFields (array of string, required) is an array of field names to use for displaying values in the chart.
-displayMode (enum(0, 1, 2), required) defines how the feature attributes will be used to create the chart. When using a value of 0 (by feature), an element will
-be added to the chart for each selected feature. When using a value of 1 (by category), selected features will be grouped according to
-a category defined by the categoryField. When using a value of 2 (count by category) the chart will show the number of features in each
-category.
-The statistic function to use when displayMode is by category (1) is defined in the operation (enum(0, 1, 2, 3), optional) key.
-A value of 0 means MIN, a value of 1 means MAX, a value of 2 means SUM and a value of 3 means AVG (Average).</p>
-<p>type: <code>arrayOf shape</code></p>
+valueFields, displayMode and operation keys.</p>
+<p>title (string, required) is the title to display for the chart.</p>
+<p>categoryField (string, optional) is the attribute to use as the category.</p>
+<p>layer (string, required) is the id property of the corresponding layer to use.</p>
+<p>valueFields (array of string, required) is an array of field names to use for displaying values in the chart.</p>
+<p>displayMode (enum(0, 1, 2), required) defines how the feature attributes will be used to create the chart.</p>
+<pre><code>        When using a value of 0 (by feature), an element will be added to the chart for each selected feature.
+
+        When using a value of 1 (by category), selected features will be grouped according to a category defined by the categoryField.
+
+        When using a value of 2 (count by category) the chart will show the number of features in each category.
+</code></pre><p>The statistic function to use when displayMode is by category (1) is defined in the operation (enum(0, 1, 2, 3), optional) key.</p>
+<pre><code>        A value of 0 means MIN,
+
+        a value of 1 means MAX,
+
+        a value of 2 means SUM
+
+        and a value of 3 means AVG (Average).
+</code></pre><p>type: <code>arrayOf shape</code></p>
 <h3 id="classname"><code>className</code></h3>
 <p>Css class name to apply on the menu or div.</p>
 <p>type: <code>string</code></p>
@@ -936,7 +951,7 @@ A value of 0 means MIN, a value of 1 means MAX, a value of 2 means SUM and a val
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Chart","level":"1.6.6","depth":2,"next":{"title":"DrawFeature","level":"1.6.7","depth":2,"path":"api/DrawFeature.md","ref":"api/DrawFeature.md","articles":[]},"previous":{"title":"Button","level":"1.6.5","depth":2,"path":"api/Button.md","ref":"api/Button.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"api/Chart.md","mtime":"2017-05-24T15:46:38.459Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-05-24T15:47:17.460Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Chart","level":"1.6.6","depth":2,"next":{"title":"DrawFeature","level":"1.6.7","depth":2,"path":"api/DrawFeature.md","ref":"api/DrawFeature.md","articles":[]},"previous":{"title":"Button","level":"1.6.5","depth":2,"path":"api/Button.md","ref":"api/Button.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"docs","styles":{"website":"styles/website.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"gitbook":"*"},"file":{"path":"api/Chart.md","mtime":"2017-05-25T15:02:08.638Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-05-25T15:02:49.208Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
