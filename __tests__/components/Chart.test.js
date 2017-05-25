@@ -7,8 +7,7 @@ import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
 import Chart from '../../src/components/Chart';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import TestUtils from 'react-addons-test-utils';
 
 raf.polyfill();
 
@@ -16,6 +15,7 @@ describe('Chart', function() {
   var target, map, layer, charts;
   var width = 360;
   var height = 180;
+  var onClose = function() {};
 
   beforeEach(function(done) {
     charts = [{
@@ -58,11 +58,8 @@ describe('Chart', function() {
 
   it('generates the correct combo', function() {
     var container = document.createElement('div');
-    var onClose = function() {};
     ReactDOM.render((
-      <MuiThemeProvider muiTheme={getMuiTheme()}>
         <Chart intl={intl} onClose={onClose} charts={charts} />
-      </MuiThemeProvider>
     ), container);
     var divs = container.querySelectorAll('div');
     var found = false;
@@ -74,6 +71,66 @@ describe('Chart', function() {
     }
     assert.equal(found, true);
     ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('sets initial state', function() {
+    var container = document.createElement('div');
+    var chart = ReactDOM.render((
+        <Chart intl={intl} onClose={onClose} charts={charts} />
+    ), container);
+    var actual = chart.state.chart;
+    var expected = charts[0];
+    assert.deepEqual(actual, expected);
+    actual = chart.state.value;
+    expected = charts[0].title;
+    assert.equal(actual, expected);
+    actual = chart.state.selected;
+    expected = null;
+    assert.equal(actual, expected);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('gets columns by display mode 2', function() {
+    var container = document.createElement('div');
+    var chart = ReactDOM.render((
+        <Chart intl={intl} onClose={onClose} charts={charts} />
+    ), container);
+    charts[0].displayMode = 2;
+    var actual = chart._getColumns();
+    var expected = [['x'], ['foo']];
+    assert.deepEqual(actual, expected);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('gets columns by display mode 1', function() {
+    var container = document.createElement('div');
+    var chart = ReactDOM.render((
+        <Chart intl={intl} onClose={onClose} charts={charts} />
+    ), container);
+    var actual = chart._getColumns();
+    var expected = [['x'], ['AREA_KM2']];
+    assert.deepEqual(actual, expected);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('gets columns by display mode 0', function() {
+    var container = document.createElement('div');
+    var chart = ReactDOM.render((
+        <Chart intl={intl} onClose={onClose} charts={charts} />
+    ), container);
+    charts[0].displayMode = 0;
+    var actual = chart._getColumns();
+    var expected = [['x'], ['AREA_KM2']];
+    assert.deepEqual(actual, expected);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('renders the chart component', function() {
+    const renderer = TestUtils.createRenderer();
+    renderer.render(<Chart intl={intl} onClose={onClose} charts={charts}/>);
+    const actual = renderer.getRenderOutput().props.className;
+    const expected = 'sdk-component chart';
+    assert.equal(actual, expected);
   });
 
 });

@@ -22,7 +22,7 @@ describe('QGISPrint', function() {
     thumbnail: 'layout1_thumbnail.png',
     width: 420.0,
     elements: [{
-      name: 'Title',
+      name: 'Element 1',
       height: 40.825440467359044,
       width: 51.98353115727002,
       y: 39.25222551928783,
@@ -79,13 +79,72 @@ describe('QGISPrint', function() {
     document.body.removeChild(target);
   });
 
-  it('layoutName not set before user makes a selection', function() {
+  it('sets default props', function() {
+    var container = document.createElement('div');
+    var print = ReactDOM.render((
+      <QGISPrint intl={intl} layouts={printLayouts} map={map} />
+    ), container);
+    var actual = print.props.menu;
+    var expected = true;
+    assert.equal(actual, expected);
+    actual = print.props.thumbnailPath;
+    expected = '../../resources/print/';
+    assert.equal(actual, expected);
+    actual = print.props.resolutions;
+    expected = [72, 150];
+    assert.deepEqual(actual, expected);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('sets initial state', function() {
+    var container = document.createElement('div');
+    var print = ReactDOM.render((
+      <QGISPrint intl={intl} layouts={printLayouts} map={map} thumbnailPath={""}/>
+    ), container);
+    var actual = print.state;
+    var expected = {
+      disabled: false,
+      layout: null,
+      layoutName: null,
+      loading: false,
+      error: false,
+      open: false,
+      errorOpen: false,
+      resolution: null
+    };
+    assert.deepEqual(actual, expected);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('changes resolution state', function(done) {
     var container = document.createElement('div');
     var print = ReactDOM.render((
       <QGISPrint intl={intl} layouts={printLayouts} map={map}/>
     ), container);
-    assert.equal(print.state.layoutName, null);
-    ReactDOM.unmountComponentAtNode(container);
+    print._onResolutionChange(null, null, 72);
+    var actual = print.state.resolution;
+    var expected = 72;
+    assert.equal(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done()
+    }, 500);
+  });
+
+  it('closes error', function(done) {
+    var container = document.createElement('div');
+    var print = ReactDOM.render((
+      <QGISPrint intl={intl} layouts={printLayouts} map={map}/>
+    ), container);
+    print.setState({errorOpen: true});
+    print._handleRequestClose();
+    var actual = print.state.errorOpen;
+    var expected = false;
+    assert.equal(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done()
+    }, 500);
   });
 
   it('loading state gets set on print', function(done) {
@@ -108,7 +167,34 @@ describe('QGISPrint', function() {
       <QGISPrint intl={intl} layouts={printLayouts} map={map}/>
     ), container);
     assert.equal(print._getTileLayers().length, 1);
+    print.props.map.removeLayer(layer);
+    assert.equal(print._getTileLayers().length, 0);
+    print.props.map.addLayer(
+      new ol.layer.Vector({
+        id: 'foo',
+        source: new ol.source.Vector({
+        })
+      })
+    );
+    assert.equal(print._getTileLayers().length, 0);
     ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('adds tile layers loaded', function(done) {
+    var container = document.createElement('div');
+    var print = ReactDOM.render((
+      <QGISPrint intl={intl} layouts={printLayouts} map={map}/>
+    ), container);
+    print._tiledLayersLoaded = 1;
+    print._tileLayers = print._getTileLayers();
+    print._tileLayerLoaded();
+    var actual = print._tiledLayersLoaded;
+    var expected = 2;
+    assert.equal(actual, expected);
+    window.setTimeout(function() {
+      ReactDOM.unmountComponentAtNode(container);
+      done()
+    }, 500);
   });
 
   it('disables the tool', function() {
@@ -119,10 +205,12 @@ describe('QGISPrint', function() {
     assert.equal(print.state.disabled, false);
     ToolActions.disableAllTools();
     assert.equal(print.state.disabled, true);
+    ToolActions.enableAllTools();
+    assert.equal(print.state.disabled, false);
     ReactDOM.unmountComponentAtNode(container);
   });
 
-  it('adds elements loaded', function() {
+  it('adds elements loaded [0]', function() {
     var container = document.createElement('div');
     var print = ReactDOM.render((
       <QGISPrint intl={intl} layouts={printLayouts} map={map} thumbnailPath={""}/>
@@ -133,23 +221,74 @@ describe('QGISPrint', function() {
     ReactDOM.unmountComponentAtNode(container);
   });
 
-  it('opens on click', function() {
+  it('adds elements loaded [1]', function() {
     var container = document.createElement('div');
     var print = ReactDOM.render((
       <QGISPrint intl={intl} layouts={printLayouts} map={map} thumbnailPath={""}/>
     ), container);
-    assert.equal(print.state.open, false);
+    print.setState({layout: printLayouts[0]});
+    print._elementsLoaded = 0;
+    print._elementLoaded();
+    var actual = print._elementsLoaded;
+    var expected = 1;
+    assert.equal(actual, expected);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+
+  it('opens menu on click and sets layout', function() {
+    var container = document.createElement('div');
+    var print = ReactDOM.render((
+      <QGISPrint intl={intl} layouts={printLayouts} map={map} thumbnailPath={""}/>
+    ), container);
     print._onClick(printLayouts[0]);
     assert.equal(print.state.open, true);
+    assert.equal(print.state.layoutName, 'Layout 1');
+    assert.deepEqual(print.state.layout, printLayouts[0]);
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('opens print dialog on click and sets layout', function() {
+    var container = document.createElement('div');
+    var print = ReactDOM.render((
+      <QGISPrint intl={intl} layouts={printLayouts} map={map} thumbnailPath={""}/>
+    ), container);
+    print._onPrintButtonClick();
+    assert.equal(print.state.open, true);
+    assert.equal(print.state.layoutName, 'Layout 1');
+    assert.deepEqual(print.state.layout, printLayouts[0]);
     ReactDOM.unmountComponentAtNode(container);
   });
 
   it('renders the component', function() {
     const renderer = TestUtils.createRenderer();
-    renderer.render(<QGISPrint intl={intl} layouts={printLayouts} map={map} thumbnailPath={""}/>);
-    const actual = renderer.getRenderOutput().props.className;
-    const expected = 'sdk-component qgis-print';
+    renderer.render(<QGISPrint intl={intl} layouts={printLayouts} map={map} />);
+    var actual = renderer.getRenderOutput().props.className;
+    var expected = 'sdk-component qgis-print';
     assert.equal(actual, expected);
+    actual = renderer.getRenderOutput().props.children[0].key;
+    expected = 'qgis-print menu';
+    assert.equal(actual, expected);
+    renderer.render(<QGISPrint intl={intl} layouts={printLayouts} map={map} menu={false}/>);
+    actual = renderer.getRenderOutput().props.className;
+    expected = 'sdk-component qgis-print';
+    assert.equal(actual, expected);
+    actual = renderer.getRenderOutput().props.children[0].key;
+    expected = 'qgis-print btn';
+    assert.equal(actual, expected);
+  });
+
+  it('closes', function() {
+    var container = document.createElement('div');
+    var print = ReactDOM.render((
+      <QGISPrint intl={intl} layouts={printLayouts} map={map} thumbnailPath={""}/>
+    ), container);
+    print.setState({open: true});
+    print.close();
+    var actual = print.state.open;
+    var expected = false;
+    assert.equal(actual, expected);
+    ReactDOM.unmountComponentAtNode(container);
   });
 
 });

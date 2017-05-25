@@ -774,7 +774,7 @@ class AddLayerModal extends React.PureComponent {
                 {selectOptions}
               </SelectField>);
     return (
-      <Dialog style={this.props.style} autoScrollBodyContent={true} bodyStyle={{padding: 20}} inline={this.props.inline} title={formatMessage(messages.title)} className='add-layer-modal' actions={actions} open={this.props.open} onRequestClose={this.close.bind(this)}>
+      <Dialog ref='dialog' style={this.props.style} autoScrollBodyContent={true} bodyStyle={{padding: 20}} inline={this.props.inline} title={formatMessage(messages.title)} className='add-layer-modal' actions={actions} open={this.props.open} onRequestClose={this.close.bind(this)}>
        {select}
        {content}
       </Dialog>
