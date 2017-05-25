@@ -45,7 +45,7 @@ const messages = defineMessages({
   }
 });
  /**
-  * $$src/components/InfoPopupDetail.md$$
+  * $$src/components/ChartDetail.md$$
   *
   */
 class Chart extends React.Component {
