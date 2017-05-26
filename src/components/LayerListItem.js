@@ -634,8 +634,7 @@ static formats = {
     }
   }
   calculateInRange() {
-    var handleResolutionChange = this.props.handleResolutionChange
-    if (!handleResolutionChange) {
+    if (!this.props.handleResolutionChange) {
       return true;
     }
     var layer = this.props.layer;
@@ -769,7 +768,7 @@ static formats = {
     var popoverEllipsis = (!(this.props.layer instanceof ol.layer.Group) && (opacity || download || filter || remove || table || label || edit)) ? (
       <div>
         <i className="fa fa-ellipsis-v" onTouchTap={this._handleMenuOpen.bind(this)}></i>
-        <Popover ref='popover-ellipsis'
+        <Popover
             open={this.state.popover}
             anchorEl={this.state.anchorEl}
             anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
@@ -817,7 +816,7 @@ static formats = {
           insetChildren={true}
           innerDivStyle={flexContainer}
           autoGenerateNestedIndicator={false}
-          primaryText={<span ref='list-item-text' className={classNames({'menuItem':true, muted, 'n1':isNested})}><span className="statusIcons">{arrowIcon}{layersIcon} <span className={'layer-list-name'}>{this.props.title}</span></span>{rightIconButtons}</span>}
+          primaryText={<span className={classNames({'menuItem':true, muted, 'n1':isNested})}><span className="statusIcons">{arrowIcon}{layersIcon} <span className={'layer-list-name'}>{this.props.title}</span></span>{rightIconButtons}</span>}
           nestedItems={this.props.nestedItems}
           open={this.state.open} />
         <div style={{paddingLeft: 72}}>
