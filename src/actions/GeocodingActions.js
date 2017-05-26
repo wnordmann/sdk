@@ -32,3 +32,23 @@ export default {
     });
   }
 };
+export const geocodingSearch = (text) => {
+  return {
+    type: 'GEOCODING_SEARCH',
+    text  //<--ES6. same as text:text, in ES5
+  }
+}
+
+export const geocodingResults = (results) => {
+  return {
+    type : 'GEOCODING_RESULTS',
+    results
+  }
+}
+//TODO: Breaking location into lat/long/title/ect
+export const geocodingSelect = (location) => {
+  return {
+    type : 'GEOCODING_SELECT',
+    location
+  }
+}
