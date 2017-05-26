@@ -33,7 +33,7 @@ import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
 import FileSaver from 'file-saver';
-import {createDragPreview} from 'react-dnd-text-dragpreview'
+import {createDragPreview} from 'react-dnd-text-dragpreview';
 
 const layerListItemSource = {
 
@@ -120,6 +120,7 @@ const dragPreviewStyleDefault = {
   paddingLeft: 7,
   fontFamily: 'Roboto'
 }
+
 const messages = defineMessages({
   closebutton: {
     id: 'layerlist.closebutton',
@@ -181,6 +182,7 @@ const messages = defineMessages({
 /**
 $$src/components/LayerListItemDetail.md$$
  */
+
 class LayerListItem extends React.Component {
   static propTypes = {
     /**
@@ -339,7 +341,6 @@ class LayerListItem extends React.Component {
     }
   };
 
-
   constructor(props, context) {
     super(props);
     this._proxy = context.proxy;
@@ -355,6 +356,7 @@ class LayerListItem extends React.Component {
       previousBase: ''
     };
   }
+
   getChildContext() {
     return {muiTheme: this._muiTheme};
   }
@@ -632,7 +634,8 @@ static formats = {
     }
   }
   calculateInRange() {
-    if (!this.props.handleResolutionChange) {
+    var handleResolutionChange = this.props.handleResolutionChange
+    if (!handleResolutionChange) {
       return true;
     }
     var layer = this.props.layer;
@@ -661,7 +664,6 @@ static formats = {
       return (<div>{item}</div>);
     }
   }
-
   render() {
     const {connectDragSource, connectDropTarget, isDragging, Item} = this.props;
     const layer = this.props.layer;
@@ -736,7 +738,7 @@ static formats = {
       tableModal = (
         <Dialog ref='tablemodal' inline={this.props.inlineDialogs} actions={actions} title={formatMessage(messages.tablemodaltitle)} open={this.state.tableOpen} onRequestClose={this._closeTable.bind(this)}>
           <div style={{height: 400}}>
-            <FeatureTable allowEdit={this.props.inlineDialogs} onUpdate={this._onTableUpdate.bind(this)} map={this.props.map} layer={this.props.layer} />
+            <FeatureTable allowEdit={this.props.inlineDialogs} onUpdate={this._onTableUpdate.bind(this)} map={this.props.map} layer={this.props.layer} intl={this.props.intl}/>
           </div>
         </Dialog>
       );
@@ -767,7 +769,7 @@ static formats = {
     var popoverEllipsis = (!(this.props.layer instanceof ol.layer.Group) && (opacity || download || filter || remove || table || label || edit)) ? (
       <div>
         <i className="fa fa-ellipsis-v" onTouchTap={this._handleMenuOpen.bind(this)}></i>
-        <Popover
+        <Popover ref='popover-ellipsis'
             open={this.state.popover}
             anchorEl={this.state.anchorEl}
             anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
@@ -815,7 +817,7 @@ static formats = {
           insetChildren={true}
           innerDivStyle={flexContainer}
           autoGenerateNestedIndicator={false}
-          primaryText={<span className={classNames({'menuItem':true, muted, 'n1':isNested})}><span className="statusIcons">{arrowIcon}{layersIcon} <span className={'layer-list-name'}>{this.props.title}</span></span>{rightIconButtons}</span>}
+          primaryText={<span ref='list-item-text' className={classNames({'menuItem':true, muted, 'n1':isNested})}><span className="statusIcons">{arrowIcon}{layersIcon} <span className={'layer-list-name'}>{this.props.title}</span></span>{rightIconButtons}</span>}
           nestedItems={this.props.nestedItems}
           open={this.state.open} />
         <div style={{paddingLeft: 72}}>
