@@ -65,28 +65,33 @@ describe('FeatureTable', function() {
         <FeatureTable layer={layer} intl={intl} map={map}/>
       </MuiThemeProvider>
     ), container);
-    var hyperlinks = container.querySelectorAll('a');
-    assert.equal(hyperlinks.length, 4);
-    assert.equal(hyperlinks[2].getAttribute('href'), 'http://www.foo.com/bar3');
     window.setTimeout(function() {
-      ReactDOM.unmountComponentAtNode(container);
-      done();
-    }, 500);
+      var hyperlinks = container.querySelectorAll('a');
+      assert.equal(hyperlinks.length, 4);
+      assert.equal(hyperlinks[2].getAttribute('href'), 'http://www.foo.com/bar3');
+      window.setTimeout(function() {
+        ReactDOM.unmountComponentAtNode(container);
+        done();
+      }, 500);
+    }, 100);
   });
 
-  it('renders table cells correctly', function() {
+  it('renders table cells correctly', function(done) {
     var container = document.createElement('div');
     ReactDOM.render((
       <MuiThemeProvider muiTheme={getMuiTheme()}>
         <FeatureTable layer={layer} intl={intl} map={map}/>
       </MuiThemeProvider>
     ), container);
-    var tds = container.querySelectorAll('div.rt-td');
-    assert.equal(tds[3].innerHTML, 'bar1');
-    assert.equal(tds[8].innerHTML, 'bar2');
-    assert.equal(tds[13].innerHTML, 'bar3');
-    assert.equal(tds[18].innerHTML, 'bar4');
-    ReactDOM.unmountComponentAtNode(container);
+    window.setTimeout(function() {
+      var tds = container.querySelectorAll('div.rt-td');
+      assert.equal(tds[3].innerHTML, 'bar1');
+      assert.equal(tds[8].innerHTML, 'bar2');
+      assert.equal(tds[13].innerHTML, 'bar3');
+      assert.equal(tds[18].innerHTML, 'bar4');
+      ReactDOM.unmountComponentAtNode(container);
+      done();
+    }, 100);
   });
 
   it('renders the feature table', function() {
