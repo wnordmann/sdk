@@ -73,7 +73,7 @@ describe('FeatureTable', function() {
         ReactDOM.unmountComponentAtNode(container);
         done();
       }, 500);
-    }, 100);
+    }, 250);
   });
 
   it('renders table cells correctly', function(done) {
@@ -91,7 +91,7 @@ describe('FeatureTable', function() {
       assert.equal(tds[18].innerHTML, 'bar4');
       ReactDOM.unmountComponentAtNode(container);
       done();
-    }, 100);
+    }, 250);
   });
 
   it('renders the feature table', function() {
