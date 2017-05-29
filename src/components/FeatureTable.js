@@ -562,9 +562,12 @@ class FeatureTable extends React.Component {
     var checkToCreateTable = this._element && columns.length > 0 && this.state.features !== null;
     if (checkToCreateTable) {
       if (!this._pageSize && this._formNode && this._element.offsetHeight > 0) {
-        var rowHeight = document.querySelector('.rt-td').offsetHeight;
-        var headerHeight = document.querySelector('.rt-th').offsetHeight;
-        var footerHeight = document.querySelector('.-pagination').offsetHeight;
+        var row = document.querySelector('.rt-td');
+        var rowHeight = row ? row.offsetHeight : 42;
+        var header = document.querySelector('.rt-th');
+        var headerHeight = header ? header.offsetHeight : 29;
+        var footer = document.querySelector('.-pagination');
+        var footerHeight = footer ? footer.offsetHeight : 39;
         this._pageSize = Math.floor((this._element.offsetHeight - this._formNode.offsetHeight - headerHeight - footerHeight) / rowHeight);
       }
       var data;
