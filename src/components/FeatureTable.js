@@ -208,7 +208,7 @@ class FeatureTable extends React.Component {
     this._dispatchToken = ToolUtil.register(this);
     this._proxy = context.proxy;
     this._requestHeaders = context.proxy;
-    this._onChange = this._onChange.bind(this);
+    this._onChange = debounce(this._onChange, 100).bind(this);
     FeatureStore.bindMap(this.props.map, this._proxy);
     this._selectedOnly = false;
     this._pagesLoaded = {};
