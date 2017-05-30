@@ -39,7 +39,7 @@ const url = 'http://nominatim.openstreetmap.org/search?format=json&addressdetail
 // Sync Action
 export const fetchGeocodeSuccess = (results) => {
   return {
-    type: 'FETCH_BOOKS_SUCCESS',
+    type: 'FETCH_GEOCODING_SUCCESS',
     results
   }
 };
