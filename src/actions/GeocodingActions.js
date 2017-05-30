@@ -10,27 +10,54 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import GeocodingConstants from '../constants/GeocodingConstants';
-import AppDispatcher from '../dispatchers/AppDispatcher';
+// import GeocodingConstants from '../constants/GeocodingConstants';
+// import AppDispatcher from '../dispatchers/AppDispatcher';
+//
+// export default {
+//   showSearchResult: (results) => {
+//     AppDispatcher.handleAction({
+//       type: GeocodingConstants.SHOW_SEARCH_RESULTS,
+//       searchResults: results
+//     });
+//   },
+//   clearSearchResult: () => {
+//     AppDispatcher.handleAction({
+//       type: GeocodingConstants.CLEAR_SEARCH_RESULT
+//     });
+//   },
+//   zoomToResult: (result) => {
+//     AppDispatcher.handleAction({
+//       type: GeocodingConstants.ZOOM_TO_RESULT,
+//       result: result
+//     });
+//   }
+// };
+import Axios from 'axios';
 
-export default {
-  showSearchResult: (results) => {
-    AppDispatcher.handleAction({
-      type: GeocodingConstants.SHOW_SEARCH_RESULTS,
-      searchResults: results
-    });
-  },
-  clearSearchResult: () => {
-    AppDispatcher.handleAction({
-      type: GeocodingConstants.CLEAR_SEARCH_RESULT
-    });
-  },
-  zoomToResult: (result) => {
-    AppDispatcher.handleAction({
-      type: GeocodingConstants.ZOOM_TO_RESULT,
-      result: result
-    });
+const url = 'http://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=5&q=';// + value
+
+// Sync Action
+export const fetchGeocodeSuccess = (results) => {
+  return {
+    type: 'FETCH_BOOKS_SUCCESS',
+    results
   }
+};
+//Async Action
+export const fetchGeocode = (searchValue) => {
+  // Returns a dispatcher function
+  // that dispatches an action at a later time
+  return (dispatch) => {
+    // Returns a promise
+    return Axios.get(url + searchValue)
+      .then(response => {
+        // Dispatch another action to consume data
+        dispatch(fetchGeocodeSuccess(response.data))
+      })
+      .catch(error => {
+        throw (error);
+      });
+  };
 };
 export const geocodingSearch = (text) => {
   return {

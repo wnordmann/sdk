@@ -67,6 +67,7 @@
     "react-tap-event-plugin": "^1.0.0"
   },
   "dependencies": {
+    "axios": "^0.16.1",
     "blueimp-canvas-to-blob": "2.2.2",
     "browser-filesaver": "^1.1.0",
     "c3-windows": "^0.4.11-rc4",
@@ -96,6 +97,7 @@
     "react-responsive-decorator": "0.0.1",
     "react-table": "^3.0.0",
     "reactcss": "^1.1.1",
+    "redux-thunk": "^2.2.0",
     "url-parse": "^1.1.1",
     "w3c-schemas": "^1.4.0"
   },
