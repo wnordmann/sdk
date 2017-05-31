@@ -12,16 +12,18 @@
 
 import React from 'react';
 import ol from 'openlayers';
+import {connect} from 'react-redux';
+import * as bookmarksActions from '../actions/BookmarksActions';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import ArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
 import ArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
-import Button from './Button';
 import Carousel from 'nuka-carousel';
+import Button from './Button';
 import Dots from './BookmarkDots.js';
 import './Bookmarks.css';
-import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import classNames from 'classnames';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 const messages = defineMessages({
   dropdowntext: {
@@ -30,6 +32,7 @@ const messages = defineMessages({
     defaultMessage: 'Bookmarks'
   }
 });
+
 
 /**
  * Adds the ability to retrieve spatial bookmarks.
@@ -42,9 +45,9 @@ const messages = defineMessages({
 class Bookmarks extends React.PureComponent {
   static propTypes = {
     /**
-     * The ol3 map instance on whose view we should navigate.
+     * @ignore
      */
-    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    intl: intlShape.isRequired,
     /**
      * Css class name to apply on the menu or the div.
      */
@@ -92,10 +95,6 @@ class Bookmarks extends React.PureComponent {
      */
     introDescription: React.PropTypes.string,
     /**
-     * @ignore
-     */
-    intl: intlShape.isRequired,
-    /**
      * Display as a menu drop down list.
      */
     menu: React.PropTypes.bool,
@@ -136,9 +135,13 @@ class Bookmarks extends React.PureComponent {
     width: '400px'
   };
 
-  constructor(props) {
+  static contextTypes = {
+    map: React.PropTypes.instanceOf(ol.Map)
+  }
+
+  constructor(props, context) {
     super(props);
-    var view = this.props.map.getView();
+    var view = context.map.getView();
     this._center = view.getCenter();
     this._resolution = view.getResolution();
     if (this._center === null) {
@@ -151,10 +154,8 @@ class Bookmarks extends React.PureComponent {
         this._resolution = evt.target.getResolution();
       }, this);
     }
-    this.state = {
-      value: null
-    }
   }
+
   componentDidMount() {
     if (this.props.showMarker) {
       this._layer = new ol.layer.Vector({
@@ -171,9 +172,10 @@ class Bookmarks extends React.PureComponent {
         }),
         source: new ol.source.Vector({wrapX: false})
       });
-      this.props.map.addLayer(this._layer);
+      this.context.map.addLayer(this._layer);
     }
   }
+
   _handleChange(evt, value) {
     var bookmark;
     for (var i = 0, ii = this.props.bookmarks.length; i < ii; ++i) {
@@ -182,11 +184,12 @@ class Bookmarks extends React.PureComponent {
         break;
       }
     }
-    this.setState({value: value});
+    this.props.bookmarkSelect(value);
     this._selectBookmark(bookmark);
   }
+
   _selectBookmark(bookmark) {
-    var map = this.props.map;
+    var map = this.context.map;
     var view = map.getView();
     var center, animateOptions;
     if (bookmark) {
@@ -255,6 +258,7 @@ class Bookmarks extends React.PureComponent {
       position: 'CenterRight'
     }
   ];
+
   render() {
     let carouselProps = Object.assign({}, this.props);
 
@@ -278,7 +282,7 @@ class Bookmarks extends React.PureComponent {
           targetOrigin = {{horizontal: 'left',vertical: 'top'}}
           className = { classNames('sdk-component story-panel-menu', this.props.className) }
           iconButtonElement = { <Button buttonType='Icon' iconClassName='headerIcons fa fa-bookmark' tooltip = {formatMessage(messages.dropdowntext)}/>}
-          value={this.state.value}
+          value={this.props.selectedBookmark}
           onChange={this._handleChange.bind(this)}>
             { menuChildren }
         </IconMenu>
@@ -314,8 +318,23 @@ class Bookmarks extends React.PureComponent {
               { carouselChildren }
           </Carousel>
         </div>
-    );}
+      );
+    }
   }
 }
 
-export default injectIntl(Bookmarks);
+// Maps state from store to props
+const mapStateToProps = (state, ownProps) => {
+  return {
+    selectedBookmark: state.bookmarks.selectedBookmark || null
+  }
+};
+
+// Maps actions to props
+const mapDispatchToProps = (dispatch) => {
+  return {
+    bookmarkSelect: value => dispatch(bookmarksActions.bookmarkSelect(value))
+  }
+};
+
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Bookmarks));
