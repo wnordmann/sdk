@@ -386,7 +386,7 @@ class LayerList extends React.PureComponent {
     return (
       <div ref='parent' className={classNames(divClass, this.props.className)}>
         {button}
-        <Paper style={{display : this.state.visible ? 'block' : 'none', minWidth:this.props.minWidth + 'px'}} zDepth={0} className='layer-tree-panel'>
+        <Paper style={{display : this.state.visible ? 'block' : 'none', minWidth:this.props.minWidth}} zDepth={0} className='layer-tree-panel'>
           {tipLabel}
           <List className='layer-list-list'>
             {this.renderLayers(layers)}
