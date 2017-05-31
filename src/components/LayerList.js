@@ -174,6 +174,10 @@ class LayerList extends React.PureComponent {
      */
     className: React.PropTypes.string,
     /**
+     * Minimum width as a number of a LayerList, this is mainly an issue on ie11
+     */
+    minWidth: React.PropTypes.number,
+    /**
      * Position of the tooltip.
      */
     tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left']),
@@ -230,7 +234,8 @@ class LayerList extends React.PureComponent {
     includeLegend: false,
     showOpacity: false,
     showOnStart: false,
-    collapsible: true
+    collapsible: true,
+    minWidth:360
   };
 
   constructor(props, context) {
@@ -381,7 +386,7 @@ class LayerList extends React.PureComponent {
     return (
       <div ref='parent' className={classNames(divClass, this.props.className)}>
         {button}
-        <Paper style={{display : this.state.visible ? 'block' : 'none'}} zDepth={0} className='layer-tree-panel'>
+        <Paper style={{display : this.state.visible ? 'block' : 'none', minWidth:this.props.minWidth}} zDepth={0} className='layer-tree-panel'>
           {tipLabel}
           <List className='layer-list-list'>
             {this.renderLayers(layers)}
