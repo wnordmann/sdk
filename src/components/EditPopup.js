@@ -291,20 +291,24 @@ class EditPopup extends React.Component {
         var geometryType = this.state.layer.get('wfsInfo').geometryType;
         var newGeom;
         if (geometryType.indexOf('Multi') !== -1) {
-          if (geometryType === 'MultiPolygon') {
+          if (geometryType === 'MultiPolygon' && geom instanceof ol.geom.Polygon) {
             newGeom = new ol.geom.MultiPolygon();
             newGeom.appendPolygon(geom);
-          } else if (geometryType === 'MultiLineString') {
+          } else if (geometryType === 'MultiLineString' && geom instanceof ol.geom.LineString) {
             newGeom = new ol.geom.MultiLineString();
             newGeom.appendLineString(geom);
-          } else if (geometryType === 'MultiPoint') {
+          } else if (geometryType === 'MultiPoint' && geom instanceof ol.geom.Point) {
             newGeom = new ol.geom.MultiPoint();
             newGeom.appendPoint(geom);
           }
         }
-        this.state.feature.setGeometryName(geomName);
+        if (oldGeomName !== geomName) {
+          this.state.feature.setGeometryName(geomName);
+        }
         this.state.feature.setGeometry(newGeom ? newGeom : geom);
-        this.state.feature.set(oldGeomName, undefined);
+        if (oldGeomName !== geomName) {
+          this.state.feature.set(oldGeomName, undefined);
+        }
         WFSService.insertFeature(this.state.layer, this.props.map.getView(), this.state.feature, function(insertId) {
           if (insertId == 'new0') {
             // reload data if we're dealing with a shapefile store
