@@ -14,6 +14,7 @@ export default (state = [], action) => {
     case 'FETCH_GEOCODING_SUCCESS':
       return {
         geocodingSearchResults: action.results,
+        geocodingTarget: action.target,
         searching:false,
         showGeocodingResults:true
       }

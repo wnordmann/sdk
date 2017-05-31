@@ -37,14 +37,15 @@ import Axios from 'axios';
 const url = 'http://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=5&q=';// + value
 
 // Sync Action
-export const fetchGeocodeSuccess = (results) => {
+export const fetchGeocodeSuccess = (results, target) => {
   return {
     type: 'FETCH_GEOCODING_SUCCESS',
-    results
+    results,
+    target
   }
 };
 //Async Action
-export const fetchGeocode = (searchValue) => {
+export const fetchGeocode = (searchValue, target) => {
   // Returns a dispatcher function
   // that dispatches an action at a later time
   return (dispatch) => {
@@ -52,7 +53,7 @@ export const fetchGeocode = (searchValue) => {
     return Axios.get(url + searchValue)
       .then(response => {
         // Dispatch another action to consume data
-        dispatch(fetchGeocodeSuccess(response.data))
+        dispatch(fetchGeocodeSuccess(response.data, target))
       })
       .catch(error => {
         throw (error);
@@ -62,7 +63,7 @@ export const fetchGeocode = (searchValue) => {
 export const geocodingSearch = (text) => {
   return {
     type: 'GEOCODING_SEARCH',
-    text  //<--ES6. same as text:text, in ES5
+    text
   }
 }
 
