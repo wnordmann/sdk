@@ -6,6 +6,7 @@ import MenuItem from 'material-ui/MenuItem';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import classNames from 'classnames';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import './Geocoding.css';
 
 const messages = defineMessages({
   noresults: {
@@ -61,6 +62,7 @@ class geocodingResultsRedux extends React.Component {
   }
   handleRequestClose = () => {
     console.log('Got Nothing Yet');
+
   };
   render() {
     const {formatMessage} = this.props.intl;
@@ -87,7 +89,8 @@ class geocodingResultsRedux extends React.Component {
         anchorEl={this.props.target}
         anchorOrigin={anchorOrigin}
         targetOrigin={targetOrigin}
-        canAutoPosition={true}
+        canAutoPosition={false}
+        useLayerForClickAway={false}
         onRequestClose={this.handleRequestClose}
         className={classNames('sdk-component geocoding-results geocoding', this.props.className)}>
         <Menu>
@@ -111,6 +114,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
   // You can now say this.props.createBook
     // geocodingSearch: search => dispatch(geocodingActions.fetchGeocode(search))
+    closeGeocoding: search => dispatch(geocodingActions.fetchGeocode(search))
   }
 };
 
