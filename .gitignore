@@ -16,6 +16,7 @@ src/components/AddLayerModal.css
 src/components/LayerList.css
 src/components/Header.css
 src/components/Dialog.css
+src/components/GeocodingResults.css
 Playback.css
 sdk.css
 Geocoding.css
