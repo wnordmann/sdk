@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {Jsonix} from '@boundlessgeo/jsonix';
+import {Jsonix} from 'jsonix';
 import {XLink_1_0} from 'w3c-schemas/lib/XLink_1_0';
 import {Filter_1_0_0} from 'ogc-schemas/lib/Filter_1_0_0';
 import {GML_2_1_2} from 'ogc-schemas/lib/GML_2_1_2';

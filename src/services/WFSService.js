@@ -12,7 +12,7 @@
 
 import ol from 'openlayers';
 import util from '../util';
-import {Jsonix} from '@boundlessgeo/jsonix';
+import {Jsonix} from 'jsonix';
 import URL from 'url-parse';
 import {XSD_1_0} from 'w3c-schemas/lib/XSD_1_0';
 import {XLink_1_0} from 'w3c-schemas/lib/XLink_1_0';
