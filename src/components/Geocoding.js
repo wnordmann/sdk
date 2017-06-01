@@ -10,99 +10,85 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
-import AppDispatcher from '../dispatchers/AppDispatcher';
-import GeocodingConstants from '../constants/GeocodingConstants';
-import GeocodingActions from '../actions/GeocodingActions';
-import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import classNames from 'classnames';
-import TextField from 'material-ui/TextField';
+ import React from 'react';
+ import {connect} from 'react-redux';
+ import * as geocodingActions from '../actions/GeocodingActions';
+ import classNames from 'classnames';
+ import {defineMessages, injectIntl, intlShape} from 'react-intl';
+ import TextField from 'material-ui/TextField';
 
-const messages = defineMessages({
-  placeholder: {
-    id: 'geocoding.placeholder',
-    description: 'Placeholder string for the search placename geocoding input field',
-    defaultMessage: 'Search placename...'
-  }
-});
 
-/**
- * Input field to search for placenames using a geocoding service (OSM nominatim).
- *
- * ```xml
- * <Geocoding maxResult={50} />
- * ```
- */
-class Geocoding extends React.PureComponent {
-  static propTypes = {
-    /**
-     * The maximum number of results to return on a search.
-     */
-    maxResults: React.PropTypes.number,
-    /**
-     * Css class name to apply on the root element of this component.
-     */
-    className: React.PropTypes.string,
-    /**
-     * Style config.
-     */
-    style: React.PropTypes.object,
-    /**
-     * @ignore
-     */
-    intl: intlShape.isRequired
-  };
+ const messages = defineMessages({
+   placeholder: {
+     id: 'geocoding.placeholder',
+     description: 'Placeholder string for the search placename geocoding input field',
+     defaultMessage: 'Search placename...'
+   }
+ });
 
-  static childContextTypes = {
-    muiTheme: React.PropTypes.object.isRequired
-  };
+ class geocoding extends React.Component {
+   static propTypes = {
+     /**
+      * The maximum number of results to return on a search.
+      */
+     maxResults: React.PropTypes.number,
+     /**
+      * Css class name to apply on the root element of this component.
+      */
+     className: React.PropTypes.string,
+     /**
+      * Style config.
+      */
+     style: React.PropTypes.object,
+     /**
+      * @ignore
+      */
+     intl: intlShape.isRequired,
+     /**
+      * @ignore
+      */
+     geocodingSearch: React.PropTypes.func
+   }
+   constructor(props) {
+     super(props);
+   }
+   _searchAddress(event) {
+     console.log(event.currentTarget);
+     if (this.geocodeSearchText.input.value.length > 2) {
+       this.props.geocodingSearch(this.geocodeSearchText.input.value, event.currentTarget);
+     }
+   }
+   geocodeSearchText = '';
 
-  static defaultProps = {
-    maxResults: 5
-  };
+   render() {
+     const {formatMessage} = this.props.intl;
+     let geocodeSearchText;
 
-  constructor(props) {
-    super(props);
-    var me = this;
-    this.state = {
-      value: ''
-    };
-    this._dispatchToken = AppDispatcher.register((payload) => {
-      let action = payload.action;
-      switch (action.type) {
-        case GeocodingConstants.ZOOM_TO_RESULT:
-          me.setState({value: ''});
-          break;
-        default:
-          break;
-      }
-    });
-  }
-  componentWillUnmount() {
-    AppDispatcher.unregister(this._dispatchToken);
-  }
-  _searchAddress(event) {
-    var value = this.refs.query.getValue();
-    this.setState({value: value});
-    if (value !== '') {
-      var cbname = 'fn' + Date.now();
-      var script = document.createElement('script');
-      script.src = 'http://nominatim.openstreetmap.org/search?format=json&limit=' + this.props.maxResults + '&q=' + value + '&json_callback=' + cbname;
-      global[cbname] = function(jsonData) {
-        GeocodingActions.showSearchResult(jsonData);
-        delete global[cbname];
-      };
-      document.head.appendChild(script);
-    } else {
-      GeocodingActions.clearSearchResult();
-    }
-  }
-  render() {
-    const {formatMessage} = this.props.intl;
-    return (
-      <TextField style={this.props.style} className={classNames('sdk-component geocoding', this.props.className)} ref='query' value={this.state.value} hintText={formatMessage(messages.placeholder)} onChange={this._searchAddress.bind(this)}/>
-    );
-  }
-}
+     return (
+       <TextField
+         style={this.props.style}
+         className={classNames('sdk-component geocoding', this.props.className)}
+         ref={node => this.geocodeSearchText = node}
+         value={geocodeSearchText}
+         hintText={formatMessage(messages.placeholder)}
+         onChange={this._searchAddress.bind(this)}
+         />
+     )
+   }
+ }
+ // Maps state from store to props
+ const mapStateToProps = (state, ownProps) => {
+   return {
+   }
+ };
 
-export default injectIntl(Geocoding);
+ // Maps actions to props
+ const mapDispatchToProps = (dispatch) => {
+   return {
+   // You can now say this.props.createBook
+     geocodingSearch: (search, target) => dispatch(geocodingActions.fetchGeocode(search, target))
+   }
+ };
+
+ // Use connect to put them together
+ export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(geocoding));
