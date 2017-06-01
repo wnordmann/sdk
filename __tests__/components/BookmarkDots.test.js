@@ -48,13 +48,6 @@ describe('Bookmarks Dots', function() {
     map.setTarget(null);
     document.body.removeChild(target);
   });
-  it('TEST!!', function() {
-    var container = document.createElement('div');
-    ReactDOM.render((
-        <Bookmarks intl={intl} bookmarks={bookmarks} map={map}/>
-    ), container);
-    ReactDOM.unmountComponentAtNode(container);
-  });
   it('are displayed on page', function() {
     var container = document.createElement('div');
     ReactDOM.render((
