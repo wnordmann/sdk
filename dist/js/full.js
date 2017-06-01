@@ -5,7 +5,7 @@
  * boundless-sdk-build:
  *   license: Apache-2.0 (http://opensource.org/licenses/Apache-2.0)
  *   author: Boundless Spatial, Inc.
- *   version: 1.0.1
+ *   version: 1.0.2
  * 
  * @boundlessgeo/jsonix:
  *   licenses: BSD-3-Clause (http://opensource.org/licenses/BSD-3-Clause)
