@@ -5,10 +5,7 @@ import {assert} from 'chai';
 import raf from 'raf';
 import  ol from 'openlayers';
 import intl from '../mock-i18n';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-
-import Bookmarks from '../../src/components/Bookmarks';
+import {Bookmarks} from '../../src/components/Bookmarks';
 
 raf.polyfill();
 
@@ -51,28 +48,20 @@ describe('Bookmarks Dots', function() {
     map.setTarget(null);
     document.body.removeChild(target);
   });
-
-
-  it(' are displayed on page', function() {
+  it('are displayed on page', function() {
     var container = document.createElement('div');
     ReactDOM.render((
-        <MuiThemeProvider muiTheme={getMuiTheme()}>
-          <Bookmarks intl={intl} useCSS={false} map={map} bookmarks={bookmarks} />
-        </MuiThemeProvider>
-      ), container);
-
+      <Bookmarks intl={intl} map={map} bookmarks={bookmarks} />
+    ), container);
     var dots = container.querySelectorAll('.bookmark-dots');
     assert.equal(dots.length, 1);
     ReactDOM.unmountComponentAtNode(container);
   });
-  it(' are not displayed on page', function() {
+  it('are not displayed on page', function() {
     var container = document.createElement('div');
     ReactDOM.render((
-        <MuiThemeProvider muiTheme={getMuiTheme()}>
-          <Bookmarks intl={intl} useCSS={false} map={map} bookmarks={bookmarks} dots={false}/>
-        </MuiThemeProvider>
-      ), container);
-
+        <Bookmarks intl={intl} map={map} bookmarks={bookmarks} dots={false}/>
+    ), container);
     var dots = container.querySelectorAll('.bookmark-dots');
     assert.equal(dots.length, 0);
     ReactDOM.unmountComponentAtNode(container);

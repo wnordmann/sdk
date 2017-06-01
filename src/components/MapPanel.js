@@ -12,12 +12,16 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {Provider} from 'react-redux';
 import classNames from 'classnames';
 import LayerStore from '../stores/LayerStore';
 import Snackbar from 'material-ui/Snackbar';
 import ol from 'openlayers';
 import './MapPanel.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import configureStore from '../stores/Store';
+
+const store = configureStore();
 
 const messages = defineMessages({
   errormsg: {
@@ -89,6 +93,12 @@ class MapPanel extends React.Component {
     this._proxy = context.proxy;
     this._requestHeaders = context.requestHeaders;
     LayerStore.bindMap(this.props.map, this._proxy, this._requestHeaders);
+  }
+
+  getChildContext() {
+    return {
+      map: this.props.map
+    };
   }
   componentWillMount() {
     this._onErrorCb = this._onError.bind(this);
@@ -193,12 +203,18 @@ class MapPanel extends React.Component {
       />);
     }
     return (
-      <div style={this.props.style} id={this.props.id} ref='map' className={classNames('sdk-component map-panel', this.props.className)}>
-        {error}
-        {this.props.children}
-      </div>
+      <Provider store={store} >
+        <div style={this.props.style} id={this.props.id} ref='map' className={classNames('sdk-component map-panel', this.props.className)}>
+          {error}
+          {this.props.children}
+        </div>
+      </Provider>
     );
   }
+}
+
+MapPanel.childContextTypes = {
+  map: React.PropTypes.instanceOf(ol.Map)
 }
 
 export default injectIntl(MapPanel);

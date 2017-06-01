@@ -12,16 +12,19 @@
 
 import React from 'react';
 import ol from 'openlayers';
+import {connect} from 'react-redux';
+import * as bookmarksActions from '../actions/BookmarksActions';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import ArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
 import ArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
-import Button from './Button';
 import Carousel from 'nuka-carousel';
+import Button from './Button';
 import Dots from './BookmarkDots.js';
 import './Bookmarks.css';
-import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import classNames from 'classnames';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const messages = defineMessages({
   dropdowntext: {
@@ -31,6 +34,7 @@ const messages = defineMessages({
   }
 });
 
+
 /**
  * Adds the ability to retrieve spatial bookmarks.
  * A spatial bookmark consists of a name, an extent and a description. Extent needs to be in the view projection.
@@ -39,12 +43,12 @@ const messages = defineMessages({
  * <Bookmarks introTitle='Paris bakeries' introDescription='Explore the best bakeries of the capital of France' map={map} bookmarks={[{name: 'foo1', description: 'description1', extent: [259562, 6254560, 260675, 6256252]}, {name: 'foo2', description: 'description2', extent: [258703, 6248811, 259816, 6250503]}]} />
  * ```
  */
-class Bookmarks extends React.PureComponent {
+export class Bookmarks extends React.PureComponent {
   static propTypes = {
     /**
-     * The ol3 map instance on whose view we should navigate.
+     * @ignore
      */
-    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    intl: intlShape.isRequired,
     /**
      * Css class name to apply on the menu or the div.
      */
@@ -92,10 +96,6 @@ class Bookmarks extends React.PureComponent {
      */
     introDescription: React.PropTypes.string,
     /**
-     * @ignore
-     */
-    intl: intlShape.isRequired,
-    /**
      * Display as a menu drop down list.
      */
     menu: React.PropTypes.bool,
@@ -118,7 +118,11 @@ class Bookmarks extends React.PureComponent {
     /**
      * Sets infinite wrapAround mode. Defaults to true
      */
-    wrapAround: React.PropTypes.bool
+    wrapAround: React.PropTypes.bool,
+    /**
+     * The map to use for this map panel, only needed if map context is not provided by MapPanel.
+     */
+    map: React.PropTypes.instanceOf(ol.Map)
   };
 
   static defaultProps = {
@@ -136,9 +140,20 @@ class Bookmarks extends React.PureComponent {
     width: '400px'
   };
 
-  constructor(props) {
+  static contextTypes = {
+    map: React.PropTypes.instanceOf(ol.Map),
+    muiTheme: React.PropTypes.object
+  }
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+
+  constructor(props, context) {
     super(props);
-    var view = this.props.map.getView();
+    this._muiTheme = context.muiTheme || getMuiTheme();
+    this.map = context.map || this.props.map;
+    var view = this.map.getView();
     this._center = view.getCenter();
     this._resolution = view.getResolution();
     if (this._center === null) {
@@ -151,10 +166,11 @@ class Bookmarks extends React.PureComponent {
         this._resolution = evt.target.getResolution();
       }, this);
     }
-    this.state = {
-      value: null
-    }
   }
+  getChildContext() {
+    return {muiTheme: this._muiTheme};
+  }
+
   componentDidMount() {
     if (this.props.showMarker) {
       this._layer = new ol.layer.Vector({
@@ -171,9 +187,10 @@ class Bookmarks extends React.PureComponent {
         }),
         source: new ol.source.Vector({wrapX: false})
       });
-      this.props.map.addLayer(this._layer);
+      this.map.addLayer(this._layer);
     }
   }
+
   _handleChange(evt, value) {
     var bookmark;
     for (var i = 0, ii = this.props.bookmarks.length; i < ii; ++i) {
@@ -182,12 +199,12 @@ class Bookmarks extends React.PureComponent {
         break;
       }
     }
-    this.setState({value: value});
+    this.props.bookmarkSelect(value);
     this._selectBookmark(bookmark);
   }
+
   _selectBookmark(bookmark) {
-    var map = this.props.map;
-    var view = map.getView();
+    var view = this.map.getView();
     var center, animateOptions;
     if (bookmark) {
       if (this.props.animatePanZoom) {
@@ -255,6 +272,7 @@ class Bookmarks extends React.PureComponent {
       position: 'CenterRight'
     }
   ];
+
   render() {
     let carouselProps = Object.assign({}, this.props);
 
@@ -278,7 +296,7 @@ class Bookmarks extends React.PureComponent {
           targetOrigin = {{horizontal: 'left',vertical: 'top'}}
           className = { classNames('sdk-component story-panel-menu', this.props.className) }
           iconButtonElement = { <Button buttonType='Icon' iconClassName='headerIcons fa fa-bookmark' tooltip = {formatMessage(messages.dropdowntext)}/>}
-          value={this.state.value}
+          value={this.props.selectedBookmark}
           onChange={this._handleChange.bind(this)}>
             { menuChildren }
         </IconMenu>
@@ -314,8 +332,23 @@ class Bookmarks extends React.PureComponent {
               { carouselChildren }
           </Carousel>
         </div>
-    );}
+      );
+    }
   }
 }
 
-export default injectIntl(Bookmarks);
+// Maps state from store to props
+const mapStateToProps = (state, ownProps) => {
+  return {
+    selectedBookmark: state.bookmarks.selectedBookmark || null
+  }
+};
+
+// Maps actions to props
+const mapDispatchToProps = (dispatch) => {
+  return {
+    bookmarkSelect: value => dispatch(bookmarksActions.bookmarkSelect(value))
+  }
+};
+
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Bookmarks));

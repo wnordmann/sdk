@@ -1,9 +1,10 @@
-import {combineReducers} from 'redux'
-import geocoding from './geocoding'
-
+import {combineReducers} from 'redux';
+import geocoding from './geocoding';
+import bookmarks from './bookmarks';
 
 const reducer = combineReducers({
-  geocoding
+  geocoding,
+  bookmarks
 })
 
 export default reducer
