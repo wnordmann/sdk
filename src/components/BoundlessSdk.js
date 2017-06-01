@@ -12,6 +12,11 @@ class BoundlessSdk extends React.Component {
      */
     children: React.PropTypes.node
   }
+  // getChildContext() {
+  //   return {
+  //     map: this.props.map
+  //   };
+  // }
   constructor(props) {
     super(props);
   }

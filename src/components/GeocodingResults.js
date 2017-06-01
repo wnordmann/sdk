@@ -84,13 +84,13 @@
        resultNodes = this.props.results.map(function(result) {
          var icon;
          if (result.icon) {
-           icon = (<i className="locationIcon"><img src={result.icon}/></i>);
+           icon = (<div className="locationIcon"><i><img src={result.icon}/></i></div>);
          }else {
-           icon = (<i className="locationIcon" className="fa fa-fw"></i>);
+           icon = (<div className="locationIcon"><i className="fa fa-fw"></i></div>);
          }
-         return (<MenuItem className="locationResult" key={result.place_id} onTouchTap={this._zoomTo.bind(this, result)}>
+         return (<div className="locationResult" key={result.place_id} onTouchTap={this._zoomTo.bind(this, result)}>
                    {icon}{this._formatDisplayName(result)}
-                 </MenuItem>);
+                 </div>);
        }, this);
      } else {
        resultNodes = formatMessage(messages.noresults);
@@ -107,7 +107,9 @@
          onRequestClose={this.handleRequestClose}
          className={classNames('sdk-component geocoding-results geocoding', this.props.className)}>
          <Menu>
-           {resultNodes}
+           <div className='geoCodingResults'>
+             {resultNodes}
+           </div>
          </Menu>
        </Popover>
      );
