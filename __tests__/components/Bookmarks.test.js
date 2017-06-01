@@ -7,10 +7,7 @@ import {assert} from 'chai';
 import raf from 'raf';
 import  ol from 'openlayers';
 import intl from '../mock-i18n';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-
-import Bookmarks from '../../src/components/Bookmarks';
+import {Bookmarks} from '../../src/components/Bookmarks';
 
 raf.polyfill();
 
@@ -20,11 +17,11 @@ describe('Bookmarks', function() {
   var height = 180;
   var bookmarks = [{
     name: 'Le Grenier Pain',
-    description: '<b>Address: </b>38 rue des Abbesses<br><b>Telephone:</b> 33 (0)1 46 06 41 81<br><a href=""http://www.legrenierapain.com"">Website</a>',
+    description: '<b>Address: </b>38 rue des Abbesses<br><b>Telephone:</b> 33 (0)1 46 06 41 81<br><a href="http://www.legrenierapain.com">Website</a>',
     extent: [259562.7661267497, 6254560.095662868, 260675.9610346824, 6256252.988234103]
   }, {
     name: 'Poilne',
-    description: '<b>Address: </b>8 rue du Cherche-Midi<br><b>Telephone:</b> 33 (0)1 45 48 42 59<br><a href=""http://www.poilane.fr"">Website</a>',
+    description: '<b>Address: </b>8 rue du Cherche-Midi<br><b>Telephone:</b> 33 (0)1 45 48 42 59<br><a href="http://www.poilane.fr">Website</a>',
     extent: [258703.71361629796, 6248811.5276565505, 259816.90852423065, 6250503.271278702]
   }];
 
@@ -58,9 +55,7 @@ describe('Bookmarks', function() {
   it('zooms to the next bookmark', function(done) {
     var container = document.createElement('div');
     ReactDOM.render((
-      <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <Bookmarks intl={intl} useCSS={false} map={map} bookmarks={bookmarks} />
-      </MuiThemeProvider>
+      <Bookmarks intl={intl} map={map} bookmarks={bookmarks} />
     ), container);
     var next = container.querySelector('div.navNext');
     assert.equal(map.getView().getZoom(), 1);
@@ -79,9 +74,7 @@ describe('Bookmarks', function() {
   it('zooms to the next bookmark using nav dots [1]', function(done) {
     var container = document.createElement('div');
     ReactDOM.render((
-      <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <Bookmarks intl={intl} useCSS={false} map={map} bookmarks={bookmarks} />
-      </MuiThemeProvider>
+      <Bookmarks intl={intl} map={map} bookmarks={bookmarks} />
     ), container);
     var buttonOne = container.querySelector('button#dots_1');
     assert.equal(map.getView().getZoom(), 1);
@@ -100,9 +93,7 @@ describe('Bookmarks', function() {
   it('zooms to the next bookmark using nav dots [2]', function(done) {
     var container = document.createElement('div');
     ReactDOM.render((
-      <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <Bookmarks intl={intl} useCSS={false} map={map} bookmarks={bookmarks} />
-      </MuiThemeProvider>
+      <Bookmarks intl={intl} map={map} bookmarks={bookmarks} />
     ), container);
     var buttonTwo = container.querySelector('button#dots_2');
     assert.equal(map.getView().getZoom(), 1);

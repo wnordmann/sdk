@@ -24,6 +24,7 @@ import Dots from './BookmarkDots.js';
 import './Bookmarks.css';
 import classNames from 'classnames';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const messages = defineMessages({
   dropdowntext: {
@@ -42,7 +43,7 @@ const messages = defineMessages({
  * <Bookmarks introTitle='Paris bakeries' introDescription='Explore the best bakeries of the capital of France' map={map} bookmarks={[{name: 'foo1', description: 'description1', extent: [259562, 6254560, 260675, 6256252]}, {name: 'foo2', description: 'description2', extent: [258703, 6248811, 259816, 6250503]}]} />
  * ```
  */
-class Bookmarks extends React.PureComponent {
+export class Bookmarks extends React.PureComponent {
   static propTypes = {
     /**
      * @ignore
@@ -117,7 +118,11 @@ class Bookmarks extends React.PureComponent {
     /**
      * Sets infinite wrapAround mode. Defaults to true
      */
-    wrapAround: React.PropTypes.bool
+    wrapAround: React.PropTypes.bool,
+    /**
+     * The map to use for this map panel, only needed if map context is not provided by MapPanel.
+     */
+    map: React.PropTypes.instanceOf(ol.Map)
   };
 
   static defaultProps = {
@@ -136,12 +141,19 @@ class Bookmarks extends React.PureComponent {
   };
 
   static contextTypes = {
-    map: React.PropTypes.instanceOf(ol.Map)
+    map: React.PropTypes.instanceOf(ol.Map),
+    muiTheme: React.PropTypes.object
   }
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
 
   constructor(props, context) {
     super(props);
-    var view = context.map.getView();
+    this._muiTheme = context.muiTheme || getMuiTheme();
+    this.map = context.map || this.props.map;
+    var view = this.map.getView();
     this._center = view.getCenter();
     this._resolution = view.getResolution();
     if (this._center === null) {
@@ -154,6 +166,9 @@ class Bookmarks extends React.PureComponent {
         this._resolution = evt.target.getResolution();
       }, this);
     }
+  }
+  getChildContext() {
+    return {muiTheme: this._muiTheme};
   }
 
   componentDidMount() {
@@ -172,7 +187,7 @@ class Bookmarks extends React.PureComponent {
         }),
         source: new ol.source.Vector({wrapX: false})
       });
-      this.context.map.addLayer(this._layer);
+      this.map.addLayer(this._layer);
     }
   }
 
@@ -189,8 +204,7 @@ class Bookmarks extends React.PureComponent {
   }
 
   _selectBookmark(bookmark) {
-    var map = this.context.map;
-    var view = map.getView();
+    var view = this.map.getView();
     var center, animateOptions;
     if (bookmark) {
       if (this.props.animatePanZoom) {
