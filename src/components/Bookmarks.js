@@ -166,6 +166,7 @@ export class Bookmarks extends React.PureComponent {
         this._resolution = evt.target.getResolution();
       }, this);
     }
+    this.props.getNumBookmarks(this.props.bookmarks.length)
   }
   getChildContext() {
     return {muiTheme: this._muiTheme};
@@ -189,6 +190,7 @@ export class Bookmarks extends React.PureComponent {
       });
       this.map.addLayer(this._layer);
     }
+    this.props.getNumLayers(this.map.getLayers().getLength());
   }
 
   _handleChange(evt, value) {
@@ -196,10 +198,9 @@ export class Bookmarks extends React.PureComponent {
     for (var i = 0, ii = this.props.bookmarks.length; i < ii; ++i) {
       if (this.props.bookmarks[i].name === value) {
         bookmark = this.props.bookmarks[i];
-        break;
+        this.props.bookmarkSelect(bookmark);
       }
     }
-    this.props.bookmarkSelect(value);
     this._selectBookmark(bookmark);
   }
 
@@ -238,11 +239,25 @@ export class Bookmarks extends React.PureComponent {
     }
   }
   _afterChange(idx) {
-    var bookmark = idx === 0 ?
-      false :
-      this.props.bookmarks[idx - 1];
+    var bookmark;
+    if (idx !== 0) {
+      bookmark = this.props.bookmarks[idx - 1];
+    }
+    this.props.bookmarkSelect(bookmark);
     this._selectBookmark(bookmark);
   }
+  /*
+  _handleChange(evt, value) {
+    var bookmark;
+    for (var i = 0, ii = this.props.bookmarks.length; i < ii; ++i) {
+      if (this.props.bookmarks[i].name === value) {
+        bookmark = this.props.bookmarks[i];
+        this.props.bookmarkSelect(bookmark);
+      }
+    }
+    this._selectBookmark(bookmark);
+  }
+  */
   _decorator = [
     {
       component: class navPrev extends React.Component {
@@ -274,13 +289,7 @@ export class Bookmarks extends React.PureComponent {
   ];
 
   render() {
-    let carouselProps = Object.assign({}, this.props);
-
-    carouselProps.autoplayInterval = this.props.autoplaySpeed;
-
     const {formatMessage} = this.props.intl;
-    let Decorators = this._decorator;
-
     if (this.props.menu === true) {
       var menuChildren = this.props.bookmarks.map(function(bookmark) {
         return (
@@ -296,12 +305,15 @@ export class Bookmarks extends React.PureComponent {
           targetOrigin = {{horizontal: 'left',vertical: 'top'}}
           className = { classNames('sdk-component story-panel-menu', this.props.className) }
           iconButtonElement = { <Button buttonType='Icon' iconClassName='headerIcons fa fa-bookmark' tooltip = {formatMessage(messages.dropdowntext)}/>}
-          value={this.props.selectedBookmark}
+          value={this.props.selectedBookmarkName}
           onChange={this._handleChange.bind(this)}>
             { menuChildren }
         </IconMenu>
       );
     } else {
+      let carouselProps = {...this.props};
+      carouselProps.autoplayInterval = this.props.autoplaySpeed;
+      let Decorators = this._decorator;
       var getHTML = function(bookmark) {
         return {__html: bookmark.description};
       };
@@ -340,14 +352,16 @@ export class Bookmarks extends React.PureComponent {
 // Maps state from store to props
 const mapStateToProps = (state, ownProps) => {
   return {
-    selectedBookmark: state.bookmarks.selectedBookmark || null
+    selectedBookmarkName: state.bookmarks.selectedBookmark ? state.bookmarks.selectedBookmark.name : null
   }
 };
 
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-    bookmarkSelect: value => dispatch(bookmarksActions.bookmarkSelect(value))
+    bookmarkSelect: bookmark => dispatch(bookmarksActions.bookmarkSelect(bookmark)),
+    getNumLayers: numLayers => dispatch(bookmarksActions.getNumLayers(numLayers)),
+    getNumBookmarks: numBookmarks => dispatch(bookmarksActions.getNumBookmarks(numBookmarks))
   }
 };
 

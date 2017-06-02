@@ -12,11 +12,29 @@
 
 // ./src/actions/BookmarksActions.js
 
-export const bookmarkSelect = (value) => {
+export const bookmarkSelect = (bookmark) => {
   return {
     // Unique identifier
     type: 'BOOKMARK_SELECT',
     // Payload
-    bookmark: value
+    bookmark
+  }
+};
+
+export const getNumLayers = (numLayers) => {
+  return {
+    // Unique identifier
+    type: 'GET_LAYERS',
+    // Payload
+    numLayers
+  }
+};
+
+export const getNumBookmarks = (numBookmarks) => {
+  return {
+    // Unique identifier
+    type: 'GET_BOOKMARKS',
+    // Payload
+    numBookmarks
   }
 };
