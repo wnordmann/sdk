@@ -122,7 +122,11 @@ export class Bookmarks extends React.PureComponent {
     /**
      * The map to use for this map panel, only needed if map context is not provided by MapPanel.
      */
-    map: React.PropTypes.instanceOf(ol.Map)
+    map: React.PropTypes.instanceOf(ol.Map),
+    /**
+     * The map to use for this map panel, only needed if map context is not provided by MapPanel.
+     */
+    carly: React.PropTypes.func
   };
 
   static defaultProps = {
@@ -166,7 +170,9 @@ export class Bookmarks extends React.PureComponent {
         this._resolution = evt.target.getResolution();
       }, this);
     }
-    this.props.getNumBookmarks(this.props.bookmarks.length);
+    if (this.props.hasOwnProperty('getNumBookmarks')) {
+      this.props.getNumBookmarks(this.props.bookmarks.length);
+    }
   }
   getChildContext() {
     return {muiTheme: this._muiTheme};
@@ -190,7 +196,9 @@ export class Bookmarks extends React.PureComponent {
       });
       this.map.addLayer(this._layer);
     }
-    this.props.getNumLayers(this.map.getLayers().getLength());
+    if (this.props.hasOwnProperty('getNumBookmarks')) {
+      this.props.getNumLayers(this.map.getLayers().getLength());
+    }
   }
 
   _handleChange(evt, value) {
@@ -198,7 +206,9 @@ export class Bookmarks extends React.PureComponent {
     for (var i = 0, ii = this.props.bookmarks.length; i < ii; ++i) {
       if (this.props.bookmarks[i].name === value) {
         bookmark = this.props.bookmarks[i];
-        this.props.bookmarkSelect(bookmark);
+        if (this.props.hasOwnProperty('bookmarkSelect')) {
+          this.props.bookmarkSelect(bookmark);
+        }
       }
     }
     this._selectBookmark(bookmark);
@@ -243,7 +253,9 @@ export class Bookmarks extends React.PureComponent {
     if (idx !== 0) {
       bookmark = this.props.bookmarks[idx - 1];
     }
-    this.props.bookmarkSelect(bookmark);
+    if (this.props.hasOwnProperty('bookmarkSelect')) {
+      this.props.bookmarkSelect(bookmark);
+    }
     this._selectBookmark(bookmark);
   }
   _decorator = [
@@ -293,7 +305,7 @@ export class Bookmarks extends React.PureComponent {
           targetOrigin = {{horizontal: 'left',vertical: 'top'}}
           className = { classNames('sdk-component story-panel-menu', this.props.className) }
           iconButtonElement = { <Button buttonType='Icon' iconClassName='headerIcons fa fa-bookmark' tooltip = {formatMessage(messages.dropdowntext)}/>}
-          value={this.props.selectedBookmarkName}
+          value={this.props.hasOwnProperty('selectedBookmarkName') ? this.props.selectedBookmarkName : null}
           onChange={this._handleChange.bind(this)}>
             { menuChildren }
         </IconMenu>
