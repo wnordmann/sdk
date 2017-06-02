@@ -53,7 +53,6 @@
      super(props);
    }
    _searchAddress(event) {
-     console.log(event.currentTarget);
      if (this.geocodeSearchText.input.value.length > 2) {
        this.props.geocodingSearch(this.geocodeSearchText.input.value, event.currentTarget);
      }
