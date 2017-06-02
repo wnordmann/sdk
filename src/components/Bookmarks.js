@@ -246,18 +246,6 @@ export class Bookmarks extends React.PureComponent {
     this.props.bookmarkSelect(bookmark);
     this._selectBookmark(bookmark);
   }
-  /*
-  _handleChange(evt, value) {
-    var bookmark;
-    for (var i = 0, ii = this.props.bookmarks.length; i < ii; ++i) {
-      if (this.props.bookmarks[i].name === value) {
-        bookmark = this.props.bookmarks[i];
-        this.props.bookmarkSelect(bookmark);
-      }
-    }
-    this._selectBookmark(bookmark);
-  }
-  */
   _decorator = [
     {
       component: class navPrev extends React.Component {
