@@ -3,7 +3,8 @@ export default (state = [], action) => {
     case 'BOOKMARK_SELECT':
       return {
         ...state,
-        selectedBookmark: action.bookmark
+        selectedBookmark: action.bookmark,
+        selectedIndex: action.index
       }
     case 'GET_LAYERS':
       return {

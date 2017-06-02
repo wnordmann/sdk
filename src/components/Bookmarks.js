@@ -166,7 +166,7 @@ export class Bookmarks extends React.PureComponent {
         this._resolution = evt.target.getResolution();
       }, this);
     }
-    this.props.getNumBookmarks(this.props.bookmarks.length)
+    this.props.getNumBookmarks(this.props.bookmarks.length);
   }
   getChildContext() {
     return {muiTheme: this._muiTheme};
@@ -345,9 +345,9 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 // Maps actions to props
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    bookmarkSelect: bookmark => dispatch(bookmarksActions.bookmarkSelect(bookmark)),
+    bookmarkSelect: bookmark => dispatch(bookmarksActions.bookmarkSelect(bookmark, ownProps.bookmarks)),
     getNumLayers: numLayers => dispatch(bookmarksActions.getNumLayers(numLayers)),
     getNumBookmarks: numBookmarks => dispatch(bookmarksActions.getNumBookmarks(numBookmarks))
   }

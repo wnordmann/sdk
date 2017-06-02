@@ -12,12 +12,13 @@
 
 // ./src/actions/BookmarksActions.js
 
-export const bookmarkSelect = (bookmark) => {
+export const bookmarkSelect = (bookmark, bookmarks) => {
   return {
     // Unique identifier
     type: 'BOOKMARK_SELECT',
     // Payload
-    bookmark
+    bookmark,
+    index: bookmarks.indexOf(bookmark)
   }
 };
 
