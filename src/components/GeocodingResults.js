@@ -95,8 +95,8 @@
      } else {
        resultNodes = formatMessage(messages.noresults);
      }
-     let anchorOrigin = {'horizontal':'left','vertical':'bottom'};
-     let targetOrigin = {'horizontal':'left','vertical':'top'};
+     let anchorOrigin = {'horizontal':'right','vertical':'bottom'};
+     let targetOrigin = {'horizontal':'right','vertical':'top'};
      return (
        <Popover open={this.props.open}
          anchorEl={this.props.target}
