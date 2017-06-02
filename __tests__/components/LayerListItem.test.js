@@ -100,7 +100,7 @@ describe('LayerListItem', function() {
     var actual = item.renderItem(newItem, true).type;
     var expected = 'div';
     assert.equal(actual, expected);
-    actual = item. renderItem(newItem, false);
+    actual = item.renderItem(newItem, false);
     expected = undefined;
     assert.equal(actual, expected);
     ReactDOM.unmountComponentAtNode(container);
@@ -117,10 +117,10 @@ describe('LayerListItem', function() {
   it('renders the filter, table, style, and label modals', function() {
     const renderer = TestUtils.createRenderer();
     renderer.render(<LayerListItem index={0} moveLayer={function() {}} intl={intl} title={overlay.get('title')} map={map} layer={overlay}/>);
-    var filterModal = renderer.getRenderOutput().props.children[1].props.children[1].props.children[0];
-    assert.notEqual(filterModal, undefined);
-    var labelModal = renderer.getRenderOutput().props.children[1].props.children[1].props.children[1];
-    assert.notEqual(labelModal, undefined);
+    var filterModal = renderer.getRenderOutput().props.children[1].props.children[1].props.children[0].ref;
+    assert.equal(filterModal, 'filterModal');
+    var labelModal = renderer.getRenderOutput().props.children[1].props.children[1].props.children[1].ref;
+    assert.equal(labelModal, 'labelModal');
     var styleModal = renderer.getRenderOutput().props.children[1].props.children[1].props.children[2];
     assert.equal(styleModal, undefined);
     var tableModal = renderer.getRenderOutput().props.children[1].props.children[1].props.children[3];
@@ -131,10 +131,10 @@ describe('LayerListItem', function() {
     assert.equal(filterModal, undefined);
     labelModal = renderer.getRenderOutput().props.children[1].props.children[1].props.children[1];
     assert.equal(labelModal, undefined);
-    styleModal = renderer.getRenderOutput().props.children[1].props.children[1].props.children[2];
-    assert.notEqual(styleModal, undefined);
-    tableModal = renderer.getRenderOutput().props.children[1].props.children[1].props.children[3];
-    assert.notEqual(tableModal, undefined);
+    styleModal = renderer.getRenderOutput().props.children[1].props.children[1].props.children[2].ref;
+    assert.equal(styleModal, 'styleModal');
+    tableModal = renderer.getRenderOutput().props.children[1].props.children[1].props.children[3].ref;
+    assert.equal(tableModal, 'tableModal');
   });
 
   it('calculates resolution range', function() {
@@ -154,6 +154,7 @@ describe('LayerListItem', function() {
     ), container);
     actual = item2.props.handleResolutionChange;
     expected = true;
+    assert.equal(actual, expected);
     actual = item2.calculateInRange();
     expected = true;
     assert.equal(actual, expected);
