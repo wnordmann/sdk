@@ -12,16 +12,15 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Provider} from 'react-redux';
+import {connect} from 'react-redux';
+import * as mapPanelActions from '../actions/MapPanelActions';
 import classNames from 'classnames';
 import LayerStore from '../stores/LayerStore';
 import Snackbar from 'material-ui/Snackbar';
 import ol from 'openlayers';
 import './MapPanel.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import configureStore from '../stores/Store';
 
-const store = configureStore();
 
 const messages = defineMessages({
   errormsg: {
@@ -39,7 +38,7 @@ const messages = defineMessages({
  * <MapPanel id='map' map={map} />
  * ```
  */
-class MapPanel extends React.Component {
+export class MapPanel extends React.Component {
   static propTypes = {
     /**
      * The map to use for this map panel.
@@ -106,6 +105,7 @@ class MapPanel extends React.Component {
   }
   componentDidMount() {
     var map = this.props.map;
+    this.props.getSDKLayers(map.getLayers())
     map.setTarget(ReactDOM.findDOMNode(this.refs.map));
     if (this.props.useHistory) {
       this._initViewFromHash();
@@ -118,6 +118,7 @@ class MapPanel extends React.Component {
     } else if (this.props.extent) {
       map.getView().fit(this.props.extent, this.props.map.getSize(), {constrainResolution: false});
     }
+    //this.props.getNumLayers(this.map.getLayers().getLength());
   }
   componentWillUnmount() {
     LayerStore.removeErrorListener(this._onErrorCb);
@@ -203,18 +204,31 @@ class MapPanel extends React.Component {
       />);
     }
     return (
-      <Provider store={store} >
-        <div style={this.props.style} id={this.props.id} ref='map' className={classNames('sdk-component map-panel', this.props.className)}>
-          {error}
-          {this.props.children}
-        </div>
-      </Provider>
+      <div style={this.props.style} id={this.props.id} ref='map' className={classNames('sdk-component map-panel', this.props.className)}>
+        {error}
+        {this.props.children}
+      </div>
     );
   }
 }
 
 MapPanel.childContextTypes = {
   map: React.PropTypes.instanceOf(ol.Map)
-}
+};
 
-export default injectIntl(MapPanel);
+// Maps state from store to props
+const mapStateToProps = (state, ownProps) => {
+  return {
+    layers: state.mapPanel || 'carly'
+  }
+};
+
+// Maps actions to props
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    getSDKLayers: layers => dispatch(mapPanelActions.getSDKLayers(layers)),
+    getNumLayers: numLayers => dispatch(mapPanelActions.getNumLayers(numLayers))
+  }
+};
+
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(MapPanel));
