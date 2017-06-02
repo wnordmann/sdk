@@ -1,5 +1,6 @@
 import React from 'react';
 import {Provider} from 'react-redux';
+import ol from 'openlayers';
 
 import configureStore from '../stores/GeocodingStore';
 
@@ -10,15 +11,19 @@ class BoundlessSdk extends React.Component {
     /**
      * @ignore
      */
-    children: React.PropTypes.node
+    children: React.PropTypes.node,
+    /**
+     * OpenLayers Map
+     */
+    map: React.PropTypes.instanceOf(ol.Map).isRequired
   }
-  // getChildContext() {
-  //   return {
-  //     map: this.props.map
-  //   };
-  // }
   constructor(props) {
     super(props);
+  }
+  getChildContext() {
+    return {
+      map: this.props.map
+    };
   }
   render() {
     return (
@@ -27,5 +32,9 @@ class BoundlessSdk extends React.Component {
       </Provider>
     );
   }
+
+}
+BoundlessSdk.childContextTypes = {
+  map: React.PropTypes.instanceOf(ol.Map)
 }
 export default BoundlessSdk;
