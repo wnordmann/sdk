@@ -12,11 +12,11 @@
 
 // ./src/actions/BookmarksActions.js
 
-export const getResolution = (resolution) => {
+export const getResolutionValue = (resolutionValue) => {
   return {
     // Unique identifier
     type: 'GET_RESOLUTION',
     // Payload
-    resolution
+    resolutionValue
   }
 };

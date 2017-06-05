@@ -54,7 +54,8 @@ export class ZoomSlider extends React.PureComponent {
     this.map.getView().un('change:resolution', this._handleChangeResolution, this);
   }
   _handleChangeResolution() {
-    this.props.getResolution(this._getValue(this.map.getView().getResolution()))
+    var olResolution = this.map.getView().getResolution();
+    this.props.getResolutionValue(this._getValue(olResolution))
   }
   _getValue(resolution) {
     var view = this.map.getView();
@@ -89,7 +90,7 @@ const mapStateToProps = (state) => {
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-    getResolution: resolution => dispatch(zoomSliderActions.getResolution(resolution))
+    getResolutionValue: resolutionValue => dispatch(zoomSliderActions.getResolutionValue(resolutionValue))
   }
 };
 

@@ -3,7 +3,7 @@ export default (state = [], action) => {
     case 'GET_RESOLUTION':
       return {
         ...state,
-        resolution: action.resolution
+        resolutionValue: action.resolutionValue
       }
     default:
       return state
