@@ -12,11 +12,11 @@
 
 // ./src/actions/BookmarksActions.js
 
-export const getNumLayers = (layers) => {
+export const getMapLayers = (mapLayers) => {
   return {
     // Unique identifier
-    type: 'GET_NUM_LAYERS',
+    type: 'GET_MAP_LAYERS',
     // Payload
-    layers
+    mapLayers
   }
 };

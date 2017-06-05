@@ -38,7 +38,7 @@ const messages = defineMessages({
  * <MapPanel id='map' map={map} />
  * ```
  */
-export class MapPanel extends React.Component {
+export class MapPanel extends React.PureComponent {
   static propTypes = {
     /**
      * The map to use for this map panel.
@@ -91,7 +91,6 @@ export class MapPanel extends React.Component {
     };
     this._proxy = context.proxy;
     this._requestHeaders = context.requestHeaders;
-    this.props.getNumLayers(this.map.getLayers().getLength());
     LayerStore.bindMap(this.props.map, this._proxy, this._requestHeaders);
   }
 
@@ -106,7 +105,9 @@ export class MapPanel extends React.Component {
   }
   componentDidMount() {
     var map = this.props.map;
-    //this.props.getSDKLayers(map.getLayers())
+    if (this.props.hasOwnProperty('getMapLayers')) {
+      this.props.getMapLayers(map.getLayers().getLength())
+    }
     map.setTarget(ReactDOM.findDOMNode(this.refs.map));
     if (this.props.useHistory) {
       this._initViewFromHash();
@@ -119,7 +120,6 @@ export class MapPanel extends React.Component {
     } else if (this.props.extent) {
       map.getView().fit(this.props.extent, this.props.map.getSize(), {constrainResolution: false});
     }
-    //this.props.getNumLayers(this.map.getLayers().getLength());
   }
   componentWillUnmount() {
     LayerStore.removeErrorListener(this._onErrorCb);
@@ -217,19 +217,11 @@ MapPanel.childContextTypes = {
   map: React.PropTypes.instanceOf(ol.Map)
 };
 
-// Maps state from store to props
-const mapStateToProps = (state, ownProps) => {
-  return {
-    //layers: state.mapPanel || 'carly'
-  }
-};
-
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-    //getSDKLayers: layers => dispatch(mapPanelActions.getSDKLayers(layers)),
-    getNumLayers: numLayers => dispatch(mapPanelActions.getNumLayers(numLayers))
+    getMapLayers: mapLayers => dispatch(mapPanelActions.getMapLayers(mapLayers))
   }
 };
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(MapPanel));
+export default injectIntl(connect(null, mapDispatchToProps)(MapPanel));

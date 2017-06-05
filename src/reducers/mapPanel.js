@@ -1,9 +1,9 @@
 export default (state = [], action) => {
   switch (action.type) {
-    case 'GET_NUM_LAYERS':
+    case 'GET_MAP_LAYERS':
       return {
         ...state,
-        numlayers: action.numlayers
+        mapLayers: action.mapLayers
       }
     default:
       return state
