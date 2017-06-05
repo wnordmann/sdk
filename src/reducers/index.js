@@ -1,13 +1,15 @@
 import {combineReducers} from 'redux';
-import geocoding from './geocoding';
 import bookmarks from './bookmarks';
+import geocoding from './geocoding';
 import mapPanel from './mapPanel';
+import zoom from './zoom';
 import zoomSlider from './zoomSlider';
 
 const reducer = combineReducers({
-  geocoding,
   bookmarks,
+  geocoding,
   mapPanel,
+  zoom,
   zoomSlider
 })
 
