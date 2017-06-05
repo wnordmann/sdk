@@ -12,10 +12,10 @@
 
 // ./src/actions/BookmarksActions.js
 
-export const getSDKLayers = (layers) => {
+export const getNumLayers = (layers) => {
   return {
     // Unique identifier
-    type: 'GET_SDK_LAYERS',
+    type: 'GET_NUM_LAYERS',
     // Payload
     layers
   }

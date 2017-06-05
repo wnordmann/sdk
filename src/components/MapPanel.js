@@ -91,6 +91,7 @@ export class MapPanel extends React.Component {
     };
     this._proxy = context.proxy;
     this._requestHeaders = context.requestHeaders;
+    this.props.getNumLayers(this.map.getLayers().getLength());
     LayerStore.bindMap(this.props.map, this._proxy, this._requestHeaders);
   }
 
@@ -105,7 +106,7 @@ export class MapPanel extends React.Component {
   }
   componentDidMount() {
     var map = this.props.map;
-    this.props.getSDKLayers(map.getLayers())
+    //this.props.getSDKLayers(map.getLayers())
     map.setTarget(ReactDOM.findDOMNode(this.refs.map));
     if (this.props.useHistory) {
       this._initViewFromHash();
@@ -219,14 +220,14 @@ MapPanel.childContextTypes = {
 // Maps state from store to props
 const mapStateToProps = (state, ownProps) => {
   return {
-    layers: state.mapPanel || 'carly'
+    //layers: state.mapPanel || 'carly'
   }
 };
 
 // Maps actions to props
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    getSDKLayers: layers => dispatch(mapPanelActions.getSDKLayers(layers)),
+    //getSDKLayers: layers => dispatch(mapPanelActions.getSDKLayers(layers)),
     getNumLayers: numLayers => dispatch(mapPanelActions.getNumLayers(numLayers))
   }
 };
