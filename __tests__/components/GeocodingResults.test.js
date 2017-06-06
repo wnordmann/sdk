@@ -102,8 +102,8 @@ describe('GeocodingResults', function() {
     ), container);
     geocodingActions.fetchGeocodeSuccess(mockSearchResults, container)
 
-    //var geocodingResults = container.querySelectorAll('.geocoding-results');
-    //assert.equal(geocodingResults.length, 1);
+    // var geocodingResults = container.querySelectorAll('.geocoding-results');
+    // assert.equal(geocodingResults.length, 1);
     ReactDOM.unmountComponentAtNode(container);
   });
 

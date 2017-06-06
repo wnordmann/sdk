@@ -188,7 +188,7 @@
  // Maps actions to props
  const mapDispatchToProps = (dispatch) => {
    return {
-     geocodingClose: search => dispatch(geocodingActions.geocodingClose()),
+     geocodingClose: () => dispatch(geocodingActions.geocodingClose()),
      geocodingSelect: () => dispatch(geocodingActions.geocodingSelect())
    }
  };
