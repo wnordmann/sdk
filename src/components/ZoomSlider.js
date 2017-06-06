@@ -1,4 +1,6 @@
 import React from 'react';
+import {connect} from 'react-redux';
+import * as zoomSliderActions from '../actions/ZoomSliderActions';
 import ol from 'openlayers';
 import debounce from  'debounce';
 import Slider from 'material-ui/Slider';
@@ -11,7 +13,7 @@ import classNames from 'classnames';
  * <ZoomSlider map={map} />
  * ```
  */
-export default class ZoomSlider extends React.PureComponent {
+export class ZoomSlider extends React.PureComponent {
   static propTypes = {
     /**
      * Refresh rate in ms for handling changes from the slider.
@@ -26,41 +28,44 @@ export default class ZoomSlider extends React.PureComponent {
     */
     className: React.PropTypes.string,
     /**
-     * The map to use.
+     * The map to use, only if not provided by context
      */
-    map: React.PropTypes.instanceOf(ol.Map).isRequired
+    map: React.PropTypes.instanceOf(ol.Map)
   };
+
+  static contextTypes = {
+    map: React.PropTypes.instanceOf(ol.Map)
+  }
 
   static defaultProps = {
     refreshRate: 100
   };
 
-  constructor(props) {
+  constructor(props, context) {
     super(props);
-    this.state = {};
+    this.map = context.map || this.props.map;
     this._onChange = debounce(this._onChange, this.props.refreshRate);
   }
   componentDidMount() {
-    this.props.map.getView().on('change:resolution', this._handleChangeResolution, this);
+    this.map.getView().on('change:resolution', this._handleChangeResolution, this);
     this._handleChangeResolution();
   }
   componentWillUnmount() {
-    this.props.map.getView().un('change:resolution', this._handleChangeResolution, this);
+    this.map.getView().un('change:resolution', this._handleChangeResolution, this);
   }
   _handleChangeResolution() {
-    this.setState({
-      value: this._getValue(this.props.map.getView().getResolution())
-    });
+    var olResolution = this.map.getView().getResolution();
+    this.props.getResolutionValue(this._getValue(olResolution))
   }
   _getValue(resolution) {
-    var view = this.props.map.getView();
+    var view = this.map.getView();
     var maxResolution = view.getMaxResolution();
     var minResolution = view.getMinResolution();
     var max = Math.log(maxResolution / minResolution) / Math.log(2);
     return 1 - ((Math.log(maxResolution / resolution) / Math.log(2)) / max);
   }
   _onChange(evt, value) {
-    var map = this.props.map;
+    var map = this.map;
     var view = map.getView();
     var maxResolution = view.getMaxResolution();
     var minResolution = view.getMinResolution();
@@ -70,7 +75,23 @@ export default class ZoomSlider extends React.PureComponent {
   }
   render() {
     return (
-      <Slider style={this.props.style} className={classNames('sdk-component zoom-slider', this.props.className)} onChange={this._onChange.bind(this)} value={this.state.value} />
+      <Slider style={this.props.style} className={classNames('sdk-component zoom-slider', this.props.className)} onChange={this._onChange.bind(this)} value={this.props.resolution} />
     );
   }
 }
+
+// Maps state from store to props
+const mapStateToProps = (state) => {
+  return {
+    resolution: state.zoomSlider.resolution || 0
+  }
+};
+
+// Maps actions to props
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getResolutionValue: resolutionValue => dispatch(zoomSliderActions.getResolutionValue(resolutionValue))
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ZoomSlider);

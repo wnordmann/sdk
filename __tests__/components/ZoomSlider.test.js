@@ -6,7 +6,7 @@ import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
 import 'phantomjs-polyfill-object-assign';
-import ZoomSlider from '../../src/components/ZoomSlider';
+import {ZoomSlider} from '../../src/components/ZoomSlider';
 
 raf.polyfill();
 

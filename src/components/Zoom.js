@@ -11,6 +11,8 @@
  */
 
 import React from 'react';
+import {connect} from 'react-redux';
+import * as zoomActions from '../actions/ZoomActions';
 import ol from 'openlayers';
 import classNames from 'classnames';
 import Button from './Button';
@@ -41,7 +43,7 @@ const messages = defineMessages({
  *
  * ![Zoom](../Zoom.png)
  */
-class Zoom extends React.PureComponent {
+export class Zoom extends React.PureComponent {
   static propTypes = {
     /**
      * Animation duration in milliseconds.
@@ -56,9 +58,9 @@ class Zoom extends React.PureComponent {
      */
     className: React.PropTypes.string,
     /**
-     * The ol3 map to use for zooming.
+     * The ol3 map to use for zooming, only needed if map not provided by context.
      */
-    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    map: React.PropTypes.instanceOf(ol.Map),
     /**
      * Tooltip to show for zoom in button.
      */
@@ -82,7 +84,12 @@ class Zoom extends React.PureComponent {
   };
 
   static contextTypes = {
+    map: React.PropTypes.instanceOf(ol.Map),
     muiTheme: React.PropTypes.object
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
   };
 
   static defaultProps = {
@@ -92,9 +99,14 @@ class Zoom extends React.PureComponent {
 
   constructor(props, context) {
     super(props);
-    this.state = {
-      muiTheme: context.muiTheme || getMuiTheme()
-    };
+    this._muiTheme = context.muiTheme || getMuiTheme();
+    this.map = context.map || this.props.map;
+    if (this.props.hasOwnProperty('getDelta')) {
+      this.props.getDelta(this.props.delta)
+    }
+  }
+  getChildContext() {
+    return {muiTheme: this._muiTheme};
   }
   _zoomIn() {
     this._zoomByDelta(this.props.delta);
@@ -103,7 +115,7 @@ class Zoom extends React.PureComponent {
     this._zoomByDelta(-this.props.delta);
   }
   _zoomByDelta(delta) {
-    var map = this.props.map;
+    var map = this.map;
     var view = map.getView();
     var currentResolution = view.getResolution();
     if (currentResolution) {
@@ -135,4 +147,11 @@ class Zoom extends React.PureComponent {
   }
 }
 
-export default injectIntl(Zoom);
+// Maps actions to props
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getDelta: delta => dispatch(zoomActions.getDelta(delta))
+  }
+};
+
+export default injectIntl(connect(null, mapDispatchToProps)(Zoom));

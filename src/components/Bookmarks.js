@@ -122,11 +122,7 @@ export class Bookmarks extends React.PureComponent {
     /**
      * The map to use for this map panel, only needed if map context is not provided by MapPanel.
      */
-    map: React.PropTypes.instanceOf(ol.Map),
-    /**
-     * The map to use for this map panel, only needed if map context is not provided by MapPanel.
-     */
-    carly: React.PropTypes.func
+    map: React.PropTypes.instanceOf(ol.Map)
   };
 
   static defaultProps = {

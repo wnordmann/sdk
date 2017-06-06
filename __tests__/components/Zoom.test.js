@@ -7,10 +7,8 @@ import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import 'phantomjs-polyfill-object-assign';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Zoom from '../../src/components/Zoom';
+import {Zoom} from '../../src/components/Zoom';
 
 raf.polyfill();
 
@@ -48,9 +46,7 @@ describe('Zoom', function() {
   it('zooms in', function(done) {
     var container = document.createElement('div');
     ReactDOM.render((
-      <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <Zoom intl={intl} map={map} />
-      </MuiThemeProvider>
+      <Zoom intl={intl} map={map} />
     ), container);
     var buttons = container.querySelectorAll('button');
     var zoomin = buttons[0];
