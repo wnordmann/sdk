@@ -13,14 +13,12 @@
  import React from 'react';
  import {connect} from 'react-redux';
  import Popover from 'material-ui/Popover';
- import Menu from 'material-ui/Menu';
- import MenuItem from 'material-ui/MenuItem';
  import ol from 'openlayers';
  import {defineMessages, injectIntl, intlShape} from 'react-intl';
  import classNames from 'classnames';
  import getMuiTheme from 'material-ui/styles/getMuiTheme';
  import * as geocodingActions from '../actions/GeocodingActions';
- import './Geocoding.css';
+ import './GeocodingResults.css';
 
  const messages = defineMessages({
    noresults: {

@@ -16,6 +16,8 @@
  import classNames from 'classnames';
  import {defineMessages, injectIntl, intlShape} from 'react-intl';
  import TextField from 'material-ui/TextField';
+ import {lightWhite, fullWhite} from 'material-ui/styles/colors';
+
 
 
  const messages = defineMessages({
@@ -66,10 +68,12 @@
      return (
        <TextField
          style={this.props.style}
-         className={classNames('sdk-component geocoding', this.props.className)}
+         className={classNames('sdk-component geocoding headerText', this.props.className)}
          ref={node => this.geocodeSearchText = node}
          value={geocodeSearchText}
+         inputStyle= {{color:fullWhite}}
          hintText={formatMessage(messages.placeholder)}
+         hintStyle= {{color: lightWhite}}
          onChange={this._searchAddress.bind(this)}
          />
      )
