@@ -1,4 +1,6 @@
 import React from 'react';
+import {connect} from 'react-redux';
+import * as zoomToLatLonActions from '../actions/ZoomToLatLonActions';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import SelectField from 'material-ui/SelectField';
@@ -111,12 +113,12 @@ const messages = defineMessages({
  * <ZoomToLatLon map={map} zoom={12} />
  * ```
  */
-class ZoomToLatLon extends React.PureComponent {
+export class ZoomToLatLon extends React.PureComponent {
   static propTypes = {
     /**
      * The map onto which to zoom.
      */
-    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    map: React.PropTypes.instanceOf(ol.Map),
     /**
      * Style config.
      */
@@ -136,7 +138,8 @@ class ZoomToLatLon extends React.PureComponent {
   };
 
   static contextTypes = {
-    muiTheme: React.PropTypes.object
+    muiTheme: React.PropTypes.object,
+    map: React.PropTypes.instanceOf(ol.Map)
   };
 
   static childContextTypes = {
@@ -150,9 +153,9 @@ class ZoomToLatLon extends React.PureComponent {
   constructor(props, context) {
     super(props);
     this._muiTheme = context.muiTheme || getMuiTheme();
+    this.map = context.map || this.props.map;
     this.state = {
       dms: false,
-      open: false,
       londirection: 'E',
       latdirection: 'N'
     };
@@ -161,10 +164,10 @@ class ZoomToLatLon extends React.PureComponent {
     return {muiTheme: this._muiTheme};
   }
   openDialog() {
-    this.setState({open: true});
+    this.props.openDialog();
   }
   closeDialog() {
-    this.setState({open: false});
+    this.props.closeDialog();
   }
   _dmsToDegrees(degrees, minutes, seconds, direction) {
     var dd = degrees + minutes / 60 + seconds / (60 * 60);
@@ -192,17 +195,10 @@ class ZoomToLatLon extends React.PureComponent {
         this.state.londirection
       );
     }
-    var view = this.props.map.getView();
+    var view = this.map.getView();
     view.setCenter(ol.proj.fromLonLat([lon, lat], view.getProjection()));
     view.setZoom(this.props.zoom);
     this.closeDialog();
-  }
-  handleChange(value) {
-    if (value === parseInt(value, 10)) {
-      this.setState({
-        value: value
-      });
-    }
   }
   _onNorthSouthChange(evt, idx, value) {
     this.setState({latdirection: value});
@@ -211,6 +207,7 @@ class ZoomToLatLon extends React.PureComponent {
     this.setState({londirection: value});
   }
   _onToggle() {
+    this.props.selectDMS();
     var dms = this.state.dms;
     this.setState({dms: !dms});
   }
@@ -259,7 +256,7 @@ class ZoomToLatLon extends React.PureComponent {
     return (
       <span style={this.props.style}>
         <Button buttonType='Icon' {...this.props} iconClassName='headerIcons ms ms-zoom-to' className={classNames('sdk-component zoom-to-latlon', this.props.className)} onTouchTap={this.openDialog.bind(this)} tooltip={formatMessage(messages.buttontitle)}/>
-        <Dialog actions={actions} open={this.state.open} autoScrollBodyContent={true} onRequestClose={this.closeDialog.bind(this)} modal={true} title={formatMessage(messages.modaltitle)}>
+        <Dialog actions={actions} open={this.props.open} autoScrollBodyContent={true} onRequestClose={this.closeDialog.bind(this)} modal={true} title={formatMessage(messages.modaltitle)}>
           {body}
         </Dialog>
       </span>
@@ -267,4 +264,19 @@ class ZoomToLatLon extends React.PureComponent {
   }
 }
 
-export default injectIntl(ZoomToLatLon);
+// Maps state from store to props
+const mapStateToProps = (state) => {
+  return {
+    open: state.zoomToLatLon.dialogIsOpen
+  }
+};
+
+// Maps actions to props
+const mapDispatchToProps = (dispatch) => {
+  return {
+    openDialog: () => dispatch(zoomToLatLonActions.openDialog()),
+    closeDialog: () => dispatch(zoomToLatLonActions.closeDialog())
+  }
+};
+
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(ZoomToLatLon));
