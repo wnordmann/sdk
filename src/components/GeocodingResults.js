@@ -14,6 +14,7 @@
  import {connect} from 'react-redux';
  import Popover from 'material-ui/Popover';
  import Menu from 'material-ui/Menu';
+ import MenuItem from 'material-ui/MenuItem';
  import ol from 'openlayers';
  import {defineMessages, injectIntl, intlShape} from 'react-intl';
  import classNames from 'classnames';
@@ -149,9 +150,11 @@
          }else {
            icon = (<div className="locationIcon"><i className="fa fa-fw"></i></div>);
          }
-         return (<div className="locationResult" key={result.place_id} onTouchTap={this._zoomTo.bind(this, result)}>
+         return (
+                  <div className="locationResult" key={result.place_id} onTouchTap={this._zoomTo.bind(this, result)}>
                    {icon}{this._formatDisplayName(result)}
-                 </div>);
+                 </div>
+               );
        }, this);
      } else {
        resultNodes = formatMessage(messages.noresults);
@@ -167,11 +170,9 @@
          useLayerForClickAway={false}
          onRequestClose={this._handleRequestClose}
          className={classNames('sdk-component geocoding-results geocoding', this.props.className)}>
-         <Menu>
-           <div className='geoCodingResults'>
-             {resultNodes}
-           </div>
-         </Menu>
+         <div className='geoCodingResults geocodingContainer'>
+           {resultNodes}
+         </div>
        </Popover>
      );
    }
