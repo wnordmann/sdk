@@ -3,19 +3,23 @@ export default (state = [], action) => {
     case 'GEOCODING_SEARCH':
       return {
         geocodingSearchString: action.text,
-        searching:true,
         showGeocodingResults:false
       }
     case 'GEOCODING_SELECT':
       return {
-        latitude:10,
-        longitude:10
+        ...state,
+        showGeocodingResults:false
+      }
+    case 'GEOCODING_CLOSE':
+      return {
+        ...state,
+        showGeocodingResults:false
       }
     case 'FETCH_GEOCODING_SUCCESS':
       return {
+        ...state,
         geocodingSearchResults: action.results,
         geocodingTarget: action.target,
-        searching:false,
         showGeocodingResults:true
       }
     default:

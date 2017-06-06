@@ -51,10 +51,13 @@ export const geocodingResults = (results) => {
     results
   }
 }
-//TODO: Breaking location into lat/long/title/ect
-export const geocodingSelect = (location) => {
+export const geocodingSelect = () => {
   return {
-    type : 'GEOCODING_SELECT',
-    location
+    type : 'GEOCODING_SELECT'
+  }
+}
+export const geocodingClose = () => {
+  return {
+    type : 'GEOCODING_CLOSE'
   }
 }

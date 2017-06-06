@@ -6,7 +6,7 @@ import configureStore from '../stores/GeocodingStore';
 
 const store = configureStore();
 
-class BoundlessSdk extends React.Component {
+export class BoundlessSdk extends React.Component {
   static propTypes = {
     /**
      * @ignore

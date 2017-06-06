@@ -4,9 +4,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {assert} from 'chai';
 import intl from '../mock-i18n';
-import Geocoding from '../../src/components/Geocoding';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import {Geocoding} from '../../src/components/Geocoding';
 
 describe('Geocoding', function() {
 
@@ -18,7 +18,7 @@ describe('Geocoding', function() {
       </MuiThemeProvider>
     ), container);
     var inputs = container.querySelectorAll('input');
-    assert(inputs.length, 1);
+    assert.equal(inputs.length, 1);
     ReactDOM.unmountComponentAtNode(container);
   });
 
