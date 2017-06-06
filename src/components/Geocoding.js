@@ -26,7 +26,7 @@
    }
  });
 
- class geocoding extends React.Component {
+ export class Geocoding extends React.Component {
    static propTypes = {
      /**
       * The maximum number of results to return on a search.
@@ -90,4 +90,4 @@
  };
 
  // Use connect to put them together
- export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(geocoding));
+ export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Geocoding));

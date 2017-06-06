@@ -7,14 +7,17 @@ export default (state = [], action) => {
       }
     case 'GEOCODING_SELECT':
       return {
+        ...state,
         showGeocodingResults:false
       }
     case 'GEOCODING_CLOSE':
       return {
+        ...state,
         showGeocodingResults:false
       }
     case 'FETCH_GEOCODING_SUCCESS':
       return {
+        ...state,
         geocodingSearchResults: action.results,
         geocodingTarget: action.target,
         showGeocodingResults:true

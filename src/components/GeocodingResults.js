@@ -29,7 +29,7 @@
    }
  });
 
- class geocodingResults extends React.Component {
+ export class GeocodingResults extends React.PureComponent {
    static propTypes = {
      /**
       * Css class name to apply on the root element of this component.
@@ -58,15 +58,15 @@
      /**
      * The map to use for this map panel, only needed if map context is not provided by MapPanel.
      */
-     map: React.PropTypes.instanceOf(ol.Map),
-     /**
-      * @ignore
-      */
-     geocodingSelect: React.PropTypes.func,
-     /**
-      * @ignore
-      */
-     geocodingClose: React.PropTypes.func
+     map: React.PropTypes.instanceOf(ol.Map)
+    //  /**
+    //   * @ignore
+    //   */
+    //  geocodingSelect: React.PropTypes.func,
+    //  /**
+    //   * @ignore
+    //   */
+    //  geocodingClose: React.PropTypes.func
    }
    static contextTypes = {
      map: React.PropTypes.instanceOf(ol.Map),
@@ -141,7 +141,7 @@
    render() {
      const {formatMessage} = this.props.intl;
      let resultNodes;
-     if (this.props.results.length > 0) {
+     if (this.props.results) {
        resultNodes = this.props.results.map(function(result) {
          var icon;
          if (result.icon) {
@@ -194,4 +194,4 @@
  };
 
  // Use connect to put them together
- export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(geocodingResults));
+ export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(GeocodingResults));
