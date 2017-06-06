@@ -15,6 +15,7 @@
  import Popover from 'material-ui/Popover';
  import Menu from 'material-ui/Menu';
  import MenuItem from 'material-ui/MenuItem';
+ import ol from 'openlayers';
  import {defineMessages, injectIntl, intlShape} from 'react-intl';
  import classNames from 'classnames';
  import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -29,7 +30,7 @@
    }
  });
 
- class geocodingResults extends React.Component {
+ export class GeocodingResults extends React.PureComponent {
    static propTypes = {
      /**
       * Css class name to apply on the root element of this component.
@@ -46,21 +47,65 @@
      /**
       * @ignore
       */
-     results: React.PropTypes.array
+     results: React.PropTypes.array,
+     /**
+     * The zoom level used when centering the view on a geocoding result.
+     */
+     zoom: React.PropTypes.number,
+     /**
+     * Url to the marker image to use for bookmark position.
+     */
+     markerUrl: React.PropTypes.string,
+     /**
+     * The map to use for this map panel, only needed if map context is not provided by MapPanel.
+     */
+     map: React.PropTypes.instanceOf(ol.Map)
+    //  /**
+    //   * @ignore
+    //   */
+    //  geocodingSelect: React.PropTypes.func,
+    //  /**
+    //   * @ignore
+    //   */
+    //  geocodingClose: React.PropTypes.func
    }
    static contextTypes = {
+     map: React.PropTypes.instanceOf(ol.Map),
      muiTheme: React.PropTypes.object
    };
    static childContextTypes = {
      muiTheme: React.PropTypes.object.isRequired
    };
+   static defaultProps = {
+     zoom: 10,
+     markerUrl: './resources/marker.png'
+   };
    constructor(props, context) {
      super(props);
      this._muiTheme = context.muiTheme || getMuiTheme();
+     this.map = context.map || this.props.map;
    }
    getChildContext() {
      return {muiTheme: this._muiTheme};
    }
+  componentDidMount() {
+    this._layer = new ol.layer.Vector({
+      title: null,
+      managed: false,
+      style: new ol.style.Style({
+        image: new ol.style.Icon({
+          anchor: [0.5, 46],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'pixels',
+          opacity: 0.75,
+          src: this.props.markerUrl
+        })
+      }),
+      source: new ol.source.Vector({wrapX: false})
+    });
+    this.map.addLayer(this._layer);
+  }
+
    _formatDisplayName(result) {
      const placeType = result.address[Object.keys(result.address)[0]];
      if (placeType) {
@@ -70,17 +115,34 @@
 
      return (<span>{result.display_name}</span>);
    }
-   _zoomTo(result) {
-     console.log('Got Nothing Yet');
-   }
-   handleRequestClose = () => {
-     console.log('Got Nothing Yet');
-
-   };
+  _zoomTo(result) {
+    var map = this.map;
+    var center = [parseFloat(result.lon), parseFloat(result.lat)];
+    center = ol.proj.transform(center, 'EPSG:4326', map.getView().getProjection());
+    map.getView().setCenter(center);
+    map.getView().setZoom(this.props.zoom);
+    var source = this._layer.getSource();
+    source.clear();
+    var feature = new ol.Feature({
+      geometry: new ol.geom.Point(center)
+    });
+    if (result.icon) {
+      feature.setStyle(new ol.style.Style({
+        image: new ol.style.Icon({
+          src: result.icon
+        })
+      }));
+    }
+    source.addFeature(feature);
+    this.props.geocodingSelect();
+  }
+    _handleRequestClose = () => {
+      this.props.geocodingClose();
+    };
    render() {
      const {formatMessage} = this.props.intl;
      let resultNodes;
-     if (this.props.results.length > 0) {
+     if (this.props.results) {
        resultNodes = this.props.results.map(function(result) {
          var icon;
          if (result.icon) {
@@ -88,9 +150,11 @@
          }else {
            icon = (<div className="locationIcon"><i className="fa fa-fw"></i></div>);
          }
-         return (<div className="locationResult" key={result.place_id} onTouchTap={this._zoomTo.bind(this, result)}>
+         return (
+                  <div className="locationResult" key={result.place_id} onTouchTap={this._zoomTo.bind(this, result)}>
                    {icon}{this._formatDisplayName(result)}
-                 </div>);
+                 </div>
+               );
        }, this);
      } else {
        resultNodes = formatMessage(messages.noresults);
@@ -104,13 +168,11 @@
          targetOrigin={targetOrigin}
          canAutoPosition={false}
          useLayerForClickAway={false}
-         onRequestClose={this.handleRequestClose}
+         onRequestClose={this._handleRequestClose}
          className={classNames('sdk-component geocoding-results geocoding', this.props.className)}>
-         <Menu>
-           <div className='geoCodingResults'>
-             {resultNodes}
-           </div>
-         </Menu>
+         <div className='geoCodingResults geocodingContainer'>
+           {resultNodes}
+         </div>
        </Popover>
      );
    }
@@ -127,11 +189,10 @@
  // Maps actions to props
  const mapDispatchToProps = (dispatch) => {
    return {
-   // You can now say this.props.createBook
-     // geocodingSearch: search => dispatch(geocodingActions.fetchGeocode(search))
-     closeGeocoding: search => dispatch(geocodingActions.fetchGeocode(search))
+     geocodingClose: () => dispatch(geocodingActions.geocodingClose()),
+     geocodingSelect: () => dispatch(geocodingActions.geocodingSelect())
    }
  };
 
  // Use connect to put them together
- export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(geocodingResults));
+ export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(GeocodingResults));
