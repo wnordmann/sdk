@@ -253,7 +253,7 @@ class ZoomToLatLon extends React.PureComponent {
     return (
       <span style={this.props.style}>
         <Button buttonType='Icon' {...this.props} iconClassName='headerIcons ms ms-zoom-to' className={classNames('sdk-component zoom-to-latlon', this.props.className)} onTouchTap={this.openDialog.bind(this)} tooltip={formatMessage(messages.buttontitle)}/>
-        <Dialog actions={actions} open={this.props.open} autoScrollBodyContent={true} onRequestClose={this.closeDialog.bind(this)} modal={true} title={formatMessage(messages.modaltitle)}>
+        <Dialog actions={actions} open={this.props.open ? this.props.open : false} autoScrollBodyContent={true} onRequestClose={this.closeDialog.bind(this)} modal={true} title={formatMessage(messages.modaltitle)}>
           {body}
         </Dialog>
       </span>

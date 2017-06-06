@@ -16,5 +16,4 @@ const mapDispatchToProps = (dispatch) => {
     closeDialog: () => dispatch(zoomToLatLonActions.closeDialog())
   }
 };
-const ZoomToLatLon = connect(mapStateToProps, mapDispatchToProps)(ZoomToLatLonView);
-export default ZoomToLatLon;
+export default connect(mapStateToProps, mapDispatchToProps)(ZoomToLatLonView);

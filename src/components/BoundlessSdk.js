@@ -2,7 +2,7 @@ import React from 'react';
 import {Provider} from 'react-redux';
 import ol from 'openlayers';
 
-import configureStore from '../stores/GeocodingStore';
+import configureStore from '../stores/Store';
 
 const store = configureStore();
 
