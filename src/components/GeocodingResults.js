@@ -18,7 +18,7 @@
  import classNames from 'classnames';
  import getMuiTheme from 'material-ui/styles/getMuiTheme';
  import * as geocodingActions from '../actions/GeocodingActions';
- import './GeocodingResults.css';
+ //import './GeocodingResults.css';
 
  const messages = defineMessages({
    noresults: {

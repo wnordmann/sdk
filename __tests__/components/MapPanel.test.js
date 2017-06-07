@@ -6,7 +6,7 @@ import {assert} from 'chai';
 import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
-import {MapPanel} from '../../src/components/MapPanel';
+import MapPanel from '../../src/components/MapPanelView';
 
 raf.polyfill();
 
