@@ -13,13 +13,21 @@
 import MapPanelView from './MapPanelView';
 import {connect} from 'react-redux';
 import * as mapPanelActions from '../actions/MapPanelActions';
+//import * as layerActions from '../actions/LayerActions';
 
+// Maps state from store to props
+const mapStateToProps = (state) => {
+  return {
+    //mapTest: state.mapPanel.map || null
+  }
+};
 
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-    getMapLayers: mapLayers => dispatch(mapPanelActions.getMapLayers(mapLayers))
+    getMapLayers: mapLayers => dispatch(mapPanelActions.getMapLayers(mapLayers)),
+    getMap: (map) => dispatch(mapPanelActions.getMap(map))
   }
 };
 
-export default connect(null,mapDispatchToProps)(MapPanelView);
+export default connect(mapStateToProps, mapDispatchToProps)(MapPanelView);

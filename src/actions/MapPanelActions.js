@@ -20,3 +20,14 @@ export const getMapLayers = (mapLayers) => {
     mapLayers
   }
 };
+
+export const getMap = (map) => {
+  return {
+    // Unique identifier
+    type: 'GET_MAP',
+    // Payload
+    map: JSON.stringify(map),
+    layers: JSON.stringify(map.layers),
+    view: JSON.stringify(map.view)
+  }
+};

@@ -5,6 +5,13 @@ export default (state = [], action) => {
         ...state,
         mapLayers: action.mapLayers
       }
+    case 'GET_MAP':
+      return {
+        ...state,
+        map: action.map,
+        layers: action.layers,
+        view: action.view
+      }
     default:
       return state
   }

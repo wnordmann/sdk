@@ -15,7 +15,7 @@ export class BoundlessSdk extends React.Component {
     /**
      * OpenLayers Map
      */
-    map: React.PropTypes.instanceOf(ol.Map).isRequired
+    map: React.PropTypes.instanceOf(ol.Map)
   }
   constructor(props) {
     super(props);

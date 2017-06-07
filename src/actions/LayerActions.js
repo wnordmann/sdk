@@ -17,3 +17,12 @@
      results
    }
  }
+
+ export const removeLayer = (map, layer, group) => {
+   return {
+     type : LAYER.REMOVE,
+     map,
+     layer,
+     group
+   }
+ }
