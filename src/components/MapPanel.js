@@ -26,7 +26,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getMapLayers: mapLayers => dispatch(mapPanelActions.getMapLayers(mapLayers)),
-    getMap: (map) => dispatch(mapPanelActions.getMap(map))
+    getMap: map => dispatch(mapPanelActions.getMap(map))
   }
 };
 

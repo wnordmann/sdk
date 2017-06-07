@@ -8,7 +8,7 @@ import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
 import 'phantomjs-polyfill-object-assign';
-import {Zoom} from '../../src/components/Zoom';
+import Zoom from '../../src/components/ZoomView';
 
 raf.polyfill();
 

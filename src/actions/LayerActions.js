@@ -9,20 +9,37 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
- import {LAYER} from './actionTypes';
 
- export const addLayer = (results) => {
-   return {
-     type : LAYER.ADD,
-     results
-   }
- }
+import LayerConstants from '../constants/LayerConstants';
+import AppDispatcher from '../dispatchers/AppDispatcher';
 
- export const removeLayer = (map, layer, group) => {
-   return {
-     type : LAYER.REMOVE,
-     map,
-     layer,
-     group
-   }
- }
+export default {
+  removeLayer: (layer, group) => {
+    AppDispatcher.handleAction({
+      type: LayerConstants.REMOVE_LAYER,
+      layer,
+      group
+    });
+  },
+  moveLayer: (dragIndex, hoverIndex, layer, group) => {
+    AppDispatcher.handleAction({
+      type: LayerConstants.MOVE_LAYER,
+      dragIndex,
+      hoverIndex,
+      layer,
+      group
+    });
+  },
+  editLayer: (layer) => {
+    AppDispatcher.handleAction({
+      type: LayerConstants.EDIT_LAYER,
+      layer
+    });
+  },
+  styleLayer: (layer) => {
+    AppDispatcher.handleAction({
+      type: LayerConstants.STYLE_LAYER,
+      layer
+    });
+  }
+};
