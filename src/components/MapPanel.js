@@ -12,16 +12,15 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Provider} from 'react-redux';
+import {connect} from 'react-redux';
+import * as mapPanelActions from '../actions/MapPanelActions';
 import classNames from 'classnames';
 import LayerStore from '../stores/LayerStore';
 import Snackbar from 'material-ui/Snackbar';
 import ol from 'openlayers';
 import './MapPanel.css';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import configureStore from '../stores/Store';
 
-const store = configureStore();
 
 const messages = defineMessages({
   errormsg: {
@@ -39,7 +38,7 @@ const messages = defineMessages({
  * <MapPanel id='map' map={map} />
  * ```
  */
-class MapPanel extends React.Component {
+export class MapPanel extends React.PureComponent {
   static propTypes = {
     /**
      * The map to use for this map panel.
@@ -106,6 +105,9 @@ class MapPanel extends React.Component {
   }
   componentDidMount() {
     var map = this.props.map;
+    if (this.props.hasOwnProperty('getMapLayers')) {
+      this.props.getMapLayers(map.getLayers().getLength())
+    }
     map.setTarget(ReactDOM.findDOMNode(this.refs.map));
     if (this.props.useHistory) {
       this._initViewFromHash();
@@ -203,18 +205,23 @@ class MapPanel extends React.Component {
       />);
     }
     return (
-      <Provider store={store} >
-        <div style={this.props.style} id={this.props.id} ref='map' className={classNames('sdk-component map-panel', this.props.className)}>
-          {error}
-          {this.props.children}
-        </div>
-      </Provider>
+      <div style={this.props.style} id={this.props.id} ref='map' className={classNames('sdk-component map-panel', this.props.className)}>
+        {error}
+        {this.props.children}
+      </div>
     );
   }
 }
 
 MapPanel.childContextTypes = {
   map: React.PropTypes.instanceOf(ol.Map)
-}
+};
 
-export default injectIntl(MapPanel);
+// Maps actions to props
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getMapLayers: mapLayers => dispatch(mapPanelActions.getMapLayers(mapLayers))
+  }
+};
+
+export default injectIntl(connect(null, mapDispatchToProps)(MapPanel));
