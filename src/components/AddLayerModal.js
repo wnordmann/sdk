@@ -13,7 +13,23 @@
 import React from 'react';
 import Dropzone from 'react-dropzone';
 import util from '../util';
-import ol from 'openlayers';
+import Map from 'ol/map';
+import GeoJSONFormat from 'ol/format/geojson';
+import KMLFormat from 'ol/format/kml';
+import GPXFormat from 'ol/format/gpx';
+import Style from 'ol/style/style';
+import CircleStyle from 'ol/style/circle';
+import StrokeStyle from 'ol/style/stroke';
+import FillStyle from 'ol/style/fill';
+import VectorLayer from 'ol/layer/vector';
+import VectorSource from 'ol/source/vector';
+import proj from 'ol/proj';
+import Polygon from 'ol/geom/polygon';
+import MultiPolygon from 'ol/geom/multipolygon';
+import LineString from 'ol/geom/linestring';
+import MultiLineString from 'ol/geom/multilinestring';
+import Point from 'ol/geom/point';
+import MultiPoint from 'ol/geom/multipoint';
 import Snackbar from 'material-ui/Snackbar';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import TextField from 'material-ui/TextField';
@@ -227,7 +243,7 @@ class AddLayerModal extends React.PureComponent {
     /**
      * The ol3 map to add layers to.
      */
-    map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    map: React.PropTypes.instanceOf(Map).isRequired,
     /**
      * Css class name to apply on the dialog.
      */
@@ -287,10 +303,10 @@ class AddLayerModal extends React.PureComponent {
     allowCreate: true
   };
   static formats = {
-    'geojson': new ol.format.GeoJSON(),
-    'json': new ol.format.GeoJSON(),
-    'kml': new ol.format.KML({extractStyles: false}),
-    'gpx': new ol.format.GPX()
+    'geojson': new GeoJSONFormat(),
+    'json': new GeoJSONFormat(),
+    'kml': new KMLFormat({extractStyles: false}),
+    'gpx': new GPXFormat()
   };
 
   constructor(props, context) {
@@ -451,14 +467,14 @@ class AddLayerModal extends React.PureComponent {
     var geometryType = this.state.geometryType;
     var attributes = this.state.attributes;
     if (layerName !== '') {
-      var fill = this.state.fillColor ? new ol.style.Fill({color: util.transformColor(this.state.fillColor)}) : undefined;
-      var stroke = this.state.strokeColor ? new ol.style.Stroke({color: util.transformColor(this.state.strokeColor), width: this.state.strokeWidth}) : undefined;
-      var style = new ol.style.Style({
+      var fill = this.state.fillColor ? new FillStyle({color: util.transformColor(this.state.fillColor)}) : undefined;
+      var stroke = this.state.strokeColor ? new StrokeStyle({color: util.transformColor(this.state.strokeColor), width: this.state.strokeWidth}) : undefined;
+      var style = new Style({
         fill: fill,
         stroke: stroke,
-        image: (fill || stroke) ? new ol.style.Circle({stroke: stroke, fill: fill, radius: 7}) : undefined
+        image: (fill || stroke) ? new CircleStyle({stroke: stroke, fill: fill, radius: 7}) : undefined
       });
-      var layer = new ol.layer.Vector({
+      var layer = new VectorLayer({
         title: layerName,
         id: this._generateId(),
         geometryType: geometryType,
@@ -466,7 +482,7 @@ class AddLayerModal extends React.PureComponent {
         isSelectable: true,
         isRemovable: true,
         style: style,
-        source: new ol.source.Vector({wrapX: false, useSpatialIndex: false})
+        source: new VectorSource({wrapX: false, useSpatialIndex: false})
       });
       this.props.map.addLayer(layer);
       FeatureStore.addLayer(layer);
@@ -484,7 +500,7 @@ class AddLayerModal extends React.PureComponent {
       if (extent) {
         var map = this.props.map;
         var view = map.getView();
-        map.getView().fit(ol.proj.transformExtent(extent, 'EPSG:4326', view.getProjection()), map.getSize());
+        map.getView().fit(proj.transformExtent(extent, 'EPSG:4326', view.getProjection()), map.getSize());
       }
       this.close();
     }
@@ -581,12 +597,12 @@ class AddLayerModal extends React.PureComponent {
             var features = format.readFeatures(text, {dataProjection: crs,
               featureProjection: map.getView().getProjection()});
             if (features && features.length > 0) {
-              var fill = me.state.hasFill ? new ol.style.Fill({color: util.transformColor(me.state.fillColor)}) : undefined;
-              var stroke = me.state.hasStroke ? new ol.style.Stroke({color: util.transformColor(me.state.strokeColor), width: me.state.strokeWidth}) : undefined;
-              var style = new ol.style.Style({
+              var fill = me.state.hasFill ? new FillStyle({color: util.transformColor(me.state.fillColor)}) : undefined;
+              var stroke = me.state.hasStroke ? new StrokeStyle({color: util.transformColor(me.state.strokeColor), width: me.state.strokeWidth}) : undefined;
+              var style = new Style({
                 fill: fill,
                 stroke: stroke,
-                image: new ol.style.Circle({stroke: stroke, fill: fill, radius: 7})
+                image: new CircleStyle({stroke: stroke, fill: fill, radius: 7})
               });
               me._counter++;
               var feature = features[0];
@@ -594,19 +610,19 @@ class AddLayerModal extends React.PureComponent {
               attributes.splice(attributes.indexOf(feature.getGeometryName()), 1);
               var geom = feature.getGeometry();
               var geomType;
-              if (geom instanceof ol.geom.Polygon || geom instanceof ol.geom.MultiPolygon) {
+              if (geom instanceof Polygon || geom instanceof MultiPolygon) {
                 geomType = 'Polygon';
-              } else if (geom instanceof ol.geom.LineString || geom instanceof ol.geom.MultiLineString) {
+              } else if (geom instanceof LineString || geom instanceof MultiLineString) {
                 geomType = 'Line';
-              } else if (geom instanceof ol.geom.Point || geom instanceof ol.geom.MultiPoint) {
+              } else if (geom instanceof Point || geom instanceof MultiPoint) {
                 geomType = 'Point';
               }
-              var lyr = new ol.layer.Vector({
+              var lyr = new VectorLayer({
                 id: me._generateId(),
                 attributes: attributes,
                 geometryType: geomType,
                 style: style,
-                source: new ol.source.Vector({
+                source: new VectorSource({
                   features: features,
                   wrapX: false
                 }),
