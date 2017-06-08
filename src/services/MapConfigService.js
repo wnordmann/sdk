@@ -254,6 +254,29 @@ class MapConfigService {
     };
     return config;
   }
+  //TODO: Move this out of mapConfig
+  getMapState(map) {
+    var layers = [];
+    map.getLayers().forEach(function(layer) {
+      if (layer.get('title') !== null) {
+        var config = {};
+        layers.push(config);
+        this.getLayerConfig(config, layer);
+      }
+    }, this);
+    var config = {};
+    config.layers = layers;
+    var view = map.getView();
+    config.view = {
+      projection: view.getProjection().getCode(),
+      center: view.getCenter(),
+      resolution: view.getResolution(),
+      zoom: view.getZoom(),
+      rotation: view.getRotation(),
+      extent: view.calculateExtent()
+    };
+    return config;
+  }
 }
 
 export default new MapConfigService();
