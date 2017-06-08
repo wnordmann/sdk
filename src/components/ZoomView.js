@@ -98,50 +98,47 @@ class Zoom extends React.PureComponent {
   constructor(props, context) {
     super(props);
     this._muiTheme = context.muiTheme || getMuiTheme();
-    this.map = context.map || this.props.map;
+    // this.map = context.map || this.props.map;
     //console.log(context.map)
-    this.map2 = this.props.mapTest
-    if (this.props.hasOwnProperty('getDelta')) {
-      this.props.getDelta(this.props.delta)
-    }
+    this.map = this.props.mapStore;
   }
   getChildContext() {
     return {muiTheme: this._muiTheme};
   }
   _zoomIn() {
-    this._zoomByDelta(this.props.delta);
-  }
-  _zoomOut() {
-    this._zoomByDelta(-this.props.delta);
-  }
-  _zoomByDelta(delta) {
-    //var map = this.map;
-    var view = this.map.getView();
-    var view2 = this.map2.view;
-    var currentResolution = view.getResolution();
-    console.log(currentResolution);
-    var currentResolution2 = view2.resolution;
-    console.log(currentResolution2);
-    if (currentResolution) {
-      var newResolution = view.constrainResolution(currentResolution, delta);
-      if (this.props.duration > 0) {
-/* TODO: not yet API see https://github.com/openlayers/openlayers/issues/6548
-        if (view.getAnimating()) {
-          view.cancelAnimations();
-        }
-*/
-        view.animate({
-          resolution: newResolution,
-          duration: this.props.duration,
-          easing: ol.easing.easeOut
-        });
-      } else {
-        view.setResolution(newResolution);
-      }
+    if (this.props.hasOwnProperty('zoomIn')) {
+      this.props.zoomIn(this.props.delta);
     }
   }
+  _zoomOut() {
+    if (this.props.hasOwnProperty('zoomOut')) {
+      this.props.zoomOut(this.props.delta);
+    }
+  }
+
+//   _zoomByDelta(delta) {
+//     var map = this.map;
+//     var view = map.view;
+//     var currentResolution = view.resolution;
+//     if (currentResolution) {
+//       var newResolution = view.constrainResolution(currentResolution, delta);
+//       if (this.props.duration > 0) {
+// /* TODO: not yet API see https://github.com/openlayers/openlayers/issues/6548
+//         if (view.getAnimating()) {
+//           view.cancelAnimations();
+//         }
+// */
+//         view.animate({
+//           resolution: newResolution,
+//           duration: this.props.duration,
+//           easing: ol.easing.easeOut
+//         });
+//       } else {
+//         view.setResolution(newResolution);
+//       }
+//     }
+//   }
   render() {
-    console.log(this.props)
     const {formatMessage} = this.props.intl;
     return (
       <div style={this.props.style} className={classNames('sdk-component zoom', this.props.className)}>

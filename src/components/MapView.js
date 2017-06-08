@@ -87,14 +87,23 @@
       let view = map.getView();
       // create a "mapAction" and dispatch it.
       // this.props.store.dispatch(mapActions.move(view.getCenter(), view.getResolution()));
-      this.props.setView({
-        center: view.getCenter(),
-        resolution: view.getResolution(),
-        zoom: view.getZoom()
-      });
+      this.props.setView(view.getCenter(),view.getResolution(),view.getZoom()
+      );
     });
   }
+  componentWillUpdate(nextProps, nextState) {
+    const mapView = this.props.map.getView();
+    const stateView = nextProps.mapStore.view;
 
+    const mapCenter = mapView.getCenter();
+    const mapZoom = mapView.getZoom();
+
+    if (mapCenter[0] !== stateView.center[0] || mapCenter[1] !== stateView.center[1] || mapZoom !== stateView.zoom) {
+      this.props.map.getView().setCenter(stateView.center);
+      this.props.map.getView().setZoom(stateView.zoom);
+    }
+
+  }
   render() {
     return (
       <div style={this.props.style} id={this.props.id} ref='map' className={classNames('sdk-component map-panel willie', this.props.className)}>

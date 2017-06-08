@@ -10,13 +10,24 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-// ./src/actions/BookmarksActions.js
-
+import {MAP} from './ActionTypes'
 export const getDelta = (delta) => {
   return {
     // Unique identifier
     type: 'GET_DELTA',
     // Payload
     delta
+  }
+};
+export const zoomIn = (delta) => {
+  return {
+    type: MAP.ZOOM_IN,
+    zoomDelta: delta
+  }
+};
+export const zoomOut = (delta) => {
+  return {
+    type: MAP.ZOOM_OUT,
+    zoomDelta: delta
   }
 };

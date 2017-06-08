@@ -17,14 +17,16 @@ import * as zoomActions from '../actions/ZoomActions';
 // Maps state from store to props
 const mapStateToProps = (state) => {
   return {
-    mapTest: JSON.parse(state.mapPanel.map) || null
+    mapStore: state.mapState || null
   }
 };
 
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-    getDelta: delta => dispatch(zoomActions.getDelta(delta))
+    // getDelta: delta => dispatch(zoomActions.getDelta(delta))
+    zoomIn: delta => dispatch(zoomActions.zoomIn(delta)),
+    zoomOut: delta => dispatch(zoomActions.zoomOut(delta))
   }
 };
 

@@ -274,6 +274,7 @@ class MapConfigService {
       zoom: view.getZoom(),
       rotation: view.getRotation(),
       extent: view.calculateExtent()
+      //TODO: Checking min and max
     };
     return config;
   }

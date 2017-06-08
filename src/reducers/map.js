@@ -13,8 +13,24 @@ export default (state = [], action) => {
           resolution:action.resolution
         }
       };
-
-
+    case MAP.ZOOM_IN:
+    //TODO:Check MaxZoom
+      return {
+        ...state,
+        view:{
+          ...state.view,
+          zoom:state.view.zoom + action.zoomDelta
+        }
+      }
+    case MAP.ZOOM_OUT:
+      //TODO:Check MinZoom
+      return {
+        ...state,
+        view:{
+          ...state.view,
+          zoom:state.view.zoom - action.zoomDelta
+        }
+      }
     default:
       return state
   }

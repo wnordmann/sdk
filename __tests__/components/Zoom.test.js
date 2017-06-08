@@ -9,6 +9,7 @@ import ol from 'openlayers';
 import intl from '../mock-i18n';
 import 'phantomjs-polyfill-object-assign';
 import Zoom from '../../src/components/ZoomView';
+import Map from '../../src/components/Map';
 
 raf.polyfill();
 
@@ -46,7 +47,9 @@ describe('Zoom', function() {
   it('zooms in', function(done) {
     var container = document.createElement('div');
     ReactDOM.render((
-      <Zoom intl={intl} map={map} />
+      <Map map={map}>
+        <Zoom intl={intl} />
+      </Map>
     ), container);
     var buttons = container.querySelectorAll('button');
     var zoomin = buttons[0];
