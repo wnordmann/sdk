@@ -11,6 +11,7 @@
  */
 
 // ./src/actions/BookmarksActions.js
+import MapConfigService from '../services/MapConfigService';
 
 export const getMapLayers = (mapLayers) => {
   return {
@@ -26,8 +27,9 @@ export const getMap = (map) => {
     // Unique identifier
     type: 'GET_MAP',
     // Payload
-    map: JSON.stringify(map),
-    layers: JSON.stringify(map.layers),
-    view: JSON.stringify(map.view)
+    map: MapConfigService.save(map)
+    //mapJ: JSON.stringify(MapConfigService.save(map)),
+    //layers: JSON.stringify(map.layers),
+    //view: JSON.stringify(map.view)
   }
 };

@@ -90,9 +90,9 @@ class MapPanel extends React.PureComponent {
     };
     this._proxy = context.proxy;
     this._requestHeaders = context.requestHeaders;
-    var config = MapConfigService.save(this.props.map);
+    //var config = MapConfigService.save(this.props.map);
     if (this.props.hasOwnProperty('getMap')) {
-      this.props.getMap(config)
+      this.props.getMap(this.props.map)
     }
     LayerStore.bindMap(this.props.map, this._proxy, this._requestHeaders);
   }
