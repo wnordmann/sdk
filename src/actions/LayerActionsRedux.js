@@ -9,25 +9,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
+ import {LAYER} from './actionTypes';
 
-import ZoomView from './ZoomView';
-import {connect} from 'react-redux';
-import * as zoomActions from '../actions/ZoomActions';
-
-// Maps state from store to props
-const mapStateToProps = (state) => {
-  return {
-    mapStore: state.mapState || null
-  }
-};
-
-// Maps actions to props
-const mapDispatchToProps = (dispatch) => {
-  return {
-    // getDelta: delta => dispatch(zoomActions.getDelta(delta))
-    zoomIn: delta => dispatch(zoomActions.zoomIn(delta)),
-    zoomOut: delta => dispatch(zoomActions.zoomOut(delta))
-  }
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ZoomView);
+ export const addLayer = (results) => {
+   return {
+     type : LAYER.ADD,
+     results
+   }
+ }
+/*
+ export const removeLayer = (map, layer, group) => {
+   return {
+     type : LAYER.REMOVE,
+     map,
+     layer,
+     group
+   }
+ }
+ */

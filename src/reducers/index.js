@@ -1,18 +1,22 @@
 import {combineReducers} from 'redux';
-import bookmarks from './bookmarks';
-import geocoding from './geocoding';
-import mapPanel from './mapPanel';
-import zoom from './zoom';
-import zoomSlider from './zoomSlider';
-import zoomToLatLon from './zoomToLatLon';
+// import bookmarks from './bookmarks';
+// import geocoding from './geocoding';
+// import layers from './layers';
+import mapState from './map';
+// import zoomSlider from './zoomSlider';
+// import zoomToLatLon from './zoomToLatLon';
 
+// const reducer = combineReducers({
+//   bookmarks,
+//   geocoding,
+//   layers,
+//   map,
+//   zoom,
+//   zoomSlider,
+//   zoomToLatLon
+// })
 const reducer = combineReducers({
-  bookmarks,
-  geocoding,
-  mapPanel,
-  zoom,
-  zoomSlider,
-  zoomToLatLon
+  mapState
 })
 
 export default reducer

@@ -10,9 +10,9 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import ZoomView from './ZoomView';
+import MapView from './MapView';
 import {connect} from 'react-redux';
-import * as zoomActions from '../actions/ZoomActions';
+import * as MapActions from '../actions/MapActions';
 
 // Maps state from store to props
 const mapStateToProps = (state) => {
@@ -24,10 +24,10 @@ const mapStateToProps = (state) => {
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-    // getDelta: delta => dispatch(zoomActions.getDelta(delta))
-    zoomIn: delta => dispatch(zoomActions.zoomIn(delta)),
-    zoomOut: delta => dispatch(zoomActions.zoomOut(delta))
+    // getMapLayers: mapLayers => dispatch(mapPanelActions.getMapLayers(mapLayers)),
+    getMap: map => dispatch(MapActions.getMap(map)),
+    setView: (center, resolution, zoom) => dispatch(MapActions.setView(center, resolution, zoom))
   }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ZoomView);
+export default connect(mapStateToProps, mapDispatchToProps)(MapView);

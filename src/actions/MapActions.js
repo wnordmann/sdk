@@ -10,24 +10,18 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import ZoomView from './ZoomView';
-import {connect} from 'react-redux';
-import * as zoomActions from '../actions/ZoomActions';
+ import {MAP} from './ActionTypes';
+ import MapConfigService from '../services/MapConfigService';
 
-// Maps state from store to props
-const mapStateToProps = (state) => {
-  return {
-    mapStore: state.mapState || null
-  }
-};
-
-// Maps actions to props
-const mapDispatchToProps = (dispatch) => {
-  return {
-    // getDelta: delta => dispatch(zoomActions.getDelta(delta))
-    zoomIn: delta => dispatch(zoomActions.zoomIn(delta)),
-    zoomOut: delta => dispatch(zoomActions.zoomOut(delta))
-  }
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ZoomView);
+ export const getMap = (map) => {
+   return {
+     type: MAP.GET_CONFIG,
+     mapState: MapConfigService.getMapState(map)
+   }
+ }
+ export const setView = (center, resolution, zoom) => {
+   return {
+     type: MAP.SET_VIEW,
+     center, resolution, zoom
+   }
+ }
