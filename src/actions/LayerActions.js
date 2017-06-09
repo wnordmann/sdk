@@ -10,36 +10,10 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import LayerConstants from '../constants/LayerConstants';
-import AppDispatcher from '../dispatchers/AppDispatcher';
+ import {LAYER} from './ActionTypes';
 
-export default {
-  removeLayer: (layer, group) => {
-    AppDispatcher.handleAction({
-      type: LayerConstants.REMOVE_LAYER,
-      layer,
-      group
-    });
-  },
-  moveLayer: (dragIndex, hoverIndex, layer, group) => {
-    AppDispatcher.handleAction({
-      type: LayerConstants.MOVE_LAYER,
-      dragIndex,
-      hoverIndex,
-      layer,
-      group
-    });
-  },
-  editLayer: (layer) => {
-    AppDispatcher.handleAction({
-      type: LayerConstants.EDIT_LAYER,
-      layer
-    });
-  },
-  styleLayer: (layer) => {
-    AppDispatcher.handleAction({
-      type: LayerConstants.STYLE_LAYER,
-      layer
-    });
-  }
-};
+ export const getLayers = () => {
+   return {
+     type: LAYER.GET_INFO
+   }
+ }
