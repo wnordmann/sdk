@@ -1,7 +1,7 @@
 {
   "name": "boundless-sdk-build",
   "private": true,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "SDK for OpenLayers 3 and React plus Flux",
   "main": "index.js",
   "repository": {
@@ -78,6 +78,7 @@
     "flux": "^2.0.1",
     "hint.css": "^2.4.0",
     "jison": "^0.4.17",
+    "@boundlessgeo/jsonix": "^2.4.3",
     "jspdf": "^1.3.2",
     "keymirror": "~0.1.0",
     "lodash.uniqueid": "^3.0.0",

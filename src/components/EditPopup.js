@@ -133,10 +133,12 @@ class EditPopup extends React.Component {
             feature: action.feature,
             layer: action.layer,
             values: action.feature.getProperties()
+          }, function() {
+            me._onChangeLayers();
+            me._callback = action.callback;
+            me.setVisible(true);
+            me.overlayPopup.setPosition(ol.extent.getTopRight(action.feature.getGeometry().getExtent()));
           });
-          me._callback = action.callback;
-          me.setVisible(true);
-          me.overlayPopup.setPosition(ol.extent.getTopRight(action.feature.getGeometry().getExtent()));
           break;
         default:
           break;
