@@ -10,9 +10,12 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
+<<<<<<< cb1e2335d81b50a87159a48b1baea84164578168
 // ./src/actions/BookmarksActions.js
 import MapConfigService from '../services/MapConfigService';
 
+=======
+>>>>>>> Working with redux
 export const getMapLayers = (mapLayers) => {
   return {
     // Unique identifier

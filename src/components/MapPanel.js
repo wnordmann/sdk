@@ -13,7 +13,12 @@
 import MapPanelView from './MapPanelView';
 import {connect} from 'react-redux';
 import * as mapPanelActions from '../actions/MapPanelActions';
-//import * as layerActions from '../actions/LayerActions';
+import classNames from 'classnames';
+import LayerStore from '../stores/LayerStore';
+import Snackbar from 'material-ui/Snackbar';
+import ol from 'openlayers';
+import './MapPanel.css';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 // Maps state from store to props
 const mapStateToProps = (state) => {
@@ -22,12 +27,22 @@ const mapStateToProps = (state) => {
   }
 };
 
+const mapStateToProps = (state, ownProps) => {
+  return {
+    layers: state.layer.layerlist
+  }
+};
+
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-    getMapLayers: mapLayers => dispatch(mapPanelActions.getMapLayers(mapLayers)),
     getMap: map => dispatch(mapPanelActions.getMap(map))
   }
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapPanelView);
+    addLayer: layer => dispatch(LayerActions.addLayer(layer))
+  }
+};
+
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(MapPanel));
