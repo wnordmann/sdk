@@ -97,10 +97,10 @@
 
     const mapCenter = mapView.getCenter();
     const mapZoom = mapView.getZoom();
-
     if (mapCenter[0] !== stateView.center[0] || mapCenter[1] !== stateView.center[1] || mapZoom !== stateView.zoom) {
-      this.props.map.getView().setCenter(stateView.center);
-      this.props.map.getView().setZoom(stateView.zoom);
+      mapView.setCenter(stateView.center);
+      mapView.setZoom(stateView.zoom);
+      this.props.setView(mapView.getCenter(),mapView.getResolution(),mapView.getZoom());
     }
 
   }
