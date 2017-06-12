@@ -56,12 +56,12 @@ describe('HomeButton', function() {
 
 
     const init_center = [0,0];
-    const init_rez = 100;
+    const init_zoom = 11;
     // set an initial view
-    store.dispatch(setView(init_center, init_rez));
+    store.dispatch(setView(init_center, init_zoom));
 
     // move the map
-    store.dispatch(setView([100, 100], 1000));
+    store.dispatch(setView([100, 100], 22));
 
     // "click" the button.
     TestUtils.Simulate.touchTap(button);
@@ -69,7 +69,7 @@ describe('HomeButton', function() {
     let view = store.getState().mapState.view;
 
     expect(view.center).to.deep.equal(init_center);
-    expect(view.resolution).to.equal(init_rez);
+    expect(view.zoom).to.equal(init_zoom);
 
     // check that the state has goen back t
     // assert.equal(map.getView().getZoom(), 1);

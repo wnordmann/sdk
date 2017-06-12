@@ -48,11 +48,7 @@ class HomeButton extends React.PureComponent {
      */
     center: React.PropTypes.arrayOf(React.PropTypes.number),
     /**
-     * Resolution for the 'home' view.
-     */
-    resolution: React.PropTypes.number,
-    /**
-     * Alternatively, the default view can be specified with a zoom level.
+     * The default view can be specified with a zoom level.
      */
     zoom: React.PropTypes.number,
     /**
@@ -76,12 +72,11 @@ class HomeButton extends React.PureComponent {
     let view = null;
 
     // the state can be seeded automatically or manually,
-    // when center and resolution are set then that is used for
+    // when center and zoom are set then that is used for
     // the default view.
     if (props.center) {
       this.state.view = {
         center: props.center,
-        resolution: props.resolution,
         zoom: props.zoom
       };
     }
@@ -102,8 +97,8 @@ class HomeButton extends React.PureComponent {
     } else {
       // short hand the view
       const v = this.state.view;
-      // set the map to the know resolution
-      this.props.dispatch(setView(v.center, v.resolution, v.zoom));
+      // set the view using the center and zoom
+      this.props.dispatch(setView(v.center, v.zoom));
     }
   }
 
