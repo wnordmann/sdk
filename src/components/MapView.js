@@ -14,16 +14,8 @@
  import ReactDOM from 'react-dom';
  import ol from 'openlayers';
  import './MapPanel.css';
- import {defineMessages, injectIntl, intlShape} from 'react-intl';
+ import {injectIntl, intlShape} from 'react-intl';
  import classNames from 'classnames';
-
- const messages = defineMessages({
-   errormsg: {
-     id: 'layerlist.errormsg',
-     description: 'Error message if loading tiles / images fails',
-     defaultMessage: 'There was an error loading tiles.'
-   }
- });
 
 
  /**
@@ -74,7 +66,7 @@
     this._proxy = context.proxy;
     this._requestHeaders = context.requestHeaders;
     if (this.props.hasOwnProperty('getMap')) {
-      this.props.getMap(this.props.map);
+      //this.props.getMap(this.props.map);
     }
   }
 
@@ -87,8 +79,7 @@
       let view = map.getView();
       // create a "mapAction" and dispatch it.
       // this.props.store.dispatch(mapActions.move(view.getCenter(), view.getResolution()));
-      this.props.setView(view.getCenter(),view.getResolution(),view.getZoom()
-      );
+      this.props.setView(view.getCenter(), view.getZoom());
     });
   }
   componentWillUpdate(nextProps, nextState) {
@@ -106,7 +97,7 @@
   }
   render() {
     return (
-      <div style={this.props.style} id={this.props.id} ref='map' className={classNames('sdk-component map-panel willie', this.props.className)}>
+      <div style={this.props.style} id={this.props.id} ref='map' className={classNames('sdk-component map-panel', this.props.className)}>
         {this.props.children}
       </div>
     );
