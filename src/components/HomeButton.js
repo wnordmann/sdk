@@ -11,11 +11,14 @@
  */
 
 import React from 'react';
-import ol from 'openlayers';
+import {connect} from 'react-redux';
+
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import classNames from 'classnames';
 import Button from './Button';
 import HomeIcon from 'material-ui/svg-icons/maps/zoom-out-map';
+
+import {setView} from '../actions/MapActions';
 
 const messages = defineMessages({
   buttontitle: {
@@ -37,17 +40,21 @@ const messages = defineMessages({
 class HomeButton extends React.PureComponent {
   static propTypes = {
     /**
-     * The ol3 map for whose view the initial center and zoom should be restored.
-     */
-    map: React.PropTypes.instanceOf(ol.Map).isRequired,
-    /**
      * Position of the tooltip.
      */
     tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left']),
     /**
-     * Extent to fit on the map on pressing this button. If not set, the initial extent of the map will be used.
+     * Center Point for the 'home' view.
      */
-    extent: React.PropTypes.arrayOf(React.PropTypes.number),
+    center: React.PropTypes.arrayOf(React.PropTypes.number),
+    /**
+     * Resolution for the 'home' view.
+     */
+    resolution: React.PropTypes.number,
+    /**
+     * Alternatively, the default view can be specified with a zoom level.
+     */
+    zoom: React.PropTypes.number,
     /**
      * Style config.
      */
@@ -64,37 +71,68 @@ class HomeButton extends React.PureComponent {
 
   constructor(props) {
     super(props);
-    if (!this.props.extent) {
-      var view = this.props.map.getView();
-      this._center = view.getCenter();
-      this._resolution = view.getResolution();
-      if (this._center === null) {
-        view.once('change:center', function(evt) {
-          this._center = evt.target.getCenter();
-        }, this);
-      }
-      if (this._resolution === undefined) {
-        view.once('change:resolution', function(evt) {
-          this._resolution = evt.target.getResolution();
-        }, this);
-      }
+
+    // default the view to null
+    let view = null;
+
+    // the state can be seeded automatically or manually,
+    // when center and resolution are set then that is used for
+    // the default view.
+    if (props.center) {
+      this.state.view = {
+        center: props.center,
+        resolution: props.resolution,
+        zoom: props.zoom
+      };
     }
+
+    this.state = {
+      view
+    };
+
+    this._goHome = this._goHome.bind(this);
   }
+
   _goHome() {
-    var view = this.props.map.getView();
-    if (this.props.extent) {
-      view.fit(this.props.extent, this.props.map.getSize(), {constrainResolution: false});
-    } else if (this._center !== null && this._resolution !== undefined) {
-      view.setCenter(this._center);
-      view.setResolution(this._resolution);
+    // helpful hint...
+    if (this.state.view === null) {
+      // TODO: There should be a supported way of notifying the user
+      //       of a misconfiguration.
+      // console.error('No default "home" view has been set.');
+    } else {
+      // short hand the view
+      const v = this.state.view;
+      // set the map to the know resolution
+      this.props.dispatch(setView(v.center, v.resolution, v.zoom));
     }
   }
+
+  componentWillUpdate(nextProps, nextState) {
+    // on the first update when there is a view available,
+    //  set the view for this state.
+    if (nextProps.map.view && this.state.view === null && nextState.view === null) {
+      this.setState({view: Object.assign({}, nextProps.map.view)});
+    }
+  }
+
   render() {
     const {formatMessage} = this.props.intl;
     return (
-      <Button style={this.props.style} tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} secondary={true} className={classNames('sdk-component home-button', this.props.className)} tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._goHome.bind(this)} ><HomeIcon /></Button>
+      <Button style={this.props.style} tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} secondary={true} className={classNames('sdk-component home-button', this.props.className)} tooltip={formatMessage(messages.buttontitle)} onTouchTap={this._goHome} ><HomeIcon /></Button>
     );
   }
 }
 
-export default injectIntl(HomeButton);
+const mapStateToProps = (state) => {
+  return {
+    map: state.mapState
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatch: dispatch
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(HomeButton));
