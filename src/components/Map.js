@@ -24,9 +24,8 @@ const mapStateToProps = (state) => {
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-    // getMapLayers: mapLayers => dispatch(mapPanelActions.getMapLayers(mapLayers)),
     getMap: map => dispatch(MapActions.getMap(map)),
-    setView: (center, resolution, zoom) => dispatch(MapActions.setView(center, resolution, zoom))
+    setView: (center, zoom) => dispatch(MapActions.setView(center, zoom))
   }
 };
 

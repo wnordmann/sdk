@@ -1,6 +1,7 @@
 export const LAYER = {
   ADD: 'LAYER_ADD',
-  REMOVE: 'LAYER_REMOVE'
+  REMOVE: 'LAYER_REMOVE',
+  GET_INFO:'LAYER_GET_INFO'
 };
 
 export const MAP = {

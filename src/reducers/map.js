@@ -9,8 +9,7 @@ export default (state = [], action) => {
         view:{
           ...state.view,
           center:action.center,
-          zoom:action.zoom,
-          resolution:action.resolution
+          zoom:action.zoom
         }
       };
     case MAP.ZOOM_IN:

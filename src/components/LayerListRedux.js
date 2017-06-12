@@ -10,18 +10,23 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
- import {MAP} from './ActionTypes';
- import MapConfigService from '../services/MapConfigService';
+import LayerListReduxView from './LayerListReduxView';
+import {connect} from 'react-redux';
+import * as MapActions from '../actions/MapActions';
 
- export const getMap = (map) => {
-   return {
-     type: MAP.GET_CONFIG,
-     mapState: MapConfigService.getMapState(map)
-   }
- }
- export const setView = (center, zoom) => {
-   return {
-     type: MAP.SET_VIEW,
-     center, zoom
-   }
- }
+// Maps state from store to props
+const mapStateToProps = (state) => {
+  return {
+    mapStore: state.mapState || null
+  }
+};
+
+// Maps actions to props
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getMapLayers: map => dispatch(MapActions.getMapLayers(map)),
+    addLayer: (layer) => dispatch(MapActions.setView(layer))
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LayerListReduxView);
