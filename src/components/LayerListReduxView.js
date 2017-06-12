@@ -233,6 +233,7 @@ class LayerListRedux extends React.PureComponent {
   };
   constructor(props, context) {
     super(props);
+    //TODO: Move to redux state
     this.state = {
       visible: props.showOnStart,
       addLayerOpen: false,
@@ -241,10 +242,78 @@ class LayerListRedux extends React.PureComponent {
     };
     this.moveLayer = debounce(this.moveLayer, 100);
   }
+ componentWillMount() {
+   //TODO: Setup state listeners
+   if (this.props.inlineDialogs) {
+     this.setState({visible: true});
+   }
+ }
+ componentWillUnmount() {
+   //TODO: Remove state listeners
+ }
  componentDidMount() {
+   var forEachLayer = function(layers, layer) {
+     if (layer.type === 'Group') {
+       layer.getLayers().forEach(function(groupLayer) {
+         forEachLayer(layers, groupLayer);
+       });
+     } else if (layer.properties.type === 'base') {
+       layers.push(layer);
+     }
+   };
+   var baseLayers = [];
+   forEachLayer(baseLayers, this.props.map.getLayerGroup());
+   if (baseLayers.length > 0) {
+     for (var i = 0; i < baseLayers.length; i++) {
+       baseLayers[i].setVisible(false);
+     }
+     baseLayers[0].setVisible(true);
+     this.setState({baseLayer: baseLayers[0].get('id')});
+   }
  }
- componentWillUpdate(nextProps, nextState) {
+ _onChange() {
+   //TODO: Build on change
+  //  this.setState(LayerStore.getState());
  }
+ renderLayerGroup(group) {
+   return this.renderLayers(group.getLayers().getArray().slice(0).reverse(), group);
+ }
+ renderLayers(layers, group) {
+   //TODO: Move to filter in state
+   var me = this;
+   var layerNodes = [];
+   for (var i = 0, ii = layers.length; i < ii; ++i) {
+     var lyr = layers[i];
+     if (!this.props.filter || this.props.filter(lyr) === true) {
+       layerNodes.push(me.getLayerNode(lyr, group, (ii - i) - 1));
+     }
+   }
+   return layerNodes;
+ }
+ _showAddLayer() {
+   //TODO: move to redux state
+   this.setState({
+     addLayerOpen: true
+   });
+ }
+ _closeAddLayer() {
+   //TODO: move to redux state
+   this.setState({
+     addLayerOpen: false
+   });
+ }
+ _togglePanel() {
+   //TODO: move to redux state
+   var newVisible = !this.state.visible;
+   if (newVisible || this._modalOpen !== true) {
+     this.setState({visible: newVisible});
+   }
+ }
+ _setBaseLayer(layer) {
+   //TODO: move to redux state
+   this.setState({baseLayer: layer});
+ }
+ //TODO: continue with line 319 and getLayerNode
  render() {
    return (
      <div>Layer</div>
