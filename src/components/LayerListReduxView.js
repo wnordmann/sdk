@@ -18,6 +18,8 @@ import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import LayerIdService from '../services/LayerIdService';
+import LayerListItem from './LayerListItem';
+
 import Label from './Label';
 import AddLayerModal from './AddLayerModal';
 import BaseMapModal from './BaseMapModal';
@@ -155,15 +157,15 @@ class LayerListRedux extends React.PureComponent {
     /**
      * Should we allow adding layers?
      */
-    addLayer: React.PropTypes.shape({
-      sources: React.PropTypes.arrayOf(React.PropTypes.shape({
-        title: React.PropTypes.string.isRequired,
-        type: React.PropTypes.string.isRequired,
-        url: React.PropTypes.string.isRequired,
-        properties: React.PropTypes.object
-      })),
-      allowUserInput: React.PropTypes.bool
-    }),
+    // addLayer: React.PropTypes.shape({
+    //   sources: React.PropTypes.arrayOf(React.PropTypes.shape({
+    //     title: React.PropTypes.string.isRequired,
+    //     type: React.PropTypes.string.isRequired,
+    //     url: React.PropTypes.string.isRequired,
+    //     properties: React.PropTypes.object
+    //   })),
+    //   allowUserInput: React.PropTypes.bool
+    // }),
     /**
      * Css class name to apply on the root element of this component.
      */
@@ -257,18 +259,18 @@ class LayerListRedux extends React.PureComponent {
        layer.getLayers().forEach(function(groupLayer) {
          forEachLayer(layers, groupLayer);
        });
-     } else if (layer.properties.type === 'base') {
+     } else if (layer.type === 'base') {
        layers.push(layer);
      }
    };
    var baseLayers = [];
-   forEachLayer(baseLayers, this.props.map.getLayerGroup());
+   forEachLayer(baseLayers, this.props.mapStore.layers);
    if (baseLayers.length > 0) {
      for (var i = 0; i < baseLayers.length; i++) {
        baseLayers[i].setVisible(false);
      }
      baseLayers[0].setVisible(true);
-     this.setState({baseLayer: baseLayers[0].get('id')});
+     this.setState({baseLayer: baseLayers[0].id});
    }
  }
  _onChange() {
@@ -276,7 +278,7 @@ class LayerListRedux extends React.PureComponent {
   //  this.setState(LayerStore.getState());
  }
  renderLayerGroup(group) {
-   return this.renderLayers(group.getLayers().getArray().slice(0).reverse(), group);
+   return this.renderLayers(group.children, group);
  }
  renderLayers(layers, group) {
    //TODO: Move to filter in state
@@ -313,11 +315,90 @@ class LayerListRedux extends React.PureComponent {
    //TODO: move to redux state
    this.setState({baseLayer: layer});
  }
- //TODO: continue with line 319 and getLayerNode
+ getLayerNode(lyr, group, idx) {
+   if (this.props.addBaseMap && lyr.properties.type === 'base' && !lyr.properties.visible) {
+     return undefined;
+   }
+   if (lyr.id === undefined) {
+     lyr.id = LayerIdService.generateId();
+   }
+   if (lyr.properties.title !== null) {
+     if (lyr.type === 'Group') {
+       var children = (lyr.showContent === false) ? [] : this.renderLayerGroup(lyr);
+       return (
+         <div>Group</div>
+       );
+     } else {
+       return (
+         <div>Not group</div>
+       );
+     }
+   }
+ }
+ _showAddBaseMap() {
+   this.refs.addbasemapmodal.getWrappedInstance().open();
+ }
+ moveLayer(dragIndex, hoverIndex, layer, group) {
+//TODO: Make move action
+  //  LayerActions.moveLayer(dragIndex, hoverIndex, layer, group);
+ }
  render() {
+   const {formatMessage} = this.props.intl;
+  //  var layers = this.state.layers.slice(0).reverse();
+   var layers = this.props.mapStore.layers;
+   var divClass = {
+     'layer-switcher': true,
+     'sdk-component': true,
+     'layer-list': true
+   };
+   var tipLabel = this.props.tipLabel ? (<div className='layer-list-header'><Label>{this.props.tipLabel}</Label></div>) : undefined;
+   var addLayer, layerModal, baseModal, button;
+
+   if (!this.props.inlineDialogs) {
+     button = (<Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={this._togglePanel.bind(this)}><LayersIcon /></Button>);
+   }
+
+   if (this.props.addLayer || this.props.addBaseMap || this.props.showUpload || this.props.showNew) {
+     var layerAdd, baseAdd;
+     if (this.props.addLayer || this.props.showUpload || this.props.showNew) {
+       if (!this.props.inlineDialogs) {
+         layerAdd = (<Button
+           buttonType='Icon'
+           iconClassName='ms ms-ogc-web-services'
+           onTouchTap={this._showAddLayer.bind(this)}
+           tooltip={formatMessage(messages.addlayertext)} />);
+       }
+       layerModal = <AddLayerModal allowUpload={this.props.showUpload} allowCreate={this.props.showNew} open={(this.props.addLayer && this.props.addLayer.open !== undefined) ? this.props.addLayer.open : this.state.addLayerOpen} inline={this.props.inlineDialogs} srsName={this.props.map.getView().getProjection().getCode()} allowUserInput={this.props.addLayer && this.props.addLayer.allowUserInput} onRequestClose={this.props.addLayer && this.props.addLayer.onRequestClose ? this.props.addLayer.onRequestClose : this._closeAddLayer.bind(this)} sources={this.props.addLayer ? this.props.addLayer.sources : undefined} map={this.props.map}  />;
+     }
+     if (this.props.addBaseMap) {
+       baseAdd = <Button buttonType='Icon' iconClassName='ms ms-layers-base' tooltip={formatMessage(messages.addbasemaptext)} onTouchTap={this._showAddBaseMap.bind(this)} disableTouchRipple={true}/>;
+       //Fallback to handle original implementation of BaseMapModal using single prop addBaseMap.tileServices
+       //over new implementation using 2 props addBaseMap and baseMapTileServices
+       var tileServices = this.props.baseMapTileServices || this.props.addBaseMap.tileServices;
+       baseModal = <BaseMapModal tileServices={tileServices} map={this.props.map} ref='addbasemapmodal' />;
+     }
+     addLayer = (
+       <span>
+         {layerAdd}
+         {baseAdd}
+       </span>
+     );
+   }
    return (
-     <div>Layer</div>
-   )
+     <div ref='parent' className={classNames(divClass, this.props.className)}>
+       {button}
+       <Paper style={{display : this.state.visible ? 'block' : 'none', minWidth:this.props.minWidth}} zDepth={0} className='layer-tree-panel'>
+         {tipLabel}
+         <List className='layer-list-list'>
+           {this.renderLayers(layers)}
+         </List>
+         {addLayer}
+       </Paper>
+       {this.props.children}
+       {layerModal}
+       {baseModal}
+     </div>
+   );
  }
 }
-export default injectIntl(LayerListRedux);
+export default injectIntl(DragDropContext(HTML5Backend)(LayerListRedux));
