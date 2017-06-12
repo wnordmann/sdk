@@ -67,7 +67,6 @@
     "react-tap-event-plugin": "^1.0.0"
   },
   "dependencies": {
-    "@boundlessgeo/jsonix": "^2.4.1",
     "axios": "^0.16.1",
     "blueimp-canvas-to-blob": "2.2.2",
     "browser-filesaver": "^1.1.0",
