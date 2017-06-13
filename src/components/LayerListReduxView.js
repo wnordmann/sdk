@@ -19,6 +19,7 @@ import classNames from 'classnames';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import LayerIdService from '../services/LayerIdService';
 import LayerListItem from './LayerListItem';
+import LayerListItemViewRedux from './LayerListItemViewRedux';
 
 import Label from './Label';
 import AddLayerModal from './AddLayerModal';
@@ -326,11 +327,11 @@ class LayerListRedux extends React.PureComponent {
      if (lyr.type === 'Group') {
        var children = (lyr.showContent === false) ? [] : this.renderLayerGroup(lyr);
        return (
-         <div>Group</div>
+         <LayerListItemViewRedux setBaseLayer={this._setBaseLayer.bind(this)} currentBaseLayer={this.state.baseLayer} index={idx} moveLayer={this.moveLayer} {...this.props} key={lyr.id} layer={lyr} group={group} nestedItems={children} title={lyr.properties.title} disableTouchRipple={true}/>
        );
      } else {
        return (
-         <div>Not group</div>
+         <LayerListItemViewRedux setBaseLayer={this._setBaseLayer.bind(this)} currentBaseLayer={this.state.baseLayer} index={idx} moveLayer={this.moveLayer} {...this.props} key={lyr.id} layer={lyr} group={group} title={lyr.properties.title} disableTouchRipple={true}/>
        );
      }
    }

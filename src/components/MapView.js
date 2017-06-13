@@ -66,7 +66,7 @@
     this._proxy = context.proxy;
     this._requestHeaders = context.requestHeaders;
     if (this.props.hasOwnProperty('getMap')) {
-      //this.props.getMap(this.props.map);
+      this.props.getMap(this.props.map);
     }
   }
 
