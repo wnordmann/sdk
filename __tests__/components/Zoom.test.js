@@ -9,7 +9,11 @@ import ol from 'openlayers';
 import intl from '../mock-i18n';
 import 'phantomjs-polyfill-object-assign';
 import Zoom from '../../src/components/ZoomView';
-import Map from '../../src/components/Map';
+import configureStore from '../../src/stores/Store';
+import {setView} from '../../src/actions/MapActions';
+import {zoomIn} from '../../src/actions/MapActions';
+import {zoomOut} from '../../src/actions/MapActions';
+import BoundlessSdk from '../../src/components/BoundlessSdk';
 
 raf.polyfill();
 
@@ -46,19 +50,20 @@ describe('Zoom', function() {
 
   it('zooms in', function(done) {
     var container = document.createElement('div');
+    const store = configureStore();
     ReactDOM.render((
-      <Map map={map}>
-        <Zoom intl={intl} />
-      </Map>
+      <BoundlessSdk store={store}>
+        <Zoom intl={intl} map={map}/>
+      </BoundlessSdk>
     ), container);
-    var buttons = container.querySelectorAll('button');
-    var zoomin = buttons[0];
-    assert.equal(map.getView().getZoom(), 1);
-    assert.equal(map.getView().getCenter()[0], 0);
-    assert.equal(map.getView().getCenter()[1], 0);
-    TestUtils.Simulate.touchTap(zoomin);
+    store.dispatch(setView([0,0], 1));
+    store.dispatch(zoomIn(1));
+    let view = store.getState().mapState.view;
+    assert.equal(view.zoom, 2);
+    store.dispatch(zoomOut(2));
+    view = store.getState().mapState.view;
+    assert.equal(view.zoom, 0);
     window.setTimeout(function() {
-      assert.equal(Math.round(map.getView().getZoom()), 2);
       ReactDOM.unmountComponentAtNode(container);
       done();
     }, 1000);

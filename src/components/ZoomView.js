@@ -11,6 +11,7 @@
  */
 
 import React from 'react';
+import ol from 'openlayers';
 import classNames from 'classnames';
 import Button from './Button';
 import ZoomIn from 'material-ui/svg-icons/action/zoom-in';
@@ -73,7 +74,12 @@ class Zoom extends React.PureComponent {
     /**
      * @ignore
      */
-    intl: intlShape.isRequired
+    intl: intlShape.isRequired,
+    /**
+     * @ignore
+     * The map to use for testing
+     */
+    map: React.PropTypes.instanceOf(ol.Map)
   };
 
   static contextTypes = {
