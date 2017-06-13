@@ -25,3 +25,15 @@
      center, zoom
    }
  }
+ export const zoomIn = (delta) => {
+   return {
+     type: MAP.ZOOM_IN,
+     zoomDelta: delta
+   }
+ };
+ export const zoomOut = (delta) => {
+   return {
+     type: MAP.ZOOM_OUT,
+     zoomDelta: delta
+   }
+ };
