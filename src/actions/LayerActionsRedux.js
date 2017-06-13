@@ -9,14 +9,15 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
- import {LAYER} from './actionTypes';
 
- export const addLayer = (results) => {
-   return {
-     type : LAYER.ADD,
-     results
-   }
- }
+import {LAYER} from './ActionTypes';
+
+export const addLayer = (results) => {
+  return {
+    type : LAYER.ADD,
+    results
+  }
+}
 /*
  export const removeLayer = (map, layer, group) => {
    return {
