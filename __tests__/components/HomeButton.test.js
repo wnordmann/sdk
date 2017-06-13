@@ -3,7 +3,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {expect} from 'chai';
-import raf from 'raf';
 import ol from 'openlayers';
 //import Intl from '../mock-i18n';
 import TestUtils from 'react-addons-test-utils';
@@ -11,7 +10,6 @@ import 'phantomjs-polyfill-object-assign';
 import HomeButton from '../../src/components/HomeButton';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import {addLocaleData, IntlProvider} from 'react-intl';
 
 import configureStore from '../../src/stores/Store';
@@ -19,9 +17,7 @@ import { setView } from '../../src/actions/MapActions';
 
 import BoundlessSdk from '../../src/components/BoundlessSdk';
 
-// polyfills
-global.Intl = require('intl');
-raf.polyfill();
+import polyfills from '../polyfills';
 
 describe('HomeButton', function() {
 
@@ -34,13 +30,6 @@ describe('HomeButton', function() {
   it('zooms to the correct location when home button is pressed', function() {
     var container = document.createElement('div');
     const store = configureStore();
-
-    try {
-      injectTapEventPlugin();
-    } catch(err) {
-      // swall the tap injector errors incase it 
-      //  was loaded in a different test.
-    }
     ReactDOM.render((
       <div>
         <IntlProvider locale="en">
