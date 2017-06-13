@@ -25,10 +25,21 @@ export const setView = (center, zoom) => {
     center, zoom
   }
 }
-
 export function setRotation(theta) {
   return {
     type: MAP.SET_ROTATION,
     rotation: theta
   }
 }
+export const zoomIn = (delta) => {
+ return {
+   type: MAP.ZOOM_IN,
+   zoomDelta: delta
+ }
+};
+export const zoomOut = (delta) => {
+ return {
+   type: MAP.ZOOM_OUT,
+   zoomDelta: delta
+ }
+};

@@ -94,7 +94,6 @@
     if (typeof(stateView.center) !== 'undefined' && (mapCenter[0] !== stateView.center[0] || mapCenter[1] !== stateView.center[1] || mapZoom !== stateView.zoom)) {
       mapView.setCenter(stateView.center);
       mapView.setZoom(stateView.zoom);
-      //this.props.setView(mapView.getCenter(),mapView.getResolution(),mapView.getZoom());
     }
 
     if (typeof(stateView.rotation) !== 'undefined' && stateView.rotation !== mapView.getRotation()) {
@@ -110,4 +109,5 @@
     );
   }
 }
- export default injectIntl(Map);
+
+export default injectIntl(Map);
