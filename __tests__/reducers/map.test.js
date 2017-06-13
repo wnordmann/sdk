@@ -10,25 +10,17 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {MAP} from './ActionTypes';
-import MapConfigService from '../services/MapConfigService';
+import {expect} from 'chai';
 
-export const getMap = (map) => {
-  return {
-     type: MAP.GET_CONFIG,
-     mapState: MapConfigService.getMapState(map)
-  }
-}
-export const setView = (center, zoom) => {
-  return {
-    type: MAP.SET_VIEW,
-    center, zoom
-  }
-}
+import configureStore from '../../src/stores/Store';
+import * as mapActions from '../../src/actions/MapActions';
 
-export function setRotation(theta) {
-  return {
-    type: MAP.SET_ROTATION,
-    rotation: theta
-  }
-}
+describe('map reducer', function() {
+
+  it('sets the rotation', () => {
+    const store = configureStore();
+    store.dispatch(mapActions.setRotation(-1.5));
+    expect(store.getState().mapState.view.rotation).to.equal(-1.5);
+  });
+
+});

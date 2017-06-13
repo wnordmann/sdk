@@ -4,15 +4,15 @@ import TestUtils from 'react-addons-test-utils';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {assert} from 'chai';
-import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import 'phantomjs-polyfill-object-assign';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import BoundlessSdk from '../../src/components/BoundlessSdk';
 import Rotate from '../../src/components/Rotate';
 
-raf.polyfill();
+import polyfills from '../polyfills';
 
 describe('Rotate', function() {
   var target, map;
@@ -49,9 +49,11 @@ describe('Rotate', function() {
   it('rotates the map back to north', function(done) {
     var container = document.createElement('div');
     ReactDOM.render((
-      <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <Rotate intl={intl} map={map} />
-      </MuiThemeProvider>
+      <BoundlessSdk>
+        <MuiThemeProvider muiTheme={getMuiTheme()}>
+          <Rotate intl={intl} map={map} />
+        </MuiThemeProvider>
+      </BoundlessSdk>
     ), container);
     var buttons = container.querySelectorAll('button');
     var rotate = buttons[0];

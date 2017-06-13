@@ -78,7 +78,10 @@
       // get the view of the map
       let view = map.getView();
       // create a "mapAction" and dispatch it.
-      // this.props.store.dispatch(mapActions.move(view.getCenter(), view.getResolution()));
+      const rotation = view.getRotation();
+      if(this.props.mapStore.view && rotation !== this.props.mapStore.view.rotation) {
+        this.props.setRotation(rotation);
+      }
       this.props.setView(view.getCenter(), view.getZoom());
     });
   }
@@ -88,10 +91,14 @@
 
     const mapCenter = mapView.getCenter();
     const mapZoom = mapView.getZoom();
-    if (mapCenter[0] !== stateView.center[0] || mapCenter[1] !== stateView.center[1] || mapZoom !== stateView.zoom) {
+    if (typeof(stateView.center) !== 'undefined' && (mapCenter[0] !== stateView.center[0] || mapCenter[1] !== stateView.center[1] || mapZoom !== stateView.zoom)) {
       mapView.setCenter(stateView.center);
       mapView.setZoom(stateView.zoom);
-      this.props.setView(mapView.getCenter(),mapView.getResolution(),mapView.getZoom());
+      //this.props.setView(mapView.getCenter(),mapView.getResolution(),mapView.getZoom());
+    }
+
+    if (typeof(stateView.rotation) !== 'undefined' && stateView.rotation !== mapView.getRotation()) {
+      mapView.setRotation(stateView.rotation);
     }
 
   }
