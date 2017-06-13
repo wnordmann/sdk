@@ -78,7 +78,6 @@
       // get the view of the map
       let view = map.getView();
       // create a "mapAction" and dispatch it.
-      // this.props.store.dispatch(mapActions.move(view.getCenter(), view.getResolution()));
       this.props.setView(view.getCenter(), view.getZoom());
     });
   }
@@ -91,7 +90,6 @@
     if (mapCenter[0] !== stateView.center[0] || mapCenter[1] !== stateView.center[1] || mapZoom !== stateView.zoom) {
       mapView.setCenter(stateView.center);
       mapView.setZoom(stateView.zoom);
-      this.props.setView(mapView.getCenter(),mapView.getResolution(),mapView.getZoom());
     }
 
   }

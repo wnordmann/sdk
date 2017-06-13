@@ -12,22 +12,15 @@
 
 import ZoomView from './ZoomView';
 import {connect} from 'react-redux';
-import * as zoomActions from '../actions/ZoomActions';
+import * as MapActions from '../actions/MapActions';
 
-// Maps state from store to props
-const mapStateToProps = (state) => {
-  return {
-    mapStore: state.mapState || null
-  }
-};
 
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-    // getDelta: delta => dispatch(zoomActions.getDelta(delta))
-    zoomIn: delta => dispatch(zoomActions.zoomIn(delta)),
-    zoomOut: delta => dispatch(zoomActions.zoomOut(delta))
+    zoomIn: delta => dispatch(MapActions.zoomIn(delta)),
+    zoomOut: delta => dispatch(MapActions.zoomOut(delta))
   }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ZoomView);
+export default connect(null, mapDispatchToProps)(ZoomView);
