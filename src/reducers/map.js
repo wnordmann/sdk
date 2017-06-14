@@ -13,10 +13,10 @@ export default (state = defaultState, action) => {
     case  MAP.GET_CONFIG:
       return action.mapState;
     case  MAP.SET_VIEW2:
-      const new_view = {};
+      //const new_view = {};
       for (const key of ['center', 'zoom', 'resolution']) {
         if (typeof (action[key]) !== 'undefined') {
-          new_view[key] = action[key];
+          state.view[key] = action[key];
         }
       }
       return {
@@ -28,7 +28,6 @@ export default (state = defaultState, action) => {
           resolution: action.resolution
         }
       };
-      //Object.assign({}, state, new_view);
     case  MAP.SET_VIEW:
       return {
         ...state,
@@ -69,7 +68,7 @@ export default (state = defaultState, action) => {
         ...state,
         view: {
           ...state.view,
-          rotation: action.rotation,
+          rotation: action.rotation
         }
       }
     default:
