@@ -56,10 +56,6 @@ class Zoom extends React.PureComponent {
      */
     className: React.PropTypes.string,
     /**
-     * The ol3 map to use for zooming, only needed if map not provided by context.
-     */
-    //map: React.PropTypes.instanceOf(ol.Map),
-    /**
      * Tooltip to show for zoom in button.
      */
     zoomInTipLabel: React.PropTypes.string,
@@ -78,11 +74,15 @@ class Zoom extends React.PureComponent {
     /**
      * @ignore
      */
-    intl: intlShape.isRequired
+    intl: intlShape.isRequired,
+    /**
+     * @ignore
+     * The map to use for testing
+     */
+    map: React.PropTypes.instanceOf(ol.Map)
   };
 
   static contextTypes = {
-    map: React.PropTypes.instanceOf(ol.Map),
     muiTheme: React.PropTypes.object
   };
 
@@ -98,9 +98,6 @@ class Zoom extends React.PureComponent {
   constructor(props, context) {
     super(props);
     this._muiTheme = context.muiTheme || getMuiTheme();
-    // this.map = context.map || this.props.map;
-    //console.log(context.map)
-    this.map = this.props.mapStore;
   }
   getChildContext() {
     return {muiTheme: this._muiTheme};
@@ -115,7 +112,7 @@ class Zoom extends React.PureComponent {
       this.props.zoomOut(this.props.delta);
     }
   }
-
+//TODO: re-apply animation
 //   _zoomByDelta(delta) {
 //     var map = this.map;
 //     var view = map.view;
