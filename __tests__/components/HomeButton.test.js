@@ -4,7 +4,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {expect} from 'chai';
 import ol from 'openlayers';
-//import Intl from '../mock-i18n';
 import TestUtils from 'react-addons-test-utils';
 import 'phantomjs-polyfill-object-assign';
 import HomeButton from '../../src/components/HomeButton';
@@ -20,12 +19,6 @@ import BoundlessSdk from '../../src/components/BoundlessSdk';
 import polyfills from '../polyfills';
 
 describe('HomeButton', function() {
-
-  beforeEach(function(done) {
-    // reset the store before each test.
-    // store = configureStore();
-    done();
-  });
 
   it('zooms to the correct location when home button is pressed', function() {
     var container = document.createElement('div');
@@ -57,12 +50,10 @@ describe('HomeButton', function() {
 
     let view = store.getState().mapState.view;
 
+    // ensure the view has returned "home".
     expect(view.center).to.deep.equal(init_center);
     expect(view.zoom).to.equal(init_zoom);
 
-    // check that the state has goen back t
-    // assert.equal(map.getView().getZoom(), 1);
-    // assert.equal(map.getView().getCenter()[0], 0);
     ReactDOM.unmountComponentAtNode(container);
   });
 
