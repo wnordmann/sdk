@@ -11,33 +11,33 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { DragSource, DropTarget } from 'react-dnd';
-import Dialog from './Dialog';
-import Button from './Button';
-import FeatureTable from './FeatureTable';
-import FilterModal from './FilterModal';
+// import Dialog from './Dialog';
+// import Button from './Button';
+// import FeatureTable from './FeatureTable';
+// import FilterModal from './FilterModal';
 import classNames from 'classnames';
-import LabelModal from './LabelModal';
-import StyleModal from './StyleModal';
-import LayerActions from '../actions/LayerActions';
-import SLDService from '../services/SLDService';
-import WMSService from '../services/WMSService';
-import Slider from 'material-ui/Slider';
-import { ListItem } from 'material-ui/List';
-import WMSLegend from './WMSLegend';
-import ArcGISRestLegend from './ArcGISRestLegend';
+// import LabelModal from './LabelModal';
+// import StyleModal from './StyleModal';
+// import LayerActions from '../actions/LayerActions';
+// import SLDService from '../services/SLDService';
+// import WMSService from '../services/WMSService';
+// import Slider from 'material-ui/Slider';
+// import { ListItem } from 'material-ui/List';
+// import WMSLegend from './WMSLegend';
+// import ArcGISRestLegend from './ArcGISRestLegend';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import Popover from 'material-ui/Popover';
-import Menu from 'material-ui/Menu';
-import MenuItem from 'material-ui/MenuItem';
-import Divider from 'material-ui/Divider';
-import FileSaver from 'file-saver';
+// import Popover from 'material-ui/Popover';
+// import Menu from 'material-ui/Menu';
+// import MenuItem from 'material-ui/MenuItem';
+// import Divider from 'material-ui/Divider';
+// import FileSaver from 'file-saver';
 import { createDragPreview } from 'react-dnd-text-dragpreview';
 
 const layerListItemSource = {
 
   canDrag(props, monitor) {
-    return(props.layer.get('canDrag') !== false && props.allowReordering && props.layer.get('type') !== 'base' && props.layer.get('type') !== 'base-group');
+    return (props.layer.get('canDrag') !== false && props.allowReordering && props.layer.get('type') !== 'base' && props.layer.get('type') !== 'base-group');
   },
   beginDrag(props) {
     return {
@@ -50,20 +50,20 @@ const layerListItemSource = {
 
 const layerListItemTarget = {
   hover(props, monitor, component) {
-    if(props.layer.get('type') === 'base' || props.layer.get('type') === 'base-group') {
+    if (props.layer.get('type') === 'base' || props.layer.get('type') === 'base-group') {
       return;
     }
     var sourceItem = monitor.getItem();
     const dragIndex = sourceItem.index;
     const hoverIndex = props.index;
     // Don't replace items with themselves
-    if(dragIndex === hoverIndex) {
+    if (dragIndex === hoverIndex) {
       return;
     }
 
     // Determine rectangle on screen
     var comp = ReactDOM.findDOMNode(component);
-    if(!comp) {
+    if (!comp) {
       return;
     }
     const hoverBoundingRect = comp.getBoundingClientRect();
@@ -82,12 +82,12 @@ const layerListItemTarget = {
     // When dragging upwards, only move when the cursor is above 50%
 
     // Dragging downwards
-    if(dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+    if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
       return;
     }
 
     // Dragging upwards
-    if(dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+    if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
       return;
     }
 
@@ -223,9 +223,9 @@ class LayerListItemRedux extends React.Component {
     //  * The group layer to which this item might belong.
     //  */
     // group: React.PropTypes.instanceOf(ol.layer.Group),
-    // /**
-    //  * The feature format to serialize in for downloads.
-    //  */
+    /**
+     * The feature format to serialize in for downloads.
+     */
     downloadFormat: React.PropTypes.oneOf(['GeoJSON', 'KML', 'GPX']),
     /**
      * The title to show for the layer.
@@ -347,7 +347,7 @@ class LayerListItemRedux extends React.Component {
       filterOpen: false,
       labelOpen: false,
       tableOpen: false,
-      open: (props.layer.isGroupExpanded === false) ? false : true,
+      open: props.layer.isGroupExpanded,
       styleOpen: false,
       checked: props.layer.visible,
       previousBase: ''
@@ -356,5 +356,223 @@ class LayerListItemRedux extends React.Component {
   getChildContext() {
     return {muiTheme: this._muiTheme};
   }
+  componentDidMount() {
+    var dragPreviewStyle = this.props.dragPreviewStyle  || dragPreviewStyleDefault;
+
+    const dragPreview = createDragPreview(this.formatDragMessage(this.props), dragPreviewStyle)
+    this.props.connectDragPreview(dragPreview)
+
+    // if (this.props.group) {
+    //   if (this.props.group.get('type') !== 'base-group') {
+    //     this.props.group.on('change:visible', this._changeGroupVisible, this);
+    //   }
+    // }
+    // this.props.layer.on('change:visible', this._changeLayerVisible, this);
+    // if (this.props.handleResolutionChange) {
+    //   this.props.map.getView().on('change:resolution', this._changeResolution, this);
+    // }
+    // if (!this.props.layer.get('wfsInfo')) {
+    //   this.props.layer.once('change:wfsInfo', function() {
+    //     this.forceUpdate();
+    //   }, this);
+    // }
+  }
+  componentWillUnmount() {
+    // if (this.props.group) {
+    //   if (this.props.group.get('type') !== 'base-group') {
+    //     this.props.group.un('change:visible', this._changeGroupVisible, this);
+    //   }
+    // }
+    this.props.layer.un('change:visible', this._changeLayerVisible, this);
+    if (this.props.handleResolutionChange) {
+      // this.props.map.getView().un('change:resolution', this._changeResolution, this);
+    }
+  }
+
+  // provides custom message for dragPreview
+  formatDragMessage(props) {
+    const {formatMessage} = this.props.intl;
+    const title = props.layer.title;
+    //IE might not like es6 template strings
+    return `${formatMessage(messages.draglayerlabel)} - ${title}`;
+  }
+
+  renderItem(item, isDragging) {
+    if (isDragging) {
+      return (<div>{item}</div>);
+    }
+  }
+
+  render() {
+    const {connectDragSource, connectDropTarget, isDragging, Item} = this.props;
+    const layer = this.props.layer;
+    const source = layer.getSource ? layer.getSource() : undefined;
+    const {formatMessage} = this.props.intl;
+    // var opacity;
+    // if (this.props.showOpacity && source && layer.get('type') !== 'base') {
+    //   var val = layer.getOpacity();
+    //   var slider = (<Slider sliderStyle={{marginTop: '0px', top: '14px', marginBottom: '0'}} defaultValue={val} onChange={this._changeOpacity.bind(this)} />);
+    //   opacity = <MenuItem leftIcon={<i className='menuIcon ms ms-opacity'></i>}>{slider}</MenuItem>
+    // }
+    // var table;
+    // if (this.props.showTable && (this.props.layer instanceof ol.layer.Vector || this.props.layer.get('wfsInfo') !== undefined)) {
+    //   table = (<MenuItem onTouchTap={this._showTable.bind(this)} primaryText={formatMessage(messages.tablebuttonlabel)} leftIcon={<i className='fa fa-table'></i>} />);
+    // }
+
+    // var downArrow = <i className="fa fa-angle-down" onTouchTap={this._toggleNested.bind(this)}></i>;
+    // var sideArrow = <i className="fa fa-angle-right" onTouchTap={this._toggleNested.bind(this)}></i>;
+    // var arrowIcon = this.state.open ? downArrow : sideArrow;
+
+    // var layersIcon = <i className="ms ms-layers"></i>;
+    // if (layer.get('type') !== 'base-group' &&  !(layer instanceof ol.layer.Group)) {
+    //   arrowIcon = <i className="fa fa-fw" ></i>;
+    // }
+    // var zoomTo;
+    // if (layer.get('type') !== 'base' && layer.get('type') !== 'base-group' && ((source && source.getExtent) || layer.get('EX_GeographicBoundingBox')) && this.props.showZoomTo) {
+    //   zoomTo = <i className="fa fa-crosshairs" onTouchTap={this._zoomTo.bind(this)}></i>;
+    // }
+    // var download;
+    // if (layer instanceof ol.layer.Vector && this.props.showDownload) {
+    //   var disabled = false;
+    //   if (this.props.downloadFormat === 'GPX') {
+    //     var features = layer.getSource().getFeatures();
+    //     if (features.length > 0) {
+    //       var geom = features[0].getGeometry();
+    //       disabled = (geom instanceof ol.geom.Polygon || geom instanceof ol.geom.MultiPolygon);
+    //     }
+    //   }
+    //   download = <MenuItem disabled={disabled} primaryText={formatMessage(messages.downloadbuttonlabel)} leftIcon={<i className='fa fa-download'></i>}onTouchTap={this._download.bind(this)}/>
+    // }
+    // var filter;
+    // if (layer instanceof ol.layer.Vector && this.props.allowFiltering) {
+    //   filter = <MenuItem primaryText={formatMessage(messages.filterbuttonlabel)} leftIcon={<i className='fa fa-filter'></i>} onTouchTap={this._filter.bind(this)} />
+    // }
+    // var label;
+    // if (layer instanceof ol.layer.Vector && this.props.allowLabeling) {
+    //   label = (<MenuItem primaryText={formatMessage(messages.labelbuttonlabel)} leftIcon={<i className='fa fa-tag'></i>} onTouchTap={this._label.bind(this)} />);
+    // }
+    // var remove;
+    // if (this.props.allowRemove && layer.get('type') !== 'base' && layer.get('isRemovable') === true) {
+    //   remove = <MenuItem primaryText={formatMessage(messages.removebuttonlabel)} leftIcon={<i className='menuIcon fa fa-trash'></i>}onTouchTap={this._remove.bind(this)} />
+    // }
+    // var edit;
+    // if (this.props.allowEditing && layer.get('isWFST') === true) {
+    //   edit = (<MenuItem onTouchTap={this._edit.bind(this)} primaryText={formatMessage(messages.editbuttonlabel)} leftIcon={<i className='fa fa-pencil'></i>} />);
+    // }
+    // var tableModal, labelModal, filterModal, styleModal;
+    // if (this.props.layer instanceof ol.layer.Vector) {
+    //   labelModal = (<LabelModal {...this.props} ref='labelModal' open={this.state.labelOpen} onRequestClose={this._closeLabel.bind(this)} inline={this.props.inlineDialogs} layer={this.props.layer} />);
+    //   filterModal = (<FilterModal {...this.props} ref='filterModal' open={this.state.filterOpen} onRequestClose={this._closeFilter.bind(this)} inline={this.props.inlineDialogs} layer={this.props.layer} />);
+    // }
+    // var styling = <i className="fa fa-fw" ></i>;
+    // var canStyle = layer.get('wfsInfo') && this.props.allowStyling;
+    // if (canStyle) {
+    //   styling = (<i className='ms ms-style' onTouchTap={this._style.bind(this)}> </i>);
+    //   styleModal = (<StyleModal {...this.props} ref='styleModal' open={this.state.styleOpen} inline={this.props.inlineDialogs} onRequestClose={this._closeStyling.bind(this)} layer={this.props.layer} />);
+    // }
+    // if (this.props.showTable && (this.props.layer instanceof ol.layer.Vector || this.props.layer.get('wfsInfo') !== undefined)) {
+    //   var actions = [
+    //     <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this._closeTable.bind(this)} />
+    //   ];
+    //   tableModal = (
+    //     <Dialog ref='tableModal' inline={this.props.inlineDialogs} actions={actions} title={formatMessage(messages.tablemodaltitle)} open={this.state.tableOpen} onRequestClose={this._closeTable.bind(this)}>
+    //       <div style={{height: 400}}>
+    //         <FeatureTable allowEdit={this.props.inlineDialogs} onUpdate={this._onTableUpdate.bind(this)} map={this.props.map} layer={this.props.layer} intl={this.props.intl}/>
+    //       </div>
+    //     </Dialog>
+    //   );
+    // }
+    // var legend;
+    // if (this.props.includeLegend && this.props.layer.getVisible() && this.calculateInRange()) {
+    //   if ((this.props.layer instanceof ol.layer.Tile && this.props.layer.getSource() instanceof ol.source.TileWMS) ||
+    //   (this.props.layer instanceof ol.layer.Image && this.props.layer.getSource() instanceof ol.source.ImageWMS)) {
+    //     legend = <WMSLegend layer={this.props.layer} />;
+    //   }
+    //   if (this.props.layer instanceof ol.layer.Tile && this.props.layer.getSource() instanceof ol.source.TileArcGISRest) {
+    //     legend = <ArcGISRestLegend layer={this.props.layer} />;
+    //   }
+    // }
+    //
+    // var showBasemapEye = this.props.layer.get('visible') || this.props.currentBaseLayer === this.props.layer.get('id');
+    // var checked = <i className='fa fa-eye' onTouchTap={this._handleVisibility.bind(this)}></i>;
+    // var unchecked = <i className='fa fa-eye-slash' onTouchTap={this._handleVisibility.bind(this)}></i>;
+    // var baseVisibility = <i onTouchTap={this._handleBaseVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye':showBasemapEye, 'fa-eye-slash':!showBasemapEye})}></i>;
+    // var baseParentVisibility = <i id='baseParentVisibility' onTouchTap={this._handleBaseParentVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye-slash':this.props.currentBaseLayer === 'baseParent', 'fa-eye':this.props.currentBaseLayer !== 'baseParent'})}></i>;
+    // var fixedWidth =  <i className='fa fa-fw'></i>;
+    //
+    // var isVisible = this.state.checked;
+    // if (!this.props.layer.getVisible() && this.state.checked) {
+    //   isVisible = false;
+    // }
+    // var visibility = isVisible ? checked : unchecked;
+    // var popoverEllipsis = (!(this.props.layer instanceof ol.layer.Group) && (opacity || download || filter || remove || table || label || edit)) ? (
+    //   <div>
+    //     <i className="fa fa-ellipsis-v" onTouchTap={this._handleMenuOpen.bind(this)}></i>
+    //     <Popover
+    //         open={this.state.popover}
+    //         anchorEl={this.state.anchorEl}
+    //         anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
+    //         targetOrigin={{horizontal: 'right', vertical: 'top'}}
+    //         onRequestClose={this._handleRequestClose.bind(this)}
+    //       >
+    //         <Menu>
+    //           {opacity}
+    //           <Divider/>
+    //           {download}
+    //           {filter}
+    //           {remove}
+    //           {table}
+    //           {label}
+    //           {edit}
+    //         </Menu>
+    //       </Popover>
+    //   </div>
+    //   ) : undefined;
+    var flexContainer = {
+      display: 'flex',
+      padding: '16px'
+    };
+    // var muted;
+    // var isNested = false;
+    // var rightIconButtons = <span className="fixedContainer">{styling}{zoomTo}{visibility}{popoverEllipsis}</span>;
+    // if (layer.get('type') === 'base-group') {
+    //   rightIconButtons = <span className="fixedContainer">{baseParentVisibility}{fixedWidth}</span>;
+    //   muted = this.props.currentBaseLayer === 'baseParent';
+    // }else if (layer.get('type') === 'base') {
+    //   rightIconButtons = <span className="fixedContainer">{baseVisibility}{fixedWidth}</span>;
+    //   muted = !showBasemapEye;
+    //   isNested = true;
+    // }else if (layer instanceof ol.layer.Group) {
+    //   rightIconButtons = <span className="fixedContainer">{visibility}{fixedWidth}</span>;
+    //   muted = !isVisible;
+    // } else {
+    //   isNested = !!this._getLayerGroupId(layer.get('id'), this.props.map.getLayerGroup());
+    //   muted = !isVisible;
+    // }
+    return connectDragSource(connectDropTarget(
+      <div>
+{/*        <ListItem
+          className={classNames({'sdk-component': true, 'menuItemContainer': true, 'layer-list-item': true}, this.props.className)}
+          insetChildren={true}
+          innerDivStyle={flexContainer}
+          autoGenerateNestedIndicator={false}
+          primaryText={<span className={classNames({'menuItem':true, muted, 'n1':isNested})}><span className="statusIcons">{arrowIcon}{layersIcon} <span className={'layer-list-name'}>{this.props.title}</span></span>{rightIconButtons}</span>}
+          nestedItems={this.props.nestedItems}
+          open={this.state.open} />
+        <div style={{paddingLeft: 72}}>
+          {legend}
+          <span>
+            {filterModal}
+            {labelModal}
+            {styleModal}
+            {tableModal}
+          </span>
+          Layer */}
+          Layer
+        {this.renderItem(Item, isDragging)}
+    </div>
+));
+
+  }
 }
-export default injectIntl(DragDropContext(HTML5Backend)(LayerListItemRedux));
+export default injectIntl(DropTarget('LayerListItemRedux', layerListItemTarget, collectDrop)(DragSource('LayerListItemRedux', layerListItemSource, collect)(LayerListItemRedux)));
