@@ -10,24 +10,17 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import MapView from './MapView';
-import {connect} from 'react-redux';
-import * as MapActions from '../actions/MapActions';
+import {expect} from 'chai';
 
-// Maps state from store to props
-const mapStateToProps = (state) => {
-  return {
-    mapStore: state.mapState || null
-  }
-};
+import configureStore from '../../src/stores/Store';
+import * as mapActions from '../../src/actions/MapActions';
 
-// Maps actions to props
-const mapDispatchToProps = (dispatch) => {
-  return {
-    getMap: map => dispatch(MapActions.getMap(map)),
-    setView: (center, zoom) => dispatch(MapActions.setView(center, zoom)),
-    setRotation: (theta) => dispatch(MapActions.setRotation(theta))
-  }
-};
+describe('map reducer', function() {
 
-export default connect(mapStateToProps, mapDispatchToProps)(MapView);
+  it('sets the rotation', () => {
+    const store = configureStore();
+    store.dispatch(mapActions.setRotation(-1.5));
+    expect(store.getState().mapState.view.rotation).to.equal(-1.5);
+  });
+
+});

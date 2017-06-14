@@ -10,30 +10,36 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
- import {MAP} from './ActionTypes';
- import MapConfigService from '../services/MapConfigService';
+import {MAP} from './ActionTypes';
+import MapConfigService from '../services/MapConfigService';
 
- export const getMap = (map) => {
-   return {
+export const getMap = (map) => {
+  return {
      type: MAP.GET_CONFIG,
      mapState: MapConfigService.getMapState(map)
-   }
+  }
+}
+export const setView = (center, zoom) => {
+  return {
+    type: MAP.SET_VIEW,
+    center, zoom
+  }
+}
+export function setRotation(theta) {
+  return {
+    type: MAP.SET_ROTATION,
+    rotation: theta
+  }
+}
+export const zoomIn = (delta) => {
+ return {
+   type: MAP.ZOOM_IN,
+   zoomDelta: delta
  }
- export const setView = (center, zoom) => {
-   return {
-     type: MAP.SET_VIEW,
-     center, zoom
-   }
+};
+export const zoomOut = (delta) => {
+ return {
+   type: MAP.ZOOM_OUT,
+   zoomDelta: delta
  }
- export const zoomIn = (delta) => {
-   return {
-     type: MAP.ZOOM_IN,
-     zoomDelta: delta
-   }
- };
- export const zoomOut = (delta) => {
-   return {
-     type: MAP.ZOOM_OUT,
-     zoomDelta: delta
-   }
- };
+};

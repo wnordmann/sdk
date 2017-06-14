@@ -4,8 +4,6 @@ import ol from 'openlayers';
 
 import configureStore from '../stores/Store';
 
-const store = configureStore();
-
 export class BoundlessSdk extends React.Component {
   static propTypes = {
     /**
@@ -19,6 +17,8 @@ export class BoundlessSdk extends React.Component {
   }
   constructor(props) {
     super(props);
+
+    this.store = props.store ? props.store : configureStore();
   }
   getChildContext() {
     return {
@@ -27,7 +27,7 @@ export class BoundlessSdk extends React.Component {
   }
   render() {
     return (
-      <Provider store={store}>
+      <Provider store={this.store}>
         {this.props.children}
       </Provider>
     );

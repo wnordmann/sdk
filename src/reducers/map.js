@@ -1,5 +1,5 @@
 import {MAP} from '../actions/ActionTypes';
-export default (state = [], action) => {
+export default (state = {}, action) => {
   switch (action.type) {
     case  MAP.GET_CONFIG:
       return action.mapState;
@@ -28,6 +28,14 @@ export default (state = [], action) => {
         view:{
           ...state.view,
           zoom:state.view.zoom - action.zoomDelta
+        }
+      }
+    case MAP.SET_ROTATION:
+      return {
+        ...state,
+        view: {
+          ...state.view,
+          rotation: action.rotation,
         }
       }
     default:

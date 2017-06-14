@@ -10,24 +10,11 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import MapView from './MapView';
-import {connect} from 'react-redux';
-import * as MapActions from '../actions/MapActions';
 
-// Maps state from store to props
-const mapStateToProps = (state) => {
-  return {
-    mapStore: state.mapState || null
-  }
-};
+global.Intl = require('intl');
 
-// Maps actions to props
-const mapDispatchToProps = (dispatch) => {
-  return {
-    getMap: map => dispatch(MapActions.getMap(map)),
-    setView: (center, zoom) => dispatch(MapActions.setView(center, zoom)),
-    setRotation: (theta) => dispatch(MapActions.setRotation(theta))
-  }
-};
+import raf from 'raf';
+raf.polyfill();
 
-export default connect(mapStateToProps, mapDispatchToProps)(MapView);
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
