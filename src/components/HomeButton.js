@@ -75,7 +75,7 @@ class HomeButton extends React.PureComponent {
     // when center and zoom are set then that is used for
     // the default view.
     if (props.center) {
-      this.state.view = {
+      view = {
         center: props.center,
         zoom: props.zoom
       };
@@ -124,10 +124,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    dispatch: dispatch
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(HomeButton));
+export default connect(mapStateToProps)(injectIntl(HomeButton));
