@@ -84,6 +84,13 @@
       }
       this.props.setView(view.getCenter(), view.getZoom());
     });
+
+    // knowing the map size avoids needing to do
+    //  strange things when zooming to an extent.
+    this.props.setSize(map.getSize());
+    map.on('change:size', () => {
+      this.props.setSize(map.getSize());
+    });
   }
   componentWillUpdate(nextProps, nextState) {
     const mapView = this.props.map.getView();
@@ -91,13 +98,15 @@
 
     const mapCenter = mapView.getCenter();
     const mapZoom = mapView.getZoom();
-    if (typeof(stateView.center) !== 'undefined' && (mapCenter[0] !== stateView.center[0] || mapCenter[1] !== stateView.center[1] || mapZoom !== stateView.zoom)) {
-      mapView.setCenter(stateView.center);
-      mapView.setZoom(stateView.zoom);
-    }
+    if (typeof(stateView ) !== 'undefined') {
+      if (typeof(stateView.center) !== 'undefined' && (mapCenter[0] !== stateView.center[0] || mapCenter[1] !== stateView.center[1] || mapZoom !== stateView.zoom)) {
+        mapView.setCenter(stateView.center);
+        mapView.setZoom(stateView.zoom);
+      }
 
-    if (typeof(stateView.rotation) !== 'undefined' && stateView.rotation !== mapView.getRotation()) {
-      mapView.setRotation(stateView.rotation);
+      if (typeof(stateView.rotation) !== 'undefined' && stateView.rotation !== mapView.getRotation()) {
+        mapView.setRotation(stateView.rotation);
+      }
     }
 
   }
