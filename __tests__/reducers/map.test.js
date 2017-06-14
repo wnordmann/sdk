@@ -10,21 +10,17 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {LAYER} from './ActionTypes';
+import {expect} from 'chai';
 
-export const addLayer = (results) => {
-  return {
-    type : LAYER.ADD,
-    results
-  }
-}
-/*
- export const removeLayer = (map, layer, group) => {
-   return {
-     type : LAYER.REMOVE,
-     map,
-     layer,
-     group
-   }
- }
- */
+import configureStore from '../../src/stores/Store';
+import * as mapActions from '../../src/actions/MapActions';
+
+describe('map reducer', function() {
+
+  it('sets the rotation', () => {
+    const store = configureStore();
+    store.dispatch(mapActions.setRotation(-1.5));
+    expect(store.getState().mapState.view.rotation).to.equal(-1.5);
+  });
+
+});

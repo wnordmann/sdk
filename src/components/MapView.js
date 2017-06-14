@@ -85,6 +85,10 @@ class Map extends React.PureComponent {
         this.props.setResolution(view.getResolution())
       }
       // create a "mapAction" and dispatch it.
+      const rotation = view.getRotation();
+      if (this.props.mapStore.view && rotation !== this.props.mapStore.view.rotation) {
+        this.props.setRotation(rotation);
+      }
       this.props.setView(view.getCenter(), view.getZoom());
     });
   }
@@ -94,13 +98,15 @@ class Map extends React.PureComponent {
 
     const mapCenter = mapView.getCenter();
     const mapZoom = mapView.getZoom();
-    if (mapCenter[0] !== stateView.center[0] || mapCenter[1] !== stateView.center[1] || mapZoom !== stateView.zoom) {
-      console.log('are we here??')
-      console.log('ol map resolution is now ' + mapView.getResolution())
+    if (typeof (stateView.center) !== 'undefined' && (mapCenter[0] !== stateView.center[0] || mapCenter[1] !== stateView.center[1] || mapZoom !== stateView.zoom)) {
       mapView.setCenter(stateView.center);
       mapView.setZoom(stateView.zoom);
       mapView.setResolution(stateView.resolution);
       console.log('after center and zoom changes, ol map resolution is now ' + mapView.getResolution())
+    }
+
+    if (typeof (stateView.rotation) !== 'undefined' && stateView.rotation !== mapView.getRotation()) {
+      mapView.setRotation(stateView.rotation);
     }
 
   }

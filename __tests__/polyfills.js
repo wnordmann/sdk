@@ -10,21 +10,11 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {LAYER} from './ActionTypes';
 
-export const addLayer = (results) => {
-  return {
-    type : LAYER.ADD,
-    results
-  }
-}
-/*
- export const removeLayer = (map, layer, group) => {
-   return {
-     type : LAYER.REMOVE,
-     map,
-     layer,
-     group
-   }
- }
- */
+global.Intl = require('intl');
+
+import raf from 'raf';
+raf.polyfill();
+
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
