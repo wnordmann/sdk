@@ -10,44 +10,44 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
- import React from 'react';
- import ReactDOM from 'react-dom';
- import ol from 'openlayers';
- import './MapPanel.css';
- import {injectIntl, intlShape} from 'react-intl';
- import classNames from 'classnames';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import ol from 'openlayers';
+import './MapPanel.css';
+import {injectIntl, intlShape} from 'react-intl';
+import classNames from 'classnames';
 
 
- /**
-  * A div that can render the OpenLayers map object. It will also take care of notifying the user of load errors.
-  * It can also provide integration with the browser's back and forward button for extent history navigation.
-  *
-  * ```xml
-  * <Map id='map' map={map} />
-  * ```
-  */
- class Map extends React.PureComponent {
+/**
+* A div that can render the OpenLayers map object. It will also take care of notifying the user of load errors.
+* It can also provide integration with the browser's back and forward button for extent history navigation.
+*
+* ```xml
+* <Map id='map' map={map} />
+* ```
+*/
+class Map extends React.PureComponent {
   //TODO: extent proptype, useHistory propTypes
   static propTypes = {
     /**
-     * The map to use for this map panel.
-     */
+    * The map to use for this map panel.
+    */
     map: React.PropTypes.instanceOf(ol.Map).isRequired,
     /**
-     * Identifier of the map div.
-     */
+    * Identifier of the map div.
+    */
     id: React.PropTypes.string,
     /**
-     * Css class name to apply on the map div.
-     */
+    * Css class name to apply on the map div.
+    */
     className: React.PropTypes.string,
     /**
-     * Style config
-     */
+    * Style config
+    */
     style: React.PropTypes.object,
     /**
-     * @ignore
-     */
+    * @ignore
+    */
     children: React.PropTypes.node,
     /**
     * @ignore
@@ -77,6 +77,13 @@
     map.on('moveend', () => {
       // get the view of the map
       let view = map.getView();
+      let resolution = view.getResolution();
+      console.log(resolution)
+      //console.log(this.props.mapStore.view.resolution)
+      if (this.props.mapStore.view && resolution !== this.props.mapStore.view.resolution) {
+        console.log('changing stored resolution')
+        this.props.setResolution(view.getResolution())
+      }
       // create a "mapAction" and dispatch it.
       this.props.setView(view.getCenter(), view.getZoom());
     });
@@ -88,8 +95,12 @@
     const mapCenter = mapView.getCenter();
     const mapZoom = mapView.getZoom();
     if (mapCenter[0] !== stateView.center[0] || mapCenter[1] !== stateView.center[1] || mapZoom !== stateView.zoom) {
+      console.log('are we here??')
+      console.log('ol map resolution is now ' + mapView.getResolution())
       mapView.setCenter(stateView.center);
       mapView.setZoom(stateView.zoom);
+      mapView.setResolution(stateView.resolution);
+      console.log('after center and zoom changes, ol map resolution is now ' + mapView.getResolution())
     }
 
   }
@@ -101,4 +112,4 @@
     );
   }
 }
- export default injectIntl(Map);
+export default injectIntl(Map);

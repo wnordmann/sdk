@@ -12,6 +12,14 @@ export default (state = [], action) => {
           zoom:action.zoom
         }
       };
+    case  MAP.SET_RESOLUTION:
+      return {
+        ...state,
+        view:{
+          ...state.view,
+          resolution:action.resolution
+        }
+      };
     case MAP.ZOOM_IN:
     //TODO:Check MaxZoom
       return {

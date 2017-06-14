@@ -17,23 +17,29 @@
    return {
      type: MAP.GET_CONFIG,
      mapState: MapConfigService.getMapState(map)
-   }
- }
+   };
+ };
  export const setView = (center, zoom) => {
    return {
      type: MAP.SET_VIEW,
      center, zoom
-   }
- }
+   };
+ };
+ export const setResolution = (resolution) => {
+   return {
+     type: MAP.SET_RESOLUTION,
+     resolution
+   };
+ };
  export const zoomIn = (delta) => {
    return {
      type: MAP.ZOOM_IN,
      zoomDelta: delta
-   }
+   };
  };
  export const zoomOut = (delta) => {
    return {
      type: MAP.ZOOM_OUT,
      zoomDelta: delta
-   }
+   };
  };
