@@ -1,8 +1,34 @@
 import {MAP} from '../actions/ActionTypes';
-export default (state = {}, action) => {
+
+const defaultState = {
+  view: {
+    center:[0,0],
+    zoom: 0,
+    rotation: 0,
+    resolution: undefined
+  }
+}
+export default (state = defaultState, action) => {
   switch (action.type) {
     case  MAP.GET_CONFIG:
       return action.mapState;
+    case  MAP.SET_VIEW2:
+      const new_view = {};
+      for (const key of ['center', 'zoom', 'resolution']) {
+        if (typeof (action[key]) !== 'undefined') {
+          new_view[key] = action[key];
+        }
+      }
+      return {
+        ...state,
+        view:{
+          ...state.view,
+          center:action.center,
+          zoom:action.zoom,
+          resolution: action.resolution
+        }
+      };
+      //Object.assign({}, state, new_view);
     case  MAP.SET_VIEW:
       return {
         ...state,

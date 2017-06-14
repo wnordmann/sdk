@@ -25,6 +25,11 @@ export const setView = (center, zoom) => {
     center, zoom
   };
 };
+export function setView2(view) {
+  return Object.assign({
+    type: MAP.SET_VIEW2
+  }, view);
+}
 export const setResolution = (resolution) => {
   return {
     type: MAP.SET_RESOLUTION,

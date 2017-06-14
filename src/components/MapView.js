@@ -65,6 +65,9 @@ class Map extends React.PureComponent {
     super(props);
     this._proxy = context.proxy;
     this._requestHeaders = context.requestHeaders;
+    //this.props.setRotation(this.props.map.getView().getRotation());
+    //this.props.setResolution(this.props.map.getView().getResolution());
+    //this.props.setView(this.props.map.getView().getCenter(), this.props.map.getView().getZoom());
     if (this.props.hasOwnProperty('getMap')) {
       //this.props.getMap(this.props.map);
     }
@@ -77,36 +80,30 @@ class Map extends React.PureComponent {
     map.on('moveend', () => {
       // get the view of the map
       let view = map.getView();
-      let resolution = view.getResolution();
-      console.log(resolution)
-      //console.log(this.props.mapStore.view.resolution)
-      if (this.props.mapStore.view && resolution !== this.props.mapStore.view.resolution) {
-        console.log('changing stored resolution')
-        this.props.setResolution(view.getResolution())
-      }
+
       // create a "mapAction" and dispatch it.
       const rotation = view.getRotation();
-      if (this.props.mapStore.view && rotation !== this.props.mapStore.view.rotation) {
+      if (rotation !== this.props.mapStore.view.rotation) {
         this.props.setRotation(rotation);
       }
-      this.props.setView(view.getCenter(), view.getZoom());
+
+      this.props.setView2({center: view.getCenter(), zoom: view.getZoom(), resolution: view.getResolution()});
     });
   }
   componentWillUpdate(nextProps, nextState) {
     const mapView = this.props.map.getView();
     const stateView = nextProps.mapStore.view;
 
-    const mapCenter = mapView.getCenter();
-    const mapZoom = mapView.getZoom();
-    if (typeof (stateView.center) !== 'undefined' && (mapCenter[0] !== stateView.center[0] || mapCenter[1] !== stateView.center[1] || mapZoom !== stateView.zoom)) {
-      mapView.setCenter(stateView.center);
-      mapView.setZoom(stateView.zoom);
-      mapView.setResolution(stateView.resolution);
-      console.log('after center and zoom changes, ol map resolution is now ' + mapView.getResolution())
+    const center = mapView.getCenter();
+    const resolution = mapView.getResolution();
+
+    if (stateView.rotation !== mapView.getRotation()) {
+      mapView.setRotation(stateView.rotation);
     }
 
-    if (typeof (stateView.rotation) !== 'undefined' && stateView.rotation !== mapView.getRotation()) {
-      mapView.setRotation(stateView.rotation);
+    if (center[0] !== stateView.center[0] || center[1] !== stateView.center[1] || resolution !== stateView.resolution) {
+      mapView.setCenter(stateView.center);
+      mapView.setResolution(stateView.resolution);
     }
 
   }
