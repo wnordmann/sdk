@@ -1,10 +1,9 @@
-/* global afterEach, beforeEach, describe, it */
+/* global describe, it */
 
 import TestUtils from 'react-addons-test-utils';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {expect} from 'chai';
-import intl from '../mock-i18n';
 import {addLocaleData, IntlProvider} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import 'phantomjs-polyfill-object-assign';
@@ -13,13 +12,11 @@ import BoundlessSdk from '../../src/components/BoundlessSdk';
 import Rotate from '../../src/components/Rotate';
 import configureStore from '../../src/stores/Store';
 
-import polyfills from '../polyfills';
+import polyfills from '../polyfills'; // eslint-disable-line no-unused-vars
 
 import * as mapActions from '../../src/actions/MapActions';
 
 describe('Rotate', function() {
-  var width = 360;
-  var height = 180;
 
   it('rotates the map back to north', function() {
     var container = document.createElement('div');
@@ -31,7 +28,7 @@ describe('Rotate', function() {
         <IntlProvider locale="en">
           <BoundlessSdk store={store}>
             <MuiThemeProvider muiTheme={getMuiTheme()}>
-              <Rotate intl={intl} />
+              <Rotate />
             </MuiThemeProvider>
           </BoundlessSdk>
         </IntlProvider>

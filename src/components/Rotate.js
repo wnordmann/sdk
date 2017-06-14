@@ -16,7 +16,7 @@ import classNames from 'classnames';
 import NorthIcon from 'material-ui/svg-icons/maps/navigation';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
 import * as MapActions from '../actions/MapActions';
 
