@@ -116,7 +116,7 @@ describe('LayerListItem', function() {
 
   it('renders the filter, table, style, and label modals', function() {
     const renderer = TestUtils.createRenderer();
-    renderer.render(<LayerListItem index={0} moveLayer={function() {}} intl={intl} title={overlay.get('title')} map={map} layer={overlay}/>);
+    renderer.render(<LayerListItem index={0} moveLayer={function() {}} intl={intl} title={overlay.get('title')} map={map} layer={overlay} allowLabeling={true} allowFiltering={true}/>);
     var filterModal = renderer.getRenderOutput().props.children[1].props.children[1].props.children[0].ref;
     assert.equal(filterModal, 'filterModal');
     var labelModal = renderer.getRenderOutput().props.children[1].props.children[1].props.children[1].ref;
@@ -126,7 +126,7 @@ describe('LayerListItem', function() {
     var tableModal = renderer.getRenderOutput().props.children[1].props.children[1].props.children[3];
     assert.equal(tableModal, undefined);
     renderer.getMountedInstance().componentWillUnmount();
-    renderer.render(<LayerListItem index={0} moveLayer={function() {}} intl={intl} title={layer.get('title')} map={map} layer={layer} allowStyling={true} showTable={true}/>);
+    renderer.render(<LayerListItem index={0} moveLayer={function() {}} intl={intl} title={layer.get('title')} map={map} layer={layer} allowStyling={true} showTable={true} allowLabeling={true} allowFiltering={true}/>);
     filterModal = renderer.getRenderOutput().props.children[1].props.children[1].props.children[0];
     assert.equal(filterModal, undefined);
     labelModal = renderer.getRenderOutput().props.children[1].props.children[1].props.children[1];

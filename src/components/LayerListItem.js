@@ -703,13 +703,15 @@ static formats = {
       }
       download = <MenuItem disabled={disabled} primaryText={formatMessage(messages.downloadbuttonlabel)} leftIcon={<i className='fa fa-download'></i>}onTouchTap={this._download.bind(this)}/>
     }
-    var filter;
+    var filter, filterModal;
     if (layer instanceof ol.layer.Vector && this.props.allowFiltering) {
       filter = <MenuItem primaryText={formatMessage(messages.filterbuttonlabel)} leftIcon={<i className='fa fa-filter'></i>} onTouchTap={this._filter.bind(this)} />
+      filterModal = (<FilterModal {...this.props} ref='filterModal' open={this.state.filterOpen} onRequestClose={this._closeFilter.bind(this)} inline={this.props.inlineDialogs} layer={this.props.layer} />);
     }
-    var label;
-    if (layer instanceof ol.layer.Vector && this.props.allowLabeling) {
+    var label, labelModal;
+    if (layer instanceof ol.layer.Vector && this.props.allowLabeling && layer.getSource() instanceof ol.source.Vector) {
       label = (<MenuItem primaryText={formatMessage(messages.labelbuttonlabel)} leftIcon={<i className='fa fa-tag'></i>} onTouchTap={this._label.bind(this)} />);
+      labelModal = (<LabelModal {...this.props} ref='labelModal' open={this.state.labelOpen} onRequestClose={this._closeLabel.bind(this)} inline={this.props.inlineDialogs} layer={this.props.layer} />);
     }
     var remove;
     if (this.props.allowRemove && layer.get('type') !== 'base' && layer.get('isRemovable') === true) {
@@ -719,11 +721,7 @@ static formats = {
     if (this.props.allowEditing && layer.get('isWFST') === true) {
       edit = (<MenuItem onTouchTap={this._edit.bind(this)} primaryText={formatMessage(messages.editbuttonlabel)} leftIcon={<i className='fa fa-pencil'></i>} />);
     }
-    var tableModal, labelModal, filterModal, styleModal;
-    if (this.props.layer instanceof ol.layer.Vector) {
-      labelModal = (<LabelModal {...this.props} ref='labelModal' open={this.state.labelOpen} onRequestClose={this._closeLabel.bind(this)} inline={this.props.inlineDialogs} layer={this.props.layer} />);
-      filterModal = (<FilterModal {...this.props} ref='filterModal' open={this.state.filterOpen} onRequestClose={this._closeFilter.bind(this)} inline={this.props.inlineDialogs} layer={this.props.layer} />);
-    }
+    var tableModal, styleModal;
     var styling = <i className="fa fa-fw" ></i>;
     var canStyle = layer.get('wfsInfo') && this.props.allowStyling;
     if (canStyle) {

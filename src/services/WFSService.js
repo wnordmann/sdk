@@ -31,6 +31,8 @@ const wfsUnmarshaller = wfsContext.createUnmarshaller();
 const xsdContext = new Jsonix.Context([XSD_1_0]);
 const xsdUnmarshaller = xsdContext.createUnmarshaller();
 
+const defaultFeaturePrefix = 'feature';
+
 const proj4326 = new ol.proj.Projection({
   code: 'http://www.opengis.net/gml/srs/epsg.xml#4326',
   axis: 'enu'
@@ -264,6 +266,7 @@ class WFSService {
   getDeletePayload(wfsInfo, feature) {
     var node = wfsFormat.writeTransaction(null, null, [feature], {
       featureNS: wfsInfo.featureNS,
+      featurePrefix: defaultFeaturePrefix,
       featureType: wfsInfo.featureType
     });
     return xmlSerializer.serializeToString(node);
@@ -316,6 +319,7 @@ class WFSService {
         srsName: view.getProjection().getCode()
       } : undefined,
       featureNS: wfsInfo.featureNS,
+      featurePrefix: defaultFeaturePrefix,
       featureType: wfsInfo.featureType
     });
     return xmlSerializer.serializeToString(node);
@@ -350,6 +354,7 @@ class WFSService {
         srsName: view.getProjection().getCode()
       },
       featureNS: wfsInfo.featureNS,
+      featurePrefix: defaultFeaturePrefix,
       featureType: wfsInfo.featureType
     });
     return xmlSerializer.serializeToString(node);
