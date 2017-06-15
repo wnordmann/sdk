@@ -10,23 +10,23 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
- import React from 'react';
- import ReactDOM from 'react-dom';
- import ol from 'openlayers';
- import './MapPanel.css';
- import {injectIntl, intlShape} from 'react-intl';
- import classNames from 'classnames';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import ol from 'openlayers';
+import './MapPanel.css';
+import {injectIntl, intlShape} from 'react-intl';
+import classNames from 'classnames';
 
 
- /**
-  * A div that can render the OpenLayers map object. It will also take care of notifying the user of load errors.
-  * It can also provide integration with the browser's back and forward button for extent history navigation.
-  *
-  * ```xml
-  * <Map id='map' map={map} />
-  * ```
-  */
- class Map extends React.PureComponent {
+/**
+* A div that can render the OpenLayers map object. It will also take care of notifying the user of load errors.
+* It can also provide integration with the browser's back and forward button for extent history navigation.
+*
+* ```xml
+* <Map id='map' map={map} />
+* ```
+*/
+class Map extends React.PureComponent {
   //TODO: extent proptype, useHistory propTypes
   static propTypes = {
     /**
@@ -79,7 +79,7 @@
       let view = map.getView();
       // create a "mapAction" and dispatch it.
       const rotation = view.getRotation();
-      if(this.props.mapStore.view && rotation !== this.props.mapStore.view.rotation) {
+      if (this.props.mapStore.view && rotation !== this.props.mapStore.view.rotation) {
         this.props.setRotation(rotation);
       }
       this.props.setView(view.getCenter(), view.getZoom());
@@ -98,13 +98,13 @@
 
     const mapCenter = mapView.getCenter();
     const mapZoom = mapView.getZoom();
-    if (typeof(stateView ) !== 'undefined') {
-      if (typeof(stateView.center) !== 'undefined' && (mapCenter[0] !== stateView.center[0] || mapCenter[1] !== stateView.center[1] || mapZoom !== stateView.zoom)) {
+    if (typeof (stateView) !== 'undefined') {
+      if (typeof (stateView.center) !== 'undefined' && (mapCenter[0] !== stateView.center[0] || mapCenter[1] !== stateView.center[1] || mapZoom !== stateView.zoom)) {
         mapView.setCenter(stateView.center);
         mapView.setZoom(stateView.zoom);
       }
 
-      if (typeof(stateView.rotation) !== 'undefined' && stateView.rotation !== mapView.getRotation()) {
+      if (typeof (stateView.rotation) !== 'undefined' && stateView.rotation !== mapView.getRotation()) {
         mapView.setRotation(stateView.rotation);
       }
     }

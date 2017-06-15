@@ -25,7 +25,7 @@ export default class ImgIcon extends React.PureComponent {
     /**
      * Style config.
      */
-    style: React.PropTypes.object,
+    style: React.PropTypes.object
   }
 
   render() {

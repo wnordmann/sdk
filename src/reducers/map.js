@@ -2,7 +2,7 @@ import {MAP} from '../actions/ActionTypes';
 
 import ol from 'openlayers';
 
-/** Take in the size of the map and extent and 
+/** Take in the size of the map and extent and
  *   return a new "view" containing center and zoom.
  */
 
@@ -55,7 +55,7 @@ export default (state = {}, action) => {
         ...state,
         view: {
           ...state.view,
-          rotation: action.rotation,
+          rotation: action.rotation
         }
       }
     case MAP.SET_SIZE:
