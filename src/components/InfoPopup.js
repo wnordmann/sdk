@@ -184,9 +184,9 @@ class InfoPopup extends React.Component {
     for (var i = 0, ii = features.length; i < ii; ++i) {
       var feature = features[i];
       fid = feature.getId();
-      var geom = feature.getGeometryName();
+      var geom = feature instanceof ol.Feature ? feature.getGeometryName() : undefined;
       if (!Array.isArray(popupDef)) {
-        popupDef = feature.getKeys();
+        popupDef = feature instanceof ol.Feature ? feature.getKeys() : Object.keys(feature.getProperties());
       }
       var style = {wordWrap: 'break-word', whiteSpace: 'normal'};
       popupDef.forEach(function(key) {
