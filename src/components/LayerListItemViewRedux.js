@@ -10,7 +10,7 @@
  */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { DragSource, DropTarget } from 'react-dnd';
+import {DragSource, DropTarget} from 'react-dnd';
 // import Dialog from './Dialog';
 // import Button from './Button';
 // import FeatureTable from './FeatureTable';
@@ -22,7 +22,7 @@ import classNames from 'classnames';
 // import SLDService from '../services/SLDService';
 // import WMSService from '../services/WMSService';
 // import Slider from 'material-ui/Slider';
-// import { ListItem } from 'material-ui/List';
+import {ListItem} from 'material-ui/List';
 // import WMSLegend from './WMSLegend';
 // import ArcGISRestLegend from './ArcGISRestLegend';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
@@ -37,7 +37,8 @@ import { createDragPreview } from 'react-dnd-text-dragpreview';
 const layerListItemSource = {
 
   canDrag(props, monitor) {
-    return (props.layer.get('canDrag') !== false && props.allowReordering && props.layer.get('type') !== 'base' && props.layer.get('type') !== 'base-group');
+    // return (props.layer.properties.canDrag !== false && props.allowReordering && props.layer.type !== 'base' && props.layer.type !== 'base-group');
+    return (props.allowReordering && props.layer.type !== 'base' && props.layer.type !== 'base-group');
   },
   beginDrag(props) {
     return {
@@ -50,7 +51,7 @@ const layerListItemSource = {
 
 const layerListItemTarget = {
   hover(props, monitor, component) {
-    if (props.layer.get('type') === 'base' || props.layer.get('type') === 'base-group') {
+    if (props.layer.type === 'base' || props.layer.type === 'base-group') {
       return;
     }
     var sourceItem = monitor.getItem();
@@ -91,8 +92,15 @@ const layerListItemTarget = {
       return;
     }
 
-    // Time to actually perform the action
+  },
+  drop(props, monitor, component) {
+    //TODO: handle group layers
+    var sourceItem = monitor.getItem();
+    const dragIndex = sourceItem.index;
+    const hoverIndex = props.index;
     props.moveLayer(dragIndex, hoverIndex, sourceItem.layer, sourceItem.group);
+    return;
+
   }
 };
 
@@ -383,7 +391,7 @@ class LayerListItemRedux extends React.Component {
     //     this.props.group.un('change:visible', this._changeGroupVisible, this);
     //   }
     // }
-    this.props.layer.un('change:visible', this._changeLayerVisible, this);
+    // this.props.layer.un('change:visible', this._changeLayerVisible, this);
     if (this.props.handleResolutionChange) {
       // this.props.map.getView().un('change:resolution', this._changeResolution, this);
     }
@@ -392,7 +400,7 @@ class LayerListItemRedux extends React.Component {
   // provides custom message for dragPreview
   formatDragMessage(props) {
     const {formatMessage} = this.props.intl;
-    const title = props.layer.title;
+    const title = props.layer.properties.title;
     //IE might not like es6 template strings
     return `${formatMessage(messages.draglayerlabel)} - ${title}`;
   }
@@ -419,11 +427,13 @@ class LayerListItemRedux extends React.Component {
     //   table = (<MenuItem onTouchTap={this._showTable.bind(this)} primaryText={formatMessage(messages.tablebuttonlabel)} leftIcon={<i className='fa fa-table'></i>} />);
     // }
 
+    var downArrow = <i className="fa fa-angle-down" ></i>;
+    var sideArrow = <i className="fa fa-angle-right" ></i>;
     // var downArrow = <i className="fa fa-angle-down" onTouchTap={this._toggleNested.bind(this)}></i>;
     // var sideArrow = <i className="fa fa-angle-right" onTouchTap={this._toggleNested.bind(this)}></i>;
-    // var arrowIcon = this.state.open ? downArrow : sideArrow;
+    var arrowIcon = this.state.open ? downArrow : sideArrow;
 
-    // var layersIcon = <i className="ms ms-layers"></i>;
+    var layersIcon = <i className="ms ms-layers"></i>;
     // if (layer.get('type') !== 'base-group' &&  !(layer instanceof ol.layer.Group)) {
     //   arrowIcon = <i className="fa fa-fw" ></i>;
     // }
@@ -532,8 +542,9 @@ class LayerListItemRedux extends React.Component {
       display: 'flex',
       padding: '16px'
     };
-    // var muted;
-    // var isNested = false;
+    var muted;
+    var isNested = false;
+    var rightIconButtons = (<span></span>);
     // var rightIconButtons = <span className="fixedContainer">{styling}{zoomTo}{visibility}{popoverEllipsis}</span>;
     // if (layer.get('type') === 'base-group') {
     //   rightIconButtons = <span className="fixedContainer">{baseParentVisibility}{fixedWidth}</span>;
@@ -551,24 +562,21 @@ class LayerListItemRedux extends React.Component {
     // }
     return connectDragSource(connectDropTarget(
       <div>
-{/*        <ListItem
+        <ListItem
           className={classNames({'sdk-component': true, 'menuItemContainer': true, 'layer-list-item': true}, this.props.className)}
           insetChildren={true}
           innerDivStyle={flexContainer}
           autoGenerateNestedIndicator={false}
-          primaryText={<span className={classNames({'menuItem':true, muted, 'n1':isNested})}><span className="statusIcons">{arrowIcon}{layersIcon} <span className={'layer-list-name'}>{this.props.title}</span></span>{rightIconButtons}</span>}
-          nestedItems={this.props.nestedItems}
-          open={this.state.open} />
-        <div style={{paddingLeft: 72}}>
+          primaryText={<span className={classNames({'menuItem':true, muted, 'n1':isNested})}><span className="statusIcons">{arrowIcon}{layersIcon} <span className={'layer-list-name'}>{layer.properties.title}</span></span>{rightIconButtons}</span>}
+          />
+{/*        <div style={{paddingLeft: 72}}>
           {legend}
           <span>
             {filterModal}
             {labelModal}
             {styleModal}
             {tableModal}
-          </span>
-          Layer */}
-          Layer
+          </span> */}
         {this.renderItem(Item, isDragging)}
     </div>
 ));

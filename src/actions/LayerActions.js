@@ -17,3 +17,10 @@
      type: LAYER.GET_INFO
    }
  }
+ export const moveLayer = (dragIndex, hoverIndex, layer, group) => {
+   return {
+     type: LAYER.MOVELAYER,
+     source: dragIndex,
+     target: hoverIndex, layer, group
+   }
+ }

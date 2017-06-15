@@ -1,5 +1,7 @@
 import {MAP} from '../actions/ActionTypes';
-export default (state = {}, action) => {
+import {LAYER} from '../actions/ActionTypes';
+
+export default (state = [], action) => {
   switch (action.type) {
     case  MAP.GET_CONFIG:
       return action.mapState;
@@ -21,6 +23,14 @@ export default (state = {}, action) => {
           zoom:state.view.zoom + action.zoomDelta
         }
       }
+    case LAYER.MOVELAYER:
+      var layers = [...state.layers];
+      layers.splice(action.target,0, layers.splice(action.source,1)[0])
+
+      return {
+        ...state,
+        layers: layers
+      };
     case MAP.ZOOM_OUT:
       //TODO:Check MinZoom
       return {

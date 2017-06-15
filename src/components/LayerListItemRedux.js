@@ -10,9 +10,10 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import LayerListReduxView from './LayerListItemReduxView';
+import LayerListItemViewRedux from './LayerListItemViewRedux';
 import {connect} from 'react-redux';
 import * as MapActions from '../actions/MapActions';
+import * as LayerActions from '../actions/LayerActions';
 
 // Maps state from store to props
 const mapStateToProps = (state) => {
@@ -25,8 +26,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getMapLayers: map => dispatch(MapActions.getMapLayers(map)),
+    moveLayer: (dragIndex, hoverIndex, layer, group) => dispatch(LayerActions.moveLayer(dragIndex, hoverIndex, layer, group)),
     addLayer: (layer) => dispatch(MapActions.setView(layer))
   }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LayerListItemReduxView);
+export default connect(mapStateToProps, mapDispatchToProps)(LayerListItemViewRedux);
