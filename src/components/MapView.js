@@ -77,14 +77,16 @@ class Map extends React.PureComponent {
     map.on('moveend', () => {
       // get the view of the map
       let view = map.getView();
-
+      var view_obj = {center: view.getCenter(), zoom: view.getZoom(), resolution: view.getResolution()}
       // create a "mapAction" and dispatch it.
+      /*
       const rotation = view.getRotation();
       if (rotation !== this.props.mapStore.view.rotation) {
         this.props.setRotation(rotation);
       }
+      */
 
-      this.props.setView2({center: view.getCenter(), zoom: view.getZoom(), resolution: view.getResolution()});
+      this.props.setView(view_obj);
     });
   }
   componentWillUpdate(nextProps, nextState) {
@@ -94,10 +96,11 @@ class Map extends React.PureComponent {
     const center = mapView.getCenter();
     const resolution = mapView.getResolution();
     const zoom = mapView.getZoom();
-
+    /*
     if (stateView.rotation !== mapView.getRotation()) {
       mapView.setRotation(stateView.rotation);
     }
+    */
 
     if (center[0] !== stateView.center[0] || center[1] !== stateView.center[1] || resolution !== stateView.resolution || zoom !== stateView.zoom) {
       mapView.setCenter(stateView.center);

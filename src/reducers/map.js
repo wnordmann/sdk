@@ -1,42 +1,33 @@
 import {MAP} from '../actions/ActionTypes';
 
-const defaultState = {
-  view: {
-    center:[0,0],
-    zoom: 0,
-    rotation: 0,
-    resolution: undefined
-  }
-}
+const defaultState = {view: {}}
+
 export default (state = defaultState, action) => {
   switch (action.type) {
     case  MAP.GET_CONFIG:
       return action.mapState;
-    case  MAP.SET_VIEW2:
-      //const new_view = {};
+    case  MAP.SET_VIEW:
+      const new_view = state.view;
       for (const key of ['center', 'zoom', 'resolution']) {
-        if (typeof (action[key]) !== 'undefined') {
-          state.view[key] = action[key];
+        if (typeof (action.view[key]) !== 'undefined') {
+          new_view[key] = action.view[key];
         }
       }
       return {
         ...state,
-        view:{
-          ...state.view,
-          center:action.center,
-          zoom:action.zoom,
-          resolution: action.resolution
+        view: {
+          ...new_view
         }
       };
-    case  MAP.SET_VIEW:
-      return {
-        ...state,
-        view:{
-          ...state.view,
-          center:action.center,
-          zoom:action.zoom
-        }
-      };
+    // case  MAP.SET_VIEW:
+    //   return {
+    //     ...state,
+    //     view:{
+    //       ...state.view,
+    //       center:action.center,
+    //       zoom:action.zoom
+    //     }
+    //   };
     case  MAP.SET_RESOLUTION:
       return {
         ...state,
@@ -45,24 +36,6 @@ export default (state = defaultState, action) => {
           resolution:action.resolution
         }
       };
-    case MAP.ZOOM_IN:
-    //TODO:Check MaxZoom
-      return {
-        ...state,
-        view:{
-          ...state.view,
-          zoom:state.view.zoom + action.zoomDelta
-        }
-      }
-    case MAP.ZOOM_OUT:
-      //TODO:Check MinZoom
-      return {
-        ...state,
-        view:{
-          ...state.view,
-          zoom:state.view.zoom - action.zoomDelta
-        }
-      }
     case MAP.SET_ROTATION:
       return {
         ...state,

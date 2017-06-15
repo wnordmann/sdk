@@ -25,8 +25,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getMap: map => dispatch(MapActions.getMap(map)),
-    setView: (center, zoom) => dispatch(MapActions.setView(center, zoom)),
-    setView2: ({center, zoom, resolution}) => dispatch(MapActions.setView2({center, zoom, resolution})),
+    setView: (view) => dispatch(MapActions.setView(view)),
     setResolution: (resolution) => dispatch(MapActions.setResolution(resolution)),
     setRotation: (theta) => dispatch(MapActions.setRotation(theta))
   }

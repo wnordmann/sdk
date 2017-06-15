@@ -19,35 +19,22 @@ export const getMap = (map) => {
     mapState: MapConfigService.getMapState(map)
   };
 };
-export const setView = (center, zoom) => {
+// export const setView = (center, zoom) => {
+//   return {
+//     type: MAP.SET_VIEW,
+//     center, zoom
+//   };
+// };
+export function setView(view) {
   return {
     type: MAP.SET_VIEW,
-    center, zoom
-  };
-};
-export function setView2(view) {
-  return Object.assign({
-    type: MAP.SET_VIEW2
-  }, view);
+    view
+  }
 }
 export const setResolution = (resolution) => {
   return {
     type: MAP.SET_RESOLUTION,
     resolution
-  };
-};
-
-export const zoomIn = (delta) => {
-  return {
-    type: MAP.ZOOM_IN,
-    zoomDelta: delta
-  };
-};
-
-export const zoomOut = (delta) => {
-  return {
-    type: MAP.ZOOM_OUT,
-    zoomDelta: delta
   };
 };
 

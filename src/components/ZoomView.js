@@ -103,14 +103,12 @@ class Zoom extends React.PureComponent {
     return {muiTheme: this._muiTheme};
   }
   _zoomIn() {
-    if (this.props.hasOwnProperty('zoomIn')) {
-      this.props.zoomIn(this.props.delta);
-    }
+    var view = {zoom: this.props.zoom + this.props.delta}
+    this.props.setView(view);
   }
   _zoomOut() {
-    if (this.props.hasOwnProperty('zoomOut')) {
-      this.props.zoomOut(this.props.delta);
-    }
+    var view = {zoom: this.props.zoom - this.props.delta}
+    this.props.setView(view);
   }
 //TODO: re-apply animation
 //   _zoomByDelta(delta) {
