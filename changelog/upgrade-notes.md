@@ -1,6 +1,7 @@
 ## Upgrade notes
 
 ### Next release
+The OpenLayers version was upgraded from 4.0.1 to 4.2.0. Make sure your applications are on the exact same version (4.2.0) as well.
 
 ### v1.0.1
 
