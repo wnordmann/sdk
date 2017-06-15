@@ -32,13 +32,13 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 // import MenuItem from 'material-ui/MenuItem';
 // import Divider from 'material-ui/Divider';
 // import FileSaver from 'file-saver';
-import { createDragPreview } from 'react-dnd-text-dragpreview';
+import {createDragPreview} from 'react-dnd-text-dragpreview';
 
 const layerListItemSource = {
 
   canDrag(props, monitor) {
-    // return (props.layer.properties.canDrag !== false && props.allowReordering && props.layer.type !== 'base' && props.layer.type !== 'base-group');
-    return (props.allowReordering && props.layer.type !== 'base' && props.layer.type !== 'base-group');
+    return (props.layer.properties.canDrag !== false && props.allowReordering && props.layer.properties.type !== 'base' && props.layer.properties.type !== 'base-group');
+    // return (props.allowReordering && props.layer.type !== 'base' && props.layer.type !== 'base-group');
   },
   beginDrag(props) {
     return {
@@ -101,6 +101,9 @@ const layerListItemTarget = {
     props.moveLayer(dragIndex, hoverIndex, sourceItem.layer, sourceItem.group);
     return;
 
+  },
+  canDrop(props, monitor) {
+    return (props.layer.properties.canDrag !== false && props.allowReordering && props.layer.properties.type !== 'base' && props.layer.properties.type !== 'base-group');
   }
 };
 
