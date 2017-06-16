@@ -53,7 +53,7 @@ export function setSize(size) {
 
 export function zoomToExtent(extent) {
   return {
-    type: MAP.EXTENT,
+    type: MAP.FIT_EXTENT,
     extent
   }
 }

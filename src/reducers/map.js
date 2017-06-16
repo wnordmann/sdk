@@ -63,7 +63,7 @@ export default (state = {}, action) => {
         ...state,
         size: action.size
       };
-    case MAP.EXTENT:
+    case MAP.FIT_EXTENT:
       return {
         ...state,
         view: convertFromExtent(state.size, action.extent, state.rotation)

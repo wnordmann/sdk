@@ -115,7 +115,7 @@ class GeocodingResults extends React.Component {
   render() {
     // map all of the results to GeocodingResult items
     const items = this.props.results.map((item, idx) => {
-      return (<GeocodingResult key={'result' + idx} zoomToExtent={this.props.zoomToExtent} result={item}/>);
+      return (<GeocodingResult key={idx} zoomToExtent={this.props.zoomToExtent} result={item}/>);
     });
 
     // TODO: Should this move to a class?
@@ -144,7 +144,6 @@ const mapStateToProps = (state, ownProps) => {
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-    // You can now say this.props.createBook
     zoomToExtent: (extent) => dispatch(zoomToExtent(extent))
   }
 };

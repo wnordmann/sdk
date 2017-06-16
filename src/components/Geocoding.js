@@ -10,7 +10,6 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import Axios from 'axios';
 import React from 'react';
 import {connect} from 'react-redux';
 import classNames from 'classnames';
@@ -26,14 +25,6 @@ const messages = defineMessages({
     defaultMessage: 'Search placename...'
   }
 });
-
-const SEARCH_URL = 'http://nominatim.openstreetmap.org/search';
-const SEARCH_PARAMS = {
-  format: 'json',
-  addressdetails: '1',
-  limit: '5',
-  q: '%QUERY%'
-};
 
 export class Geocoding extends React.Component {
   static propTypes = {
@@ -66,14 +57,24 @@ export class Geocoding extends React.Component {
      */
     searchUrl: React.PropTypes.string
   }
+
+  static defaultProps = {
+    // use the nomantim search url if not given anything else.
+    searchUrl: 'http://nominatim.openstreetmap.org/search',
+    // normatim style urls.
+    searchParams: {
+      format: 'json',
+      addressdetails: '1',
+      limit: '5',
+      q: '%QUERY%'
+    }
+  }
+
   constructor(props) {
     super(props);
 
-    // seed the state as empty.
+    // seed the state with no results.
     this.state = {
-      // use the nomantim search url if not given anything else.
-      search_url: props.searchUrl ? props.searchUrl : SEARCH_URL,
-      search_params: props.searchParams ? props.searchParams : SEARCH_PARAMS,
       results: []
     };
   }
@@ -82,13 +83,13 @@ export class Geocoding extends React.Component {
     const search_string = event.target.value;
     if (search_string.length > 2) {
       // clone the params and substitute the query string in.
-      const params = Object.assign({}, this.state.search_params);
+      const params = Object.assign({}, this.props.searchParams);
       for (const key in params) {
         params[key]  = params[key].replace('%QUERY%', search_string);
       }
 
       // kick off the query.
-      return Axios.get(this.state.search_url, {params}).then((response) => {
+      return fetch(this.props.searchUrl, {params}).then((response) => {
         // get the results and transform them if given
         //  a transform function.
         let results = response.data;
