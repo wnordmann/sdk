@@ -23,14 +23,32 @@ export default (state = [], action) => {
           zoom:state.view.zoom + action.zoomDelta
         }
       }
-    case LAYER.MOVELAYER:
-      var layers = [...state.layers];
-      layers.splice(action.target,0, layers.splice(action.source,1)[0])
+    case LAYER.MOVE_LAYER:
+      {
+        let layers = [...state.layers];
+        layers[action.source]['dragTargetIndex'] = action.target;
+        layers[action.source]['dragSourceIndex'] = action.source;
 
-      return {
-        ...state,
-        layers: layers
-      };
+        layers.splice(action.target,0, layers.splice(action.source,1)[0])
+        return {
+          ...state,
+          layers: layers
+        };
+      }
+    case LAYER.CLEAR_DRAG:
+      {
+        let layers = [...state.layers];
+        layers.forEach(value => {
+          if (value.dragSourceIndex) {
+            delete value.dragSourceIndex;
+            delete value.dragTargetIndex;
+          }
+        })
+        return {
+          ...state,
+          layers: layers
+        };
+      }
     case MAP.ZOOM_OUT:
       //TODO:Check MinZoom
       return {
