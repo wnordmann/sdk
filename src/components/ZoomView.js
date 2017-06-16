@@ -11,7 +11,6 @@
  */
 
 import React from 'react';
-import ol from 'openlayers';
 import classNames from 'classnames';
 import Button from './Button';
 import ZoomIn from 'material-ui/svg-icons/action/zoom-in';

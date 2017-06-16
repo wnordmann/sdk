@@ -66,7 +66,7 @@ class Map extends React.PureComponent {
     this._proxy = context.proxy;
     this._requestHeaders = context.requestHeaders;
     if (this.props.hasOwnProperty('getMap')) {
-      this.props.getMap(this.props.map);
+      //this.props.getMap(this.props.map);
     }
   }
 
@@ -86,6 +86,7 @@ class Map extends React.PureComponent {
   componentWillUpdate(nextProps, nextState) {
     const mapView = this.props.map.getView();
     const stateView = nextProps.mapStore.view;
+
     const center = mapView.getCenter();
     const resolution = mapView.getResolution();
     const rotation = mapView.getRotation();
@@ -95,7 +96,7 @@ class Map extends React.PureComponent {
       mapView.setResolution(stateView.resolution);
       mapView.setRotation(stateView.rotation);
     }
-    
+/*
     const mapLayers = this.props.map.getLayers();
     const stateLayers = nextProps.mapStore.layers;
     if (nextProps) {
@@ -107,6 +108,7 @@ class Map extends React.PureComponent {
         }
       })
     }
+    */
   }
   render() {
     return (
