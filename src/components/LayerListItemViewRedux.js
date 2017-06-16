@@ -1,0 +1,589 @@
+/* Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {DragSource, DropTarget} from 'react-dnd';
+// import Dialog from './Dialog';
+// import Button from './Button';
+// import FeatureTable from './FeatureTable';
+// import FilterModal from './FilterModal';
+import classNames from 'classnames';
+// import LabelModal from './LabelModal';
+// import StyleModal from './StyleModal';
+// import LayerActions from '../actions/LayerActions';
+// import SLDService from '../services/SLDService';
+// import WMSService from '../services/WMSService';
+// import Slider from 'material-ui/Slider';
+import {ListItem} from 'material-ui/List';
+// import WMSLegend from './WMSLegend';
+// import ArcGISRestLegend from './ArcGISRestLegend';
+import { defineMessages, injectIntl, intlShape } from 'react-intl';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+// import Popover from 'material-ui/Popover';
+// import Menu from 'material-ui/Menu';
+// import MenuItem from 'material-ui/MenuItem';
+// import Divider from 'material-ui/Divider';
+// import FileSaver from 'file-saver';
+import {createDragPreview} from 'react-dnd-text-dragpreview';
+
+const layerListItemSource = {
+
+  canDrag(props, monitor) {
+    return (props.layer.properties.canDrag !== false && props.allowReordering && props.layer.properties.type !== 'base' && props.layer.properties.type !== 'base-group');
+    // return (props.allowReordering && props.layer.type !== 'base' && props.layer.type !== 'base-group');
+  },
+  beginDrag(props) {
+    return {
+      index: props.index,
+      layer: props.layer,
+      group: props.group
+    };
+  }
+};
+
+const layerListItemTarget = {
+  hover(props, monitor, component) {
+    if (props.layer.type === 'base' || props.layer.type === 'base-group') {
+      return;
+    }
+    var sourceItem = monitor.getItem();
+    const dragIndex = sourceItem.index;
+    const hoverIndex = props.index;
+    // Don't replace items with themselves
+    if (dragIndex === hoverIndex) {
+      return;
+    }
+
+    // Determine rectangle on screen
+    var comp = ReactDOM.findDOMNode(component);
+    if (!comp) {
+      return;
+    }
+    const hoverBoundingRect = comp.getBoundingClientRect();
+
+    // Get vertical middle
+    const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+
+    // Determine mouse position
+    const clientOffset = monitor.getClientOffset();
+
+    // Get pixels to the top
+    const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+
+    // Only perform the move when the mouse has crossed half of the items height
+    // When dragging downwards, only move when the cursor is below 50%
+    // When dragging upwards, only move when the cursor is above 50%
+
+    // Dragging downwards
+    if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+      return;
+    }
+
+    // Dragging upwards
+    if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+      return;
+    }
+
+  },
+  drop(props, monitor, component) {
+    //TODO: handle group layers
+    var sourceItem = monitor.getItem();
+    const dragIndex = sourceItem.index;
+    const hoverIndex = props.index;
+    props.moveLayer(dragIndex, hoverIndex, sourceItem.layer, sourceItem.group);
+    return;
+
+  },
+  canDrop(props, monitor) {
+    return (props.layer.properties.canDrag !== false && props.allowReordering && props.layer.properties.type !== 'base' && props.layer.properties.type !== 'base-group');
+  }
+};
+
+function collect(connect, monitor) {
+  return {
+    connectDragSource: connect.dragSource(),
+    connectDragPreview: connect.dragPreview()
+  };
+}
+
+function collectDrop(connect, monitor) {
+  return {
+    connectDropTarget: connect.dropTarget()
+  };
+}
+
+const dragPreviewStyleDefault = {
+  backgroundColor: 'rgb(68, 67, 67)',
+  color: 'white',
+  fontSize: 14,
+  paddingTop: 4,
+  paddingRight: 7,
+  paddingBottom: 6,
+  paddingLeft: 7,
+  fontFamily: 'Roboto'
+}
+
+const messages = defineMessages({
+  closebutton: {
+    id: 'layerlist.closebutton',
+    description: 'Text for close button',
+    defaultMessage: 'Close'
+  },
+  tablemodaltitle: {
+    id: 'layerlist.tablemodaltitle',
+    description: 'Title for the table modal',
+    defaultMessage: 'Table'
+  },
+  zoombuttonlabel: {
+    id: 'layerlist.zoombuttonlabel',
+    description: 'Tooltip for the zoom to layer button',
+    defaultMessage: 'Zoom to layer'
+  },
+  downloadbuttonlabel: {
+    id: 'layerlist.downloadbuttonlabel',
+    description: 'Tooltip for the download layer button',
+    defaultMessage: 'Download layer'
+  },
+  filterbuttonlabel: {
+    id: 'layerlist.filterbuttonlabel',
+    description: 'Tooltip for the zoom button',
+    defaultMessage: 'Filter layer'
+  },
+  labelbuttonlabel: {
+    id: 'layerlist.labelbuttonlabel',
+    description: 'Tooltip for the label button',
+    defaultMessage: 'Edit layer label'
+  },
+  stylingbuttonlabel: {
+    id: 'layerlist.stylingbuttonlabel',
+    description: 'Tooltip for the style layer button',
+    defaultMessage: 'Edit layer style'
+  },
+  removebuttonlabel: {
+    id: 'layerlist.removebuttonlabel',
+    description: 'Tooltip for the remove layer button',
+    defaultMessage: 'Remove layer'
+  },
+  editbuttonlabel: {
+    id: 'layerlist.editbuttonlabel',
+    description: 'Tooltip for the edit layer button',
+    defaultMessage: 'Edit layer'
+  },
+  tablebuttonlabel: {
+    id: 'layerlist.tablebuttonlabel',
+    description: 'Tooltip for the table button',
+    defaultMessage: 'Show table'
+  },
+  draglayerlabel: {
+    id: 'layerlist.draglayerlabel',
+    description: 'Text on label when dragging',
+    defaultMessage: 'Moving Layer'
+  }
+});
+
+/**
+$$src/components/LayerListItemDetail.md$$
+ */
+class LayerListItemRedux extends React.Component {
+  static propTypes = {
+    /**
+     * @ignore
+     */
+    connectDragSource: React.PropTypes.func.isRequired,
+    /**
+     * @ignore
+     */
+    connectDragPreview: React.PropTypes.func.isRequired,
+    /**
+     * @ignore
+     */
+    connectDropTarget: React.PropTypes.func.isRequired,
+    /**
+     * @ignore
+     */
+    isDragging: React.PropTypes.bool,
+    /**
+     * @ignore
+     */
+    Item: React.PropTypes.object,
+    /**
+     * @ignore
+     */
+    moveLayer: React.PropTypes.func.isRequired,
+    /**
+     * @ignore
+     */
+    index: React.PropTypes.number.isRequired,
+    /**
+     * The map in which the layer of this item resides.
+     */
+    // map: React.PropTypes.instanceOf(ol.Map).isRequired,
+    /**
+     * The layer associated with this item.
+     */
+    layer: React.PropTypes.object,
+    // /**
+    //  * The group layer to which this item might belong.
+    //  */
+    // group: React.PropTypes.instanceOf(ol.layer.Group),
+    /**
+     * The feature format to serialize in for downloads.
+     */
+    downloadFormat: React.PropTypes.oneOf(['GeoJSON', 'KML', 'GPX']),
+    /**
+     * The title to show for the layer.
+     */
+    title: React.PropTypes.string.isRequired,
+    /**
+     * Should we show a button that can open up the feature table?
+     */
+    showTable: React.PropTypes.bool,
+    /**
+     * Should we show a zoom to button for the layer?
+     */
+    showZoomTo: React.PropTypes.bool,
+    /**
+     * Should we show allow reordering?
+     */
+    allowReordering: React.PropTypes.bool,
+    /**
+     * Should we allow for filtering of features in a layer?
+     */
+    allowFiltering: React.PropTypes.bool,
+    /**
+     * Should we allow for removal of layers?
+     */
+    allowRemove: React.PropTypes.bool,
+    /**
+     * Should we allow editing of features in a vector layer?
+     */
+    allowEditing: React.PropTypes.bool,
+    /**
+     * Should we allow for labeling of features in a layer?
+     */
+    allowLabeling: React.PropTypes.bool,
+    /**
+     * Should we allow for styling of features in a vector layer?
+     */
+    allowStyling: React.PropTypes.bool,
+    /**
+     * Should we show a download button?
+     */
+    showDownload: React.PropTypes.bool,
+    /**
+     * Should we include the legend in the layer list?
+     */
+    includeLegend: React.PropTypes.bool,
+    /**
+     * Should groups be collapsible?
+     */
+    collapsible: React.PropTypes.bool,
+    /**
+     * The nested items to show for this item.
+     */
+    nestedItems: React.PropTypes.array,
+    /**
+     * Should we show an opacity slider for the layer?
+     */
+    showOpacity: React.PropTypes.bool,
+    /**
+     * Css class name to apply on the root element of this component.
+     */
+    className: React.PropTypes.string,
+    /**
+     * Style config for when label is out of scale.
+     */
+    labelStyleOutOfScale: React.PropTypes.object,
+    /**
+     * Should we handle resolution changes to show when a layer is in or out of scale?
+     */
+    handleResolutionChange: React.PropTypes.bool,
+    /**
+     * Should dialogs show inline instead of a modal?
+     */
+    inlineDialogs: React.PropTypes.bool,
+    /**
+     *  State from parent component to manage baseLayers
+     */
+    currentBaseLayer: React.PropTypes.string,
+    /**
+     *  Style for text of dragged layer
+     */
+    dragPreviewStyle: React.PropTypes.object,
+    /**
+     *  Callback from parent component to manage baseLayers
+     */
+    setBaseLayer: React.PropTypes.func,
+    /**
+     * @ignore
+     */
+    intl: intlShape.isRequired
+  };
+
+  static contextTypes = {
+    muiTheme: React.PropTypes.object,
+    proxy: React.PropTypes.string,
+    requestHeaders: React.PropTypes.object
+  };
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  };
+  static defaultProps = {
+    connectDragSource: function(a) {
+      return a;
+    },
+    connectDropTarget: function(a) {
+      return a;
+    },
+    connectDragPreview: function(a) {
+      return a;
+    }
+  };
+  constructor(props, context) {
+    super(props);
+    this._proxy = context.proxy;
+    this._requestHeaders = context.requestHeaders;
+    this._muiTheme = context.muiTheme || getMuiTheme();
+    //TODO: move to redux state
+    this.state = {
+      filterOpen: false,
+      labelOpen: false,
+      tableOpen: false,
+      open: props.layer.isGroupExpanded,
+      styleOpen: false,
+      checked: props.layer.visible,
+      previousBase: ''
+    };
+  }
+  getChildContext() {
+    return {muiTheme: this._muiTheme};
+  }
+  componentDidMount() {
+    var dragPreviewStyle = this.props.dragPreviewStyle  || dragPreviewStyleDefault;
+
+    const dragPreview = createDragPreview(this.formatDragMessage(this.props), dragPreviewStyle)
+    this.props.connectDragPreview(dragPreview)
+
+    // if (this.props.group) {
+    //   if (this.props.group.get('type') !== 'base-group') {
+    //     this.props.group.on('change:visible', this._changeGroupVisible, this);
+    //   }
+    // }
+    // this.props.layer.on('change:visible', this._changeLayerVisible, this);
+    // if (this.props.handleResolutionChange) {
+    //   this.props.map.getView().on('change:resolution', this._changeResolution, this);
+    // }
+    // if (!this.props.layer.get('wfsInfo')) {
+    //   this.props.layer.once('change:wfsInfo', function() {
+    //     this.forceUpdate();
+    //   }, this);
+    // }
+  }
+  componentWillUnmount() {
+    // if (this.props.group) {
+    //   if (this.props.group.get('type') !== 'base-group') {
+    //     this.props.group.un('change:visible', this._changeGroupVisible, this);
+    //   }
+    // }
+    // this.props.layer.un('change:visible', this._changeLayerVisible, this);
+    if (this.props.handleResolutionChange) {
+      // this.props.map.getView().un('change:resolution', this._changeResolution, this);
+    }
+  }
+
+  // provides custom message for dragPreview
+  formatDragMessage(props) {
+    const {formatMessage} = this.props.intl;
+    const title = props.layer.properties.title;
+    //IE might not like es6 template strings
+    return `${formatMessage(messages.draglayerlabel)} - ${title}`;
+  }
+
+  renderItem(item, isDragging) {
+    if (isDragging) {
+      return (<div>{item}</div>);
+    }
+  }
+
+  render() {
+    const {connectDragSource, connectDropTarget, isDragging, Item} = this.props;
+    const layer = this.props.layer;
+    const source = layer.getSource ? layer.getSource() : undefined;
+    const {formatMessage} = this.props.intl;
+    // var opacity;
+    // if (this.props.showOpacity && source && layer.get('type') !== 'base') {
+    //   var val = layer.getOpacity();
+    //   var slider = (<Slider sliderStyle={{marginTop: '0px', top: '14px', marginBottom: '0'}} defaultValue={val} onChange={this._changeOpacity.bind(this)} />);
+    //   opacity = <MenuItem leftIcon={<i className='menuIcon ms ms-opacity'></i>}>{slider}</MenuItem>
+    // }
+    // var table;
+    // if (this.props.showTable && (this.props.layer instanceof ol.layer.Vector || this.props.layer.get('wfsInfo') !== undefined)) {
+    //   table = (<MenuItem onTouchTap={this._showTable.bind(this)} primaryText={formatMessage(messages.tablebuttonlabel)} leftIcon={<i className='fa fa-table'></i>} />);
+    // }
+
+    var downArrow = <i className="fa fa-angle-down" ></i>;
+    var sideArrow = <i className="fa fa-angle-right" ></i>;
+    // var downArrow = <i className="fa fa-angle-down" onTouchTap={this._toggleNested.bind(this)}></i>;
+    // var sideArrow = <i className="fa fa-angle-right" onTouchTap={this._toggleNested.bind(this)}></i>;
+    var arrowIcon = this.state.open ? downArrow : sideArrow;
+
+    var layersIcon = <i className="ms ms-layers"></i>;
+    // if (layer.get('type') !== 'base-group' &&  !(layer instanceof ol.layer.Group)) {
+    //   arrowIcon = <i className="fa fa-fw" ></i>;
+    // }
+    // var zoomTo;
+    // if (layer.get('type') !== 'base' && layer.get('type') !== 'base-group' && ((source && source.getExtent) || layer.get('EX_GeographicBoundingBox')) && this.props.showZoomTo) {
+    //   zoomTo = <i className="fa fa-crosshairs" onTouchTap={this._zoomTo.bind(this)}></i>;
+    // }
+    // var download;
+    // if (layer instanceof ol.layer.Vector && this.props.showDownload) {
+    //   var disabled = false;
+    //   if (this.props.downloadFormat === 'GPX') {
+    //     var features = layer.getSource().getFeatures();
+    //     if (features.length > 0) {
+    //       var geom = features[0].getGeometry();
+    //       disabled = (geom instanceof ol.geom.Polygon || geom instanceof ol.geom.MultiPolygon);
+    //     }
+    //   }
+    //   download = <MenuItem disabled={disabled} primaryText={formatMessage(messages.downloadbuttonlabel)} leftIcon={<i className='fa fa-download'></i>}onTouchTap={this._download.bind(this)}/>
+    // }
+    // var filter;
+    // if (layer instanceof ol.layer.Vector && this.props.allowFiltering) {
+    //   filter = <MenuItem primaryText={formatMessage(messages.filterbuttonlabel)} leftIcon={<i className='fa fa-filter'></i>} onTouchTap={this._filter.bind(this)} />
+    // }
+    // var label;
+    // if (layer instanceof ol.layer.Vector && this.props.allowLabeling) {
+    //   label = (<MenuItem primaryText={formatMessage(messages.labelbuttonlabel)} leftIcon={<i className='fa fa-tag'></i>} onTouchTap={this._label.bind(this)} />);
+    // }
+    // var remove;
+    // if (this.props.allowRemove && layer.get('type') !== 'base' && layer.get('isRemovable') === true) {
+    //   remove = <MenuItem primaryText={formatMessage(messages.removebuttonlabel)} leftIcon={<i className='menuIcon fa fa-trash'></i>}onTouchTap={this._remove.bind(this)} />
+    // }
+    // var edit;
+    // if (this.props.allowEditing && layer.get('isWFST') === true) {
+    //   edit = (<MenuItem onTouchTap={this._edit.bind(this)} primaryText={formatMessage(messages.editbuttonlabel)} leftIcon={<i className='fa fa-pencil'></i>} />);
+    // }
+    // var tableModal, labelModal, filterModal, styleModal;
+    // if (this.props.layer instanceof ol.layer.Vector) {
+    //   labelModal = (<LabelModal {...this.props} ref='labelModal' open={this.state.labelOpen} onRequestClose={this._closeLabel.bind(this)} inline={this.props.inlineDialogs} layer={this.props.layer} />);
+    //   filterModal = (<FilterModal {...this.props} ref='filterModal' open={this.state.filterOpen} onRequestClose={this._closeFilter.bind(this)} inline={this.props.inlineDialogs} layer={this.props.layer} />);
+    // }
+    // var styling = <i className="fa fa-fw" ></i>;
+    // var canStyle = layer.get('wfsInfo') && this.props.allowStyling;
+    // if (canStyle) {
+    //   styling = (<i className='ms ms-style' onTouchTap={this._style.bind(this)}> </i>);
+    //   styleModal = (<StyleModal {...this.props} ref='styleModal' open={this.state.styleOpen} inline={this.props.inlineDialogs} onRequestClose={this._closeStyling.bind(this)} layer={this.props.layer} />);
+    // }
+    // if (this.props.showTable && (this.props.layer instanceof ol.layer.Vector || this.props.layer.get('wfsInfo') !== undefined)) {
+    //   var actions = [
+    //     <Button buttonType='Flat' label={formatMessage(messages.closebutton)} onTouchTap={this._closeTable.bind(this)} />
+    //   ];
+    //   tableModal = (
+    //     <Dialog ref='tableModal' inline={this.props.inlineDialogs} actions={actions} title={formatMessage(messages.tablemodaltitle)} open={this.state.tableOpen} onRequestClose={this._closeTable.bind(this)}>
+    //       <div style={{height: 400}}>
+    //         <FeatureTable allowEdit={this.props.inlineDialogs} onUpdate={this._onTableUpdate.bind(this)} map={this.props.map} layer={this.props.layer} intl={this.props.intl}/>
+    //       </div>
+    //     </Dialog>
+    //   );
+    // }
+    // var legend;
+    // if (this.props.includeLegend && this.props.layer.getVisible() && this.calculateInRange()) {
+    //   if ((this.props.layer instanceof ol.layer.Tile && this.props.layer.getSource() instanceof ol.source.TileWMS) ||
+    //   (this.props.layer instanceof ol.layer.Image && this.props.layer.getSource() instanceof ol.source.ImageWMS)) {
+    //     legend = <WMSLegend layer={this.props.layer} />;
+    //   }
+    //   if (this.props.layer instanceof ol.layer.Tile && this.props.layer.getSource() instanceof ol.source.TileArcGISRest) {
+    //     legend = <ArcGISRestLegend layer={this.props.layer} />;
+    //   }
+    // }
+    //
+    // var showBasemapEye = this.props.layer.get('visible') || this.props.currentBaseLayer === this.props.layer.get('id');
+    // var checked = <i className='fa fa-eye' onTouchTap={this._handleVisibility.bind(this)}></i>;
+    // var unchecked = <i className='fa fa-eye-slash' onTouchTap={this._handleVisibility.bind(this)}></i>;
+    // var baseVisibility = <i onTouchTap={this._handleBaseVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye':showBasemapEye, 'fa-eye-slash':!showBasemapEye})}></i>;
+    // var baseParentVisibility = <i id='baseParentVisibility' onTouchTap={this._handleBaseParentVisibility.bind(this)} className={classNames({'fa':true, 'fa-eye-slash':this.props.currentBaseLayer === 'baseParent', 'fa-eye':this.props.currentBaseLayer !== 'baseParent'})}></i>;
+    // var fixedWidth =  <i className='fa fa-fw'></i>;
+    //
+    // var isVisible = this.state.checked;
+    // if (!this.props.layer.getVisible() && this.state.checked) {
+    //   isVisible = false;
+    // }
+    // var visibility = isVisible ? checked : unchecked;
+    // var popoverEllipsis = (!(this.props.layer instanceof ol.layer.Group) && (opacity || download || filter || remove || table || label || edit)) ? (
+    //   <div>
+    //     <i className="fa fa-ellipsis-v" onTouchTap={this._handleMenuOpen.bind(this)}></i>
+    //     <Popover
+    //         open={this.state.popover}
+    //         anchorEl={this.state.anchorEl}
+    //         anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
+    //         targetOrigin={{horizontal: 'right', vertical: 'top'}}
+    //         onRequestClose={this._handleRequestClose.bind(this)}
+    //       >
+    //         <Menu>
+    //           {opacity}
+    //           <Divider/>
+    //           {download}
+    //           {filter}
+    //           {remove}
+    //           {table}
+    //           {label}
+    //           {edit}
+    //         </Menu>
+    //       </Popover>
+    //   </div>
+    //   ) : undefined;
+    var flexContainer = {
+      display: 'flex',
+      padding: '16px'
+    };
+    var muted;
+    var isNested = false;
+    var rightIconButtons = (<span></span>);
+    // var rightIconButtons = <span className="fixedContainer">{styling}{zoomTo}{visibility}{popoverEllipsis}</span>;
+    // if (layer.get('type') === 'base-group') {
+    //   rightIconButtons = <span className="fixedContainer">{baseParentVisibility}{fixedWidth}</span>;
+    //   muted = this.props.currentBaseLayer === 'baseParent';
+    // }else if (layer.get('type') === 'base') {
+    //   rightIconButtons = <span className="fixedContainer">{baseVisibility}{fixedWidth}</span>;
+    //   muted = !showBasemapEye;
+    //   isNested = true;
+    // }else if (layer instanceof ol.layer.Group) {
+    //   rightIconButtons = <span className="fixedContainer">{visibility}{fixedWidth}</span>;
+    //   muted = !isVisible;
+    // } else {
+    //   isNested = !!this._getLayerGroupId(layer.get('id'), this.props.map.getLayerGroup());
+    //   muted = !isVisible;
+    // }
+    return connectDragSource(connectDropTarget(
+      <div>
+        <ListItem
+          className={classNames({'sdk-component': true, 'menuItemContainer': true, 'layer-list-item': true}, this.props.className)}
+          insetChildren={true}
+          innerDivStyle={flexContainer}
+          autoGenerateNestedIndicator={false}
+          primaryText={<span className={classNames({'menuItem':true, muted, 'n1':isNested})}><span className="statusIcons">{arrowIcon}{layersIcon} <span className={'layer-list-name'}>{layer.properties.title}</span></span>{rightIconButtons}</span>}
+          />
+{/*        <div style={{paddingLeft: 72}}>
+          {legend}
+          <span>
+            {filterModal}
+            {labelModal}
+            {styleModal}
+            {tableModal}
+          </span> */}
+        {this.renderItem(Item, isDragging)}
+    </div>
+));
+
+  }
+}
+export default injectIntl(DropTarget('LayerListItemRedux', layerListItemTarget, collectDrop)(DragSource('LayerListItemRedux', layerListItemSource, collect)(LayerListItemRedux)));

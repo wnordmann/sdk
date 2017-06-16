@@ -3,15 +3,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {assert} from 'chai';
-import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import AddLayerModal from '../../src/components/AddLayerModal';
 import TestUtils from 'react-addons-test-utils';
 
-raf.polyfill();
-injectTapEventPlugin();
+import polyfills from '../polyfills';
 
 describe('AddLayerModal', function() {
 

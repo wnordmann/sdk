@@ -10,23 +10,25 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import ZoomView from './ZoomView';
+import LayerListItemViewRedux from './LayerListItemViewRedux';
 import {connect} from 'react-redux';
 import * as MapActions from '../actions/MapActions';
+import * as LayerActions from '../actions/LayerActions';
 
 // Maps state from store to props
 const mapStateToProps = (state) => {
   return {
-    resolution: state.mapState.view.resolution || null
+    mapStore: state.mapState || null
   }
 };
-
 
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-    setView: view => dispatch(MapActions.setView(view))
+    getMapLayers: map => dispatch(MapActions.getMapLayers(map)),
+    moveLayer: (dragIndex, hoverIndex, layer, group) => dispatch(LayerActions.moveLayer(dragIndex, hoverIndex, layer, group)),
+    addLayer: (layer) => dispatch(MapActions.setView(layer))
   }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ZoomView);
+export default connect(mapStateToProps, mapDispatchToProps)(LayerListItemViewRedux);

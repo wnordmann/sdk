@@ -11,8 +11,6 @@ import 'phantomjs-polyfill-object-assign';
 import Zoom from '../../src/components/ZoomView';
 import configureStore from '../../src/stores/Store';
 import {setView} from '../../src/actions/MapActions';
-import {zoomIn} from '../../src/actions/MapActions';
-import {zoomOut} from '../../src/actions/MapActions';
 import BoundlessSdk from '../../src/components/BoundlessSdk';
 
 raf.polyfill();
@@ -48,7 +46,7 @@ describe('Zoom', function() {
     document.body.removeChild(target);
   });
 
-  it('zooms in', function(done) {
+  it('zooms in and out', function(done) {
     var container = document.createElement('div');
     const store = configureStore();
     ReactDOM.render((
@@ -56,13 +54,13 @@ describe('Zoom', function() {
         <Zoom intl={intl} map={map}/>
       </BoundlessSdk>
     ), container);
-    store.dispatch(setView([0,0], 1));
-    store.dispatch(zoomIn(1));
-    let view = store.getState().mapState.view;
-    assert.equal(view.zoom, 2);
-    store.dispatch(zoomOut(2));
-    view = store.getState().mapState.view;
-    assert.equal(view.zoom, 0);
+    let initResolution = map.getView().getResolution();
+    store.dispatch(setView({center:[0,0], resolution: initResolution}));
+    store.dispatch(setView({resolution: initResolution / 2}));
+    let newResolution = store.getState().mapState.view.resolution;
+    assert.equal(newResolution, initResolution / 2);
+    store.dispatch(setView({resolution: newResolution * 2}));
+    assert.equal(store.getState().mapState.view.resolution, initResolution);
     window.setTimeout(function() {
       ReactDOM.unmountComponentAtNode(container);
       done();

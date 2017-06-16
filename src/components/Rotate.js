@@ -11,11 +11,14 @@
  */
 
 import React from 'react';
-import ol from 'openlayers';
 import Button from './Button';
 import classNames from 'classnames';
 import NorthIcon from 'material-ui/svg-icons/maps/navigation';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+
+import {connect} from 'react-redux';
+
+import * as MapActions from '../actions/MapActions';
 
 const messages = defineMessages({
   rotatetitle: {
@@ -29,7 +32,7 @@ const messages = defineMessages({
  * A button that shows the rotation of the map and allows to reset it.
  *
  * ```xml
- * <Rotate map={map} />
+ * <Rotate />
  * ```
  *
  * ![Rotate](../Rotate.png)
@@ -44,10 +47,6 @@ class Rotate extends React.PureComponent {
      * Style config.
      */
     style: React.PropTypes.object,
-    /**
-     * The ol3 map to use.
-     */
-    map: React.PropTypes.instanceOf(ol.Map).isRequired,
     /**
      * Should we hide the button if not rotated?
      */
@@ -71,50 +70,41 @@ class Rotate extends React.PureComponent {
     duration: 250
   };
 
-  constructor(props, context) {
-    super(props);
-    this.state = {
-      rotation: 0
-    };
-  }
-  componentDidMount() {
-    var view = this.props.map.getView();
-    this.setState({
-      rotation: view.getRotation()
-    });
-    view.on('change:rotation', function() {
-      this.setState({rotation: view.getRotation()});
-    }, this);
-  }
   _resetNorth() {
-    var map = this.props.map;
-    var view = map.getView();
-    var currentRotation = view.getRotation();
-    if (currentRotation !== 0) {
-      if (this.props.duration > 0) {
-        view.animate({
-          rotation: 0,
-          duration: this.props.duration,
-          easing: ol.easing.easeOut
-        });
-      } else {
-        view.setRotation(0);
-      }
-    }
+    var view = {rotation: 0};
+    this.props.setView(view);
   }
   render() {
-    if (this.state.rotation === 0 && this.props.autoHide) {
-      return (<article/>);
+    // get the angle of the map
+    let theta = 0;
+    if (this.props.map && this.props.map.view && this.props.map.view.rotation) {
+      theta = this.props.map.view.rotation;
+    }
+    // when autohide is enabled, do not render anything in the DOM.
+    if (theta === 0 && this.props.autoHide) {
+      return false;
     } else {
       const {formatMessage} = this.props.intl;
       var iconStyle = {
-        transform: 'rotate(' + this.state.rotation + 'rad)'
+        transform: 'rotate(' + theta + 'rad)'
       };
       return (
-        <Button style={this.props.style} tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} secondary={true} className={classNames('sdk-component rotate', this.props.className)} iconStyle={iconStyle} tooltip={formatMessage(messages.rotatetitle)} onTouchTap={this._resetNorth.bind(this)}><NorthIcon /></Button>
+        <Button style={this.props.style} tooltip={formatMessage(messages.rotatetitle)} tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} secondary={true} iconStyle={iconStyle} className={classNames('sdk-component rotate', this.props.className)}  onTouchTap={this._resetNorth.bind(this)}><NorthIcon /></Button>
       );
     }
   }
 }
 
-export default injectIntl(Rotate);
+function mapPropsToState(state) {
+  return {
+    map: state.mapState
+  }
+}
+
+function mapPropsToDispatch(dispatch) {
+  return {
+    setView: view => dispatch(MapActions.setView(view))
+  }
+}
+
+export default connect(mapPropsToState, mapPropsToDispatch)(injectIntl(Rotate));

@@ -4,8 +4,7 @@ import ol from 'openlayers';
 
 import configureStore from '../stores/Store';
 
-
-export class BoundlessSdk extends React.PureComponent {
+export class BoundlessSdk extends React.Component {
   static propTypes = {
     /**
      * @ignore

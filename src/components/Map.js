@@ -13,6 +13,7 @@
 import MapView from './MapView';
 import {connect} from 'react-redux';
 import * as MapActions from '../actions/MapActions';
+import * as LayerActions from '../actions/LayerActions';
 
 // Maps state from store to props
 const mapStateToProps = (state) => {
@@ -25,7 +26,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getMap: map => dispatch(MapActions.getMap(map)),
-    setView: (center, zoom) => dispatch(MapActions.setView(center, zoom))
+    setView: (view) => dispatch(MapActions.setView(view)),
+    clearLayerDrag: () => dispatch(LayerActions.clearDrag())
   }
 };
 

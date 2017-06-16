@@ -10,23 +10,11 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import ZoomView from './ZoomView';
-import {connect} from 'react-redux';
-import * as MapActions from '../actions/MapActions';
 
-// Maps state from store to props
-const mapStateToProps = (state) => {
-  return {
-    resolution: state.mapState.view.resolution || null
-  }
-};
+global.Intl = require('intl');
 
+import raf from 'raf';
+raf.polyfill();
 
-// Maps actions to props
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setView: view => dispatch(MapActions.setView(view))
-  }
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ZoomView);
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
