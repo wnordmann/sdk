@@ -66,7 +66,7 @@ class Rotate extends React.PureComponent {
   };
 
   static defaultProps = {
-    autoHide: false,
+    autoHide: true,
     duration: 250
   };
 
