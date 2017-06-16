@@ -7,7 +7,13 @@ export default function mapSource(state = [], action) {
         ...state,
         layer: action.layer
       };
-
+    // case LAYER.MOVELAYER:
+    //   console.log(state.mapState.layers);
+    //   // return {
+    //   //   ...state,
+    //   //   layer: action.layer
+    //   // };
+    //   return state;
     default:
       return state;
   }

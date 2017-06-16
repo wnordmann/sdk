@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import MapView from './MapView';
+import LayerListItemViewRedux from './LayerListItemViewRedux';
 import {connect} from 'react-redux';
 import * as MapActions from '../actions/MapActions';
 import * as LayerActions from '../actions/LayerActions';
@@ -25,12 +25,10 @@ const mapStateToProps = (state) => {
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-    getMap: map => dispatch(MapActions.getMap(map)),
-    setView: (center, zoom) => dispatch(MapActions.setView(center, zoom)),
-    setRotation: (theta) => dispatch(MapActions.setRotation(theta)),
-    setSize: (size) => dispatch(MapActions.setSize(size)),
-    clearLayerDrag: () => dispatch(LayerActions.clearDrag())
+    getMapLayers: map => dispatch(MapActions.getMapLayers(map)),
+    moveLayer: (dragIndex, hoverIndex, layer, group) => dispatch(LayerActions.moveLayer(dragIndex, hoverIndex, layer, group)),
+    addLayer: (layer) => dispatch(MapActions.setView(layer))
   }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MapView);
+export default connect(mapStateToProps, mapDispatchToProps)(LayerListItemViewRedux);
