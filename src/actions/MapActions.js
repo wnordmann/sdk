@@ -16,7 +16,7 @@ import MapConfigService from '../services/MapConfigService';
 export const getMap = (map) => {
   return {
     type: MAP.GET_CONFIG,
-    mapState: MapConfigService.getMapState(map)
+    layers: MapConfigService.getMapState(map)
   };
 };
 export function setView(view) {
