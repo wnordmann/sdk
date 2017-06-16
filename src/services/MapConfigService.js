@@ -281,6 +281,12 @@ class MapConfigService {
     //return config;
     return layers;
   }
+  extentToResolution(map) {
+    var view = map.getView();
+    var extent = view.calculateExtent();
+    var resolution = view.getResolutionForExtent(extent);
+    return resolution;
+  }
 }
 
 export default new MapConfigService();

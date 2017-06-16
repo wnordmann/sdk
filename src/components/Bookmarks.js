@@ -14,12 +14,18 @@ import BookmarksView from './BookmarksView';
 import {connect} from 'react-redux';
 import * as MapActions from '../actions/MapActions';
 
+// Maps actions to props
+const mapStateToProps = (state) => {
+  return {
+    //view: view => dispatch(MapActions.setView(view))
+  }
+};
 
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-    setView: (center, zoom) => dispatch(MapActions.setView(center, zoom))
+    setView: view => dispatch(MapActions.setView(view))
   }
 };
 
-export default connect(null, mapDispatchToProps)(BookmarksView);
+export default connect(mapStateToProps, mapDispatchToProps)(BookmarksView);

@@ -63,8 +63,7 @@ class Bookmarks extends React.PureComponent {
     bookmarks: React.PropTypes.arrayOf(React.PropTypes.shape({
       name: React.PropTypes.string.isRequired,
       description: React.PropTypes.string.isRequired,
-      center: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
-      zoom: React.PropTypes.number.isRequired
+      center: React.PropTypes.arrayOf(React.PropTypes.number).isRequired
     })).isRequired,
 
     /**
@@ -118,12 +117,7 @@ class Bookmarks extends React.PureComponent {
     /**
      * Sets infinite wrapAround mode. Defaults to true
      */
-    wrapAround: React.PropTypes.bool,
-    /**
-     * @ignore
-     * The map to use for testing
-     */
-    map: React.PropTypes.instanceOf(ol.Map)
+    wrapAround: React.PropTypes.bool
   };
 
   static defaultProps = {
@@ -186,9 +180,8 @@ class Bookmarks extends React.PureComponent {
     for (var i = 0, ii = this.props.bookmarks.length; i < ii; ++i) {
       if (this.props.bookmarks[i].name === value) {
         bookmark = this.props.bookmarks[i];
-        if (this.props.hasOwnProperty('setView')) {
-          this.props.setView(bookmark.center, bookmark.zoom);
-        }
+        let view = {center: bookmark.center}
+        this.props.setView(view);
       }
     }
     this.setState({value: value});
@@ -235,9 +228,8 @@ class Bookmarks extends React.PureComponent {
     var bookmark;
     if (idx !== 0) {
       bookmark = this.props.bookmarks[idx - 1];
-      if (this.props.hasOwnProperty('setView')) {
-        this.props.setView(bookmark.center, bookmark.zoom);
-      }
+      let view = {center: bookmark.center}
+      this.props.setView(view);
     }
     //this._selectBookmark(bookmark);
   }
