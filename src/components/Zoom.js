@@ -17,7 +17,7 @@ import * as MapActions from '../actions/MapActions';
 // Maps state from store to props
 const mapStateToProps = (state) => {
   return {
-    zoom: state.mapState.view.zoom || null
+    resolution: state.mapState.view.resolution || null
   }
 };
 

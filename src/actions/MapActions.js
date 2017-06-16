@@ -19,25 +19,12 @@ export const getMap = (map) => {
     mapState: MapConfigService.getMapState(map)
   };
 };
-// export const setView = (center, zoom) => {
-//   return {
-//     type: MAP.SET_VIEW,
-//     center, zoom
-//   };
-// };
 export function setView(view) {
   return {
     type: MAP.SET_VIEW,
     view
   }
 }
-export const setResolution = (resolution) => {
-  return {
-    type: MAP.SET_RESOLUTION,
-    resolution
-  };
-};
-
 export function setRotation(theta) {
   return {
     type: MAP.SET_ROTATION,

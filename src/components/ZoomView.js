@@ -74,12 +74,7 @@ class Zoom extends React.PureComponent {
     /**
      * @ignore
      */
-    intl: intlShape.isRequired,
-    /**
-     * @ignore
-     * The map to use for testing
-     */
-    map: React.PropTypes.instanceOf(ol.Map)
+    intl: intlShape.isRequired
   };
 
   static contextTypes = {
@@ -103,11 +98,11 @@ class Zoom extends React.PureComponent {
     return {muiTheme: this._muiTheme};
   }
   _zoomIn() {
-    var view = {zoom: this.props.zoom + this.props.delta}
+    var view = {resolution: this.props.resolution / (2 * this.props.delta)}
     this.props.setView(view);
   }
   _zoomOut() {
-    var view = {zoom: this.props.zoom - this.props.delta}
+    var view = {resolution: this.props.resolution * (2 * this.props.delta)}
     this.props.setView(view);
   }
 //TODO: re-apply animation

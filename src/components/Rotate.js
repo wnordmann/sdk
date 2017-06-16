@@ -32,7 +32,7 @@ const messages = defineMessages({
  * A button that shows the rotation of the map and allows to reset it.
  *
  * ```xml
- * <Rotate map={map} />
+ * <Rotate />
  * ```
  *
  * ![Rotate](../Rotate.png)
@@ -66,12 +66,13 @@ class Rotate extends React.PureComponent {
   };
 
   static defaultProps = {
-    autoHide: true,
+    autoHide: false,
     duration: 250
   };
 
   _resetNorth() {
-    this.props.setRotation(0);
+    var view = {rotation: 0};
+    this.props.setView(view);
   }
   render() {
     // get the angle of the map
@@ -79,7 +80,6 @@ class Rotate extends React.PureComponent {
     if (this.props.map && this.props.map.view && this.props.map.view.rotation) {
       theta = this.props.map.view.rotation;
     }
-
     // when autohide is enabled, do not render anything in the DOM.
     if (theta === 0 && this.props.autoHide) {
       return false;
@@ -89,7 +89,7 @@ class Rotate extends React.PureComponent {
         transform: 'rotate(' + theta + 'rad)'
       };
       return (
-        <Button style={this.props.style} tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} secondary={true} className={classNames('sdk-component rotate', this.props.className)} iconStyle={iconStyle} tooltip={formatMessage(messages.rotatetitle)} onTouchTap={this._resetNorth.bind(this)}><NorthIcon /></Button>
+        <Button style={this.props.style} tooltip={formatMessage(messages.rotatetitle)} tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} secondary={true} iconStyle={iconStyle} className={classNames('sdk-component rotate', this.props.className)}  onTouchTap={this._resetNorth.bind(this)}><NorthIcon /></Button>
       );
     }
   }
@@ -103,7 +103,7 @@ function mapPropsToState(state) {
 
 function mapPropsToDispatch(dispatch) {
   return {
-    setRotation: (theta) => dispatch(MapActions.setRotation(theta))
+    setView: view => dispatch(MapActions.setView(view))
   }
 }
 
