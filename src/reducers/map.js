@@ -40,22 +40,6 @@ export default (state = defaultState, action) => {
           layers: layers
         };
       }
-    case MAP.ZOOM_OUT:
-      //TODO:Check MinZoom
-      return {
-        ...state,
-        view: {
-          ...new_view
-        }
-      };
-    case MAP.SET_ROTATION:
-      return {
-        ...state,
-        view: {
-          ...state.view,
-          rotation: action.rotation
-        }
-      }
     default:
       return state
   }

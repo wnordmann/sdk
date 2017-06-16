@@ -25,9 +25,3 @@ export function setView(view) {
     view
   }
 }
-export function setRotation(theta) {
-  return {
-    type: MAP.SET_ROTATION,
-    rotation: theta
-  }
-}
