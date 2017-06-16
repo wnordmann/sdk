@@ -1,14 +1,14 @@
 /*
- * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and limitations under the License.
- */
+* Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+* Licensed under the Apache License, Version 2.0 (the "License").
+* You may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+* http://www.apache.org/licenses/LICENSE-2.0
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and limitations under the License.
+*/
 
 import React from 'react';
 import debounce from  'debounce';
@@ -18,7 +18,8 @@ import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import LayerIdService from '../services/LayerIdService';
-import LayerListItem from './LayerListItem';
+// import LayerListItem from './LayerListItem';
+import LayerListItemRedux from './LayerListItemRedux';
 
 import Label from './Label';
 import AddLayerModal from './AddLayerModal';
@@ -53,95 +54,95 @@ const messages = defineMessages({
   }
 });
 /**
- * $$src/components/LayerListDetail.md$$
- *
- */
+* $$src/components/LayerListDetail.md$$
+*
+*/
 class LayerListRedux extends React.PureComponent {
   static propTypes = {
     /**
-     * Should we allow upload of vector layers?
-     */
+    * Should we allow upload of vector layers?
+    */
     showUpload: React.PropTypes.bool,
     /**
-     * Should we allow creation of new vector layers?
-     */
+    * Should we allow creation of new vector layers?
+    */
     showNew: React.PropTypes.bool,
     /**
-     * The map whose layers should show up in this layer list.
-     */
+    * The map whose layers should show up in this layer list.
+    */
     map: React.PropTypes.object,
     /**
-     * Style config.
-     */
+    * Style config.
+    */
     style: React.PropTypes.object,
     /**
-     * Should we show a button that allows the user to zoom to the layer's extent?
-     */
+    * Should we show a button that allows the user to zoom to the layer's extent?
+    */
     showZoomTo: React.PropTypes.bool,
     /**
-     * Should we show a button that can open up the feature table?
-     */
+    * Should we show a button that can open up the feature table?
+    */
     showTable: React.PropTypes.bool,
     /**
-     * Should we allow for reordering of layers?
-     */
+    * Should we allow for reordering of layers?
+    */
     allowReordering: React.PropTypes.bool,
     /**
-     * Should we allow for filtering of features in a layer?
-     */
+    * Should we allow for filtering of features in a layer?
+    */
     allowFiltering: React.PropTypes.bool,
     /**
-     * Should we allow for labeling of features in a layer?
-     */
+    * Should we allow for labeling of features in a layer?
+    */
     allowLabeling: React.PropTypes.bool,
     /**
-     * Should we allow for styling of features in a vector layer?
-     */
+    * Should we allow for styling of features in a vector layer?
+    */
     allowStyling: React.PropTypes.bool,
     /**
-     * Should we allow for editing of features in a vector layer?
-     * This does require having a WFST component in your application.
-     */
+    * Should we allow for editing of features in a vector layer?
+    * This does require having a WFST component in your application.
+    */
     allowEditing: React.PropTypes.bool,
     /**
-     * Should we allow for removal of layers?
-     */
+    * Should we allow for removal of layers?
+    */
     allowRemove: React.PropTypes.bool,
     /**
-     * Should we show a download button for layers?
-     */
+    * Should we show a download button for layers?
+    */
     showDownload: React.PropTypes.bool,
     /**
-     * Should we include the legend in the layer list?
-     */
+    * Should we include the legend in the layer list?
+    */
     includeLegend: React.PropTypes.bool,
     /**
-     * The feature format to serialize in for downloads.
-     */
+    * The feature format to serialize in for downloads.
+    */
     downloadFormat: React.PropTypes.oneOf(['GeoJSON', 'KML', 'GPX']),
     /**
-     * Should we show an opacity slider for layers?
-     */
+    * Should we show an opacity slider for layers?
+    */
     showOpacity: React.PropTypes.bool,
     /**
-     * Text to show on top of layers.
-     */
+    * Text to show on top of layers.
+    */
     tipLabel: React.PropTypes.string,
     /**
-     * Should we show this component on start of the application?
-     */
+    * Should we show this component on start of the application?
+    */
     showOnStart: React.PropTypes.bool,
     /**
-     * Should groups be collapsible?
-     */
+    * Should groups be collapsible?
+    */
     collapsible: React.PropTypes.bool,
     /**
-     * Icon for the component
-     */
+    * Icon for the component
+    */
     icon: React.PropTypes.node,
     /**
-     * Add basemap functionality that adds a button that will open the BaseMapModal componenet
-     */
+    * Add basemap functionality that adds a button that will open the BaseMapModal componenet
+    */
     addBaseMap: React.PropTypes.bool,
     /**
     *  Tile services for the BaseMapModal component.  There is a built in default tileService if none provided
@@ -155,8 +156,8 @@ class LayerListRedux extends React.PureComponent {
       thumbnail: React.PropTypes.string.isRequired
     })),
     /**
-     * Should we allow adding layers?
-     */
+    * Should we allow adding layers?
+    */
     // addLayer: React.PropTypes.shape({
     //   sources: React.PropTypes.arrayOf(React.PropTypes.shape({
     //     title: React.PropTypes.string.isRequired,
@@ -167,36 +168,36 @@ class LayerListRedux extends React.PureComponent {
     //   allowUserInput: React.PropTypes.bool
     // }),
     /**
-     * Css class name to apply on the root element of this component.
-     */
+    * Css class name to apply on the root element of this component.
+    */
     className: React.PropTypes.string,
     /**
-     * Minimum width as a number of a LayerList, this is mainly an issue on ie11
-     */
+    * Minimum width as a number of a LayerList, this is mainly an issue on ie11
+    */
     minWidth: React.PropTypes.number,
     /**
-     * Position of the tooltip.
-     */
+    * Position of the tooltip.
+    */
     tooltipPosition: React.PropTypes.oneOf(['bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'top-right', 'top', 'top-left']),
     /**
-     * A filter function to filter out some of the layers by returning false.
-     */
+    * A filter function to filter out some of the layers by returning false.
+    */
     filter: React.PropTypes.func,
     /**
-     * Style config for when label is out of scale.
-     */
+    * Style config for when label is out of scale.
+    */
     labelStyleOutOfScale: React.PropTypes.object,
     /**
-     * Should we handle resolution changes to show when a layer is in or out of scale?
-     */
+    * Should we handle resolution changes to show when a layer is in or out of scale?
+    */
     handleResolutionChange: React.PropTypes.bool,
     /**
-     * @ignore
-     */
+    * @ignore
+    */
     children: React.PropTypes.node,
     /**
-     * Should dialogs show inline instead of a modal?
-     */
+    * Should dialogs show inline instead of a modal?
+    */
     inlineDialogs: React.PropTypes.bool,
     /**
     * @ignore
@@ -244,161 +245,159 @@ class LayerListRedux extends React.PureComponent {
     };
     this.moveLayer = debounce(this.moveLayer, 100);
   }
- componentWillMount() {
-   //TODO: Setup state listeners
-   if (this.props.inlineDialogs) {
-     this.setState({visible: true});
-   }
- }
- componentWillUnmount() {
-   //TODO: Remove state listeners
- }
- componentDidMount() {
-   var forEachLayer = function(layers, layer) {
-     if (layer.type === 'Group') {
-       layer.getLayers().forEach(function(groupLayer) {
-         forEachLayer(layers, groupLayer);
-       });
-     } else if (layer.type === 'base') {
-       layers.push(layer);
-     }
-   };
-   var baseLayers = [];
-   forEachLayer(baseLayers, this.props.mapStore.layers);
-   if (baseLayers.length > 0) {
-     for (var i = 0; i < baseLayers.length; i++) {
-       baseLayers[i].setVisible(false);
-     }
-     baseLayers[0].setVisible(true);
-     this.setState({baseLayer: baseLayers[0].id});
-   }
- }
- _onChange() {
-   //TODO: Build on change
-  //  this.setState(LayerStore.getState());
- }
- renderLayerGroup(group) {
-   return this.renderLayers(group.children, group);
- }
- renderLayers(layers, group) {
-   //TODO: Move to filter in state
-   var me = this;
-   var layerNodes = [];
-   for (var i = 0, ii = layers.length; i < ii; ++i) {
-     var lyr = layers[i];
-     if (!this.props.filter || this.props.filter(lyr) === true) {
-       layerNodes.push(me.getLayerNode(lyr, group, (ii - i) - 1));
-     }
-   }
-   return layerNodes;
- }
- _showAddLayer() {
-   //TODO: move to redux state
-   this.setState({
-     addLayerOpen: true
-   });
- }
- _closeAddLayer() {
-   //TODO: move to redux state
-   this.setState({
-     addLayerOpen: false
-   });
- }
- _togglePanel() {
-   //TODO: move to redux state
-   var newVisible = !this.state.visible;
-   if (newVisible || this._modalOpen !== true) {
-     this.setState({visible: newVisible});
-   }
- }
- _setBaseLayer(layer) {
-   //TODO: move to redux state
-   this.setState({baseLayer: layer});
- }
- getLayerNode(lyr, group, idx) {
-   if (this.props.addBaseMap && lyr.properties.type === 'base' && !lyr.properties.visible) {
-     return undefined;
-   }
-   if (lyr.id === undefined) {
-     lyr.id = LayerIdService.generateId();
-   }
-   if (lyr.properties.title !== null) {
-     if (lyr.type === 'Group') {
-       var children = (lyr.showContent === false) ? [] : this.renderLayerGroup(lyr);
-       return (
-         <div>Group</div>
-       );
-     } else {
-       return (
-         <div>Not group</div>
-       );
-     }
-   }
- }
- _showAddBaseMap() {
-   this.refs.addbasemapmodal.getWrappedInstance().open();
- }
- moveLayer(dragIndex, hoverIndex, layer, group) {
-//TODO: Make move action
-  //  LayerActions.moveLayer(dragIndex, hoverIndex, layer, group);
- }
- render() {
-   const {formatMessage} = this.props.intl;
-  //  var layers = this.state.layers.slice(0).reverse();
-   var layers = this.props.mapStore.layers;
-   var divClass = {
-     'layer-switcher': true,
-     'sdk-component': true,
-     'layer-list': true
-   };
-   var tipLabel = this.props.tipLabel ? (<div className='layer-list-header'><Label>{this.props.tipLabel}</Label></div>) : undefined;
-   var addLayer, layerModal, baseModal, button;
-
-   if (!this.props.inlineDialogs) {
-     button = (<Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={this._togglePanel.bind(this)}><LayersIcon /></Button>);
-   }
-
-   if (this.props.addLayer || this.props.addBaseMap || this.props.showUpload || this.props.showNew) {
-     var layerAdd, baseAdd;
-     if (this.props.addLayer || this.props.showUpload || this.props.showNew) {
-       if (!this.props.inlineDialogs) {
-         layerAdd = (<Button
-           buttonType='Icon'
-           iconClassName='ms ms-ogc-web-services'
-           onTouchTap={this._showAddLayer.bind(this)}
-           tooltip={formatMessage(messages.addlayertext)} />);
-       }
-       layerModal = <AddLayerModal allowUpload={this.props.showUpload} allowCreate={this.props.showNew} open={(this.props.addLayer && this.props.addLayer.open !== undefined) ? this.props.addLayer.open : this.state.addLayerOpen} inline={this.props.inlineDialogs} srsName={this.props.map.getView().getProjection().getCode()} allowUserInput={this.props.addLayer && this.props.addLayer.allowUserInput} onRequestClose={this.props.addLayer && this.props.addLayer.onRequestClose ? this.props.addLayer.onRequestClose : this._closeAddLayer.bind(this)} sources={this.props.addLayer ? this.props.addLayer.sources : undefined} map={this.props.map}  />;
-     }
-     if (this.props.addBaseMap) {
-       baseAdd = <Button buttonType='Icon' iconClassName='ms ms-layers-base' tooltip={formatMessage(messages.addbasemaptext)} onTouchTap={this._showAddBaseMap.bind(this)} disableTouchRipple={true}/>;
-       //Fallback to handle original implementation of BaseMapModal using single prop addBaseMap.tileServices
-       //over new implementation using 2 props addBaseMap and baseMapTileServices
-       var tileServices = this.props.baseMapTileServices || this.props.addBaseMap.tileServices;
-       baseModal = <BaseMapModal tileServices={tileServices} map={this.props.map} ref='addbasemapmodal' />;
-     }
-     addLayer = (
-       <span>
-         {layerAdd}
-         {baseAdd}
-       </span>
-     );
-   }
-   return (
-     <div ref='parent' className={classNames(divClass, this.props.className)}>
-       {button}
-       <Paper style={{display : this.state.visible ? 'block' : 'none', minWidth:this.props.minWidth}} zDepth={0} className='layer-tree-panel'>
-         {tipLabel}
-         <List className='layer-list-list'>
-           {this.renderLayers(layers)}
-         </List>
-         {addLayer}
-       </Paper>
-       {this.props.children}
-       {layerModal}
-       {baseModal}
-     </div>
-   );
- }
-}
-export default injectIntl(DragDropContext(HTML5Backend)(LayerListRedux));
+  componentWillMount() {
+    //TODO: Setup state listeners
+    if (this.props.inlineDialogs) {
+      this.setState({visible: true});
+    }
+  }
+  componentWillUnmount() {
+    //TODO: Remove state listeners
+  }
+  componentDidMount() {
+    var forEachLayer = function(layers, layer) {
+      if (layer.type === 'Group') {
+        layer.getLayers().forEach(function(groupLayer) {
+          forEachLayer(layers, groupLayer);
+        });
+      } else if (layer.type === 'base') {
+        layers.push(layer);
+      }
+    };
+    var baseLayers = [];
+    forEachLayer(baseLayers, this.props.mapStore.layers);
+    if (baseLayers.length > 0) {
+      for (var i = 0; i < baseLayers.length; i++) {
+        baseLayers[i].setVisible(false);
+      }
+      baseLayers[0].setVisible(true);
+      this.setState({baseLayer: baseLayers[0].id});
+    }
+  }
+  _onChange() {
+    //TODO: Build on change
+    //  this.setState(LayerStore.getState());
+  }
+  renderLayerGroup(group) {
+    return this.renderLayers(group.children, group);
+  }
+  renderLayers(layers, group) {
+    //TODO: Move to filter in state
+    var me = this;
+    var layerNodes = [];
+    for (var i = 0, ii = layers.length; i < ii; ++i) {
+      var lyr = layers[i];
+      if (!this.props.filter || this.props.filter(lyr) === true) {
+        layerNodes.push(me.getLayerNode(lyr, group, (ii - i) - 1));
+      }
+    }
+    return layerNodes;
+  }
+  _showAddLayer() {
+    //TODO: move to redux state
+    this.setState({
+      addLayerOpen: true
+    });
+  }
+  _closeAddLayer() {
+    //TODO: move to redux state
+    this.setState({
+      addLayerOpen: false
+    });
+  }
+  _togglePanel() {
+    //TODO: move to redux state
+    var newVisible = !this.state.visible;
+    if (newVisible || this._modalOpen !== true) {
+      this.setState({visible: newVisible});
+    }
+  }
+  _setBaseLayer(layer) {
+    //TODO: move to redux state
+    this.setState({baseLayer: layer});
+  }
+  getLayerNode(lyr, group, idx) {
+    if (this.props.addBaseMap && lyr.properties.type === 'base' && !lyr.properties.visible) {
+      return undefined;
+    }
+    if (lyr.id === undefined) {
+      lyr.id = LayerIdService.generateId();
+    }
+    if (lyr.properties.title !== null) {
+      if (lyr.type === 'Group') {
+        var children = (lyr.showContent === false) ? [] : this.renderLayerGroup(lyr);
+        return (
+          <LayerListItemRedux setBaseLayer={this._setBaseLayer.bind(this)} currentBaseLayer={this.state.baseLayer} index={idx} moveLayer={this.moveLayer} {...this.props} key={lyr.id} layer={lyr} group={group} nestedItems={children} title={lyr.properties.title} disableTouchRipple={true}/>
+        );
+      } else {
+        return (
+          <LayerListItemRedux setBaseLayer={this._setBaseLayer.bind(this)} currentBaseLayer={this.state.baseLayer} index={idx} moveLayer={this.moveLayer} {...this.props} key={lyr.id} layer={lyr} group={group} title={lyr.properties.title} disableTouchRipple={true}/>
+        );
+      }
+    }
+  }
+  _showAddBaseMap() {
+    this.refs.addbasemapmodal.getWrappedInstance().open();
+  }
+  moveLayer(dragIndex, hoverIndex, layer, group) {
+    //TODO: Make move action
+    // LayerActions.moveLayer(dragIndex, hoverIndex, layer, group);
+  }
+  render() {
+    const {formatMessage} = this.props.intl;
+    var layers = this.props.mapStore.layers.slice(0).reverse();
+    //  var layers = this.props.mapStore.layers;
+    var divClass = {
+      'layer-switcher': true,
+      'sdk-component': true,
+      'layer-list': true
+    };
+    var tipLabel = this.props.tipLabel ? (<div className='layer-list-header'><Label>{this.props.tipLabel}</Label></div>) : undefined;
+    var addLayer, layerModal, baseModal, button;
+    if (!this.props.inlineDialogs) {
+      button = (<Button tooltipPosition={this.props.tooltipPosition} buttonType='Action' mini={true} className='layerlistbutton' tooltip={formatMessage(messages.layertitle)} onTouchTap={this._togglePanel.bind(this)}><LayersIcon /></Button>);
+    }
+    if (this.props.addLayer || this.props.addBaseMap || this.props.showUpload || this.props.showNew) {
+      var layerAdd, baseAdd;
+      if (this.props.addLayer || this.props.showUpload || this.props.showNew) {
+        if (!this.props.inlineDialogs) {
+          layerAdd = (<Button
+            buttonType='Icon'
+            iconClassName='ms ms-ogc-web-services'
+            onTouchTap={this._showAddLayer.bind(this)}
+            tooltip={formatMessage(messages.addlayertext)} />);
+          }
+          layerModal = <AddLayerModal allowUpload={this.props.showUpload} allowCreate={this.props.showNew} open={(this.props.addLayer && this.props.addLayer.open !== undefined) ? this.props.addLayer.open : this.state.addLayerOpen} inline={this.props.inlineDialogs} srsName={this.props.map.getView().getProjection().getCode()} allowUserInput={this.props.addLayer && this.props.addLayer.allowUserInput} onRequestClose={this.props.addLayer && this.props.addLayer.onRequestClose ? this.props.addLayer.onRequestClose : this._closeAddLayer.bind(this)} sources={this.props.addLayer ? this.props.addLayer.sources : undefined} map={this.props.map}  />;
+        }
+        if (this.props.addBaseMap) {
+          baseAdd = <Button buttonType='Icon' iconClassName='ms ms-layers-base' tooltip={formatMessage(messages.addbasemaptext)} onTouchTap={this._showAddBaseMap.bind(this)} disableTouchRipple={true}/>;
+          //Fallback to handle original implementation of BaseMapModal using single prop addBaseMap.tileServices
+          //over new implementation using 2 props addBaseMap and baseMapTileServices
+          var tileServices = this.props.baseMapTileServices || this.props.addBaseMap.tileServices;
+          baseModal = <BaseMapModal tileServices={tileServices} map={this.props.map} ref='addbasemapmodal' />;
+        }
+        addLayer = (
+          <span>
+            {layerAdd}
+            {baseAdd}
+          </span>
+        );
+      }
+      return (
+        <div ref='parent' className={classNames(divClass, this.props.className)}>
+          {button}
+          <Paper style={{display : this.state.visible ? 'block' : 'none', minWidth:this.props.minWidth}} zDepth={0} className='layer-tree-panel'>
+            {tipLabel}
+            <List className='layer-list-list'>
+              {this.renderLayers(layers)}
+            </List>
+            {addLayer}
+          </Paper>
+          {this.props.children}
+          {layerModal}
+          {baseModal}
+        </div>
+      );
+    }
+  }
+  export default injectIntl(DragDropContext(HTML5Backend)(LayerListRedux));
