@@ -25,3 +25,9 @@ export function setView(view) {
     view
   }
 }
+export function setSize(size) {
+  return {
+    type: MAP.SET_SIZE,
+    size
+  }
+}
