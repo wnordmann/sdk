@@ -14,9 +14,9 @@ function convertFromExtent(mapSize, extent, rotation) {
   });
 
   return {
-    zoom: view.getZoom(),
+    resolution: view.getResolution(),
     center: view.getCenter(),
-    rotation: rotation
+    rotation: rotation ? rotation : 0
   }
 }
 

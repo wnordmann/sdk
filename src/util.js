@@ -122,14 +122,11 @@ export default {
     xmlhttp.send(data);
     return xmlhttp;
   },
-  /**
-   * Uses fetch api but normalizes KVP parameters.
-   */
   fetch(url, options) {
     let req_url = url;
-    if(options.params) {
+    if (options.params) {
       const params = [];
-      for(const key of Object.keys(options.params)) {
+      for (const key of Object.keys(options.params)) {
         params.push(key + '=' + encodeURIComponent(options.params[key]));
       }
       req_url += '?' + params.join('&');

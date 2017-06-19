@@ -31,3 +31,9 @@ export function setSize(size) {
     size
   }
 }
+export function zoomToExtent(extent) {
+  return {
+    type: MAP.FIT_EXTENT,
+    extent
+  }
+}

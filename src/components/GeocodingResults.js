@@ -14,11 +14,7 @@ import ol from 'openlayers';
 import React from 'react';
 import {connect} from 'react-redux';
 import classNames from 'classnames';
-import {List, ListItem} from 'material-ui/List';
-import Place from 'material-ui/svg-icons/maps/place';
-
 import {zoomToExtent} from '../actions/MapActions';
-import ImgIcon from './ImgIcon';
 
 
 class GeocodingResult extends React.Component {
@@ -36,7 +32,7 @@ class GeocodingResult extends React.Component {
     const placeType = result.address[Object.keys(result.address)[0]];
     if (placeType) {
       const displayName = result.display_name.slice(placeType.length);
-      return (<span className="locationDetails"><span className="place">{placeType}</span>{displayName}</span>)
+      return (<div><span className="place">{placeType}</span>{displayName}</div>)
     }
 
     return (<span>{result.display_name}</span>);
@@ -65,10 +61,10 @@ class GeocodingResult extends React.Component {
       // The OSM geocoder returns URLs to images,
       //  this "shims" the material-ui icon renderer
       //  to use an <img>.
-      icon = (<ImgIcon src={result.icon} />);
+      icon = (<img src={result.icon}/>)
     } else {
       // send it? There might be a better icon for this.
-      icon = (<Place/>);
+      icon = (<i className="fa fa-search"></i>);
     }
 
     const zoom_to = () => {
@@ -76,13 +72,16 @@ class GeocodingResult extends React.Component {
     };
 
     return (
-      <ListItem
-        className='geocoding-result'
-        leftIcon={icon}
-        key={result.place_id}
-        onTouchTap={zoom_to}>
-          {this.formatDisplayName(result)}
-      </ListItem>
+      <div className="locationResult">
+        <div className="locationIcon">
+          {icon}
+        </div>
+        <div className="locationDetails"
+          key={result.place_id}
+          onTouchTap={zoom_to}>
+            {this.formatDisplayName(result)}
+        </div>
+      </div>
     );
   }
 }
@@ -125,10 +124,8 @@ class GeocodingResults extends React.Component {
     }
 
     return (
-      <div style={style} className={classNames('sdk-component geocoding-results-panel', this.props.className)}>
-        <List>
-          {items}
-        </List>
+      <div style={style} className={classNames('sdk-component geoCodingResults', this.props.className)}>
+        {items}
       </div>
     );
   }

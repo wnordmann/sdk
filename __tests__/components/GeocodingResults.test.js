@@ -1,4 +1,4 @@
-/* global afterEach, beforeEach, describe, it */
+/* global describe, it */
 
 import React from 'react';
 import ReactDOM from 'react-dom';
