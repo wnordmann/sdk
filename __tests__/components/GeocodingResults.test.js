@@ -80,7 +80,7 @@ describe('GeocodingResults', function() {
       </div>
     ), container);
 
-    var geocodingResults = container.querySelectorAll('.geocoding-result');
+    var geocodingResults = container.querySelectorAll('.locationResult');
     assert.equal(geocodingResults.length, 2);
     ReactDOM.unmountComponentAtNode(container);
   });
