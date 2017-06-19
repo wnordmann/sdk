@@ -5,7 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {expect} from 'chai';
 import {setView} from '../../src/actions/MapActions';
-import {addLocaleData, IntlProvider} from 'react-intl';
+import {IntlProvider} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import 'phantomjs-polyfill-object-assign';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -14,8 +14,6 @@ import Rotate from '../../src/components/Rotate';
 import configureStore from '../../src/stores/Store';
 
 import polyfills from '../polyfills'; // eslint-disable-line no-unused-vars
-
-import * as mapActions from '../../src/actions/MapActions';
 
 describe('Rotate', function() {
 
@@ -36,7 +34,6 @@ describe('Rotate', function() {
       </div>
     ), container);
 
-    //store.dispatch(mapActions.setRotation(0.1));
     store.dispatch(setView({rotation: 0.1}));
     expect(store.getState().mapState.view.rotation).to.equal(0.1);
 

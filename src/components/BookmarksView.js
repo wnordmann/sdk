@@ -171,8 +171,8 @@ class Bookmarks extends React.PureComponent {
         }),
         source: new ol.source.Vector({wrapX: false})
       });
-      ///* TODO: Add layer when addlayer action is in place
-      this.map.addLayer(this._layer);
+      // TODO: Add layer when addlayer action is in place
+      //this.map.addLayer(this._layer);
     }
   }
 
