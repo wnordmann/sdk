@@ -18,6 +18,8 @@ import TextField from 'material-ui/TextField';
 import {lightWhite, fullWhite} from 'material-ui/styles/colors';
 import GeocodingResults from './GeocodingResults';
 
+import util from '../util';
+
 const messages = defineMessages({
   placeholder: {
     id: 'geocoding.placeholder',
@@ -89,10 +91,11 @@ export class Geocoding extends React.Component {
       }
 
       // kick off the query.
-      return fetch(this.props.searchUrl, {params}).then((response) => {
+      return util.fetch(this.props.searchUrl, {params}).then((response) => {
+        return response.json();
+      }).then((results) => {
         // get the results and transform them if given
         //  a transform function.
-        let results = response.data;
         if (typeof (this.props.transformResults) === 'function') {
           results = this.props.transformResults(results);
         }
