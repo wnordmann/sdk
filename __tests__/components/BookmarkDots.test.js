@@ -22,13 +22,13 @@ describe('Bookmarks Dots', function() {
     description: '<b>Address: </b>38 rue des Abbesses<br><b>Telephone:</b> 33 (0)1 46 06 41 81<br><a href=""http://www.legrenierapain.com"">Website</a>',
     extent: [259562.7661267497, 6254560.095662868, 260675.9610346824, 6256252.988234103],
     center: ol.extent.getCenter([259562.7661267497, 6254560.095662868, 260675.9610346824, 6256252.988234103]),
-    zoom: 13
+    resolution: map.getView().getResolutionForExtent([259562.7661267497, 6254560.095662868, 260675.9610346824, 6256252.988234103], ol.extent.getSize([259562.7661267497, 6254560.095662868, 260675.9610346824, 6256252.988234103]))
   }, {
     name: 'Poilne',
     description: '<b>Address: </b>8 rue du Cherche-Midi<br><b>Telephone:</b> 33 (0)1 45 48 42 59<br><a href=""http://www.poilane.fr"">Website</a>',
     extent: [258703.71361629796, 6248811.5276565505, 259816.90852423065, 6250503.271278702],
     center: ol.extent.getCenter([258703.71361629796, 6248811.5276565505, 259816.90852423065, 6250503.271278702]),
-    zoom: 13
+    resolution: map.getView().getResolutionForExtent([258703.71361629796, 6248811.5276565505, 259816.90852423065, 6250503.271278702], ol.extent.getSize([258703.71361629796, 6248811.5276565505, 259816.90852423065, 6250503.271278702]))
   }];
 
   beforeEach(function(done) {

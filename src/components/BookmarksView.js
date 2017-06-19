@@ -63,7 +63,8 @@ class Bookmarks extends React.PureComponent {
     bookmarks: React.PropTypes.arrayOf(React.PropTypes.shape({
       name: React.PropTypes.string.isRequired,
       description: React.PropTypes.string.isRequired,
-      center: React.PropTypes.arrayOf(React.PropTypes.number).isRequired
+      center: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
+      resolution: React.PropTypes.number.isRequired
     })).isRequired,
 
     /**
@@ -170,8 +171,8 @@ class Bookmarks extends React.PureComponent {
         }),
         source: new ol.source.Vector({wrapX: false})
       });
-      //TODO: Add layer when addlayer action is in place
-      //this.map.addLayer(this._layer);
+      ///* TODO: Add layer when addlayer action is in place
+      this.map.addLayer(this._layer);
     }
   }
 
@@ -180,15 +181,15 @@ class Bookmarks extends React.PureComponent {
     for (var i = 0, ii = this.props.bookmarks.length; i < ii; ++i) {
       if (this.props.bookmarks[i].name === value) {
         bookmark = this.props.bookmarks[i];
-        let view = {center: bookmark.center}
+        let view = {center: bookmark.center, resolution: bookmark.resolution}
         this.props.setView(view);
       }
     }
     this.setState({value: value});
     //this._selectBookmark(bookmark);
   }
-//TODO: Add animation back into change view action, probably in Map componentDidMount
-/*
+
+/*TODO: Add animation back into change view action, probably in Map componentDidMount
   _selectBookmark(bookmark) {
     var view = this.map.getView();
     var center, animateOptions;
@@ -228,7 +229,7 @@ class Bookmarks extends React.PureComponent {
     var bookmark;
     if (idx !== 0) {
       bookmark = this.props.bookmarks[idx - 1];
-      let view = {center: bookmark.center}
+      let view = {center: bookmark.center, resolution: bookmark.resolution}
       this.props.setView(view);
     }
     //this._selectBookmark(bookmark);
