@@ -1,45 +1,27 @@
 /*
- * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and limitations under the License.
- */
+* Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
+* Licensed under the Apache License, Version 2.0 (the "License").
+* You may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+* http://www.apache.org/licenses/LICENSE-2.0
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and limitations under the License.
+*/
 
 import {MAP} from './ActionTypes';
 import MapConfigService from '../services/MapConfigService';
 
 export const getMap = (map) => {
   return {
-     type: MAP.GET_CONFIG,
-     mapState: MapConfigService.getMapState(map)
-  }
-}
-export const setView = (center, zoom) => {
+    type: MAP.GET_CONFIG,
+    layers: MapConfigService.getMapState(map)
+  };
+};
+export function setView(view) {
   return {
     type: MAP.SET_VIEW,
-    center, zoom
+    view
   }
 }
-export function setRotation(theta) {
-  return {
-    type: MAP.SET_ROTATION,
-    rotation: theta
-  }
-}
-export const zoomIn = (delta) => {
- return {
-   type: MAP.ZOOM_IN,
-   zoomDelta: delta
- }
-};
-export const zoomOut = (delta) => {
- return {
-   type: MAP.ZOOM_OUT,
-   zoomDelta: delta
- }
-};

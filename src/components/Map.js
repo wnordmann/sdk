@@ -26,8 +26,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getMap: map => dispatch(MapActions.getMap(map)),
-    setView: (center, zoom) => dispatch(MapActions.setView(center, zoom)),
-    setRotation: (theta) => dispatch(MapActions.setRotation(theta)),
+    setView: (view) => dispatch(MapActions.setView(view)),
     clearLayerDrag: () => dispatch(LayerActions.clearDrag())
   }
 };

@@ -1,25 +1,15 @@
-/*
- * Copyright 2015-present Boundless Spatial Inc., http://boundlessgeo.com
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and limitations under the License.
- */
+/* global describe, it */
 
 import {expect} from 'chai';
 
 import configureStore from '../../src/stores/Store';
-import * as mapActions from '../../src/actions/MapActions';
+import * as MapActions from '../../src/actions/MapActions';
 
 describe('map reducer', function() {
 
   it('sets the rotation', () => {
     const store = configureStore();
-    store.dispatch(mapActions.setRotation(-1.5));
+    store.dispatch(MapActions.setView({rotation: -1.5}));
     expect(store.getState().mapState.view.rotation).to.equal(-1.5);
   });
 

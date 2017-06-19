@@ -11,7 +11,6 @@
  */
 
 import React from 'react';
-import ol from 'openlayers';
 import classNames from 'classnames';
 import Button from './Button';
 import ZoomIn from 'material-ui/svg-icons/action/zoom-in';
@@ -74,12 +73,7 @@ class Zoom extends React.PureComponent {
     /**
      * @ignore
      */
-    intl: intlShape.isRequired,
-    /**
-     * @ignore
-     * The map to use for testing
-     */
-    map: React.PropTypes.instanceOf(ol.Map)
+    intl: intlShape.isRequired
   };
 
   static contextTypes = {
@@ -103,14 +97,12 @@ class Zoom extends React.PureComponent {
     return {muiTheme: this._muiTheme};
   }
   _zoomIn() {
-    if (this.props.hasOwnProperty('zoomIn')) {
-      this.props.zoomIn(this.props.delta);
-    }
+    var view = {resolution: this.props.resolution / (2 * this.props.delta)}
+    this.props.setView(view);
   }
   _zoomOut() {
-    if (this.props.hasOwnProperty('zoomOut')) {
-      this.props.zoomOut(this.props.delta);
-    }
+    var view = {resolution: this.props.resolution * (2 * this.props.delta)}
+    this.props.setView(view);
   }
 //TODO: re-apply animation
 //   _zoomByDelta(delta) {

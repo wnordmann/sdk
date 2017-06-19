@@ -264,8 +264,9 @@ class MapConfigService {
         this.getLayerConfig(config, layer);
       }
     }, this);
-    var config = {};
-    config.layers = layers;
+    //var config = {};
+    //config.layers = layers;
+    /*
     var view = map.getView();
     config.view = {
       projection: view.getProjection().getCode(),
@@ -276,7 +277,9 @@ class MapConfigService {
       extent: view.calculateExtent()
       //TODO: Checking min and max
     };
-    return config;
+    */
+    //return config;
+    return layers;
   }
 }
 
