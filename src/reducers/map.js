@@ -20,28 +20,28 @@ function convertFromExtent(mapSize, extent, rotation) {
   }
 }
 
-export default (state = {}, action) => {
+const defaultState = {view: {}}
+
+export default (state = defaultState, action) => {
   switch (action.type) {
-    case  MAP.GET_CONFIG:
-      return action.mapState;
+    case MAP.GET_CONFIG:
+      return {
+        ...state,
+        layers: action.layers
+      }
     case  MAP.SET_VIEW:
-      return {
-        ...state,
-        view:{
-          ...state.view,
-          center:action.center,
-          zoom:action.zoom
-        }
-      };
-    case MAP.ZOOM_IN:
-    //TODO:Check MaxZoom
-      return {
-        ...state,
-        view:{
-          ...state.view,
-          zoom:state.view.zoom + action.zoomDelta
+      const new_view = state.view;
+      for (const key of ['center', 'resolution', 'rotation']) {
+        if (typeof (action.view[key]) !== 'undefined') {
+          new_view[key] = action.view[key];
         }
       }
+      return {
+        ...state,
+        view: {
+          ...new_view
+        }
+      };
     case LAYER.MOVE_LAYER:
       {
         let layers = [...state.layers];
@@ -67,23 +67,6 @@ export default (state = {}, action) => {
           ...state,
           layers: layers
         };
-      }
-    case MAP.ZOOM_OUT:
-      //TODO:Check MinZoom
-      return {
-        ...state,
-        view:{
-          ...state.view,
-          zoom:state.view.zoom - action.zoomDelta
-        }
-      }
-    case MAP.SET_ROTATION:
-      return {
-        ...state,
-        view: {
-          ...state.view,
-          rotation: action.rotation
-        }
       }
     case MAP.SET_SIZE:
       return {

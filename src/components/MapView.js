@@ -75,14 +75,12 @@ class Map extends React.PureComponent {
     map.setTarget(ReactDOM.findDOMNode(this.refs.map));
     // when the map moves, dispatch an action
     map.on('moveend', () => {
+
       // get the view of the map
       let view = map.getView();
-      // create a "mapAction" and dispatch it.
-      const rotation = view.getRotation();
-      if (this.props.mapStore.view && rotation !== this.props.mapStore.view.rotation) {
-        this.props.setRotation(rotation);
-      }
-      this.props.setView(view.getCenter(), view.getZoom());
+      var view_obj = {center: view.getCenter(), resolution: view.getResolution(), rotation: view.getRotation()}
+
+      this.props.setView(view_obj);
     });
 
     // knowing the map size avoids needing to do
@@ -95,17 +93,15 @@ class Map extends React.PureComponent {
   componentWillUpdate(nextProps, nextState) {
     const mapView = this.props.map.getView();
     const stateView = nextProps.mapStore.view;
-    const mapCenter = mapView.getCenter();
-    const mapZoom = mapView.getZoom();
-    if (typeof (stateView) !== 'undefined') {
-      if (typeof (stateView.center) !== 'undefined' && (mapCenter[0] !== stateView.center[0] || mapCenter[1] !== stateView.center[1] || mapZoom !== stateView.zoom)) {
-        mapView.setCenter(stateView.center);
-        mapView.setZoom(stateView.zoom);
-      }
 
-      if (typeof (stateView.rotation) !== 'undefined' && stateView.rotation !== mapView.getRotation()) {
-        mapView.setRotation(stateView.rotation);
-      }
+    const center = mapView.getCenter();
+    const resolution = mapView.getResolution();
+    const rotation = mapView.getRotation();
+
+    if (typeof (stateView.center) !== 'undefined' && (center[0] !== stateView.center[0] || center[1] !== stateView.center[1] || resolution !== stateView.resolution || rotation !== stateView.rotation)) {
+      mapView.setCenter(stateView.center);
+      mapView.setResolution(stateView.resolution);
+      mapView.setRotation(stateView.rotation);
     }
     const mapLayers = this.props.map.getLayers();
     const stateLayers = nextProps.mapStore.layers;
@@ -127,5 +123,4 @@ class Map extends React.PureComponent {
     );
   }
 }
-
 export default injectIntl(Map);

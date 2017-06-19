@@ -4,6 +4,7 @@ import TestUtils from 'react-addons-test-utils';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {expect} from 'chai';
+import {setView} from '../../src/actions/MapActions';
 import {IntlProvider} from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import 'phantomjs-polyfill-object-assign';
@@ -35,7 +36,8 @@ describe('Rotate', function() {
       </div>
     ), container);
 
-    store.dispatch(mapActions.setRotation(0.1));
+    //store.dispatch(mapActions.setRotation(0.1));
+    store.dispatch(setView({rotation: 0.1}));
     expect(store.getState().mapState.view.rotation).to.equal(0.1);
 
     var buttons = container.querySelectorAll('button');
