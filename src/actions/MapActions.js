@@ -25,3 +25,10 @@ export function setView(view) {
     view
   }
 }
+
+export function setRenderer(renderer) {
+  return {
+    type: MAP.SET_RENDERER,
+    renderer
+  }
+}

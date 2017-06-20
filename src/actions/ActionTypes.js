@@ -8,5 +8,6 @@ export const LAYER = {
 
 export const MAP = {
   GET_CONFIG: 'MAP_GET_CONFIG',
-  SET_VIEW: 'MAP_SET_VIEW'
+  SET_VIEW: 'MAP_SET_VIEW',
+  SET_RENDERER: 'MAP_SET_RENDERER'
 };

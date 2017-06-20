@@ -5,6 +5,11 @@ const defaultState = {view: {}}
 
 export default (state = defaultState, action) => {
   switch (action.type) {
+    case MAP.SET_RENDERER:
+      return {
+        ...state,
+        renderer: action.renderer
+      }
     case MAP.GET_CONFIG:
       return {
         ...state,
