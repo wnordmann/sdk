@@ -11,7 +11,7 @@ import intl from '../mock-i18n';
 import Bookmarks from '../../src/components/Bookmarks';
 import BoundlessSdk from '../../src/components/BoundlessSdk';
 import configureStore from '../../src/stores/Store';
-import polyfills from '../polyfills'; // eslint-disable-line no-unused-vars
+import '../polyfills';
 import {IntlProvider} from 'react-intl';
 
 

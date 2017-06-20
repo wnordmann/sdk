@@ -25,9 +25,3 @@ export function setView(view) {
     view
   }
 }
-export function extentToResolution(map) {
-  return {
-    type: MAP.EXTENT_TO_RESOLUTION,
-    extent: MapConfigService.extentToResolution(map)
-  }
-}
