@@ -9,7 +9,7 @@ import {IntlProvider} from 'react-intl';
 
 import BoundlessSdk from '../../src/components/BoundlessSdk';
 
-import polyfills from '../polyfills'; // eslint-disable-line no-unused-vars
+import '../polyfills';
 
 import Geocoding from '../../src/components/Geocoding';
 

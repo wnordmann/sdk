@@ -8,7 +8,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {IntlProvider} from 'react-intl';
 
-import polyfills from '../polyfills'; // eslint-disable-line no-unused-vars
+import '../polyfills';
 
 import BoundlessSdk from '../../src/components/BoundlessSdk';
 import GeocodingResults from '../../src/components/GeocodingResults';
