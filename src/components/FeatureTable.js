@@ -316,7 +316,11 @@ class FeatureTable extends React.Component {
         FeatureStore.restoreOriginalFeatures(lyr);
       }
     } else {
-      FeatureStore.setFilter(lyr, this._filteredRows);
+      if (this._selectedOnly === true) {
+        FeatureStore.setSelectedAsFilter(lyr);
+      } else {
+        FeatureStore.setFilter(lyr, this._filteredRows);
+      }
     }
   }
   _clearSelected() {
