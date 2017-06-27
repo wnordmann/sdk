@@ -309,15 +309,11 @@ class FeatureTable extends React.Component {
   }
   _updateStoreFilter() {
     var lyr = this._layer;
-    if (!this._filtered) {
-      if (this._selectedOnly === true) {
-        FeatureStore.setSelectedAsFilter(lyr);
-      } else {
-        FeatureStore.restoreOriginalFeatures(lyr);
-      }
+    if (this._selectedOnly === true) {
+      FeatureStore.setSelectedAsFilter(lyr);
     } else {
-      if (this._selectedOnly === true) {
-        FeatureStore.setSelectedAsFilter(lyr);
+      if (!this._filtered) {
+        FeatureStore.restoreOriginalFeatures(lyr);
       } else {
         FeatureStore.setFilter(lyr, this._filteredRows);
       }
