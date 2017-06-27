@@ -309,14 +309,14 @@ class FeatureTable extends React.Component {
   }
   _updateStoreFilter() {
     var lyr = this._layer;
-    if (!this._filtered) {
-      if (this._selectedOnly === true) {
-        FeatureStore.setSelectedAsFilter(lyr);
-      } else {
-        FeatureStore.restoreOriginalFeatures(lyr);
-      }
+    if (this._selectedOnly === true) {
+      FeatureStore.setSelectedAsFilter(lyr);
     } else {
-      FeatureStore.setFilter(lyr, this._filteredRows);
+      if (!this._filtered) {
+        FeatureStore.restoreOriginalFeatures(lyr);
+      } else {
+        FeatureStore.setFilter(lyr, this._filteredRows);
+      }
     }
   }
   _clearSelected() {
@@ -347,6 +347,8 @@ class FeatureTable extends React.Component {
     var filterBy = evt.target.value;
     var state = FeatureStore.getState(this._layer);
     var rows = this._selectedOnly ? state.selected : state.features.getFeatures();
+    var selected = this._selectedOnly ? [] : state.selected;
+    var filteredSelected = [];
     var filteredRows = [];
     var queryFilter;
     if (filterBy !== '') {
@@ -365,12 +367,20 @@ class FeatureTable extends React.Component {
           errorOpen: false,
           error: false
         });
-        for (var i = 0, ii = rows.length; i < ii; ++i) {
-          var row = rows[i];
+        var i, ii, properties, row;
+        for (i = 0, ii = selected.length; i < ii; ++i) {
+          row = selected[i];
+          properties = row.getProperties();
+          if (queryFilter(properties)) {
+            filteredSelected.push(row);
+          }
+        }
+        for (i = 0, ii = rows.length; i < ii; ++i) {
+          row = rows[i];
           if (row) {
-            var properties = rows[i].getProperties();
+            properties = row.getProperties();
             if (queryFilter(properties)) {
-              filteredRows.push(rows[i]);
+              filteredRows.push(row);
             }
           }
         }
@@ -381,6 +391,10 @@ class FeatureTable extends React.Component {
     this._filtered = (rows.length !== filteredRows.length);
     this._filteredRows = filteredRows;
     FeatureStore.setFilter(this._layer, filteredRows);
+    if (filteredSelected.length !== selected.length) {
+      // we need to filter the selection as well
+      FeatureStore.setSelection(this._layer, filteredSelected, true);
+    }
   }
   _handleRequestClose() {
     this.setState({
