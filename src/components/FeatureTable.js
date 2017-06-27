@@ -376,7 +376,7 @@ class FeatureTable extends React.Component {
           }
         }
         for (i = 0, ii = rows.length; i < ii; ++i) {
-          var row = rows[i];
+          row = rows[i];
           if (row) {
             properties = row.getProperties();
             if (queryFilter(properties)) {
