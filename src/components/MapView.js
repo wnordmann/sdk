@@ -65,9 +65,6 @@ class Map extends React.PureComponent {
     super(props);
     this._proxy = context.proxy;
     this._requestHeaders = context.requestHeaders;
-    if (this.props.hasOwnProperty('getMap')) {
-      this.props.getMap(this.props.map);
-    }
   }
 
   componentDidMount() {
@@ -82,6 +79,13 @@ class Map extends React.PureComponent {
 
       this.props.setView(view_obj);
     });
+
+    // knowing the map size avoids needing to do
+    //  strange things when zooming to an extent.
+    this.props.setSize(map.getSize());
+    map.on('change:size', () => {
+      this.props.setSize(map.getSize());
+    });
   }
   componentWillUpdate(nextProps, nextState) {
     const mapView = this.props.map.getView();
@@ -95,7 +99,9 @@ class Map extends React.PureComponent {
       mapView.setCenter(stateView.center);
       mapView.setResolution(stateView.resolution);
       mapView.setRotation(stateView.rotation);
+
     }
+    /* Removing layer list for now...
     const mapLayers = this.props.map.getLayers();
     const stateLayers = nextProps.mapStore.layers;
     if (nextProps) {
@@ -107,6 +113,7 @@ class Map extends React.PureComponent {
         }
       })
     }
+    */
   }
   render() {
     return (
