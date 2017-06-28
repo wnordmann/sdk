@@ -76,14 +76,6 @@ class Zoom extends React.PureComponent {
     intl: intlShape.isRequired
   };
 
-  static contextTypes = {
-    muiTheme: React.PropTypes.object
-  };
-
-  static childContextTypes = {
-    muiTheme: React.PropTypes.object.isRequired
-  };
-
   static defaultProps = {
     delta: 1,
     duration: 250
@@ -91,10 +83,6 @@ class Zoom extends React.PureComponent {
 
   constructor(props, context) {
     super(props);
-    this._muiTheme = context.muiTheme || getMuiTheme();
-  }
-  getChildContext() {
-    return {muiTheme: this._muiTheme};
   }
   _zoomIn() {
     var view = {resolution: this.props.resolution / (2 * this.props.delta)}
