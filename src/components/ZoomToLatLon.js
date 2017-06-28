@@ -218,8 +218,10 @@ class ZoomToLatLon extends React.PureComponent {
         backgroundColor: this._muiTheme.toggle.trackOnColor
       }
     };
+    var oldAction = (<span style={{position: 'absolute', bottom: 10, display: 'flex'}}><span style={{width: 50}}>{formatMessage(messages.dd)}</span><Toggle style={{width: 50}} thumbStyle={styles.thumbOff} trackStyle={styles.trackOff} toggled={this.state.dms} onToggle={this._onToggle.bind(this)}/><span style={{width: 50}}>{formatMessage(messages.dms)}</span></span>);
     var actions = [
-      <span style={{position: 'absolute', bottom: 10, display: 'flex'}}><span style={{width: 50}}>{formatMessage(messages.dd)}</span><Toggle style={{width: 50}} thumbStyle={styles.thumbOff} trackStyle={styles.trackOff} toggled={this.state.dms} onToggle={this._onToggle.bind(this)}/><span style={{width: 50}}>{formatMessage(messages.dms)}</span></span>,
+      <span>DMS<label className="switch"><input type="checkbox" /><div className="slider round"></div></label>DD</span>,
+
       <Button primary={true} buttonType='Flat' label={formatMessage(messages.closebuttontext)} onTouchTap={this.closeDialog.bind(this)} />,
       <Button primary={true} buttonType='Flat' label={formatMessage(messages.zoombuttontext)} onTouchTap={this._zoomToLatLon.bind(this)} />
     ];
