@@ -46,9 +46,6 @@ class Logo extends React.PureComponent {
   static defaultProps = {
     tooltipPosition: 'bottom'
   };
-  static childContextTypes = {
-    muiTheme: React.PropTypes.object.isRequired
-  };
 
   render() {
     var className = {
