@@ -1,0 +1,44 @@
+/**
+ * sdk Appbar
+ */
+
+$x-mobile-breakpoint: 480px;
+
+// ============================================================================
+// HELPER CLASSES
+// ============================================================================
+
+// mobile portrait
+.sdk--appbar-height      { height: $sdk-appbar-height-xs-portrait; }
+.sdk--appbar-min-height  { min-height: $sdk-appbar-height-xs-portrait; }
+.sdk--appbar-line-height { line-height: $sdk-appbar-height-xs-portrait; }
+.sdk--appbar-top         { top: $sdk-appbar-height-xs-portrait; }
+
+// mobile landscape
+@media (orientation: landscape) and (max-height: $x-mobile-breakpoint) {
+  .sdk--appbar-height      { height: $sdk-appbar-height-xs-landscape; }
+  .sdk--appbar-min-height  { min-height: $sdk-appbar-height-xs-landscape; }
+  .sdk--appbar-line-height { line-height: $sdk-appbar-height-xs-landscape; }
+  .sdk--appbar-top         { top: $sdk-appbar-height-xs-landscape; }
+}
+
+// all other screen sizes
+@media (min-width: $x-mobile-breakpoint) {
+  .sdk--appbar-height      { height: $sdk-appbar-height; }
+  .sdk--appbar-min-height  { min-height: $sdk-appbar-height; }
+  .sdk--appbar-line-height { line-height: $sdk-appbar-height; }
+  .sdk--appbar-top         { top: $sdk-appbar-height; }  
+}
+
+
+
+
+// ============================================================================
+// APPBAR
+// ============================================================================
+.sdk-appbar {
+  @extend .sdk--appbar-min-height;
+
+  background-color: $sdk-appbar-bg-color;
+  color: $sdk-appbar-font-color;
+}

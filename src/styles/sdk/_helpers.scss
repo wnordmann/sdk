@@ -1,0 +1,334 @@
+/**
+ * sdk Helpers module
+ */
+
+// ============================================================================
+// ANIMATION
+// ============================================================================
+
+.sdk--no-transition {
+  transition: none !important;
+}
+
+
+
+
+// ============================================================================
+// USER SELECT
+// ============================================================================
+.sdk--no-user-select {
+  user-select: none;
+}
+
+
+
+
+// ============================================================================
+// CARET
+// ============================================================================
+
+.sdk-caret {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 2px;
+  vertical-align: middle;
+  border-top:   $sdk-caret-width solid;
+  border-right: $sdk-caret-width solid transparent;
+  border-left:  $sdk-caret-width solid transparent;
+}
+
+
+
+
+// ============================================================================
+// ALIGNMENT HELPERS
+// ============================================================================
+
+.sdk--text-left           { text-align: left !important; }
+.sdk--text-right          { text-align: right !important; }
+.sdk--text-center         { text-align: center !important; }
+.sdk--text-justify        { text-align: justify !important; }
+.sdk--text-nowrap         { white-space: nowrap !important; }
+
+.sdk--align-baseline      { vertical-align: baseline !important; }
+.sdk--align-top           { vertical-align: top !important; }
+.sdk--align-middle        { vertical-align: middle !important; }
+.sdk--align-bottom        { vertical-align: bottom !important; }
+
+
+
+
+// ============================================================================
+// TEXT COLOR HELPERS
+// ============================================================================
+
+.sdk--text-dark             { color: $sdk-text-dark; }
+.sdk--text-dark-secondary   { color: $sdk-text-dark-secondary; }
+.sdk--text-dark-hint        { color: $sdk-text-dark-hint; }
+
+.sdk--text-light            { color: $sdk-text-light; }
+.sdk--text-light-secondary  { color: $sdk-text-light-secondary; }
+.sdk--text-light-hint       { color: $sdk-text-light-hint; }
+
+.sdk--text-accent           { color: $sdk-text-accent; }
+.sdk--text-accent-secondary { color: $sdk-text-accent-secondary; }
+.sdk--text-accent-hint      { color: $sdk-text-accent-hint; }
+
+.sdk--text-black            { color: sdk-color('black'); }
+.sdk--text-white            { color: sdk-color('white'); }
+.sdk--text-danger           { color: $sdk-text-danger; }
+
+
+
+
+// ============================================================================
+// BACKGROUND COLORS
+// ============================================================================
+
+.sdk--bg-primary       { background-color: $sdk-primary-color; }
+.sdk--bg-primary-dark  { background-color: $sdk-primary-color-dark; }
+.sdk--bg-primary-light { background-color: $sdk-primary-color-light; }
+
+.sdk--bg-accent        { background-color: $sdk-accent-color; }
+.sdk--bg-accent-dark   { background-color: $sdk-accent-color-dark; }
+.sdk--bg-accent-light  { background-color: $sdk-accent-color-light; }
+
+.sdk--bg-danger        { background-color: $sdk-danger-color; }
+
+
+
+// ============================================================================
+// LISTS
+// ============================================================================
+
+@mixin x-list-unstyled {
+  padding-left: 0;
+  list-style: none;
+}
+
+// [converter] extracted as `@mixin list-unstyled` for libsass compatibility
+.sdk-list--unstyled {
+  @include x-list-unstyled();
+}
+
+// Inline turns list items into inline-block
+.sdk-list--inline {
+  @include x-list-unstyled();
+
+  margin-left: -5px;
+
+  > li {
+    display: inline-block;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+}
+
+
+
+
+// ============================================================================
+// DEPTH HELPERS
+// ============================================================================
+
+.sdk--z1 {
+  box-shadow: 0 1px 3px rgba(sdk-color('black'), 0.12),
+              0 1px 2px rgba(sdk-color('black'), 0.24);
+}
+
+.sdk--z2 {
+  box-shadow: 0 3px 6px rgba(sdk-color('black'), 0.16),
+              0 3px 6px rgba(sdk-color('black'), 0.23);
+}
+
+.sdk--z3 {
+  box-shadow: 0 10px 20px rgba(sdk-color('black'), 0.19),
+              0 6px 6px rgba(sdk-color('black'), 0.23);
+}
+
+.sdk--z4 {
+  box-shadow: 0 14px 28px rgba(sdk-color('black'), 0.25),
+              0 10px 10px rgba(sdk-color('black'), 0.22);
+}
+
+.sdk--z5 {
+  box-shadow: 0 19px 38px rgba(sdk-color('black'), 0.30),
+              0 15px 12px rgba(sdk-color('black'), 0.22);
+}
+
+
+
+
+// ============================================================================
+// FLOAT HELPERS
+// ============================================================================
+
+.sdk--clearfix {
+  @include sdk-clearfix();
+}
+
+.sdk--pull-right {
+  float: right !important;
+}
+
+.sdk--pull-left {
+  float: left !important;
+}
+
+
+
+
+// ============================================================================
+// TOGGLE HELPERS
+// ============================================================================
+
+.sdk--hide {
+  display: none !important;
+}
+
+.sdk--show {
+  display: block !important;
+}
+
+.sdk--invisible {
+  visibility: hidden;
+}
+
+.sdk--overflow-hidden {
+  overflow: hidden !important;
+}
+
+.sdk--overflow-hidden-x {
+  overflow-x: hidden !important;
+}
+
+.sdk--overflow-hidden-y {
+  overflow-y: hidden !important;
+}
+
+
+
+// ============================================================================
+// RESPONSIVE UTILITIES
+// ============================================================================
+
+@mixin x-responsive-visibility($parent) {
+  #{$parent} {
+    display: block !important;
+  }
+
+  table#{$parent}  { display: table; }
+  tr#{$parent}     { display: table-row !important; }
+  th#{$parent},
+  td#{$parent}     { display: table-cell !important; }
+}
+
+// [converter] $parent hack
+@mixin x-responsive-invisibility($parent) {
+  #{$parent} {
+    display: none !important;
+  }
+}
+
+.sdk--visible-xs-block,
+.sdk--visible-xs-inline,
+.sdk--visible-xs-inline-block,
+.sdk--visible-sm-block,
+.sdk--visible-sm-inline,
+.sdk--visible-sm-inline-block,
+.sdk--visible-md-block,
+.sdk--visible-md-inline,
+.sdk--visible-md-inline-block,
+.sdk--visible-lg-block,
+.sdk--visible-lg-inline,
+.sdk--visible-lg-inline-block,
+.sdk--visible-xl-block,
+.sdk--visible-xl-inline,
+.sdk--visible-xl-inline-block {
+  display: none !important;
+}
+
+
+@media (max-width: $sdk-screen-xs-max) {
+  @include x-responsive-visibility('.sdk-visible-xs');
+
+  .sdk--visible-xs-block        { display: block !important; }
+  .sdk--visible-xs-inline       { display: inline !important; }
+  .sdk--visible-xs-inline-block { display: inline-block !important; }
+}
+
+
+@media (min-width: $sdk-screen-sm-min) and (max-width: $sdk-screen-sm-max) {
+  @include x-responsive-visibility('.sdk-visible-sm');
+
+  .sdk--visible-sm-block        { display: block !important; }
+  .sdk--visible-sm-inline       { display: inline !important; }
+  .sdk--visible-sm-inline-block { display: inline-block !important; }
+}
+
+
+@media (min-width: $sdk-screen-md-min) and (max-width: $sdk-screen-md-max) {
+  @include x-responsive-visibility('.sdk-visible-md');
+
+  .sdk--visible-md-block        { display: block !important; }
+  .sdk--visible-md-inline       { display: inline !important; }
+  .sdk--visible-md-inline-block { display: inline-block !important; }
+}
+
+
+@media (min-width: $sdk-screen-lg-min) and (max-width: $sdk-screen-lg-max) {
+  @include x-responsive-visibility('.sdk-visible-lg');
+
+  .sdk--visible-lg-block        { display: block !important; }
+  .sdk--visible-lg-inline       { display: inline !important; }
+  .sdk--visible-lg-inline-block { display: inline-block !important; }
+}
+
+
+@media (min-width: $sdk-screen-xl-min) {
+  @include x-responsive-visibility('.sdk-visible-xl');
+
+  .sdk--visible-xl-block        { display: block !important; }
+  .sdk--visible-xl-inline       { display: inline !important; }
+  .sdk--visible-xl-inline-block { display: inline-block !important; }
+}
+
+
+@media (max-width: $sdk-screen-xs-max) {
+  @include x-responsive-invisibility('.sdk--hidden-xs');
+}
+
+
+@media (min-width: $sdk-screen-sm-min) and (max-width: $sdk-screen-sm-max) {
+  @include x-responsive-invisibility('.sdk--hidden-sm');
+}
+
+
+@media (min-width: $sdk-screen-md-min) and (max-width: $sdk-screen-md-max) {
+  @include x-responsive-invisibility('.sdk--hidden-md');
+}
+
+
+@media (min-width: $sdk-screen-lg-min) and (max-width: $sdk-screen-lg-max) {
+  @include x-responsive-invisibility('.sdk--hidden-lg');
+}
+
+
+@media (min-width: $sdk-screen-xl-min) {
+  @include x-responsive-invisibility('.sdk--hidden-xl');
+}
+
+
+
+// ============================================================================
+// SCROLL LOCK
+// ============================================================================
+
+.sdk-scrlock--showbar-y {
+  overflow-y: scroll !important;
+}
+
+.sdk-scrlock--showbar-x {
+  overflow-x: scroll !important;
+}
