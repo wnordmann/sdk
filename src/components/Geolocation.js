@@ -13,7 +13,6 @@
 import React from 'react';
 import ol from 'openlayers';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import classNames from 'classnames';
 import Snackbar from 'material-ui/Snackbar';
 import Button from './Button';
@@ -42,7 +41,7 @@ const messages = defineMessages({
  * Can show the current position on the map, and also track the position.
  *
  * ```xml
- * <Geolocation map={map} />
+ * <Geolocation />
  * ```
  * ![Geolocation button](../Geolocation.png)
  * ![Geolocation tracking mode](../Geolocation_tracking.png)
@@ -77,25 +76,14 @@ class Geolocation extends React.PureComponent {
     intl: intlShape.isRequired
   };
 
-  static contextTypes = {
-    muiTheme: React.PropTypes.object
-  };
-
-  static childContextTypes = {
-    muiTheme: React.PropTypes.object.isRequired
-  };
 
   constructor(props, context) {
     super(props);
     this.state = {
-      muiTheme: context.muiTheme || getMuiTheme(),
       error: false,
       open: false,
       tracking: false
     };
-  }
-  getChildContext() {
-    return {muiTheme: this.state.muiTheme};
   }
   _geolocate() {
     var map = this.props.map;
@@ -172,7 +160,7 @@ class Geolocation extends React.PureComponent {
       var iconStyle, tooltip = formatMessage(messages.buttontitle);
       if (this.state.tracking) {
         iconStyle = {
-          fill: this.state.muiTheme.rawTheme.palette.active1Color
+          fill: 'blue'
         };
         tooltip += ' (' + formatMessage(messages.trackingtitle) + ')';
       }

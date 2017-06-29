@@ -3,13 +3,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {assert} from 'chai';
-import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
 import InfoPopup from '../../src/components/InfoPopup';
 import TestUtils from 'react-addons-test-utils';
-
-raf.polyfill();
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import '../polyfills';
 
 describe('InfoPopup', function() {
   var target, map, layers;

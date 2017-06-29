@@ -14,8 +14,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 import classNames from 'classnames';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import TextField from 'material-ui/TextField';
-import {lightWhite, fullWhite} from 'material-ui/styles/colors';
 import GeocodingResults from './GeocodingResults';
 
 import util from '../util';
@@ -124,12 +122,10 @@ export class Geocoding extends React.Component {
     //  list should disappear.
     return (
       <span>
-        <TextField
+        <input
           style={this.props.style}
           className={classNames('sdk-component geocoding headerText', this.props.className)}
-          inputStyle= {{color:fullWhite}}
-          hintText={formatMessage(messages.placeholder)}
-          hintStyle= {{color: lightWhite}}
+          placeholder={formatMessage(messages.placeholder)}
           onFocus={() => {
             this.focus(true);
           }}
