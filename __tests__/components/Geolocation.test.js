@@ -3,14 +3,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {assert} from 'chai';
-import raf from 'raf';
 import ol from 'openlayers';
 import intl from '../mock-i18n';
-import TestUtils from 'react-addons-test-utils';
-import 'phantomjs-polyfill-object-assign';
 import Geolocation from '../../src/components/Geolocation';
-
-raf.polyfill();
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import BoundlessSdk from '../../src/components/BoundlessSdk';
+import configureStore from '../../src/stores/Store';
+import '../polyfills';
 
 describe('Geolocation', function() {
   var target, map;
@@ -29,7 +29,7 @@ describe('Geolocation', function() {
     map = new ol.Map({
       target: target,
       view: new ol.View({
-        center: [0, 0],
+        center: [0,0],
         zoom: 1
       })
     });
@@ -43,15 +43,21 @@ describe('Geolocation', function() {
     document.body.removeChild(target);
   });
 
-
-  it('geolocation created on click', function() {
+  it('renders the Geolocation component', function() {
     var container = document.createElement('div');
-    var geolocation = ReactDOM.render((
-      <Geolocation intl={intl} map={map}/>
+    const store = configureStore();
+    ReactDOM.render((
+      <div>
+        <BoundlessSdk store={store}>
+          <MuiThemeProvider muiTheme={getMuiTheme()}>
+            <Geolocation intl={intl} map={map}/>
+          </MuiThemeProvider>
+        </BoundlessSdk>
+      </div>
     ), container);
-    var button = container.querySelector('button');
-    TestUtils.Simulate.touchTap(button);
-    assert.equal(geolocation._geolocation !== undefined, true);
+    const actual = container.children[0].innerHTML;
+    const expected = 'sdk-component geolocation';
+    assert.include(actual, expected);
     ReactDOM.unmountComponentAtNode(container);
   });
 

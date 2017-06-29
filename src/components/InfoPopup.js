@@ -25,7 +25,6 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import Button from './Button';
 import CloserIcon from 'material-ui/svg-icons/navigation/close';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import './BasePopup.css';
 import './InfoPopup.css';
 
@@ -92,13 +91,9 @@ class InfoPopup extends React.Component {
 
   static contextTypes = {
     proxy: React.PropTypes.string,
-    requestHeaders: React.PropTypes.object,
-    muiTheme: React.PropTypes.object
+    requestHeaders: React.PropTypes.object
   };
 
-  static childContextTypes = {
-    muiTheme: React.PropTypes.object.isRequired
-  };
 
   static defaultProps = {
     hover: false,
@@ -110,7 +105,6 @@ class InfoPopup extends React.Component {
     super(props);
     this._proxy = context.proxy;
     this._requestHeaders = context.requestHeaders;
-    this._muiTheme = context.muiTheme || getMuiTheme();
     this._dispatchToken = ToolUtil.register(this);
     LayerStore.bindMap(this.props.map);
     if (this.props.hover === true) {
@@ -123,9 +117,6 @@ class InfoPopup extends React.Component {
     this.state = {
       popupTexts: []
     };
-  }
-  getChildContext() {
-    return {muiTheme: this._muiTheme};
   }
   componentDidMount() {
     this.overlayPopup = new ol.Overlay({
