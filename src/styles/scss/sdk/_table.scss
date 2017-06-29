@@ -1,0 +1,43 @@
+/**
+ * sdk Table Component
+ */
+
+// Table style
+.sdk-table {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: $sdk-base-line-height-computed;
+
+  // Cells
+  > thead,
+  > tbody,
+  > tfoot {
+    > tr {
+      > th {
+        text-align: left;
+      }
+
+      > th,
+      > td {
+        padding: $sdk-table-cell-padding;
+        line-height: $sdk-base-line-height;
+      }
+    }
+  }
+  
+  // Bottom align for column headings
+  > thead > tr > th {
+    border-bottom: 2px solid $sdk-table-border-color;
+    font-weight: 700;
+  }
+
+  // multiple tbody instances
+  > tbody + tbody {
+    border-top: 2px solid $sdk-table-border-color;
+  }  
+
+  // Bordered style
+  &.sdk-table--bordered > tbody > tr > td {
+    border-bottom: 1px solid $sdk-table-border-color;
+  }
+}

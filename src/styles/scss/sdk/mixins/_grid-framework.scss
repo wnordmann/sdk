@@ -1,0 +1,54 @@
+// Overrides bootstrap functions to add prfx support
+
+@mixin sdk-make-grid-columns($i: 1, $list: ".sdk-col-xs-#{$i}, .sdk-col-sm-#{$i}, .sdk-col-md-#{$i}, .sdk-col-lg-#{$i}") {
+  @for $i from (1 + 1) through $sdk-grid-columns {
+    $list: "#{$list}, .sdk-col-xs-#{$i}, .sdk-col-sm-#{$i}, .sdk-col-md-#{$i}, .sdk-col-lg-#{$i}";
+  }
+
+  #{$list} {
+    // box sizing
+    box-sizing: border-box;
+
+    // Prevent columns from collapsing when empty
+    min-height: 1px;
+
+    // Inner gutter via padding
+    padding-left:  ($sdk-grid-gutter-width / 2);
+    padding-right: ($sdk-grid-gutter-width / 2);
+  }
+}
+
+@mixin sdk-float-grid-columns($class, $i: 1, $list: ".sdk-col-#{$class}-#{$i}") {
+  @for $i from (1 + 1) through $sdk-grid-columns {
+    $list: "#{$list}, .sdk-col-#{$class}-#{$i}";
+  }
+
+  #{$list} {
+    float: left;
+  }
+}
+
+@mixin sdk-calc-grid-column($i, $class, $type) {
+  @if ($type == 'width') and ($i > 0) {
+    .sdk-col-#{$class}-#{$i} {
+      width: percentage(($i / $sdk-grid-columns));
+    }
+  }
+  @if ($type == 'offset') {
+    .sdk-col-#{$class}-offset-#{$i} {
+      margin-left: percentage(($i / $sdk-grid-columns));
+    }
+  }
+}
+
+@mixin sdk-loop-grid-columns($columns, $class, $type) {
+  @for $i from 0 through $columns {
+    @include sdk-calc-grid-column($i, $class, $type);
+  }
+}
+
+@mixin sdk-make-grid($class) {
+  @include sdk-float-grid-columns($class);
+  @include sdk-loop-grid-columns($sdk-grid-columns, $class, 'width');
+  @include sdk-loop-grid-columns($sdk-grid-columns, $class, 'offset');
+}

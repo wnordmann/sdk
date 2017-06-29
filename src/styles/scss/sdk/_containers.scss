@@ -1,0 +1,24 @@
+/**
+ * sdk Container module
+ */
+
+.sdk-container {
+  @include sdk-container-fixed();
+
+  @media (min-width: $sdk-screen-sm-min) {
+    max-width: $sdk-container-sm;
+  }
+  @media (min-width: $sdk-screen-md-min) {
+    max-width: $sdk-container-md;
+  }
+  @media (min-width: $sdk-screen-lg-min) {
+    max-width: $sdk-container-lg;
+  }
+  @media (min-width: $sdk-screen-xl-min) {
+    max-width: $sdk-container-xl;
+  }
+}
+
+.sdk-container-fluid {
+  @include sdk-container-fixed();
+}

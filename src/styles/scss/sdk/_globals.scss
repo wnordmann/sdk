@@ -1,0 +1,157 @@
+/**
+ * sdk Globals
+ */
+
+@if $sdk-include-globals == true {
+  @include normalizecss();
+
+  // Body reset
+  html {
+    font-size: 10px;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  }
+
+  body {
+    font-family: $sdk-base-font-family;
+    font-size: $sdk-base-font-size;
+    font-weight: $sdk-base-font-weight;
+    line-height: $sdk-base-line-height;
+    color: $sdk-base-font-color;
+    background-color: $sdk-body-bg-color;
+  }
+
+  // Links
+  a {
+    color: $sdk-link-font-color;
+    text-decoration: $sdk-link-text-decoration;
+    
+    &:hover,
+    &:focus {
+      text-decoration: $sdk-link-text-decoration-hover;
+    }
+    
+    &:focus {
+      @include sdk-tab-focus();
+    }
+  }
+
+  // paragraphs
+  p {
+    margin: 0 0 ($sdk-base-line-height-computed / 2);
+  }
+  
+  // lists
+  ul,
+  ol {
+    margin-top: 0;
+    margin-bottom: ($sdk-base-line-height-computed / 2);
+  }
+
+  // Horizontal rules
+  hr {
+    margin-top: $sdk-base-line-height-computed;
+    margin-bottom: $sdk-base-line-height-computed;
+    border: 0;
+    height: 1px;
+    background-color: $sdk-hr-color;
+  }
+
+  // Strong
+  strong {
+    font-weight: 700;
+  }
+  
+  // Abbreviations
+  abbr[title] {
+    cursor: help;
+    border-bottom: 1px dotted $sdk-abbr-border-color;
+  }
+  
+  // headers
+  h1 {
+    @extend .sdk--text-display1;
+  }
+  
+  h2 {
+    @extend .sdk--text-headline;
+  }
+  
+  h3 {
+    @extend .sdk--text-title;
+  }
+  
+  h4 {
+    @extend .sdk--text-subhead;
+  }
+  
+  h5 {
+    @extend .sdk--text-body2;
+  }
+  
+  h1, h2, h3 {
+    margin-top: $sdk-base-line-height-computed;
+    margin-bottom: ($sdk-base-line-height-computed / 2);
+  }
+  
+  h4, h5, h6 {
+    margin-top: ($sdk-base-line-height-computed / 2);
+    margin-bottom: ($sdk-base-line-height-computed / 2);
+  }
+} @else {
+  // Cherry pick from normalize.css
+  
+  // remove margin in Firefox and Safari
+  .sdk-textfield > input,
+  .sdk-textfield > textarea,
+  .sdk-select > select {
+    margin: 0;
+  }
+  
+  // show the overflow in Edge
+  .sdk-textfield > input {
+    overflow: visible;
+  }
+  
+  // remove inner border and padding in Firefox
+  button.sdk-btn::-moz-focus-inner,
+  .sdk-btn[type="button"]::-moz-focus-inner,
+  .sdk-btn[type="reset"]::-moz-focus-inner,
+  .sdk-btn[type="submit"]::-moz-focus-inner {
+    border-style: none;
+    padding: 0;    
+  }
+  
+  // restore focus styles unset by previous role
+  button.sdk-btn:-moz-focusring,
+  .sdk-btn[type="button"]:-moz-focusring,
+  .sdk-btn[type="reset"]:-moz-focusring,
+  .sdk-btn[type="submit"]:-moz-focusring {
+    outline: 1px dotted ButtonText;
+  }
+  
+  // remove default vertical scrollbar in IE
+  .sdk-textfield > textarea {
+    overflow: auto;
+  }
+  
+  // add correct box sizing and padding in IE10-
+  .sdk-radio,
+  .sdk-checkbox {
+    input {
+      box-sizing: border-box;
+      padding: 0;
+    }
+  }
+}
+
+@if $sdk-base-font-smoothing == true {
+  html,
+  body,
+  button,  // safari issue
+  input,  // safari issue
+  textarea {  // safari issue
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
+  }
+}
