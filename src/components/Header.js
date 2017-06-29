@@ -34,6 +34,10 @@ class Header extends React.Component {
      */
     style: React.PropTypes.object,
     /**
+     * Logo height
+     */
+    logoHeight: React.PropTypes.number,
+    /**
     * Array of menu items to add to the header
     */
     leftMenuItems: React.PropTypes.node,
@@ -87,12 +91,15 @@ class Header extends React.Component {
   render() {
     var title
     if (this.props.logo) {
-      title = (<Logo src={this.props.logo} onTouchTap={this.props.onLeftIconTouchTap} visible={this.props.showLeftIcon} tooltip={this.props.title}/>);
+      title = (<Logo src={this.props.logo}
+        logoHeight={this.props.logoHeight}
+        onTouchTap={this.props.onLeftIconTouchTap}
+        visible={this.props.showLeftIcon}
+        tooltip={this.props.title}/>);
     } else {
       title = this.props.title;
     }
-
-    return (
+    var old =  (
       <AppBar
           style={this.props.style}
           showMenuIconButton={this.props.showLeftIcon}
@@ -104,6 +111,13 @@ class Header extends React.Component {
           }
           onLeftIconButtonTouchTap={this.props.onLeftIconTouchTap}
         />
+    );
+    return (
+      <div className="sdk-component header">
+        <span className="sidedrawer-toggle">☰</span>
+        <span className="header-title">{title}</span>
+        <span className="header-actions">{this.props.children}</span>
+      </div>
     );
   }
 }

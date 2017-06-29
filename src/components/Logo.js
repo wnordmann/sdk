@@ -39,12 +39,17 @@ class Logo extends React.PureComponent {
      */
     tooltip: React.PropTypes.string,
     /**
+     * The tooltip to show.
+     */
+    logoHeight: React.PropTypes.number,
+    /**
      * Function to execute when clicked.
      */
     onTouchTap: React.PropTypes.func
   };
   static defaultProps = {
-    tooltipPosition: 'bottom'
+    tooltipPosition: 'bottom',
+    logoHeight: 40
   };
 
   render() {
@@ -59,7 +64,7 @@ class Logo extends React.PureComponent {
         className={classNames(className, this.props.className)}
         aria-label={this.props.tooltip}
         title={this.props.tooltip}>
-        <img src={this.props.src}  style={{marginTop: 12, height: 40}} />
+        <img src={this.props.src}  style={height: this.props.logoHeight} />
       </span>)
   }
 }
