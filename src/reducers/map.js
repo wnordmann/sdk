@@ -53,8 +53,12 @@ function updateLayer(state, action) {
   // action.layer should be a new mix in for the layer.
   const new_layers = [];
   for(let i = 0, ii = state.layers.length; i < ii; i++) {
+    // if the id matches, update the layer
     if(state.layers[i].id === action.layerId) {
       new_layers.push(Object.assign({}, state.layers[i], action.layer));
+    // otherwise leave it the same.
+    } else {
+      new_layers.push(state.layers[i]);
     }
   }
 
