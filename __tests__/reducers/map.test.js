@@ -1,5 +1,6 @@
 import reducer from '../../src/reducers/map'
 import {MAP} from '../../src/action-types'
+import deepFreeze from 'deep-freeze';
 
 describe('map reducer', () => {
   it('should return the initial state', () => {
@@ -16,17 +17,21 @@ describe('map reducer', () => {
   })
 
   it('should handle ADD_LAYER', () => {
+   const layer = {
+     "id": "background",
+     "type": "background",
+     "paint": {
+       "background-color": "rgba(0,0,0,0)"
+      }
+    };
+    deepFreeze(layer);
+    const action = {
+      type: MAP.ADD_LAYER,
+      layer: layer
+    };
+    deepFreeze(action);
     expect(
-      reducer(undefined, {
-        type: MAP.ADD_LAYER,
-        layer: {
-          "id": "background",
-          "type": "background",
-          "paint": {
-            "background-color": "rgba(0,0,0,0)"
-          }
-        }
-      })
+      reducer(undefined, action)
     ).toEqual({
       version: 8,
       name: 'default',
