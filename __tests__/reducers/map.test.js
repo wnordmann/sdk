@@ -27,7 +27,7 @@ describe('map reducer', () => {
     deepFreeze(layer);
     const action = {
       type: MAP.ADD_LAYER,
-      layer: layer
+      layerDef: layer
     };
     deepFreeze(action);
     expect(
