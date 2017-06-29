@@ -122,15 +122,17 @@ export class Geocoding extends React.Component {
     //  list should disappear.
     return (
       <span>
-        <input
-          style={this.props.style}
-          className={classNames('sdk-component geocoding headerText', this.props.className)}
-          placeholder={formatMessage(messages.placeholder)}
-          onFocus={() => {
-            this.focus(true);
-          }}
-          onChange={this._searchAddress.bind(this)}
-          />
+        <div className={'sdk-textfield'}>
+          <input
+            style={this.props.style}
+            className={classNames('sdk-component geocoding headerText', this.props.className)}
+            placeholder={formatMessage(messages.placeholder)}
+            onFocus={() => {
+              this.focus(true);
+            }}
+            onChange={this._searchAddress.bind(this)}
+            />
+        </div>
         <span onClick={() => {
           this.focus(false);
         }}>
