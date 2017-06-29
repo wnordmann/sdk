@@ -1,0 +1,290 @@
+// ============================================================================
+// COLORS
+// ============================================================================
+
+$sdk-primary-color:            sdk-color('blue', '500') !default;
+$sdk-primary-color-dark:       sdk-color('blue', '700') !default;
+$sdk-primary-color-light:      sdk-color('blue', '100') !default;
+
+$sdk-accent-color:             sdk-color('pink', 'A200') !default;
+$sdk-accent-color-dark:        sdk-color('pink', 'A400') !default;
+$sdk-accent-color-light:       sdk-color('pink', 'A100') !default;
+
+$sdk-danger-color:             sdk-color('red', '500') !default;
+
+
+
+
+// ============================================================================
+// GLOBAL VARIABLES
+// ============================================================================
+
+$sdk-include-globals:            true !default;
+
+$sdk-body-bg-color:              sdk-color('white') !default;
+
+$sdk-base-font-color:            sdk-color('black-alpha-87') !default;
+$sdk-base-font-family:           Arial, Verdana, Tahoma !default;
+$sdk-base-font-size:             14px !default;
+$sdk-base-font-weight:           400 !default;
+$sdk-base-line-height:           1.429 !default;
+$sdk-base-font-smoothing:        false !default;
+
+$sdk-link-font-color:            $sdk-primary-color !default;
+$sdk-link-text-decoration:       none !default;
+$sdk-link-font-color-hover:      $sdk-primary-color-dark !default;
+$sdk-link-text-decoration-hover: underline !default;
+
+$sdk-cursor-disabled:            not-allowed !default;
+$sdk-border-radius-default:      2px !default;
+
+$sdk-hr-color:                   sdk-color('black-alpha-12') !default;
+$sdk-abbr-border-color:          $sdk-primary-color !default;
+
+
+
+
+// ============================================================================
+// MEDIA QUERY BREAKPOINTS
+// ============================================================================
+
+$sdk-screen-sm-min: 544px !default;
+$sdk-screen-md-min: 768px !default;
+$sdk-screen-lg-min: 992px !default;
+$sdk-screen-xl-min: 1200px !default;
+
+
+
+
+// ============================================================================
+// GRID SYSTEM
+// ============================================================================
+
+$sdk-grid-columns:               12 !default;
+$sdk-grid-gutter-width:          30px !default;
+$sdk-grid-float-breakpoint:      $sdk-screen-sm-min !default;
+
+
+
+
+// ============================================================================
+// CONTAINER SIZES
+// ============================================================================
+
+$sdk-container-sm:               570px !default;
+$sdk-container-md:               740px !default;
+$sdk-container-lg:               960px !default;
+$sdk-container-xl:               1170px !default;
+
+
+
+
+// ============================================================================
+// TEXT COLORS
+// ============================================================================
+
+$sdk-text-dark:             sdk-color('black-alpha-87') !default;
+$sdk-text-dark-secondary:   sdk-color('black-alpha-54') !default;
+$sdk-text-dark-hint:        sdk-color('black-alpha-38') !default;
+
+$sdk-text-light:            sdk-color('white') !default;
+$sdk-text-light-secondary:  sdk-color('white-alpha-70') !default;
+$sdk-text-light-hint:       sdk-color('white-alpha-30') !default;
+
+$sdk-text-accent:           rgba($sdk-accent-color, .87) !default;
+$sdk-text-accent-secondary: rgba($sdk-accent-color, .54) !default;
+$sdk-text-accent-hint:      rgba($sdk-accent-color, .38) !default;
+
+$sdk-text-danger:          $sdk-danger-color !default;
+
+
+
+
+// ============================================================================
+// BUTTONS
+// ============================================================================
+
+$sdk-btn-height:                      36px !default;
+$sdk-btn-height-sm:                   $sdk-btn-height * 0.85 !default;
+$sdk-btn-height-lg:                   $sdk-btn-height * 1.5 !default;
+
+$sdk-btn-border-radius:               $sdk-border-radius-default !default;
+
+$sdk-btn-padding-horizontal:          26px !default;
+$sdk-btn-padding-horizontal-sm:       16px !default;
+$sdk-btn-padding-horizontal-lg:       $sdk-btn-padding-horizontal !default;
+
+$sdk-btn-font-size:                   14px !default;
+$sdk-btn-font-size-sm:                13px !default;
+$sdk-btn-font-size-lg:                $sdk-btn-font-size !default;
+
+$sdk-btn-fab-diameter:                55px !default;
+$sdk-btn-fab-diameter-sm:             44px !default;
+$sdk-btn-fab-diameter-lg:             75px !default;
+
+$sdk-btn-margin-vertical:             6px !default;
+$sdk-btn-spacing-horizontal:          8px !default;
+
+
+
+// ----------------------------------------------------------------------------
+// COLORS
+// ----------------------------------------------------------------------------
+
+$sdk-btn-default-bg-color:            sdk-color('white') !default;
+$sdk-btn-default-font-color:          $sdk-base-font-color !default;
+$sdk-btn-default-ripple-color:        darken(sdk-color('white'), 35%) !default;
+
+$sdk-btn-primary-bg-color:            $sdk-primary-color !default;
+$sdk-btn-primary-font-color:          sdk-color('white') !default;
+$sdk-btn-primary-ripple-color:        sdk-color('white') !default;
+
+$sdk-btn-danger-bg-color:             $sdk-danger-color !default;
+$sdk-btn-danger-font-color:           sdk-color('white') !default;
+$sdk-btn-danger-ripple-color:         sdk-color('white') !default;
+
+$sdk-btn-dark-bg-color:               sdk-color('grey', '800') !default;
+$sdk-btn-dark-font-color:             sdk-color('white') !default;
+$sdk-btn-dark-ripple-color:           sdk-color('white') !default;
+
+$sdk-btn-accent-bg-color:             $sdk-accent-color !default;
+$sdk-btn-accent-font-color:           sdk-color('white') !default;
+$sdk-btn-accent-ripple-color:         sdk-color('white') !default;
+
+$sdk-btn-flat-bg-color:               transparent !default;
+$sdk-btn-flat-bg-color-hover:         darken(sdk-color('white'), 5%) !default;
+$sdk-btn-flat-ripple-color:           darken(sdk-color('white'), 35%) !default;
+
+
+
+
+// ============================================================================
+// FORMS
+// ============================================================================
+
+$sdk-input-bg-color:              transparent !default;
+$sdk-input-bg-color-disabled:     transparent !default;
+$sdk-input-font-color:            $sdk-base-font-color !default;
+$sdk-input-font-size:             16px !default;
+$sdk-input-height:                32px !default;
+
+$sdk-input-placeholder-color:     rgba(sdk-color('black'), 0.26) !default;
+
+$sdk-input-border-color:          $sdk-input-placeholder-color !default;
+$sdk-input-border-color-focus:    $sdk-primary-color !default;
+
+$sdk-textarea-height:             64px !default;
+
+$sdk-label-font-size:             12px !default;
+$sdk-label-font-color:            sdk-color('black-alpha-54') !default;
+$sdk-label-margin-bottom:         3px !default;
+
+$sdk-form-legend-font-size:       $sdk-base-font-size * 1.5 !default;
+$sdk-form-legend-margin-bottom:   $sdk-form-legend-font-size / 2 !default;
+$sdk-form-legend-font-color:      $sdk-base-font-color !default;
+$sdk-form-group-margin-bottom:    20px !default;
+
+
+
+
+// ============================================================================
+// PANELS
+// ============================================================================
+
+$sdk-panel-bg-color:             sdk-color('white') !default;
+$sdk-panel-padding:              15px !default;
+$sdk-panel-border-radius:        0 !default;
+
+
+
+
+// ============================================================================
+// DIVIDERS
+// ============================================================================
+
+$sdk-divider-color:              sdk-color('black-alpha-12') !default;
+
+
+
+
+// ============================================================================
+// DROPDOWNS
+// ============================================================================
+
+$sdk-dropdown-bg-color:                 sdk-color('white') !default;
+$sdk-dropdown-border-color:             $sdk-divider-color !default;
+$sdk-dropdown-border-radius:            $sdk-border-radius-default !default;
+
+$sdk-dropdown-link-font-color:          $sdk-base-font-color !default;
+$sdk-dropdown-link-font-color-hover:    darken($sdk-dropdown-link-font-color, 5%) !default;
+$sdk-dropdown-link-font-color-active:   $sdk-accent-color !default;
+$sdk-dropdown-link-font-color-disabled: sdk-color('grey', '200') !default;
+
+$sdk-dropdown-link-bg-color-hover:      sdk-color('grey', '200') !default;
+$sdk-dropdown-link-bg-color-active:     sdk-color('white') !default;
+
+
+
+
+// ============================================================================
+// APPBAR
+// ============================================================================
+
+$sdk-appbar-height:              64px !default;
+$sdk-appbar-height-xs-portrait:  56px !default;
+$sdk-appbar-height-xs-landscape: 48px !default;
+
+$sdk-appbar-bg-color:            $sdk-primary-color !default;
+$sdk-appbar-font-color:          sdk-color('white') !default;
+
+
+
+
+// ============================================================================
+// TABLES
+// ============================================================================
+
+$sdk-table-cell-padding:         10px !default;
+$sdk-table-border-color:         $sdk-divider-color !default;
+
+
+
+
+// ============================================================================
+// TABS
+// ============================================================================
+
+$sdk-tab-font-color:             $sdk-base-font-color !default;
+$sdk-tab-font-color-active:      $sdk-primary-color !default;
+$sdk-tab-border-color-active:    $sdk-primary-color !default;
+
+
+
+
+// ============================================================================
+// CARET
+// ============================================================================
+
+$sdk-caret-width:                4px !default;
+
+
+
+
+// ============================================================================
+// OVERLAY
+// ============================================================================
+
+$sdk-overlay-bg-color:           rgba(sdk-color('black'), 0.20) !default;
+
+
+
+
+// ============================================================================
+// INTERNAL VARIABLES
+// ============================================================================
+
+$sdk-base-line-height-computed: floor(($sdk-base-font-size * $sdk-base-line-height));
+$sdk-screen-xs-max: ($sdk-screen-sm-min - 1);
+$sdk-screen-sm-max: ($sdk-screen-md-min - 1);
+$sdk-screen-md-max: ($sdk-screen-lg-min - 1);
+$sdk-screen-lg-max: ($sdk-screen-xl-min - 1);

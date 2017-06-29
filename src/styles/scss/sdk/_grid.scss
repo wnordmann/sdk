@@ -1,0 +1,37 @@
+/**
+ * sdk Grid module
+ */
+
+// row
+.sdk-row {
+  @include sdk-clearfix();
+
+  margin-left: ($sdk-grid-gutter-width / -2);
+  margin-right: ($sdk-grid-gutter-width / -2);
+}
+
+// columns
+@include sdk-make-grid-columns();
+
+// extra small grid
+@include sdk-make-grid('xs');
+
+// small grid
+@media (min-width: $sdk-screen-sm-min) {
+  @include sdk-make-grid('sm');
+}
+
+// medium grid
+@media (min-width: $sdk-screen-md-min) {
+  @include sdk-make-grid('md');
+}
+
+// large grid
+@media (min-width: $sdk-screen-lg-min) {
+  @include sdk-make-grid('lg');
+}
+
+// extra-large grid
+@media (min-width: $sdk-screen-xl-min) {
+  @include sdk-make-grid('xl');
+}
