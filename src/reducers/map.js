@@ -23,7 +23,7 @@ function addLayer(state, action) {
   const new_layer = Object.assign({
     filter: null,
     paint: {}
-  }, action.layer);
+  }, action.layerDef);
 
   return Object.assign({}, state, {
     _layersVersion: state._layersVersion + 1,
@@ -73,12 +73,14 @@ function updateLayer(state, action) {
 /** Add a source to the state.
  */
 function addSource(state, action) {
-  const new_sources = Object.assign({
+  const new_source = {}
+  new_source[action.sourceName] = Object.assign({
     features: [],
-    _featuresVersion: 0,
-  }, state.sources);
-  new_sources[action.sourceName] = action.sourceDef;
-  return Object.assign({}, state, {_sourcesVersion: state._sourcesVersion + 1}, new_sources);
+    _featuresVersion: 0
+  }, action.sourceDef);
+
+  const new_sources = Object.assign({}, state.sources, new_source);
+  return Object.assign({}, state, {_sourcesVersion: state._sourcesVersion + 1}, {sources: new_sources});
 }
 
 /** Remove a source from the state.
@@ -113,6 +115,32 @@ function addFeatures(state, action) {
   return Object.assign({}, state, new_sources);
 }
 
+/** Change the visibiilty of a layer given in the action.
+ */
+function setVisibility(state, action) {
+  const updated_layers = [];
+  let updated = 0;
+  for(const layer of state.layers) {
+    if(layer.id === action.id) {
+      updated_layers.push({
+        ...layer,
+        layout: {
+          ...layer.layout,
+          visibility: action.visibility,
+        }
+      });
+
+      updated = 1;
+    } else {
+      updated_layers.push(layer);
+    }
+  }
+  return Object.assign({}, state, {
+    _layersVersion: state.layersVersion + updated,
+    layers: updated_layers
+  });
+}
+
 
 /** Main reducer.
  */
@@ -132,6 +160,8 @@ export default function MapReducer(state = defaultState, action) {
       return removeSource(state, action);
     case MAP.ADD_FEATURES:
       return addFeatures(state, action);
+    case MAP.SET_LAYER_VISIBILITY:
+      return setVisibility(state, action);
     default:
       return state;
   }

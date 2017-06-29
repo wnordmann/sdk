@@ -53,3 +53,11 @@ export function addFeatures(sourceName, features) {
     sourceName, features
   }
 }
+
+export function setLayerVisibility(layerId, vis) {
+  return {
+    type: MAP.SET_LAYER_VISIBILITY,
+    id: layerId,
+    visibility: vis
+  }
+}
