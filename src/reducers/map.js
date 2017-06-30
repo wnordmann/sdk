@@ -136,7 +136,7 @@ function setVisibility(state, action) {
     }
   }
   return Object.assign({}, state, {
-    _layersVersion: state.layersVersion + updated,
+    _layersVersion: state._layersVersion + updated,
     layers: updated_layers
   });
 }

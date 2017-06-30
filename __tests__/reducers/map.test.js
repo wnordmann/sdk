@@ -50,4 +50,54 @@ describe('map reducer', () => {
       }]
     })
   })
+
+  it('should handle SET_LAYER_VISIBILITY', () => {
+   const layer = {
+     "id": "background",
+     "type": "background",
+     "paint": {
+       "background-color": "rgba(0,0,0,0)"
+      }
+    };
+    deepFreeze(layer);
+    const action = {
+      type: MAP.SET_LAYER_VISIBILITY,
+      id: 'background',
+      visibility: 'none'
+    };
+    const state = {
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      _sourcesVersion: 0,
+      sources: {},
+     _layersVersion: 0,
+     layers: [layer]
+    };
+    deepFreeze(state);
+    deepFreeze(action);
+    expect(
+      reducer(state, action)
+    ).toEqual({
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      _sourcesVersion: 0,
+      sources: {},
+      _layersVersion: 1,
+      layers: [{
+        "id": "background",
+        "type": "background",
+        "paint": {
+          "background-color": "rgba(0,0,0,0)"
+        },
+        "layout": {
+          "visibility": "none"
+        }
+      }]
+    })
+  })
+
 })
