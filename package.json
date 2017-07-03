@@ -5,7 +5,8 @@
   "scripts": {
     "start": "webpack-dev-server --config webpack-dev-server.config.js",
     "test": "jest",
-    "test:watch": "npm test -- --watch"
+    "test:watch": "npm test -- --watch",
+    "cover": "node_modules/.bin/jest --coverage && cat ./coverage/lcov.info"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
