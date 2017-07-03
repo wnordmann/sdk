@@ -55,7 +55,7 @@ function updateLayer(state, action) {
   for(let i = 0, ii = state.layers.length; i < ii; i++) {
     // if the id matches, update the layer
     if(state.layers[i].id === action.layerId) {
-      new_layers.push(Object.assign({}, state.layers[i], action.layer));
+      new_layers.push(Object.assign({}, state.layers[i], action.layerDef));
     // otherwise leave it the same.
     } else {
       new_layers.push(state.layers[i]);
@@ -74,10 +74,8 @@ function updateLayer(state, action) {
  */
 function addSource(state, action) {
   const new_source = {}
-  new_source[action.sourceName] = Object.assign({
-    features: [],
-    _featuresVersion: 0
-  }, action.sourceDef);
+  const sourceDef = action.sourceDef.type !== 'raster' ? {features: [], _featuresVersion: 0} : {};
+  new_source[action.sourceName] = Object.assign(sourceDef, action.sourceDef);
 
   const new_sources = Object.assign({}, state.sources, new_source);
   return Object.assign({}, state, {_sourcesVersion: state._sourcesVersion + 1}, {sources: new_sources});
