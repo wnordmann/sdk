@@ -119,7 +119,7 @@ function setVisibility(state, action) {
   const updated_layers = [];
   let updated = 0;
   for(const layer of state.layers) {
-    if(layer.id === action.id) {
+    if(layer.id === action.layerId) {
       updated_layers.push({
         ...layer,
         layout: {

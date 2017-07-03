@@ -63,7 +63,7 @@ describe('map reducer', () => {
     deepFreeze(layer);
     const action = {
       type: MAP.SET_LAYER_VISIBILITY,
-      id: 'background',
+      layerId: 'background',
       visibility: 'none'
     };
     const state = {
