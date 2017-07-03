@@ -97,20 +97,20 @@ function addFeatures(state, action) {
   let new_features = [];
   // if the features already exist, add the new features to the
   //  end of the stack.
-  if(source.features) {
-    new_features = source.features.slice().concat(action.features);
+  if(source.data.features) {
+    new_features = source.data.features.slice().concat(action.features);
   // if the features don't exist yet then just set them.
   } else {
     new_features = action.features;
   }
 
   // update the individual source.
-  new_sources[action.sourceName] = Object.assign(source, {
+  new_sources[action.sourceName] = Object.assign({}, source, {
     _featuresVersion: source._featuresVersion + 1,
-    features: new_features
+    data: Object.assign({}, source.data, {features: new_features})
   });
   // kick back the new state.
-  return Object.assign({}, state, new_sources);
+  return Object.assign({}, state, {sources: new_sources});
 }
 
 /** Change the visibiilty of a layer given in the action.
