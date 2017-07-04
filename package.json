@@ -46,6 +46,10 @@
     ],
     "transformIgnorePatterns": [
       "/node_modules/(?!(ol)/).*/"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "env-setup.js"
     ]
   }
 }
