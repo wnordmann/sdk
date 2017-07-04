@@ -41,6 +41,31 @@ function main() {
     source: 'osm',
   }));
 
+  store.dispatch(mapActions.addSource('points', {
+    type: 'geojson',
+    data: {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [-10895923.706980927, 4656189.67701237],
+      },
+      properties: {
+        title: 'Sample Point',
+      }
+    },
+  }));
+
+  store.dispatch(mapActions.addLayer({
+    id: 'sample-points',
+    source: 'points',
+    type: 'circle',
+    paint: {
+      'circle-radius' : 5,
+      'circle-color': '#feb24c',
+      'circle-stroke-color' : '#f03b20',
+    }
+  }));
+
   // semaphore to prevent the states layer
   //  from being added twice.
   let sem = true;

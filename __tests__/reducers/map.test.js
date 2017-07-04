@@ -267,8 +267,8 @@ describe('map reducer', () => {
   })
 
   it('should handle ADD_FEATURES', () => {
-    // since we do not go through ADD_SOURCE we need to set _featuresVersion
-    const source = {"_featuresVersion": 0, "data": {"type":"FeatureCollection","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"n":2,"cat":1},"geometry":{"type":"Point","coordinates":[0.5,0.5]}},{"type":"Feature","properties":{"n":3,"cat":2},"geometry":{"type":"Point","coordinates":[0.5,1.5]}}]}};
+    // since we do not go through ADD_SOURCE we need to set _dataVersion
+    const source = {"_dataVersion": 0, "data": {"type":"FeatureCollection","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"n":2,"cat":1},"geometry":{"type":"Point","coordinates":[0.5,0.5]}},{"type":"Feature","properties":{"n":3,"cat":2},"geometry":{"type":"Point","coordinates":[0.5,1.5]}}]}};
     deepFreeze(source);
     const action = {
       type: MAP.ADD_FEATURES,
@@ -289,7 +289,7 @@ describe('map reducer', () => {
       layers: []
     };
     deepFreeze(state);
-    const newSource = {"_featuresVersion": 1, "data": {"type":"FeatureCollection","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"n":2,"cat":1},"geometry":{"type":"Point","coordinates":[0.5,0.5]}},{"type":"Feature","properties":{"n":3,"cat":2},"geometry":{"type":"Point","coordinates":[0.5,1.5]}},{"type":"Feature","properties":{"n":27,"cat":2},"geometry":{"type":"Point","coordinates":[2.5,5.5]}},{"type":"Feature","properties":{"n":28,"cat":1},"geometry":{"type":"Point","coordinates":[2.5,6.5]}}]}};
+    const newSource = {"_dataVersion": 1, "data": {"type":"FeatureCollection","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"n":2,"cat":1},"geometry":{"type":"Point","coordinates":[0.5,0.5]}},{"type":"Feature","properties":{"n":3,"cat":2},"geometry":{"type":"Point","coordinates":[0.5,1.5]}},{"type":"Feature","properties":{"n":27,"cat":2},"geometry":{"type":"Point","coordinates":[2.5,5.5]}},{"type":"Feature","properties":{"n":28,"cat":1},"geometry":{"type":"Point","coordinates":[2.5,6.5]}}]}};
     deepFreeze(newSource);
     expect(
       reducer(state, action)

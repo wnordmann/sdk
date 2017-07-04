@@ -74,7 +74,7 @@ function updateLayer(state, action) {
  */
 function addSource(state, action) {
   const new_source = {}
-  const sourceDef = action.sourceDef.type !== 'raster' ? {features: [], _featuresVersion: 0} : {};
+  const sourceDef = action.sourceDef.type !== 'raster' ? {data: {}, _dataVersion: 0} : {};
   new_source[action.sourceName] = Object.assign(sourceDef, action.sourceDef);
 
   const new_sources = Object.assign({}, state.sources, new_source);
@@ -92,25 +92,51 @@ function removeSource(state, action) {
 /** Add features to a source.
  */
 function addFeatures(state, action) {
-  const new_sources = Object.assign({}, state.sources);
   const source = state.sources[action.sourceName];
   let new_features = [];
   // if the features already exist, add the new features to the
   //  end of the stack.
   if(source.data.features) {
     new_features = source.data.features.slice().concat(action.features);
-  // if the features don't exist yet then just set them.
-  } else {
-    new_features = action.features;
   }
+  // if the features don't exist yet then just set them.
+  const data = source.data;
 
-  // update the individual source.
-  new_sources[action.sourceName] = Object.assign({}, source, {
-    _featuresVersion: source._featuresVersion + 1,
-    data: Object.assign({}, source.data, {features: new_features})
-  });
-  // kick back the new state.
-  return Object.assign({}, state, {sources: new_sources});
+  let new_data = null;
+
+  // when there is no data, use the data
+  // from the action.
+  if(!data || !data.type) {
+    // coerce this to a FeatureCollection.
+    new_data = {
+      type: 'FeatureCollection',
+      features: action.features
+    };
+  } else {
+    if(data.type === 'Feature') {
+      new_data = {
+        type: 'FeatureCollection',
+        features: [data].concat(action.features)
+      };
+    } else if(data.type === 'FeatureCollection') {
+      new_data = {
+        type: 'FeatureCollection',
+        features: data.features.concat(action.features)
+      }
+    }
+  }
+  if(new_data !== null) {
+    const new_sources = Object.assign({}, state.sources);
+    // update the individual source.
+    new_sources[action.sourceName] = Object.assign(source, {
+      _dataVersion: source._dataVersion + 1,
+      data: new_data,
+    });
+
+    // kick back the new state.
+    return Object.assign({}, state, new_sources);
+  }
+  return state;
 }
 
 /** Change the visibiilty of a layer given in the action.
