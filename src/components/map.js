@@ -8,12 +8,21 @@ import { connect } from 'react-redux';
 
 import { setView } from '../actions/map';
 
+import getStyleFunction from 'mapbox-to-ol-style';
+
 import olMap from 'ol/map';
 import View from 'ol/view';
 
 import TileLayer from 'ol/layer/tile';
 import XyzSource from 'ol/source/xyz';
 
+import VectorLayer from 'ol/layer/vector';
+import VectorSource from 'ol/source/vector';
+
+import GeoJsonFormat from 'ol/format/geojson';
+
+
+const GEOJSON_FORMAT = new GeoJsonFormat();
 
 function configureXyzSource(glSource) {
   const source = new XyzSource({
@@ -44,17 +53,52 @@ function configureRasterLayer(olSource, glLayer) {
   });
 }
 
+/** Create a vector source based on a
+ *  MapBox GL styles definition.
+ *
+ *  @param glSource a MapBox GL styles defintiion of the source.
+ *
+ * @returns ol.source.vector instance.
+ */
+function configureVectorSource(glSource) {
+  const vector_src = new VectorSource({
+    useSpatialIndex: false,
+  });
+
+  // see the vector source with the first update
+  //  before returning it.
+  updateVectorSource(vector_src, glSource);
+
+  return vector_src;
+}
+
+function updateVectorSource(olSource, glSource) {
+  // this indicates the data version has changed.
+  if (olSource.get('dataVersion') !== glSource._dataVersion) {
+    // parse the new features,
+    // TODO: This should really check the map for the correct projection.
+    const features = GEOJSON_FORMAT.readFeatures(glSource.data, {featureProjection: 'EPSG:3857'});
+
+    // clear the layer WITHOUT dispatching remove events.
+    olSource.clear(true);
+    // bulk load the feature data.
+    olSource.addFeatures(features);
+
+    // update the data version in the layer.
+    olSource.set('dataVersion', glSource._dataVersion);
+  }
+}
+
+
 function configureSource(glSource) {
-  if(glSource.tiles) {
+  // tiled rater layer.
+  if(glSource.type === 'raster' && 'tiles' in glSource) {
     return configureXyzSource(glSource);
+  } else if(glSource.type === 'geojson') {
+    return configureVectorSource(glSource);
   }
   return null;
 }
-
-function configureLayer(sourceDef, glLayer) {
-
-}
-
 
 export class Map extends React.Component {
 
@@ -133,6 +177,16 @@ export class Map extends React.Component {
               source: this.sources[layer.source],
             });
           }
+        } else if (layer_src.type === 'geojson') {
+          new_layer = new VectorLayer({
+            source: this.sources[layer.source],
+            // this is a small bit of trickery that fakes
+            // `getStyleFunction` into rendering only THIS layer.
+            style: getStyleFunction({
+              version: 8,
+              layers: [layer],
+            }, layer.source)
+          })
         }
         // if the new layer has been defined, add it to the map.
         if(new_layer !== null) {
@@ -174,6 +228,17 @@ export class Map extends React.Component {
     if(this.layersVersion !== nextProps.map._layersVersion) {
       // go through and update the layers.
       this.configureLayers(nextProps.map.sources, nextProps.map.layers);
+    }
+
+    // check the vector sources for data changes
+    for (const src_name in nextProps.map.sources) {
+      const src = this.props.map.sources[src_name];
+      if (src.type === 'geojson') {
+        const next_src = nextProps.map.sources[src_name];
+        if (src._dataVersion !== next_src._dataVersion) {
+          updateVectorSource(this.sources[src_name], next_src);
+        }
+      }
     }
 
     // This should always return false to keep

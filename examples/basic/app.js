@@ -47,10 +47,10 @@ function main() {
       type: 'Feature',
       geometry: {
         type: 'Point',
-        coordinates: [-10895923.706980927, 4656189.67701237],
+        coordinates: [0,0],
       },
       properties: {
-        title: 'Sample Point',
+        title: 'Null Island',
       }
     },
   }));
@@ -105,6 +105,20 @@ function main() {
     store.dispatch(mapActions.setView([0,0], 5));
   }
 
+  // Add a random point to the map
+  const addRandomPoint = () => {
+    store.dispatch(mapActions.addFeatures('points', [{
+      type: 'Feature',
+      properties: {
+        title: 'Random Point',
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [Math.random() * 360 - 180, Math.random() * 180 - 90],
+      }
+    }]));
+  }
+
   // place the map on the page.
   ReactDOM.render(<SdkMap store={store} />, document.getElementById('map'));
 
@@ -115,6 +129,7 @@ function main() {
       <button onClick={ hideOSM }>Hide OSM</button>
       <button onClick={ showOSM }>Show OSM</button>
       <button onClick={ zoomToNullIsland }>Zoom to Null Island</button>
+      <button onClick={ addRandomPoint }>Add a random point</button>
     </div>
   ), document.getElementById('controls'));
 }
