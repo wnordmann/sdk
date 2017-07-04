@@ -19,14 +19,14 @@
     "eslint": "^4.1.1",
     "jest": "^20.0.4",
     "mixin": "^0.2.0",
+    "react-dom": "^15.6.1",
     "react-test-renderer": "^15.6.1",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.4.5"
   },
   "dependencies": {
     "ol": "^4.1.1",
-    "react": "^15.3.2",
-    "react-dom": "^15.3.2",
+    "react": "^15.6.1",
     "react-redux": "^5.0.5",
     "redux": "^3.6.0"
   },
@@ -41,7 +41,11 @@
   },
   "homepage": "https://github.com/boundlessgeo/sdk#readme",
   "jest": {
-    "setupFiles": ["<rootDir>/env-setup.js"],
-    "transformIgnorePatterns": ["/node_modules\/(?!(ol)\/).*/"]
+    "setupFiles": [
+      "<rootDir>/env-setup.js"
+    ],
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(ol)/).*/"
+    ]
   }
 }
