@@ -41,6 +41,7 @@
   },
   "homepage": "https://github.com/boundlessgeo/sdk#readme",
   "jest": {
+    "setupFiles": ["<rootDir>/env-setup.js"],
     "transformIgnorePatterns": ["/node_modules\/(?!(ol)\/).*/"]
   }
 }

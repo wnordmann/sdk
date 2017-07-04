@@ -56,7 +56,7 @@ function configureLayer(sourceDef, glLayer) {
 }
 
 
-class Map extends React.Component {
+export class Map extends React.Component {
 
 
   constructor(props) {
