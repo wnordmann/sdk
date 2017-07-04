@@ -19,6 +19,7 @@
     "eslint": "^4.1.1",
     "jest": "^20.0.4",
     "mixin": "^0.2.0",
+    "react-test-renderer": "^15.6.1",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.4.5"
   },
@@ -38,5 +39,8 @@
   "bugs": {
     "url": "https://github.com/boundlessgeo/sdk/issues"
   },
-  "homepage": "https://github.com/boundlessgeo/sdk#readme"
+  "homepage": "https://github.com/boundlessgeo/sdk#readme",
+  "jest": {
+    "transformIgnorePatterns": ["/node_modules\/(?!(ol)\/).*/"]
+  }
 }
