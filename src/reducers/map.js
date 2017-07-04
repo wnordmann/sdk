@@ -93,15 +93,9 @@ function removeSource(state, action) {
  */
 function addFeatures(state, action) {
   const source = state.sources[action.sourceName];
-  let new_features = [];
-  // if the features already exist, add the new features to the
-  //  end of the stack.
-  if(source.data.features) {
-    new_features = source.data.features.slice().concat(action.features);
-  }
-  // if the features don't exist yet then just set them.
   const data = source.data;
 
+  // placeholder for the new data
   let new_data = null;
 
   // when there is no data, use the data
@@ -112,29 +106,31 @@ function addFeatures(state, action) {
       type: 'FeatureCollection',
       features: action.features
     };
-  } else {
-    if(data.type === 'Feature') {
-      new_data = {
-        type: 'FeatureCollection',
-        features: [data].concat(action.features)
-      };
-    } else if(data.type === 'FeatureCollection') {
-      new_data = {
-        type: 'FeatureCollection',
-        features: data.features.concat(action.features)
-      }
+  } else if (data.type === 'Feature') {
+    new_data = {
+      type: 'FeatureCollection',
+      features: [data].concat(action.features)
+    };
+  } else if(data.type === 'FeatureCollection') {
+    new_data = {
+      type: 'FeatureCollection',
+      features: data.features.concat(action.features)
     }
   }
+
   if(new_data !== null) {
-    const new_sources = Object.assign({}, state.sources);
+    const src_mixin = {};
+
     // update the individual source.
-    new_sources[action.sourceName] = Object.assign(source, {
+    src_mixin[action.sourceName] = Object.assign({}, source, {
       _dataVersion: source._dataVersion + 1,
-      data: new_data,
+      data: Object.assign({}, source.data, new_data),
     });
 
     // kick back the new state.
-    return Object.assign({}, state, new_sources);
+    return Object.assign({}, state, {
+      sources: Object.assign({}, state.sources, src_mixin)
+    });
   }
   return state;
 }
