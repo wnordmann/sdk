@@ -141,15 +141,15 @@ export class Map extends React.Component {
     });
 
     // bootstrap the map with the current configuration.
-    this.configureSources(this.props.map.sources);
-    this.configureLayers(this.props.map.sources, this.props.map.layers);
+    this.configureSources(this.props.map.sources, this.props.map._sourcesVersion);
+    this.configureLayers(this.props.map.sources, this.props.map.layers, this.props.map._layersVersion);
   }
 
   /** Convert the GL source definitions into internal
    *  OpenLayers source definitions.
    */
-  configureSources(sourcesDef) {
-    this.sourcesVersion = sourcesDef._sourcesVersion;
+  configureSources(sourcesDef, sourceVersion) {
+    this.sourcesVersion = sourceVersion;
     // TODO: Update this to check "diff" configurations
     //       of sources.  Currently, this will only detect
     //       additions and removals.
@@ -170,10 +170,10 @@ export class Map extends React.Component {
     }
   }
 
-  configureLayers(sourcesDef, layersDef) {
+  configureLayers(sourcesDef, layersDef, layerVersion) {
     const layer_exists = {};
 
-    this.layersVersion = layersDef._layersVersion;
+    this.layersVersion = layerVersion;
     // layers is an array.
     for(let i = 0, ii = layersDef.length; i < ii; i++) {
       const layer = layersDef[i];
@@ -182,41 +182,43 @@ export class Map extends React.Component {
       layer_exists[layer.id] = true;
 
       if(!(layer.id in this.layers)) {
-        const layer_src = sourcesDef[layer.source];
-        let new_layer = null;
-        if(layer_src.type === 'raster') {
-          if('tiles' in layer_src) {
-            new_layer = new TileLayer({
+        if (layer.type !== 'background') {
+          const layer_src = sourcesDef[layer.source];
+          let new_layer = null;
+          if(layer_src.type === 'raster') {
+            if('tiles' in layer_src) {
+              new_layer = new TileLayer({
+                source: this.sources[layer.source],
+              });
+            }
+          } else if (layer_src.type === 'geojson') {
+            new_layer = new VectorLayer({
               source: this.sources[layer.source],
+              // this is a small bit of trickery that fakes
+              // `getStyleFunction` into rendering only THIS layer.
+              style: getStyleFunction({
+                version: 8,
+                layers: [layer],
+              }, layer.source)
+            })
+          } else if (layer_src.type === 'image') {
+            new_layer = new ImageLayer({
+              source: this.sources[layer.source],
+              opacity: layer.paint ? layer.paint["raster-opacity"] : undefined,
             });
           }
-        } else if (layer_src.type === 'geojson') {
-          new_layer = new VectorLayer({
-            source: this.sources[layer.source],
-            // this is a small bit of trickery that fakes
-            // `getStyleFunction` into rendering only THIS layer.
-            style: getStyleFunction({
-              version: 8,
-              layers: [layer],
-            }, layer.source)
-          })
-        } else if (layer_src.type === 'image') {
-          new_layer = new ImageLayer({
-            source: this.sources[layer.source],
-            opacity: layer.paint ? layer.paint["raster-opacity"] : undefined,
-          });
+          // if the new layer has been defined, add it to the map.
+          if(new_layer !== null) {
+            this.layers[layer.id] = new_layer;
+            this.map.addLayer(this.layers[layer.id]);
+          }
         }
-        // if the new layer has been defined, add it to the map.
-        if(new_layer !== null) {
-          this.layers[layer.id] = new_layer;
-          this.map.addLayer(this.layers[layer.id]);
-        }
-      }
 
-      // handle visibility and z-ordering.
-      if(layer.id in this.layers) {
-        this.layers[layer.id].setVisible(is_visible);
-        this.layers[layer.id].setZIndex(i);
+        // handle visibility and z-ordering.
+        if(layer.id in this.layers) {
+          this.layers[layer.id].setVisible(is_visible);
+          this.layers[layer.id].setZIndex(i);
+        }
       }
     }
 
@@ -251,11 +253,11 @@ export class Map extends React.Component {
     // check the sources diff
     if(this.sourcesVersion !== nextProps.map._sourcesVersion) {
       // go through and update the sources.
-      this.configureSources(nextProps.map.sources);
+      this.configureSources(nextProps.map.sources, nextProps.map._sourcesVersion);
     }
     if(this.layersVersion !== nextProps.map._layersVersion) {
       // go through and update the layers.
-      this.configureLayers(nextProps.map.sources, nextProps.map.layers);
+      this.configureLayers(nextProps.map.sources, nextProps.map.layers, nextProps.map._layersVersion);
     }
 
     // check the vector sources for data changes
