@@ -46,7 +46,7 @@
       "<rootDir>/env-setup.js"
     ],
     "transformIgnorePatterns": [
-      "/node_modules/(?!(ol)/).*/"
+      "/node_modules/(?!(ol|mapbox-to-ol-style)/).*/"
     ],
     "coveragePathIgnorePatterns": [
       "/node_modules/",
