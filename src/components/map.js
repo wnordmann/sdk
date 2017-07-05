@@ -16,6 +16,9 @@ import View from 'ol/view';
 import TileLayer from 'ol/layer/tile';
 import XyzSource from 'ol/source/xyz';
 
+import ImageLayer from 'ol/layer/image';
+import ImageStaticSource from 'ol/source/imagestatic';
+
 import VectorLayer from 'ol/layer/vector';
 import VectorSource from 'ol/source/vector';
 
@@ -46,11 +49,14 @@ function configureXyzSource(glSource) {
   return source;
 }
 
-function configureRasterLayer(olSource, glLayer) {
-  return new TileLayer({
-    source: olSource,
-    visible: glLayer.layout ? glLayer.layout.visibility !== 'none' : true,
+function configureImageSource(glSource) {
+  const coords = glSource.coordinates;
+  const source = new ImageStaticSource({
+    url: glSource.url,
+    imageExtent: [coords[0][0], coords[3][1], coords[1][0], coords[0][1]],
+    projection: 'EPSG:4326'
   });
+  return source;
 }
 
 /** Create a vector source based on a
@@ -92,11 +98,13 @@ function updateVectorSource(olSource, glSource) {
 
 
 function configureSource(glSource) {
-  // tiled rater layer.
+  // tiled raster layer.
   if(glSource.type === 'raster' && 'tiles' in glSource) {
     return configureXyzSource(glSource);
   } else if(glSource.type === 'geojson') {
     return configureVectorSource(glSource);
+  } else if (glSource.type === 'image') {
+    return configureImageSource(glSource);
   }
   return null;
 }
@@ -188,6 +196,11 @@ export class Map extends React.Component {
               layers: [layer],
             }, layer.source)
           })
+        } else if (layer_src.type === 'image') {
+          new_layer = new ImageLayer({
+            source: this.sources[layer.source],
+            opacity: layer.paint ? layer.paint["raster-opacity"] : undefined,
+          });
         }
         // if the new layer has been defined, add it to the map.
         if(new_layer !== null) {

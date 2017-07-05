@@ -88,6 +88,31 @@ function main() {
 
   }
 
+  let semOverlay = true;
+  const addOverlay = () => {
+    if (semOverlay) {
+      store.dispatch(mapActions.addSource('overlay', {
+        type: 'image',
+        url: "https://www.mapbox.com/mapbox-gl-js/assets/radar.gif",
+        coordinates: [
+          [-80.425, 46.437],
+          [-71.516, 46.437],
+          [-71.516, 37.936],
+          [-80.425, 37.936]
+        ]
+      }));
+
+      store.dispatch(mapActions.addLayer({
+        id: 'overlay',
+        source: 'overlay',
+        type: "raster",
+        paint: {"raster-opacity": 0.85},
+      }));
+
+      semOverlay = false;
+    }
+  }
+
   const toggleVisibility = (vis) => {
     store.dispatch(mapActions.setLayerVisibility('osm', vis));
   }
@@ -131,6 +156,7 @@ function main() {
       <button onClick={ showOSM }>Show OSM</button>
       <button onClick={ zoomToNullIsland }>Zoom to Null Island</button>
       <button onClick={ addRandomPoint }>Add a random point</button>
+      <button onClick={ addOverlay }>Add static image</button>
     </div>
   ), document.getElementById('controls'));
 }
