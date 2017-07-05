@@ -233,7 +233,7 @@ export class Map extends React.Component {
     // check the vector sources for data changes
     for (const src_name in nextProps.map.sources) {
       const src = this.props.map.sources[src_name];
-      if (src.type === 'geojson') {
+      if (src && src.type === 'geojson') {
         const next_src = nextProps.map.sources[src_name];
         if (src._dataVersion !== next_src._dataVersion) {
           updateVectorSource(this.sources[src_name], next_src);
