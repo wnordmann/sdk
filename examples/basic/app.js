@@ -12,6 +12,7 @@ import ReactDOM from 'react-dom'
 import SdkMap from '@boundlessgeo/sdk/components/map';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
+import 'ol/ol.css';
 
 const store = createStore(combineReducers({
   map: SdkMapReducer,
