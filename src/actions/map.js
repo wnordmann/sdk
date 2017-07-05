@@ -1,3 +1,5 @@
+import fetch from 'isomorphic-fetch'
+
 /** Action Defintions for the map.
  */
 
@@ -69,3 +71,30 @@ export function setLayerVisibility(layerId, visibility) {
   }
 }
 
+export function requestContext() {
+  return {
+    type: MAP.REQUEST_CONTEXT
+  }
+}
+
+export function receiveContext(context) {
+  return {
+    type: MAP.RECEIVE_CONTEXT,
+    context
+  }
+}
+
+// thunk action creator
+export function fetchContext(url) {
+  return function (dispatch) {
+    dispatch(requestContext());
+    return fetch(url)
+      .then(
+        response => response.json(),
+        error => console.log('An error occured.', error)
+      )
+      .then(json =>
+        dispatch(receiveContext(json))
+      )
+  }
+}

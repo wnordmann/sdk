@@ -28,10 +28,12 @@
     "webpack-dev-server": "^2.4.5"
   },
   "dependencies": {
+    "isomorphic-fetch": "^2.2.1",
     "ol": "^4.1.1",
     "react": "^15.6.1",
     "react-redux": "^5.0.5",
-    "redux": "^3.6.0"
+    "redux": "^3.6.0",
+    "redux-thunk": "^2.2.0"
   },
   "repository": {
     "type": "git",
