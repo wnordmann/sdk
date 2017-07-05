@@ -63,6 +63,7 @@ function configureRasterLayer(olSource, glLayer) {
 function configureVectorSource(glSource) {
   const vector_src = new VectorSource({
     useSpatialIndex: false,
+    wrapX: false
   });
 
   // see the vector source with the first update
