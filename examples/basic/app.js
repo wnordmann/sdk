@@ -132,17 +132,24 @@ function main() {
   }
 
   // Add a random point to the map
-  const addRandomPoint = () => {
-    store.dispatch(mapActions.addFeatures('points', [{
-      type: 'Feature',
-      properties: {
-        title: 'Random Point',
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: [Math.random() * 360 - 180, Math.random() * 180 - 90],
-      }
-    }]));
+  const addRandomPoints = () => {
+    for(var i = 0; i < 10; i++) {
+      store.dispatch(mapActions.addFeatures('points', [{
+        type: 'Feature',
+        properties: {
+          title: 'Random Point',
+          isRandom: true,
+        },
+        geometry: {
+          type: 'Point',
+          coordinates: [Math.random() * 360 - 180, Math.random() * 180 - 90],
+        }
+      }]));
+    }
+  }
+
+  const removeRandomPoints = () => {
+    store.dispatch(mapActions.removeFeatures('points', ['==', 'isRandom', true]));
   }
 
   // place the map on the page.
@@ -155,7 +162,8 @@ function main() {
       <button onClick={ hideOSM }>Hide OSM</button>
       <button onClick={ showOSM }>Show OSM</button>
       <button onClick={ zoomToNullIsland }>Zoom to Null Island</button>
-      <button onClick={ addRandomPoint }>Add a random point</button>
+      <button onClick={ addRandomPoints }>Add 10 random points</button>
+      <button onClick={ removeRandomPoints }>Remove random points</button>
       <button onClick={ addOverlay }>Add static image</button>
     </div>
   ), document.getElementById('controls'));
