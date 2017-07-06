@@ -85,7 +85,15 @@ function main() {
 
       sem = false;
     }
+  }
 
+  const removeLayer = () => {
+    if(!sem) {
+      store.dispatch(mapActions.removeLayer('states'));
+      store.dispatch(mapActions.removeSource('states'));
+
+      sem = true;
+    }
   }
 
   let semOverlay = true;
@@ -112,6 +120,7 @@ function main() {
       semOverlay = false;
     }
   }
+
 
   const toggleVisibility = (vis) => {
     store.dispatch(mapActions.setLayerVisibility('osm', vis));
@@ -159,6 +168,7 @@ function main() {
   ReactDOM.render((
     <div>
       <button onClick={ addLayer }>Add Layer</button>
+      <button onClick={ removeLayer }>Remove Layer</button>
       <button onClick={ hideOSM }>Hide OSM</button>
       <button onClick={ showOSM }>Show OSM</button>
       <button onClick={ zoomToNullIsland }>Zoom to Null Island</button>
