@@ -124,7 +124,7 @@ function main() {
 
   const loadContext = () => {
     var url = 'https://raw.githubusercontent.com/boundlessgeo/ol-mapbox-style/master/example/data/wms.json';
-    store.dispatch(mapActions.fetchContext(url));
+    store.dispatch(mapActions.setContext({url: url}));
   }
 
   const toggleVisibility = (vis) => {

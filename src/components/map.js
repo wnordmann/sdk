@@ -182,7 +182,9 @@ export class Map extends React.Component {
       layer_exists[layer.id] = true;
 
       if(!(layer.id in this.layers)) {
-        if (layer.type !== 'background') {
+        if (layer.type === 'background') {
+          // TODO handle background
+        } else {
           const layer_src = sourcesDef[layer.source];
           let new_layer = null;
           if(layer_src.type === 'raster') {

@@ -71,12 +71,6 @@ export function setLayerVisibility(layerId, visibility) {
   }
 }
 
-export function requestContext() {
-  return {
-    type: MAP.REQUEST_CONTEXT
-  }
-}
-
 export function receiveContext(context) {
   return {
     type: MAP.RECEIVE_CONTEXT,
@@ -85,16 +79,24 @@ export function receiveContext(context) {
 }
 
 // thunk action creator
-export function fetchContext(url) {
+export function setContext(options) {
   return function (dispatch) {
-    dispatch(requestContext());
-    return fetch(url)
-      .then(
-        response => response.json(),
-        error => console.log('An error occured.', error)
-      )
-      .then(json =>
-        dispatch(receiveContext(json))
-      )
+    if (options.url) {
+      return fetch(options.url)
+        .then(
+          response => response.json(),
+          error => console.log('An error occured.', error)
+        )
+        .then(json =>
+          dispatch(receiveContext(json))
+        )
+    } else if (options.json) {
+      return new Promise(function(resolve, reject) {
+        dispatch(receiveContext(options.json));
+        resolve();
+      });
+    } else {
+      console.log('Invalid option for setContext. Specify either json or url.');
+    }
   }
 }
