@@ -15,6 +15,7 @@ import View from 'ol/view';
 
 import TileLayer from 'ol/layer/tile';
 import XyzSource from 'ol/source/xyz';
+import TileJSON from 'ol/source/tilejson';
 
 import ImageLayer from 'ol/layer/image';
 import ImageStaticSource from 'ol/source/imagestatic';
@@ -47,6 +48,13 @@ function configureXyzSource(glSource) {
   });
 
   return source;
+}
+
+function configureTileJSONSource(glSource) {
+  return new TileJSON({
+    url: glSource.url,
+    crossOrigin: 'anonymous'
+  });
 }
 
 function configureImageSource(glSource) {
@@ -99,8 +107,12 @@ function updateVectorSource(olSource, glSource) {
 
 function configureSource(glSource) {
   // tiled raster layer.
-  if(glSource.type === 'raster' && 'tiles' in glSource) {
-    return configureXyzSource(glSource);
+  if(glSource.type === 'raster') {
+    if ('tiles' in glSource) {
+      return configureXyzSource(glSource);
+    } else if (glSource.url) {
+      return configureTileJSONSource(glSource);
+    }
   } else if(glSource.type === 'geojson') {
     return configureVectorSource(glSource);
   } else if (glSource.type === 'image') {
@@ -188,11 +200,9 @@ export class Map extends React.Component {
           const layer_src = sourcesDef[layer.source];
           let new_layer = null;
           if(layer_src.type === 'raster') {
-            if('tiles' in layer_src) {
-              new_layer = new TileLayer({
-                source: this.sources[layer.source],
-              });
-            }
+            new_layer = new TileLayer({
+              source: this.sources[layer.source],
+            });
           } else if (layer_src.type === 'geojson') {
             new_layer = new VectorLayer({
               source: this.sources[layer.source],

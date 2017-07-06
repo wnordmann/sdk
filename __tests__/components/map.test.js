@@ -7,6 +7,7 @@ import olMap from 'ol/map';
 import TileLayer from 'ol/layer/tile';
 import ImageLayer from 'ol/layer/image';
 import ImageStaticSource from 'ol/source/imagestatic';
+import TileJSONSource from 'ol/source/tilejson';
 
 import { createStore, combineReducers } from 'redux'
 import ConnectedMap from '../../src/components/map';
@@ -89,6 +90,29 @@ describe('Map component', () => {
     expect(layer.getOpacity()).toEqual(layers[0].paint['raster-opacity']);
     const source = layer.getSource();
     expect(source).toBeInstanceOf(ImageStaticSource);
+  });
+
+  it('should create a raster tilejson', function() {
+    const sources = {
+      "tilejson": {
+        "type": "raster",
+        "url": "https://api.tiles.mapbox.com/v3/mapbox.geography-class.json?secure"
+      }
+    };
+    const layers = [{
+      "id": "tilejson-layer",
+      "source": "tilejson"
+    }];
+    const center = [0, 0];
+    const zoom = 2;
+    const _sourcesVersion = 0, _layersVersion = 0;
+    const wrapper = shallow(<Map map={{center, zoom, sources, layers, _sourcesVersion, _layersVersion}} />);
+    wrapper.instance().componentDidMount();
+    const map = wrapper.instance().map;
+    const layer = map.getLayers().item(0);
+    expect(layer).toBeInstanceOf(TileLayer);
+    const source = layer.getSource();
+    expect(source).toBeInstanceOf(TileJSONSource);
   });
 
   it('should created a connected map', function() {
