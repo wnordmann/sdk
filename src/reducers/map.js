@@ -2,6 +2,7 @@
  */
 
 import { MAP } from '../action-types';
+import createFilter from '@mapbox/mapbox-gl-style-spec/feature_filter';
 
 const defaultState = {
   version: 8,
@@ -89,6 +90,28 @@ function removeSource(state, action) {
   return Object.assign({}, state, {_sourcesVersion: state._sourcesVersion + 1}, new_sources);
 }
 
+
+
+/** Creates a new state with the data for a
+ *  source changed to the contents of data.
+ *
+ */
+function changeData(state, sourceName, data) {
+  const source = state.sources[sourceName];
+  const src_mixin = {};
+
+  // update the individual source.
+  src_mixin[sourceName] = Object.assign({}, source, {
+    _dataVersion: source._dataVersion + 1,
+    data: Object.assign({}, source.data, data),
+  });
+
+  // kick back the new state.
+  return Object.assign({}, state, {
+    sources: Object.assign({}, state.sources, src_mixin)
+  });
+}
+
 /** Add features to a source.
  */
 function addFeatures(state, action) {
@@ -119,19 +142,50 @@ function addFeatures(state, action) {
   }
 
   if(new_data !== null) {
-    const src_mixin = {};
-
-    // update the individual source.
-    src_mixin[action.sourceName] = Object.assign({}, source, {
-      _dataVersion: source._dataVersion + 1,
-      data: Object.assign({}, source.data, new_data),
-    });
-
-    // kick back the new state.
-    return Object.assign({}, state, {
-      sources: Object.assign({}, state.sources, src_mixin)
-    });
+    return changeData(state, action.sourceName, new_data);
   }
+  return state;
+}
+
+/** Remove features from a source.
+ *
+ *  The action should define a filter, any feature
+ *  matching the filter will be removed.
+ *
+ */
+function removeFeatures(state, action) {
+  // short hand the source source and the data
+  const source = state.sources[action.sourceName];
+  const data = source.data;
+
+  // filter function, features which MATCH this function will be REMOVED.
+  const match = createFilter(action.filter);
+
+  if(data.type === 'Feature') {
+    // if the feature should be removed, return an empty
+    //  FeatureCollection
+    if(match(data)) {
+      return changeData(state, action.sourceName, {
+        type: 'FeatureCollection',
+        features: [],
+      });
+    }
+  } else if(data.type === 'FeatureCollection') {
+    const new_features = [];
+    for(const feature of data.features) {
+      if(!match(feature)) {
+        new_features.push(feature);
+      }
+    }
+
+    const new_data = {
+      type: 'FeatureCollection',
+      features: new_features,
+    };
+
+    return changeData(state, action.sourceName, new_data);
+  }
+
   return state;
 }
 
@@ -180,6 +234,8 @@ export default function MapReducer(state = defaultState, action) {
       return removeSource(state, action);
     case MAP.ADD_FEATURES:
       return addFeatures(state, action);
+    case MAP.REMOVE_FEATURES:
+      return removeFeatures(state, action);
     case MAP.SET_LAYER_VISIBILITY:
       return setVisibility(state, action);
     default:

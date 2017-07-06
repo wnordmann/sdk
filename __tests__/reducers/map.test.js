@@ -307,4 +307,42 @@ describe('map reducer', () => {
     })
   })
 
+  it('should handle REMOVE_FEATURES', () => {
+    const source = {"_dataVersion": 0, "data": {"type":"FeatureCollection","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"n":2,"cat":1},"geometry":{"type":"Point","coordinates":[0.5,0.5]}},{"type":"Feature","properties":{"n":3,"cat":2},"geometry":{"type":"Point","coordinates":[0.5,1.5]}}]}};
+    deepFreeze(source);
+    const action = {
+      type: MAP.REMOVE_FEATURES,
+      sourceName: 'points',
+      filter: ['all', ['<', 'n', 3]]
+    };
+    deepFreeze(action);
+    const state = {
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      _sourcesVersion: 0,
+      sources: {
+        'points': source
+      },
+      _layersVersion: 0,
+      layers: []
+    };
+    const newSource = {"_dataVersion": 1, "data": {"type":"FeatureCollection","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"n":3,"cat":2},"geometry":{"type":"Point","coordinates":[0.5,1.5]}}]}};
+    expect(
+      reducer(state, action)
+    ).toEqual({
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      _sourcesVersion: 0,
+      sources: {
+        'points': newSource
+      },
+      _layersVersion: 0,
+      layers: []
+    })
+  })
+
 })

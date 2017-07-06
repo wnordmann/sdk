@@ -54,6 +54,13 @@ export function addFeatures(sourceName, features) {
   }
 }
 
+export function removeFeatures(sourceName, filter) {
+  return {
+    type: MAP.REMOVE_FEATURES,
+    sourceName, filter
+  }
+}
+
 export function setLayerVisibility(layerId, visibility) {
   return {
     type: MAP.SET_LAYER_VISIBILITY,
@@ -61,3 +68,4 @@ export function setLayerVisibility(layerId, visibility) {
     visibility
   }
 }
+
