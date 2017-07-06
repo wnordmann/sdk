@@ -171,11 +171,15 @@ export class Map extends React.Component {
   }
 
   configureLayers(sourcesDef, layersDef) {
+    const layer_exists = {};
+
     this.layersVersion = layersDef._layersVersion;
     // layers is an array.
     for(let i = 0, ii = layersDef.length; i < ii; i++) {
       const layer = layersDef[i];
       const is_visible = layer.layout ? layer.layout.visibility !== 'none' : true;
+
+      layer_exists[layer.id] = true;
 
       if(!(layer.id in this.layers)) {
         const layer_src = sourcesDef[layer.source];
@@ -213,6 +217,16 @@ export class Map extends React.Component {
       if(layer.id in this.layers) {
         this.layers[layer.id].setVisible(is_visible);
         this.layers[layer.id].setZIndex(i);
+      }
+    }
+
+    // check for layers which should be removed.
+    for(const layer_id in this.layers) {
+      // if the layer_id was not set to true then
+      //  it has been removed the state and needs to be removed
+      //  from the map.
+      if(layer_exists[layer_id] !== true) {
+        this.map.removeLayer(this.layers[layer_id]);
       }
     }
   }
