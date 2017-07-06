@@ -21,8 +21,10 @@
     "jest": "^20.0.4",
     "mapbox-to-ol-style": "^2.5.2",
     "mixin": "^0.2.0",
+    "nock": "^9.0.13",
     "react-dom": "^15.6.1",
     "react-test-renderer": "^15.6.1",
+    "redux-mock-store": "^1.2.3",
     "style-loader": "^0.18.2",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.4.5"
