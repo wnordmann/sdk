@@ -106,4 +106,16 @@ describe('actions', () => {
     expect(actions.setLayerVisibility(layerId, visibility)).toEqual(expectedAction)
   });
 
+  it('should create an action to remove features', () => {
+    const sourceName = 'points';
+    const filter = ['all', ['<', 'n', '3']];
+    const expectedAction = {
+      type: MAP.REMOVE_FEATURES,
+      sourceName,
+      filter
+    };
+
+    expect(actions.removeFeatures(sourceName, filter)).toEqual(expectedAction)
+  });
+
 })
