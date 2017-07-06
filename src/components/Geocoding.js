@@ -121,7 +121,7 @@ export class Geocoding extends React.Component {
     //  to show itself, when any result is clicked then the
     //  list should disappear.
     return (
-      <span>
+      <span className='sdk-geocoded'>
         <div className={'sdk-textfield'}>
           <input
             style={this.props.style}
@@ -133,7 +133,7 @@ export class Geocoding extends React.Component {
             onChange={this._searchAddress.bind(this)}
             />
         </div>
-        <span onClick={() => {
+        <span className="geoCodingResultsContainer" onClick={() => {
           this.focus(false);
         }}>
           <GeocodingResults show={this.state.hasFocus} results={this.state.results}/>

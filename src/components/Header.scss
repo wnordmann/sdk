@@ -1,3 +1,94 @@
+@import
+"../styles/scss/sdk/colors",
+"../styles/scss/sdk/mixins";
+
+// Layout
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  transition: left .2s;
+   .appbar {
+     display: flex;
+    .header-left {
+      flex: 2;
+      align-self: center;
+      .sidedrawer-toggle {
+        cursor: pointer;
+        margin-right: 20px;
+      }
+      .header-title {
+        line-height: 64px;
+        background-color: green;
+        img {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(0%, -65%);
+        }
+      }
+    }
+    .header-right {
+      text-align: right;
+      flex: 3;
+      align-self: center;
+      .nav-menu {
+        display: none;
+      }
+      .header-actions {
+        .sdk-geocoded {
+          .sdk-textfield {
+            margin-bottom: auto;
+            display: inline-block;
+          }
+          .geoCodingResultsContainer {
+            display: none;
+          }
+          .geoCodingResults {}
+        }
+      }
+
+    }
+    @media screen and (max-width: 890px){
+      .header-right {
+        .nav-menu {
+          display: block;
+        }
+        .header-actions {
+          display: none;
+        }
+      }
+    }
+  }
+
+
+}
+
+
+// Styled
+.header {
+  // background-color: sdk-color('cyan', '500');
+  // color: sdk-color('white');
+  .header-right {
+    .header-actions {
+      .sdk-geocoded {
+        .sdk-textfield {
+          input {
+            color: sdk-color('white');
+            border-bottom-color: rgba(255, 255, 255, 0.26);
+          }
+        }
+        .geoCodingResultsContainer {
+
+        }
+        .geoCodingResults {}
+      }
+    }
+  }
+}
+
 .headerIcons {
   color: #ffffff !important;
   svg {
@@ -8,9 +99,5 @@
   }
 }
 .sidedrawer-toggle {
-  color: #555;
-  cursor: pointer;
-  font-size: 20px;
-  line-height: 20px;
-  margin-right: 10px;
+
 }

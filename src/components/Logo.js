@@ -64,7 +64,7 @@ class Logo extends React.PureComponent {
         className={classNames(className, this.props.className)}
         aria-label={this.props.tooltip}
         title={this.props.tooltip}>
-        <img src={this.props.src}  style={height: this.props.logoHeight} />
+        <img src={this.props.src}  style={{height: this.props.logoHeight}} />
       </span>)
   }
 }

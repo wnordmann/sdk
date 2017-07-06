@@ -113,10 +113,17 @@ class Header extends React.Component {
         />
     );
     return (
-      <div className="sdk-component header">
-        <span className="sidedrawer-toggle">☰</span>
-        <span className="header-title">{title}</span>
-        <span className="header-actions">{this.props.children}</span>
+      <div className="sdk-component header sdk-appbar sdk-container-fluid sdk--z1">
+        <nav className="appbar sdk--appbar-height">
+          <div className="header-left sdk--text-title">
+            <span className="sidedrawer-toggle"><i className="fa fa-bars"></i></span>
+            <span className="header-title">{title}</span>
+          </div>
+          <div className="header-right">
+            <span className="nav-menu"><i className="fa fa-ellipsis-v"></i></span>
+            <span className="header-actions">{this.props.children}</span>
+          </div>
+        </nav>
       </div>
     );
   }
