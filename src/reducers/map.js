@@ -219,7 +219,7 @@ function setVisibility(state, action) {
  */
 function setContext(state, action) {
   // simply replace the full state
-  return action.context;
+  return Object.assign({}, action.context);
 }
 
 /** Main reducer.
