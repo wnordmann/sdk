@@ -190,7 +190,6 @@ export class Map extends React.Component {
     for(let i = 0, ii = layersDef.length; i < ii; i++) {
       const layer = layersDef[i];
       const is_visible = layer.layout ? layer.layout.visibility !== 'none' : true;
-
       layer_exists[layer.id] = true;
 
       if(!(layer.id in this.layers)) {
@@ -225,12 +224,12 @@ export class Map extends React.Component {
             this.map.addLayer(this.layers[layer.id]);
           }
         }
+      }
 
-        // handle visibility and z-ordering.
-        if(layer.id in this.layers) {
-          this.layers[layer.id].setVisible(is_visible);
-          this.layers[layer.id].setZIndex(i);
-        }
+      // handle visibility and z-ordering.
+      if(layer.id in this.layers) {
+        this.layers[layer.id].setVisible(is_visible);
+        this.layers[layer.id].setZIndex(i);
       }
     }
 

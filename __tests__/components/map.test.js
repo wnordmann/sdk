@@ -115,6 +115,46 @@ describe('Map component', () => {
     expect(source).toBeInstanceOf(TileJSONSource);
   });
 
+  it('should handle visibility changes', function() {
+    const sources = {
+      "tilejson": {
+        "type": "raster",
+        "url": "https://api.tiles.mapbox.com/v3/mapbox.geography-class.json?secure"
+      }
+    };
+    const layers = [{
+      "id": "tilejson-layer",
+      "source": "tilejson"
+    }];
+    const center = [0, 0];
+    const zoom = 2;
+    const _sourcesVersion = 0, _layersVersion = 0;
+    const wrapper = shallow(<Map map={{center, zoom, sources, layers, _sourcesVersion, _layersVersion}} />);
+    const instance = wrapper.instance();
+    instance.componentDidMount();
+    const map = instance.map;
+    const layer = map.getLayers().item(0);
+    expect(layer.getVisible()).toBe(true);
+    const nextProps = {
+      map: {
+        center,
+        zoom,
+        _sourcesVersion: 0,
+        _layersVersion: 1,
+        sources,
+        layers: [{
+          "id": "tilejson-layer",
+          "source": "tilejson",
+          "layout": {
+            visibility: "none"
+          }
+        }]
+      }
+    };
+    instance.shouldComponentUpdate.call(instance, nextProps);
+    expect(layer.getVisible()).toBe(false);
+  });
+
   it('should created a connected map', function() {
     const store = createStore(combineReducers({
       map: MapReducer,
