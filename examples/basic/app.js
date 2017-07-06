@@ -5,7 +5,8 @@
  *
  */
 
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import thunkMiddleware from 'redux-thunk';
 import React from 'react';
 import ReactDOM from 'react-dom'
 
@@ -15,8 +16,8 @@ import * as mapActions from '@boundlessgeo/sdk/actions/map';
 import 'ol/ol.css';
 
 const store = createStore(combineReducers({
-  map: SdkMapReducer,
-}), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+  map: SdkMapReducer
+}), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(), applyMiddleware(thunkMiddleware));
 
 window.store = store;
 
@@ -121,6 +122,10 @@ function main() {
     }
   }
 
+  const loadContext = () => {
+    var url = 'https://raw.githubusercontent.com/boundlessgeo/ol-mapbox-style/master/example/data/wms.json';
+    store.dispatch(mapActions.setContext({url: url}));
+  }
 
   const toggleVisibility = (vis) => {
     store.dispatch(mapActions.setLayerVisibility('osm', vis));
@@ -175,6 +180,7 @@ function main() {
       <button onClick={ addRandomPoints }>Add 10 random points</button>
       <button onClick={ removeRandomPoints }>Remove random points</button>
       <button onClick={ addOverlay }>Add static image</button>
+      <button onClick={ loadContext }>Load context</button>
     </div>
   ), document.getElementById('controls'));
 }

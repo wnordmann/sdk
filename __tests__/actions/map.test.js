@@ -1,5 +1,11 @@
-import * as actions from '../../src/actions/map'
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import * as actions from '../../src/actions/map';
 import { MAP } from '../../src/action-types';
+import nock from 'nock';
+
+const middlewares = [thunk]
+const mockStore = configureMockStore(middlewares)
 
 describe('actions', () => {
 
@@ -118,4 +124,55 @@ describe('actions', () => {
     expect(actions.removeFeatures(sourceName, filter)).toEqual(expectedAction)
   });
 
+})
+
+describe('async actions', () => {
+  afterEach(() => {
+    nock.cleanAll()
+  })
+
+  it('creates RECEIVE_CONTEXT when fetching context has been done', () => {
+    const body = {
+      "version": 8,
+      "name": "states-wms",
+      "center": [-98.78906130124426, 37.92686191312036],
+      "zoom": 4,
+      "sources": {
+        "osm": {
+          "type": "raster",
+          "attribution": "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors.",
+          "tileSize": 256,
+          "tiles": [
+            "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            "https://b.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            "https://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          ]
+        }
+      },
+      "layers": [
+        {
+          "id": "background",
+          "type": "background",
+          "paint": {
+            "background-color": "rgba(0,0,0,0)"
+          }
+        },
+        {
+          "id": "osm",
+          "source": "osm"
+        }
+      ]
+    };
+    nock('http://example.com/')
+      .get('/context')
+      .reply(200, body)
+
+    const expectedAction = {type: MAP.RECEIVE_CONTEXT, context: body};
+    const store = mockStore({});
+
+    return store.dispatch(actions.setContext({url: 'http://example.com/context'})).then(() => {
+      // return of async actions
+      expect(store.getActions()).toEqual([expectedAction])
+    });
+  })
 })

@@ -189,7 +189,7 @@ function removeFeatures(state, action) {
   return state;
 }
 
-/** Change the visibiilty of a layer given in the action.
+/** Change the visibility of a layer given in the action.
  */
 function setVisibility(state, action) {
   const updated_layers = [];
@@ -215,6 +215,12 @@ function setVisibility(state, action) {
   });
 }
 
+/** Load a new context
+ */
+function setContext(state, action) {
+  // simply replace the full state
+  return Object.assign({}, action.context);
+}
 
 /** Main reducer.
  */
@@ -238,6 +244,8 @@ export default function MapReducer(state = defaultState, action) {
       return removeFeatures(state, action);
     case MAP.SET_LAYER_VISIBILITY:
       return setVisibility(state, action);
+    case MAP.RECEIVE_CONTEXT:
+      return setContext(state, action);
     default:
       return state;
   }
