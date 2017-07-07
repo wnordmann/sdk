@@ -1,3 +1,5 @@
+import fetch from 'isomorphic-fetch'
+
 /** Action Defintions for the map.
  */
 
@@ -54,10 +56,47 @@ export function addFeatures(sourceName, features) {
   }
 }
 
-export function setLayerVisibility(layerId, vis) {
+export function removeFeatures(sourceName, filter) {
+  return {
+    type: MAP.REMOVE_FEATURES,
+    sourceName, filter
+  }
+}
+
+export function setLayerVisibility(layerId, visibility) {
   return {
     type: MAP.SET_LAYER_VISIBILITY,
-    id: layerId,
-    visibility: vis
+    layerId,
+    visibility
+  }
+}
+
+export function receiveContext(context) {
+  return {
+    type: MAP.RECEIVE_CONTEXT,
+    context
+  }
+}
+
+// thunk action creator
+export function setContext(options) {
+  return function (dispatch) {
+    if (options.url) {
+      return fetch(options.url)
+        .then(
+          response => response.json(),
+          error => console.log('An error occured.', error)
+        )
+        .then(json =>
+          dispatch(receiveContext(json))
+        )
+    } else if (options.json) {
+      return new Promise(function(resolve, reject) {
+        dispatch(receiveContext(options.json));
+        resolve();
+      });
+    } else {
+      console.log('Invalid option for setContext. Specify either json or url.');
+    }
   }
 }
