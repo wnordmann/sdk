@@ -4,17 +4,47 @@
 import { MAP } from '../action-types';
 import createFilter from '@mapbox/mapbox-gl-style-spec/feature_filter';
 
+import { LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TITLE_KEY, DATA_VERSION_KEY } from '../constants';
+
+function defaultMetadata() {
+  // define the metadata.
+  const default_metadata = {};
+  default_metadata[LAYER_VERSION_KEY] = 0;
+  default_metadata[SOURCE_VERSION_KEY] = 0;
+  return default_metadata;
+}
+
 const defaultState = {
   version: 8,
   name: 'default',
   center: [0, 0],
   zoom: 3,
-  _sourcesVersion: 0,
+  metadata: defaultMetadata(),
   sources: {},
-  _layersVersion: 0,
   layers: []
 };
 
+function getVersion(metadata, version) {
+  if (typeof(metadata) === 'undefined' || typeof(metadata[version]) === 'undefined') {
+    return 0;
+  }
+  return metadata[version];
+}
+
+function incrementVersion(metadata, version) {
+  const new_metadata = Object.assign({}, metadata);
+  new_metadata[version] = getVersion(metadata, version) + 1;
+  return {
+    metadata: new_metadata
+  }
+}
+
+/** As there is no "source" metadata, this generates a unique key
+ *  for the version of the data in the map's metadata object.
+ */
+export function dataVersionKey(sourceName) {
+  return DATA_VERSION_KEY + ':' + sourceName;
+}
 
 /** Add a layer to the state.
  */
@@ -23,29 +53,33 @@ function addLayer(state, action) {
   //       order to support easier dev.
   const new_layer = Object.assign({
     filter: null,
-    paint: {}
+    paint: {},
+    metadata: {},
   }, action.layerDef);
 
+  // add a layer name if specified in the action.
+  if (action.layerTitle) {
+    new_layer.metadata[TITLE_KEY] = action.layerTitle;
+  }
+
   return Object.assign({}, state, {
-    _layersVersion: state._layersVersion + 1,
     layers: state.layers.concat([new_layer]),
-  });
+  }, incrementVersion(state.metadata, LAYER_VERSION_KEY));
 }
 
 /** Remove a layer from the state.
  */
 function removeLayer(state, action) {
   const new_layers = [];
-  for(let i = 0, ii = state.layers.length; i < ii; i++) {
-    if(state.layers[i].id !== action.layerId) {
+  for (let i = 0, ii = state.layers.length; i < ii; i++) {
+    if (state.layers[i].id !== action.layerId) {
       new_layers.push(state.layers[i]);
     }
   }
 
   return Object.assign({}, state, {
-    _layersVersion: state._layersVersion + 1,
     layers: new_layers
-  });
+  }, incrementVersion(state.metadata, LAYER_VERSION_KEY));
 }
 
 /** Update a layer that's in the state already.
@@ -53,10 +87,18 @@ function removeLayer(state, action) {
 function updateLayer(state, action) {
   // action.layer should be a new mix in for the layer.
   const new_layers = [];
-  for(let i = 0, ii = state.layers.length; i < ii; i++) {
+  for (let i = 0, ii = state.layers.length; i < ii; i++) {
     // if the id matches, update the layer
-    if(state.layers[i].id === action.layerId) {
-      new_layers.push(Object.assign({}, state.layers[i], action.layerDef));
+    if (state.layers[i].id === action.layerId) {
+      if (action.type === MAP.SET_LAYER_METADATA) {
+        const meta_update = {};
+        meta_update[action.key] = action.value;
+        new_layers.push(Object.assign({}, state.layers[i], {
+          metadata: Object.assign({}, state.layers[i].metadata, meta_update)
+        }));
+      } else {
+        new_layers.push(Object.assign({}, state.layers[i], action.layerDef));
+      }
     // otherwise leave it the same.
     } else {
       new_layers.push(state.layers[i]);
@@ -64,10 +106,8 @@ function updateLayer(state, action) {
   }
 
   return Object.assign({}, state, {
-    _layersVersion: state._layersVersion + 1,
     layers: new_layers
-  });
-
+  }, incrementVersion(state.metadata, LAYER_VERSION_KEY));
 }
 
 
@@ -75,11 +115,19 @@ function updateLayer(state, action) {
  */
 function addSource(state, action) {
   const new_source = {}
-  const sourceDef = action.sourceDef.type !== 'raster' ? {data: {}, _dataVersion: 0} : {};
-  new_source[action.sourceName] = Object.assign(sourceDef, action.sourceDef);
+  new_source[action.sourceName] = Object.assign({}, action.sourceDef);
+  if (action.sourceDef.type !== 'raster') {
+    new_source[action.sourceName].data = Object.assign({}, action.sourceDef.data);
+  }
+
+  const new_metadata = {};
+  new_metadata[dataVersionKey(action.sourceName)] = 0;
 
   const new_sources = Object.assign({}, state.sources, new_source);
-  return Object.assign({}, state, {_sourcesVersion: state._sourcesVersion + 1}, {sources: new_sources});
+  return Object.assign({}, state, {
+    metadata: Object.assign({}, state.metadata, new_metadata),
+    sources: new_sources
+  }, incrementVersion(state.metadata, SOURCE_VERSION_KEY));
 }
 
 /** Remove a source from the state.
@@ -87,7 +135,9 @@ function addSource(state, action) {
 function removeSource(state, action) {
   const new_sources = Object.assign({}, state.sources);
   delete new_sources[action.sourceName];
-  return Object.assign({}, state, {_sourcesVersion: state._sourcesVersion + 1}, {sources: new_sources});
+  return Object.assign({}, state, {
+    sources: new_sources
+  }, incrementVersion(state.metadata, SOURCE_VERSION_KEY));
 }
 
 
@@ -102,14 +152,13 @@ function changeData(state, sourceName, data) {
 
   // update the individual source.
   src_mixin[sourceName] = Object.assign({}, source, {
-    _dataVersion: source._dataVersion + 1,
     data: Object.assign({}, source.data, data),
   });
 
   // kick back the new state.
   return Object.assign({}, state, {
     sources: Object.assign({}, state.sources, src_mixin)
-  });
+  }, incrementVersion(state.metadata, dataVersionKey(sourceName)));
 }
 
 /** Add features to a source.
@@ -123,7 +172,7 @@ function addFeatures(state, action) {
 
   // when there is no data, use the data
   // from the action.
-  if(!data || !data.type) {
+  if (!data || !data.type) {
     // coerce this to a FeatureCollection.
     new_data = {
       type: 'FeatureCollection',
@@ -134,14 +183,14 @@ function addFeatures(state, action) {
       type: 'FeatureCollection',
       features: [data].concat(action.features)
     };
-  } else if(data.type === 'FeatureCollection') {
+  } else if (data.type === 'FeatureCollection') {
     new_data = {
       type: 'FeatureCollection',
       features: data.features.concat(action.features)
     }
   }
 
-  if(new_data !== null) {
+  if (new_data !== null) {
     return changeData(state, action.sourceName, new_data);
   }
   return state;
@@ -161,19 +210,19 @@ function removeFeatures(state, action) {
   // filter function, features which MATCH this function will be REMOVED.
   const match = createFilter(action.filter);
 
-  if(data.type === 'Feature') {
+  if (data.type === 'Feature') {
     // if the feature should be removed, return an empty
     //  FeatureCollection
-    if(match(data)) {
+    if (match(data)) {
       return changeData(state, action.sourceName, {
         type: 'FeatureCollection',
         features: [],
       });
     }
-  } else if(data.type === 'FeatureCollection') {
+  } else if (data.type === 'FeatureCollection') {
     const new_features = [];
-    for(const feature of data.features) {
-      if(!match(feature)) {
+    for (const feature of data.features) {
+      if (!match(feature)) {
         new_features.push(feature);
       }
     }
@@ -194,8 +243,8 @@ function removeFeatures(state, action) {
 function setVisibility(state, action) {
   const updated_layers = [];
   let updated = 0;
-  for(const layer of state.layers) {
-    if(layer.id === action.layerId) {
+  for (const layer of state.layers) {
+    if (layer.id === action.layerId) {
       updated_layers.push({
         ...layer,
         layout: {
@@ -210,9 +259,8 @@ function setVisibility(state, action) {
     }
   }
   return Object.assign({}, state, {
-    _layersVersion: state._layersVersion + updated,
     layers: updated_layers
-  });
+  }, incrementVersion(state.metadata, LAYER_VERSION_KEY));
 }
 
 /** Load a new context
@@ -232,6 +280,7 @@ export default function MapReducer(state = defaultState, action) {
       return addLayer(state, action);
     case MAP.REMOVE_LAYER:
       return removeLayer(state, action);
+    case MAP.SET_LAYER_METADATA:
     case MAP.UPDATE_LAYER:
       return updateLayer(state, action);
     case MAP.ADD_SOURCE:

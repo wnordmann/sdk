@@ -44,10 +44,14 @@ describe('Map component', () => {
       "id": "states",
       "source": "states-wms",
     }];
+    const metadata = {
+      'bnd:source-version': 0,
+      'bnd:layer-version': 0,
+    };
+
     const center = [0, 0];
     const zoom = 2;
-    const _sourcesVersion = 0, _layersVersion = 0;
-    const wrapper = shallow(<Map map={{center, zoom, sources, layers, _sourcesVersion, _layersVersion}} />);
+    const wrapper = shallow(<Map map={{center, zoom, sources, layers, metadata}} />);
     wrapper.instance().componentDidMount();
     const map = wrapper.instance().map;
     expect(map).toBeDefined();
@@ -81,8 +85,11 @@ describe('Map component', () => {
     }];
     const center = [0, 0];
     const zoom = 2;
-    const _sourcesVersion = 0, _layersVersion = 0;
-    const wrapper = shallow(<Map map={{center, zoom, sources, layers, _sourcesVersion, _layersVersion}} />);
+    const metadata = {
+      'bnd:source-version': 0,
+      'bnd:layer-version': 0,
+    };
+    const wrapper = shallow(<Map map={{center, zoom, sources, layers, metadata}} />);
     wrapper.instance().componentDidMount();
     const map = wrapper.instance().map;
     const layer = map.getLayers().item(0);
@@ -103,10 +110,14 @@ describe('Map component', () => {
       "id": "tilejson-layer",
       "source": "tilejson"
     }];
+
+    const metadata = {
+      'bnd:source-version': 0,
+      'bnd:layer-version': 0,
+    };
     const center = [0, 0];
     const zoom = 2;
-    const _sourcesVersion = 0, _layersVersion = 0;
-    const wrapper = shallow(<Map map={{center, zoom, sources, layers, _sourcesVersion, _layersVersion}} />);
+    const wrapper = shallow(<Map map={{center, zoom, sources, layers, metadata}} />);
     wrapper.instance().componentDidMount();
     const map = wrapper.instance().map;
     const layer = map.getLayers().item(0);
@@ -126,10 +137,14 @@ describe('Map component', () => {
       "id": "tilejson-layer",
       "source": "tilejson"
     }];
+
+    const metadata = {
+      'bnd:source-version': 0,
+      'bnd:layer-version': 0,
+    };
     const center = [0, 0];
     const zoom = 2;
-    const _sourcesVersion = 0, _layersVersion = 0;
-    const wrapper = shallow(<Map map={{center, zoom, sources, layers, _sourcesVersion, _layersVersion}} />);
+    const wrapper = shallow(<Map map={{center, zoom, sources, layers, metadata}} />);
     const instance = wrapper.instance();
     instance.componentDidMount();
     const map = instance.map;
@@ -139,8 +154,10 @@ describe('Map component', () => {
       map: {
         center,
         zoom,
-        _sourcesVersion: 0,
-        _layersVersion: 1,
+        metadata: {
+          'bnd:source-version': 0,
+          'bnd:layer-version': 1,
+        },
         sources,
         layers: [{
           "id": "tilejson-layer",
@@ -168,8 +185,11 @@ describe('Map component', () => {
     }];
     const center = [0, 0];
     const zoom = 2;
-    const _sourcesVersion = 0, _layersVersion = 0;
-    const wrapper = shallow(<Map map={{center, zoom, sources, layers, _sourcesVersion, _layersVersion}} />);
+    const metadata = {
+      'bnd:source-version': 0,
+      'bnd:layer-version': 0,
+    };
+    const wrapper = shallow(<Map map={{center, zoom, sources, layers, metadata}} />);
     const instance = wrapper.instance();
     instance.componentDidMount();
     const map = instance.map;
@@ -178,8 +198,10 @@ describe('Map component', () => {
       map: {
         center,
         zoom,
-        _sourcesVersion: 0,
-        _layersVersion: 1,
+        metadata: {
+          'bnd:source-version': 0,
+          'bnd:layer-version': 1,
+        },
         sources,
         layers: []
       }
@@ -190,8 +212,10 @@ describe('Map component', () => {
       map: {
         center,
         zoom,
-        _sourcesVersion: 0,
-        _layersVersion: 2,
+        metadata: {
+          'bnd:source-version': 0,
+          'bnd:layer-version': 2,
+        },
         sources,
         layers: layers
       }

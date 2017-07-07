@@ -7,6 +7,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { setView } from '../actions/map';
+import { LAYER_VERSION_KEY, SOURCE_VERSION_KEY, DATA_VERSION_KEY } from '../constants';
+
+import { dataVersionKey } from '../reducers/map';
 
 import getStyleFunction from 'mapbox-to-ol-style';
 
@@ -90,7 +93,7 @@ function configureMvtSource(glSource) {
  *
  * @returns ol.source.vector instance.
  */
-function configureVectorSource(glSource) {
+function configureGeojsonSouce(glSource) {
   const vector_src = new VectorSource({
     useSpatialIndex: false,
     wrapX: false
@@ -98,39 +101,33 @@ function configureVectorSource(glSource) {
 
   // see the vector source with the first update
   //  before returning it.
-  updateVectorSource(vector_src, glSource);
+  updateGeojsonSource(vector_src, glSource);
 
   return vector_src;
 }
 
-function updateVectorSource(olSource, glSource) {
-  // this indicates the data version has changed.
-  if (olSource.get('dataVersion') !== glSource._dataVersion) {
-    // parse the new features,
-    // TODO: This should really check the map for the correct projection.
-    const features = GEOJSON_FORMAT.readFeatures(glSource.data, {featureProjection: 'EPSG:3857'});
+function updateGeojsonSource(olSource, glSource) {
+  // parse the new features,
+  // TODO: This should really check the map for the correct projection.
+  const features = GEOJSON_FORMAT.readFeatures(glSource.data, {featureProjection: 'EPSG:3857'});
 
-    // clear the layer WITHOUT dispatching remove events.
-    olSource.clear(true);
-    // bulk load the feature data.
-    olSource.addFeatures(features);
-
-    // update the data version in the layer.
-    olSource.set('dataVersion', glSource._dataVersion);
-  }
+  // clear the layer WITHOUT dispatching remove events.
+  olSource.clear(true);
+  // bulk load the feature data.
+  olSource.addFeatures(features);
 }
 
 
 function configureSource(glSource) {
   // tiled raster layer.
-  if(glSource.type === 'raster') {
+  if (glSource.type === 'raster') {
     if ('tiles' in glSource) {
       return configureXyzSource(glSource);
     } else if (glSource.url) {
       return configureTileJSONSource(glSource);
     }
-  } else if(glSource.type === 'geojson') {
-    return configureVectorSource(glSource);
+  } else if (glSource.type === 'geojson') {
+    return configureGeojsonSouce(glSource);
   } else if (glSource.type === 'image') {
     return configureImageSource(glSource);
   } else if (glSource.type === 'vector') {
@@ -147,6 +144,7 @@ export class Map extends React.Component {
 
     this.sourcesVersion = null;
     this.layersVersion = null;
+
     // keep a version of the sources in
     //  their OpenLayers source definition.
     this.sources = {};
@@ -171,8 +169,8 @@ export class Map extends React.Component {
     });
 
     // bootstrap the map with the current configuration.
-    this.configureSources(this.props.map.sources, this.props.map._sourcesVersion);
-    this.configureLayers(this.props.map.sources, this.props.map.layers, this.props.map._layersVersion);
+    this.configureSources(this.props.map.sources, this.props.map.metadata[SOURCE_VERSION_KEY]);
+    this.configureLayers(this.props.map.sources, this.props.map.layers, this.props.map.metadata[LAYER_VERSION_KEY]);
   }
 
   /** Convert the GL source definitions into internal
@@ -183,17 +181,17 @@ export class Map extends React.Component {
     // TODO: Update this to check "diff" configurations
     //       of sources.  Currently, this will only detect
     //       additions and removals.
-    for(const source_name in sourcesDef) {
+    for (const source_name in sourcesDef) {
       // Add the source because it's not in the current
       //  list of sources.
-      if(!(source_name in this.sources)) {
+      if (!(source_name in this.sources)) {
         this.sources[source_name] = configureSource(sourcesDef[source_name]);
       }
     }
 
     // remove sources no longer there.
-    for(const source_name in this.sources) {
-      if(!(source_name in sourcesDef)) {
+    for (const source_name in this.sources) {
+      if (!(source_name in sourcesDef)) {
         // TODO: Remove all layers that are using this source.
         delete this.sources[source_name];
       }
@@ -252,7 +250,7 @@ export class Map extends React.Component {
     this.layersVersion = layerVersion;
 
     // layers is an array.
-    for(let i = 0, ii = layersDef.length; i < ii; i++) {
+    for (let i = 0, ii = layersDef.length; i < ii; i++) {
       const layer = layersDef[i];
       const is_visible = layer.layout ? layer.layout.visibility !== 'none' : true;
       layer_exists[layer.id] = true;
@@ -264,9 +262,8 @@ export class Map extends React.Component {
         } else {
           const new_layer = this.configureLayer(sourcesDef, layer);
           new_layer.set('name', layer.id);
-
           // if the new layer has been defined, add it to the map.
-          if(new_layer !== null) {
+          if (new_layer !== null) {
             this.layers[layer.id] = new_layer;
             this.map.addLayer(this.layers[layer.id]);
           }
@@ -274,18 +271,18 @@ export class Map extends React.Component {
       }
 
       // handle visibility and z-ordering.
-      if(layer.id in this.layers) {
+      if (layer.id in this.layers) {
         this.layers[layer.id].setVisible(is_visible);
         this.layers[layer.id].setZIndex(i);
       }
     }
 
     // check for layers which should be removed.
-    for(const layer_id in this.layers) {
+    for (const layer_id in this.layers) {
       // if the layer_id was not set to true then
       //  it has been removed the state and needs to be removed
       //  from the map.
-      if(layer_exists[layer_id] !== true) {
+      if (layer_exists[layer_id] !== true) {
         this.map.removeLayer(this.layers[layer_id]);
         delete this.layers[layer_id];
       }
@@ -302,7 +299,7 @@ export class Map extends React.Component {
    */
   shouldComponentUpdate(nextProps, nextState) {
     // compare the centers
-    if(nextProps.map.center[0] !== this.props.map.center[0]
+    if (nextProps.map.center[0] !== this.props.map.center[0]
       || nextProps.map.center[1] !== this.props.map.center[1]
       || nextProps.map.zoom !== this.props.zoom) {
       this.map.getView().setCenter(nextProps.map.center);
@@ -310,22 +307,24 @@ export class Map extends React.Component {
     }
 
     // check the sources diff
-    if(this.sourcesVersion !== nextProps.map._sourcesVersion) {
+    if (this.sourcesVersion !== nextProps.map.metadata[SOURCE_VERSION_KEY]) {
       // go through and update the sources.
-      this.configureSources(nextProps.map.sources, nextProps.map._sourcesVersion);
+      this.configureSources(nextProps.map.sources, nextProps.map.metadata[SOURCE_VERSION_KEY]);
     }
-    if(this.layersVersion !== nextProps.map._layersVersion) {
+    if (this.layersVersion !== nextProps.map.metadata[LAYER_VERSION_KEY]) {
       // go through and update the layers.
-      this.configureLayers(nextProps.map.sources, nextProps.map.layers, nextProps.map._layersVersion);
+      this.configureLayers(nextProps.map.sources, nextProps.map.layers, nextProps.map.metadata[LAYER_VERSION_KEY]);
     }
 
     // check the vector sources for data changes
     for (const src_name in nextProps.map.sources) {
       const src = this.props.map.sources[src_name];
       if (src && src.type === 'geojson') {
-        const next_src = nextProps.map.sources[src_name];
-        if (src._dataVersion !== next_src._dataVersion) {
-          updateVectorSource(this.sources[src_name], next_src);
+        const version_key = dataVersionKey(src_name);
+
+        if (this.props.map.metadata[version_key] !== nextProps.map.metadata[version_key]) {
+          const next_src = nextProps.map.sources[src_name];
+          updateGeojsonSource(this.sources[src_name], next_src);
         }
       }
     }

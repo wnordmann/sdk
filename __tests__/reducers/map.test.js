@@ -10,25 +10,29 @@ describe('map reducer', () => {
       name: 'default',
       center: [0, 0],
       zoom: 3,
-      _sourcesVersion: 0,
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 0,
+      },
       sources: {},
-      _layersVersion: 0,
       layers: []
     })
   })
 
   it('should handle ADD_LAYER', () => {
+   const title = "Background";
    const layer = {
      "id": "background",
      "type": "background",
      "paint": {
        "background-color": "rgba(0,0,0,0)"
-      }
+      },
     };
     deepFreeze(layer);
     const action = {
       type: MAP.ADD_LAYER,
-      layerDef: layer
+      layerDef: layer,
+      layerTitle: title,
     };
     deepFreeze(action);
     expect(
@@ -38,19 +42,80 @@ describe('map reducer', () => {
       name: 'default',
       center: [0, 0],
       zoom: 3,
-      _sourcesVersion: 0,
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 1,
+      },
       sources: {},
-      _layersVersion: 1,
       layers: [{
         "id": "background",
         "type": "background",
         "paint": {
           "background-color": "rgba(0,0,0,0)"
         },
+        "metadata": {
+          "bnd:title" : title
+        },
         "filter": null
       }]
     })
   })
+
+  it('should handle SET_LAYER_METADATA', () => {
+    const title = "Background";
+    const layer = {
+     "id": "background",
+     "type": "background",
+     "paint": {
+       "background-color": "rgba(0,0,0,0)"
+      },
+    };
+    deepFreeze(layer);
+    const action = {
+      type: MAP.SET_LAYER_METADATA,
+      layerId: 'background',
+      key: 'bnd:title',
+      value: title
+    };
+    const state = {
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 0,
+      },
+      sources: {},
+     layers: [layer]
+    };
+    deepFreeze(state);
+    deepFreeze(action);
+    expect(
+      reducer(state, action)
+    ).toEqual({
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      sources: {},
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 1,
+      },
+      layers: [{
+        "id": "background",
+        "type": "background",
+        "paint": {
+          "background-color": "rgba(0,0,0,0)"
+        },
+        "metadata": {
+          "bnd:title": title
+        }
+      }]
+    })
+
+  });
 
   it('should handle SET_LAYER_VISIBILITY', () => {
    const layer = {
@@ -71,9 +136,11 @@ describe('map reducer', () => {
       name: 'default',
       center: [0, 0],
       zoom: 3,
-      _sourcesVersion: 0,
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 0,
+      },
       sources: {},
-     _layersVersion: 0,
      layers: [layer]
     };
     deepFreeze(state);
@@ -85,9 +152,11 @@ describe('map reducer', () => {
       name: 'default',
       center: [0, 0],
       zoom: 3,
-      _sourcesVersion: 0,
       sources: {},
-      _layersVersion: 1,
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 1,
+      },
       layers: [{
         "id": "background",
         "type": "background",
@@ -119,9 +188,11 @@ describe('map reducer', () => {
       name: 'default',
       center: [0, 0],
       zoom: 3,
-      _sourcesVersion: 0,
       sources: {},
-     _layersVersion: 0,
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 0,
+      },
      layers: [layer]
     };
     deepFreeze(state);
@@ -133,9 +204,11 @@ describe('map reducer', () => {
       name: 'default',
       center: [0, 0],
       zoom: 3,
-      _sourcesVersion: 0,
       sources: {},
-      _layersVersion: 1,
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 1,
+      },
       layers: []
     })
   })
@@ -167,9 +240,11 @@ describe('map reducer', () => {
       name: 'default',
       center: [0, 0],
       zoom: 3,
-      _sourcesVersion: 0,
       sources: {},
-     _layersVersion: 0,
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 0,
+      },
      layers: [layer]
     };
     deepFreeze(state);
@@ -181,9 +256,11 @@ describe('map reducer', () => {
       name: 'default',
       center: [0, 0],
       zoom: 3,
-      _sourcesVersion: 0,
       sources: {},
-      _layersVersion: 1,
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 1,
+      },
       layers: [newLayer]
     })
   })
@@ -213,11 +290,13 @@ describe('map reducer', () => {
       name: 'default',
       center: [0, 0],
       zoom: 3,
-      _sourcesVersion: 1,
       sources: {
         'osm': source
       },
-      _layersVersion: 0,
+      metadata: {
+        'bnd:source-version': 1,
+        'bnd:layer-version': 0,
+      },
       layers: []
     })
   })
@@ -243,11 +322,13 @@ describe('map reducer', () => {
       name: 'default',
       center: [0, 0],
       zoom: 3,
-      _sourcesVersion: 0,
       sources: {
         'osm': source
       },
-      _layersVersion: 0,
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 0,
+      },
       layers: []
     };
     deepFreeze(state);
@@ -259,16 +340,18 @@ describe('map reducer', () => {
       name: 'default',
       center: [0, 0],
       zoom: 3,
-      _sourcesVersion: 1,
       sources: {},
-      _layersVersion: 0,
+      metadata: {
+        'bnd:source-version': 1,
+        'bnd:layer-version': 0,
+      },
       layers: []
     })
   })
 
   it('should handle ADD_FEATURES', () => {
     // since we do not go through ADD_SOURCE we need to set _dataVersion
-    const source = {"_dataVersion": 0, "data": {"type":"FeatureCollection","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"n":2,"cat":1},"geometry":{"type":"Point","coordinates":[0.5,0.5]}},{"type":"Feature","properties":{"n":3,"cat":2},"geometry":{"type":"Point","coordinates":[0.5,1.5]}}]}};
+    const source = {"data": {"type":"FeatureCollection","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"n":2,"cat":1},"geometry":{"type":"Point","coordinates":[0.5,0.5]}},{"type":"Feature","properties":{"n":3,"cat":2},"geometry":{"type":"Point","coordinates":[0.5,1.5]}}]}};
     deepFreeze(source);
     const action = {
       type: MAP.ADD_FEATURES,
@@ -281,15 +364,17 @@ describe('map reducer', () => {
       name: 'default',
       center: [0, 0],
       zoom: 3,
-      _sourcesVersion: 0,
       sources: {
         'points': source
       },
-      _layersVersion: 0,
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 0,
+      },
       layers: []
     };
     deepFreeze(state);
-    const newSource = {"_dataVersion": 1, "data": {"type":"FeatureCollection","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"n":2,"cat":1},"geometry":{"type":"Point","coordinates":[0.5,0.5]}},{"type":"Feature","properties":{"n":3,"cat":2},"geometry":{"type":"Point","coordinates":[0.5,1.5]}},{"type":"Feature","properties":{"n":27,"cat":2},"geometry":{"type":"Point","coordinates":[2.5,5.5]}},{"type":"Feature","properties":{"n":28,"cat":1},"geometry":{"type":"Point","coordinates":[2.5,6.5]}}]}};
+    const newSource = {"data": {"type":"FeatureCollection","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"n":2,"cat":1},"geometry":{"type":"Point","coordinates":[0.5,0.5]}},{"type":"Feature","properties":{"n":3,"cat":2},"geometry":{"type":"Point","coordinates":[0.5,1.5]}},{"type":"Feature","properties":{"n":27,"cat":2},"geometry":{"type":"Point","coordinates":[2.5,5.5]}},{"type":"Feature","properties":{"n":28,"cat":1},"geometry":{"type":"Point","coordinates":[2.5,6.5]}}]}};
     deepFreeze(newSource);
     expect(
       reducer(state, action)
@@ -298,17 +383,20 @@ describe('map reducer', () => {
       name: 'default',
       center: [0, 0],
       zoom: 3,
-      _sourcesVersion: 0,
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 0,
+        'bnd:data-version:points': 1,
+      },
       sources: {
         'points': newSource
       },
-      _layersVersion: 0,
       layers: []
     })
   })
 
   it('should handle REMOVE_FEATURES', () => {
-    const source = {"_dataVersion": 0, "data": {"type":"FeatureCollection","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"n":2,"cat":1},"geometry":{"type":"Point","coordinates":[0.5,0.5]}},{"type":"Feature","properties":{"n":3,"cat":2},"geometry":{"type":"Point","coordinates":[0.5,1.5]}}]}};
+    const source = {"data": {"type":"FeatureCollection","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"n":2,"cat":1},"geometry":{"type":"Point","coordinates":[0.5,0.5]}},{"type":"Feature","properties":{"n":3,"cat":2},"geometry":{"type":"Point","coordinates":[0.5,1.5]}}]}};
     deepFreeze(source);
     const action = {
       type: MAP.REMOVE_FEATURES,
@@ -321,14 +409,17 @@ describe('map reducer', () => {
       name: 'default',
       center: [0, 0],
       zoom: 3,
-      _sourcesVersion: 0,
       sources: {
         'points': source
       },
-      _layersVersion: 0,
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 0,
+        'bnd:data-version:points': 0,
+      },
       layers: []
     };
-    const newSource = {"_dataVersion": 1, "data": {"type":"FeatureCollection","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"n":3,"cat":2},"geometry":{"type":"Point","coordinates":[0.5,1.5]}}]}};
+    const newSource = {"data": {"type":"FeatureCollection","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"n":3,"cat":2},"geometry":{"type":"Point","coordinates":[0.5,1.5]}}]}};
     expect(
       reducer(state, action)
     ).toEqual({
@@ -336,11 +427,14 @@ describe('map reducer', () => {
       name: 'default',
       center: [0, 0],
       zoom: 3,
-      _sourcesVersion: 0,
       sources: {
         'points': newSource
       },
-      _layersVersion: 0,
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 0,
+        'bnd:data-version:points': 1,
+      },
       layers: []
     })
   })

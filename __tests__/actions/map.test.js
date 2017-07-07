@@ -124,6 +124,18 @@ describe('actions', () => {
     expect(actions.removeFeatures(sourceName, filter)).toEqual(expectedAction)
   });
 
+  it('should create an action to change the layer title', () => {
+    const layer_id = 'background';
+    const title = 'new_title';
+    const expectedAction = {
+      type: MAP.SET_LAYER_METADATA,
+      layerId: layer_id,
+      key: 'bnd:title', value: title
+    }
+
+    expect(actions.setLayerTitle(layer_id, title)).toEqual(expectedAction);
+  });
+
 })
 
 describe('async actions', () => {
