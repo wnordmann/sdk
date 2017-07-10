@@ -2,18 +2,13 @@
  *  state of the  store.
  */
 
+import PropTypes from 'prop-types';
 import React from 'react';
-
 import { connect } from 'react-redux';
-
-import { setView } from '../actions/map';
-import { LAYER_VERSION_KEY, SOURCE_VERSION_KEY, DATA_VERSION_KEY } from '../constants';
-
-import { dataVersionKey } from '../reducers/map';
 
 import getStyleFunction from 'mapbox-to-ol-style';
 
-import olMap from 'ol/map';
+import OlMap from 'ol/map';
 import View from 'ol/view';
 
 import TileLayer from 'ol/layer/tile';
@@ -33,25 +28,34 @@ import VectorSource from 'ol/source/vector';
 
 import GeoJsonFormat from 'ol/format/geojson';
 
+import { setView } from '../actions/map';
+import { LAYER_VERSION_KEY, SOURCE_VERSION_KEY } from '../constants';
+import { dataVersionKey } from '../reducers/map';
+
+
 const GEOJSON_FORMAT = new GeoJsonFormat();
 
 function configureXyzSource(glSource) {
   const source = new XyzSource({
-      attributions: glSource.attribution,
-      minZoom: glSource.minzoom,
-      maxZoom: 'maxzoom' in glSource ? glSource.maxzoom : 22,
-      tileSize: glSource.tileSize || 512,
-      //url: url,
-      urls: glSource.tiles,
-      crossOrigin: 'crossOrigin' in glSource ? glSource.crossOrigin : 'anonymous',
-    });
+    attributions: glSource.attribution,
+    minZoom: glSource.minzoom,
+    maxZoom: 'maxzoom' in glSource ? glSource.maxzoom : 22,
+    tileSize: glSource.tileSize || 512,
+    urls: glSource.tiles,
+    crossOrigin: 'crossOrigin' in glSource ? glSource.crossOrigin : 'anonymous',
+  });
 
-  source.setTileLoadFunction(function(tile, src) {
-    if (src.indexOf('{bbox-epsg-3857}') != -1) {
-      var bbox = source.getTileGrid().getTileCoordExtent(tile.getTileCoord());
-      src = src.replace('{bbox-epsg-3857}', bbox.toString());
+  source.setTileLoadFunction((tile, src) => {
+    // copy the src string.
+    let img_src = src.slice();
+    if (src.indexOf('{bbox-epsg-3857}') !== -1) {
+      const bbox = source.getTileGrid().getTileCoordExtent(tile.getTileCoord());
+      img_src = src.replace('{bbox-epsg-3857}', bbox.toString());
     }
-    tile.getImage().src = src;
+    // disabled the linter below as this is how
+    //  OpenLayers documents this operation.
+    // eslint-disable-next-line
+    tile.getImage().src = img_src; 
   });
 
   return source;
@@ -60,7 +64,7 @@ function configureXyzSource(glSource) {
 function configureTileJSONSource(glSource) {
   return new TileJSON({
     url: glSource.url,
-    crossOrigin: 'anonymous'
+    crossOrigin: 'anonymous',
   });
 }
 
@@ -69,7 +73,7 @@ function configureImageSource(glSource) {
   const source = new ImageStaticSource({
     url: glSource.url,
     imageExtent: [coords[0][0], coords[3][1], coords[1][0], coords[0][1]],
-    projection: 'EPSG:4326'
+    projection: 'EPSG:4326',
   });
   return source;
 }
@@ -77,13 +81,24 @@ function configureImageSource(glSource) {
 function configureMvtSource(glSource) {
   const source = new VectorTileSource({
     url: glSource.url,
-    tileGrid: TileGrid.createXYZ({maxZoom: 22}),
+    tileGrid: TileGrid.createXYZ({ maxZoom: 22 }),
     tilePixelRatio: 16,
     format: new MvtFormat(),
     crossOrigin: 'crossOrigin' in glSource ? glSource.crossOrigin : 'anonymous',
   });
 
   return source;
+}
+
+function updateGeojsonSource(olSource, glSource) {
+  // parse the new features,
+  // TODO: This should really check the map for the correct projection.
+  const features = GEOJSON_FORMAT.readFeatures(glSource.data, { featureProjection: 'EPSG:3857' });
+
+  // clear the layer WITHOUT dispatching remove events.
+  olSource.clear(true);
+  // bulk load the feature data.
+  olSource.addFeatures(features);
 }
 
 /** Create a vector source based on a
@@ -96,7 +111,7 @@ function configureMvtSource(glSource) {
 function configureGeojsonSouce(glSource) {
   const vector_src = new VectorSource({
     useSpatialIndex: false,
-    wrapX: false
+    wrapX: false,
   });
 
   // see the vector source with the first update
@@ -105,18 +120,6 @@ function configureGeojsonSouce(glSource) {
 
   return vector_src;
 }
-
-function updateGeojsonSource(olSource, glSource) {
-  // parse the new features,
-  // TODO: This should really check the map for the correct projection.
-  const features = GEOJSON_FORMAT.readFeatures(glSource.data, {featureProjection: 'EPSG:3857'});
-
-  // clear the layer WITHOUT dispatching remove events.
-  olSource.clear(true);
-  // bulk load the feature data.
-  olSource.addFeatures(features);
-}
-
 
 function configureSource(glSource) {
   // tiled raster layer.
@@ -136,8 +139,18 @@ function configureSource(glSource) {
   return null;
 }
 
-export class Map extends React.Component {
+/** This is a small bit of trickery that fakes
+ *  `getStyleFunction` into rendering only THIS layer.
+ */
+function fakeStyle(layer) {
+  return getStyleFunction({
+    version: 8,
+    layers: [layer],
+  }, layer.source);
+}
 
+
+export class Map extends React.Component {
 
   constructor(props) {
     super(props);
@@ -153,24 +166,52 @@ export class Map extends React.Component {
     this.layers = [];
   }
 
-  /** Initialize the map */
-  configureMap() {
-    this.map = new olMap({
-      target: this.refs.mapdiv,
-      view: new View({
-        center: this.props.map.center,
-        zoom: this.props.map.zoom,
-      })
-    });
+  componentDidMount() {
+    // put the map into the DOM
+    this.configureMap();
+  }
 
-    // when the map moves update the location in the state
-    this.map.on('moveend', (evt) => {
-      this.props.setView(this.map.getView());
-    });
+  /** This will check nextProps and nextState to see
+   *  what needs to be updated on the map.
+   */
+  shouldComponentUpdate(nextProps) {
+    // compare the centers
+    if (nextProps.map.center[0] !== this.props.map.center[0]
+      || nextProps.map.center[1] !== this.props.map.center[1]
+      || nextProps.map.zoom !== this.props.map.zoom) {
+      this.map.getView().setCenter(nextProps.map.center);
+      this.map.getView().setZoom(nextProps.map.zoom);
+    }
 
-    // bootstrap the map with the current configuration.
-    this.configureSources(this.props.map.sources, this.props.map.metadata[SOURCE_VERSION_KEY]);
-    this.configureLayers(this.props.map.sources, this.props.map.layers, this.props.map.metadata[LAYER_VERSION_KEY]);
+    // check the sources diff
+    if (this.sourcesVersion !== nextProps.map.metadata[SOURCE_VERSION_KEY]) {
+      // go through and update the sources.
+      this.configureSources(nextProps.map.sources, nextProps.map.metadata[SOURCE_VERSION_KEY]);
+    }
+    const next_layer_version = nextProps.map.metadata[LAYER_VERSION_KEY];
+    if (this.layersVersion !== next_layer_version) {
+      // go through and update the layers.
+      this.configureLayers(nextProps.map.sources, nextProps.map.layers, next_layer_version);
+    }
+
+    // check the vector sources for data changes
+    const src_names = Object.keys(nextProps.map.sources);
+    for (let i = 0, ii = src_names.length; i < ii; i++) {
+      const src_name = src_names[i];
+      const src = this.props.map.sources[src_name];
+      if (src && src.type === 'geojson') {
+        const version_key = dataVersionKey(src_name);
+
+        if (this.props.map.metadata[version_key] !== nextProps.map.metadata[version_key]) {
+          const next_src = nextProps.map.sources[src_name];
+          updateGeojsonSource(this.sources[src_name], next_src);
+        }
+      }
+    }
+
+    // This should always return false to keep
+    // render() from being called.
+    return false;
   }
 
   /** Convert the GL source definitions into internal
@@ -181,31 +222,25 @@ export class Map extends React.Component {
     // TODO: Update this to check "diff" configurations
     //       of sources.  Currently, this will only detect
     //       additions and removals.
-    for (const source_name in sourcesDef) {
+    let src_names = Object.keys(sourcesDef);
+    for (let i = 0, ii = src_names.length; i < ii; i++) {
+      const src_name = src_names[i];
       // Add the source because it's not in the current
       //  list of sources.
-      if (!(source_name in this.sources)) {
-        this.sources[source_name] = configureSource(sourcesDef[source_name]);
+      if (!(src_name in this.sources)) {
+        this.sources[src_name] = configureSource(sourcesDef[src_name]);
       }
     }
 
     // remove sources no longer there.
-    for (const source_name in this.sources) {
-      if (!(source_name in sourcesDef)) {
+    src_names = Object.keys(this.sources);
+    for (let i = 0, ii = src_names.length; i < ii; i++) {
+      const src_name = src_names[i];
+      if (!(src_name in sourcesDef)) {
         // TODO: Remove all layers that are using this source.
-        delete this.sources[source_name];
+        delete this.sources[src_name];
       }
     }
-  }
-
-  /** This is a small bit of trickery that fakes
-   *  `getStyleFunction` into rendering only THIS layer.
-   */
-  fakeStyle(layer) {
-    return getStyleFunction({
-      version: 8,
-      layers: [layer],
-    }, layer.source);
   }
 
   /** Convert a GL-defined to an OpenLayers' layer.
@@ -213,22 +248,20 @@ export class Map extends React.Component {
   configureLayer(sourcesDef, layer) {
     const layer_src = sourcesDef[layer.source];
 
-    switch(layer_src.type) {
+    switch (layer_src.type) {
       case 'raster':
         return new TileLayer({
           source: this.sources[layer.source],
         });
-        break;
       case 'geojson':
         return new VectorLayer({
           source: this.sources[layer.source],
-          style: this.fakeStyle(layer),
+          style: fakeStyle(layer),
         });
       case 'vector':
         return new VectorTileLayer({
           source: this.sources[layer.source],
-          //source: configureSource(sourcesDef[layer.source]),
-          style: this.fakeStyle(layer),
+          style: fakeStyle(layer),
         });
       case 'image':
         return new ImageLayer({
@@ -256,12 +289,13 @@ export class Map extends React.Component {
       layer_exists[layer.id] = true;
 
       // if the layer is not on the map, create it.
-      if(!(layer.id in this.layers)) {
+      if (!(layer.id in this.layers)) {
         if (layer.type === 'background') {
           // TODO handle background
         } else {
           const new_layer = this.configureLayer(sourcesDef, layer);
           new_layer.set('name', layer.id);
+
           // if the new layer has been defined, add it to the map.
           if (new_layer !== null) {
             this.layers[layer.id] = new_layer;
@@ -278,7 +312,9 @@ export class Map extends React.Component {
     }
 
     // check for layers which should be removed.
-    for (const layer_id in this.layers) {
+    const layer_ids = Object.keys(this.layers);
+    for (let i = 0, ii = layer_ids.length; i < ii; i++) {
+      const layer_id = layer_ids[i];
       // if the layer_id was not set to true then
       //  it has been removed the state and needs to be removed
       //  from the map.
@@ -289,72 +325,70 @@ export class Map extends React.Component {
     }
   }
 
-  componentDidMount() {
-    // put the map into the DOM
-    this.configureMap();
-  }
+  /** Initialize the map */
+  configureMap() {
+    this.map = new OlMap({
+      target: this.mapdiv,
+      view: new View({
+        center: this.props.map.center,
+        zoom: this.props.map.zoom,
+      }),
+    });
 
-  /** This will check nextProps and nextState to see
-   *  what needs to be updated on the map.
-   */
-  shouldComponentUpdate(nextProps, nextState) {
-    // compare the centers
-    if (nextProps.map.center[0] !== this.props.map.center[0]
-      || nextProps.map.center[1] !== this.props.map.center[1]
-      || nextProps.map.zoom !== this.props.zoom) {
-      this.map.getView().setCenter(nextProps.map.center);
-      this.map.getView().setZoom(nextProps.map.zoom);
-    }
+    // when the map moves update the location in the state
+    this.map.on('moveend', () => {
+      this.props.setView(this.map.getView());
+    });
 
-    // check the sources diff
-    if (this.sourcesVersion !== nextProps.map.metadata[SOURCE_VERSION_KEY]) {
-      // go through and update the sources.
-      this.configureSources(nextProps.map.sources, nextProps.map.metadata[SOURCE_VERSION_KEY]);
-    }
-    if (this.layersVersion !== nextProps.map.metadata[LAYER_VERSION_KEY]) {
-      // go through and update the layers.
-      this.configureLayers(nextProps.map.sources, nextProps.map.layers, nextProps.map.metadata[LAYER_VERSION_KEY]);
-    }
-
-    // check the vector sources for data changes
-    for (const src_name in nextProps.map.sources) {
-      const src = this.props.map.sources[src_name];
-      if (src && src.type === 'geojson') {
-        const version_key = dataVersionKey(src_name);
-
-        if (this.props.map.metadata[version_key] !== nextProps.map.metadata[version_key]) {
-          const next_src = nextProps.map.sources[src_name];
-          updateGeojsonSource(this.sources[src_name], next_src);
-        }
-      }
-    }
-
-    // This should always return false to keep
-    // render() from being called.
-    return false;
+    // bootstrap the map with the current configuration.
+    this.configureSources(this.props.map.sources, this.props.map.metadata[SOURCE_VERSION_KEY]);
+    this.configureLayers(this.props.map.sources, this.props.map.layers,
+                         this.props.map.metadata[LAYER_VERSION_KEY]);
   }
 
   render() {
     return (
-      <div ref="mapdiv" className="map">
-      </div>
+      <div ref={(c) => { this.mapdiv = c; }} className="map" />
     );
   }
 }
 
+Map.propTypes = {
+  map: PropTypes.shape({
+    center: PropTypes.array,
+    zoom: PropTypes.number,
+    metadata: PropTypes.object,
+    layers: PropTypes.array,
+    sources: PropTypes.object,
+  }),
+  setView: PropTypes.func,
+};
 
-const mapStateToProps = (state) => {
+Map.defaultProps = {
+  map: {
+    center: [0, 0],
+    zoom: 2,
+    metadata: {},
+    layers: [],
+    sources: {},
+  },
+  setView: () => {
+    // swallow event.
+  },
+};
+
+function mapStateToProps(state) {
   return {
-    map: state.map
-  }
+    map: state.map,
+  };
 }
 
-const mapDispatchToProps = (dispatch) => {
+function mapDispatchToProps(dispatch) {
   return {
     setView: (view) => {
       dispatch(setView(view.getCenter(), view.getZoom()));
-    }
-  }
+    },
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Map);

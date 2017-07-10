@@ -13,3 +13,7 @@ export const MAP = {
   SET_LAYER_VISIBILITY: 'MAP_SET_LAYER_VISIBILITY',
   RECEIVE_CONTEXT: 'MAP_RECEIVE_CONTEXT',
 };
+
+export default {
+  MAP,
+};

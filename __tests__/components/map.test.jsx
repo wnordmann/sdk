@@ -1,49 +1,51 @@
+/* global it, describe, expect */
+
 import React from 'react';
-import { shallow, mount, render } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 
-
-import { Map } from '../../src/components/map';
 import olMap from 'ol/map';
 import TileLayer from 'ol/layer/tile';
 import ImageLayer from 'ol/layer/image';
 import ImageStaticSource from 'ol/source/imagestatic';
 import TileJSONSource from 'ol/source/tilejson';
 
-import { createStore, combineReducers } from 'redux'
-import ConnectedMap from '../../src/components/map';
+import { createStore, combineReducers } from 'redux';
+
+import ConnectedMap, { Map } from '../../src/components/map';
 import MapReducer from '../../src/reducers/map';
 
 describe('Map component', () => {
-
-  it('should render without throwing an error', function() {
-    expect(shallow(<Map />).contains(<div className="map"></div>)).toBe(true);
+  it('should render without throwing an error', () => {
+    expect(shallow(<Map />).contains(<div className="map" />)).toBe(true);
   });
 
-  it('should create a map', function() {
+  it('should create a map', () => {
     const sources = {
-      "osm": {
-        "type": "raster",
-        "attribution": "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors.",
-        "tileSize": 256,
-        "tiles": [
-          "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
-          "https://b.tile.openstreetmap.org/{z}/{x}/{y}.png",
-          "https://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        ]
+      osm: {
+        type: 'raster',
+        attribution: '&copy; <a href=\'https://www.openstreetmap.org/copyright\'>OpenStreetMap</a> contributors.',
+        tileSize: 256,
+        tiles: [
+          'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          'https://b.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        ],
       },
-      "states-wms": {
-        "type": "raster",
-        "tileSize": 256,
-        "tiles": ["https://ahocevar.com/geoserver/gwc/service/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image/png&SRS=EPSG:900913&LAYERS=topp:states&STYLES=&WIDTH=256&HEIGHT=256&BBOX={bbox-epsg-3857}"]
-      }
+      'states-wms': {
+        type: 'raster',
+        tileSize: 256,
+        tiles: ['https://ahocevar.com/geoserver/gwc/service/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image/png&SRS=EPSG:900913&LAYERS=topp:states&STYLES=&WIDTH=256&HEIGHT=256&BBOX={bbox-epsg-3857}'],
+      },
     };
-    const layers = [{
-      "id": "osm",
-      "source": "osm"
-    }, {
-      "id": "states",
-      "source": "states-wms",
-    }];
+    const layers = [
+      {
+        id: 'osm',
+        source: 'osm',
+      }, {
+        id: 'states',
+        source: 'states-wms',
+      },
+    ];
     const metadata = {
       'bnd:source-version': 0,
       'bnd:layer-version': 0,
@@ -51,7 +53,7 @@ describe('Map component', () => {
 
     const center = [0, 0];
     const zoom = 2;
-    const wrapper = shallow(<Map map={{center, zoom, sources, layers, metadata}} />);
+    const wrapper = shallow(<Map map={{ center, zoom, sources, layers, metadata }} />);
     wrapper.instance().componentDidMount();
     const map = wrapper.instance().map;
     expect(map).toBeDefined();
@@ -60,36 +62,38 @@ describe('Map component', () => {
 
     // move the map.
     wrapper.setProps({
-      zoom: 4
+      zoom: 4,
     });
   });
 
-  it('should create a static image', function() {
+  it('should create a static image', () => {
     const sources = {
-      "overlay": {
-        "type": "image",
-        "url": "https://www.mapbox.com/mapbox-gl-js/assets/radar.gif",
-        "coordinates": [
+      overlay: {
+        type: 'image',
+        url: 'https://www.mapbox.com/mapbox-gl-js/assets/radar.gif',
+        coordinates: [
           [-80.425, 46.437],
           [-71.516, 46.437],
           [-71.516, 37.936],
-          [-80.425, 37.936]
-        ]
-      }
+          [-80.425, 37.936],
+        ],
+      },
     };
-    const layers = [{
-      "id": "overlay",
-      "source": "overlay",
-      "type": "raster",
-      "paint": {"raster-opacity": 0.85}
-    }];
+    const layers = [
+      {
+        id: 'overlay',
+        source: 'overlay',
+        type: 'raster',
+        paint: { 'raster-opacity': 0.85 },
+      },
+    ];
     const center = [0, 0];
     const zoom = 2;
     const metadata = {
       'bnd:source-version': 0,
       'bnd:layer-version': 0,
     };
-    const wrapper = shallow(<Map map={{center, zoom, sources, layers, metadata}} />);
+    const wrapper = shallow(<Map map={{ center, zoom, sources, layers, metadata }} />);
     wrapper.instance().componentDidMount();
     const map = wrapper.instance().map;
     const layer = map.getLayers().item(0);
@@ -99,16 +103,16 @@ describe('Map component', () => {
     expect(source).toBeInstanceOf(ImageStaticSource);
   });
 
-  it('should create a raster tilejson', function() {
+  it('should create a raster tilejson', () => {
     const sources = {
-      "tilejson": {
-        "type": "raster",
-        "url": "https://api.tiles.mapbox.com/v3/mapbox.geography-class.json?secure"
-      }
+      tilejson: {
+        type: 'raster',
+        url: 'https://api.tiles.mapbox.com/v3/mapbox.geography-class.json?secure',
+      },
     };
     const layers = [{
-      "id": "tilejson-layer",
-      "source": "tilejson"
+      id: 'tilejson-layer',
+      source: 'tilejson',
     }];
 
     const metadata = {
@@ -117,7 +121,7 @@ describe('Map component', () => {
     };
     const center = [0, 0];
     const zoom = 2;
-    const wrapper = shallow(<Map map={{center, zoom, sources, layers, metadata}} />);
+    const wrapper = shallow(<Map map={{ center, zoom, sources, layers, metadata }} />);
     wrapper.instance().componentDidMount();
     const map = wrapper.instance().map;
     const layer = map.getLayers().item(0);
@@ -126,16 +130,16 @@ describe('Map component', () => {
     expect(source).toBeInstanceOf(TileJSONSource);
   });
 
-  it('should handle visibility changes', function() {
+  it('should handle visibility changes', () => {
     const sources = {
-      "tilejson": {
-        "type": "raster",
-        "url": "https://api.tiles.mapbox.com/v3/mapbox.geography-class.json?secure"
-      }
+      tilejson: {
+        type: 'raster',
+        url: 'https://api.tiles.mapbox.com/v3/mapbox.geography-class.json?secure',
+      },
     };
     const layers = [{
-      "id": "tilejson-layer",
-      "source": "tilejson"
+      id: 'tilejson-layer',
+      source: 'tilejson',
     }];
 
     const metadata = {
@@ -144,7 +148,8 @@ describe('Map component', () => {
     };
     const center = [0, 0];
     const zoom = 2;
-    const wrapper = shallow(<Map map={{center, zoom, sources, layers, metadata}} />);
+    const wrapper = shallow(<Map map={{ center, zoom, sources, layers, metadata }} />);
+
     const instance = wrapper.instance();
     instance.componentDidMount();
     const map = instance.map;
@@ -160,28 +165,28 @@ describe('Map component', () => {
         },
         sources,
         layers: [{
-          "id": "tilejson-layer",
-          "source": "tilejson",
-          "layout": {
-            visibility: "none"
-          }
-        }]
-      }
+          id: 'tilejson-layer',
+          source: 'tilejson',
+          layout: {
+            visibility: 'none',
+          },
+        }],
+      },
     };
     instance.shouldComponentUpdate.call(instance, nextProps);
     expect(layer.getVisible()).toBe(false);
   });
 
-  it('should handle layer removal and re-adding', function() {
+  it('should handle layer removal and re-adding', () => {
     const sources = {
-      "tilejson": {
-        "type": "raster",
-        "url": "https://api.tiles.mapbox.com/v3/mapbox.geography-class.json?secure"
-      }
+      tilejson: {
+        type: 'raster',
+        url: 'https://api.tiles.mapbox.com/v3/mapbox.geography-class.json?secure',
+      },
     };
     const layers = [{
-      "id": "tilejson-layer",
-      "source": "tilejson"
+      id: 'tilejson-layer',
+      source: 'tilejson',
     }];
     const center = [0, 0];
     const zoom = 2;
@@ -189,11 +194,11 @@ describe('Map component', () => {
       'bnd:source-version': 0,
       'bnd:layer-version': 0,
     };
-    const wrapper = shallow(<Map map={{center, zoom, sources, layers, metadata}} />);
+    const wrapper = shallow(<Map map={{ center, zoom, sources, layers, metadata }} />);
     const instance = wrapper.instance();
     instance.componentDidMount();
     const map = instance.map;
-    const layer = map.getLayers().item(0);
+    expect(map.getLayers().item(0)).not.toBe(undefined);
     let nextProps = {
       map: {
         center,
@@ -203,8 +208,8 @@ describe('Map component', () => {
           'bnd:layer-version': 1,
         },
         sources,
-        layers: []
-      }
+        layers: [],
+      },
     };
     instance.shouldComponentUpdate.call(instance, nextProps);
     expect(map.getLayers().getLength()).toBe(0);
@@ -217,19 +222,17 @@ describe('Map component', () => {
           'bnd:layer-version': 2,
         },
         sources,
-        layers: layers
-      }
+        layers,
+      },
     };
     instance.shouldComponentUpdate.call(instance, nextProps);
     expect(map.getLayers().getLength()).toBe(1);
   });
 
-  it('should created a connected map', function() {
+  it('should created a connected map', () => {
     const store = createStore(combineReducers({
       map: MapReducer,
     }));
-
-    const wrapper = mount(<ConnectedMap store={store}/>);
+    mount(<ConnectedMap store={store} />);
   });
-
 });

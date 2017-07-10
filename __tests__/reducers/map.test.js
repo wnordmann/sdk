@@ -1,9 +1,11 @@
-import reducer from '../../src/reducers/map'
-import {MAP} from '../../src/action-types'
+/* global it, describe, expect */
+
 import deepFreeze from 'deep-freeze';
 
-describe('map reducer', () => {
+import reducer from '../../src/reducers/map';
+import { MAP } from '../../src/action-types';
 
+describe('map reducer', () => {
   it('should return the initial state', () => {
     expect(reducer(undefined, {})).toEqual({
       version: 8,
@@ -15,17 +17,17 @@ describe('map reducer', () => {
         'bnd:layer-version': 0,
       },
       sources: {},
-      layers: []
-    })
-  })
+      layers: [],
+    });
+  });
 
   it('should handle ADD_LAYER', () => {
-   const title = "Background";
-   const layer = {
-     "id": "background",
-     "type": "background",
-     "paint": {
-       "background-color": "rgba(0,0,0,0)"
+    const title = 'Background';
+    const layer = {
+      id: 'background',
+      type: 'background',
+      paint: {
+        'background-color': 'rgba(0,0,0,0)',
       },
     };
     deepFreeze(layer);
@@ -35,9 +37,7 @@ describe('map reducer', () => {
       layerTitle: title,
     };
     deepFreeze(action);
-    expect(
-      reducer(undefined, action)
-    ).toEqual({
+    expect(reducer(undefined, action)).toEqual({
       version: 8,
       name: 'default',
       center: [0, 0],
@@ -47,27 +47,29 @@ describe('map reducer', () => {
         'bnd:layer-version': 1,
       },
       sources: {},
-      layers: [{
-        "id": "background",
-        "type": "background",
-        "paint": {
-          "background-color": "rgba(0,0,0,0)"
+      layers: [
+        {
+          id: 'background',
+          type: 'background',
+          paint: {
+            'background-color': 'rgba(0,0,0,0)',
+          },
+          metadata: {
+            'bnd:title': title,
+          },
+          filter: null,
         },
-        "metadata": {
-          "bnd:title" : title
-        },
-        "filter": null
-      }]
-    })
-  })
+      ],
+    });
+  });
 
   it('should handle SET_LAYER_METADATA', () => {
-    const title = "Background";
+    const title = 'Background';
     const layer = {
-     "id": "background",
-     "type": "background",
-     "paint": {
-       "background-color": "rgba(0,0,0,0)"
+      id: 'background',
+      type: 'background',
+      paint: {
+        'background-color': 'rgba(0,0,0,0)',
       },
     };
     deepFreeze(layer);
@@ -75,7 +77,7 @@ describe('map reducer', () => {
       type: MAP.SET_LAYER_METADATA,
       layerId: 'background',
       key: 'bnd:title',
-      value: title
+      value: title,
     };
     const state = {
       version: 8,
@@ -87,13 +89,11 @@ describe('map reducer', () => {
         'bnd:layer-version': 0,
       },
       sources: {},
-     layers: [layer]
+      layers: [layer],
     };
     deepFreeze(state);
     deepFreeze(action);
-    expect(
-      reducer(state, action)
-    ).toEqual({
+    expect(reducer(state, action)).toEqual({
       version: 8,
       name: 'default',
       center: [0, 0],
@@ -103,33 +103,34 @@ describe('map reducer', () => {
         'bnd:source-version': 0,
         'bnd:layer-version': 1,
       },
-      layers: [{
-        "id": "background",
-        "type": "background",
-        "paint": {
-          "background-color": "rgba(0,0,0,0)"
+      layers: [
+        {
+          id: 'background',
+          type: 'background',
+          paint: {
+            'background-color': 'rgba(0,0,0,0)',
+          },
+          metadata: {
+            'bnd:title': title,
+          },
         },
-        "metadata": {
-          "bnd:title": title
-        }
-      }]
-    })
-
+      ],
+    });
   });
 
   it('should handle SET_LAYER_VISIBILITY', () => {
-   const layer = {
-     "id": "background",
-     "type": "background",
-     "paint": {
-       "background-color": "rgba(0,0,0,0)"
-      }
+    const layer = {
+      id: 'background',
+      type: 'background',
+      paint: {
+        'background-color': 'rgba(0,0,0,0)',
+      },
     };
     deepFreeze(layer);
     const action = {
       type: MAP.SET_LAYER_VISIBILITY,
       layerId: 'background',
-      visibility: 'none'
+      visibility: 'none',
     };
     const state = {
       version: 8,
@@ -141,13 +142,11 @@ describe('map reducer', () => {
         'bnd:layer-version': 0,
       },
       sources: {},
-     layers: [layer]
+      layers: [layer],
     };
     deepFreeze(state);
     deepFreeze(action);
-    expect(
-      reducer(state, action)
-    ).toEqual({
+    expect(reducer(state, action)).toEqual({
       version: 8,
       name: 'default',
       center: [0, 0],
@@ -157,31 +156,33 @@ describe('map reducer', () => {
         'bnd:source-version': 0,
         'bnd:layer-version': 1,
       },
-      layers: [{
-        "id": "background",
-        "type": "background",
-        "paint": {
-          "background-color": "rgba(0,0,0,0)"
+      layers: [
+        {
+          id: 'background',
+          type: 'background',
+          paint: {
+            'background-color': 'rgba(0,0,0,0)',
+          },
+          layout: {
+            visibility: 'none',
+          },
         },
-        "layout": {
-          "visibility": "none"
-        }
-      }]
-    })
-  })
+      ],
+    });
+  });
 
   it('should handle REMOVE_LAYER', () => {
-   const layer = {
-     "id": "background",
-     "type": "background",
-     "paint": {
-       "background-color": "rgba(0,0,0,0)"
-      }
+    const layer = {
+      id: 'background',
+      type: 'background',
+      paint: {
+        'background-color': 'rgba(0,0,0,0)',
+      },
     };
     deepFreeze(layer);
     const action = {
       type: MAP.REMOVE_LAYER,
-      layerId: 'background'
+      layerId: 'background',
     };
     const state = {
       version: 8,
@@ -193,13 +194,11 @@ describe('map reducer', () => {
         'bnd:source-version': 0,
         'bnd:layer-version': 0,
       },
-     layers: [layer]
+      layers: [layer],
     };
     deepFreeze(state);
     deepFreeze(action);
-    expect(
-      reducer(undefined, action)
-    ).toEqual({
+    expect(reducer(undefined, action)).toEqual({
       version: 8,
       name: 'default',
       center: [0, 0],
@@ -209,31 +208,31 @@ describe('map reducer', () => {
         'bnd:source-version': 0,
         'bnd:layer-version': 1,
       },
-      layers: []
-    })
-  })
+      layers: [],
+    });
+  });
 
   it('should handle UPDATE_LAYER', () => {
-   const layer = {
-     "id": "background",
-     "type": "background",
-     "paint": {
-       "background-color": "rgba(0,0,0,0)"
-      }
+    const layer = {
+      id: 'background',
+      type: 'background',
+      paint: {
+        'background-color': 'rgba(0,0,0,0)',
+      },
     };
     const newLayer = {
-     "id": "background",
-     "type": "background",
-     "paint": {
-       "background-color": "rgba(255,0,0,0)"
-      }
+      id: 'background',
+      type: 'background',
+      paint: {
+        'background-color': 'rgba(255,0,0,0)',
+      },
     };
     deepFreeze(layer);
     deepFreeze(newLayer);
     const action = {
       type: MAP.UPDATE_LAYER,
       layerId: 'background',
-      layerDef: newLayer
+      layerDef: newLayer,
     };
     const state = {
       version: 8,
@@ -245,13 +244,11 @@ describe('map reducer', () => {
         'bnd:source-version': 0,
         'bnd:layer-version': 0,
       },
-     layers: [layer]
+      layers: [layer],
     };
     deepFreeze(state);
     deepFreeze(action);
-    expect(
-      reducer(state, action)
-    ).toEqual({
+    expect(reducer(state, action)).toEqual({
       version: 8,
       name: 'default',
       center: [0, 0],
@@ -261,61 +258,59 @@ describe('map reducer', () => {
         'bnd:source-version': 0,
         'bnd:layer-version': 1,
       },
-      layers: [newLayer]
-    })
-  })
+      layers: [newLayer],
+    });
+  });
 
   it('should handle ADD_SOURCE', () => {
     const source = {
-      "type": "raster",
-      "attribution": "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors.",
-      "tileSize": 256,
-      "tiles": [
-        "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        "https://b.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        "https://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      ]
+      type: 'raster',
+      attribution: '&copy; <a href=\'https://www.openstreetmap.org/copyright\'>OpenStreetMap</a> contributors.',
+      tileSize: 256,
+      tiles: [
+        'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        'https://b.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      ],
     };
     deepFreeze(source);
     const action = {
       type: MAP.ADD_SOURCE,
       sourceName: 'osm',
-      sourceDef: source
+      sourceDef: source,
     };
     deepFreeze(action);
-    expect(
-      reducer(undefined, action)
-    ).toEqual({
+    expect(reducer(undefined, action)).toEqual({
       version: 8,
       name: 'default',
       center: [0, 0],
       zoom: 3,
       sources: {
-        'osm': source
+        osm: source,
       },
       metadata: {
         'bnd:source-version': 1,
         'bnd:layer-version': 0,
       },
-      layers: []
-    })
-  })
+      layers: [],
+    });
+  });
 
   it('should handle REMOVE_SOURCE', () => {
-   const source = {
-      "type": "raster",
-      "attribution": "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors.",
-      "tileSize": 256,
-      "tiles": [
-        "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        "https://b.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        "https://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      ]
+    const source = {
+      type: 'raster',
+      attribution: '&copy; <a href=\'https://www.openstreetmap.org/copyright\'>OpenStreetMap</a> contributors.',
+      tileSize: 256,
+      tiles: [
+        'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        'https://b.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      ],
     };
     deepFreeze(source);
     const action = {
       type: MAP.REMOVE_SOURCE,
-      sourceName: 'osm'
+      sourceName: 'osm',
     };
     const state = {
       version: 8,
@@ -323,19 +318,17 @@ describe('map reducer', () => {
       center: [0, 0],
       zoom: 3,
       sources: {
-        'osm': source
+        osm: source,
       },
       metadata: {
         'bnd:source-version': 0,
         'bnd:layer-version': 0,
       },
-      layers: []
+      layers: [],
     };
     deepFreeze(state);
     deepFreeze(action);
-    expect(
-      reducer(undefined, action)
-    ).toEqual({
+    expect(reducer(undefined, action)).toEqual({
       version: 8,
       name: 'default',
       center: [0, 0],
@@ -345,18 +338,20 @@ describe('map reducer', () => {
         'bnd:source-version': 1,
         'bnd:layer-version': 0,
       },
-      layers: []
-    })
-  })
+      layers: [],
+    });
+  });
 
   it('should handle ADD_FEATURES', () => {
     // since we do not go through ADD_SOURCE we need to set _dataVersion
-    const source = {"data": {"type":"FeatureCollection","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"n":2,"cat":1},"geometry":{"type":"Point","coordinates":[0.5,0.5]}},{"type":"Feature","properties":{"n":3,"cat":2},"geometry":{"type":"Point","coordinates":[0.5,1.5]}}]}};
+    // eslint-disable-next-line
+    const source = {data: {type:'FeatureCollection',crs:{type:'name',properties:{'name':'urn:ogc:def:crs:OGC:1.3:CRS84'}},features:[{type:'Feature',properties:{'n':2,'cat':1},geometry:{type:'Point',coordinates:[0.5,0.5]}},{type:'Feature',properties:{'n':3,'cat':2},'geometry':{type:'Point',coordinates:[0.5,1.5]}}]}};
     deepFreeze(source);
     const action = {
       type: MAP.ADD_FEATURES,
       sourceName: 'points',
-      features: [{"type":"Feature","properties":{"n":27,"cat":2},"geometry":{"type":"Point","coordinates":[2.5,5.5]}},{"type":"Feature","properties":{"n":28,"cat":1},"geometry":{"type":"Point","coordinates":[2.5,6.5]}}]
+      // eslint-disable-next-line
+      features: [{type:'Feature',properties:{'n':27,'cat':2},geometry:{type:'Point',coordinates:[2.5,5.5]}},{type:'Feature',properties:{'n':28,'cat':1},'geometry':{type:'Point',coordinates:[2.5,6.5]}}]
     };
     deepFreeze(action);
     const state = {
@@ -365,20 +360,19 @@ describe('map reducer', () => {
       center: [0, 0],
       zoom: 3,
       sources: {
-        'points': source
+        points: source,
       },
       metadata: {
         'bnd:source-version': 0,
         'bnd:layer-version': 0,
       },
-      layers: []
+      layers: [],
     };
     deepFreeze(state);
-    const newSource = {"data": {"type":"FeatureCollection","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"n":2,"cat":1},"geometry":{"type":"Point","coordinates":[0.5,0.5]}},{"type":"Feature","properties":{"n":3,"cat":2},"geometry":{"type":"Point","coordinates":[0.5,1.5]}},{"type":"Feature","properties":{"n":27,"cat":2},"geometry":{"type":"Point","coordinates":[2.5,5.5]}},{"type":"Feature","properties":{"n":28,"cat":1},"geometry":{"type":"Point","coordinates":[2.5,6.5]}}]}};
+    // eslint-disable-next-line
+    const newSource = {data: {type:'FeatureCollection',crs:{type:'name',properties:{'name':'urn:ogc:def:crs:OGC:1.3:CRS84'}},features:[{type:'Feature',properties:{'n':2,'cat':1},geometry:{type:'Point',coordinates:[0.5,0.5]}},{type:'Feature',properties:{'n':3,'cat':2},'geometry':{type:'Point',coordinates:[0.5,1.5]}},{type:'Feature',properties:{'n':27,'cat':2},'geometry':{type:'Point',coordinates:[2.5,5.5]}},{type:'Feature',properties:{'n':28,'cat':1},'geometry':{type:'Point',coordinates:[2.5,6.5]}}]}};
     deepFreeze(newSource);
-    expect(
-      reducer(state, action)
-    ).toEqual({
+    expect(reducer(state, action)).toEqual({
       version: 8,
       name: 'default',
       center: [0, 0],
@@ -389,19 +383,20 @@ describe('map reducer', () => {
         'bnd:data-version:points': 1,
       },
       sources: {
-        'points': newSource
+        points: newSource,
       },
-      layers: []
-    })
-  })
+      layers: [],
+    });
+  });
 
   it('should handle REMOVE_FEATURES', () => {
-    const source = {"data": {"type":"FeatureCollection","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"n":2,"cat":1},"geometry":{"type":"Point","coordinates":[0.5,0.5]}},{"type":"Feature","properties":{"n":3,"cat":2},"geometry":{"type":"Point","coordinates":[0.5,1.5]}}]}};
+    // eslint-disable-next-line
+    const source = {data: {type:'FeatureCollection',crs:{type:'name',properties:{'name':'urn:ogc:def:crs:OGC:1.3:CRS84'}},features:[{type:'Feature',properties:{'n':2,'cat':1},geometry:{type:'Point',coordinates:[0.5,0.5]}},{type:'Feature',properties:{'n':3,'cat':2},'geometry':{type:'Point',coordinates:[0.5,1.5]}}]}};
     deepFreeze(source);
     const action = {
       type: MAP.REMOVE_FEATURES,
       sourceName: 'points',
-      filter: ['all', ['<', 'n', 3]]
+      filter: ['all', ['<', 'n', 3]],
     };
     deepFreeze(action);
     const state = {
@@ -410,33 +405,31 @@ describe('map reducer', () => {
       center: [0, 0],
       zoom: 3,
       sources: {
-        'points': source
+        points: source,
       },
       metadata: {
         'bnd:source-version': 0,
         'bnd:layer-version': 0,
         'bnd:data-version:points': 0,
       },
-      layers: []
+      layers: [],
     };
-    const newSource = {"data": {"type":"FeatureCollection","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"n":3,"cat":2},"geometry":{"type":"Point","coordinates":[0.5,1.5]}}]}};
-    expect(
-      reducer(state, action)
-    ).toEqual({
+    // eslint-disable-next-line
+    const newSource = {data: {type:'FeatureCollection',crs:{type:'name',properties:{'name':'urn:ogc:def:crs:OGC:1.3:CRS84'}},features:[{type:'Feature',properties:{'n':3,'cat':2},geometry:{type:'Point',coordinates:[0.5,1.5]}}]}};
+    expect(reducer(state, action)).toEqual({
       version: 8,
       name: 'default',
       center: [0, 0],
       zoom: 3,
       sources: {
-        'points': newSource
+        points: newSource,
       },
       metadata: {
         'bnd:source-version': 0,
         'bnd:layer-version': 0,
         'bnd:data-version:points': 1,
       },
-      layers: []
-    })
-  })
-
-})
+      layers: [],
+    });
+  });
+});

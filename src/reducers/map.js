@@ -1,9 +1,9 @@
 /** Reducer to implement mapbox style document.
  */
 
-import { MAP } from '../action-types';
 import createFilter from '@mapbox/mapbox-gl-style-spec/feature_filter';
 
+import { MAP } from '../action-types';
 import { LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TITLE_KEY, DATA_VERSION_KEY } from '../constants';
 
 function defaultMetadata() {
@@ -21,11 +21,11 @@ const defaultState = {
   zoom: 3,
   metadata: defaultMetadata(),
   sources: {},
-  layers: []
+  layers: [],
 };
 
 function getVersion(metadata, version) {
-  if (typeof(metadata) === 'undefined' || typeof(metadata[version]) === 'undefined') {
+  if (typeof (metadata) === 'undefined' || typeof (metadata[version]) === 'undefined') {
     return 0;
   }
   return metadata[version];
@@ -35,15 +35,15 @@ function incrementVersion(metadata, version) {
   const new_metadata = Object.assign({}, metadata);
   new_metadata[version] = getVersion(metadata, version) + 1;
   return {
-    metadata: new_metadata
-  }
+    metadata: new_metadata,
+  };
 }
 
 /** As there is no "source" metadata, this generates a unique key
  *  for the version of the data in the map's metadata object.
  */
 export function dataVersionKey(sourceName) {
-  return DATA_VERSION_KEY + ':' + sourceName;
+  return `${DATA_VERSION_KEY}:${sourceName}`;
 }
 
 /** Add a layer to the state.
@@ -78,7 +78,7 @@ function removeLayer(state, action) {
   }
 
   return Object.assign({}, state, {
-    layers: new_layers
+    layers: new_layers,
   }, incrementVersion(state.metadata, LAYER_VERSION_KEY));
 }
 
@@ -94,7 +94,7 @@ function updateLayer(state, action) {
         const meta_update = {};
         meta_update[action.key] = action.value;
         new_layers.push(Object.assign({}, state.layers[i], {
-          metadata: Object.assign({}, state.layers[i].metadata, meta_update)
+          metadata: Object.assign({}, state.layers[i].metadata, meta_update),
         }));
       } else {
         new_layers.push(Object.assign({}, state.layers[i], action.layerDef));
@@ -106,15 +106,14 @@ function updateLayer(state, action) {
   }
 
   return Object.assign({}, state, {
-    layers: new_layers
+    layers: new_layers,
   }, incrementVersion(state.metadata, LAYER_VERSION_KEY));
 }
-
 
 /** Add a source to the state.
  */
 function addSource(state, action) {
-  const new_source = {}
+  const new_source = {};
   new_source[action.sourceName] = Object.assign({}, action.sourceDef);
   if (action.sourceDef.type !== 'raster') {
     new_source[action.sourceName].data = Object.assign({}, action.sourceDef.data);
@@ -126,7 +125,7 @@ function addSource(state, action) {
   const new_sources = Object.assign({}, state.sources, new_source);
   return Object.assign({}, state, {
     metadata: Object.assign({}, state.metadata, new_metadata),
-    sources: new_sources
+    sources: new_sources,
   }, incrementVersion(state.metadata, SOURCE_VERSION_KEY));
 }
 
@@ -136,11 +135,9 @@ function removeSource(state, action) {
   const new_sources = Object.assign({}, state.sources);
   delete new_sources[action.sourceName];
   return Object.assign({}, state, {
-    sources: new_sources
+    sources: new_sources,
   }, incrementVersion(state.metadata, SOURCE_VERSION_KEY));
 }
-
-
 
 /** Creates a new state with the data for a
  *  source changed to the contents of data.
@@ -157,7 +154,7 @@ function changeData(state, sourceName, data) {
 
   // kick back the new state.
   return Object.assign({}, state, {
-    sources: Object.assign({}, state.sources, src_mixin)
+    sources: Object.assign({}, state.sources, src_mixin),
   }, incrementVersion(state.metadata, dataVersionKey(sourceName)));
 }
 
@@ -176,18 +173,18 @@ function addFeatures(state, action) {
     // coerce this to a FeatureCollection.
     new_data = {
       type: 'FeatureCollection',
-      features: action.features
+      features: action.features,
     };
   } else if (data.type === 'Feature') {
     new_data = {
       type: 'FeatureCollection',
-      features: [data].concat(action.features)
+      features: [data].concat(action.features),
     };
   } else if (data.type === 'FeatureCollection') {
     new_data = {
       type: 'FeatureCollection',
-      features: data.features.concat(action.features)
-    }
+      features: data.features.concat(action.features),
+    };
   }
 
   if (new_data !== null) {
@@ -221,7 +218,8 @@ function removeFeatures(state, action) {
     }
   } else if (data.type === 'FeatureCollection') {
     const new_features = [];
-    for (const feature of data.features) {
+    for (let i = 0, ii = data.features.length; i < ii; i++) {
+      const feature = data.features[i];
       if (!match(feature)) {
         new_features.push(feature);
       }
@@ -241,26 +239,31 @@ function removeFeatures(state, action) {
 /** Change the visibility of a layer given in the action.
  */
 function setVisibility(state, action) {
+  let updated = false;
   const updated_layers = [];
-  let updated = 0;
-  for (const layer of state.layers) {
+
+  for (let i = 0, ii = state.layers.length; i < ii; i++) {
+    const layer = state.layers[i];
     if (layer.id === action.layerId) {
       updated_layers.push({
         ...layer,
         layout: {
           ...layer.layout,
           visibility: action.visibility,
-        }
+        },
       });
-
-      updated = 1;
+      updated = true;
     } else {
       updated_layers.push(layer);
     }
   }
-  return Object.assign({}, state, {
-    layers: updated_layers
-  }, incrementVersion(state.metadata, LAYER_VERSION_KEY));
+  if (updated) {
+    return Object.assign({}, state, {
+      layers: updated_layers,
+    }, incrementVersion(state.metadata, LAYER_VERSION_KEY));
+  }
+  // if nothing was updated, return the default state.
+  return state;
 }
 
 /** Load a new context
@@ -273,7 +276,7 @@ function setContext(state, action) {
 /** Main reducer.
  */
 export default function MapReducer(state = defaultState, action) {
-  switch(action.type) {
+  switch (action.type) {
     case MAP.SET_VIEW:
       return Object.assign({}, state, action.view);
     case MAP.ADD_LAYER:

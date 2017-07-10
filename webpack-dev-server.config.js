@@ -3,6 +3,7 @@ const path = require('path');
 
 const config = {
   resolve: {
+    extensions: ['.js', '.jsx'],
     alias: {
       '@boundlessgeo/sdk': path.resolve(__dirname, 'src/'),
     }
@@ -11,7 +12,7 @@ const config = {
   entry: {
     basic: [
       'webpack/hot/only-dev-server',
-      './examples/basic/app.js'
+      './examples/basic/app.jsx'
     ],
   },
   // Server Configuration options
@@ -35,7 +36,7 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
         query: {
