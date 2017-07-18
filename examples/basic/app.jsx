@@ -85,7 +85,14 @@ function main() {
     source: 'points',
     type: 'circle',
     paint: {
-      'circle-radius': 5,
+      'circle-radius': {
+        type: 'interval',
+        default: 3,
+        property: 'point_count',
+        stops: [
+          [0, 5], [2, 10], [3, 30],
+        ],
+      },
       'circle-color': '#feb24c',
       'circle-stroke-color': '#f03b20',
     },
@@ -202,6 +209,11 @@ function main() {
     }
   };
 
+  // Cluster points on the map
+  const clusterPoints = () => {
+    store.dispatch(mapActions.clusterPoints('points', !store.getState().map.sources.points.cluster));
+  };
+
   // Removing features uses MapBox GL Spec filters.
   const removeRandomPoints = () => {
     store.dispatch(mapActions.removeFeatures('points', ['==', 'isRandom', true]));
@@ -216,6 +228,7 @@ function main() {
       <button className="sdk-btn" onClick={zoomToNullIsland}>Zoom to Null Island</button>
       <button className="sdk-btn" onClick={addRandomPoints}>Add 10 random points</button>
       <button className="sdk-btn blue" onClick={removeRandomPoints}>Remove random points</button>
+      <button className="sdk-btn" onClick={clusterPoints}>Cluster Points</button>
     </div>
   ), document.getElementById('controls'));
 }
