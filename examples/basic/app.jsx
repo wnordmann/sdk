@@ -98,6 +98,7 @@ function main() {
       'circle-color': '#feb24c',
       'circle-stroke-color': '#f03b20',
     },
+    minzoom: 1,
   }));
 
   // The points source has both null island
@@ -221,10 +222,10 @@ function main() {
       super(props);
       this.state = { value: store.getState().map.name };
     }
-    updateMapName = (event) => {
+    updateMapName(event) {
       this.setState({ value: event.target.value });
-    };
-    handleSubmit = (event) => {
+    }
+    handleSubmit(event) {
       event.preventDefault();
       store.dispatch(mapActions.setMapName(this.state.value));
       this.setState({ value: '' });
@@ -244,6 +245,19 @@ function main() {
       );
     }
   }
+  // Updates minzoom level on Null Island layer.
+  const updateMinzoom = () => {
+    store.dispatch(mapActions.updateLayer('null-island', {
+      source: 'points',
+      type: 'circle',
+      paint: {
+        'circle-radius': 10,
+        'circle-color': '#f03b20',
+        'circle-stroke-color': '#f03b20',
+      },
+      minzoom: 2,
+    }));
+  };
 
   // place the map on the page.
   ReactDOM.render(<SdkMap store={store} />, document.getElementById('map'));
@@ -254,6 +268,7 @@ function main() {
       <button className="sdk-btn" onClick={zoomToNullIsland}>Zoom to Null Island</button>
       <button className="sdk-btn" onClick={addRandomPoints}>Add 10 random points</button>
       <button className="sdk-btn blue" onClick={removeRandomPoints}>Remove random points</button>
+      <button className="sdk-btn" onClick={updateMinzoom}>Update Min Zoom</button>
       <InputField />
     </div>
   ), document.getElementById('controls'));
