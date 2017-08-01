@@ -16,7 +16,9 @@ import { createStore, combineReducers } from 'redux';
 import ConnectedMap, { Map } from '../../src/components/map';
 import SdkPopup from '../../src/components/map/popup';
 import MapReducer from '../../src/reducers/map';
+import PrintReducer from '../../src/reducers/print';
 import * as MapActions from '../../src/actions/map';
+import * as PrintActions from '../../src/actions/print';
 
 describe('Map component', () => {
   it('should render without throwing an error', () => {
@@ -449,6 +451,24 @@ describe('Map component', () => {
     });
 
     expect(store.getState().map.center).toEqual([0, 0]);
+  });
+
+  it('should trigger renderSync on export image', () => {
+    const store = createStore(combineReducers({
+      map: MapReducer,
+      print: PrintReducer,
+    }));
+    const props = {
+      store,
+    };
+
+    const wrapper = mount(<ConnectedMap {...props} />);
+    const sdk_map = wrapper.instance().getWrappedInstance();
+    spyOn(sdk_map.map, 'renderSync');
+    store.dispatch(PrintActions.exportMapImage());
+
+    // renderSync should get called.
+    expect(sdk_map.map.renderSync).toHaveBeenCalled();
   });
 
   it('should trigger the popup-related callbacks', () => {

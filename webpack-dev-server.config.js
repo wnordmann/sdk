@@ -44,7 +44,11 @@ const config = {
     legends: [
       'webpack/hot/only-dev-server',
       './examples/legends/app.jsx',
-    ]
+    ],
+    'export-image': [
+      'webpack/hot/only-dev-server',
+      './examples/export-image/app.jsx',
+    ],
   },
   // Server Configuration options
   devServer: {
