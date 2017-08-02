@@ -42,6 +42,7 @@ function main() {
     />
   , document.getElementById('map'));
 
+  // called by the onExportImage prop of the SdkMap.
   const exportImage = () => {
     store.dispatch(printActions.exportMapImage());
   };

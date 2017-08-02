@@ -281,6 +281,7 @@ export class Map extends React.Component {
     }
 
     if (nextProps.print && nextProps.print.exportImage) {
+      // this uses the canvas api to get the map image
       this.map.once('postcompose', (evt) => { evt.context.canvas.toBlob(this.props.onExportImage); }, this);
       this.map.renderSync();
     }
