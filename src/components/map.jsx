@@ -23,6 +23,7 @@ import Sphere from 'ol/sphere';
 
 import TileLayer from 'ol/layer/tile';
 import XyzSource from 'ol/source/xyz';
+import TileWMSSource from 'ol/source/tilewms';
 import TileJSON from 'ol/source/tilejson';
 import TileGrid from 'ol/tilegrid';
 
@@ -50,7 +51,7 @@ import { setMeasureFeature, clearMeasureFeature } from '../actions/drawing';
 
 import ClusterSource from '../source/cluster';
 
-import { jsonEquals, getLayerById, getMin, getMax } from '../util';
+import { parseQueryString, jsonEquals, getLayerById, getMin, getMax } from '../util';
 
 
 const GEOJSON_FORMAT = new GeoJsonFormat();
@@ -67,16 +68,34 @@ function getVersion(obj, key) {
   return obj.metadata[key];
 }
 
-function configureXyzSource(glSource, mapProjection) {
-  const source = new XyzSource({
+function configureTileSource(glSource, mapProjection) {
+  const tile_url = glSource.tiles[0];
+  const commonProps = {
     attributions: glSource.attribution,
     minZoom: glSource.minzoom,
     maxZoom: 'maxzoom' in glSource ? glSource.maxzoom : 22,
     tileSize: glSource.tileSize || 512,
-    urls: glSource.tiles,
     crossOrigin: 'crossOrigin' in glSource ? glSource.crossOrigin : 'anonymous',
     projection: mapProjection,
-  });
+  };
+  // check to see if the url is a wms request.
+  if (tile_url.toUpperCase().indexOf('SERVICE=WMS') >= 0) {
+    const urlParts = glSource.tiles[0].split('?');
+    const params = parseQueryString(urlParts[1]);
+    const keys = Object.keys(params);
+    for (let i = 0, ii = keys.length; i < ii; ++i) {
+      if (keys[i].toUpperCase() === 'REQUEST') {
+        delete params[keys[i]];
+      }
+    }
+    return new TileWMSSource(Object.assign({
+      url: urlParts[0],
+      params,
+    }, commonProps));
+  }
+  const source = new XyzSource(Object.assign({
+    urls: glSource.tiles,
+  }, commonProps));
 
   source.setTileLoadFunction((tile, src) => {
     // copy the src string.
@@ -190,7 +209,7 @@ function configureSource(glSource, mapProjection) {
   // tiled raster layer.
   if (glSource.type === 'raster') {
     if ('tiles' in glSource) {
-      return configureXyzSource(glSource, mapProjection);
+      return configureTileSource(glSource, mapProjection);
     } else if (glSource.url) {
       return configureTileJSONSource(glSource);
     }

@@ -11,6 +11,7 @@ import ImageLayer from 'ol/layer/image';
 import VectorTileLayer from 'ol/layer/vectortile';
 import ImageStaticSource from 'ol/source/imagestatic';
 import TileJSONSource from 'ol/source/tilejson';
+import TileWMSSource from 'ol/source/tilewms';
 
 import { createStore, combineReducers } from 'redux';
 
@@ -102,6 +103,10 @@ describe('Map component', () => {
     expect(map).toBeDefined();
     expect(map).toBeInstanceOf(olMap);
     expect(map.getLayers().item(0)).toBeInstanceOf(TileLayer);
+    expect(map.getLayers().item(1)).toBeInstanceOf(TileLayer);
+    expect(map.getLayers().item(1).getSource()).toBeInstanceOf(TileWMSSource);
+    // REQUEST param cleared
+    expect(map.getLayers().item(1).getSource().getParams().REQUEST).toBe(undefined);
     expect(map.getLayers().item(2)).toBeInstanceOf(VectorLayer);
     expect(map.getLayers().item(3)).toBeInstanceOf(VectorTileLayer);
 
