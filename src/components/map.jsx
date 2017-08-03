@@ -280,6 +280,12 @@ export class Map extends React.Component {
       this.updateInteraction(nextProps.drawing);
     }
 
+    if (nextProps.print && nextProps.print.exportImage) {
+      // this uses the canvas api to get the map image
+      this.map.once('postcompose', (evt) => { evt.context.canvas.toBlob(this.props.onExportImage); }, this);
+      this.map.renderSync();
+    }
+
     // This should always return false to keep
     // render() from being called.
     return false;
@@ -332,8 +338,8 @@ export class Map extends React.Component {
       // this handles update the named source and then subsequently updating
       // the layers.
       const src = this.props.map.sources[src_name];
-      if (src.cluster !== sourcesDef[src_name].cluster
-          || src.clusterRadius !== sourcesDef[src_name].clusterRadius) {
+      if (src && (src.cluster !== sourcesDef[src_name].cluster
+          || src.clusterRadius !== sourcesDef[src_name].clusterRadius)) {
         // reconfigure the source for clustering.
         this.sources[src_name] = configureSource(sourcesDef[src_name]);
         // tell all the layers about it.
@@ -814,6 +820,7 @@ Map.propTypes = {
   onFeatureDrawn: PropTypes.func,
   onFeatureModified: PropTypes.func,
   onFeatureSelected: PropTypes.func,
+  onExportImage: PropTypes.func,
 };
 
 Map.defaultProps = {
@@ -843,12 +850,15 @@ Map.defaultProps = {
   },
   onFeatureSelected: () => {
   },
+  onExportImage: () => {
+  },
 };
 
 function mapStateToProps(state) {
   return {
     map: state.map,
     drawing: state.drawing,
+    print: state.print,
   };
 }
 
