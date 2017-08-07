@@ -37,6 +37,10 @@ const config = {
       'webpack/hot/only-dev-server',
       './examples/paint-change/app.jsx',
     ],
+    'sprite-change': [
+      'webpack/hot/only-dev-server',
+      './examples/sprite-change/app.jsx',
+    ],
     'drawing': [
       'webpack/hot/only-dev-server',
       './examples/drawing/app.jsx',
@@ -48,6 +52,10 @@ const config = {
     'export-image': [
       'webpack/hot/only-dev-server',
       './examples/export-image/app.jsx',
+    ],
+    'basic-wgs84': [
+      'webpack/hot/only-dev-server',
+      './examples/basic-wgs84/app.jsx'
     ],
   },
   // Server Configuration options

@@ -12,5 +12,12 @@
     "width": 40,
     "x": 0,
     "y": 0
+  },
+  "grey-duck": {
+    "height": 32,
+    "pixelRatio": 1,
+    "width": 32,
+    "x": 0,
+    "y": 40
   }
 }

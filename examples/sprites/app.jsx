@@ -24,11 +24,8 @@ const store = createStore(combineReducers({
    applyMiddleware(thunkMiddleware));
 
 function main() {
-  // Start with a reasonable global view of the map.
-  store.dispatch(mapActions.setView([0, 0], 3));
-
   // setup the map sprites.
-  store.dispatch(mapActions.setSprites('./sprites'));
+  store.dispatch(mapActions.setSprite('./sprites'));
 
   // add the OSM source
   store.dispatch(mapActions.addSource('osm', {
@@ -86,10 +83,53 @@ function main() {
   //  as the game is technically "Duck, Duck, Grey Duck"
   addSymbol(-45, 0, 'duck');
   addSymbol(0, 0, 'duck');
-  addSymbol(45, 0, 'goose');
+  // addSymbol(45, 0, 'goose');
+
+  store.dispatch(mapActions.addSource('points-change', {
+    type: 'geojson',
+    data: {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [45, 0],
+      },
+    },
+  }));
+
+  store.dispatch(mapActions.addLayer({
+    id: 'symbols-change',
+    source: 'points-change',
+    type: 'symbol',
+    layout: {
+      'icon-image': 'grey-duck',
+    },
+  }));
+
+  const updateSprite = (icon) => {
+    store.dispatch(mapActions.updateLayer('symbols-change', {
+      layout: {
+        'icon-image': icon,
+      },
+    }));
+  };
+
+  const duckToGoose = () => {
+    updateSprite('goose');
+  };
+
+  const gooseToDuck = () => {
+    updateSprite('grey-duck');
+  };
 
   // place the map on the page.
   ReactDOM.render(<SdkMap store={store} />, document.getElementById('map'));
+
+  ReactDOM.render((
+    <div>
+      <button className="sdk-btn" onClick={duckToGoose}>Duck, Duck, Goose</button>
+      <button className="sdk-btn" onClick={gooseToDuck}>Duck, Duck, Grey Duck</button>
+    </div>
+  ), document.getElementById('controls'));
 }
 
 main();

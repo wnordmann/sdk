@@ -67,7 +67,7 @@ function getVersion(obj, key) {
   return obj.metadata[key];
 }
 
-function configureXyzSource(glSource) {
+function configureXyzSource(glSource, mapProjection) {
   const source = new XyzSource({
     attributions: glSource.attribution,
     minZoom: glSource.minzoom,
@@ -75,6 +75,7 @@ function configureXyzSource(glSource) {
     tileSize: glSource.tileSize || 512,
     urls: glSource.tiles,
     crossOrigin: 'crossOrigin' in glSource ? glSource.crossOrigin : 'anonymous',
+    projection: mapProjection,
   });
 
   source.setTileLoadFunction((tile, src) => {
@@ -122,10 +123,12 @@ function configureMvtSource(glSource) {
 }
 
 
-function updateGeojsonSource(olSource, glSource) {
+function updateGeojsonSource(olSource, glSource, mapProjection) {
   // parse the new features,
   // TODO: This should really check the map for the correct projection.
-  const features = GEOJSON_FORMAT.readFeatures(glSource.data, { featureProjection: 'EPSG:3857' });
+  const features = GEOJSON_FORMAT.readFeatures(glSource.data, {
+    featureProjection: mapProjection,
+  });
 
   let vector_src = olSource;
 
@@ -151,7 +154,7 @@ function updateGeojsonSource(olSource, glSource) {
  *
  * @returns ol.source.vector instance.
  */
-function configureGeojsonSource(glSource) {
+function configureGeojsonSource(glSource, mapProjection) {
   const vector_src = new VectorSource({
     useSpatialIndex: true,
     wrapX: false,
@@ -172,20 +175,20 @@ function configureGeojsonSource(glSource) {
 
   // seed the vector source with the first update
   //  before returning it.
-  updateGeojsonSource(new_src, glSource);
+  updateGeojsonSource(new_src, glSource, mapProjection);
   return new_src;
 }
 
-function configureSource(glSource) {
+function configureSource(glSource, mapProjection) {
   // tiled raster layer.
   if (glSource.type === 'raster') {
     if ('tiles' in glSource) {
-      return configureXyzSource(glSource);
+      return configureXyzSource(glSource, mapProjection);
     } else if (glSource.url) {
       return configureTileJSONSource(glSource);
     }
   } else if (glSource.type === 'geojson') {
-    return configureGeojsonSource(glSource);
+    return configureGeojsonSource(glSource, mapProjection);
   } else if (glSource.type === 'image') {
     return configureImageSource(glSource);
   } else if (glSource.type === 'vector') {
@@ -227,20 +230,22 @@ export class Map extends React.Component {
     // put the map into the DOM
     this.configureMap();
 
-    // check to see if ther are any sprites in the state.
-    this.configureSprites(this.props.map);
+    // check to see if there is a sprite in the state.
+    this.configureSprite(this.props.map);
   }
 
   /** This will check nextProps and nextState to see
    *  what needs to be updated on the map.
    */
   shouldComponentUpdate(nextProps) {
+    const map_proj = this.map.getView().getProjection();
+
     // compare the centers
     if (nextProps.map.center[0] !== this.props.map.center[0]
       || nextProps.map.center[1] !== this.props.map.center[1]
       || nextProps.map.zoom !== this.props.map.zoom) {
       // convert the center point to map coordinates.
-      const center = Proj.transform(nextProps.map.center, 'EPSG:4326', this.map.getView().getProjection());
+      const center = Proj.transform(nextProps.map.center, 'EPSG:4326', map_proj);
       this.map.getView().setCenter(center);
       this.map.getView().setZoom(nextProps.map.zoom);
     }
@@ -267,7 +272,7 @@ export class Map extends React.Component {
 
         if (this.props.map.metadata[version_key] !== nextProps.map.metadata[version_key]) {
           const next_src = nextProps.map.sources[src_name];
-          updateGeojsonSource(this.sources[src_name], next_src);
+          updateGeojsonSource(this.sources[src_name], next_src, map_proj);
         }
       }
     }
@@ -276,9 +281,9 @@ export class Map extends React.Component {
     //  that have been closed.
     this.updatePopups();
 
-    // update the sprites, this could happen BEFORE the map
-    if (this.props.map.sprites !== nextProps.map.sprites) {
-      this.configureSprites(nextProps.map);
+    // update the sprite, this could happen BEFORE the map
+    if (this.props.map.sprite !== nextProps.map.sprite) {
+      this.configureSprite(nextProps.map);
     }
 
     // change the current interaction as needed
@@ -337,7 +342,8 @@ export class Map extends React.Component {
       // Add the source because it's not in the current
       //  list of sources.
       if (!(src_name in this.sources)) {
-        this.sources[src_name] = configureSource(sourcesDef[src_name]);
+        const proj = this.map.getView().getProjection();
+        this.sources[src_name] = configureSource(sourcesDef[src_name], proj);
       }
 
       // Check to see if there was a clustering change.
@@ -522,7 +528,8 @@ export class Map extends React.Component {
         if (current_layer !== null) {
           const diff_filter = !jsonEquals(current_layer.filter, layer.filter);
           const diff_paint = !jsonEquals(current_layer.paint, layer.paint);
-          if (diff_filter || diff_paint) {
+          const diff_layout = !jsonEquals(current_layer.layout, layer.layout);
+          if (diff_filter || diff_paint || (current_layer.type === 'symbol' && diff_layout)) {
             ol_layer.setStyle(this.fakeStyle(layer));
           }
         }
@@ -540,20 +547,20 @@ export class Map extends React.Component {
     this.cleanupLayers(layersDef);
   }
 
-  configureSprites(map) {
-    if (map.sprites === undefined) {
+  configureSprite(map) {
+    if (map.sprite === undefined) {
       // return a resolved promise.
       return (new Promise((resolve) => {
         resolve();
       }));
     }
 
-    return fetch(`${map.sprites}.json`)
+    return fetch(`${map.sprite}.json`)
       .then(r => r.json())
       .then((spriteJson) => {
         // store the spite data for later styling.
         this.spriteData = spriteJson;
-        this.spriteImageUrl = `${map.sprites}.png`;
+        this.spriteImageUrl = `${map.sprite}.png`;
 
         // restyle all the symbol layers.
         for (let i = 0, ii = map.layers.length; i < ii; i++) {
@@ -655,6 +662,46 @@ export class Map extends React.Component {
     }
   }
 
+  /** Query the map and the appropriate layers.
+   *
+   *  @param evt - The click event that kicked off the query.
+   *
+   *  @returns Promise.all promise.
+   */
+  queryMap(evt) {
+    // get the map projection
+    const map_prj = this.map.getView().getProjection();
+
+    // this is the standard "get features when clicking"
+    //  business.
+    const features_promise = new Promise((resolve) => {
+      const features_by_layer = {};
+
+      this.map.forEachFeatureAtPixel(evt.pixel, (feature, layer) => {
+        // get the gl-name for the layer from the openlayer's layer.
+        const layer_name = layer.get('name');
+        // use that name as the key for the features-by-layer object,
+        // and initialize the array if the layer hasn't been used.
+        if (features_by_layer[layer_name] === undefined) {
+          features_by_layer[layer_name] = [];
+        }
+        // ensure the features are in 4326 when sent back to the caller.
+        features_by_layer[layer_name].push(GEOJSON_FORMAT.writeFeatureObject(feature, {
+          featureProjection: map_prj,
+          dataProjection: 'EPSG:4326',
+        }));
+      });
+
+      resolve(features_by_layer);
+    });
+
+    const promises = [features_promise];
+
+    // add other asynch queries here.
+
+    return Promise.all(promises);
+  }
+
   /** Initialize the map */
   configureMap() {
     // determine the map's projection.
@@ -673,7 +720,6 @@ export class Map extends React.Component {
         projection: map_proj,
       }),
     });
-
 
     // when the map moves update the location in the state
     this.map.on('moveend', () => {
@@ -695,16 +741,9 @@ export class Map extends React.Component {
 
         // if includeFeaturesOnClick is true then query for the
         //  features on the map.
-        const click_features = [];
+        let features_promises = null;
         if (this.props.includeFeaturesOnClick) {
-          this.map.forEachFeatureAtPixel(evt.pixel, (feature) => {
-            // ship the working projection for the features back to the
-            //  caller as 4326 for consistency sake.
-            click_features.push(GEOJSON_FORMAT.writeFeatureObject(feature, {
-              featureProjection: map_prj,
-              dataProjection: 'EPSG:4326',
-            }));
-          });
+          features_promises = this.queryMap(evt);
         }
 
         // ensure the coordinate is also in 4326
@@ -717,7 +756,7 @@ export class Map extends React.Component {
         };
 
         // send the clicked-on coordinate and the list of features
-        this.props.onClick(this, coordinate, click_features);
+        this.props.onClick(this, coordinate, features_promises);
       }
     });
 
@@ -842,7 +881,7 @@ Map.propTypes = {
     metadata: PropTypes.object,
     layers: PropTypes.array,
     sources: PropTypes.object,
-    sprites: PropTypes.string,
+    sprite: PropTypes.string,
   }),
   drawing: PropTypes.shape({
     interaction: PropTypes.string,
@@ -868,7 +907,7 @@ Map.defaultProps = {
     metadata: {},
     layers: [],
     sources: {},
-    sprites: undefined,
+    sprite: undefined,
   },
   drawing: {
     interaction: null,

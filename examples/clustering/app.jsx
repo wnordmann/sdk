@@ -25,7 +25,7 @@ const store = createStore(combineReducers({
    applyMiddleware(thunkMiddleware));
 
 function main() {
-  // Start with a reasonable global view of hte map.
+  // Start with a reasonable global view of the map.
   store.dispatch(mapActions.setView([-93, 45], 5));
 
   // add the OSM source
