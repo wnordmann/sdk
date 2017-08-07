@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+/**
+ * Render a list of layers available on the WMS, and a button to add them to the map.
+ */
 const AddWMSLayer = (props) => {
   const children = [];
   for (let i = 0, ii = props.layers.length; i < ii; ++i) {

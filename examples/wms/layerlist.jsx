@@ -3,6 +3,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
 
+/**
+ * Layer list to toggle visibility and remove layers from the map.
+ */
 const LayerListContainer = (props) => {
   const layers = [];
   for (let i = 0, ii = props.layers.length; i < ii; ++i) {

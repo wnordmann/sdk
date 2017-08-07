@@ -1,7 +1,6 @@
-/** Very basic SDK application example.
+/** WMS Example.
  *
- *  Contains a Map and demonstrates some of the dynamics of
- *  using the store.
+ *  Shows how to interact with a Web Mapping Service.
  *
  */
 
@@ -56,7 +55,9 @@ function main() {
     },
   }));
 
+  // retrieve GetCapabilities and give user ability to add a layer.
   const addWMS = () => {
+    // this requires CORS headers on the geoserver instance.
     const url = 'https://demo.boundlessgeo.com/geoserver/wms?service=WMS&request=GetCapabilities';
     fetch(url).then(
       response => response.text(),
@@ -67,6 +68,7 @@ function main() {
       const root = info.Capability.Layer;
       ReactDOM.render(<AddWMSLayer
         onAddLayer={(layer) => {
+          // add a new source and layer
           const getMapUrl = `https://demo.boundlessgeo.com/geoserver/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image/png&TRANSPARENT=TRUE&SRS=EPSG:900913&LAYERS=${layer.Name}&STYLES=&WIDTH=256&HEIGHT=256&BBOX={bbox-epsg-3857}`;
           store.dispatch(mapActions.addSource(layer.Name, {
             type: 'raster',
@@ -91,6 +93,7 @@ function main() {
   // place the map on the page.
   ReactDOM.render(<SdkMap
     onClick={(map, xy) => {
+      // show a popup containing WMS GetFeatureInfo.
       const state = store.getState();
       const view = map.map.getView();
       const layers = state.map.layers;
