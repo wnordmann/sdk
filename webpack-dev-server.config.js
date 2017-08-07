@@ -8,14 +8,14 @@ const config = {
     extensions: ['.js', '.jsx'],
     alias: {
       '@boundlessgeo/sdk': path.resolve(__dirname, 'src/'),
-    }
+    },
   },
   // Entry points to the project
   entry: {
     // each example is it's own entry point.
     basic: [
       'webpack/hot/only-dev-server',
-      './examples/basic/app.jsx'
+      './examples/basic/app.jsx',
     ],
     wms: [
       'webpack/hot/only-dev-server',
@@ -37,7 +37,7 @@ const config = {
       'webpack/hot/only-dev-server',
       './examples/paint-change/app.jsx',
     ],
-    'drawing': [
+    drawing: [
       'webpack/hot/only-dev-server',
       './examples/drawing/app.jsx',
     ],
@@ -48,6 +48,10 @@ const config = {
     'export-image': [
       'webpack/hot/only-dev-server',
       './examples/export-image/app.jsx',
+    ],
+    'basic-wgs84': [
+      'webpack/hot/only-dev-server',
+      './examples/basic-wgs84/app.jsx',
     ],
   },
   // Server Configuration options

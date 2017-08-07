@@ -884,14 +884,14 @@ describe('map reducer', () => {
 
     const sprite_root = './my-sprites';
     const sprite_action = {
-      type: MAP.SET_SPRITES,
-      sprites: sprite_root,
+      type: MAP.SET_SPRITE,
+      sprite: sprite_root,
     };
 
-    expect(reducer(state, sprite_action).sprites).toEqual(sprite_root);
+    expect(reducer(state, sprite_action).sprite).toEqual(sprite_root);
   });
 
-  it('should change the maps sprites', () => {
+  it('should change the maps sprite', () => {
     const state = {
       version: 8,
       name: 'default',

@@ -12,6 +12,7 @@ import ImageStaticSource from 'ol/source/imagestatic';
 import TileJSONSource from 'ol/source/tilejson';
 
 import { createStore, combineReducers } from 'redux';
+import { jsonEquals } from '../../src/util';
 
 import ConnectedMap, { Map } from '../../src/components/map';
 import SdkPopup from '../../src/components/map/popup';
@@ -220,6 +221,48 @@ describe('Map component', () => {
     };
     instance.shouldComponentUpdate.call(instance, nextProps);
     expect(layer.getVisible()).toBe(false);
+  });
+
+  it('should handle layout changes', () => {
+    const sources = {
+      geojson: {
+        type: 'geojson',
+        data: {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [0, 0],
+          },
+          properties: {
+            layer: 'symbol-layer',
+          },
+        },
+      },
+    };
+    const layers = [{
+      id: 'symbol-layer',
+      source: 'geojson',
+      'source-layer': 'symbol-layer',
+      type: 'symbol',
+      layout: {
+        'icon-image': 'foo',
+      },
+    }];
+    const metadata = {
+      'bnd:source-version': 0,
+      'bnd:layer-version': 0,
+    };
+    const center = [0, 0];
+    const zoom = 2;
+    const wrapper = shallow(<Map map={{ center, zoom, sources, layers, metadata }} />);
+    const instance = wrapper.instance();
+    instance.componentDidMount();
+    const style = instance.fakeStyle(layers[0]);
+    const map = instance.map;
+    const layer = map.getLayers().item(0);
+    const ol_style = layer.getStyle();
+    const results = jsonEquals(style, ol_style);
+    expect(results).toEqual(true);
   });
 
   it('handles updates to source and layer min/maxzoom values', () => {
@@ -475,13 +518,18 @@ describe('Map component', () => {
     const store = createStore(combineReducers({
       map: MapReducer,
     }));
-    const onClick = () => { };
+    const onClick = (map, xy, featuresPromise) => {
+      // check that something looking like a promise
+      // was returned.
+      expect(typeof featuresPromise.then).toBe('function');
+    };
 
     // create a props dictionary which
     //  can include a spy.
     const props = {
       store,
       onClick,
+      includeFeaturesOnClick: true,
     };
     spyOn(props, 'onClick');
 
@@ -528,7 +576,7 @@ describe('Map component', () => {
     expect(sdk_map.map.getOverlays().getLength()).toEqual(1);
   });
 
-  it('should change the sprites and redraw the layer', () => {
+  it('should change the sprite and redraw the layer', () => {
     const store = createStore(combineReducers({
       map: MapReducer,
     }));
@@ -536,9 +584,9 @@ describe('Map component', () => {
     const wrapper = mount(<ConnectedMap store={store} />);
     const map = wrapper.instance().getWrappedInstance();
 
-    spyOn(map, 'configureSprites');
-    store.dispatch(MapActions.setSprites('./sprites'));
+    spyOn(map, 'configureSprite');
+    store.dispatch(MapActions.setSprite('./sprites'));
 
-    expect(map.configureSprites).toHaveBeenCalled();
+    expect(map.configureSprite).toHaveBeenCalled();
   });
 });
