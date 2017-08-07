@@ -6,8 +6,14 @@ import PropTypes from 'prop-types';
  */
 const AddWMSLayer = (props) => {
   const children = [];
-  for (let i = 0, ii = props.layers.length; i < ii; ++i) {
-    const layer = props.layers[i];
+  const layers = props.layers.slice();
+  layers.sort((a, b) => {
+    const upperA = a.Title.toUpperCase();
+    const upperB = b.Title.toUpperCase();
+    return (upperA > upperB) - (upperA < upperB);
+  });
+  for (let i = 0, ii = layers.length; i < ii; ++i) {
+    const layer = layers[i];
     const button = (<button onClick={() => { props.onAddLayer(layer); }}>Add</button>);
     children.push(<li key={i}>{layer.Title}{button}</li>);
   }
