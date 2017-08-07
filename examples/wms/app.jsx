@@ -98,8 +98,9 @@ function main() {
       const view = map.map.getView();
       const layers = state.map.layers;
       for (let i = 0, ii = layers.length; i < ii; ++i) {
-        if (layers[i].metadata['bnd:queryable']) {
-          const url = map.sources[layers[i].source].getGetFeatureInfoUrl(
+        const layer = layers[i];
+        if (layer.metadata['bnd:queryable'] && (!layer.layout || (layer.layout.visibility && layer.layout.visibility !== 'none'))) {
+          const url = map.sources[layer.source].getGetFeatureInfoUrl(
             xy.xy, view.getResolution(), view.getProjection(), {
               INFO_FORMAT: 'application/json',
             },
