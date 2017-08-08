@@ -9,6 +9,7 @@ import thunkMiddleware from 'redux-thunk';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import WMSCapabilitiesFormat from 'ol/format/wmscapabilities';
+import TileWMSSource from 'ol/source/tilewms';
 
 import SdkMap from '@boundlessgeo/sdk/components/map';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
@@ -100,24 +101,27 @@ function main() {
       for (let i = 0, ii = layers.length; i < ii; ++i) {
         const layer = layers[i];
         if (layer.metadata['bnd:queryable'] && (!layer.layout || (layer.layout.visibility && layer.layout.visibility !== 'none'))) {
-          const url = map.sources[layer.source].getGetFeatureInfoUrl(
-            xy.xy, view.getResolution(), view.getProjection(), {
-              INFO_FORMAT: 'application/json',
-            },
-          );
-          fetch(url).then(
-            response => response.json(),
-            error => console.error('An error occured.', error),
-          )
-          .then((json) => {
-            if (json.features.length > 0) {
-              map.addPopup(<WMSPopup
-                coordinate={xy}
-                closeable
-                feature={json.features[0]}
-              />);
-            }
-          });
+          const source = map.sources[layer.source];
+          if (source instanceof TileWMSSource) {
+            const url = map.sources[layer.source].getGetFeatureInfoUrl(
+              xy.xy, view.getResolution(), view.getProjection(), {
+                INFO_FORMAT: 'application/json',
+              },
+            );
+            fetch(url).then(
+              response => response.json(),
+              error => console.error('An error occured.', error),
+            )
+            .then((json) => {
+              if (json.features.length > 0) {
+                map.addPopup(<WMSPopup
+                  coordinate={xy}
+                  closeable
+                  feature={json.features[0]}
+                />);
+              }
+            });
+          }
         }
       }
     }}
