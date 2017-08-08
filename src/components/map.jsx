@@ -122,13 +122,15 @@ function configureMvtSource(glSource) {
   return source;
 }
 
-
 function updateGeojsonSource(olSource, glSource, mapProjection) {
   // parse the new features,
-  // TODO: This should really check the map for the correct projection.
-  const features = GEOJSON_FORMAT.readFeatures(glSource.data, {
-    featureProjection: mapProjection,
-  });
+
+  let features;
+
+  if (glSource.data.features) {
+    const readFeatureOpt = { featureProjection: mapProjection || 'EPSG:3857' };
+    features = GEOJSON_FORMAT.readFeatures(glSource.data, readFeatureOpt);
+  }
 
   let vector_src = olSource;
 
@@ -141,11 +143,16 @@ function updateGeojsonSource(olSource, glSource, mapProjection) {
       olSource.setDistance(glSource.clusterRadius);
     }
   }
+
   // clear the layer WITHOUT dispatching remove events.
   vector_src.clear(true);
-  // bulk load the feature data.
-  vector_src.addFeatures(features);
+
+  if (features) {
+    // bulk load the feature data
+    vector_src.addFeatures(features || null);
+  }
 }
+
 
 /** Create a vector source based on a
  *  MapBox GL styles definition.
@@ -834,7 +841,7 @@ export class Map extends React.Component {
 
   render() {
     return (
-      <div ref={(c) => { this.mapdiv = c; }} className="map" />
+      <div ref={(c) => { this.mapdiv = c; }} className="sdk-map" />
     );
   }
 }
