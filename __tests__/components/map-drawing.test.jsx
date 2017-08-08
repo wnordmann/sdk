@@ -207,7 +207,8 @@ if (HAS_CANVAS) {
 
       // get the select interaction
       const select = interactions.item(interactions.getLength() - 1);
-
+      // eslint-disable-next-line no-underscore-dangle
+      expect(select.layerFilter_(sdk_map.layers.points)).toBe(true);
       // configure a spy, when a feature is selected onFeatureEvent
       //  should be called.
       spyOn(sdk_map, 'onFeatureEvent');

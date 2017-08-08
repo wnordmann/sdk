@@ -482,11 +482,13 @@ describe('Map component', () => {
     const props = {
       store,
       onClick,
+      includeFeaturesOnClick: true,
     };
     spyOn(props, 'onClick');
 
     const wrapper = mount(<ConnectedMap {...props} />);
     const sdk_map = wrapper.instance().getWrappedInstance();
+    spyOn(sdk_map.map, 'forEachFeatureAtPixel');
     sdk_map.map.dispatchEvent({
       type: 'postcompose',
     });
@@ -503,6 +505,9 @@ describe('Map component', () => {
 
     // onclick should get called when the map is clicked.
     expect(props.onClick).toHaveBeenCalled();
+
+    // forEachFeatureAtPixel should get called when includeFeaturesOnClick is true
+    expect(sdk_map.map.forEachFeatureAtPixel).toHaveBeenCalled();
   });
 
   it('should create an overlay for the initialPopups', () => {
@@ -526,6 +531,64 @@ describe('Map component', () => {
     });
 
     expect(sdk_map.map.getOverlays().getLength()).toEqual(1);
+  });
+
+  it('should add a popup', () => {
+    const store = createStore(combineReducers({
+      map: MapReducer,
+    }));
+
+    const props = {
+      store,
+    };
+
+    const wrapper = mount(<ConnectedMap {...props} />);
+    const sdk_map = wrapper.instance().getWrappedInstance();
+
+    expect(sdk_map.map.getOverlays().getLength()).toEqual(0);
+
+    spyOn(sdk_map, 'updatePopups');
+    sdk_map.addPopup(<SdkPopup coordinate={[0, 0]}><div>foo</div></SdkPopup>, false);
+    expect(sdk_map.map.getOverlays().getLength()).toEqual(1);
+    expect(sdk_map.updatePopups).toHaveBeenCalled();
+  });
+
+  it('should remove a popup', () => {
+    const store = createStore(combineReducers({
+      map: MapReducer,
+    }));
+
+    const props = {
+      store,
+    };
+
+    const wrapper = mount(<ConnectedMap {...props} />);
+    const sdk_map = wrapper.instance().getWrappedInstance();
+
+    sdk_map.addPopup(<SdkPopup coordinate={[0, 0]}><div>foo</div></SdkPopup>, false);
+    spyOn(sdk_map, 'updatePopups');
+    const id = sdk_map.map.getOverlays().item(0).get('popupId');
+    sdk_map.removePopup(id);
+    expect(sdk_map.updatePopups).toHaveBeenCalled();
+  });
+
+  it('should remove the overlay of the popup', () => {
+    const store = createStore(combineReducers({
+      map: MapReducer,
+    }));
+
+    const props = {
+      store,
+    };
+
+    const wrapper = mount(<ConnectedMap {...props} />);
+    const sdk_map = wrapper.instance().getWrappedInstance();
+
+    sdk_map.addPopup(<SdkPopup coordinate={[0, 0]}><div>foo</div></SdkPopup>, false);
+    const id = sdk_map.map.getOverlays().item(0).get('popupId');
+    sdk_map.popups[id].state.closed = true;
+    sdk_map.updatePopups();
+    expect(sdk_map.map.getOverlays().getLength()).toEqual(0);
   });
 
   it('should change the sprites and redraw the layer', () => {
