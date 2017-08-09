@@ -97,8 +97,7 @@ describe('Map component', () => {
 
     const center = [0, 0];
     const zoom = 2;
-    const wrapper = shallow(<Map map={{ center, zoom, sources, layers, metadata }} />);
-    wrapper.instance().componentDidMount();
+    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
     const map = wrapper.instance().map;
     expect(map).toBeDefined();
     expect(map).toBeInstanceOf(olMap);
@@ -139,8 +138,7 @@ describe('Map component', () => {
       'bnd:source-version': 0,
       'bnd:layer-version': 0,
     };
-    const wrapper = shallow(<Map map={{ center, zoom, sources, layers, metadata }} />);
-    wrapper.instance().componentDidMount();
+    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
     const map = wrapper.instance().map;
     const layer = map.getLayers().item(0);
     expect(layer).toBeInstanceOf(ImageLayer);
@@ -167,8 +165,7 @@ describe('Map component', () => {
     };
     const center = [0, 0];
     const zoom = 2;
-    const wrapper = shallow(<Map map={{ center, zoom, sources, layers, metadata }} />);
-    wrapper.instance().componentDidMount();
+    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
     const map = wrapper.instance().map;
     const layer = map.getLayers().item(0);
     expect(layer).toBeInstanceOf(TileLayer);
@@ -194,10 +191,9 @@ describe('Map component', () => {
     };
     const center = [0, 0];
     const zoom = 2;
-    const wrapper = shallow(<Map map={{ center, zoom, sources, layers, metadata }} />);
+    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
 
     const instance = wrapper.instance();
-    instance.componentDidMount();
     const map = instance.map;
     const layer = map.getLayers().item(0);
     expect(layer.getVisible()).toBe(true);
@@ -242,10 +238,9 @@ describe('Map component', () => {
     };
     const center = [0, 0];
     const zoom = 2;
-    const wrapper = shallow(<Map map={{ center, zoom, sources, layers, metadata }} />);
+    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
 
     const instance = wrapper.instance();
-    instance.componentDidMount();
     const map = instance.map;
     const layer = map.getLayers().item(0);
     const view = map.getView();
@@ -361,9 +356,8 @@ describe('Map component', () => {
       'bnd:source-version': 0,
       'bnd:layer-version': 0,
     };
-    const wrapper = shallow(<Map map={{ center, zoom, sources, layers, metadata }} />);
+    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
     const instance = wrapper.instance();
-    instance.componentDidMount();
     const map = instance.map;
     expect(map.getLayers().item(0)).not.toBe(undefined);
     let nextProps = {
@@ -413,9 +407,8 @@ describe('Map component', () => {
       'bnd:source-version': 0,
       'bnd:layer-version': 0,
     };
-    const wrapper = shallow(<Map map={{ sources, layers, center, zoom, metadata }} />);
+    const wrapper = mount(<Map map={{ sources, layers, center, zoom, metadata }} />);
     const instance = wrapper.instance();
-    instance.componentDidMount();
     expect(instance.sourcesVersion).toEqual(0);
     const nextProps = {
       map: {
