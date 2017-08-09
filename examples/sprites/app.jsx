@@ -83,7 +83,6 @@ function main() {
   //  as the game is technically "Duck, Duck, Grey Duck"
   addSymbol(-45, 0, 'duck');
   addSymbol(0, 0, 'duck');
-  // addSymbol(45, 0, 'goose');
 
   store.dispatch(mapActions.addSource('points-change', {
     type: 'geojson',
