@@ -43,7 +43,7 @@ import DrawInteraction from 'ol/interaction/draw';
 import ModifyInteraction from 'ol/interaction/modify';
 import SelectInteraction from 'ol/interaction/select';
 
-import { setView } from '../actions/map';
+import { setView, setRotation } from '../actions/map';
 import { INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY } from '../constants';
 import { dataVersionKey } from '../reducers/map';
 
@@ -51,7 +51,7 @@ import { setMeasureFeature, clearMeasureFeature } from '../actions/drawing';
 
 import ClusterSource from '../source/cluster';
 
-import { parseQueryString, jsonEquals, getLayerById, getMin, getMax } from '../util';
+import { parseQueryString, jsonEquals, getLayerById, getMin, getMax, degreesToRadians, radiansToDegrees } from '../util';
 
 
 const GEOJSON_FORMAT = new GeoJsonFormat();
@@ -270,11 +270,14 @@ export class Map extends React.Component {
     // compare the centers
     if (nextProps.map.center[0] !== this.props.map.center[0]
       || nextProps.map.center[1] !== this.props.map.center[1]
-      || nextProps.map.zoom !== this.props.map.zoom) {
+      || nextProps.map.zoom !== this.props.map.zoom
+      || nextProps.map.bearing !== this.props.map.bearing) {
       // convert the center point to map coordinates.
       const center = Proj.transform(nextProps.map.center, 'EPSG:4326', map_proj);
+      const rotation = degreesToRadians(nextProps.map.bearing);
       this.map.getView().setCenter(center);
       this.map.getView().setZoom(nextProps.map.zoom);
+      this.map.getView().setRotation(rotation);
     }
 
     // check the sources diff
@@ -773,6 +776,9 @@ export class Map extends React.Component {
     // determine the map's projection.
     const map_proj = this.props.projection;
 
+    // determine the map's rotation.
+    const rotation = degreesToRadians(this.props.map.bearing);
+
     // reproject the initial center based on that projection.
     const center = Proj.transform(this.props.map.center, 'EPSG:4326', map_proj);
 
@@ -783,6 +789,7 @@ export class Map extends React.Component {
       view: new View({
         center,
         zoom: this.props.map.zoom,
+        rotation,
         projection: map_proj,
       }),
     });
@@ -944,6 +951,7 @@ Map.propTypes = {
   map: PropTypes.shape({
     center: PropTypes.array,
     zoom: PropTypes.number,
+    bearing: PropTypes.number,
     metadata: PropTypes.object,
     layers: PropTypes.array,
     sources: PropTypes.object,
@@ -970,6 +978,7 @@ Map.defaultProps = {
   map: {
     center: [0, 0],
     zoom: 2,
+    bearing: 0,
     metadata: {},
     layers: [],
     sources: {},
@@ -1013,7 +1022,9 @@ function mapDispatchToProps(dispatch) {
     setView: (view) => {
       // transform the center to 4326 before dispatching the action.
       const center = Proj.transform(view.getCenter(), view.getProjection(), 'EPSG:4326');
+      const rotation = radiansToDegrees(view.getRotation());
       dispatch(setView(center, view.getZoom()));
+      dispatch(setRotation(rotation));
     },
     setMeasureGeometry: (geometry, projection) => {
       const geom = GEOJSON_FORMAT.writeGeometryObject(geometry, {

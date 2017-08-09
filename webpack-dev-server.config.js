@@ -53,9 +53,15 @@ const config = {
       'webpack/hot/only-dev-server',
       './examples/export-image/app.jsx',
     ],
+<<<<<<< HEAD
     'basic-wgs84': [
       'webpack/hot/only-dev-server',
       './examples/basic-wgs84/app.jsx',
+=======
+    rotating: [
+      'webpack/hot/only-dev-server',
+      './examples/rotating/app.jsx',
+>>>>>>> 871f294b... beginning of set rotation action
     ],
   },
   // Server Configuration options
