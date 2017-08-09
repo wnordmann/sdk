@@ -15,8 +15,6 @@ import SdkMap from '@boundlessgeo/sdk/components/map';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
 
-import { reprojectGeoJson } from '@boundlessgeo/sdk/util';
-
 import fetch from 'isomorphic-fetch';
 
 

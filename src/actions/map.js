@@ -81,11 +81,11 @@ export function setClusterRadius(sourceName, radius) {
   };
 }
 
-export function addFeatures(sourceName, geoJson) {
+export function addFeatures(sourceName, features) {
   return {
     type: MAP.ADD_FEATURES,
     sourceName,
-    geoJson,
+    features,
   };
 }
 

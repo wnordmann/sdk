@@ -54,6 +54,56 @@ describe('util', () => {
     expect(util.encodeQueryObject(parsed)).toBe(query_string);
   });
   it('reprojects geojson data to target crs', () => {
+    const geoJson3857 = {
+      type: 'FeatureCollection',
+      crs: {
+        type: 'name',
+        properties: {
+          name: 'urn:ogc:def:crs:EPSG::3857',
+        },
+      },
+      features: [
+        {
+          type: 'Feature',
+          properties: {
+            cat: 1,
+          },
+          geometry: {
+            type: 'Point',
+            coordinates: [
+              -18142325,
+              10318077,
+            ],
+          },
+        },
+      ],
+    };
+
+    const geoJson4326 = {
+      type: 'FeatureCollection',
+      crs: {
+        type: 'name',
+        properties: {
+          name: 'urn:ogc:def:crs:EPSG::4326',
+        },
+      },
+      features: [
+        {
+          type: 'Feature',
+          properties: {
+            cat: 1,
+          },
+          geometry: {
+            type: 'Point',
+            coordinates: [
+              -162.97527836963695,
+              67.56207748693251,
+            ],
+          },
+        },
+      ],
+    };
+
     const features3857 = [
       {
         type: 'Feature',
@@ -69,7 +119,7 @@ describe('util', () => {
         },
       },
     ];
-    const feature4326 = [
+    const features4326 = [
       {
         type: 'Feature',
         properties: {
@@ -84,13 +134,14 @@ describe('util', () => {
         },
       },
     ];
-    const crs3857 = { type: 'name', properties: { name: 'urn:ogc:def:crs:EPSG::3857' } };
-    const crs4326 = { type: 'name', properties: { name: 'urn:ogc:def:crs:EPSG::4326' } };
+
     // convert 3857 to 4326
-    expect(util.reprojectGeoJson(features3857, crs3857)).toEqual(feature4326);
+    expect(util.reprojectGeoJson(geoJson3857)).toEqual(features4326);
     // pass in 4326 without a projection and get back 4326
-    expect(util.reprojectGeoJson(feature4326)).toEqual(feature4326);
+    expect(util.reprojectGeoJson(geoJson4326)).toEqual(features4326);
     // pass in 4326 and destination projection and get back 3857
-    expect(util.reprojectGeoJson(feature4326, crs4326, 'EPSG:3857')).toEqual(features3857);
+    expect(util.reprojectGeoJson(geoJson4326, 'EPSG:3857')).toEqual(features3857);
+    // pass in 3857 and destination projection and get back 4326
+    expect(util.reprojectGeoJson(geoJson3857, 'EPSG:4326')).toEqual(features4326);
   });
 });

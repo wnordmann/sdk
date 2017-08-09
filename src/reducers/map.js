@@ -2,12 +2,9 @@
  */
 
 import createFilter from '@mapbox/mapbox-gl-style-spec/feature_filter';
-
+import { reprojectGeoJson } from '../util';
 import { MAP } from '../action-types';
 import { LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TITLE_KEY, DATA_VERSION_KEY } from '../constants';
-
-import { reprojectGeoJson } from '@boundlessgeo/sdk/util';
-
 
 function defaultMetadata() {
   // define the metadata.
@@ -199,7 +196,7 @@ function removeSource(state, action) {
  *
  *  @param {object} state - redux state
  *  @param {string} sourceName - name of the souce to be changed
- *  @param {array} data -  List of features to be added to the source 
+ *  @param {array} data -  List of features to be added to the source
  */
 function changeData(state, sourceName, data) {
   const source = state.sources[sourceName];
@@ -225,12 +222,12 @@ function addFeatures(state, action) {
   // placeholder for the new data
   let new_data = null;
   let features;
-  if(action.geoJson.features){
+  if (action.features.features) {
     // When a full geoJson object is passed in check the projection
-    features = reprojectGeoJson(action.geoJson);
+    features = reprojectGeoJson(action.features);
   } else {
     // Pass along an just features
-    features = action.geoJson;
+    features = action.features;
   }
 
   // when there is no data, use the data
@@ -239,7 +236,7 @@ function addFeatures(state, action) {
     // coerce this to a FeatureCollection.
     new_data = {
       type: 'FeatureCollection',
-      features: features,
+      features,
     };
   } else if (data.type === 'Feature') {
     new_data = {

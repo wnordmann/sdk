@@ -115,7 +115,7 @@ export function reprojectGeoJson(geoJSON, destProj = 'EPSG:4326') {
     type: 'FeatureCollection',
     features: geoJSON.features,
   };
-  
+
   const features = GEOJSON_FORMAT.writeFeaturesObject(
     GEOJSON_FORMAT.readFeatures(new_data, readFeatureOptions), writeFeatureOptions);
   return features.features;
