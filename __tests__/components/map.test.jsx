@@ -607,6 +607,43 @@ describe('Map component', () => {
 
     expect(map.configureSprites).toHaveBeenCalled();
   });
+
+  it('should call handleWMSGetFeatureInfo', () => {
+    const store = createStore(combineReducers({
+      map: MapReducer,
+    }));
+
+    const props = {
+      store,
+      includeFeaturesOnClick: true,
+    };
+
+    store.dispatch(MapActions.addSource('osm', {
+      type: 'raster',
+      tileSize: 256,
+      tiles: [
+        'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        'https://b.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      ],
+    }));
+
+    store.dispatch(MapActions.addLayer({
+      id: 'osm',
+      source: 'osm',
+    }));
+
+    const wrapper = mount(<ConnectedMap {...props} />);
+    const sdk_map = wrapper.instance().getWrappedInstance();
+
+    spyOn(sdk_map, 'handleWMSGetFeatureInfo');
+
+    sdk_map.queryMap({
+      pixel: [0, 0],
+    });
+
+    expect(sdk_map.handleWMSGetFeatureInfo).toHaveBeenCalled();
+  });
 });
 
 describe('Map component async', () => {
@@ -636,5 +673,48 @@ describe('Map component async', () => {
       expect(map.spriteImageUrl).toEqual('http://example.com/sprites.png');
       done();
     }, 300);
+  });
+  it('should handle WMS GetFeatureInfo', () => {
+    const store = createStore(combineReducers({
+      map: MapReducer,
+    }));
+
+    const props = {
+      store,
+      includeFeaturesOnClick: true,
+    };
+
+    const wrapper = mount(<ConnectedMap {...props} />);
+    const sdk_map = wrapper.instance().getWrappedInstance();
+    let promises = [];
+    const layer = {
+      id: 'foo',
+      source: 'mywms',
+      metadata: {
+        'bnd:queryable': true,
+      },
+    };
+    // eslint-disable-next-line
+    const response = {"type":"FeatureCollection","totalFeatures":"unknown","features":[{"type":"Feature","id":"bugsites.1","geometry":{"type":"Point","coordinates":[590232,4915039]},"geometry_name":"the_geom","properties":{"cat":1,"str1":"Beetle site"}}],"crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:EPSG::26713"}}};
+    nock('http://example.com')
+      .get('/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&FORMAT=image%2Fpng&TRANSPARENT=true&QUERY_LAYERS=bar&LAYERS=bar&INFO_FORMAT=application%2Fjson&I=0&J=255&WIDTH=256&HEIGHT=256&CRS=EPSG%3A3857&STYLES=&BBOX=0%2C0%2C5009377.085697311%2C5009377.085697311')
+      .reply(200, response);
+
+    sdk_map.sources = {
+      mywms: new TileWMSSource({ url: 'http://example.com/wms', params: { LAYERS: 'bar' } }),
+    };
+    sdk_map.handleWMSGetFeatureInfo(layer, promises, { coordinate: [100, 100] });
+    expect(promises.length).toEqual(1);
+    promises = [];
+    // invisible layer ignored
+    layer.layout = { visibility: 'none' };
+    sdk_map.handleWMSGetFeatureInfo(layer, promises, { coordinate: [100, 100] });
+    expect(promises.length).toEqual(0);
+    delete layer.layout;
+    promises = [];
+    // non queryable layer ignored
+    layer.metadata['bnd:queryable'] = false;
+    sdk_map.handleWMSGetFeatureInfo(layer, promises, { coordinate: [100, 100] });
+    expect(promises.length).toEqual(0);
   });
 });

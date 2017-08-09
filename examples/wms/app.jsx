@@ -9,7 +9,6 @@ import thunkMiddleware from 'redux-thunk';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import WMSCapabilitiesFormat from 'ol/format/wmscapabilities';
-import TileWMSSource from 'ol/source/tilewms';
 
 import SdkMap from '@boundlessgeo/sdk/components/map';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
@@ -93,37 +92,31 @@ function main() {
 
   // place the map on the page.
   ReactDOM.render(<SdkMap
-    onClick={(map, xy) => {
+    includeFeaturesOnClick
+    onClick={(map, xy, featuresPromise) => {
       // show a popup containing WMS GetFeatureInfo.
-      const state = store.getState();
-      const view = map.map.getView();
-      const layers = state.map.layers;
-      for (let i = 0, ii = layers.length; i < ii; ++i) {
-        const layer = layers[i];
-        if (layer.metadata['bnd:queryable'] && (!layer.layout || (layer.layout.visibility && layer.layout.visibility !== 'none'))) {
-          const source = map.sources[layer.source];
-          if (source instanceof TileWMSSource) {
-            const url = map.sources[layer.source].getGetFeatureInfoUrl(
-              xy.xy, view.getResolution(), view.getProjection(), {
-                INFO_FORMAT: 'application/json',
-              },
-            );
-            fetch(url).then(
-              response => response.json(),
-              error => console.error('An error occured.', error),
-            )
-            .then((json) => {
-              if (json.features.length > 0) {
-                map.addPopup(<WMSPopup
-                  coordinate={xy}
-                  closeable
-                  feature={json.features[0]}
-                />);
-              }
-            });
+      featuresPromise.then((featureGroups) => {
+        // setup an array for all the features returned in the promise.
+        let features = [];
+
+        // featureGroups is an array of objects. The key of each object
+        // is a layer from the map.
+        for (let g = 0, gg = featureGroups.length; g < gg; g++) {
+          // collect every feature from each layer.
+          const layers = Object.keys(featureGroups[g]);
+          for (let l = 0, ll = layers.length; l < ll; l++) {
+            const layer = layers[l];
+            features = features.concat(featureGroups[g][layer]);
           }
         }
-      }
+        if (features.length > 0) {
+          map.addPopup(<WMSPopup
+            coordinate={xy}
+            closeable
+            features={features}
+          />);
+        }
+      });
     }}
     store={store}
   />, document.getElementById('map'));

@@ -691,6 +691,38 @@ export class Map extends React.Component {
     }
   }
 
+  handleWMSGetFeatureInfo(layer, promises, evt) {
+    const map_prj = this.map.getView().getProjection();
+    const map_resolution = this.map.getView().getResolution();
+    if (layer.metadata['bnd:queryable'] && (!layer.layout || (layer.layout.visibility && layer.layout.visibility !== 'none'))) {
+      const source = this.sources[layer.source];
+      if (source instanceof TileWMSSource) {
+        promises.push(new Promise((resolve) => {
+          const features_by_layer = {};
+          const layer_name = layer.id;
+          const url = this.sources[layer.source].getGetFeatureInfoUrl(
+            evt.coordinate, map_resolution, map_prj, {
+              INFO_FORMAT: 'application/json',
+            },
+          );
+          fetch(url).then(
+            response => response.json(),
+            error => console.error('An error occured.', error),
+          )
+          .then((json) => {
+            features_by_layer[layer_name] = GEOJSON_FORMAT.writeFeaturesObject(
+              GEOJSON_FORMAT.readFeatures(json), {
+                featureProjection: GEOJSON_FORMAT.readProjection(json),
+                dataProjection: 'EPSG:4326',
+              },
+            ).features;
+            resolve(features_by_layer);
+          });
+        }));
+      }
+    }
+  }
+
   /** Query the map and the appropriate layers.
    *
    *  @param evt - The click event that kicked off the query.
@@ -726,7 +758,11 @@ export class Map extends React.Component {
 
     const promises = [features_promise];
 
-    // add other asynch queries here.
+    // add other async queries here.
+    for (let i = 0, ii = this.props.map.layers.length; i < ii; ++i) {
+      const layer = this.props.map.layers[i];
+      this.handleWMSGetFeatureInfo(layer, promises, evt);
+    }
 
     return Promise.all(promises);
   }
