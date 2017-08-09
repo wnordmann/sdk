@@ -23,7 +23,7 @@ import * as PrintActions from '../../src/actions/print';
 
 describe('Map component', () => {
   it('should render without throwing an error', () => {
-    expect(shallow(<Map />).contains(<div className="map" />)).toBe(true);
+    expect(shallow(<Map />).contains(<div className="sdk-map" />)).toBe(true);
   });
 
   it('should create a map', () => {
@@ -245,10 +245,10 @@ describe('Map component', () => {
     const layer = map.getLayers().item(0);
     const view = map.getView();
     let max_rez = view.constrainResolution(
-      view.getMaxResolution(), layers[0].minzoom - view.getMinZoom());
+    view.getMaxResolution(), layers[0].minzoom - view.getMinZoom());
     expect(layer.getMaxResolution()).toEqual(max_rez);
     let min_rez = view.constrainResolution(
-      view.getMinResolution(), layers[0].maxzoom - view.getMaxZoom());
+    view.getMinResolution(), layers[0].maxzoom - view.getMaxZoom());
     expect(layer.getMinResolution()).toEqual(min_rez);
     // min/max zoom values change on layer def
     let nextProps = {
@@ -270,10 +270,10 @@ describe('Map component', () => {
     };
     instance.shouldComponentUpdate.call(instance, nextProps);
     max_rez = view.constrainResolution(
-      view.getMaxResolution(), nextProps.map.layers[0].minzoom - view.getMinZoom());
+    view.getMaxResolution(), nextProps.map.layers[0].minzoom - view.getMinZoom());
     expect(layer.getMaxResolution()).toEqual(max_rez);
     min_rez = view.constrainResolution(
-      view.getMinResolution(), nextProps.map.layers[0].maxzoom - view.getMaxZoom());
+    view.getMinResolution(), nextProps.map.layers[0].maxzoom - view.getMaxZoom());
     expect(layer.getMinResolution()).toEqual(min_rez);
     // min/max zoom values defined on source only
     nextProps = {
@@ -300,10 +300,10 @@ describe('Map component', () => {
     };
     instance.shouldComponentUpdate.call(instance, nextProps);
     max_rez = view.constrainResolution(
-      view.getMaxResolution(), nextProps.map.sources.tilejson.minzoom - view.getMinZoom());
+    view.getMaxResolution(), nextProps.map.sources.tilejson.minzoom - view.getMinZoom());
     expect(layer.getMaxResolution()).toEqual(max_rez);
     min_rez = view.constrainResolution(
-      view.getMinResolution(), nextProps.map.sources.tilejson.maxzoom - view.getMaxZoom());
+    view.getMinResolution(), nextProps.map.sources.tilejson.maxzoom - view.getMaxZoom());
     expect(layer.getMinResolution()).toEqual(min_rez);
     // min.max zoom values defined on both source and layer def
     nextProps = {
@@ -332,7 +332,7 @@ describe('Map component', () => {
     };
     instance.shouldComponentUpdate.call(instance, nextProps);
     max_rez = view.constrainResolution(
-      view.getMaxResolution(), nextProps.map.layers[0].minzoom - view.getMinZoom());
+    view.getMaxResolution(), nextProps.map.layers[0].minzoom - view.getMinZoom());
     expect(layer.getMaxResolution()).toEqual(max_rez);
     min_rez = view.constrainResolution(
       view.getMinResolution(), nextProps.map.sources.tilejson.maxzoom - view.getMaxZoom());

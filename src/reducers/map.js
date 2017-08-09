@@ -2,7 +2,7 @@
  */
 
 import createFilter from '@mapbox/mapbox-gl-style-spec/feature_filter';
-
+import { reprojectGeoJson } from '../util';
 import { MAP } from '../action-types';
 import { LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TITLE_KEY, DATA_VERSION_KEY } from '../constants';
 
@@ -194,6 +194,9 @@ function removeSource(state, action) {
 /** Creates a new state with the data for a
  *  source changed to the contents of data.
  *
+ *  @param {object} state - redux state
+ *  @param {string} sourceName - name of the souce to be changed
+ *  @param {array} data -  List of features to be added to the source
  */
 function changeData(state, sourceName, data) {
   const source = state.sources[sourceName];
@@ -218,6 +221,14 @@ function addFeatures(state, action) {
 
   // placeholder for the new data
   let new_data = null;
+  let features;
+  if (action.features.features) {
+    // When a full geoJson object is passed in check the projection
+    features = reprojectGeoJson(action.features);
+  } else {
+    // Pass along an just features
+    features = action.features;
+  }
 
   // when there is no data, use the data
   // from the action.
@@ -225,17 +236,17 @@ function addFeatures(state, action) {
     // coerce this to a FeatureCollection.
     new_data = {
       type: 'FeatureCollection',
-      features: action.features,
+      features,
     };
   } else if (data.type === 'Feature') {
     new_data = {
       type: 'FeatureCollection',
-      features: [data].concat(action.features),
+      features: [data].concat(features),
     };
   } else if (data.type === 'FeatureCollection') {
     new_data = Object.assign({},
       data,
-      { features: data.features.concat(action.features) },
+      { features: data.features.concat(features) },
     );
   }
 

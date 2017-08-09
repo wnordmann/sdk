@@ -21,6 +21,10 @@ const config = {
       'webpack/hot/only-dev-server',
       './examples/wms/app.jsx',
     ],
+    'feature-table': [
+      'webpack/hot/only-dev-server',
+      './examples/feature-table/app.jsx',
+    ],
     popups: [
       'webpack/hot/only-dev-server',
       './examples/popups/app.jsx',
