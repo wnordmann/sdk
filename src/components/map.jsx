@@ -122,13 +122,13 @@ function configureMvtSource(glSource) {
   return source;
 }
 
-function updateGeojsonSource(olSource, glSource, mapProjection) {
+function updateGeojsonSource(olSource, glSource, opt_mapProjection = 'EPSG:3857') {
   // parse the new features,
 
   let features;
 
   if (glSource.data.features) {
-    const readFeatureOpt = { featureProjection: mapProjection || 'EPSG:3857' };
+    const readFeatureOpt = { featureProjection: opt_mapProjection };
     features = GEOJSON_FORMAT.readFeatures(glSource.data, readFeatureOpt);
   }
 
@@ -149,7 +149,7 @@ function updateGeojsonSource(olSource, glSource, mapProjection) {
 
   if (features) {
     // bulk load the feature data
-    vector_src.addFeatures(features || null);
+    vector_src.addFeatures(features);
   }
 }
 

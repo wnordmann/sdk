@@ -88,8 +88,7 @@ function main() {
         error => console.error('An error occured.', error),
       )
       // addFeatures with the features, source name
-      .then(json => store.dispatch(mapActions.addFeatures(sourceName,
-        reprojectGeoJson(json.features, json.crs))));
+      .then(json => store.dispatch(mapActions.addFeatures(sourceName, json)));
   };
 
   // This is called by the onClick, keeping the onClick HTML clean
@@ -97,8 +96,6 @@ function main() {
     const url = './data/airports.json';
     addLayerFromGeoJSON(url, 'dynamic-source');
   };
-
-  // Next few functions are all about building the feature Table
 
   // Next few functions are all about building the feature Table
   // Read the source and get all the possible properties

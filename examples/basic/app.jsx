@@ -269,7 +269,6 @@ function main() {
       <button className="sdk-btn" onClick={zoomToNullIsland}>Zoom to Null Island</button>
       <button className="sdk-btn" onClick={addRandomPoints}>Add 10 random points</button>
       <button className="sdk-btn blue" onClick={removeRandomPoints}>Remove random points</button>
-      <button className="sdk-btn" onClick={clusterPoints}>Cluster Points</button>
       <button className="sdk-btn" onClick={updateMinzoom}>Update Min Zoom</button>
       <InputField />
 

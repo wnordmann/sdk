@@ -93,18 +93,13 @@ export function encodeQueryObject(query) {
 }
 
 /** Reproject GeoJSON to mapbox gl style spec EPSG:4326
-  * @param data - array of geoJSON features
-  * @param projection - string from geoJSON crs (coordinate referance system)
+  * @param geoJSON - geoJSON object
   * @param destProj - ['EPSG:4326'] string of target projection for the data
   * @return array of geoJSON feature in destProj
  */
-export function reprojectGeoJson(data, projection, destProj = 'EPSG:4326') {
+export function reprojectGeoJson(geoJSON, destProj = 'EPSG:4326') {
   const GEOJSON_FORMAT = new GeoJsonFormat();
-
-  let crsName;
-  if (projection && projection.properties && projection.properties.name) {
-    crsName = projection.properties.name;
-  }
+  const crsName = GEOJSON_FORMAT.readProjectionFromObject(geoJSON).getCode();
 
   const readFeatureOptions = {
     featureProjection: destProj,
@@ -118,9 +113,9 @@ export function reprojectGeoJson(data, projection, destProj = 'EPSG:4326') {
 
   const new_data = {
     type: 'FeatureCollection',
-    features: data,
+    features: geoJSON.features,
   };
-  // const features = GEOJSON_FORMAT.readFeatures(new_data, readFeatureOptions);
+  
   const features = GEOJSON_FORMAT.writeFeaturesObject(
     GEOJSON_FORMAT.readFeatures(new_data, readFeatureOptions), writeFeatureOptions);
   return features.features;
