@@ -428,6 +428,21 @@ describe('Map component', () => {
     }));
     mount(<ConnectedMap store={store} />);
   });
+  it('should add the zoomSlider', () => {
+    const store = createStore(combineReducers({
+      map: MapReducer,
+    }));
+    const wrapper = mount(<ConnectedMap store={store} zoomSlider />);
+    expect(wrapper.html().indexOf('ol-zoomslider')).toBeGreaterThan(0);
+  });
+
+  it('should not have a zoomSlider', () => {
+    const store = createStore(combineReducers({
+      map: MapReducer,
+    }));
+    const wrapper = mount(<ConnectedMap store={store} zoomSlider={false} />);
+    expect(wrapper.html().indexOf('ol-zoomslider')).toBe(-1);
+  });
 
   it('should trigger the setView callback', () => {
     const store = createStore(combineReducers({
@@ -617,7 +632,7 @@ describe('Map component async', () => {
     const wrapper = mount(<ConnectedMap store={store} />);
     const map = wrapper.instance().getWrappedInstance();
 
-    // eslint-disable-next-line 
+    // eslint-disable-next-line
     const spritesJson = {"accommodation_camping": {"y": 0, "width": 20, "pixelRatio": 1, "x": 0, "height": 20}, "amenity_firestation": {"y": 0, "width": 50, "pixelRatio": 1, "x": 20, "height": 50}};
 
     nock('http://example.com')

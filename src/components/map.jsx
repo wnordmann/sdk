@@ -25,6 +25,7 @@ import TileLayer from 'ol/layer/tile';
 import XyzSource from 'ol/source/xyz';
 import TileJSON from 'ol/source/tilejson';
 import TileGrid from 'ol/tilegrid';
+import ZoomControl from 'ol/control/zoomslider';
 
 import VectorTileLayer from 'ol/layer/vectortile';
 import VectorTileSource from 'ol/source/vectortile';
@@ -724,6 +725,9 @@ export class Map extends React.Component {
       }),
     });
 
+    if (this.props.zoomSlider) {
+      this.map.addControl(new ZoomControl());
+    }
     // when the map moves update the location in the state
     this.map.on('moveend', () => {
       this.props.setView(this.map.getView());
@@ -890,6 +894,7 @@ Map.propTypes = {
     interaction: PropTypes.string,
     sourceName: PropTypes.string,
   }),
+  zoomSlider: PropTypes.bool,
   initialPopups: PropTypes.arrayOf(PropTypes.object),
   setView: PropTypes.func,
   includeFeaturesOnClick: PropTypes.bool,
@@ -916,6 +921,7 @@ Map.defaultProps = {
     interaction: null,
     source: null,
   },
+  zoomSlider: false,
   initialPopups: [],
   setView: () => {
     // swallow event.
