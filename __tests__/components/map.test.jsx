@@ -1,7 +1,8 @@
-/* global it, describe, expect, spyOn */
+/* global it, describe, expect, spyOn, afterEach */
 
 import React from 'react';
 import { shallow, mount } from 'enzyme';
+import nock from 'nock';
 
 import olMap from 'ol/map';
 import TileLayer from 'ol/layer/tile';
@@ -603,5 +604,35 @@ describe('Map component', () => {
     store.dispatch(MapActions.setSprites('./sprites'));
 
     expect(map.configureSprites).toHaveBeenCalled();
+  });
+});
+
+describe('Map component async', () => {
+  afterEach(() => {
+    nock.cleanAll();
+  });
+
+  it('should set spriteData', (done) => {
+    const store = createStore(combineReducers({
+      map: MapReducer,
+    }));
+
+    const wrapper = mount(<ConnectedMap store={store} />);
+    const map = wrapper.instance().getWrappedInstance();
+
+    // eslint-disable-next-line 
+    const spritesJson = {"accommodation_camping": {"y": 0, "width": 20, "pixelRatio": 1, "x": 0, "height": 20}, "amenity_firestation": {"y": 0, "width": 50, "pixelRatio": 1, "x": 20, "height": 50}};
+
+    nock('http://example.com')
+      .get('/sprites.json')
+      .reply(200, spritesJson);
+
+    store.dispatch(MapActions.setSprites('http://example.com/sprites'));
+
+    setTimeout(() => {
+      expect(map.spriteData).toEqual(spritesJson);
+      expect(map.spriteImageUrl).toEqual('http://example.com/sprites.png');
+      done();
+    }, 300);
   });
 });
