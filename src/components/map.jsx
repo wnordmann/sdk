@@ -218,8 +218,9 @@ export class Map extends React.Component {
     // hash of the openlayers layers in the map.
     this.layers = [];
 
-    // popups are stored as an ID managed hash.
+    // popups and their elements are stored as an ID managed hash.
     this.popups = {};
+    this.elems = {};
 
     // interactions are how the user can manipulate the map,
     //  this tracks any active interaction.
@@ -581,9 +582,10 @@ export class Map extends React.Component {
         // mark this for removal
         overlays_to_remove.push(overlay);
         // umount the component from the DOM
-        ReactDOM.unmountComponentAtNode(overlay.getElement());
+        ReactDOM.unmountComponentAtNode(this.elems[id]);
         // remove the component from the popups hash
         delete this.popups[id];
+        delete this.elems[id];
       }
     });
 
@@ -635,7 +637,9 @@ export class Map extends React.Component {
     // render the element into the popup's DOM.
     ReactDOM.render(popup, elem, (function addInstance() {
       self.popups[id] = this;
+      self.elems[id] = elem;
     }));
+
 
     // move the element up a level to ensure
     //  the rects are calculated correctly.

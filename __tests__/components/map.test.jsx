@@ -1,7 +1,8 @@
-/* global it, describe, expect, spyOn */
+/* global it, describe, expect, spyOn, afterEach */
 
 import React from 'react';
 import { shallow, mount } from 'enzyme';
+import nock from 'nock';
 
 import olMap from 'ol/map';
 import TileLayer from 'ol/layer/tile';
@@ -96,8 +97,7 @@ describe('Map component', () => {
 
     const center = [0, 0];
     const zoom = 2;
-    const wrapper = shallow(<Map map={{ center, zoom, sources, layers, metadata }} />);
-    wrapper.instance().componentDidMount();
+    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
     const map = wrapper.instance().map;
     expect(map).toBeDefined();
     expect(map).toBeInstanceOf(olMap);
@@ -138,8 +138,7 @@ describe('Map component', () => {
       'bnd:source-version': 0,
       'bnd:layer-version': 0,
     };
-    const wrapper = shallow(<Map map={{ center, zoom, sources, layers, metadata }} />);
-    wrapper.instance().componentDidMount();
+    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
     const map = wrapper.instance().map;
     const layer = map.getLayers().item(0);
     expect(layer).toBeInstanceOf(ImageLayer);
@@ -166,8 +165,7 @@ describe('Map component', () => {
     };
     const center = [0, 0];
     const zoom = 2;
-    const wrapper = shallow(<Map map={{ center, zoom, sources, layers, metadata }} />);
-    wrapper.instance().componentDidMount();
+    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
     const map = wrapper.instance().map;
     const layer = map.getLayers().item(0);
     expect(layer).toBeInstanceOf(TileLayer);
@@ -193,10 +191,9 @@ describe('Map component', () => {
     };
     const center = [0, 0];
     const zoom = 2;
-    const wrapper = shallow(<Map map={{ center, zoom, sources, layers, metadata }} />);
+    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
 
     const instance = wrapper.instance();
-    instance.componentDidMount();
     const map = instance.map;
     const layer = map.getLayers().item(0);
     expect(layer.getVisible()).toBe(true);
@@ -241,10 +238,9 @@ describe('Map component', () => {
     };
     const center = [0, 0];
     const zoom = 2;
-    const wrapper = shallow(<Map map={{ center, zoom, sources, layers, metadata }} />);
+    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
 
     const instance = wrapper.instance();
-    instance.componentDidMount();
     const map = instance.map;
     const layer = map.getLayers().item(0);
     const view = map.getView();
@@ -360,9 +356,8 @@ describe('Map component', () => {
       'bnd:source-version': 0,
       'bnd:layer-version': 0,
     };
-    const wrapper = shallow(<Map map={{ center, zoom, sources, layers, metadata }} />);
+    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
     const instance = wrapper.instance();
-    instance.componentDidMount();
     const map = instance.map;
     expect(map.getLayers().item(0)).not.toBe(undefined);
     let nextProps = {
@@ -412,9 +407,8 @@ describe('Map component', () => {
       'bnd:source-version': 0,
       'bnd:layer-version': 0,
     };
-    const wrapper = shallow(<Map map={{ sources, layers, center, zoom, metadata }} />);
+    const wrapper = mount(<Map map={{ sources, layers, center, zoom, metadata }} />);
     const instance = wrapper.instance();
-    instance.componentDidMount();
     expect(instance.sourcesVersion).toEqual(0);
     const nextProps = {
       map: {
@@ -492,6 +486,7 @@ describe('Map component', () => {
 
     const wrapper = mount(<ConnectedMap {...props} />);
     const sdk_map = wrapper.instance().getWrappedInstance();
+    spyOn(sdk_map.map, 'forEachFeatureAtPixel');
     sdk_map.map.dispatchEvent({
       type: 'postcompose',
     });
@@ -508,6 +503,9 @@ describe('Map component', () => {
 
     // onclick should get called when the map is clicked.
     expect(props.onClick).toHaveBeenCalled();
+
+    // forEachFeatureAtPixel should get called when includeFeaturesOnClick is true
+    expect(sdk_map.map.forEachFeatureAtPixel).toHaveBeenCalled();
   });
 
   it('should create an overlay for the initialPopups', () => {
@@ -533,6 +531,64 @@ describe('Map component', () => {
     expect(sdk_map.map.getOverlays().getLength()).toEqual(1);
   });
 
+  it('should add a popup', () => {
+    const store = createStore(combineReducers({
+      map: MapReducer,
+    }));
+
+    const props = {
+      store,
+    };
+
+    const wrapper = mount(<ConnectedMap {...props} />);
+    const sdk_map = wrapper.instance().getWrappedInstance();
+
+    expect(sdk_map.map.getOverlays().getLength()).toEqual(0);
+
+    spyOn(sdk_map, 'updatePopups');
+    sdk_map.addPopup(<SdkPopup coordinate={[0, 0]}><div>foo</div></SdkPopup>, false);
+    expect(sdk_map.map.getOverlays().getLength()).toEqual(1);
+    expect(sdk_map.updatePopups).toHaveBeenCalled();
+  });
+
+  it('should remove a popup', () => {
+    const store = createStore(combineReducers({
+      map: MapReducer,
+    }));
+
+    const props = {
+      store,
+    };
+
+    const wrapper = mount(<ConnectedMap {...props} />);
+    const sdk_map = wrapper.instance().getWrappedInstance();
+
+    sdk_map.addPopup(<SdkPopup coordinate={[0, 0]}><div>foo</div></SdkPopup>, false);
+    spyOn(sdk_map, 'updatePopups');
+    const id = sdk_map.map.getOverlays().item(0).get('popupId');
+    sdk_map.removePopup(id);
+    expect(sdk_map.updatePopups).toHaveBeenCalled();
+  });
+
+  it('should remove the overlay of the popup', () => {
+    const store = createStore(combineReducers({
+      map: MapReducer,
+    }));
+
+    const props = {
+      store,
+    };
+
+    const wrapper = mount(<ConnectedMap {...props} />);
+    const sdk_map = wrapper.instance().getWrappedInstance();
+
+    sdk_map.addPopup(<SdkPopup coordinate={[0, 0]}><div>foo</div></SdkPopup>, false);
+    const id = sdk_map.map.getOverlays().item(0).get('popupId');
+    sdk_map.popups[id].state.closed = true;
+    sdk_map.updatePopups();
+    expect(sdk_map.map.getOverlays().getLength()).toEqual(0);
+  });
+
   it('should change the sprites and redraw the layer', () => {
     const store = createStore(combineReducers({
       map: MapReducer,
@@ -545,5 +601,35 @@ describe('Map component', () => {
     store.dispatch(MapActions.setSprites('./sprites'));
 
     expect(map.configureSprites).toHaveBeenCalled();
+  });
+});
+
+describe('Map component async', () => {
+  afterEach(() => {
+    nock.cleanAll();
+  });
+
+  it('should set spriteData', (done) => {
+    const store = createStore(combineReducers({
+      map: MapReducer,
+    }));
+
+    const wrapper = mount(<ConnectedMap store={store} />);
+    const map = wrapper.instance().getWrappedInstance();
+
+    // eslint-disable-next-line 
+    const spritesJson = {"accommodation_camping": {"y": 0, "width": 20, "pixelRatio": 1, "x": 0, "height": 20}, "amenity_firestation": {"y": 0, "width": 50, "pixelRatio": 1, "x": 20, "height": 50}};
+
+    nock('http://example.com')
+      .get('/sprites.json')
+      .reply(200, spritesJson);
+
+    store.dispatch(MapActions.setSprites('http://example.com/sprites'));
+
+    setTimeout(() => {
+      expect(map.spriteData).toEqual(spritesJson);
+      expect(map.spriteImageUrl).toEqual('http://example.com/sprites.png');
+      done();
+    }, 300);
   });
 });
