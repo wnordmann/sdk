@@ -238,8 +238,8 @@ export class Map extends React.Component {
     // put the map into the DOM
     this.configureMap();
 
-    // check to see if ther are any sprites in the state.
-    this.configureSprites(this.props.map);
+    // check to see if there is a sprite in the state.
+    this.configureSprite(this.props.map);
   }
 
   /** This will check nextProps and nextState to see
@@ -289,9 +289,9 @@ export class Map extends React.Component {
     //  that have been closed.
     this.updatePopups();
 
-    // update the sprites, this could happen BEFORE the map
-    if (this.props.map.sprites !== nextProps.map.sprites) {
-      this.configureSprites(nextProps.map);
+    // update the sprite, this could happen BEFORE the map
+    if (this.props.map.sprite !== nextProps.map.sprite) {
+      this.configureSprite(nextProps.map);
     }
 
     // change the current interaction as needed
@@ -536,7 +536,8 @@ export class Map extends React.Component {
         if (current_layer !== null) {
           const diff_filter = !jsonEquals(current_layer.filter, layer.filter);
           const diff_paint = !jsonEquals(current_layer.paint, layer.paint);
-          if (diff_filter || diff_paint) {
+          const diff_layout = !jsonEquals(current_layer.layout, layer.layout);
+          if (diff_filter || diff_paint || (current_layer.type === 'symbol' && diff_layout)) {
             ol_layer.setStyle(this.fakeStyle(layer));
           }
         }
@@ -554,20 +555,20 @@ export class Map extends React.Component {
     this.cleanupLayers(layersDef);
   }
 
-  configureSprites(map) {
-    if (map.sprites === undefined) {
+  configureSprite(map) {
+    if (map.sprite === undefined) {
       // return a resolved promise.
       return (new Promise((resolve) => {
         resolve();
       }));
     }
 
-    return fetch(`${map.sprites}.json`)
+    return fetch(`${map.sprite}.json`)
       .then(r => r.json())
       .then((spriteJson) => {
         // store the spite data for later styling.
         this.spriteData = spriteJson;
-        this.spriteImageUrl = `${map.sprites}.png`;
+        this.spriteImageUrl = `${map.sprite}.png`;
 
         // restyle all the symbol layers.
         for (let i = 0, ii = map.layers.length; i < ii; i++) {
@@ -891,7 +892,7 @@ Map.propTypes = {
     metadata: PropTypes.object,
     layers: PropTypes.array,
     sources: PropTypes.object,
-    sprites: PropTypes.string,
+    sprite: PropTypes.string,
   }),
   drawing: PropTypes.shape({
     interaction: PropTypes.string,
@@ -917,7 +918,7 @@ Map.defaultProps = {
     metadata: {},
     layers: [],
     sources: {},
-    sprites: undefined,
+    sprite: undefined,
   },
   drawing: {
     interaction: null,

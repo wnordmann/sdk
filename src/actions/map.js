@@ -166,16 +166,16 @@ export function orderLayer(layerId, targetLayerId) {
   };
 }
 
-/** Set the sprites for hte map
+/** Set the sprite for the map
  *
  *  @param spriteRoot - The URI to the sprite data without the .json/.png suffix.
  *
  * @returns action object.
  */
-export function setSprites(spriteRoot) {
+export function setSprite(spriteRoot) {
   return {
-    type: MAP.SET_SPRITES,
-    sprites: spriteRoot,
+    type: MAP.SET_SPRITE,
+    sprite: spriteRoot,
   };
 }
 
