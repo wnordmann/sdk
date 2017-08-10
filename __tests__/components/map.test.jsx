@@ -428,11 +428,11 @@ describe('Map component', () => {
     }));
     mount(<ConnectedMap store={store} />);
   });
-  it('should add the zoomSlider', () => {
+  it('should add the zoomSlider using showZoomSlider prop', () => {
     const store = createStore(combineReducers({
       map: MapReducer,
     }));
-    const wrapper = mount(<ConnectedMap store={store} zoomSlider />);
+    const wrapper = mount(<ConnectedMap store={store} showZoomSlider />);
     expect(wrapper.html().indexOf('ol-zoomslider')).toBeGreaterThan(0);
   });
 
@@ -440,7 +440,7 @@ describe('Map component', () => {
     const store = createStore(combineReducers({
       map: MapReducer,
     }));
-    const wrapper = mount(<ConnectedMap store={store} zoomSlider={false} />);
+    const wrapper = mount(<ConnectedMap store={store} showZoomSlider={false} />);
     expect(wrapper.html().indexOf('ol-zoomslider')).toBe(-1);
   });
 

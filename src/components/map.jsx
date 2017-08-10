@@ -725,7 +725,7 @@ export class Map extends React.Component {
       }),
     });
 
-    if (this.props.zoomSlider) {
+    if (this.props.showZoomSlider) {
       this.map.addControl(new ZoomControl());
     }
     // when the map moves update the location in the state
@@ -894,7 +894,7 @@ Map.propTypes = {
     interaction: PropTypes.string,
     sourceName: PropTypes.string,
   }),
-  zoomSlider: PropTypes.bool,
+  showZoomSlider: PropTypes.bool,
   initialPopups: PropTypes.arrayOf(PropTypes.object),
   setView: PropTypes.func,
   includeFeaturesOnClick: PropTypes.bool,
@@ -921,7 +921,7 @@ Map.defaultProps = {
     interaction: null,
     source: null,
   },
-  zoomSlider: false,
+  showZoomSlider: false,
   initialPopups: [],
   setView: () => {
     // swallow event.
