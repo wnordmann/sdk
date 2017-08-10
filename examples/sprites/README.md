@@ -14,4 +14,5 @@ spritezero sprites ./sprites-src
 
 * duck.svg - https://openclipart.org/detail/159499/rubber-duck
 * goose.svg - https://openclipart.org/detail/282727/goose-vectorized
+* grey-duck.svg - A greyscale version of duck.svg.
 

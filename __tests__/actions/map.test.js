@@ -186,15 +186,15 @@ describe('actions', () => {
     expect(actions.orderLayer(layer_id)).toEqual(expectedAction);
   });
 
-  it('should issue an action to change the sprites', () => {
-    const spriteRoot = 'localSprites';
+  it('should issue an action to change the sprite', () => {
+    const spriteRoot = 'localSprite';
     const expectedAction = {
-      type: MAP.SET_SPRITES,
-      sprites: spriteRoot,
+      type: MAP.SET_SPRITE,
+      sprite: spriteRoot,
       targetId: undefined,
     };
 
-    expect(actions.setSprites(spriteRoot)).toEqual(expectedAction);
+    expect(actions.setSprite(spriteRoot)).toEqual(expectedAction);
   });
 });
 
