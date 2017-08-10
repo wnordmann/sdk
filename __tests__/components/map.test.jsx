@@ -574,7 +574,6 @@ describe('Map component', () => {
     expect(sdk_map.map.getOverlays().getLength()).toEqual(1);
   });
 
-<<<<<<< HEAD
   it('should add a popup', () => {
     const store = createStore(combineReducers({
       map: MapReducer,
@@ -668,7 +667,7 @@ describe('Map component async', () => {
       .get('/sprites.json')
       .reply(200, spritesJson);
 
-    store.dispatch(MapActions.setSprites('http://example.com/sprites'));
+    store.dispatch(MapActions.setSprite('http://example.com/sprites'));
 
     setTimeout(() => {
       expect(map.spriteData).toEqual(spritesJson);
