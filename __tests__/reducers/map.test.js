@@ -1,9 +1,11 @@
-/* global it, describe, expect */
+/* global it, describe, expect, beforeEach */
 
 import deepFreeze from 'deep-freeze';
 
 import reducer from '../../src/reducers/map';
 import { MAP } from '../../src/action-types';
+import * as MapActions from '../../src/actions/map';
+
 
 describe('map reducer', () => {
   it('should return the initial state', () => {
@@ -1000,5 +1002,65 @@ describe('map reducer', () => {
       layers: [{ id: 'my-points', source: 'points' }],
       metadata: { 'bnd:source-version': 1 },
     });
+  });
+});
+
+describe('map reducer - placing layers', () => {
+  // setup four "dummy" layers
+  const layer_a = { id: 'layer_a', source: 'dummy' };
+  const layer_b = { id: 'layer_b', source: 'dummy' };
+  const layer_c = { id: 'layer_c', source: 'dummy' };
+  const layer_d = { id: 'layer_d', source: 'dummy' };
+
+  // ensure the layers themselves are never changed.
+  deepFreeze(layer_a);
+  deepFreeze(layer_b);
+  deepFreeze(layer_c);
+  deepFreeze(layer_d);
+
+  let state = null;
+
+  // reset the state each time.
+  beforeEach(() => {
+    state = {
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      sources: {
+        dummy: { },
+      },
+      layers: [layer_a, layer_b, layer_c, layer_d],
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 0,
+      },
+    };
+    deepFreeze(state);
+  });
+
+  // This is a meta function for the various order tests.
+  function runOrderTest(layerId, targetId, expectedOrder) {
+    const new_state = reducer(state, MapActions.orderLayer(layerId, targetId));
+    const expected_state = Object.assign({}, state, {
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 1,
+      },
+      layers: expectedOrder,
+    });
+    expect(new_state).toEqual(expected_state);
+  }
+
+  it('moves layer_a to the end', () => {
+    runOrderTest('layer_a', undefined, [layer_b, layer_c, layer_d, layer_a]);
+  });
+
+  it('moves a layer to the beginning', () => {
+    runOrderTest('layer_d', 'layer_a', [layer_d, layer_a, layer_b, layer_c]);
+  });
+
+  it('moves a layer to the middle', () => {
+    runOrderTest('layer_d', 'layer_b', [layer_a, layer_d, layer_b, layer_c]);
   });
 });
