@@ -168,8 +168,8 @@ function updateLayer(state, action) {
 function addSource(state, action) {
   const new_source = {};
   new_source[action.sourceName] = Object.assign({}, action.sourceDef);
-  if (action.sourceDef.type !== 'raster') {
-    if (action.sourceDef === undefined || action.sourceDef === null) {
+  if (action.sourceDef.type === 'geojson') {
+    if (action.sourceDef.data === undefined || action.sourceDef.data === null) {
       new_source[action.sourceName].data = {};
     } else if (typeof action.sourceDef.data === 'object') {
       new_source[action.sourceName].data = Object.assign({}, action.sourceDef.data);
