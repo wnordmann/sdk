@@ -226,6 +226,73 @@ describe('Map component', () => {
     expect(layer.getVisible()).toBe(false);
   });
 
+  it('should handle undefined bearing in constructor', () => {
+    const sources = {
+      tilejson: {
+        type: 'raster',
+        url: 'https://api.tiles.mapbox.com/v3/mapbox.geography-class.json?secure',
+      },
+    };
+    const layers = [{
+      id: 'tilejson-layer',
+      source: 'tilejson',
+    }];
+
+    const metadata = {
+      'bnd:source-version': 0,
+      'bnd:layer-version': 0,
+    };
+    const center = [0, 0];
+    const zoom = 2;
+    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
+
+    const instance = wrapper.instance();
+    const map = instance.map;
+    // default rotation should get set
+    expect(map.getView().getRotation()).toBe(0);
+  });
+
+  it('should handle undefined bearing in shouldComponentUpdate', () => {
+    const sources = {
+      tilejson: {
+        type: 'raster',
+        url: 'https://api.tiles.mapbox.com/v3/mapbox.geography-class.json?secure',
+      },
+    };
+    const layers = [{
+      id: 'tilejson-layer',
+      source: 'tilejson',
+    }];
+
+    const metadata = {
+      'bnd:source-version': 0,
+      'bnd:layer-version': 0,
+    };
+    const center = [0, 0];
+    const zoom = 2;
+    const bearing = 45;
+    const wrapper = mount(<Map map={{ bearing, center, zoom, sources, layers, metadata }} />);
+
+    const instance = wrapper.instance();
+    const map = instance.map;
+
+    const nextProps = {
+      map: {
+        center,
+        zoom,
+        bearing: undefined,
+        metadata: {
+          'bnd:source-version': 0,
+          'bnd:layer-version': 0,
+        },
+        sources,
+        layers,
+      },
+    };
+    instance.shouldComponentUpdate.call(instance, nextProps);
+    expect(radiansToDegrees(map.getView().getRotation())).toBe(45);
+  });
+
   it('should handle layout changes', () => {
     const sources = {
       geojson: {
