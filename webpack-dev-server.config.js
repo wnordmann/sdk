@@ -57,6 +57,10 @@ const config = {
       'webpack/hot/only-dev-server',
       './examples/basic-wgs84/app.jsx',
     ],
+    'layer-list': [
+      'webpack/hot/only-dev-server',
+      './examples/layer-list/app.jsx',
+    ],
     rotating: [
       'webpack/hot/only-dev-server',
       './examples/rotating/app.jsx',
