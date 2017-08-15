@@ -32,6 +32,5 @@ after_success:
 branches:
   only:
     - master
-    - sdk-redux
-    - ultimateredux
+    - 1.x
     - /^v\d+\.\d+(\.\d+)?$/
