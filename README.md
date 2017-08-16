@@ -8,3 +8,17 @@
 Javascript SDK based on React, OpenLayers and Redux.
 
 For the previous version, please see the 1.x branch instead.
+
+To run the examples, 
+
+Clone Project
+
+In directory of cloned project
+
+`npm install` - install libraries
+
+`npm start` - start webpack
+
+http://localhost:3000/examples - browse to examples
+
+If examples don't work, might need to run `npm link` in directory of cloned files
