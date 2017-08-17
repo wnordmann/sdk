@@ -9,6 +9,7 @@ Javascript SDK based on React, OpenLayers and Redux.
 
 For the previous version, please see the 1.x branch instead.
 
+## Running Project
 To run the examples, 
 
 Clone Project
@@ -21,4 +22,6 @@ In directory of cloned project
 
 http://localhost:3000/examples - browse to examples
 
-If examples don't work, might need to run `npm link` in directory of cloned files
+## Troubleshooting
+
+If `npm start` fails review node version, SDK targets v6.0 or greater.  On OSX node install can be error prone, seems to work best when installed by Brew http://brewformulas.org/Node
