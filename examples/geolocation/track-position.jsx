@@ -102,7 +102,9 @@ class TrackPosition extends React.PureComponent {
     this.location = new OlGeolocation({
       tracking: true,
     });
-    this.location.setTracking(true);
+    this.location.on('error', () => {
+      this.error();
+    });
     this.location.on('change', () => {
       this.findUser();
     });
