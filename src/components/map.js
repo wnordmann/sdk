@@ -43,6 +43,8 @@ import TileJSON from 'ol/source/tilejson';
 import TileGrid from 'ol/tilegrid';
 import ZoomControl from 'ol/control/zoomslider';
 
+import Control from 'ol/control/control';
+
 import VectorTileLayer from 'ol/layer/vectortile';
 import VectorTileSource from 'ol/source/vectortile';
 import MvtFormat from 'ol/format/mvt';
@@ -388,9 +390,42 @@ export class Map extends React.Component {
     this.activeInteractions = null;
   }
 
+  configureMapControls(controls) {
+    if(controls){
+      const controlNames = Object.keys(controls);
+      const mapControls = this.map.getControls().getArray();
+      for (let i = 0, ii = mapControls.length; i < ii; i++) {
+        if(controlNames.indexOf(mapControls[i].get('name')) >= 0 ){
+          this.map.removeControl(mapControls[i]);
+        }
+      }
+      for (let i = 0, ii = controlNames.length; i < ii; i++) {
+          const controlOptions = controls[controlNames[i]];
+          var innerElement = document.createElement(controlOptions.innerHtmlElement);
+          innerElement.className = controlOptions.innerElementClass  + ' ol-control';
+          if (controlOptions.html) {
+            innerElement.innerHTML = controlOptions.html;
+          } else if (controlOptions.text) {
+            innerElement.innerText = controlOptions.text;
+          }
+
+          var outerElement = document.createElement(controlOptions.outerHtmlElement);
+          outerElement.className = controlOptions.outerElementClass + ' ol-control';
+          outerElement.appendChild(innerElement);
+
+          const control = new Control({element:outerElement});
+          control.set('name', controlOptions.name);
+          this.map.addControl(control);
+        }
+      }
+     }
+
   componentDidMount() {
     // put the map into the DOM
     this.configureMap();
+
+    // add controls to the map
+    this.configureMapControls(this.props.control)
   }
 
   /** This will check nextProps and nextState to see
@@ -462,6 +497,11 @@ export class Map extends React.Component {
     if (nextProps.drawing && (nextProps.drawing.interaction !== this.props.drawing.interaction
         || nextProps.drawing.sourceName !== this.props.drawing.sourceName)) {
       this.updateInteraction(nextProps.drawing);
+    }
+
+    // change the controls as needed
+    if (nextProps.control !== this.props.control) {
+        this.configureMapControls(nextProps.control);
     }
 
     if (nextProps.print && nextProps.print.exportImage) {
@@ -1200,6 +1240,7 @@ function mapStateToProps(state) {
   return {
     map: state.map,
     drawing: state.drawing,
+    control: state.mapControl,
     print: state.print,
   };
 }
