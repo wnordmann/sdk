@@ -18,12 +18,11 @@ for (let i = 0, ii = subDirs.length; i < ii; ++i) {
   entry[name] = [
     'webpack/hot/only-dev-server'
   ];
-  entry[name].push(`.${path.sep}${subDirs[i]}${path.sep}app.jsx`);
+  entry[name].push(`.${path.sep}${subDirs[i]}${path.sep}app.js`);
 }
 
 const config = {
   resolve: {
-    extensions: ['.js', '.jsx'],
     alias: {
       '@boundlessgeo/sdk': path.resolve(__dirname, 'src/'),
     },
