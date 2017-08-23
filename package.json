@@ -6,8 +6,9 @@
     "start": "webpack-dev-server --config webpack-dev-server.config.js",
     "test": "jest && npm run lint",
     "test:watch": "npm test -- --watch",
-    "lint": "eslint __tests__ src examples --ext .jsx,.js",
-    "cover": "node_modules/.bin/jest --coverage"
+    "lint": "eslint __tests__ src examples tasks --ext .jsx,.js",
+    "cover": "node_modules/.bin/jest --coverage",
+    "build:examples": "node tasks/build-examples.js"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
