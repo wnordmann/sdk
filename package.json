@@ -6,7 +6,7 @@
     "start": "webpack-dev-server --config webpack-dev-server.config.js",
     "test": "jest && npm run lint",
     "test:watch": "npm test -- --watch",
-    "lint": "eslint __tests__ src examples tasks --ext .jsx,.js",
+    "lint": "eslint __tests__ src examples tasks",
     "cover": "node_modules/.bin/jest --coverage",
     "build:examples": "node tasks/build-examples.js"
   },

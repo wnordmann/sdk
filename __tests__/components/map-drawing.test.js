@@ -3,7 +3,7 @@
 /** Specific tests for map interactions.
  *
  *  This is *not* intended to be a complete test of the map,
- *  it only tests the drawing related functionality. See map.test.jsx
+ *  it only tests the drawing related functionality. See map.test.js
  *  for a more complete test of the map component.
  *
  */
