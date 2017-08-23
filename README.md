@@ -17,10 +17,10 @@ Clone Project
 In directory of cloned project
 
 `npm install` - install libraries
-
+`npm run build:examples` - build examples from templates
 `npm start` - start webpack
 
-http://localhost:3000/examples - browse to examples
+http://localhost:3000/build/examples - browse to examples
 
 ## Troubleshooting
 
