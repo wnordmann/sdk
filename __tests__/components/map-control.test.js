@@ -55,6 +55,35 @@ describe('Map component custom control', () => {
     expect(wrapper.html().indexOf('modal-window')).toBeGreaterThan(0);
     expect(wrapper.html().indexOf('interior')).toBeGreaterThan(0);
   });
+  it('should add in a new controls with out text or html', () => {
+    const store = createStore(combineReducers({
+      map: MapReducer, mapControl: MapControlReducer,
+    }), applyMiddleware(thunkMiddleware));
+
+    const wrapper = mount(<ConnectedMap store={store} />);
+    const map = wrapper.instance().getWrappedInstance();
+
+    const removingHtmlAndText = {
+      html: null,
+      text: null,
+    }
+
+    // Add in a control
+    store.dispatch(controlActions.addControl(Object.assign({}, controlObj, removingHtmlAndText)));
+
+    // Get collection of controls
+    const mapControls = map.map.getControls().getArray();
+
+    // Now have 4 controls
+    expect(mapControls.length).toBe(4);
+
+    // Index 3 should be a DIV element as defined in controlObj
+    expect(mapControls[3].element instanceof HTMLDivElement).toBeTruthy();
+
+    // Check for classes defined in controlObj to be present
+    expect(wrapper.html().indexOf('modal-window')).toBeGreaterThan(0);
+    expect(wrapper.html().indexOf('interior')).toBeGreaterThan(0);
+  });
   it('should add in a new controls with html and div', () => {
     const store = createStore(combineReducers({
       map: MapReducer, mapControl: MapControlReducer,

@@ -404,9 +404,16 @@ export class Map extends React.Component {
           var innerElement = document.createElement(controlOptions.innerHtmlElement);
           innerElement.className = controlOptions.innerElementClass  + ' ol-control';
 
-          innerElement.innerHTML = controlOptions.html || '';
-          innerElement.innerText = controlOptions.text || '';
-
+          // Can not set both text and html
+          // If both are passed in default to html
+          // If neither are passed in set text to blank
+          if (controlOptions.html) {
+            innerElement.innerHTML = controlOptions.html;
+          } else if(controlOptions.text) {
+            innerElement.innerText = controlOptions.text;
+          } else {
+            innerElement.innerText = '';
+          }
 
           var outerElement = document.createElement(controlOptions.outerHtmlElement);
           outerElement.className = controlOptions.outerElementClass + ' ol-control';
