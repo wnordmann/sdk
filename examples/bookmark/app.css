@@ -1,15 +1,4 @@
-/*
- * Basic styling for some form elements.
- */
 
-input.radius {
-    width: 3em;
-}
-
-span.input {
-    width: 4em;
-    text-align: center;
-}
 
 html,
 body {
@@ -20,6 +9,9 @@ a {
   color: inherit;
 }
 
+/*
+ * Styling for modal custom control
+ */
 .interior {
   display: table-cell;
   vertical-align: middle;
@@ -57,7 +49,9 @@ a {
   -webkit-animation: fadein 1s; /* Safari and Chrome */
   -o-animation: fadein 1s; /* Opera */
 }
-
+/*
+ * Animation fading in and out
+ */
 @keyframes fadein {
     from {
         opacity:0;

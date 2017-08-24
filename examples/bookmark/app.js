@@ -1,5 +1,5 @@
 /** Demo of bookmarks zooming between points in an SDK map.
- *
+ *  Custom Open Layer Controls are added
  *
  */
 
@@ -161,7 +161,7 @@ function main() {
       innerElementClass: 'interior',
       outerHtmlElement: 'div',
       outerElementClass: 'modal-window',
-      html,
+      text: 'test',
     }
     store.dispatch(controlActions.addControl(control));
   }
