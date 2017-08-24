@@ -403,11 +403,10 @@ export class Map extends React.Component {
           const controlOptions = controls[controlNames[i]];
           var innerElement = document.createElement(controlOptions.innerHtmlElement);
           innerElement.className = controlOptions.innerElementClass  + ' ol-control';
-          if (controlOptions.html) {
-            innerElement.innerHTML = controlOptions.html;
-          } else if (controlOptions.text) {
-            innerElement.innerText = controlOptions.text;
-          }
+
+          innerElement.innerHTML = controlOptions.html || '';
+          innerElement.innerText = controlOptions.text || '';
+
 
           var outerElement = document.createElement(controlOptions.outerHtmlElement);
           outerElement.className = controlOptions.outerElementClass + ' ol-control';
