@@ -17,13 +17,15 @@ import * as MapActions from '../../src/actions/map';
 describe('tests for the geojson-type map sources', () => {
   let map;
   let store;
+  let baseUrl;
 
   beforeEach(() => {
     store = createStore(combineReducers({
       map: MapReducer,
     }));
 
-    const wrapper = mount(<SdkMap store={store} />);
+    baseUrl = 'http://example.com/base';
+    const wrapper = mount(<SdkMap store={store} baseUrl={baseUrl} />);
     map = wrapper.instance().getWrappedInstance();
   });
 
@@ -108,6 +110,15 @@ describe('tests for the geojson-type map sources', () => {
       .reply(200, JSON.stringify(feature_collection));
 
     testGeojsonData(done, 'http://example.com/test.geojson', 2);
+  });
+
+  it('adds a geojson feature collection from a relative url', (done) => {
+    // mock up the url to call
+    nock('http://example.com')
+      .get('/base/test.geojson')
+      .reply(200, JSON.stringify(feature_collection));
+
+    testGeojsonData(done, './test.geojson', 2);
   });
 
   it('tries to fetch a geojson file that does not exist', (done) => {
