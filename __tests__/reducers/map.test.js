@@ -2,6 +2,7 @@
 
 import deepFreeze from 'deep-freeze';
 
+import proj from 'ol/proj';
 import reducer from '../../src/reducers/map';
 import { MAP } from '../../src/action-types';
 import * as MapActions from '../../src/actions/map';
@@ -642,6 +643,62 @@ describe('map reducer', () => {
     deepFreeze(state);
     // eslint-disable-next-line
     const newSource = {data: {type:'FeatureCollection', features: [source.data].concat(action.features)}};
+    deepFreeze(newSource);
+    expect(reducer(state, action)).toEqual({
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 0,
+        'bnd:data-version:points': 1,
+      },
+      sources: {
+        points: newSource,
+      },
+      layers: [],
+    });
+  });
+
+  it('should reproject when handling ADD_FEATURES with a full feature collection', () => {
+    // since we do not go through ADD_SOURCE we need to set _dataVersion
+    // eslint-disable-next-line
+    const source = {data: {type:'Feature', properties:{'n':29,'cat':4}, geometry:{type:'Point', coordinates:[1.0,7.5]}}};
+    deepFreeze(source);
+    const geom1 = [2000,2000];
+    deepFreeze(geom1);
+    const reprojectedGeom1 = proj.toLonLat(geom1);
+    deepFreeze(reprojectedGeom1);
+    const geom2 = [2000000,200000];
+    deepFreeze(geom2);
+    const reprojectedGeom2 = proj.toLonLat(geom2);
+    deepFreeze(reprojectedGeom2);
+    const action = {
+      type: MAP.ADD_FEATURES,
+      sourceName: 'points',
+      // eslint-disable-next-line
+      features: {type: 'FeatureCollection', crs:{type:'name',properties:{'name':'urn:ogc:def:crs:EPSG::3857'}},features: [{type:'Feature',properties:{'n':27,'cat':2},geometry:{type:'Point',coordinates:geom1}},{type:'Feature',properties:{'n':28,'cat':1},'geometry':{type:'Point',coordinates:geom2}}]}
+    };
+    deepFreeze(action);
+    const state = {
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3, 
+      sources: {
+        points: source,
+      },
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 0,
+      },
+      layers: [],
+    };
+    deepFreeze(state);
+    const reprojectedFeatures = [{"geometry": {"coordinates": reprojectedGeom1, "type": "Point"}, "properties": {"cat": 2, "n": 27}, "type": "Feature"}, {"geometry": {"coordinates": reprojectedGeom2, "type": "Point"}, "properties": {"cat": 1, "n": 28}, "type": "Feature"}];
+    // eslint-disable-next-line
+    const newSource = {data: {type:'FeatureCollection', features: [source.data].concat(reprojectedFeatures)}};
     deepFreeze(newSource);
     expect(reducer(state, action)).toEqual({
       version: 8,
