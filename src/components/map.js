@@ -149,7 +149,7 @@ function configureMvtSource(glSource, accessToken) {
   let urls;
   if (url.indexOf(MAPBOX_PROTOCOL) === 0) {
     const mapid = url.replace(MAPBOX_PROTOCOL, '');
-    const suffix = glSource.type === 'vector' ? 'vector.pbf' : 'png';
+    const suffix = 'vector.pbf';
     const hosts = ['a', 'b', 'c', 'd'];
     urls = [];
     for (let i = 0, ii = hosts.length; i < ii; ++i) {

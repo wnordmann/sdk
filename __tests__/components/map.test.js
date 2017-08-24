@@ -73,7 +73,7 @@ describe('Map component', () => {
         type: 'raster',
         tileSize: 256,
         tiles: ['https://www.example.com/foo?BBOX={bbox-epsg-3857}'],
-      }
+      },
     };
     const layers = [
       {
@@ -142,6 +142,9 @@ describe('Map component', () => {
     expect(map.getLayers().item(3)).toBeInstanceOf(VectorTileLayer);
     const expected = `https://a.tiles.mapbox.com/v4/mapbox.mapbox-streets-v7/{z}/{x}/{y}.vector.pbf?access_token=${apiKey}`;
     expect(map.getLayers().item(4).getSource().getUrls()[0]).toBe(expected);
+    expect(map.getLayers().item(4).getSource().getUrls()[1]).toBe(expected.replace('a.', 'b.'));
+    expect(map.getLayers().item(4).getSource().getUrls()[2]).toBe(expected.replace('a.', 'c.'));
+    expect(map.getLayers().item(4).getSource().getUrls()[3]).toBe(expected.replace('a.', 'd.'));
     // move the map.
     wrapper.setProps({
       zoom: 4,
