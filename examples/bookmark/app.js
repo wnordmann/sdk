@@ -161,7 +161,7 @@ function main() {
       innerElementClass: 'interior',
       outerHtmlElement: 'div',
       outerElementClass: 'modal-window',
-      text: 'test',
+      html,
     }
     store.dispatch(controlActions.addControl(control));
   }
