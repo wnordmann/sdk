@@ -151,6 +151,29 @@ describe('Map component', () => {
     });
   });
 
+  it('should ignore unknown types', () => {
+    const sources = {
+      overlay: {
+        type: 'foo',
+      },
+    };
+    const layers = [
+      {
+        id: 'overlay',
+        source: 'overlay',
+      },
+    ];
+    const center = [0, 0];
+    const zoom = 2;
+    const metadata = {
+      'bnd:source-version': 0,
+      'bnd:layer-version': 0,
+    };
+    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
+    const map = wrapper.instance().map;
+    expect(map.getLayers().getLength()).toBe(0);
+  });
+
   it('should create a static image', () => {
     const sources = {
       overlay: {
