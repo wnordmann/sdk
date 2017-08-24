@@ -12,6 +12,8 @@ import VectorTileLayer from 'ol/layer/vectortile';
 import ImageStaticSource from 'ol/source/imagestatic';
 import TileJSONSource from 'ol/source/tilejson';
 import TileWMSSource from 'ol/source/tilewms';
+import ImageTile from 'ol/imagetile';
+import TileState from 'ol/tilestate';
 
 import { createStore, combineReducers } from 'redux';
 import { radiansToDegrees } from '../../src/util';
@@ -67,6 +69,11 @@ describe('Map component', () => {
         url: 'mapbox://mapbox.mapbox-streets-v7',
         type: 'vector',
       },
+      tile: {
+        type: 'raster',
+        tileSize: 256,
+        tiles: ['https://www.example.com/foo?BBOX={bbox-epsg-3857}'],
+      }
     };
     const layers = [
       {
@@ -98,6 +105,9 @@ describe('Map component', () => {
           'circle-color': '#cc00cc',
         },
         filter: ['==', 'isPurple', true],
+      }, {
+        id: 'tilelayer',
+        source: 'tile',
       },
     ];
     const metadata = {
@@ -118,6 +128,14 @@ describe('Map component', () => {
     expect(map.getLayers().item(0)).toBeInstanceOf(TileLayer);
     expect(map.getLayers().item(1)).toBeInstanceOf(TileLayer);
     expect(map.getLayers().item(1).getSource()).toBeInstanceOf(TileWMSSource);
+    const tileLoadFunction = map.getLayers().item(6).getSource().getTileLoadFunction();
+    const tileCoord = [0, 0, 0];
+    const state = TileState.IDLE;
+    const src = 'https://www.example.com/foo?BBOX={bbox-epsg-3857}';
+    const tile = new ImageTile(tileCoord, state, src, null, tileLoadFunction);
+    tileLoadFunction(tile, src);
+    // bbox substituted
+    expect(tile.getImage().src).toBe('https://www.example.com/foo?BBOX=-20037508.342789244,20037508.342789244,20037508.342789244,60112525.02836773');
     // REQUEST param cleared
     expect(map.getLayers().item(1).getSource().getParams().REQUEST).toBe(undefined);
     expect(map.getLayers().item(2)).toBeInstanceOf(VectorLayer);
