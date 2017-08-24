@@ -171,18 +171,29 @@ function configureMvtSource(glSource, accessToken) {
   return source;
 }
 
-function updateGeojsonSource(olSource, glSource, mapProjection) {
+function updateGeojsonSource(olSource, glSource, mapProjection, baseUrl) {
   // setup a feature promise to handle async loading
   // of features.
   let features_promise;
 
   // if the data is a string, assume its a url
   if (typeof glSource.data === 'string') {
+    let url = glSource.data;
+
+    // if the baseUrl is present and the url does not
+    // start with http:// or "/" then assume the path is
+    // relative to the style doc.
+    if (!(url.indexOf('http://') === 0 || url.indexOf('/') === '0')) {
+      if (url.indexOf('.') === 0) {
+        url = url.substring(1);
+      }
+      url = baseUrl + url;
+    }
     features_promise = new Promise((resolve) => {
       // instead of just returning the fetch promise,
       // this ensures that the features are always resolved
       //  to SOMETHING.
-      fetch(glSource.data)
+      fetch(url)
         .then(response => response.json())
         .then((features) => {
           resolve(features);
@@ -241,7 +252,7 @@ function updateGeojsonSource(olSource, glSource, mapProjection) {
  *
  * @returns ol.source.vector instance.
  */
-function configureGeojsonSource(glSource, mapProjection) {
+function configureGeojsonSource(glSource, mapProjection, baseUrl) {
   const vector_src = new VectorSource({
     useSpatialIndex: true,
     wrapX: false,
@@ -262,11 +273,11 @@ function configureGeojsonSource(glSource, mapProjection) {
 
   // seed the vector source with the first update
   //  before returning it.
-  updateGeojsonSource(new_src, glSource, mapProjection);
+  updateGeojsonSource(new_src, glSource, mapProjection, baseUrl);
   return new_src;
 }
 
-function configureSource(glSource, mapProjection, accessToken) {
+function configureSource(glSource, mapProjection, accessToken, baseUrl) {
   // tiled raster layer.
   if (glSource.type === 'raster') {
     if ('tiles' in glSource) {
@@ -275,7 +286,7 @@ function configureSource(glSource, mapProjection, accessToken) {
       return configureTileJSONSource(glSource);
     }
   } else if (glSource.type === 'geojson') {
-    return configureGeojsonSource(glSource, mapProjection);
+    return configureGeojsonSource(glSource, mapProjection, baseUrl);
   } else if (glSource.type === 'image') {
     return configureImageSource(glSource);
   } else if (glSource.type === 'vector') {
@@ -292,6 +303,21 @@ function getLayerGroupName(layer_group) {
     all_names.push(layer_group[i].id);
   }
   return `${layer_group[0].source}-${all_names.join(',')}`;
+}
+
+/** Get the source name from the layer group name
+ *
+ */
+function getSourceName(groupName) {
+  const dash = groupName.indexOf('-');
+  return groupName.substring(0, dash);
+}
+
+/** Get the list of layers from the layer group name
+ */
+function getLayerNames(groupName) {
+  const dash = groupName.indexOf('-');
+  return groupName.substring(dash).split(',');
 }
 
 /** Populate a ref'd layer.
@@ -415,9 +441,10 @@ export class Map extends React.Component {
       if (src && src.type === 'geojson') {
         const version_key = dataVersionKey(src_name);
 
-        if (this.props.map.metadata[version_key] !== nextProps.map.metadata[version_key]) {
+        if (this.props.map.metadata !== undefined &&
+            this.props.map.metadata[version_key] !== nextProps.map.metadata[version_key]) {
           const next_src = nextProps.map.sources[src_name];
-          updateGeojsonSource(this.sources[src_name], next_src, map_proj);
+          updateGeojsonSource(this.sources[src_name], next_src, map_proj, this.props.baseUrl);
         }
       }
     }
@@ -489,7 +516,7 @@ export class Map extends React.Component {
       //  list of sources.
       if (!(src_name in this.sources)) {
         this.sources[src_name] = configureSource(sourcesDef[src_name], proj,
-          this.props.accessToken);
+          this.props.accessToken, this.props.baseUrl);
       }
 
       // Check to see if there was a clustering change.
@@ -591,7 +618,7 @@ export class Map extends React.Component {
     const layer_names = Object.keys(this.layers);
     for (let i = 0, ii = layer_names.length; i < ii; i++) {
       const name = layer_names[i];
-      if (name.split('-')[0] === sourceName) {
+      if (getSourceName(name) === sourceName) {
         this.layers[name].setSource(this.sources[sourceName]);
       }
     }
@@ -729,7 +756,7 @@ export class Map extends React.Component {
     const layer_groups = Object.keys(this.layers);
     for (let grp = 0, ngrp = layer_groups.length; grp < ngrp; grp++) {
       // unpack the layers from the group name
-      const layers = layer_groups[grp].split('-')[1].split(',');
+      const layers = getLayerNames(layer_groups[grp]);
 
       let restyled = false;
       for (let lyr = 0, nlyr = sprite_layers.length; !restyled && lyr < nlyr; lyr++) {
