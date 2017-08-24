@@ -76,11 +76,15 @@ describe('tests for cluster map sources', () => {
         const resolution = 4891.96981025128;
         const proj = 'EPSG:3857';
         map.sources[src_name].loadFeatures(extent, resolution, proj);
-        const cluster = map.sources[src_name];
+        let cluster = map.sources[src_name];
         expect(cluster).toBeInstanceOf(SdkClusterSource);
+        expect(cluster.getDistance()).toBe(50);
         expect(cluster.getFeatures().length).toBe(1);
         const feature = cluster.getFeatures()[0];
         expect(feature.getGeometry().getCoordinates()[0]).not.toBe(5.5);
+        store.dispatch(MapActions.setClusterRadius(src_name, 10));
+        cluster = map.sources[src_name];
+        expect(cluster.getDistance()).toBe(10);
         done();
       }, 100);
     }, 100);
