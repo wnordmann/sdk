@@ -9,6 +9,7 @@ import TileLayer from 'ol/layer/tile';
 import VectorLayer from 'ol/layer/vector';
 import ImageLayer from 'ol/layer/image';
 import VectorTileLayer from 'ol/layer/vectortile';
+import VectorTileSource from 'ol/source/vectortile';
 import ImageStaticSource from 'ol/source/imagestatic';
 import TileJSONSource from 'ol/source/tilejson';
 import TileWMSSource from 'ol/source/tilewms';
@@ -208,6 +209,61 @@ describe('Map component', () => {
     expect(layer.getOpacity()).toEqual(layers[0].paint['raster-opacity']);
     const source = layer.getSource();
     expect(source).toBeInstanceOf(ImageStaticSource);
+  });
+
+  it('should create mvt groups', () => {
+    const sources = {
+      mapbox: {
+        url: 'mapbox://mapbox.mapbox-streets-v7',
+        type: 'vector',
+      },
+    };
+    const layers = [
+      {
+        id: 'landuse_overlay_national_park',
+        type: 'fill',
+        source: 'mapbox',
+        'source-layer': 'landuse_overlay',
+        filter: [
+          '==',
+          'class',
+          'national_park'
+        ],
+        'paint': {
+          'fill-color': '#d8e8c8',
+          'fill-opacity': 0.75
+        },
+      }, {
+        id: 'landuse_park',
+        type: 'fill',
+        source: 'mapbox',
+        'source-layer': 'landuse',
+        filter: [
+          '==',
+          'class',
+          'park'
+        ],
+        paint: {
+          'fill-color': '#d8e8c8'
+        },
+      },
+    ];
+    const center = [0, 0];
+    const zoom = 2;
+    const metadata = {
+      'bnd:source-version': 0,
+      'bnd:layer-version': 0,
+    };
+    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
+    const instance = wrapper.instance();
+    const map = instance.map;
+    expect(map.getLayers().getLength()).toBe(1); // 1 layer created
+    const layer = map.getLayers().item(0);
+    expect(layer).toBeInstanceOf(VectorTileLayer);
+    const source = layer.getSource();
+    expect(source).toBeInstanceOf(VectorTileSource);
+    expect(layer.get('name')).toBe('mapbox-landuse_overlay_national_park,landuse_park');
+    expect(instance.layers[layer.get('name')]).toBe(layer);
   });
 
   it('should create a raster tilejson', () => {
