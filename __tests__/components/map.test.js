@@ -264,6 +264,9 @@ describe('Map component', () => {
     expect(source).toBeInstanceOf(VectorTileSource);
     expect(layer.get('name')).toBe('mapbox-landuse_overlay_national_park,landuse_park');
     expect(instance.layers[layer.get('name')]).toBe(layer);
+    spyOn(layer, 'setSource');
+    instance.updateLayerSource('mapbox');
+    expect(layer.setSource).toHaveBeenCalled();
   });
 
   it('should create a raster tilejson', () => {
