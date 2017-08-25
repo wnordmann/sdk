@@ -112,7 +112,6 @@ function configureTileSource(glSource, mapProjection) {
   const source = new XyzSource(Object.assign({
     urls: glSource.tiles,
   }, commonProps));
-
   source.setTileLoadFunction((tile, src) => {
     // copy the src string.
     let img_src = src.slice();
@@ -150,7 +149,7 @@ function configureMvtSource(glSource, accessToken) {
   let urls;
   if (url.indexOf(MAPBOX_PROTOCOL) === 0) {
     const mapid = url.replace(MAPBOX_PROTOCOL, '');
-    const suffix = glSource.type === 'vector' ? 'vector.pbf' : 'png';
+    const suffix = 'vector.pbf';
     const hosts = ['a', 'b', 'c', 'd'];
     urls = [];
     for (let i = 0, ii = hosts.length; i < ii; ++i) {
@@ -564,7 +563,7 @@ export class Map extends React.Component {
       layers: render_layers,
     };
 
-    if (this.props.map.sprite && this.props.map.sprite.indexOf('mapbox://') === 0) {
+    if (this.props.map.sprite && this.props.map.sprite.indexOf(MAPBOX_PROTOCOL) === 0) {
       const baseUrl = this.props.baseUrl;
       fake_style.sprite = `${baseUrl}/sprite?access_token=${this.props.accessToken}`;
     }

@@ -9,9 +9,12 @@ import TileLayer from 'ol/layer/tile';
 import VectorLayer from 'ol/layer/vector';
 import ImageLayer from 'ol/layer/image';
 import VectorTileLayer from 'ol/layer/vectortile';
+import VectorTileSource from 'ol/source/vectortile';
 import ImageStaticSource from 'ol/source/imagestatic';
 import TileJSONSource from 'ol/source/tilejson';
 import TileWMSSource from 'ol/source/tilewms';
+import ImageTile from 'ol/imagetile';
+import TileState from 'ol/tilestate';
 
 import { createStore, combineReducers } from 'redux';
 import { radiansToDegrees } from '../../src/util';
@@ -67,6 +70,11 @@ describe('Map component', () => {
         url: 'mapbox://mapbox.mapbox-streets-v7',
         type: 'vector',
       },
+      tile: {
+        type: 'raster',
+        tileSize: 256,
+        tiles: ['https://www.example.com/foo?BBOX={bbox-epsg-3857}'],
+      },
     };
     const layers = [
       {
@@ -98,6 +106,9 @@ describe('Map component', () => {
           'circle-color': '#cc00cc',
         },
         filter: ['==', 'isPurple', true],
+      }, {
+        id: 'tilelayer',
+        source: 'tile',
       },
     ];
     const metadata = {
@@ -118,16 +129,50 @@ describe('Map component', () => {
     expect(map.getLayers().item(0)).toBeInstanceOf(TileLayer);
     expect(map.getLayers().item(1)).toBeInstanceOf(TileLayer);
     expect(map.getLayers().item(1).getSource()).toBeInstanceOf(TileWMSSource);
+    const tileLoadFunction = map.getLayers().item(6).getSource().getTileLoadFunction();
+    const tileCoord = [0, 0, 0];
+    const state = TileState.IDLE;
+    const src = 'https://www.example.com/foo?BBOX={bbox-epsg-3857}';
+    const tile = new ImageTile(tileCoord, state, src, null, tileLoadFunction);
+    tileLoadFunction(tile, src);
+    // bbox substituted
+    expect(tile.getImage().src).toBe('https://www.example.com/foo?BBOX=-20037508.342789244,20037508.342789244,20037508.342789244,60112525.02836773');
     // REQUEST param cleared
     expect(map.getLayers().item(1).getSource().getParams().REQUEST).toBe(undefined);
     expect(map.getLayers().item(2)).toBeInstanceOf(VectorLayer);
     expect(map.getLayers().item(3)).toBeInstanceOf(VectorTileLayer);
     const expected = `https://a.tiles.mapbox.com/v4/mapbox.mapbox-streets-v7/{z}/{x}/{y}.vector.pbf?access_token=${apiKey}`;
     expect(map.getLayers().item(4).getSource().getUrls()[0]).toBe(expected);
+    expect(map.getLayers().item(4).getSource().getUrls()[1]).toBe(expected.replace('a.', 'b.'));
+    expect(map.getLayers().item(4).getSource().getUrls()[2]).toBe(expected.replace('a.', 'c.'));
+    expect(map.getLayers().item(4).getSource().getUrls()[3]).toBe(expected.replace('a.', 'd.'));
     // move the map.
     wrapper.setProps({
       zoom: 4,
     });
+  });
+
+  it('should ignore unknown types', () => {
+    const sources = {
+      overlay: {
+        type: 'foo',
+      },
+    };
+    const layers = [
+      {
+        id: 'overlay',
+        source: 'overlay',
+      },
+    ];
+    const center = [0, 0];
+    const zoom = 2;
+    const metadata = {
+      'bnd:source-version': 0,
+      'bnd:layer-version': 0,
+    };
+    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
+    const map = wrapper.instance().map;
+    expect(map.getLayers().getLength()).toBe(0);
   });
 
   it('should create a static image', () => {
@@ -164,6 +209,91 @@ describe('Map component', () => {
     expect(layer.getOpacity()).toEqual(layers[0].paint['raster-opacity']);
     const source = layer.getSource();
     expect(source).toBeInstanceOf(ImageStaticSource);
+  });
+
+  it('should create mvt groups', () => {
+    const sources = {
+      mapbox: {
+        url: 'mapbox://mapbox.mapbox-streets-v7',
+        type: 'vector',
+      },
+    };
+    const layers = [
+      {
+        id: 'landuse_overlay_national_park',
+        type: 'fill',
+        source: 'mapbox',
+        'source-layer': 'landuse_overlay',
+        filter: [
+          '==',
+          'class',
+          'national_park'
+        ],
+        'paint': {
+          'fill-color': '#d8e8c8',
+          'fill-opacity': 0.75
+        },
+      }, {
+        id: 'landuse_park',
+        type: 'fill',
+        source: 'mapbox',
+        'source-layer': 'landuse',
+        filter: [
+          '==',
+          'class',
+          'park'
+        ],
+        paint: {
+          'fill-color': '#d8e8c8'
+        },
+      }, {
+        layout: {
+          'text-font': [
+            'Open Sans Italic',
+            'Arial Unicode MS Regular'
+          ],
+          'text-field': '{name_en}',
+          'text-max-width': 5,
+          'text-size': 12
+        },
+        filter: [
+          '==',
+          '$type',
+          'Point'
+        ],
+        type: 'symbol',
+        source: 'mapbox',
+        id: 'water_label',
+        paint: {
+          'text-color': '#74aee9',
+          'text-halo-width': 1.5,
+          'text-halo-color': 'rgba(255,255,255,0.7)'
+        },
+        'source-layer': 'water_label'
+      }
+    ];
+    const center = [0, 0];
+    const zoom = 2;
+    const metadata = {
+      'bnd:source-version': 0,
+      'bnd:layer-version': 0,
+    };
+    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
+    const instance = wrapper.instance();
+    const map = instance.map;
+    expect(map.getLayers().getLength()).toBe(1); // 1 layer created
+    const layer = map.getLayers().item(0);
+    expect(layer).toBeInstanceOf(VectorTileLayer);
+    const source = layer.getSource();
+    expect(source).toBeInstanceOf(VectorTileSource);
+    expect(layer.get('name')).toBe('mapbox-landuse_overlay_national_park,landuse_park,water_label');
+    expect(instance.layers[layer.get('name')]).toBe(layer);
+    spyOn(layer, 'setSource');
+    instance.updateLayerSource('mapbox');
+    expect(layer.setSource).toHaveBeenCalled();
+    spyOn(instance, 'applyStyle');
+    instance.updateSpriteLayers({layers});
+    expect(instance.applyStyle).toHaveBeenCalled();
   });
 
   it('should create a raster tilejson', () => {
