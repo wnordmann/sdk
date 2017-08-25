@@ -246,7 +246,31 @@ describe('Map component', () => {
         paint: {
           'fill-color': '#d8e8c8'
         },
-      },
+      }, {
+        layout: {
+          'text-font': [
+            'Open Sans Italic',
+            'Arial Unicode MS Regular'
+          ],
+          'text-field': '{name_en}',
+          'text-max-width': 5,
+          'text-size': 12
+        },
+        filter: [
+          '==',
+          '$type',
+          'Point'
+        ],
+        type: 'symbol',
+        source: 'mapbox',
+        id: 'water_label',
+        paint: {
+          'text-color': '#74aee9',
+          'text-halo-width': 1.5,
+          'text-halo-color': 'rgba(255,255,255,0.7)'
+        },
+        'source-layer': 'water_label'
+      }
     ];
     const center = [0, 0];
     const zoom = 2;
@@ -262,11 +286,14 @@ describe('Map component', () => {
     expect(layer).toBeInstanceOf(VectorTileLayer);
     const source = layer.getSource();
     expect(source).toBeInstanceOf(VectorTileSource);
-    expect(layer.get('name')).toBe('mapbox-landuse_overlay_national_park,landuse_park');
+    expect(layer.get('name')).toBe('mapbox-landuse_overlay_national_park,landuse_park,water_label');
     expect(instance.layers[layer.get('name')]).toBe(layer);
     spyOn(layer, 'setSource');
     instance.updateLayerSource('mapbox');
     expect(layer.setSource).toHaveBeenCalled();
+    spyOn(instance, 'applyStyle');
+    instance.updateSpriteLayers({layers});
+    expect(instance.applyStyle).toHaveBeenCalled();
   });
 
   it('should create a raster tilejson', () => {
