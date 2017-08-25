@@ -31,7 +31,7 @@ class mapControl extends React.PureComponent {
     this.props.onHide();
   }
 
-  renderPopup(children) {
+  renderMapControl(children) {
     if (!this.state.visible) {
       return false;
     }
@@ -46,11 +46,11 @@ class mapControl extends React.PureComponent {
   }
 
   render() {
-    return this.renderPopup(this.props.children);
+    return this.renderMapControl(this.props.children);
   }
 }
 
-Popup.propTypes = {
+mapControl.propTypes = {
   // this unused prop warning is ignored because the coordinate is
   //  a required prop to rightly render the popup on the map.
   // eslint-disable-next-line
@@ -64,7 +64,7 @@ Popup.propTypes = {
   onClose: PropTypes.func,
 };
 
-Popup.defaultProps = {
+mapControl.defaultProps = {
   children: '',
   closeable: false,
   onClose: () => {

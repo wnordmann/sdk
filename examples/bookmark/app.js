@@ -15,8 +15,27 @@ import SdkMapControlReducer from '@boundlessgeo/sdk/reducers/mapControl';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
 import * as controlActions from '@boundlessgeo/sdk/actions/mapControl';
 
+import SdkMapControl from '@boundlessgeo/sdk/components/map/mapControl';
+
 // This will have webpack include all of the SDK styles.
 import '@boundlessgeo/sdk/stylesheet/sdk.scss';
+
+class BookmarkComponent extends SdkMapControl{
+  render() {
+    const feature = this.props.feature
+    return this.renderMapControl((
+      <div className='modal-window'>
+        <div className='interior'>
+          <header>{feature.properties.title}</header>
+                      Name: {feature.properties.randomName} <br/>
+                    Latitude: <span class='coords'>{feature.geometry.coordinates[1]}</span> <br/>
+                  Longitude: <span class='coords'>{feature.geometry.coordinates[0]}</span> <br/>
+
+        </div>
+      </div>
+    ))
+  }
+}
 
 /* eslint-disable no-underscore-dangle */
 const store = createStore(combineReducers({
@@ -151,22 +170,6 @@ function main() {
     }
   };
 
-  // Adding a map control
-  // Map control has a inner and outer div with own classes
-  // Uses HTML passed in as a param
-  const updateMapControl = (html) => {
-    const control = {
-      name:'test',
-      innerHtmlElement: 'div',
-      innerElementClass: 'interior',
-      outerHtmlElement: 'div',
-      outerElementClass: 'modal-window',
-      html,
-    }
-    store.dispatch(controlActions.addControl(control));
-  }
-
-
   // Zoom to next point to the map
   const zoomToNextPoint = (sourceName) => {
     // get list of features from state
@@ -192,8 +195,10 @@ function main() {
   // add 10 random points to the map on startup
   addRandomPoints(10);
 
-  // place the map on the page.
-  ReactDOM.render(<SdkMap store={store} />, document.getElementById('map'));
+  // place the map on the page
+  const feature = {"type":"Feature","properties":{"title":"Random Point","isRandom":true,"randomName":"Lorita Laux"},"geometry":{"type":"Point","coordinates":[-62.73791703739279,-0.09712046520596118]}}
+
+  ReactDOM.render(<SdkMap store={store} initialMapControls={[<BookmarkComponent feature={feature}/>]}/>, document.getElementById('map'));
 
   // add some buttons to demo some actions.
   ReactDOM.render((
