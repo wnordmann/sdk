@@ -85,6 +85,14 @@ describe('tests for cluster map sources', () => {
         store.dispatch(MapActions.setClusterRadius(src_name, 10));
         cluster = map.sources[src_name];
         expect(cluster.getDistance()).toBe(10);
+        store.dispatch(MapActions.clusterPoints(src_name, false));
+        cluster = map.sources[src_name];
+        expect(cluster).toBeInstanceOf(VectorSource);
+        // re cluster and check radius
+        store.dispatch(MapActions.clusterPoints(src_name, true));
+        cluster = map.sources[src_name];
+        expect(cluster).toBeInstanceOf(SdkClusterSource);
+        expect(cluster.getDistance()).toBe(10);
         done();
       }, 100);
     }, 100);
