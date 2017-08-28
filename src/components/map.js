@@ -43,8 +43,6 @@ import TileJSON from 'ol/source/tilejson';
 import TileGrid from 'ol/tilegrid';
 import ZoomControl from 'ol/control/zoomslider';
 
-import Control from 'ol/control/control';
-
 import VectorTileLayer from 'ol/layer/vectortile';
 import VectorTileSource from 'ol/source/vectortile';
 import MvtFormat from 'ol/format/mvt';
@@ -385,50 +383,10 @@ export class Map extends React.Component {
     this.popups = {};
     this.elems = {};
 
-    // mapcontorols and their elements are stored as an ID managed hash.
-    this.mapControls = {};
-    this.mapControlElems = {};
-
     // interactions are how the user can manipulate the map,
     //  this tracks any active interaction.
     this.activeInteractions = null;
   }
-  //
-  // configureMapControls(controls) {
-  //   if(controls){
-  //     const controlNames = Object.keys(controls);
-  //     const mapControls = this.map.getControls().getArray();
-  //     for (let i = 0, ii = mapControls.length; i < ii; i++) {
-  //       if(controlNames.indexOf(mapControls[i].get('name')) >= 0 ){
-  //         this.map.removeControl(mapControls[i]);
-  //       }
-  //     }
-  //     for (let i = 0, ii = controlNames.length; i < ii; i++) {
-  //         const controlOptions = controls[controlNames[i]];
-  //         var innerElement = document.createElement(controlOptions.innerHtmlElement);
-  //         innerElement.className = controlOptions.innerElementClass  + ' ol-control';
-  //
-  //         // Can not set both text and html
-  //         // If both are passed in default to html
-  //         // If neither are passed in set text to blank
-  //         if (controlOptions.html) {
-  //           innerElement.innerHTML = controlOptions.html;
-  //         } else if(controlOptions.text) {
-  //           innerElement.innerText = controlOptions.text;
-  //         } else {
-  //           innerElement.innerText = '';
-  //         }
-  //
-  //         var outerElement = document.createElement(controlOptions.outerHtmlElement);
-  //         outerElement.className = controlOptions.outerElementClass + ' ol-control';
-  //         outerElement.appendChild(innerElement);
-  //
-  //         const control = new Control({element:outerElement});
-  //         control.set('name', controlOptions.name);
-  //         this.map.addControl(control);
-  //       }
-  //     }
-  //    }
 
   componentDidMount() {
     // put the map into the DOM
@@ -495,7 +453,6 @@ export class Map extends React.Component {
     // do a quick sweep to remove any popups
     //  that have been closed.
     this.updatePopups();
-    this.updateMapControls();
 
     // update the sprite, this could happen BEFORE the map
     if (this.props.map.sprite !== nextProps.map.sprite) {
@@ -506,11 +463,6 @@ export class Map extends React.Component {
     if (nextProps.drawing && (nextProps.drawing.interaction !== this.props.drawing.interaction
         || nextProps.drawing.sourceName !== this.props.drawing.sourceName)) {
       this.updateInteraction(nextProps.drawing);
-    }
-
-    // change the controls as needed
-    if (nextProps.control !== this.props.control) {
-        this.configureMapControls(nextProps.control);
     }
 
     if (nextProps.print && nextProps.print.exportImage) {
@@ -823,65 +775,6 @@ export class Map extends React.Component {
     }
   }
 
-  updateMapControls() {
-    console.log('update map control');
-    const mapControls = this.map.getControls().getArray();
-
-  }
-
-  removeMapControl() {
-    console.log('remove map control');
-  }
-
-
-  /** Add a Popup to the map.
-   *
-   *  @param {SdkPopup} popup - Instance of SdkPopop or a subclass.
-   *  @param {boolean}  [silent] - When true, do not call updatePopups after adding.
-   *
-   */
-  addMapControl(mapControl, silent = false) {
-    // each mapControl uses a unique id to relate what is
-    //  in openlayers vs what we have in the react world.
-    const id = uuid.v4();
-
-    const elem = document.createElement('div');
-
-    const control = new Control({
-      // create an empty div element for the Popup
-      element: elem,
-
-    });
-
-    // Editor's note:
-    // I hate using the self = this construction but
-    //  there were few options when needing to get the
-    //  instance of the react component using the callback
-    //  method recommened by eslint and the react team.
-    // See here:
-    // - https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-render-return-value.md
-    const self = this;
-    // render the element into the popup's DOM.
-    ReactDOM.render(mapControl, elem, (function addInstance() {
-      self.mapControls[id] = this;
-      self.mapControlElems[id] = elem;
-    }));
-
-
-    // set the popup id so we can match the component
-    //  to the control.
-    control.set('mapControl', id);
-
-    // Add the control to the map,
-    this.map.addControl(control);
-
-    // do not trigger an update if silent is
-    //  set to true.  Useful for bulk popup additions.
-    // if (silent !== true) {
-    //   this.updatePopups();
-    // }
-  }
-
   updatePopups() {
     const overlays = this.map.getOverlays();
     const overlays_to_remove = [];
@@ -1139,11 +1032,6 @@ export class Map extends React.Component {
         this.addPopup(this.props.initialPopups[i], true);
       }
 
-      for (let i = 0, ii = this.props.initialMapControls.length; i < ii; i++) {
-        // set silent to true since updatePopups is called after the loop
-        this.addMapControl(this.props.initialMapControls[i], true);
-      }
-
       this.updatePopups();
     });
   }
@@ -1259,7 +1147,6 @@ Map.propTypes = {
   }),
   showZoomSlider: PropTypes.bool,
   initialPopups: PropTypes.arrayOf(PropTypes.object),
-  initialMapControls: PropTypes.arrayOf(PropTypes.object),
   setView: PropTypes.func,
   includeFeaturesOnClick: PropTypes.bool,
   baseUrl: PropTypes.string,
@@ -1292,7 +1179,6 @@ Map.defaultProps = {
   },
   showZoomSlider: false,
   initialPopups: [],
-  initialMapControls: [],
   setView: () => {
     // swallow event.
   },

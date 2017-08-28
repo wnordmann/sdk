@@ -13,28 +13,44 @@ import SdkMap from '@boundlessgeo/sdk/components/map';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
 
-import SdkMapControl from '@boundlessgeo/sdk/components/map/mapControl';
-
 // This will have webpack include all of the SDK styles.
 import '@boundlessgeo/sdk/stylesheet/sdk.scss';
 
-class BookmarkComponent extends SdkMapControl{
-  moveNext(map){
-    map.addMapControl();
+// Custom Bookmark Component
+class BookmarkComponent extends React.PureComponent{
+  constructor(){
+    super();
+    // Using state local to the component instead of the redux store
+    this.state = {count: 0};
+  }
+  // This is the where action really happens, update state and move the map
+  moveBookmark(count){
+    this.setState({count});
+    this.props.zoomFunction(this.props.features[count].geometry.coordinates);
+  }
+  nextBookmark(){
+    const newCount  = this.state.count >= this.props.features.length - 1 ? 0 : this.state.count + 1;
+    this.moveBookmark(newCount);
+  }
+  previousBookmark(){
+    const newCount = this.state.count <= 0 ? this.props.features.length - 1 : this.state.count - 1;
+    this.moveBookmark(newCount);
   }
   render() {
-    const feature = this.props.feature
-    return this.renderMapControl((
+    // Get the feature selected by the count in state
+    const feature = this.props.features[this.state.count];
+    // Render the modal window using style from app.css
+    return (
       <div className='modal-window'>
         <div className='interior'>
           <header>{feature.properties.title}</header>
             Name: {feature.properties.randomName} <br/>
-          Latitude: <span className='coords'>{feature.geometry.coordinates[1]}</span> <br/>
+            Latitude: <span className='coords'>{feature.geometry.coordinates[1]}</span> <br/>
             Longitude: <span className='coords'>{feature.geometry.coordinates[0]}</span> <br/>
-          <button  onClick={() => { console.log('points');}}  >Previous</button><button>Next</button>
+          <button  onClick={() => { this.previousBookmark() }}  >Previous</button><button onClick={() => {this.nextBookmark()}}>Next</button>
         </div>
       </div>
-    ))
+    )
   }
 }
 
@@ -47,8 +63,6 @@ const store = createStore(combineReducers({
 function main() {
   // Start with a reasonable global view of the map.
   store.dispatch(mapActions.setView([-93, 45], 5));
-  var count = 0;
-  var feature = {};
   // add the OSM source
   store.dispatch(mapActions.addSource('osm', {
     type: 'raster',
@@ -136,16 +150,7 @@ function main() {
       'Brent Borgia', 
       'Annemarie Asher',  
       'Solomon Salgado',  
-      'Tatiana Treece',  
-      'Philomena Paradise',  
-      'Adelle Audie',  
-      'Janean Jordahl',  
-      'Celine Cataldo',  
-      'Faustino Fournier',  
-      'Carlo Convery',  
-      'Carla Ciriaco',  
-      'Florance Farnham',  
-      'Jeraldine Jaycox',  
+      'Tatiana Treece',   
       'Albina Auclair',  
       'Breanne Blind',  
       'Carmina Croney',  
@@ -172,36 +177,21 @@ function main() {
     }
   };
 
-  // Zoom to next point to the map
-  const zoomToNextPoint = (sourceName) => {
-    // get list of features from state
-    const features = store.getState().map.sources[sourceName].data.features;
-
-    // get coordinates for current feature
-    const coords = features[count].geometry.coordinates;
-
-    // Change zoom to coordinates of current feature
-    store.dispatch(mapActions.setView(coords, 5));
-
-    // Update count, this
-    count = features.length - 1 === count ? 0 : count + 1;
-    // map.addMapControl(<BookmarkComponent feature={features[count]}/>)
-  };
-
   // add 10 random points to the map on startup
   addRandomPoints(10);
 
+  // Need a zoomTo function to pass into the components
+  const zoomTo = (coords) => {
+    store.dispatch(mapActions.setView(coords, 5))
+  }
+
   // place the map on the page
-  const features = store.getState().map.sources["points"].data.features;
+  ReactDOM.render(<SdkMap className='map-container' store={store}/>,
+    document.getElementById('map'));
 
-  ReactDOM.render(<SdkMap store={store} initialMapControls={[<BookmarkComponent feature={features[count]}/>]}/>, document.getElementById('map'));
+  // place the bookmark control and pass in the features and zoom function
+  ReactDOM.render(<BookmarkComponent className='bookmark-item' features={store.getState().map.sources["points"].data.features} zoomFunction={zoomTo}/>,
+    document.getElementById('bookmark'));
 
-  // add some buttons to demo some actions.
-  ReactDOM.render((
-    <div>
-      <button className="sdk-btn" onClick={() => { zoomToNextPoint('points'); }}>Zoom to the next point</button>
-    </div>
-  ), document.getElementById('controls'));
 }
-
 main();
