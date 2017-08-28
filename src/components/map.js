@@ -434,8 +434,6 @@ export class Map extends React.Component {
     // put the map into the DOM
     this.configureMap();
 
-    // add controls to the map
-    // this.configureMapControls(this.props.control)
   }
 
   /** This will check nextProps and nextState to see
@@ -1319,7 +1317,6 @@ function mapStateToProps(state) {
   return {
     map: state.map,
     drawing: state.drawing,
-    control: state.mapControl,
     print: state.print,
   };
 }

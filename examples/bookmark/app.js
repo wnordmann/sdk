@@ -11,9 +11,7 @@ import ReactDOM from 'react-dom';
 
 import SdkMap from '@boundlessgeo/sdk/components/map';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
-import SdkMapControlReducer from '@boundlessgeo/sdk/reducers/mapControl';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
-import * as controlActions from '@boundlessgeo/sdk/actions/mapControl';
 
 import SdkMapControl from '@boundlessgeo/sdk/components/map/mapControl';
 
@@ -21,16 +19,19 @@ import SdkMapControl from '@boundlessgeo/sdk/components/map/mapControl';
 import '@boundlessgeo/sdk/stylesheet/sdk.scss';
 
 class BookmarkComponent extends SdkMapControl{
+  moveNext(map){
+    map.addMapControl();
+  }
   render() {
     const feature = this.props.feature
     return this.renderMapControl((
       <div className='modal-window'>
         <div className='interior'>
           <header>{feature.properties.title}</header>
-                      Name: {feature.properties.randomName} <br/>
-                    Latitude: <span class='coords'>{feature.geometry.coordinates[1]}</span> <br/>
-                  Longitude: <span class='coords'>{feature.geometry.coordinates[0]}</span> <br/>
-
+            Name: {feature.properties.randomName} <br/>
+          Latitude: <span className='coords'>{feature.geometry.coordinates[1]}</span> <br/>
+            Longitude: <span className='coords'>{feature.geometry.coordinates[0]}</span> <br/>
+          <button  onClick={() => { console.log('points');}}  >Previous</button><button>Next</button>
         </div>
       </div>
     ))
@@ -39,7 +40,7 @@ class BookmarkComponent extends SdkMapControl{
 
 /* eslint-disable no-underscore-dangle */
 const store = createStore(combineReducers({
-  map: SdkMapReducer, mapControl: SdkMapControlReducer,
+  map: SdkMapReducer,
 }), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
    applyMiddleware(thunkMiddleware));
 
@@ -47,6 +48,7 @@ function main() {
   // Start with a reasonable global view of the map.
   store.dispatch(mapActions.setView([-93, 45], 5));
   var count = 0;
+  var feature = {};
   // add the OSM source
   store.dispatch(mapActions.addSource('osm', {
     type: 'raster',
@@ -181,24 +183,18 @@ function main() {
     // Change zoom to coordinates of current feature
     store.dispatch(mapActions.setView(coords, 5));
 
-    // Build a nice html display for the point include randomName property
-    const html = `<header>${features[count].properties.title}</header>
-                Name: ${features[count].properties.randomName} <br/>
-                Latitude: <span class='coords'>${coords[1]}</span> <br/>
-                Longitude: <span class='coords'>${coords[0]}</span> <br/>`
-    updateMapControl(html);
-
     // Update count, this
     count = features.length - 1 === count ? 0 : count + 1;
+    // map.addMapControl(<BookmarkComponent feature={features[count]}/>)
   };
 
   // add 10 random points to the map on startup
   addRandomPoints(10);
 
   // place the map on the page
-  const feature = {"type":"Feature","properties":{"title":"Random Point","isRandom":true,"randomName":"Lorita Laux"},"geometry":{"type":"Point","coordinates":[-62.73791703739279,-0.09712046520596118]}}
+  const features = store.getState().map.sources["points"].data.features;
 
-  ReactDOM.render(<SdkMap store={store} initialMapControls={[<BookmarkComponent feature={feature}/>]}/>, document.getElementById('map'));
+  ReactDOM.render(<SdkMap store={store} initialMapControls={[<BookmarkComponent feature={features[count]}/>]}/>, document.getElementById('map'));
 
   // add some buttons to demo some actions.
   ReactDOM.render((
