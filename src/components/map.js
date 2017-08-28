@@ -391,7 +391,6 @@ export class Map extends React.Component {
   componentDidMount() {
     // put the map into the DOM
     this.configureMap();
-
   }
 
   /** This will check nextProps and nextState to see
