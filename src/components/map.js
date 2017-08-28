@@ -781,16 +781,14 @@ export class Map extends React.Component {
 
     overlays.forEach((overlay) => {
       const id = overlay.get('popupId');
-      if(id){
-        if (this.popups[id].state.closed !== false) {
-          // mark this for removal
-          overlays_to_remove.push(overlay);
-          // umount the component from the DOM
-          ReactDOM.unmountComponentAtNode(this.elems[id]);
-          // remove the component from the popups hash
-          delete this.popups[id];
-          delete this.elems[id];
-        }
+      if (this.popups[id].state.closed !== false) {
+        // mark this for removal
+        overlays_to_remove.push(overlay);
+        // umount the component from the DOM
+        ReactDOM.unmountComponentAtNode(this.elems[id]);
+        // remove the component from the popups hash
+        delete this.popups[id];
+        delete this.elems[id];
       }
     });
 
