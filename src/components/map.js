@@ -60,7 +60,7 @@ import ModifyInteraction from 'ol/interaction/modify';
 import SelectInteraction from 'ol/interaction/select';
 
 import { setView, setRotation } from '../actions/map';
-import { INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY } from '../constants';
+import { INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TIME_KEY } from '../constants';
 import { dataVersionKey } from '../reducers/map';
 
 import { setMeasureFeature, clearMeasureFeature } from '../actions/drawing';
@@ -397,6 +397,18 @@ export class Map extends React.Component {
    *  what needs to be updated on the map.
    */
   shouldComponentUpdate(nextProps) {
+    if (nextProps.map.metadata && nextProps.map.metadata[TIME_KEY] !== this.props.map.metadata[TIME_KEY]) {
+      // find time dependent layers
+      for (let i = 0, ii = nextProps.map.layers.length; i < ii; ++i) {
+        if (nextProps.map.layers[i].metadata[TIME_KEY] !== undefined) {
+          const source = nextProps.map.layers[i].source;
+          const olSource = this.sources[source];
+          if (olSource && olSource instanceof TileWMSSource) {
+            olSource.updateParams({TIME: nextProps.map.metadata[TIME_KEY]});
+          }
+        }
+      }
+    }
     const map_proj = this.map.getView().getProjection();
 
     // compare the centers
