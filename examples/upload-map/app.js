@@ -1,3 +1,4 @@
+/* global saveAs */
 /** Demo adding a map through mapbox style and exporting the map's endpoints to a file.
  *
  */
@@ -33,6 +34,13 @@ function main() {
     },
   }));
 
+  const exportMapSpec = () => {
+    const map_spec = store.getState().map;
+    const text = JSON.stringify(map_spec);
+    const file = new File([text], 'my_map', {type: "application/json"});
+    saveAs(file, 'my_map.json');
+  };
+
   // place the map on the page.
   ReactDOM.render(
     <SdkMap
@@ -44,6 +52,9 @@ function main() {
   ReactDOM.render((
     <div>
       <ContextSelector store={store} />
+      <h1>Save a Map</h1>
+      <h2>To .json:</h2>
+      <button className="sdk-btn" onClick={exportMapSpec}>Save Map</button>
     </div>
   ), document.getElementById('controls'));
 }

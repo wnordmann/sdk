@@ -107,7 +107,7 @@ class ContextSelector extends React.PureComponent {
           </div>
           <div className="drop">
             <h2>Via File Upload:</h2>
-            <label htmlFor="file_upload" onClick={this.clearError}>Choose a file to upload (.JSON)</label>
+            <label htmlFor="file_upload" onClick={this.clearError}>Choose a file to upload (.json)</label>
             <input id="file_upload" type="file" accept=".json" onChange={this.dropFiles}/>
           </div>
         </div>
