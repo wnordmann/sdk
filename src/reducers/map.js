@@ -425,7 +425,7 @@ export default function MapReducer(state = defaultState, action) {
     case MAP.CLUSTER_POINTS:
     case MAP.SET_CLUSTER_RADIUS:
       return clusterPoints(state, action);
-    case MAP.SET_METADATA:
+    case MAP.UPDATE_METADATA:
       return updateMetadata(state, action);
     default:
       return state;

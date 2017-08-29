@@ -1,0 +1,51 @@
+.url {
+  width: 50%;
+  display: inline-block;
+}
+
+.title {
+  width: 25%;
+  display: inline-block;
+}
+
+.drop {
+  width: 50%;
+  display: inline-block;
+}
+
+.selector {
+  display: flex;
+}
+
+.urlinput {
+  width : 30%;
+  height : 20%;
+  border : 1px solid black;
+}
+
+div label {
+  background-color: #f58d50;
+  color: #fff;
+
+  display: inline-block;
+  font-weight: 400;
+  line-height: 1.25;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: .5rem 1rem;
+  font-size: 1rem;
+  border-radius: .25rem;
+}
+
+#file_upload {
+  display: none;
+}
+
+.error {
+  margin-top: 3%;
+  color: red;
+}
