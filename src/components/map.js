@@ -440,6 +440,7 @@ export class Map extends React.Component {
       if (src && src.type === 'geojson') {
         const version_key = dataVersionKey(src_name);
 
+
         if (this.props.map.metadata !== undefined &&
             this.props.map.metadata[version_key] !== nextProps.map.metadata[version_key]) {
           const next_src = nextProps.map.sources[src_name];
