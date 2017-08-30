@@ -349,4 +349,13 @@ describe('async actions', () => {
     };
     expect(actions.updateMetadata(metadata)).toEqual(expectedAction);
   });
+
+  it('should create an action to update a source', () => {
+    const expected = {
+      type: MAP.UPDATE_SOURCE,
+      sourceName: 'points',
+      sourceDef: { data: {} },
+    };
+    expect(actions.updateSource('points', {data: {}})).toEqual(expected);
+  });
 });

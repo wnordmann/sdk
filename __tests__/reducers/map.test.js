@@ -685,7 +685,7 @@ describe('map reducer', () => {
       version: 8,
       name: 'default',
       center: [0, 0],
-      zoom: 3, 
+      zoom: 3,
       sources: {
         points: source,
       },
@@ -1085,6 +1085,42 @@ describe('map reducer', () => {
       metadata: { 'bnd:source-version': 1 },
     });
   });
+
+
+  it('should update a source', () => {
+    const state = {
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      sources: {
+        points: {
+        },
+      },
+      layers: [],
+    };
+    deepFreeze(state);
+
+    const action = MapActions.updateSource('points', {
+      type: 'geojson',
+    });
+
+    expect(reducer(state, action)).toEqual({
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      metadata: {
+        'bnd:data-version:points': 1,
+      },
+      sources: {
+        points: {
+          type: 'geojson',
+        },
+      },
+      layers: [],
+    });
+  })
 });
 
 describe('map reducer - placing layers', () => {
