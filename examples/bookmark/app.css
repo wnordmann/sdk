@@ -25,7 +25,6 @@ a {
   z-index: 999;
   user-select:text;
   position: relative;
-  height: 150px;
   left: 40px;
   bottom: 180px;
   width: 400px;
@@ -33,7 +32,6 @@ a {
 }
 .bookmark-item {
   width: 400px;
-  height: 150px;
   position: absolute;
   position: relative;
   height: 150px;

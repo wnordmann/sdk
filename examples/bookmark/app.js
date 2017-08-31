@@ -21,32 +21,58 @@ class BookmarkComponent extends React.PureComponent{
   constructor(){
     super();
     // Using state local to the component instead of the redux store
-    this.state = {count: 0};
+    const count = 0;
+    const featureCount = 0;
+    const feature = {
+      properties:{
+        title:'',
+        randomName:''
+      },
+      geometry:{
+        coordinates :[0,0]
+      }
+    };
+    this.state = {count, feature, featureCount};
+  }
+  componentDidMount(){
+    this.moveBookmark(0);
   }
   // This is the where action really happens, update state and move the map
   moveBookmark(count){
-    this.setState({count});
-    this.props.zoomFunction(this.props.features[count].geometry.coordinates);
+    const feature = this.props.store.getState().map.sources["points"].data.features[count];
+    this.setState({count, feature});
+    this.props.zoomFunction(feature.geometry.coordinates);
   }
   nextBookmark(){
-    const newCount  = this.state.count >= this.props.features.length - 1 ? 0 : this.state.count + 1;
+    const newCount  = this.state.count >= this.checkFeatureCount() - 1 ? 0 : this.state.count + 1;
     this.moveBookmark(newCount);
   }
   previousBookmark(){
-    const newCount = this.state.count <= 0 ? this.props.features.length - 1 : this.state.count - 1;
+    const newCount = this.state.count <= 0 ? this.checkFeatureCount() - 1 : this.state.count - 1;
     this.moveBookmark(newCount);
+  }
+  checkFeatureCount(){
+    const featureCount = this.props.store.getState().map.sources["points"].data.features.length;
+    if(this.state.featureCount !== featureCount){
+      this.setState({featureCount});
+    }
+    return featureCount;
+  }
+  componentWillReceiveProps(nextProps){
+      console.log('change');
   }
   render() {
     // Get the feature selected by the count in state
-    const feature = this.props.features[this.state.count];
+    // const feature = this.props.store.getState().map.sources["points"].data.features[this.state.count];
+    // const feature = this.props.features[this.state.count];
     // Render the modal window using style from app.css
     return (
       <div className='modal-window'>
         <div className='interior'>
-          <header>{feature.properties.title}</header>
-            Name: {feature.properties.randomName} <br/>
-            Latitude: <span className='coords'>{feature.geometry.coordinates[1]}</span> <br/>
-            Longitude: <span className='coords'>{feature.geometry.coordinates[0]}</span> <br/>
+          <header>{this.state.feature.properties.title}</header>
+            Name: {this.state.feature.properties.randomName} <br/>
+            Latitude: <span className='coords'>{this.state.feature.geometry.coordinates[1]}</span> <br/>
+            Longitude: <span className='coords'>{this.state.feature.geometry.coordinates[0]}</span> <br/>
           <button  onClick={() => { this.previousBookmark() }}  >Previous</button><button onClick={() => {this.nextBookmark()}}>Next</button>
         </div>
       </div>
@@ -61,6 +87,7 @@ const store = createStore(combineReducers({
    applyMiddleware(thunkMiddleware));
 
 function main() {
+
   // Start with a reasonable global view of the map.
   store.dispatch(mapActions.setView([-93, 45], 5));
   // add the OSM source
@@ -141,7 +168,7 @@ function main() {
   }));
 
   // Add a random point to the map
-  const addRandomPoints = (nPoints = 20) => {
+  const addRandomPoints = () => {
     // Random names to give the points more content
     // http://listofrandomnames.com/
     const randomNames = [
@@ -158,7 +185,7 @@ function main() {
       'Lorita Laux'
       ]
     // loop over adding a point to the map.
-    for (let i = 0; i < nPoints; i++) {
+    for (let i = 0; i < 10; i++) {
       // the feature is a normal GeoJSON feature definition,
       // 'points' referes to the SOURCE which will get the feature.
       store.dispatch(mapActions.addFeatures('points', [{
@@ -166,7 +193,7 @@ function main() {
         properties: {
           title: 'Random Point',
           isRandom: true,
-          randomName: randomNames[Math.round(Math.random(20) * 100) % 20]
+          randomName: randomNames[Math.round(Math.random(10) * 100) % 10]
         },
         geometry: {
           type: 'Point',
@@ -178,20 +205,38 @@ function main() {
   };
 
   // add 10 random points to the map on startup
-  addRandomPoints(10);
+  addRandomPoints();
 
   // Need a zoomTo function to pass into the components
   const zoomTo = (coords) => {
     store.dispatch(mapActions.setView(coords, 5))
   }
+  const removeCurrentSlide = () => {
+    console.log(currentSlide);
+  }
+  const previousBookmark = () => {
+    currentSlide--;
+  }
+  const nextBookmark = () => {
+    currentSlide++;
+  }
+  
 
   // place the map on the page
   ReactDOM.render(<SdkMap className='map-container' store={store}/>,
     document.getElementById('map'));
 
   // place the bookmark control and pass in the features and zoom function
-  ReactDOM.render(<BookmarkComponent className='bookmark-item' features={store.getState().map.sources["points"].data.features} zoomFunction={zoomTo}/>,
+  ReactDOM.render(<BookmarkComponent className='bookmark-item' store={store} zoomFunction={zoomTo} currentSlide={currentSlide}/>,
     document.getElementById('bookmark'));
 
+  ReactDOM.render(
+    (<div>
+      <button className="sdk-btn" onClick={addRandomPoints}>Add 10 random points</button>
+      <button className="sdk-btn" onClick={removeCurrentSlide}>Remove current Bookmark</button>
+      <button className="sdk-btn" onClick={nextBookmark}>Next Bookmark</button>
+      <button className="sdk-btn" onClick={previousBookmark}>Previous Bookmark</button>
+    </div>),
+      document.getElementById('controls'));
 }
 main();
