@@ -1,17 +1,21 @@
 
 
-html,
+/*html,
 body {
   height: 100%;
 }
 
 a {
   color: inherit;
-}
+}*/
 
 /*
  * Styling for modal custom control
  */
+ #container {
+   height: 480px;
+   background-color: #f1f1f1; 
+ }
 .interior {
   display: table-cell;
   vertical-align: middle;
@@ -21,7 +25,7 @@ a {
 
 }
 
-.modal-window {
+#bookmark {
   z-index: 999;
   user-select:text;
   position: relative;
@@ -30,15 +34,15 @@ a {
   width: 400px;
   box-shadow: 8px 8px 5px #888888;
 }
-.bookmark-item {
+/*.bookmark-item {
   width: 400px;
   position: absolute;
   position: relative;
   height: 150px;
   left: 40px;
   bottom: 180px;
-}
-.modal-window>div {
+}*/
+.modal-window {
   padding: 2rem;
   background: #fff;
   color: #444;
