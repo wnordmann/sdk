@@ -28,7 +28,6 @@ class BookmarkComponent extends React.PureComponent{
   moveBookmark(count){
     this.props.moveSlide(count);
     const feature = this.props.map.sources["points"].data.features[count];
-    //this.setState({count, feature});
     this.props.zoomFunction(feature.geometry.coordinates);
   }
   nextBookmark(){
@@ -64,7 +63,6 @@ class BookmarkComponent extends React.PureComponent{
             Name: {feature.properties.randomName} <br/>
             Latitude: <span className='coords'>{feature.geometry.coordinates[1]}</span> <br/>
             Longitude: <span className='coords'>{feature.geometry.coordinates[0]}</span> <br/>
-          <span>{count}</span><br/>
           <button  onClick={() => { this.previousBookmark() }}  >Previous</button><button onClick={() => {this.nextBookmark()}}>Next</button>
         </div>
       </div>
