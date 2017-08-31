@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import bookmarkReducer from './reducer';
+import MoveButtonComponent from './moveButton';
 import * as bookmarkAction from './action';
 
 // Custom Bookmark Component
@@ -24,33 +25,6 @@ class BookmarkComponent extends React.PureComponent{
     };
     this.state = {featureCount};
   }
-  // This is the where action really happens, update state and move the map
-  moveBookmark(count){
-    this.props.moveSlide(count);
-    const feature = this.props.map.sources["points"].data.features[count];
-    this.props.zoomFunction(feature.geometry.coordinates);
-  }
-  nextBookmark(){
-    const stateCount = this.props.bookmark.count;
-    const newCount  = stateCount >= this.checkFeatureCount() - 1 ? 0 : stateCount + 1;
-    this.moveBookmark(newCount);
-  }
-  previousBookmark(){
-    const stateCount = this.props.bookmark.count;
-    const newCount = stateCount <= 0 ? this.checkFeatureCount() - 1 : stateCount - 1;
-    this.moveBookmark(newCount);
-  }
-  checkFeatureCount(){
-    const featureCount = this.props.map.sources["points"].data.features.length;
-    const stateCount = this.props.bookmark.count
-    if(stateCount !== featureCount){
-      this.setState({featureCount});
-    }
-    return featureCount;
-  }
-  componentWillReceiveProps(nextProps){
-      console.log('change');
-  }
   render() {
     // Get the feature selected by the count in state
     // Render the modal window using style from app.css
@@ -63,8 +37,8 @@ class BookmarkComponent extends React.PureComponent{
             Name: {feature.properties.randomName} <br/>
             Latitude: <span className='coords'>{feature.geometry.coordinates[1]}</span> <br/>
             Longitude: <span className='coords'>{feature.geometry.coordinates[0]}</span> <br/>
-          <button  onClick={() => { this.previousBookmark() }}  >Previous</button><button onClick={() => {this.nextBookmark()}}>Next</button>
         </div>
+        <MoveButtonComponent store={this.props.store}/>
       </div>
     )
   }
