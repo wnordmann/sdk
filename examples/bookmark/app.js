@@ -13,81 +13,22 @@ import SdkMap from '@boundlessgeo/sdk/components/map';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
 
+import uuid from 'uuid';
+
+import BookmarkComponent from './bookmarks';
+import bookmarkReducer from './reducer';
+import * as bookmarkAction from './action';
+
 // This will have webpack include all of the SDK styles.
 import '@boundlessgeo/sdk/stylesheet/sdk.scss';
 
-// Custom Bookmark Component
-class BookmarkComponent extends React.PureComponent{
-  constructor(){
-    super();
-    // Using state local to the component instead of the redux store
-    const count = 0;
-    const featureCount = 0;
-    const feature = {
-      properties:{
-        title:'',
-        randomName:''
-      },
-      geometry:{
-        coordinates :[0,0]
-      }
-    };
-    this.state = {count, feature, featureCount};
-  }
-  componentDidMount(){
-    this.moveBookmark(0);
-  }
-  // This is the where action really happens, update state and move the map
-  moveBookmark(count){
-    const feature = this.props.store.getState().map.sources["points"].data.features[count];
-    this.setState({count, feature});
-    this.props.zoomFunction(feature.geometry.coordinates);
-  }
-  nextBookmark(){
-    const newCount  = this.state.count >= this.checkFeatureCount() - 1 ? 0 : this.state.count + 1;
-    this.moveBookmark(newCount);
-  }
-  previousBookmark(){
-    const newCount = this.state.count <= 0 ? this.checkFeatureCount() - 1 : this.state.count - 1;
-    this.moveBookmark(newCount);
-  }
-  checkFeatureCount(){
-    const featureCount = this.props.store.getState().map.sources["points"].data.features.length;
-    if(this.state.featureCount !== featureCount){
-      this.setState({featureCount});
-    }
-    return featureCount;
-  }
-  componentWillReceiveProps(nextProps){
-      console.log('change');
-  }
-  render() {
-    // Get the feature selected by the count in state
-    // const feature = this.props.store.getState().map.sources["points"].data.features[this.state.count];
-    // const feature = this.props.features[this.state.count];
-    // Render the modal window using style from app.css
-    return (
-      <div className='modal-window'>
-        <div className='interior'>
-          <header>{this.state.feature.properties.title}</header>
-            Name: {this.state.feature.properties.randomName} <br/>
-            Latitude: <span className='coords'>{this.state.feature.geometry.coordinates[1]}</span> <br/>
-            Longitude: <span className='coords'>{this.state.feature.geometry.coordinates[0]}</span> <br/>
-          <button  onClick={() => { this.previousBookmark() }}  >Previous</button><button onClick={() => {this.nextBookmark()}}>Next</button>
-        </div>
-      </div>
-    )
-  }
-}
-
 /* eslint-disable no-underscore-dangle */
 const store = createStore(combineReducers({
-  map: SdkMapReducer,
+  map: SdkMapReducer, bookmark: bookmarkReducer,
 }), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
    applyMiddleware(thunkMiddleware));
 
 function main() {
-
   // Start with a reasonable global view of the map.
   store.dispatch(mapActions.setView([-93, 45], 5));
   // add the OSM source
@@ -188,12 +129,15 @@ function main() {
     for (let i = 0; i < 10; i++) {
       // the feature is a normal GeoJSON feature definition,
       // 'points' referes to the SOURCE which will get the feature.
+      const id = uuid.v4();
+
       store.dispatch(mapActions.addFeatures('points', [{
         type: 'Feature',
         properties: {
           title: 'Random Point',
           isRandom: true,
-          randomName: randomNames[Math.round(Math.random(10) * 100) % 10]
+          randomName: randomNames[Math.round(Math.random(10) * 100) % 10],
+          id
         },
         geometry: {
           type: 'Point',
@@ -212,22 +156,22 @@ function main() {
     store.dispatch(mapActions.setView(coords, 5))
   }
   const removeCurrentSlide = () => {
-    console.log(currentSlide);
+    console.log(store.getState().bookmark.count);
   }
   const previousBookmark = () => {
-    currentSlide--;
+    store.dispatch(bookmarkAction.moveSlide(store.getState().bookmark.count - 1));
   }
   const nextBookmark = () => {
-    currentSlide++;
+    store.dispatch(bookmarkAction.moveSlide(store.getState().bookmark.count + 1));
   }
-  
+
 
   // place the map on the page
   ReactDOM.render(<SdkMap className='map-container' store={store}/>,
     document.getElementById('map'));
 
   // place the bookmark control and pass in the features and zoom function
-  ReactDOM.render(<BookmarkComponent className='bookmark-item' store={store} zoomFunction={zoomTo} currentSlide={currentSlide}/>,
+  ReactDOM.render(<BookmarkComponent className='bookmark-item' zoomFunction={zoomTo} store={store}/>,
     document.getElementById('bookmark'));
 
   ReactDOM.render(
