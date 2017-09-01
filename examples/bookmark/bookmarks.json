@@ -85,6 +85,22 @@
                 38.6066791
               ]
             }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "title": "The Sweet Divine",
+              "address": "1801 S 9th St",
+              "telephone": "(636) 942-2900",
+              "website": "http://thesweetdivine.com"
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -90.2058737,
+                38.6099087
+              ]
+            }
           }
         ]
       }
