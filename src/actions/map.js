@@ -17,7 +17,7 @@ import fetch from 'isomorphic-fetch';
  */
 
 import { MAP } from '../action-types';
-import { TITLE_KEY } from '../constants';
+import { TITLE_KEY, TIME_KEY } from '../constants';
 
 export function setView(center, zoom) {
   return {
@@ -138,6 +138,10 @@ export function setLayerTitle(layerId, title) {
   return setLayerMetadata(layerId, TITLE_KEY, title);
 }
 
+export function setLayerTime(layerId, time) {
+  return setLayerMetadata(layerId, TIME_KEY, time);
+}
+
 export function receiveContext(context) {
   return {
     type: MAP.RECEIVE_CONTEXT,
@@ -212,7 +216,6 @@ export function updateMetadata(metadata) {
   };
 }
 
-
 /** Manually update a source.
  */
 export function updateSource(sourceName, update) {
@@ -223,3 +226,14 @@ export function updateSource(sourceName, update) {
   };
 }
 
+/** Set the time of the map.
+ *
+ *  @param time - An ISO date time string.
+ *
+ * @returns action object.
+ */
+export function setMapTime(time) {
+  let metadata = {};
+  metadata[TIME_KEY] = time;
+  return updateMetadata(metadata);
+}

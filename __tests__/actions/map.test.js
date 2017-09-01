@@ -6,6 +6,7 @@ import thunk from 'redux-thunk';
 
 import * as actions from '../../src/actions/map';
 import { MAP } from '../../src/action-types';
+import { TITLE_KEY, TIME_KEY } from '../../src/constants';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -157,11 +158,24 @@ describe('actions', () => {
     const expectedAction = {
       type: MAP.SET_LAYER_METADATA,
       layerId: layer_id,
-      key: 'bnd:title',
+      key: TITLE_KEY,
       value: title,
     };
 
     expect(actions.setLayerTitle(layer_id, title)).toEqual(expectedAction);
+  });
+
+  it('should create an action to set the layer time', () => {
+    const layer_id = 'wms';
+    const time = '1995-01-01/2017-12-31/PT5M';
+    const expectedAction = {
+      type: MAP.SET_LAYER_METADATA,
+      layerId: layer_id,
+      key: TIME_KEY,
+      value: time,
+    };
+
+    expect(actions.setLayerTime(layer_id, time)).toEqual(expectedAction);
   });
 
   it('should issue an action to change the layer order', () => {
@@ -357,5 +371,16 @@ describe('async actions', () => {
       sourceDef: { data: {} },
     };
     expect(actions.updateSource('points', {data: {}})).toEqual(expected);
+  });
+
+  it('should create an action to set the map time', () => {
+    let metadata = {};
+    const time = '2015-06-23T03:10:00Z';
+    metadata[TIME_KEY] = time;
+    const expectedAction = {
+      type: MAP.UPDATE_METADATA,
+      metadata,
+    };
+    expect(actions.setMapTime(time)).toEqual(expectedAction);
   });
 });

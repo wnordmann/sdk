@@ -16,6 +16,7 @@
 export const LAYER_VERSION_KEY = 'bnd:layer-version';
 export const SOURCE_VERSION_KEY = 'bnd:source-version';
 export const TITLE_KEY = 'bnd:title';
+export const TIME_KEY = 'bnd:time';
 export const DATA_VERSION_KEY = 'bnd:data-version';
 
 export const INTERACTIONS = {
@@ -43,6 +44,7 @@ export default {
   LAYER_VERSION_KEY,
   SOURCE_VERSION_KEY,
   TITLE_KEY,
+  TIME_KEY,
   DATA_VERSION_KEY,
   INTERACTIONS,
 };
