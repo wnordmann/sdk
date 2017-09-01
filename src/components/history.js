@@ -11,7 +11,8 @@
  * under the License.
  */
 
-/** Track the history of the map in the hash.
+/** @module components/history
+ * @desc Track the history of the map in the hash.
  *
  */
 
@@ -22,6 +23,12 @@ import { connect } from 'react-redux';
 import { setView } from '../actions/map';
 import { parseQueryString, encodeQueryObject } from '../util';
 
+/** Attempts to parse a given value as a floating point number.
+ * @param {*} value The given value to try to parse.
+ * @param {number} defaultValue The fallback value to return in case value cannot by parsed as float.
+ *
+ * @returns {number} Value parsed as a float, or defaultValue,
+ */
 function proposeFloat(value, defaultValue) {
   const proposed = parseFloat(value);
   if (typeof proposed === 'number' && isFinite(proposed)) {
@@ -49,7 +56,7 @@ export class HashHistory extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    // this only listens for the center and zoom
+    // this only listens for the center,zoom, and rotation
     //  to change but props.map contains a lot more data.
     return (
       this.props.map.center[0] !== nextProps.map.center[0]
@@ -74,7 +81,7 @@ export class HashHistory extends React.Component {
   /** Encode the location in an object appropriate
    *  for hash-encoding.
    *
-   *  @returns an Object with x,y,z members.
+   *  @returns {Object} An Object with x,y,z members.
    */
   getLocationStateObject() {
     return {
@@ -85,11 +92,12 @@ export class HashHistory extends React.Component {
     };
   }
 
-  /** Create an object which will be encoded in the hash
+  /** Create an object which will be encoded in the hash.
    *
    *  This object should represent a limited amount of state
    *  which is appropriate for hash-encoding.
    *
+   *  @returns {Object} A new location state object.
    */
   getStateObject() {
     return Object.assign(
@@ -100,7 +108,7 @@ export class HashHistory extends React.Component {
 
   /** Parse the location from the hash.
    *
-   *  @param parsedHash The object resulting from parseQueryString of the hash.
+   *  @param {Object} parsedHash The object resulting from parseQueryString() of the hash.
    *
    */
   parseLocationHash(parsedHash) {
@@ -119,6 +127,7 @@ export class HashHistory extends React.Component {
   }
 
   /** Encode the state for the URL hash.
+   *  @returns A call to encodeQueryObject().
    */
   encodeState() {
     const st = this.getStateObject();

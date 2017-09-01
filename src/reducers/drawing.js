@@ -11,7 +11,8 @@
  * under the License.
  */
 
-/** Drawing Reducer
+/** @module reducers/drawing
+ * @desc Drawing Reducer
  *
  *  This initiates drawing on the map and can track
  *  changes as they are made.
@@ -27,7 +28,8 @@ const defaultState = {
   measureSegments: null,
 };
 
-
+/** Update the state to indicate an interaction has started.
+ */
 function startDrawing(state, action) {
   return {
     interaction: action.interaction,
@@ -37,7 +39,12 @@ function startDrawing(state, action) {
   };
 }
 
-
+/** Drawing reducer.
+ *  @param {Object} state The redux state.
+ *  @param {Object} action The selected action object.
+ *
+ *  @returns {Object} The new state object.
+ */
 export default function drawingReducer(state = defaultState, action) {
   switch (action.type) {
     case DRAWING.END:

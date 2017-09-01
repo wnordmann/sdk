@@ -11,8 +11,11 @@
  * under the License.
  */
 
-/** Collection of useful constants.
+/**
+ *  A collection of useful constants.
+ *  @ignore
  */
+
 export const LAYER_VERSION_KEY = 'bnd:layer-version';
 export const SOURCE_VERSION_KEY = 'bnd:source-version';
 export const TITLE_KEY = 'bnd:title';

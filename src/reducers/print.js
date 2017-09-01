@@ -11,7 +11,8 @@
  * under the License.
  */
 
-/** Print Reducer
+/** @module reducers/print
+ * @desc Print Reducer
  *
  *  Exports map image.
  *
@@ -23,6 +24,12 @@ const defaultState = {
   exportImage: false,
 };
 
+/** Print reducer.
+ *  @param {Object} state The redux state.
+ *  @param {Object} action The selected action object.
+ *
+ *  @returns {Object} The new state object.
+ */
 export default function printReducer(state = defaultState, action) {
   switch (action.type) {
     case PRINT.EXPORT_IMAGE:

@@ -18,13 +18,16 @@ import { connect } from 'react-redux';
 
 import { getLayerById, parseQueryString, encodeQueryObject } from '../util';
 
+/** @module components/legend
+ * @desc React Component to render the legend data.
+ */
 
 /** Return a div that is asynchronously populated
  *  with the content from the parameter href.
  *
- *  @param href - The location of the content for the div.
+ *  @param {string} href The location of the content for the div.
  *
- *  @returns a Div.
+ *  @returns {Object} A <div> element.
  */
 function getRemoteLegend(href) {
   let ref = null;
@@ -45,7 +48,7 @@ function getRemoteLegend(href) {
 /** Create legend objects using the metadata prefixes
  *  "bnd:legend-type" and "bnd:legend-contents".
  *
- *  Neither the Mapbox GL Spec nor the specific underlaying
+ *  Neither the Mapbox GL Spec nor the specific underlying
  *  services for vector layers have a standardized way of
  *  providing legends.  This is using the metadata provided
  *  by the layer to do so.
@@ -59,6 +62,9 @@ function getRemoteLegend(href) {
  *   the html content for a <div>
  *  "bnd:legend-type" : "href", "bnd:legend-content" would provide
  *   the URL for html content.
+ *   @param {Object} layer Mapbox GL layer.
+ *
+ *   @returns {(Object|null)} A <div> or <img> element, or null.
  */
 export function getLegend(layer) {
   if (layer.metadata === undefined) {
@@ -81,10 +87,13 @@ export function getLegend(layer) {
 }
 
 /** Get the legend for a raster-type layer.
- *
  *  Attempts to detect a WMS-type source and use GetLegendGraphic,
  *  otherwise, uses SDK specified legend metadata.
  *
+ *  @param {Object} layer Mapbox GL layer object.
+ *  @param {Object} layer_src Mapbox GL source object.
+ *
+ *  @returns {(Object[]|Object)} An array of <img> elements or a <div> element.
  */
 export function getRasterLegend(layer, layer_src) {
   if (layer_src.tiles && layer_src.tiles.length > 0) {
@@ -155,6 +164,9 @@ export function getRasterLegend(layer, layer_src) {
 
 class Legend extends React.Component {
 
+  /** Handles how to get the legend data based on the layer source type.
+   *  @returns {Object} Call to getRasterLegend() or getLegend() to return the html element.
+   */
   getLegendContents() {
     // get the layer definition
     const layer = getLayerById(this.props.layers, this.props.layerId);

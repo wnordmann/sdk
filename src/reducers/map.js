@@ -11,7 +11,8 @@
  * under the License.
  */
 
-/** Reducer to implement mapbox style document.
+/** @module reducers/map
+ * @desc Reducer to implement mapbox style document.
  */
 
 import createFilter from '@mapbox/mapbox-gl-style-spec/feature_filter';
@@ -38,6 +39,13 @@ const defaultState = {
   layers: [],
 };
 
+/** Returns a metadata child object.
+ *
+ *  @param {Object} metadata The state.map.metadata.
+ *  @param {string} version The version name of the metadata child object to be returned.
+ *
+ *  @returns {Object} The requested metadata child object.
+ */
 function getVersion(metadata, version) {
   if (typeof (metadata) === 'undefined' || typeof (metadata[version]) === 'undefined') {
     return 0;
@@ -45,6 +53,13 @@ function getVersion(metadata, version) {
   return metadata[version];
 }
 
+/** Increments metadata object version numbers.
+ *
+ *  @param {Object} metadata The state.map.metadata.
+ *  @param {string} version The metadata object to be incremented.
+ *
+ *  @returns {Object} The new state.map.metadata object with the incremented version.
+ */
 function incrementVersion(metadata, version) {
   const new_metadata = Object.assign({}, metadata);
   new_metadata[version] = getVersion(metadata, version) + 1;
@@ -55,6 +70,10 @@ function incrementVersion(metadata, version) {
 
 /** As there is no "source" metadata, this generates a unique key
  *  for the version of the data in the map's metadata object.
+ *
+ *  @param {string} sourceName The name of the source whose data is versioned.
+ *
+ *  @returns {string} The string value of the new source data version key.
  */
 export function dataVersionKey(sourceName) {
   return `${DATA_VERSION_KEY}:${sourceName}`;
@@ -62,6 +81,12 @@ export function dataVersionKey(sourceName) {
 
 /** Move a layer in the layers list.
  *
+ *  @param {Object} state The redux state.
+ *  @param {Object} layer The layer object to be moved.
+ *  @param {string} targetId The id of the layer
+ *  at the position where layer will be moved.
+ *
+ *  @returns {Object} The new state object.
  */
 function placeLayer(state, layer, targetId) {
   let placed = false;
@@ -216,9 +241,11 @@ function removeSource(state, action) {
 /** Creates a new state with the data for a
  *  source changed to the contents of data.
  *
- *  @param {object} state - redux state
- *  @param {string} sourceName - name of the souce to be changed
- *  @param {array} data -  List of features to be added to the source
+ *  @param {Object} state The redux state.
+ *  @param {string} sourceName The name of the source to be changed.
+ *  @param {Object[]} data The list of features to be added to the source.
+ *
+ *  @returns {Object} The new redux state.
  */
 function changeData(state, sourceName, data) {
   const source = state.sources[sourceName];
@@ -245,7 +272,7 @@ function addFeatures(state, action) {
   let new_data = null;
   let features;
   if (action.features.features) {
-    // When a full geoJson object is passed in check the projection
+    // When a full geoJson object is passed in, check the projection
     features = reprojectGeoJson(action.features);
   } else {
     // Pass along an just features
@@ -307,7 +334,6 @@ function clusterPoints(state, action) {
  *
  *  The action should define a filter, any feature
  *  matching the filter will be removed.
- *
  */
 function removeFeatures(state, action) {
   // short hand the source source and the data
@@ -384,6 +410,10 @@ function setContext(state, action) {
 }
 
 /** Update the map's metadata.
+ *  @param {Object} state The redux state.
+ *  @param {Object} action The selected action object.
+ *
+ *  @returns {Object} The new state object.
  */
 function updateMetadata(state, action) {
   return Object.assign({}, state, {
@@ -409,6 +439,10 @@ function updateSource(state, action) {
 }
 
 /** Main reducer.
+ *  @param {Object} state The redux state.
+ *  @param {Object} action The selected action object.
+ *
+ *  @returns {Object} The new state object.
  */
 export default function MapReducer(state = defaultState, action) {
   switch (action.type) {

@@ -11,13 +11,18 @@
  * under the License.
  */
 
-/** Actions for interacting with the map.
+/** @module actions/drawing
+ * @desc Actions for interacting with the map.
  */
 
 import { DRAWING } from '../action-types';
 import { INTERACTIONS } from '../constants';
 
 /** Action to start an interaction on the map.
+ *  @param {string} sourceName The name of the source on which the action takes place.
+ *  @param {string} drawingType The type of drawing interaction.
+ *
+ *  @returns {Object} An action object to pass to the reducer.
  */
 export function startDrawing(sourceName, drawingType) {
   return {
@@ -27,17 +32,26 @@ export function startDrawing(sourceName, drawingType) {
   };
 }
 
-/** Short-hand action to start modify-feature */
+/** Short-hand action to start modify-feature
+ *  @param {string} sourceName The name of the source to modify.
+ *
+ *  @returns {Object} Call to startDrawing()
+ */
 export function startModify(sourceName) {
   return startDrawing(sourceName, INTERACTIONS.modify);
 }
 
-/** Short-hand action to start select-feature */
+/** Short-hand action to start select-feature
+ *  @param {string} sourceName The name of the source on which the feature to select is found.
+ *
+ *  @returns {Object} Call to startDrawing()
+ */
 export function startSelect(sourceName) {
   return startDrawing(sourceName, INTERACTIONS.select);
 }
 
 /** Stop drawing / select / modify
+ *  @returns {Object} An action object to pass to the reducer.
  */
 export function endDrawing() {
   return {
@@ -45,17 +59,25 @@ export function endDrawing() {
   };
 }
 
-// These are just aliases to end drawing.
+/** These are just aliases to end drawing.
+ *  @returns {Object} Call to endDrawing().
+ */
 export function endModify() {
   return endDrawing();
 }
 
+/** These are just aliases to end drawing.
+ *  @returns {Object} Call to endDrawing().
+ */
 export function endSelect() {
   return endDrawing();
 }
 
 
 /** Start measuring.
+ *  @param {string} interaction Type of interation.
+ *
+ *  @returns {Object} Call to startDrawing().
  */
 export function startMeasure(interaction) {
   return startDrawing(null, interaction);
@@ -65,11 +87,11 @@ export function startMeasure(interaction) {
  *
  *  This is called each time the feature is updated.
  *
- *  @param feature  - The feature in WGS84.
- *  @param segments - Array of the incremental measurements in meters.
+ *  @param {Object} feature  The feature in WGS84.
+ *  @param {number[]} segments Array of the incremental measurements in meters.
  *                    [] for a Point, [total_area] for a polygon.
  *
- *  @returns a measurement action.
+ *  @returns {Object} A measurement action.
  */
 export function setMeasureFeature(feature, segments) {
   return {
@@ -80,6 +102,7 @@ export function setMeasureFeature(feature, segments) {
 }
 
 /** Clear the measurement feature.
+ *  @returns {Object} An action object to pass to the reducer.
  */
 export function clearMeasureFeature() {
   return {
