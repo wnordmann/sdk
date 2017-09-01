@@ -53,6 +53,38 @@
                 38.5931809
               ]
             }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "title": "Winslow’s Home",
+              "address": "7213 Delmar Blvd",
+              "telephone": "(314) 725-7559",
+              "website": "http://winslowshome.com"
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -90.3213879,
+                38.6577713
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "title": "Pint Size Bakery",
+              "address": "3133 Watson Rd",
+              "telephone": "(314) 645-7142",
+              "website": "http://pintsizebakery.com"
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -90.2960089,
+                38.6066791
+              ]
+            }
           }
         ]
       }
