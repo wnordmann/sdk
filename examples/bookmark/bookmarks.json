@@ -2,7 +2,7 @@
   "version": 8,
   "name": "states-wms",
   "center": [
-    2.336734, 
+    2.336734,
     48.885318
   ],
   "zoom": 18,
@@ -17,7 +17,47 @@
         "https://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
       ]
     },
-    "bookmarks-source": {
+    "saint-louis-bakeries": {
+      "type": "geojson",
+      "data": {
+        "type": "FeatureCollection",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "title": "La Patisserie Chouquette",
+              "address": "1626 Tower Grove Avenue",
+              "telephone": "(314) 932-7935",
+              "website": "https://www.simonefaure.com/"
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -90.2555367,
+                38.6197195
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "title": "Whisk: a Sustainable Bakeshop",
+              "address": "2201 Cherokee Street",
+              "telephone": "(314) 932-5166",
+              "website": "http://whiskstl.com/"
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -90.2232659,
+                38.5931809
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "paris-bakeries": {
       "type": "geojson",
       "data": {
         "type": "FeatureCollection",
@@ -151,8 +191,18 @@
       "source": "osm"
     },
     {
-      "id": "bookmarks-layer",
-      "source": "bookmarks-source",
+      "id": "saint-louis",
+      "source": "saint-louis-bakeries",
+      "type": "circle",
+      "paint": {
+        "circle-radius": 5,
+        "circle-color": "#006522",
+        "circle-stroke-color": "#603906"
+      }
+    },
+    {
+      "id": "paris",
+      "source": "paris-bakeries",
       "type": "circle",
       "paint": {
         "circle-radius": 5,

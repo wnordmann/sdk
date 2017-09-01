@@ -8,9 +8,9 @@ class BookmarkComponent extends React.PureComponent{
   render() {
     // Get the feature selected by the count in state
     // Render the modal window using style from app.css
-    const count = this.props.count
+    const count = this.props.bookmark.count
     if (Object.keys(this.props.map.sources).length > 0) {
-      const feature = this.props.map.sources[this.props.bookmarkSource].data.features[count];
+      const feature = this.props.map.sources[this.props.bookmark.source].data.features[count];
       return (
         <div className='modal-window'>
           <div className='interior'>
@@ -22,7 +22,7 @@ class BookmarkComponent extends React.PureComponent{
               <span className='coords'>{feature.geometry.coordinates[0]}</span> <br/>
               <br/>
           </div>
-          <MoveButtonComponent store={this.props.store} bookmarkSource={this.props.bookmarkSource}/>
+          <MoveButtonComponent store={this.props.store} />
         </div>
       )
     } else {
@@ -36,10 +36,10 @@ class BookmarkComponent extends React.PureComponent{
     }
   }
 }
-// Getting the bookmark.count and map stores
+// Getting the bookmark and map stores
 function mapStateToProps(state) {
   return {
-    count: state.bookmark.count,
+    bookmark: state.bookmark,
     map: state.map,
   };
 }

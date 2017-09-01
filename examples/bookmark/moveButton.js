@@ -9,22 +9,29 @@ class MoveButtonComponent extends React.PureComponent{
 	// This is the where action really happens, update state and move the map
 	moveBookmark(count){
 		this.props.moveSlide(count);
-		const feature = this.props.map.sources[this.props.bookmarkSource].data.features[count];
+		const feature = this.props.map.sources[this.props.bookmark.source].data.features[count];
 		this.props.zoomTo(feature.geometry.coordinates, 18);
 	}
 	// Logic for handling next button
 	nextBookmark(){
-		const featureCount = this.props.map.sources[this.props.bookmarkSource].data.features.length;
+		const featureCount = this.props.map.sources[this.props.bookmark.source].data.features.length;
 		const currentCount = this.props.bookmark.count;
 		const newCount  = currentCount >= featureCount - 1 ? 0 : currentCount + 1;
 		this.moveBookmark(newCount);
 	}
 	// Logic for handling previous button
 	previousBookmark(){
-		const featureCount = this.props.map.sources[this.props.bookmarkSource].data.features.length;
+		const featureCount = this.props.map.sources[this.props.bookmark.source].data.features.length;
 		const currentCount = this.props.bookmark.count;
 		const newCount = currentCount <= 0 ? featureCount - 1 : currentCount - 1;
 		this.moveBookmark(newCount);
+	}
+	componentDidUpdate(nextProps, nextState)
+	{
+		if(nextProps.bookmark.source !== this.props.bookmark.source)
+		{
+			this.moveBookmark(this.props.bookmark.count)
+		}
 	}
 	// Render the buttons
 	render() {

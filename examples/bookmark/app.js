@@ -15,6 +15,7 @@ import * as mapActions from '@boundlessgeo/sdk/actions/map';
 
 import BookmarkComponent from './bookmarks';
 import bookmarkReducer from './reducer';
+import * as bookmarkAction from './action';
 
 import MoveButtonComponent from './moveButton';
 
@@ -32,19 +33,29 @@ function main() {
   store.dispatch(mapActions.setContext({url:'./bookmarks.json'}));
 
   // This is the name of the source that the bookmark componet will iterate over
-  const bookmarkSource = "bookmarks-source";
+  const sources = ['paris-bakeries', 'saint-louis-bakeries'];
+  store.dispatch(bookmarkAction.changeSource(sources[0]));
+
+  const changeSource = () => {
+    let source = sources[0];
+    if(store.getState().bookmark.source === sources[0]){
+      source = sources[1]
+    }
+
+    store.dispatch(bookmarkAction.changeSource(source));
+  }
 
   // place the map on the page
   ReactDOM.render(<SdkMap className='map-container' store={store}/>,
     document.getElementById('map'));
 
   // place the bookmark control and pass in the features and zoom function
-  ReactDOM.render(<BookmarkComponent className='bookmark-item' store={store} bookmarkSource={bookmarkSource}/>,
+  ReactDOM.render(<BookmarkComponent className='bookmark-item' store={store}/>,
     document.getElementById('bookmark'));
 
   // place the move slide compoent, same slide used in bookmark component
   ReactDOM.render(
-    (<MoveButtonComponent className="sdk-btn" store={store} bookmarkSource={bookmarkSource}/>),
+    (<div><button className="sdk-btn" onClick={ changeSource }  >Change Source</button><MoveButtonComponent className="sdk-btn" store={store}/></div>),
       document.getElementById('controls'));
 }
 main();

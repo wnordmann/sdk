@@ -6,3 +6,9 @@ export function moveSlide(count) {
     count
   };
 }
+export function changeSource(source) {
+  return {
+    type: 'CHANGESOURCE',
+    source
+  };
+}
