@@ -31,7 +31,7 @@ class BookmarkComponent extends React.PureComponent{
                 </span>
               </div>
             </div>
-            <MoveButtonComponent className="buttons" store={this.props.store} />
+            <MoveButtonComponent store={this.props.store} />
           </div>
         </div>
       )

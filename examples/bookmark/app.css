@@ -45,6 +45,9 @@ a {
   z-index: 9999;
   width: 400px;
 }
+.interior .buttons button.sdk-btn {
+  padding: .25rem;
+}
 .bookmarkItem {
   margin-bottom: 10px;
 }
