@@ -16,43 +16,47 @@ a {
    height: 480px;
    background-color: #f1f1f1;
  }
-.interior {
-  display: table-cell;
-  vertical-align: middle;
-  text-align: center;
-  z-index: 9999;
-  width: 400px;
-
-}
-
 #bookmark {
   z-index: 999;
   user-select:text;
   position: relative;
   left: 40px;
-  bottom: 240px;
+  bottom: 260px;
   width: 400px;
   box-shadow: 8px 8px 5px #888888;
 }
-/*.bookmark-item {
-  width: 400px;
-  position: absolute;
-  position: relative;
-  height: 150px;
-  left: 40px;
-  bottom: 180px;
-}*/
 .modal-window {
   padding: 2rem;
   background: #fff;
   color: #444;
 }
-
 .modal-window header {
   font-weight: bold;
 }
 
-.modal-window h1 {
-  font-size: 150%;
+.modal-window h3 {
+  margin: 0;
+  font-size: 1rem;
   margin: 0 0 15px;
+}
+.interior {
+  display: table-cell;
+  vertical-align: middle;
+  z-index: 9999;
+  width: 400px;
+}
+.bookmarkItem {
+  margin-bottom: 10px;
+}
+.label, .value {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.label {
+  width: 80px;;
+}
+.value {
+  width: 250px;
 }

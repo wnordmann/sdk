@@ -14,15 +14,25 @@ class BookmarkComponent extends React.PureComponent{
       return (
         <div className='modal-window'>
           <div className='interior'>
-            <header>{feature.properties.title}</header>
-              Address: {feature.properties.address} <br/>
-              Phone: {feature.properties.telephone} <br/>
-              <a href={feature.properties.website}> Web Site</a> <br/>
-              <span className='coords'>{feature.geometry.coordinates[1]}</span>,
-              <span className='coords'>{feature.geometry.coordinates[0]}</span> <br/>
-              <br/>
+            <h3>{feature.properties.title}</h3>
+            <div className="bookmarkItem">
+              <div>
+                <span className="label">Address:</span> <span className="value">{feature.properties.address}</span>
+              </div>
+              <div>
+                <span className="label">Phone:</span> <span className="value">{feature.properties.telephone}</span>
+              </div>
+              <div>
+                <span className="label">Web Site:</span> <span className="value"><a href={feature.properties.website}>{feature.properties.website}</a></span>
+              </div>
+              <div>
+                <span className="label">Lat/Long:</span> <span className="value">
+                  <span className='coords'>{feature.geometry.coordinates[1]}</span>, <span className='coords'>{feature.geometry.coordinates[0]}</span>
+                </span>
+              </div>
+            </div>
+            <MoveButtonComponent className="buttons" store={this.props.store} />
           </div>
-          <MoveButtonComponent store={this.props.store} />
         </div>
       )
     } else {
