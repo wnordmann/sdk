@@ -28,19 +28,31 @@ class BookmarkComponent extends React.PureComponent{
   render() {
     // Get the feature selected by the count in state
     // Render the modal window using style from app.css
-    const count = this.props.bookmark.count;
-    const feature = this.props.map.sources["points"].data.features[count];
-    return (
-      <div className='modal-window'>
-        <div className='interior'>
-          <header>{feature.properties.title}</header>
-            Name: {feature.properties.randomName} <br/>
-            Latitude: <span className='coords'>{feature.geometry.coordinates[1]}</span> <br/>
-            Longitude: <span className='coords'>{feature.geometry.coordinates[0]}</span> <br/>
+    const count = this.props.bookmark.count
+    if (Object.keys(this.props.map.sources).length > 0) {
+      const feature = this.props.map.sources["bookmarks-source"].data.features[count];
+      return (
+        <div className='modal-window'>
+          <div className='interior'>
+            <header>{feature.properties.title}</header>
+              Address: {feature.properties.address} <br/>
+              Phone: {feature.properties.telephone} <br/>
+              <a href={feature.properties.website}> Web Site</a> <br/>
+              <span className='coords'>{feature.geometry.coordinates[1]}</span>,
+              <span className='coords'>{feature.geometry.coordinates[0]}</span> <br/>
+          </div>
+          <MoveButtonComponent store={this.props.store}/>
         </div>
-        <MoveButtonComponent store={this.props.store}/>
-      </div>
-    )
+      )
+    } else {
+      return (
+        <div className='modal-window'>
+          <div className='interior'>
+          </div>
+          <MoveButtonComponent store={this.props.store}/>
+        </div>
+      )
+    }
   }
 }
 

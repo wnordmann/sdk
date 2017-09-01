@@ -32,25 +32,19 @@ const store = createStore(combineReducers({
    applyMiddleware(thunkMiddleware));
 
 function main() {
-
-  // Start with a reasonable global view of the map.
-  //store.dispatch(mapActions.setView(store.getState().map.sources["points"].data.features[0].geometry.coordinates, 5));
-
-  store.dispatch(mapActions.setContext({url:'./mapboxstyle.json'}));
-  store.dispatch(mapActions.setView([10,10], 10));  
+  // load in the map style from a external .json
+  store.dispatch(mapActions.setContext({url:'./bookmarks.json'}));
 
   // place the map on the page
   ReactDOM.render(<SdkMap className='map-container' store={store}/>,
     document.getElementById('map'));
 
+  // place the bookmark control and pass in the features and zoom function
+  ReactDOM.render(<BookmarkComponent className='bookmark-item' store={store}/>,
+    document.getElementById('bookmark'));
 
-
-  // // place the bookmark control and pass in the features and zoom function
-  // ReactDOM.render(<BookmarkComponent className='bookmark-item' store={store}/>,
-  //   document.getElementById('bookmark'));
-
-  // ReactDOM.render(
-  //   (<MoveButtonComponent className="sdk-btn" store={store}/>),
-  //     document.getElementById('controls'));
+  ReactDOM.render(
+    (<MoveButtonComponent className="sdk-btn" store={store}/>),
+      document.getElementById('controls'));
 }
 main();
