@@ -13,14 +13,10 @@ import SdkMap from '@boundlessgeo/sdk/components/map';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
 
-import uuid from 'uuid';
-
 import BookmarkComponent from './bookmarks';
 import bookmarkReducer from './reducer';
-import * as bookmarkAction from './action';
 
 import MoveButtonComponent from './moveButton';
-
 
 // This will have webpack include all of the SDK styles.
 import '@boundlessgeo/sdk/stylesheet/sdk.scss';
@@ -35,16 +31,20 @@ function main() {
   // load in the map style from a external .json
   store.dispatch(mapActions.setContext({url:'./bookmarks.json'}));
 
+  // This is the name of the source that the bookmark componet will iterate over
+  const bookmarkSource = "bookmarks-source";
+
   // place the map on the page
   ReactDOM.render(<SdkMap className='map-container' store={store}/>,
     document.getElementById('map'));
 
   // place the bookmark control and pass in the features and zoom function
-  ReactDOM.render(<BookmarkComponent className='bookmark-item' store={store}/>,
+  ReactDOM.render(<BookmarkComponent className='bookmark-item' store={store} bookmarkSource={bookmarkSource}/>,
     document.getElementById('bookmark'));
 
+  // place the move slide compoent, same slide used in bookmark component
   ReactDOM.render(
-    (<MoveButtonComponent className="sdk-btn" store={store}/>),
+    (<MoveButtonComponent className="sdk-btn" store={store} bookmarkSource={bookmarkSource}/>),
       document.getElementById('controls'));
 }
 main();

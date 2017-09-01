@@ -1,36 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 
-import bookmarkReducer from './reducer';
 import MoveButtonComponent from './moveButton';
-import * as bookmarkAction from './action';
 
 // Custom Bookmark Component
 class BookmarkComponent extends React.PureComponent{
-  constructor(){
-    super();
-    // Using state local to the component instead of the redux store
-    const count = 0;
-    const featureCount = 0;
-    const feature = {
-      properties:{
-        title:'',
-        randomName:'',
-        id:0
-      },
-      geometry:{
-        coordinates :[0,0]
-      }
-    };
-    this.state = {featureCount};
-  }
   render() {
     // Get the feature selected by the count in state
     // Render the modal window using style from app.css
-    const count = this.props.bookmark.count
+    const count = this.props.count
     if (Object.keys(this.props.map.sources).length > 0) {
-      const feature = this.props.map.sources["bookmarks-source"].data.features[count];
+      const feature = this.props.map.sources[this.props.bookmarkSource].data.features[count];
       return (
         <div className='modal-window'>
           <div className='interior'>
@@ -40,8 +20,9 @@ class BookmarkComponent extends React.PureComponent{
               <a href={feature.properties.website}> Web Site</a> <br/>
               <span className='coords'>{feature.geometry.coordinates[1]}</span>,
               <span className='coords'>{feature.geometry.coordinates[0]}</span> <br/>
+              <br/>
           </div>
-          <MoveButtonComponent store={this.props.store}/>
+          <MoveButtonComponent store={this.props.store} bookmarkSource={this.props.bookmarkSource}/>
         </div>
       )
     } else {
@@ -55,19 +36,12 @@ class BookmarkComponent extends React.PureComponent{
     }
   }
 }
-
+// Getting the bookmark.count and map stores
 function mapStateToProps(state) {
   return {
-    bookmark: state.bookmark,
+    count: state.bookmark.count,
     map: state.map,
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    moveSlide: (count) => {
-      dispatch(bookmarkAction.moveSlide(count));
-    }
-  };
-}
-export default connect(mapStateToProps, mapDispatchToProps)(BookmarkComponent);
+export default connect(mapStateToProps, null)(BookmarkComponent);
