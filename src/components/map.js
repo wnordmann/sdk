@@ -1043,6 +1043,12 @@ export class Map extends React.Component {
 
       this.updatePopups();
     });
+
+
+    // check for any interactions
+    if (this.props.drawing && this.props.drawing.interaction) {
+      this.updateInteraction(this.props.drawing);
+    }
   }
 
   updateInteraction(drawingProps) {

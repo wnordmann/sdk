@@ -45,8 +45,18 @@ export const PRINT = {
   RECEIVE_IMAGE: 'PRINT_RECEIVE_IMAGE',
 };
 
+export const WFS = {
+  INSERT: 'WFS_INSERT',
+  UPDATE: 'WFS_UPDATE',
+  DELETE: 'WFS_DELETE',
+  ADD_SOURCE: 'WFS_ADD_SOURCE',
+  REMOVE_SOURCE: ' WFS_REMOVE_SOURCE',
+  FINISHED: 'WFS_FINISHED',
+};
+
 export default {
   MAP,
   DRAWING,
   PRINT,
+  WFS,
 };

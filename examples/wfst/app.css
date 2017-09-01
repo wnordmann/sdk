@@ -1,0 +1,31 @@
+/* Demo how to over ride the default color of the buttons */
+
+button.sdk-btn.blue {
+    background-color: #29728d;
+}
+
+.color-control {
+    display: inline-block;
+    width: 1.25em;
+    height: 1.25em;
+    line-height: 1.25em;
+    border: 2px solid #f5f5f5;
+    border-radius: 50%;
+    color:#f5f5f5;
+    text-align:center;
+    text-decoration:none;
+    background: #464646;
+    box-shadow: 0 0 3px gray;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.color-control.selected {
+    border: solid 2px black;
+}
+
+span.label {
+    font-weight: bold;
+    width: 6em;
+    display: inline-block;
+}

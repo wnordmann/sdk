@@ -36,6 +36,12 @@ const config = {
     inline: true,
     port: 3000, // Port Number
     host: 'localhost', // Change to '0.0.0.0' for external facing server
+    proxy: {
+      '/geoserver' : {
+        target: 'http://localhost:8080/',
+        secure: false,
+      }
+    },
   },
   devtool: 'eval',
   node: {fs: "empty"},
