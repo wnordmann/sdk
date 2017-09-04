@@ -10,17 +10,21 @@ Javascript SDK based on React, OpenLayers and Redux.
 For the previous version, please see the 1.x branch instead.
 
 ## Running Project
-To run the examples, 
+To run the examples,
 
-Clone Project
+First, clone the project: `git clone https://github.com/boundlessgeo/sdk.git`
 
-In directory of cloned project
+Then change into directory of cloned project: `cd sdk`
+
+and run the following commands:
 
 `npm install` - install libraries
-`npm run build:examples` - build examples from templates
-`npm start` - start webpack
 
-http://localhost:3000/build/examples - browse to examples
+`npm run build:examples` - build examples from templates
+
+`npm start` - start webpack-dev-server
+
+The last command should open your browser to a page of examples: http://localhost:3000/build/examples
 
 ## Troubleshooting
 
