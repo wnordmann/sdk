@@ -1,4 +1,4 @@
-/** Demonstrate the loading of a MapBox GL Style Spec document into SDK
+/** Demonstrate the loading of a Mapbox GL Style Spec document into SDK
  *
  */
 

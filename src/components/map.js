@@ -245,9 +245,9 @@ function updateGeojsonSource(olSource, glSource, mapProjection, baseUrl) {
 
 
 /** Create a vector source based on a
- *  MapBox GL styles definition.
+ *  Mapbox GL styles definition.
  *
- *  @param glSource a MapBox GL styles defintiion of the source.
+ *  @param glSource a Mapbox GL styles defintiion of the source.
  *
  * @returns ol.source.vector instance.
  */
@@ -265,7 +265,7 @@ function configureGeojsonSource(glSource, mapProjection, baseUrl) {
     new_src = new ClusterSource({
       source: vector_src,
       // default the distance to 50 as that's what
-      //  is specified by MapBox.
+      //  is specified by Mapbox.
       distance: glSource.clusterRadius ? glSource.clusterRadius : 50,
     });
   }

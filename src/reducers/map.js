@@ -284,7 +284,7 @@ function clusterPoints(state, action) {
 
   if (typeof action.cluster !== 'undefined') {
     cluster_settings.cluster = action.cluster;
-    // MapBox GL style spec defaults to 50,
+    // Mapbox GL style spec defaults to 50,
     //  whereas OpenLayers defaults to 20px.
     cluster_settings.clusterRadius = source.clusterRadius ? source.clusterRadius : 50;
   }

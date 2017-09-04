@@ -198,7 +198,7 @@ function main() {
     }
   };
 
-  // Removing features uses MapBox GL Spec filters.
+  // Removing features uses Mapbox GL Spec filters.
   const removeRandomPoints = () => {
     store.dispatch(mapActions.removeFeatures('points', ['==', 'isRandom', true]));
   };
