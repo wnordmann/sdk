@@ -37,7 +37,7 @@ function main() {
     crossOrigin: null,
     tiles: [
       // The {bbox-epsg-3857} is a misnomer in this case.
-      // MapBox GL Style spec does not outline specifying {bbox-epsg-4326}
+      // Mapbox GL Style spec does not outline specifying {bbox-epsg-4326}
       // or {bbox} for native map coordiantes as it does not appear to consider
       // rendering maps in projections other than EPSG:3857.
       // 'https://server.arcgisonline.com/arcgis/rest/services/ESRI_Imagery_World_2D/MapServer/export?bbox={bbox-epsg-3857}&bboxSR=&layers=&layerDefs=&size=&imageSR=&format=png&transparent=false&f=image'
@@ -152,7 +152,7 @@ function main() {
     }
   };
 
-  // Removing features uses MapBox GL Spec filters.
+  // Removing features uses Mapbox GL Spec filters.
   const removeRandomPoints = () => {
     store.dispatch(mapActions.removeFeatures('points', ['==', 'isRandom', true]));
   };
