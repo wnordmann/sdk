@@ -24,7 +24,7 @@ function createIndex(files, metalsmith, done) {
   index += '<div id="header">';
   index += 'Boundless SDK Examples';
   index += '</div>';
-  index += '<ul>';
+  index += '<ul class="examples">';
   const keys = Object.keys(files);
   for (let i = 0, ii = keys.length; i < ii; ++i) {
     const filename = keys[i];
