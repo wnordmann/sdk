@@ -17,6 +17,9 @@ class BookmarkComponent extends React.PureComponent{
             <h3>{feature.properties.title}</h3>
             <div className="bookmarkItem">
               <div>
+                <span className="label">Name:</span> <span className="value">{feature.properties.name}</span>
+              </div>
+              <div>
                 <span className="label">Address:</span> <span className="value">{feature.properties.address}</span>
               </div>
               <div>
