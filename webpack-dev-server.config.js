@@ -51,7 +51,7 @@ const config = {
     filename: 'build/examples/[name]/[name].bundle.js',
   },
   plugins: [
-    new ExtractTextPlugin('dist/sdk.css'),
+    new ExtractTextPlugin('sdk.css'),
     // Enables Hot Modules Replacement
     new webpack.HotModuleReplacementPlugin(),
   ],

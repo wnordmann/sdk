@@ -9,12 +9,15 @@
     "test:watch": "npm test -- --watch",
     "lint": "eslint __tests__ src examples tasks",
     "cover": "node_modules/.bin/jest --coverage",
+    "sass": "node-sass --include-path ./node_modules ./src/stylesheet/sdk.scss",
     "build:examples": "node tasks/build-examples.js",
+    "build:examples-js": "webpack --config ./webpack-dev-server.config.js",
+    "build:css": "npm run sass -- -o ./build/stylesheet",
+    "bundle-examples": "npm run build:examples && npm run build:examples-js && npm run build:css",
     "build:js": "babel ./src --out-dir ./dist",
     "watch:js": "babel --watch ./src --out-dir ./dist",
-    "dist:examples": "node tasks/build-examples.js ./dist/examples",
-    "dist:copy": "node tasks/dist-copy.js",
-    "build:dist": "npm run build:js && npm run dist:copy && npm run dist:examples"
+    "dist:copy": "node tasks/dist-copy.js && node tasks/create-package-json.js",
+    "dist": "npm run build:js && npm run dist:copy"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
