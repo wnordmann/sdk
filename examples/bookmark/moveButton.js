@@ -9,8 +9,11 @@ class MoveButtonComponent extends React.PureComponent{
 	// This is the where action really happens, update state and move the map
 	moveBookmark(count){
 		this.props.moveSlide(count);
-		const feature = this.props.map.sources[this.props.bookmark.source].data.features[count];
-		this.props.zoomTo(feature.geometry.coordinates, 18);
+		if (this.props.map.sources[this.props.bookmark.source]) {
+			const feature = this.props.map.sources[this.props.bookmark.source].data.features[count];
+			this.props.zoomTo(feature.geometry.coordinates, 18);
+		}
+
 	}
 	// Logic for handling next button
 	nextBookmark(){

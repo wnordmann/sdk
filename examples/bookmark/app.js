@@ -8,6 +8,7 @@ import thunkMiddleware from 'redux-thunk';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import fetch from 'isomorphic-fetch';
 
 import SdkMap from '@boundlessgeo/sdk/components/map';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
@@ -32,18 +33,32 @@ function main() {
   // load in the map style from a external .json
   store.dispatch(mapActions.setContext({url:'./bookmarks.json'}));
 
-  // This is the name of the source that the bookmark componet will iterate over
-  const sources = ['paris-bakeries', 'saint-louis-bakeries'];
-  store.dispatch(bookmarkAction.changeSource(sources[0]));
+  // This is the name of the source that the bookmark component will iterate over
+  const SOURCENAMES = ['paris-bakeries', 'saint-louis-bakeries'];
 
-  const changeSource = () => {
-    let source = sources[0];
-    if(store.getState().bookmark.source === sources[0]){
-      source = sources[1]
-    }
+  // Fetch the geoJson file from a url and add it to the map at the named source
+  const addDataFromGeoJSON = (url, sourceName) => {
+    // Fetch URL
+    fetch(url)
+      .then(
+        response => response.json(),
+        error => console.error('An error occured.', error),
+      )
+      // addFeatures with the features, source name
+      .then(json => store.dispatch(mapActions.addFeatures(sourceName, json)));
+  };
 
-    store.dispatch(bookmarkAction.changeSource(source));
+  // Change the souce as needed
+  const changeSource = (sourceName) => {
+    store.dispatch(bookmarkAction.changeSource(sourceName));
   }
+
+  // Fetch data from local files
+  addDataFromGeoJSON('./data/stlouis.json', SOURCENAMES[1]);
+  addDataFromGeoJSON('./data/paris.json', SOURCENAMES[0]);
+
+  // Init source for the bookmarks
+  changeSource(SOURCENAMES[0]);
 
   // place the map on the page
   ReactDOM.render(<SdkMap className='map-container' store={store}/>,
@@ -55,7 +70,11 @@ function main() {
 
   // place the move slide compoent, same slide used in bookmark component
   ReactDOM.render(
-    (<div><button className="sdk-btn" onClick={ changeSource }  >Change Source</button><MoveButtonComponent className="sdk-btn" store={store}/></div>),
+    (<div>
+        <button className="sdk-btn" onClick={() => {changeSource(SOURCENAMES[1])} }  >St. Louis Bakeries</button>
+        <button className="sdk-btn" onClick={() => {changeSource(SOURCENAMES[0])} }  >Paris Bakeries</button>
+        <MoveButtonComponent className="sdk-btn" store={store}/>
+      </div>),
       document.getElementById('controls'));
 }
 main();
