@@ -70,8 +70,29 @@ function main() {
     store.dispatch(bookmarkAction.changeSource(sourceName));
   }
   // Add bookmark to redux store
-  const addBookmark = (sourceName) => {
+  const addBookmark = () => {
     store.dispatch(bookmarkAction.addBookmark(true));
+  }
+  // Delete bookmark to redux store
+  const deleteBookmark = () => {
+    const bookmark = store.getState().bookmark;
+    const features = store.getState().map.sources[bookmark.source].data.features;
+
+    // Simple check to make sure we have more feature to remove
+    if( features.length > 0 ) {
+
+      // move to the next feature before it's deleted
+      if( features.length > 1) {
+        store.dispatch(mapActions.setView(features[bookmark.count + 1].geometry.coordinates, 18))
+      }
+
+      // Assumes address is unique
+      // In a larger dataset adding in a uuid would be a good idea
+      const filter = ['==', 'address', features[bookmark.count].properties.address];
+      store.dispatch(mapActions.removeFeatures(bookmark.source, filter));
+    } else {
+      alert("No features left to delete");
+    }
   }
 
   // Fetch data from local files
@@ -100,7 +121,8 @@ function main() {
     (<div>
         <button className="sdk-btn" onClick={() => {changeSource(SOURCENAMES[1])} }  >St. Louis Bakeries</button>
         <button className="sdk-btn" onClick={() => {changeSource(SOURCENAMES[0])} }  >Paris Bakeries</button>
-        <button className="sdk-btn" onClick={() => {addBookmark()} }  >Add</button>
+        <button className="sdk-btn" onClick={() => {addBookmark()} }  >Add Bookmark</button>
+        <button className="sdk-btn" onClick={() => {deleteBookmark()} }  >Delete Bookmark</button>
         <MoveButtonComponent className="sdk-btn" store={store}/>
       </div>),
       document.getElementById('controls'));

@@ -9,7 +9,8 @@ class BookmarkComponent extends React.PureComponent{
     // Get the feature selected by the count in state
     // Render the modal window using style from app.css
     const count = this.props.bookmark.count
-    if (this.props.map.sources[this.props.bookmark.source] && this.props.map.sources[this.props.bookmark.source].data) {
+    if (this.props.map.sources[this.props.bookmark.source] &&
+      this.props.map.sources[this.props.bookmark.source].data.features.length > 0) {
       const feature = this.props.map.sources[this.props.bookmark.source].data.features[count];
       return (
         <div className='modal-window'>

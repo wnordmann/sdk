@@ -28,7 +28,6 @@ class addBookmarkComponenet extends React.PureComponent{
 		this.props.addBookmark(false);
 	}
   save() {
-		console.log(this.props.bookmark.source);
 		const feature = {
 			type:'Feature',
 			properties:{
