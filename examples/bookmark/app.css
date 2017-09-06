@@ -19,9 +19,18 @@ a {
 #bookmark {
   z-index: 999;
   user-select:text;
-  position: relative;
+  position: absolute;
   left: 40px;
-  bottom: 260px;
+  top: 260px;
+  width: 400px;
+  box-shadow: 8px 8px 5px #888888;
+}
+#addForm {
+  z-index: 1000;
+  user-select:text;
+  position: absolute;
+  left: 470px;
+  top: 260px;
   width: 400px;
   box-shadow: 8px 8px 5px #888888;
 }

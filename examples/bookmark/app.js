@@ -15,10 +15,12 @@ import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
 
 import BookmarkComponent from './bookmarks';
+import MoveButtonComponent from './moveButton';
+import AddBookmarkComponent from './addBookmark';
+
 import bookmarkReducer from './reducer';
 import * as bookmarkAction from './action';
 
-import MoveButtonComponent from './moveButton';
 
 // This will have webpack include all of the SDK styles.
 import '@boundlessgeo/sdk/stylesheet/sdk.scss';
@@ -39,26 +41,47 @@ function main() {
   // Fetch the geoJson file from a url and add it to the map at the named source
   const addDataFromGeoJSON = (url, sourceName) => {
     // Fetch URL
-    fetch(url)
+    return fetch(url)
       .then(
         response => response.json(),
         error => console.error('An error occured.', error),
       )
       // addFeatures with the features, source name
-      .then(json => store.dispatch(mapActions.addFeatures(sourceName, json)));
+      // .then(json => store.dispatch(mapActions.addFeatures(sourceName, json)));
+      .then(json => {
+        store.dispatch(mapActions.addSource(sourceName, {
+          type: 'geojson',
+          data: json
+        }));
+        store.dispatch(mapActions.addLayer({
+          id: sourceName,
+          source: sourceName,
+          paint: {
+            'circle-radius': 5,
+            'circle-color': '#f46b42',
+            'circle-stroke-color': '#3a160b',
+          }
+        }));
+      });
   };
 
   // Change the souce as needed
   const changeSource = (sourceName) => {
     store.dispatch(bookmarkAction.changeSource(sourceName));
   }
+  // Add bookmark to redux store
+  const addBookmark = (sourceName) => {
+
+  }
 
   // Fetch data from local files
   addDataFromGeoJSON('./data/stlouis.json', SOURCENAMES[1]);
   addDataFromGeoJSON('./data/paris.json', SOURCENAMES[0]);
 
+
   // Init source for the bookmarks
   changeSource(SOURCENAMES[0]);
+  //this.props.zoomTo(feature.geometry.coordinates, 18);
 
   // place the map on the page
   ReactDOM.render(<SdkMap className='map-container' store={store}/>,
@@ -68,11 +91,16 @@ function main() {
   ReactDOM.render(<BookmarkComponent className='bookmark-item' store={store}/>,
     document.getElementById('bookmark'));
 
+  // place the bookmark control and pass in the features and zoom function
+  ReactDOM.render(<AddBookmarkComponent store={store}/>,
+    document.getElementById('addForm'));
+
   // place the move slide compoent, same slide used in bookmark component
   ReactDOM.render(
     (<div>
         <button className="sdk-btn" onClick={() => {changeSource(SOURCENAMES[1])} }  >St. Louis Bakeries</button>
         <button className="sdk-btn" onClick={() => {changeSource(SOURCENAMES[0])} }  >Paris Bakeries</button>
+        <button className="sdk-btn" onClick={() => {addBookmark()} }  >Add</button>
         <MoveButtonComponent className="sdk-btn" store={store}/>
       </div>),
       document.getElementById('controls'));

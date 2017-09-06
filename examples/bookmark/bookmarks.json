@@ -1,10 +1,7 @@
 {
   "version": 8,
-  "name": "states-wms",
-  "center": [
-    2.336734,
-    48.885318
-  ],
+  "name": "bookmarks",
+  "center":[2.336734,48.885318],
   "zoom": 18,
   "sources": {
     "osm": {
@@ -16,12 +13,6 @@
         "https://b.tile.openstreetmap.org/{z}/{x}/{y}.png",
         "https://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
       ]
-    },
-    "saint-louis-bakeries": {
-      "type": "geojson"
-    },
-    "paris-bakeries": {
-      "type": "geojson"
     }
   },
   "layers": [
@@ -35,26 +26,6 @@
     {
       "id": "osm",
       "source": "osm"
-    },
-    {
-      "id": "saint-louis",
-      "source": "saint-louis-bakeries",
-      "type": "circle",
-      "paint": {
-        "circle-radius": 5,
-        "circle-color": "#006522",
-        "circle-stroke-color": "#603906"
-      }
-    },
-    {
-      "id": "paris",
-      "source": "paris-bakeries",
-      "type": "circle",
-      "paint": {
-        "circle-radius": 5,
-        "circle-color": "#f4a742",
-        "circle-stroke-color": "#603906"
-      }
     }
   ],
   "bearing": 0

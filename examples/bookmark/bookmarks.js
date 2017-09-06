@@ -40,11 +40,7 @@ class BookmarkComponent extends React.PureComponent{
       )
     } else {
       return (
-        <div className='modal-window'>
-          <div className='interior'>
-          </div>
-          <MoveButtonComponent store={this.props.store}/>
-        </div>
+      <div> </div>
       )
     }
   }
