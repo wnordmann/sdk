@@ -4,6 +4,7 @@
   "description": "Boundless Web SDK",
   "scripts": {
     "start": "webpack-dev-server --config webpack-dev-server.config.js --open --open-page 'build/examples'",
+    "serve": "webpack-dev-server --config webpack-dev-server.config.js",
     "test": "jest && npm run lint",
     "test:only": "jest",
     "test:watch": "npm test -- --watch",
