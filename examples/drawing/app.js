@@ -208,6 +208,7 @@ function main() {
   // add some buttons to demo some actions.
   ReactDOM.render((
     <div>
+      <h3>Try it out</h3>
       <div className="control-panel">
         <h4>Layers</h4>
         <select onChange={setLayer}>

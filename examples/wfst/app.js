@@ -136,6 +136,7 @@ function main() {
   // add some buttons to demo some actions.
   ReactDOM.render((
     <div>
+      <h3>Try it out</h3>
       <p>
         <b>Click on a Census Tract to change its color.</b><br/>
       </p>

@@ -169,6 +169,7 @@ function main() {
   // add some buttons to demo some actions.
   ReactDOM.render((
     <div>
+      <h3>Try it out</h3>
       <button className="sdk-btn" onClick={runFetchGeoJSON}>Fetch Data</button>
       <button className="sdk-btn" onClick={displayTable}>Show the data in a table</button>
     </div>

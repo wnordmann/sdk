@@ -136,6 +136,7 @@ function main() {
   // add some legends to the demo.
   ReactDOM.render((
     <div>
+      <h3>Try it out</h3>
       <h4>Legends</h4>
       <Provider store={store}>
         <div>

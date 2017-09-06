@@ -198,6 +198,7 @@ function main() {
   // add some buttons to demo some actions.
   ReactDOM.render((
     <div>
+      <h3>Try it out</h3>
       <div>
         <b>Choose a color for the points on the map:</b> <br />
         <div>{color_controls}</div>

@@ -51,6 +51,7 @@ function main() {
   // add a button to demo the action.
   ReactDOM.render((
     <div>
+      <h3>Try it out</h3>
       <ContextSelector store={store} />
       <h1>Save a Map</h1>
       <h2>To <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/">MapBox Style Specification</a></h2>

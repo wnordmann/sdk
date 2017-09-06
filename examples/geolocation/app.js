@@ -64,6 +64,7 @@ function main() {
   // add some buttons to demo some actions.
   ReactDOM.render((
     <div>
+      <h3>Try it out</h3>
       <TrackPosition store={store} />
     </div>
   ), document.getElementById('controls'));
