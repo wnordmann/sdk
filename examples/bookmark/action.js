@@ -12,3 +12,9 @@ export function changeSource(source) {
     source
   };
 }
+export function addBookmark(isAdding) {
+  return {
+    type: 'ADDBOOKMARK',
+    isAdding
+  };
+}

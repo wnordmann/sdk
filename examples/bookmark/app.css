@@ -72,3 +72,27 @@ a {
 .value {
   width: 250px;
 }
+/* form specific formatting */
+ .form-group {
+   display: flex;
+   flex-direction: row;
+ }
+
+ .form-group label {
+   flex: none;
+   display: block;
+   width: 95px;
+  }
+ .form-group label.right-inline {
+   text-align: right;
+   padding-right: 4px;
+   padding-left: 5px;
+   width: auto;
+ }
+
+ .form-group .input-control {
+   flex: 1 1 auto;
+   display: block;
+   margin-bottom: 4px;
+   margin-top: -4px;
+ }

@@ -71,7 +71,7 @@ function main() {
   }
   // Add bookmark to redux store
   const addBookmark = (sourceName) => {
-
+    store.dispatch(bookmarkAction.addBookmark(true));
   }
 
   // Fetch data from local files

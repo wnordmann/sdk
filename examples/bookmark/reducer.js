@@ -8,6 +8,8 @@ export default function bookmarkReducer(state = defaultState, action) {
 			return Object.assign({}, state, { count: action.count });
   	case 'CHANGESOURCE':
 			return { source: action.source, count: 0};
+  	case 'ADDBOOKMARK':
+    return Object.assign({}, state, { isAdding: action.isAdding });
   	default:
       return state;
   }

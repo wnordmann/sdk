@@ -19,16 +19,20 @@ class addBookmarkComponenet extends React.PureComponent{
 
     this.handleChange = this.handleChange.bind(this);
   }
-
+	// Change handler to keep track of state
   handleChange(event) {
     this.setState({[event.target.name]: event.target.value});
   }
-
+	//
+	close() {
+		this.props.addBookmark(false);
+	}
   save() {
 		console.log(this.props.bookmark.source);
 		const feature = {
 			type:'Feature',
 			properties:{
+				title: this.state.title,
 				name:this.state.name,
 				address:this.state.address,
 				telephone:this.state.phone,
@@ -36,43 +40,60 @@ class addBookmarkComponenet extends React.PureComponent{
 			},
 			geometry: {
 				type:'Point',
-				coordinates : [this.state.long, this.state.lat]
+				coordinates : [parseFloat(this.state.long), parseFloat(this.state.lat)]
 			}
 		}
-		console.log(feature);
 		this.props.addFeature(this.props.bookmark.source, feature);
-
+		this.close();
   }
 
   render() {
+		if(this.props.bookmark.isAdding){
       return (
         <div className='modal-window'>
           <div className='interior'>
-					<div className="bookmarkItem">
-		         <label>Name:
-		           <input type="text" name='name' value={this.state.name} onChange={this.handleChange} />
-		         </label>
-		         <label>Address:
-		           <input type="text" name='address' value={this.state.address} onChange={this.handleChange} />
-		         </label>
-		         <label>Phone:
-		           <input type="number" name='phone' value={this.state.phone} onChange={this.handleChange} />
-		         </label>
-		         <label>Web Site:
-		           <input type="text" name='website' value={this.state.website} onChange={this.handleChange} />
-		         </label>
-		         <label>Lat:
-		           <input type="number" name='lat' value={this.state.lat} onChange={this.handleChange} />
-		         </label>
-		         <label>Long:
-		           <input type="number" name='long' value={this.state.long} onChange={this.handleChange} />
-		         </label>
+						<div className="bookmarkItem">
+						<div className="form-group">
+		         	<label>Name: </label>
+		          <input className="input-control" type="text" name='name' value={this.state.name} onChange={this.handleChange} />
+						</div>
+						<div className="form-group">
+		         	<label>Title: </label>
+		          <input className="input-control" type="text" name='title' value={this.state.title} onChange={this.handleChange} />
+						</div>
+						<div className="form-group">
+		         <label>Address:</label>
+		         <input className="input-control" type="text" name='address' value={this.state.address} onChange={this.handleChange} />
+					 </div>
+					 <div className="form-group">
+		         <label>Phone:</label>
+		          <input className="input-control" type="number" name='phone' value={this.state.phone} onChange={this.handleChange} />
+						</div>
+						<div className="form-group">
+		        	<label>Web Site:</label>
+		        	<input className="input-control" type="text" name='website' value={this.state.website} onChange={this.handleChange} />
+						</div>
+						<div className="form-group">
+		        	<label>Latitude:</label>
+		        	<input className="input-control" type="number" name='lat' value={this.state.lat} onChange={this.handleChange} />
+						</div>
+						<div className="form-group">
+	         		<label>Longitude:</label>
+		        	<input className="input-control" type="number" name='long' value={this.state.long} onChange={this.handleChange} />
+						</div>
+						<div className="form-group">
 		         <button className="sdk-btn" onClick={() => {this.save()}} >Save</button>
+		         <button className="sdk-btn" onClick={() => {this.close()}} >Cancel</button>
+						</div>
 					</div>
 				</div>
       </div>
-      )
-  }
+    )
+  } else {
+		return (<div></div>)
+	}
+
+}
 }
 // Getting the bookmark and map stores
 function mapStateToProps(state) {
@@ -85,6 +106,9 @@ function mapDispatchToProps(dispatch) {
   return {
 		addFeature: (sourceName, features) => {
 			dispatch(mapActions.addFeatures(sourceName, features));
+		},
+		addBookmark: (isAdding) => {
+			dispatch(bookmarkAction.addBookmark(isAdding));
 		}
   };
 }
