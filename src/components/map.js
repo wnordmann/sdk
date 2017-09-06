@@ -84,7 +84,7 @@ function getVersion(obj, key) {
   return obj.metadata[key];
 }
 
-function configureTileSource(glSource, mapProjection) {
+function configureTileSource(glSource, mapProjection, time) {
   const tile_url = glSource.tiles[0];
   const commonProps = {
     attributions: glSource.attribution,
@@ -103,6 +103,9 @@ function configureTileSource(glSource, mapProjection) {
       if (keys[i].toUpperCase() === 'REQUEST') {
         delete params[keys[i]];
       }
+    }
+    if (time) {
+      params.TIME = time;
     }
     return new TileWMSSource(Object.assign({
       url: urlParts[0],
@@ -276,11 +279,11 @@ function configureGeojsonSource(glSource, mapProjection, baseUrl) {
   return new_src;
 }
 
-function configureSource(glSource, mapProjection, accessToken, baseUrl) {
+function configureSource(glSource, mapProjection, accessToken, baseUrl, time) {
   // tiled raster layer.
   if (glSource.type === 'raster') {
     if ('tiles' in glSource) {
-      return configureTileSource(glSource, mapProjection);
+      return configureTileSource(glSource, mapProjection, time);
     } else if (glSource.url) {
       return configureTileJSONSource(glSource);
     }
@@ -527,8 +530,9 @@ export class Map extends React.Component {
       // Add the source because it's not in the current
       //  list of sources.
       if (!(src_name in this.sources)) {
+        const time = this.props.map.metadata ? this.props.map.metadata[TIME_KEY] : null;
         this.sources[src_name] = configureSource(sourcesDef[src_name], proj,
-          this.props.accessToken, this.props.baseUrl);
+          this.props.accessToken, this.props.baseUrl, time);
       }
 
       // Check to see if there was a clustering change.
