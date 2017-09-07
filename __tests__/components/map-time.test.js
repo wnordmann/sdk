@@ -1,4 +1,4 @@
-/* global it, describe, expect */
+/* global it, describe, expect, spyOn */
 
 import React from 'react';
 import { mount } from 'enzyme';
@@ -68,5 +68,87 @@ describe('Map component time tests', () => {
     const source = layers[0].getSource();
     const params = source.getParams();
     expect(params.TIME).toBe('2006-06-23T03:10:00Z');
+  });
+
+  it('should correctly filter a vector source that is time enabled', () => {
+    const store = createStore(combineReducers({
+      map: MapReducer,
+    }));
+
+    const createLayerFilter = (layer, mapTime) => {
+    };
+
+    const props = {
+      store,
+      createLayerFilter,
+    };
+    spyOn(props, 'createLayerFilter').and.returnValue('dummyfilter');
+
+    const wrapper = mount(<ConnectedMap {...props} />);
+    const map = wrapper.instance().getWrappedInstance();
+
+    store.dispatch(MapActions.setView([-98, 40], 4));
+
+    const data = {
+      type: 'FeatureCollection',
+      features: [{
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [0, 0],
+        },
+        properties: {
+          mag: 6,
+          time: 500
+        },
+      }, {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [-45, 0],
+        },
+        properties: {
+          mag: 8,
+          time: 1000
+        },
+      }],
+    };
+
+    store.dispatch(MapActions.addSource('earthquakes', {
+      type: 'geojson',
+      data: data
+    }));
+
+    const layerConfig = {
+      metadata: {
+        'bnd:timeattribute': 'time'
+      },
+      id: 'earthquakes',
+      type: 'circle',
+      source: 'earthquakes',
+      paint: {
+        'circle-color': {
+          property: 'mag',
+          stops: [
+            [6, '#FCA107'],
+            [8, '#7F3121']
+          ]
+        },
+        'circle-opacity': 0.75,
+        'circle-radius': {
+          property: 'mag',
+          stops: [
+            [6, 20],
+            [8, 40]
+          ]
+        }
+      }
+    };
+
+    store.dispatch(MapActions.addLayer(layerConfig));
+    // dummy range for testing, for applications ISO8601 with moment would normally be used
+    store.dispatch(MapActions.setMapTime('200,500'));
+    expect(props.createLayerFilter).toHaveBeenCalled();
+    expect(map.props.map.layers[0].filter).toBe('dummyfilter');
   });
 });

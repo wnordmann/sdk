@@ -59,8 +59,8 @@ import DrawInteraction from 'ol/interaction/draw';
 import ModifyInteraction from 'ol/interaction/modify';
 import SelectInteraction from 'ol/interaction/select';
 
-import { setView, setRotation } from '../actions/map';
-import { INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TIME_KEY } from '../constants';
+import { updateLayer, setView, setRotation } from '../actions/map';
+import { INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TIME_KEY, TIME_ATTRIBUTE_KEY } from '../constants';
 import { dataVersionKey } from '../reducers/map';
 
 import { setMeasureFeature, clearMeasureFeature } from '../actions/drawing';
@@ -254,10 +254,10 @@ function updateGeojsonSource(olSource, glSource, mapProjection, baseUrl) {
  *
  * @returns ol.source.vector instance.
  */
-function configureGeojsonSource(glSource, mapProjection, baseUrl) {
+function configureGeojsonSource(glSource, mapProjection, baseUrl, wrapX) {
   const vector_src = new VectorSource({
     useSpatialIndex: true,
-    wrapX: false,
+    wrapX: wrapX,
   });
 
   // GeoJson sources can be clustered but OpenLayers
@@ -279,7 +279,7 @@ function configureGeojsonSource(glSource, mapProjection, baseUrl) {
   return new_src;
 }
 
-function configureSource(glSource, mapProjection, accessToken, baseUrl, time) {
+function configureSource(glSource, mapProjection, accessToken, baseUrl, time, wrapX) {
   // tiled raster layer.
   if (glSource.type === 'raster') {
     if ('tiles' in glSource) {
@@ -288,7 +288,7 @@ function configureSource(glSource, mapProjection, accessToken, baseUrl, time) {
       return configureTileJSONSource(glSource);
     }
   } else if (glSource.type === 'geojson') {
-    return configureGeojsonSource(glSource, mapProjection, baseUrl);
+    return configureGeojsonSource(glSource, mapProjection, baseUrl, wrapX);
   } else if (glSource.type === 'image') {
     return configureImageSource(glSource);
   } else if (glSource.type === 'vector') {
@@ -406,8 +406,14 @@ export class Map extends React.Component {
     if (old_time !== new_time) {
       // find time dependent layers
       for (let i = 0, ii = nextProps.map.layers.length; i < ii; ++i) {
-        if (nextProps.map.layers[i].metadata[TIME_KEY] !== undefined) {
-          const source = nextProps.map.layers[i].source;
+        const layer = nextProps.map.layers[i];
+        if (layer.metadata[TIME_ATTRIBUTE_KEY] !== undefined) {
+          this.props.updateLayer(layer.id, {
+            filter: this.props.createLayerFilter(layer, nextProps.map.metadata[TIME_KEY])
+          });
+        }
+        if (layer.metadata[TIME_KEY] !== undefined) {
+          const source = layer.source;
           const olSource = this.sources[source];
           if (olSource && olSource instanceof TileWMSSource) {
             olSource.updateParams({TIME: nextProps.map.metadata[TIME_KEY]});
@@ -533,9 +539,9 @@ export class Map extends React.Component {
       // Add the source because it's not in the current
       //  list of sources.
       if (!(src_name in this.sources)) {
-        const time = this.props.map.metadata ? this.props.map.metadata[TIME_KEY] : null;
+        const time = getKey(this.props.map.metadata, TIME_KEY);
         this.sources[src_name] = configureSource(sourcesDef[src_name], proj,
-          this.props.accessToken, this.props.baseUrl, time);
+          this.props.accessToken, this.props.baseUrl, time, this.props.wrapX);
       }
 
       // Check to see if there was a clustering change.
@@ -1153,6 +1159,7 @@ export class Map extends React.Component {
 }
 
 Map.propTypes = {
+  wrapX: PropTypes.bool,
   projection: PropTypes.string,
   map: PropTypes.shape({
     center: PropTypes.array,
@@ -1183,6 +1190,7 @@ Map.propTypes = {
 };
 
 Map.defaultProps = {
+  wrapX: false,
   projection: 'EPSG:3857',
   baseUrl: '',
   accessToken: '',
@@ -1219,6 +1227,8 @@ Map.defaultProps = {
   },
   clearMeasureFeature: () => {
   },
+  createLayerFilter: () => {
+  },
 };
 
 function mapStateToProps(state) {
@@ -1231,6 +1241,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    updateLayer: (layerId, layerConfig) => {
+      dispatch(updateLayer(layerId, layerConfig));
+    },
     setView: (view) => {
       // transform the center to 4326 before dispatching the action.
       const center = Proj.transform(view.getCenter(), view.getProjection(), 'EPSG:4326');
