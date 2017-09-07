@@ -11,14 +11,16 @@
     <div id="header">
       {{ shortdesc }}
     </div>
-    {{{ contents }}}
-    <div class="info">
-      <h3>Features in this demo</h3>
-      <ul class="info-list">
-        {{ md docs }}
-      </ul>
+    <div id="map"></div>
+    <div class="description">
+      {{{ contents }}}
+      <div class="info">
+        <h3>Features in this demo</h3>
+        <ul class="info-list">
+          {{ md docs }}
+        </ul>
+      </div>
     </div>
-  </div> <!--- added to close the index.html - Need to find a better way --->
     {{{ js.tag }}}
   </body>
 </html>

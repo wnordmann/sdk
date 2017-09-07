@@ -30,7 +30,7 @@ function createIndex(files, metalsmith, done) {
     const filename = keys[i];
     const example = files[filename];
     if (filename.indexOf('index.html') !== -1 && filename.indexOf('.swp') === -1) {
-      index += '<li>';
+      index += `<li onClick="location.href = '${filename}'">`;
       index += `<a href="${filename}">${example.title}</a><br>`;
       index += `${example.shortdesc}`;
       index += '</li>';

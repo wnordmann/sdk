@@ -51,6 +51,8 @@ body {
    margin: 1rem;
    background-color: #29728d;
    box-shadow: 2px 2px 2px 0px #ccc;
+   cursor: pointer;
+   cursor: hand;
  }
 
  .examples a {
@@ -58,6 +60,8 @@ body {
   display: inline-block;
   padding-bottom: 6px;
   text-decoration: none;
+  cursor: pointer;
+  cursor: hand;
 }
 .description {
   display: flex;
@@ -68,22 +72,22 @@ body {
 
 }
 .description #controls {
- flex: 1;
- order: 2;
+  flex: 1;
+  order: 2;
 }
 .description .info {
- flex: 1;
- order: 1;
+  flex: 1;
+  order: 1;
 }
 .description h3 {
- margin-bottom: .5rem;
- color: #757575;
- border-bottom: solid 1px #757575;
- padding-bottom: .5rem;
- margin-bottom: 1rem;
+  margin-bottom: .5rem;
+  color: #757575;
+  border-bottom: solid 1px #757575;
+  padding-bottom: .5rem;
+  margin-bottom: 1rem;
 }
 .description .info li {
- margin-bottom: .45rem;
- margin-left: 1rem;
- list-style: square;
+  margin-bottom: .45rem;
+  margin-left: 1rem;
+  list-style: square;
 }
