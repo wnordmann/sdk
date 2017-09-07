@@ -15,11 +15,11 @@ import SdkMap from '@boundlessgeo/sdk/components/map';
 import SdkHashHistory from '@boundlessgeo/sdk/components/history';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
-
+import GPXFormat from 'ol/format/gpx';
+import GeoJSONFormat from 'ol/format/geojson';
 // This will have webpack include all of the SDK styles.
 import '@boundlessgeo/sdk/stylesheet/sdk.scss';
 
-import toGeoJSON from './togeojson';
 import fetch from 'isomorphic-fetch';
 
 /* eslint-disable no-underscore-dangle */
@@ -60,10 +60,9 @@ function main() {
       )
       // addFeatures with the features, source name
       .then(text => {
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(text,"text/xml");
-        const geoJson = toGeoJSON.gpx(xmlDoc);
-        store.dispatch(mapActions.addSource("bike", {type:'geoJson', data: geoJson}));
+        const features = new GPXFormat().readFeatures(text);
+        const geoJson = new GeoJSONFormat().writeFeaturesObject(features);
+        store.dispatch(mapActions.addSource("bike", {type:'geojson', data: geoJson}));
         store.dispatch(mapActions.addLayer({
           id: "bikeLayer",
           source: "bike",
@@ -86,10 +85,7 @@ function main() {
       )
       // addFeatures with the features, source name
       .then(json => {
-        // const parser = new DOMParser();
-        // const xmlDoc = parser.parseFromString(text,"text/xml");
-        // const geoJson = toGeoJSON.gpx(xmlDoc);
-        store.dispatch(mapActions.addSource("tax", {type:'geoJson', data: json}));
+        store.dispatch(mapActions.addSource("tax", {type:'geojson', data: json}));
         // setup the polys layer
         store.dispatch(mapActions.addLayer({
           id: 'taxLayer',
