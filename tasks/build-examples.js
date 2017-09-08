@@ -22,7 +22,10 @@ function createIndex(files, metalsmith, done) {
   index += '</head>';
   index += '<body>';
   index += '<div id="header">';
+  index += '<img src="boundless_sdk_horiz.svg" width="90">';
+  index += '<span class="desc">';
   index += 'Boundless SDK Examples';
+  index += '</span>';
   index += '</div>';
   index += '<ul class="examples">';
   const keys = Object.keys(files);

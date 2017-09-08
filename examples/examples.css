@@ -18,13 +18,17 @@ body {
   height: 57px;
   background-color: #ededed;
   border-bottom: solid 2px #f58d50;
-  padding: 24px 5px;
-  padding-left: 118px;
-  background-image: url(boundless_sdk_horiz.svg);
-  background-size: 90px;
-  background-repeat: no-repeat;
-  background-position: 11px 11px;
+  padding: 11px 5px;
+  padding-left: 12px;
+
+}
+
+#header .desc {
   font-size: 20px;
+  vertical-align: top;
+  margin-top: .5rem;
+  display: inline-block;
+  padding-left: .5rem;
 }
 
 #map .sdk-map {
@@ -35,6 +39,20 @@ body {
 #controls button {
   margin: 5px;
   font-size: .85rem;
+}
+#controls p {
+  margin-bottom: 10px;
+}
+#controls .input {
+  padding-right: 10px;
+}
+
+#controls .control-panel {
+  margin-bottom: 10px;
+}
+
+#controls .control-panel h4 {
+  margin-bottom: 6px;
 }
 
 .examples {
