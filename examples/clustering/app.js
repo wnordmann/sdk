@@ -150,6 +150,7 @@ function main() {
   // add some buttons to demo some actions.
   ReactDOM.render((
     <div>
+      <h3>Try it out</h3>
       <button className="sdk-btn" onClick={() => { addRandomPoints(); }}>Add 10 random points</button>
       <p>
         <span className="input"><input type="checkbox" onChange={clusterPoints} /></span> Cluster Points

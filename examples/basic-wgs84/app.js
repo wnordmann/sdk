@@ -162,6 +162,7 @@ function main() {
   // add some buttons to demo some actions.
   ReactDOM.render((
     <div>
+      <h3>Try it out</h3>
       <button className="sdk-btn" onClick={zoomToNullIsland}>Zoom to Null Island</button>
       <button className="sdk-btn" onClick={addRandomPoints}>Add 10 random points</button>
       <button className="sdk-btn blue" onClick={removeRandomPoints}>Remove random points</button>

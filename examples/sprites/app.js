@@ -125,6 +125,7 @@ function main() {
 
   ReactDOM.render((
     <div>
+      <h3>Try it out</h3>
       <button className="sdk-btn" onClick={duckToGoose}>Duck, Duck, Goose</button>
       <button className="sdk-btn" onClick={gooseToDuck}>Duck, Duck, Grey Duck</button>
     </div>

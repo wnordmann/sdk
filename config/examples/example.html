@@ -9,14 +9,20 @@
   </head>
   <body>
     <div id="header">
-      {{ shortdesc }}
+      <a href="/build/examples"><img src="../boundless_sdk_horiz.svg" width="90"></a>
+      <span class="desc">
+        {{ shortdesc }}
+      </span>
     </div>
-    {{{ contents }}}
-    <div class="info">
-      <h3>Features in this demo</h3>
-      <ul class="info-list">
-        {{ md docs }}
-      </ul>
+    <div id="map"></div>
+    <div class="description">
+      {{{ contents }}}
+      <div class="info">
+        <h3>Features in this demo</h3>
+        <ul class="info-list">
+          {{ md docs }}
+        </ul>
+      </div>
     </div>
     {{{ js.tag }}}
   </body>

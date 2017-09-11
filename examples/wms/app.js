@@ -124,6 +124,7 @@ function main() {
   // add some buttons to demo some actions.
   ReactDOM.render((
     <div>
+      <h3>Try it out</h3>
       <h4>Layers</h4>
       <LayerList store={store} />
       <button onClick={addWMS}>Add WMS Layer</button>
