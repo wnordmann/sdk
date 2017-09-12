@@ -180,14 +180,17 @@ function updateLayer(state, action) {
  */
 function addSource(state, action) {
   const new_source = {};
-  new_source[action.sourceName] = Object.assign({}, action.sourceDef);
-  if (action.sourceDef.type === 'geojson') {
-    if (action.sourceDef.data === undefined || action.sourceDef.data === null) {
+  // psudo error handling forcing type to lower to avoid mixed case geoJson
+  const sourceDef = Object.assign({}, action.sourceDef, {type:action.sourceDef.type.toLowerCase()});
+
+  new_source[action.sourceName] = Object.assign({}, sourceDef);
+  if (sourceDef.type === 'geojson') {
+    if (sourceDef.data === undefined || sourceDef.data === null) {
       new_source[action.sourceName].data = {};
-    } else if (typeof action.sourceDef.data === 'object') {
-      new_source[action.sourceName].data = Object.assign({}, action.sourceDef.data);
+    } else if (typeof sourceDef.data === 'object') {
+      new_source[action.sourceName].data = Object.assign({}, sourceDef.data);
     } else {
-      new_source[action.sourceName].data = action.sourceDef.data;
+      new_source[action.sourceName].data = sourceDef.data;
     }
   }
 
