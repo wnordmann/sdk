@@ -38,15 +38,6 @@ const defaultState = {
   layers: [],
 };
 
-const sourceTypes = [
-  'vector',
-  'raster',
-  'geojson',
-  'image',
-  'video',
-  'canvas'
-];
-
 function getVersion(metadata, version) {
   if (typeof (metadata) === 'undefined' || typeof (metadata[version]) === 'undefined') {
     return 0;
@@ -190,30 +181,26 @@ function updateLayer(state, action) {
 function addSource(state, action) {
   const new_source = {};
 
-  if (sourceTypes.indexOf(action.sourceDef.type) === -1) {
-    new Error("Invalid source type: " + action.sourceDef.type);
-    return state;
-  } else {
-    new_source[action.sourceName] = Object.assign({}, action.sourceDef);
-    if (action.sourceDef.type === 'geojson') {
-      if (action.sourceDef.data === undefined || action.sourceDef.data === null) {
-        new_source[action.sourceName].data = {};
-      } else if (typeof action.sourceDef.data === 'object') {
-        new_source[action.sourceName].data = Object.assign({}, action.sourceDef.data);
-      } else {
-        new_source[action.sourceName].data = action.sourceDef.data;
-      }
+  new_source[action.sourceName] = Object.assign({}, action.sourceDef);
+  if (action.sourceDef.type === 'geojson') {
+    if (action.sourceDef.data === undefined || action.sourceDef.data === null) {
+      new_source[action.sourceName].data = {};
+    } else if (typeof action.sourceDef.data === 'object') {
+      new_source[action.sourceName].data = Object.assign({}, action.sourceDef.data);
+    } else {
+      new_source[action.sourceName].data = action.sourceDef.data;
     }
-
-    const new_metadata = {};
-    new_metadata[dataVersionKey(action.sourceName)] = 0;
-
-    const new_sources = Object.assign({}, state.sources, new_source);
-    return Object.assign({}, state, {
-      metadata: Object.assign({}, state.metadata, new_metadata),
-      sources: new_sources,
-    }, incrementVersion(state.metadata, SOURCE_VERSION_KEY));
   }
+
+  const new_metadata = {};
+  new_metadata[dataVersionKey(action.sourceName)] = 0;
+
+  const new_sources = Object.assign({}, state.sources, new_source);
+  return Object.assign({}, state, {
+    metadata: Object.assign({}, state.metadata, new_metadata),
+    sources: new_sources,
+  }, incrementVersion(state.metadata, SOURCE_VERSION_KEY));
+
 }
 
 /** Remove a source from the state.

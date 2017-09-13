@@ -59,17 +59,6 @@ describe('tests for the geojson-type map sources', () => {
     testGeojsonData(done, undefined, 0);
   });
 
-  it('handles mixed case type - geoJson', () => {
-    const src_name = 'test-source';
-    store.dispatch(MapActions.addSource(src_name, {
-      type: 'geoJson',
-      data : {},
-    }));
-
-    // check to see if the map source is now undefined.
-    expect(map.sources[src_name]).toBe(undefined);
-  });
-
   it('adds a geojson source with an empty object', (done) => {
     testGeojsonData(done, {}, 0);
   });
