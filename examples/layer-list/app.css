@@ -42,7 +42,7 @@
   outline: none;
 }
 
-.sdk-layerlist .layer .btn-container button:hover, .sdk-layerlist .layer .btn-container button:focus {
+.sdk-layerlist .layer .btn-container button:hover{
 	background: orange;
   color: #f1f1f1;
 }
