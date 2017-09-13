@@ -4,7 +4,7 @@ const Metalsmith = require('metalsmith');
 const handlebars = require('handlebars');
 const templates = require('metalsmith-layouts');
 const marked = require('marked');
-
+const config = require('./config');
 const srcDir = path.join(__dirname, '..', 'examples');
 const destDir = path.join(__dirname, '..', 'build', 'examples');
 const templatesDir = path.join(__dirname, '..', 'config', 'examples');
@@ -32,7 +32,8 @@ function createIndex(files, metalsmith, done) {
   for (let i = 0, ii = keys.length; i < ii; ++i) {
     const filename = keys[i];
     const example = files[filename];
-    if (filename.indexOf('index.html') !== -1 && filename.indexOf('.swp') === -1) {
+    const skipExample = process.argv[2] ? config.skip.indexOf(filename.split(path.sep)[0]) !== -1 : false;
+    if (filename.indexOf('index.html') !== -1 && filename.indexOf('.swp') === -1 && !skipExample) {
       index += `<li onClick="location.href = '${filename}'">`;
       index += `<a href="${filename}">${example.title}</a><br>`;
       index += `${example.shortdesc}`;
@@ -55,12 +56,15 @@ function augmentExamples(files, metalsmith, done) {
   for (let i = 0, ii = keys.length; i < ii; ++i) {
     const filename = keys[i];
     const file = files[filename];
+    const id = filename.split(path.sep)[0];
+    const skipExample = process.argv[2] ? config.skip.indexOf(id) !== -1 : false;
+    if (skipExample) {
+      delete files[filename];
+    }
     if (filename.indexOf('index.html') !== -1 && filename.indexOf('.swp') === -1) {
       if (!file.layout) {
         throw new Error(`${filename}: Missing "layout" in YAML front-matter`);
       }
-      const id = filename.split(path.sep)[0];
-
       file.js = {
         tag: `<script src="./${id}.bundle.js"></script>`,
       };
