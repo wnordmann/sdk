@@ -32,7 +32,7 @@ function createIndex(files, metalsmith, done) {
   for (let i = 0, ii = keys.length; i < ii; ++i) {
     const filename = keys[i];
     const example = files[filename];
-    const skipExample = process.argv[2] ? config.skip.indexOf(filename.split(path.sep)[0]) === -1 : false;
+    const skipExample = process.argv[2] ? config.skip.indexOf(filename.split(path.sep)[0]) !== -1 : false;
     if (filename.indexOf('index.html') !== -1 && filename.indexOf('.swp') === -1 && !skipExample) {
       index += `<li onClick="location.href = '${filename}'">`;
       index += `<a href="${filename}">${example.title}</a><br>`;
@@ -57,7 +57,7 @@ function augmentExamples(files, metalsmith, done) {
     const filename = keys[i];
     const file = files[filename];
     const id = filename.split(path.sep)[0];
-    const skipExample = process.argv[2] ? config.skip.indexOf(id) === -1 : false;
+    const skipExample = process.argv[2] ? config.skip.indexOf(id) !== -1 : false;
     if (skipExample) {
       delete files[filename];
     }

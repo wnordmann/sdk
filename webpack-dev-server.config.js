@@ -1,25 +1,9 @@
 const webpack = require('webpack');
 const path = require('path');
-
+const common  = require('./webpack-common');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const { lstatSync, readdirSync } = require('fs')
-const { join } = require('path')
-
-const isDirectory = source => lstatSync(source).isDirectory()
-const getDirectories = source =>
-  readdirSync(source).map(name => join(source, name)).filter(isDirectory)
-
-const subDirs = getDirectories('./examples');
-
-const entry = {};
-for (let i = 0, ii = subDirs.length; i < ii; ++i) {
-  const name = subDirs[i].split(path.sep).pop();
-  entry[name] = [
-    'webpack/hot/only-dev-server'
-  ];
-  entry[name].push(`.${path.sep}${subDirs[i]}${path.sep}app.js`);
-}
+const entry = common.getEntries(true);
 
 const config = {
   resolve: {
