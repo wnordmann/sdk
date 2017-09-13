@@ -55,30 +55,19 @@ describe('tests for the geojson-type map sources', () => {
     }, 100);
   }
 
-  function testGeoJsonData(done, data, nFeatures) {
-    const src_name = 'test-source';
-    store.dispatch(MapActions.addSource(src_name, {
-      type: 'geoJson',
-      data,
-    }));
-
-    // check to see if the map source is now defined.
-    expect(map.sources[src_name]).not.toBe(undefined);
-
-    // check the feature count matches.
-    setTimeout(() => {
-      const src = map.sources[src_name];
-      expect(src.getFeatures().length).toBe(nFeatures);
-      done();
-    }, 100);
-  }
-
   it('handles undefined data', (done) => {
     testGeojsonData(done, undefined, 0);
   });
 
-  it('handles mixed case type - geoJson', (done) => {
-    testGeoJsonData(done, {}, 0);
+  it('handles mixed case type - geoJson', () => {
+    const src_name = 'test-source';
+    store.dispatch(MapActions.addSource(src_name, {
+      type: 'geoJson',
+      data : {},
+    }));
+
+    // check to see if the map source is now undefined.
+    expect(map.sources[src_name]).toBe(undefined);
   });
 
   it('adds a geojson source with an empty object', (done) => {
