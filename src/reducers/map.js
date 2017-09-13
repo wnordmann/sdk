@@ -180,6 +180,7 @@ function updateLayer(state, action) {
  */
 function addSource(state, action) {
   const new_source = {};
+
   new_source[action.sourceName] = Object.assign({}, action.sourceDef);
   if (action.sourceDef.type === 'geojson') {
     if (action.sourceDef.data === undefined || action.sourceDef.data === null) {
@@ -199,6 +200,7 @@ function addSource(state, action) {
     metadata: Object.assign({}, state.metadata, new_metadata),
     sources: new_sources,
   }, incrementVersion(state.metadata, SOURCE_VERSION_KEY));
+
 }
 
 /** Remove a source from the state.

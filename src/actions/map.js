@@ -19,6 +19,15 @@ import fetch from 'isomorphic-fetch';
 import { MAP } from '../action-types';
 import { TITLE_KEY, TIME_KEY } from '../constants';
 
+const sourceTypes = [
+  'vector',
+  'raster',
+  'geojson',
+  'image',
+  'video',
+  'canvas'
+];
+
 export function setView(center, zoom) {
   return {
     type: MAP.SET_VIEW,
@@ -50,6 +59,9 @@ export function addLayer(layerDef, layerTitle, positionId) {
 }
 
 export function addSource(sourceName, sourceDef) {
+  if (sourceTypes.indexOf(sourceDef.type) === -1 ) {
+    throw(new Error("Invalid source type: " + sourceDef.type + ".  Valid source types are " + sourceTypes.toString()));
+  }
   return {
     type: MAP.ADD_SOURCE,
     sourceName,

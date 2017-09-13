@@ -75,6 +75,23 @@ describe('actions', () => {
     expect(actions.addSource(sourceName, sourceDef)).toEqual(expectedAction);
   });
 
+  it('should create an action to add a source of a bad type and error', () => {
+    const sourceName = 'osm';
+    const sourceDef = {
+      type: 'xraster',
+      attribution: '&copy; <a href=\'https://www.openstreetmap.org/copyright\'>OpenStreetMap</a> contributors.',
+      tileSize: 256,
+      tiles: [
+        'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        'https://b.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      ],
+    };
+
+    const errorMsg = 'Invalid source type: xraster.  Valid source types are vector,raster,geojson,image,video,canvas';
+    expect(() => {actions.addSource(sourceName, sourceDef)} ).toThrow(new Error(errorMsg));
+  });
+
   it('should create an action to remove a layer', () => {
     const layerId = 'osm';
     const expectedAction = {
