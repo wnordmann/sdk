@@ -1190,7 +1190,7 @@ Map.propTypes = {
 };
 
 Map.defaultProps = {
-  wrapX: false,
+  wrapX: true,
   projection: 'EPSG:3857',
   baseUrl: '',
   accessToken: '',
