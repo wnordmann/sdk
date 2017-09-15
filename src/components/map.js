@@ -176,7 +176,6 @@ function configureMvtSource(glSource, accessToken) {
   return source;
 }
 
-
 function getLoaderFunction(glSource, mapProjection, baseUrl) {
   return function(bbox, resolution, projection) {
     // setup a feature promise to handle async loading
@@ -190,7 +189,7 @@ function getLoaderFunction(glSource, mapProjection, baseUrl) {
       // if the baseUrl is present and the url does not
       // start with http:// or "/" then assume the path is
       // relative to the style doc.
-      if (!(url.indexOf('http://') === 0 || url.indexOf('/') === '0')) {
+      if (!(url.indexOf('https://') === 0 || url.indexOf('http://') === 0 || url.indexOf('/') === 0)) {
         if (baseUrl && url.indexOf('.') === 0) {
           url = url.substring(1);
         }
