@@ -17,7 +17,7 @@
 
 import fetch from 'isomorphic-fetch';
 
-import { PureComponent } from 'react';
+import { Component } from 'react';
 import { connect } from 'react-redux';
 
 import WfsFormat from 'ol/format/wfs';
@@ -30,7 +30,7 @@ import { finishedAction } from '../actions/wfs';
 import { jsonClone } from '../util';
 import { WFS } from '../action-types';
 
-class WfsController extends PureComponent {
+class WfsController extends Component {
   constructor(props) {
     super(props);
     this.pendingActions = {};
