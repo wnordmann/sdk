@@ -156,6 +156,6 @@ describe('tests for the geojson-type map sources', () => {
       testGeojsonData(done, './test2.geojson', 2);
     };
 
-    testGeojsonData(done, '/bbox.geojson?BBOX={bbox-epsg-3857}', 2);
+    testGeojsonData(next_fetch, '/bbox.geojson?BBOX={bbox-epsg-3857}', 2);
   });
 });
