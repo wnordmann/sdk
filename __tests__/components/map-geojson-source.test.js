@@ -121,6 +121,15 @@ describe('tests for the geojson-type map sources', () => {
     testGeojsonData(done, './test.geojson', 2);
   });
 
+  it('adds a geojson feature collection with a BBOX', (done) => {
+    // mock up the url to call
+    nock('http://example.com')
+      .get('/base/bbox.geojson?BBOX=-978393.9620502561,-978393.9620502568,978393.9620502561,978393.9620502554')
+      .reply(200, JSON.stringify(feature_collection));
+
+    testGeojsonData(done, '/bbox.geojson?BBOX={bbox-epsg-3857}', 2);
+  });
+
   it('tries to fetch a geojson file that does not exist', (done) => {
     testGeojsonData(done, 'http://example.com/no-where.geojson', 0);
   });
@@ -131,5 +140,22 @@ describe('tests for the geojson-type map sources', () => {
       .reply(200, 'alphabet soup');
 
     testGeojsonData(done, 'http://example.com/bad.geojson', 0);
+  });
+
+  it('fetches by bbox then by relative url', (done) => {
+
+    // mock up the url to call
+    nock('http://example.com')
+      .get('/base/bbox.geojson?BBOX=-978393.9620502561,-978393.9620502568,978393.9620502561,978393.9620502554')
+      .reply(200, JSON.stringify(feature_collection));
+
+    const next_fetch = () => {
+      nock('http://example.com')
+        .get('/base/test2.geojson')
+        .reply(200, JSON.stringify(feature_collection));
+      testGeojsonData(done, './test2.geojson', 2);
+    };
+
+    testGeojsonData(done, '/bbox.geojson?BBOX={bbox-epsg-3857}', 2);
   });
 });

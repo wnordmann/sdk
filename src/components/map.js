@@ -59,6 +59,8 @@ import DrawInteraction from 'ol/interaction/draw';
 import ModifyInteraction from 'ol/interaction/modify';
 import SelectInteraction from 'ol/interaction/select';
 
+import LoadingStrategy from 'ol/loadingstrategy';
+
 import { updateLayer, setView, setRotation } from '../actions/map';
 import { INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TIME_KEY, TIME_ATTRIBUTE_KEY } from '../constants';
 import { dataVersionKey } from '../reducers/map';
@@ -73,6 +75,7 @@ import { parseQueryString, jsonClone, jsonEquals, getLayerById, degreesToRadians
 const GEOJSON_FORMAT = new GeoJsonFormat();
 const WGS84_SPHERE = new Sphere(6378137);
 const MAPBOX_PROTOCOL = 'mapbox://';
+const BBOX_STRING = '{bbox-epsg-3857}';
 
 /** This variant of getVersion differs as it allows
  *  for undefined values to be returned.
@@ -118,9 +121,9 @@ function configureTileSource(glSource, mapProjection, time) {
   source.setTileLoadFunction((tile, src) => {
     // copy the src string.
     let img_src = src.slice();
-    if (src.indexOf('{bbox-epsg-3857}') !== -1) {
+    if (src.indexOf(BBOX_STRING) !== -1) {
       const bbox = source.getTileGrid().getTileCoordExtent(tile.getTileCoord());
-      img_src = src.replace('{bbox-epsg-3857}', bbox.toString());
+      img_src = src.replace(BBOX_STRING, bbox.toString());
     }
     // disabled the linter below as this is how
     //  OpenLayers documents this operation.
@@ -173,77 +176,77 @@ function configureMvtSource(glSource, accessToken) {
   return source;
 }
 
-function updateGeojsonSource(olSource, glSource, mapProjection, baseUrl) {
-  // setup a feature promise to handle async loading
-  // of features.
-  let features_promise;
 
-  // if the data is a string, assume its a url
-  if (typeof glSource.data === 'string') {
-    let url = glSource.data;
+function getLoaderFunction(glSource, mapProjection, baseUrl) {
+  return function(bbox, resolution, projection) {
+    // setup a feature promise to handle async loading
+    // of features.
+    let features_promise;
 
-    // if the baseUrl is present and the url does not
-    // start with http:// or "/" then assume the path is
-    // relative to the style doc.
-    if (!(url.indexOf('http://') === 0 || url.indexOf('/') === '0')) {
-      if (url.indexOf('.') === 0) {
-        url = url.substring(1);
+    // if the data is a string, assume it's a url
+    if (typeof glSource.data === 'string') {
+      let url = glSource.data;
+
+      // if the baseUrl is present and the url does not
+      // start with http:// or "/" then assume the path is
+      // relative to the style doc.
+      if (!(url.indexOf('http://') === 0 || url.indexOf('/') === '0')) {
+        if (baseUrl && url.indexOf('.') === 0) {
+          url = url.substring(1);
+        }
+        url = baseUrl + url;
       }
-      url = baseUrl + url;
+
+      // check to see if the bbox strategy should be employed
+      //  for this source.
+      if (url.indexOf(BBOX_STRING) >= 0) {
+        url = url.replace(BBOX_STRING, bbox.toString());
+      }
+
+      features_promise = fetch(url).then(response => response.json());
+    } else if (typeof glSource.data === 'object'
+      && (glSource.data.type === 'Feature' || glSource.data.type === 'FeatureCollection')) {
+      features_promise = new Promise((resolve) => {
+        resolve(glSource.data);
+      });
     }
-    features_promise = new Promise((resolve) => {
-      // instead of just returning the fetch promise,
-      // this ensures that the features are always resolved
-      //  to SOMETHING.
-      fetch(url)
-        .then(response => response.json())
-        .then((features) => {
-          resolve(features);
-        })
-        .catch(() => {
-          resolve(null);
-        });
-    });
-  } else if (typeof glSource.data === 'object'
-    && (glSource.data.type === 'Feature' || glSource.data.type === 'FeatureCollection')) {
-    features_promise = new Promise((resolve) => {
-      resolve(glSource.data);
-    });
+
+    // if data is undefined then no promise would
+    // have been created.
+    if (features_promise) {
+      // when the feature promise resolves,
+      // add those features to the source.
+      features_promise.then((features) => {
+        // features could be null, in which case there
+        //  are no features to add.
+        if (features) {
+          // setup the projection options.
+          const readFeatureOpt = { featureProjection: mapProjection };
+
+          // bulk load the feature data
+          this.addFeatures(GEOJSON_FORMAT.readFeatures(features, readFeatureOpt));
+        }
+      }).catch((error) => {
+        console.error(error);
+      });
+    }
   }
+}
 
-  let vector_src = olSource;
-
-  // if the source is clustered then
-  //  the actual data is stored on the source's source.
+function updateGeojsonSource(olSource, glSource, mapView, baseUrl) {
+  let src = olSource;
   if (glSource.cluster) {
-    vector_src = olSource.getSource();
-    if (glSource.clusterRadius !== olSource.getDistance()) {
-      olSource.setDistance(glSource.clusterRadius);
-    }
+    src = olSource.getSource();
   }
+
+  // update the loader function based on the glSource definition
+  src.set('loader', getLoaderFunction(glSource, mapView.getProjection, baseUrl));
 
   // clear the layer WITHOUT dispatching remove events.
-  vector_src.clear(true);
+  src.clear(true);
 
-  // if data is undefined then no promise would
-  // have been created.
-  if (features_promise) {
-    // when the feature promise resolves,
-    // add those features to the source.
-    features_promise.then((features) => {
-      // features could be null, in which case there
-      //  are no features to add.
-      if (features) {
-        // setup the projection options.
-        const readFeatureOpt = { featureProjection: mapProjection };
-
-        // bulk load the feature data
-        vector_src.addFeatures(GEOJSON_FORMAT.readFeatures(features, readFeatureOpt));
-      }
-    }).catch((error) => {
-      console.error(error);
-    });
-  }
+  // force a refresh
+  src.loadFeatures(mapView.calculateExtent(), mapView.getResolution(), mapView.getProjection());
 }
 
 
@@ -254,8 +257,11 @@ function updateGeojsonSource(olSource, glSource, mapProjection, baseUrl) {
  *
  * @returns ol.source.vector instance.
  */
-function configureGeojsonSource(glSource, mapProjection, baseUrl, wrapX) {
+function configureGeojsonSource(glSource, mapView, baseUrl, wrapX) {
+  const use_bbox = (typeof glSource.data === 'string' && glSource.data.indexOf(BBOX_STRING) >= 0);
   const vector_src = new VectorSource({
+    strategy: use_bbox ? LoadingStrategy.bbox : LoadingStrategy.all,
+    loader: getLoaderFunction(glSource, mapView.getProjection(), baseUrl),
     useSpatialIndex: true,
     wrapX: wrapX,
   });
@@ -275,20 +281,20 @@ function configureGeojsonSource(glSource, mapProjection, baseUrl, wrapX) {
 
   // seed the vector source with the first update
   //  before returning it.
-  updateGeojsonSource(new_src, glSource, mapProjection, baseUrl);
+  updateGeojsonSource(new_src, glSource, mapView, baseUrl);
   return new_src;
 }
 
-function configureSource(glSource, mapProjection, accessToken, baseUrl, time, wrapX) {
+function configureSource(glSource, mapView, accessToken, baseUrl, time, wrapX) {
   // tiled raster layer.
   if (glSource.type === 'raster') {
     if ('tiles' in glSource) {
-      return configureTileSource(glSource, mapProjection, time);
+      return configureTileSource(glSource, mapView.getProjection(), time);
     } else if (glSource.url) {
       return configureTileJSONSource(glSource);
     }
   } else if (glSource.type === 'geojson') {
-    return configureGeojsonSource(glSource, mapProjection, baseUrl, wrapX);
+    return configureGeojsonSource(glSource, mapView, baseUrl, wrapX);
   } else if (glSource.type === 'image') {
     return configureImageSource(glSource);
   } else if (glSource.type === 'vector') {
@@ -533,14 +539,14 @@ export class Map extends React.Component {
     //       of sources.  Currently, this will only detect
     //       additions and removals.
     let src_names = Object.keys(sourcesDef);
-    const proj = this.map.getView().getProjection();
+    const map_view = this.map.getView();
     for (let i = 0, ii = src_names.length; i < ii; i++) {
       const src_name = src_names[i];
       // Add the source because it's not in the current
       //  list of sources.
       if (!(src_name in this.sources)) {
         const time = getKey(this.props.map.metadata, TIME_KEY);
-        this.sources[src_name] = configureSource(sourcesDef[src_name], proj,
+        this.sources[src_name] = configureSource(sourcesDef[src_name], map_view,
           this.props.accessToken, this.props.baseUrl, time, this.props.wrapX);
       }
 
@@ -552,7 +558,7 @@ export class Map extends React.Component {
       if (src && (src.cluster !== sourcesDef[src_name].cluster
           || src.clusterRadius !== sourcesDef[src_name].clusterRadius)) {
         // reconfigure the source for clustering.
-        this.sources[src_name] = configureSource(sourcesDef[src_name], proj);
+        this.sources[src_name] = configureSource(sourcesDef[src_name], map_view);
         // tell all the layers about it.
         this.updateLayerSource(src_name);
       }
