@@ -9,7 +9,8 @@
  */
 
 import React from 'react';
-import { mount } from 'enzyme';
+import { mount, configure } from 'enzyme';
+import  Adapter from 'enzyme-adapter-react-16';
 
 import { createStore, combineReducers } from 'redux';
 
@@ -28,6 +29,7 @@ import * as DrawingActions from '../../src/actions/drawing';
 import { INTERACTIONS } from '../../src/constants';
 import { DRAWING } from '../../src/action-types';
 
+configure({ adapter: new Adapter() });
 
 // jsdom / enzyme / jest will include <canvas> support
 // but not the full API, this dummys the CanvasPattern

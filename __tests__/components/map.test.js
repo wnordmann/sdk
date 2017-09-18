@@ -1,8 +1,9 @@
 /* global it, describe, expect, spyOn, afterEach */
 
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { shallow, mount, configure } from 'enzyme';
 import nock from 'nock';
+import  Adapter from 'enzyme-adapter-react-16';
 
 import olMap from 'ol/map';
 import TileLayer from 'ol/layer/tile';
@@ -26,6 +27,7 @@ import PrintReducer from '../../src/reducers/print';
 import * as MapActions from '../../src/actions/map';
 import * as PrintActions from '../../src/actions/print';
 
+configure({ adapter: new Adapter() });
 
 describe('Map component', () => {
   it('should render without throwing an error', () => {

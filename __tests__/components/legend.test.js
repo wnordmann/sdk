@@ -1,13 +1,16 @@
 /* global it, describe, expect, afterEach, beforeEach */
 
 import React from 'react';
-import { mount } from 'enzyme';
+import { mount, configure } from 'enzyme';
 import nock from 'nock';
+import  Adapter from 'enzyme-adapter-react-16';
 
 import { createStore, combineReducers } from 'redux';
 import MapReducer from '../../src/reducers/map';
 
 import SdkLegend from '../../src/components/legend';
+
+configure({ adapter: new Adapter() });
 
 describe('test the Legend component', () => {
   let store = null;

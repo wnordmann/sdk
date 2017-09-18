@@ -1,7 +1,8 @@
 /* global it, describe, expect, beforeEach */
 
 import React from 'react';
-import { mount } from 'enzyme';
+import { mount, configure } from 'enzyme';
+import  Adapter from 'enzyme-adapter-react-16';
 
 import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
@@ -11,6 +12,7 @@ import { isLayerVisible } from '../../src/util';
 
 import SdkLayerList, { SdkLayerListItem } from '../../src/components/layer-list';
 
+configure({ adapter: new Adapter() });
 
 class TestLayerListItem extends SdkLayerListItem {
   render() {
