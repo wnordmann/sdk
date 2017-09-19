@@ -484,6 +484,57 @@ describe('Map component', () => {
     expect(typeof ol_style).toEqual('function');
   });
 
+  it('handles updates to geojson source', () => {
+    const sources = {
+      drone: {
+        type: 'geojson',
+        data: 'https://wanderdrone.appspot.com/',
+      },
+    };
+    const layers = [{
+      id: 'drone',
+      source: 'drone',
+    }];
+    const metadata = {
+      'bnd:source-version': 0,
+      'bnd:layer-version': 0,
+    };
+    const center = [0, 0];
+    const zoom = 2;
+    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
+
+    const instance = wrapper.instance();
+
+    let nextProps = {
+      map: {
+        center,
+        zoom,
+        metadata: {
+          'bnd:source-version': 1,
+          'bnd:layer-version': 1,
+          'bnd:data-version:drone': 1
+        },
+        sources: {
+          drone: {
+            type: 'geojson',
+            data: 'https://wanderdrone.appspot.com/',
+          },
+        },
+        layers: [{
+          id: 'drone',
+          source: 'drone',
+        }],
+      },
+    };
+    let error = false;
+    try {
+      instance.shouldComponentUpdate.call(instance, nextProps);
+    } catch(e) {
+      error = true;
+    }
+    expect(error).toBe(false);
+  });
+
   it('handles updates to source and layer min/maxzoom values', () => {
     const sources = {
       tilejson: {
