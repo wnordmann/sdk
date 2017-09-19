@@ -50,9 +50,8 @@ function createIndex(files, metalsmith, done) {
   for (let i = 0, ii = keys.length; i < ii; ++i) {
     const filename = keys[i];
     const example = files[filename];
-    // const skipExample = process.argv[2] ? config.skip.indexOf(filename.split(path.sep)[0]) !== -1 : false;
-    const skipExample = config.skip.indexOf(filename.split(path.sep).join('/')) !== -1 || false;
-    if (filename.indexOf('index.html') !== -1 && filename.indexOf('.swp') === -1 && !skipExample) {
+    const skipExample = process.argv[2] ? config.skip.indexOf(filename.split(path.sep)[0]) !== -1 : false;
+    if (filename.indexOf('index.html') !== -1 && filename.indexOf('.swp') === -1 && !skipExample && !example.skipExamplePage) {
       index += `<li onClick="location.href = '${filename}'">`;
       index += `<a href="${filename}">${example.title}</a><br>`;
       index += `${example.shortdesc}`;
