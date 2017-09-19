@@ -176,7 +176,6 @@ function configureMvtSource(glSource, accessToken) {
   return source;
 }
 
-
 function getLoaderFunction(glSource, mapProjection, baseUrl) {
   return function(bbox, resolution, projection) {
     // setup a feature promise to handle async loading
@@ -186,23 +185,20 @@ function getLoaderFunction(glSource, mapProjection, baseUrl) {
     // if the data is a string, assume it's a url
     if (typeof glSource.data === 'string') {
       let url = glSource.data;
-
       // if the baseUrl is present and the url does not
-      // start with http:// or "/" then assume the path is
+      // start with http:// or "https://" then assume the path is
       // relative to the style doc.
-      if (!(url.indexOf('http://') === 0 || url.indexOf('/') === '0')) {
+      if (!(url.indexOf('https://') === 0 || url.indexOf('http://') === 0)) {
         if (baseUrl && url.indexOf('.') === 0) {
           url = url.substring(1);
         }
         url = baseUrl + url;
       }
-
       // check to see if the bbox strategy should be employed
       //  for this source.
       if (url.indexOf(BBOX_STRING) >= 0) {
         url = url.replace(BBOX_STRING, bbox.toString());
       }
-
       features_promise = fetch(url).then(response => response.json());
     } else if (typeof glSource.data === 'object'
       && (glSource.data.type === 'Feature' || glSource.data.type === 'FeatureCollection')) {
@@ -427,7 +423,8 @@ export class Map extends React.Component {
         }
       }
     }
-    const map_proj = this.map.getView().getProjection();
+    const map_view = this.map.getView();
+    const map_proj = map_view.getProjection();
 
     // compare the centers
     if (nextProps.map.center !== undefined) {
@@ -437,17 +434,17 @@ export class Map extends React.Component {
         || nextProps.map.center[1] !== this.props.map.center[1])) {
         // convert the center point to map coordinates.
         const center = Proj.transform(nextProps.map.center, 'EPSG:4326', map_proj);
-        this.map.getView().setCenter(center);
+        map_view.setCenter(center);
       }
     }
     // compare the zoom
     if (nextProps.map.zoom !== undefined && (nextProps.map.zoom !== this.props.map.zoom)) {
-      this.map.getView().setZoom(nextProps.map.zoom);
+      map_view.setZoom(nextProps.map.zoom);
     }
     // compare the rotation
     if (nextProps.map.bearing !== undefined && nextProps.map.bearing !== this.props.map.bearing) {
       const rotation = degreesToRadians(nextProps.map.bearing);
-      this.map.getView().setRotation(rotation);
+      map_view.setRotation(rotation);
     }
 
     // check the sources diff
@@ -474,7 +471,7 @@ export class Map extends React.Component {
         if (this.props.map.metadata !== undefined &&
             this.props.map.metadata[version_key] !== nextProps.map.metadata[version_key]) {
           const next_src = nextProps.map.sources[src_name];
-          updateGeojsonSource(this.sources[src_name], next_src, map_proj, this.props.baseUrl);
+          updateGeojsonSource(this.sources[src_name], next_src, map_view, this.props.baseUrl);
         }
       }
     }
