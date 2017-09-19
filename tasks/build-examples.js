@@ -18,6 +18,12 @@ function createIndex(files, metalsmith, done) {
   index += '<html>';
   index += '<head>';
   index += '<title>Boundless SDK Examples</title>';
+  index += '<link rel="apple-touch-icon" sizes="180x180" href="_ico/apple-touch-icon.png">';
+  index += '<link rel="icon" type="image/png" sizes="32x32" href="_ico/favicon-32x32.png">';
+  index += '<link rel="icon" type="image/png" sizes="16x16" href="_ico/favicon-16x16.png">';
+  index += '<link rel="manifest" href="_ico/manifest.json">';
+  index += '<link rel="mask-icon" href="_ico/safari-pinned-tab.svg" color="#5bbad5">';
+  index += '<meta name="theme-color" content="#ffffff">';
   index += '<link rel="stylesheet" type="text/css" href="examples.css"/>';
   index += '</head>';
   index += '<body>';
