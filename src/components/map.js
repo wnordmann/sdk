@@ -426,7 +426,8 @@ export class Map extends React.Component {
         }
       }
     }
-    const map_proj = this.map.getView().getProjection();
+    const map_view = this.map.getView();
+    const map_proj = map_view.getProjection();
 
     // compare the centers
     if (nextProps.map.center !== undefined) {
@@ -436,17 +437,17 @@ export class Map extends React.Component {
         || nextProps.map.center[1] !== this.props.map.center[1])) {
         // convert the center point to map coordinates.
         const center = Proj.transform(nextProps.map.center, 'EPSG:4326', map_proj);
-        this.map.getView().setCenter(center);
+        map_view.setCenter(center);
       }
     }
     // compare the zoom
     if (nextProps.map.zoom !== undefined && (nextProps.map.zoom !== this.props.map.zoom)) {
-      this.map.getView().setZoom(nextProps.map.zoom);
+      map_view.setZoom(nextProps.map.zoom);
     }
     // compare the rotation
     if (nextProps.map.bearing !== undefined && nextProps.map.bearing !== this.props.map.bearing) {
       const rotation = degreesToRadians(nextProps.map.bearing);
-      this.map.getView().setRotation(rotation);
+      map_view.setRotation(rotation);
     }
 
     // check the sources diff
@@ -473,7 +474,7 @@ export class Map extends React.Component {
         if (this.props.map.metadata !== undefined &&
             this.props.map.metadata[version_key] !== nextProps.map.metadata[version_key]) {
           const next_src = nextProps.map.sources[src_name];
-          updateGeojsonSource(this.sources[src_name], next_src, map_proj, this.props.baseUrl);
+          updateGeojsonSource(this.sources[src_name], next_src, map_view, this.props.baseUrl);
         }
       }
     }
