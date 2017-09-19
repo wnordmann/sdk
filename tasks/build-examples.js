@@ -22,17 +22,29 @@ function createIndex(files, metalsmith, done) {
   index += '</head>';
   index += '<body>';
   index += '<div id="header">';
-  index += '<img src="boundless_sdk_horiz.svg" width="90">';
+  index += '<div class="headerContainer">';
+  index += '<span class="logo">';
+  index += '<a href="index.html">';
+  index += '<img src="boundless_sdk_horiz.svg" width="120">';
+  index += '</a>';
+  index += '</span>';
   index += '<span class="desc">';
-  index += 'Boundless SDK Examples';
+  index += '<ul>';
+  index += '<li><a href="">Examples</a></li>';
+  index += '<li><a href="">Documentation</a></li>';
+  index += '<li><a href="">Download</a></li>';
+  index += '<ul>';
   index += '</span>';
   index += '</div>';
+  index += '</div>';
+  index += '<div class="contentContainer">';
   index += '<ul class="examples">';
   const keys = Object.keys(files);
   for (let i = 0, ii = keys.length; i < ii; ++i) {
     const filename = keys[i];
     const example = files[filename];
-    const skipExample = process.argv[2] ? config.skip.indexOf(filename.split(path.sep)[0]) !== -1 : false;
+    // const skipExample = process.argv[2] ? config.skip.indexOf(filename.split(path.sep)[0]) !== -1 : false;
+    const skipExample = config.skip.indexOf(filename.split(path.sep).join('/')) !== -1 || false;
     if (filename.indexOf('index.html') !== -1 && filename.indexOf('.swp') === -1 && !skipExample) {
       index += `<li onClick="location.href = '${filename}'">`;
       index += `<a href="${filename}">${example.title}</a><br>`;
@@ -41,10 +53,11 @@ function createIndex(files, metalsmith, done) {
     }
   }
   index += '</ul>';
+  index += '</div>';
   index += '</body>';
   index += '</html>';
   // eslint-disable-next-line no-param-reassign
-  files['index.html'] = {
+  files['examples.html'] = {
     contents: new Buffer(index),
     mode: '0644',
   };

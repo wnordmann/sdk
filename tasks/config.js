@@ -2,7 +2,7 @@
 const skip = ['mb-bright', 'wfst', 'realtime'];
 
 const config = {
-  skip,
+  skip:'index.html' ,
 };
 
 module.exports = config;

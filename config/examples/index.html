@@ -2,8 +2,8 @@
 <html>
   <head>
     <title>{{ title }}</title>
-    <link rel="stylesheet" type="text/css" href="../sdk.css"/>
-    <link rel="stylesheet" type="text/css" href="../examples.css"/>
+    <link rel="stylesheet" type="text/css" href="sdk.css"/>
+    <link rel="stylesheet" type="text/css" href="examples.css"/>
     {{{ extraHead.local }}}
     {{{ css.tag }}}
   </head>
@@ -11,7 +11,7 @@
     <div id="header">
       <div class="headerContainer">
         <span class="logo">
-          <a href="../"><img src="../boundless_sdk_horiz.svg" width="120"></a>
+          <img src="boundless_sdk_horiz.svg" width="120">
         </span>
         <span class="desc">
           <ul>
@@ -23,16 +23,9 @@
       </div>
     </div>
     <div class="contentContainer">
-      <h1>{{ shortdesc }}</h1>
-      <div id="map"></div>
+      <h1>{{ pageTitle }}</h1>
       <div class="description">
         {{{ contents }}}
-        <div class="info">
-          <h3>Features in this demo</h3>
-          <ul class="info-list">
-            {{ md docs }}
-          </ul>
-        </div>
       </div>
     </div>
     {{{ js.tag }}}
