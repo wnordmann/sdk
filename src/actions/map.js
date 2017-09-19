@@ -13,7 +13,8 @@
 
 import fetch from 'isomorphic-fetch';
 
-/** Action Defintions for the map.
+/** @module actions/map
+ * @desc Action Defintions for the map.
  */
 
 import { MAP } from '../action-types';
@@ -28,6 +29,12 @@ const sourceTypes = [
   'canvas'
 ];
 
+/** Action to update the center and zoom values in map state.
+ *  @param {number[]} center Center coordinates.
+ *  @param {number} zoom Zoom value.
+ *
+ *  @returns {Object} Action object to pass to reducer.
+ */
 export function setView(center, zoom) {
   return {
     type: MAP.SET_VIEW,
@@ -35,6 +42,11 @@ export function setView(center, zoom) {
   };
 }
 
+/** Action to update the map name in map state.
+ *  @param {string} name Map name.
+ *
+ *  @returns {Object} Action object to pass to reducer.
+ */
 export function setMapName(name) {
   return {
     type: MAP.SET_NAME,
@@ -42,6 +54,11 @@ export function setMapName(name) {
   };
 }
 
+/** Action to update the map bearing value in map state.
+ *  @param {number} degrees Bearing value to set in degrees.
+ *
+ *  @returns {Object} Action object to pass to reducer.
+ */
 export function setRotation(degrees) {
   return {
     type: MAP.SET_ROTATION,
@@ -49,6 +66,13 @@ export function setRotation(degrees) {
   };
 }
 
+/** Action to add a layer object in the map state.
+ *  @param {Object} layerDef Layer properties.
+ *  @param {string} layerTitle Title of the layer to be added.
+ *  @param {string} positionId String id for the layer.
+ *
+ *  @returns {Object} Action object to pass to reducer.
+ */
 export function addLayer(layerDef, layerTitle, positionId) {
   return {
     type: MAP.ADD_LAYER,
@@ -58,6 +82,12 @@ export function addLayer(layerDef, layerTitle, positionId) {
   };
 }
 
+/** Action to add a source object in the map state.
+ *  @param {string} sourceName Name of the source to be added.
+ *  @param {Object} sourceDef Source properties.
+ *
+ *  @returns {Object} Action object to pass to reducer.
+ */
 export function addSource(sourceName, sourceDef) {
   if (sourceTypes.indexOf(sourceDef.type) === -1 ) {
     throw(new Error("Invalid source type: " + sourceDef.type + ".  Valid source types are " + sourceTypes.toString()));
@@ -69,6 +99,11 @@ export function addSource(sourceName, sourceDef) {
   };
 }
 
+/** Action to remove a layer object in the map state.
+ *  @param {string} layerId String id for the layer.
+ *
+ *  @returns {Object} Action object to pass to reducer.
+ */
 export function removeLayer(layerId) {
   return {
     type: MAP.REMOVE_LAYER,
@@ -76,6 +111,11 @@ export function removeLayer(layerId) {
   };
 }
 
+/** Action to remove a source object in the map state.
+ *  @param {string} sourceName Name of the source to be added.
+ *
+ *  @returns {Object} Action object to pass to reducer.
+ */
 export function removeSource(sourceName) {
   return {
     type: MAP.REMOVE_SOURCE,
@@ -83,6 +123,12 @@ export function removeSource(sourceName) {
   };
 }
 
+/** Action to update a layer object in the map state.
+ *  @param {string} layerId String id for the layer to be updated.
+ *  @param {Object} layerDef Layer properties.
+ *
+ *  @returns {Object} Action object to pass to reducer.
+ */
 export function updateLayer(layerId, layerDef) {
   return {
     type: MAP.UPDATE_LAYER,
@@ -91,6 +137,12 @@ export function updateLayer(layerId, layerDef) {
   };
 }
 
+/** Action to update cluster status in the map state.
+ *  @param {string} sourceName Name of the source to be added.
+ *  @param {boolean} isClustered
+ *
+ *  @returns {Object} Action object to pass to reducer.
+ */
 export function clusterPoints(sourceName, isClustered) {
   return {
     type: MAP.CLUSTER_POINTS,
@@ -104,6 +156,10 @@ export function clusterPoints(sourceName, isClustered) {
  *  When set to a layer without clustering this will
  *  have no effect.
  *
+ *  @param {Object} sourceName Name of the source on which the features are clustered.
+ *  @param {number} radius Cluster radius.
+ *
+ *  @returns {Object} Action object to pass to reducer.
  */
 export function setClusterRadius(sourceName, radius) {
   return {
@@ -113,6 +169,13 @@ export function setClusterRadius(sourceName, radius) {
   };
 }
 
+/** Add features to a source on the map.
+ *
+ *  @param {Object} sourceName Name of the source on which the features will be added.
+ *  @param {Object[]} features An array of features to add.
+ *
+ *  @returns {Object} Action object to pass to reducer.
+ */
 export function addFeatures(sourceName, features) {
   return {
     type: MAP.ADD_FEATURES,
@@ -121,6 +184,14 @@ export function addFeatures(sourceName, features) {
   };
 }
 
+/** Remove features from a source on the map.
+ *
+ *  @param {Object} sourceName Name of the source on which the features will be removed.
+ *  @param {string[]} filter Rule determining which features will be removed.
+ *  See https://www.mapbox.com/mapbox-gl-js/style-spec/#types-filter.
+ *
+ *  @returns {Object} Action object to pass to reducer.
+ */
 export function removeFeatures(sourceName, filter) {
   return {
     type: MAP.REMOVE_FEATURES,
@@ -129,6 +200,13 @@ export function removeFeatures(sourceName, filter) {
   };
 }
 
+/** Change the visibility of a given layer in the map state.
+ *
+ *  @param {string} layerId String id for the layer.
+ *  @param {boolean} visibility
+ *
+ *  @returns {Object} Action object to pass to reducer.
+ */
 export function setLayerVisibility(layerId, visibility) {
   return {
     type: MAP.SET_LAYER_VISIBILITY,
@@ -137,6 +215,14 @@ export function setLayerVisibility(layerId, visibility) {
   };
 }
 
+/** Change the metadata object in a given layer in the map state.
+ *
+ *  @param {string} layerId String id for the layer.
+ *  @param {string} itemName A key.
+ *  @param {number} itemValue A value.
+ *
+ *  @returns {Object} Action object to pass to reducer.
+ */
 export function setLayerMetadata(layerId, itemName, itemValue) {
   return {
     type: MAP.SET_LAYER_METADATA,
@@ -146,14 +232,34 @@ export function setLayerMetadata(layerId, itemName, itemValue) {
   };
 }
 
+/** Set a layer's title in the map state.
+ *
+ *  @param {string} layerId String id for the layer.
+ *  @param {string} title A string representing a layer title.
+ *
+ *  @returns {Object} Call to setLayerMetadata for a title key.
+ */
 export function setLayerTitle(layerId, title) {
   return setLayerMetadata(layerId, TITLE_KEY, title);
 }
 
+/** Set a layer's time property in the map state.
+ *
+ *  @param {string} layerId String id for the layer.
+ *  @param {*} time The value of time assigned to the layer.
+ *
+ *  @returns {Object} Call to setLayerMetadata for a time key.
+ */
 export function setLayerTime(layerId, time) {
   return setLayerMetadata(layerId, TIME_KEY, time);
 }
 
+/** Receive a Mapbox GL style object.
+ *
+ *  @param {Object} context Mapbox GL style object to populate the map state.
+ *
+ *  @returns {Object} Action object to pass to reducer.
+ */
 export function receiveContext(context) {
   return {
     type: MAP.RECEIVE_CONTEXT,
@@ -161,7 +267,13 @@ export function receiveContext(context) {
   };
 }
 
-// thunk action creator
+/** Thunk action creator to set the map state from a provided context object.
+ *
+ *  @param {Object} options A context object that must provide a Mapbox GL json
+ *  object either via a json property or a from a url fetch.
+ *
+ *  @returns {Promise} A Promise object.
+ */
 export function setContext(options) {
   return (dispatch) => {
     if (options.url) {
@@ -187,12 +299,12 @@ export function setContext(options) {
 
 /** Rearrange a layer in the list.
  *
- *  @param layerId the layer to move.
- *  @param targetLayerId The ID of the layer id to move the layerId BEFORE.
+ *  @param {string} layerId the layer to move.
+ *  @param {string} targetLayerId The ID of the layer to move the layerId BEFORE.
  *                       When null or undefined, moves the layer to the end
  *                       of the list.
  *
- * @returns action object.
+ *  @returns {Object} An action object.
  */
 export function orderLayer(layerId, targetLayerId) {
   return {
@@ -202,11 +314,11 @@ export function orderLayer(layerId, targetLayerId) {
   };
 }
 
-/** Set the sprite for the map
+/** Set the sprite for the map.
  *
- *  @param spriteRoot - The URI to the sprite data without the .json/.png suffix.
+ *  @param {string} spriteRoot The URI to the sprite data without the .json/.png suffix.
  *
- * @returns action object.
+ *  @returns {Object} An action object.
  */
 export function setSprite(spriteRoot) {
   return {
@@ -217,9 +329,9 @@ export function setSprite(spriteRoot) {
 
 /** Update the map's metadata.
  *
- *  @param metadata - An object containing new/updated metadata.
+ *  @param {Object} metadata An object containing new/updated metadata.
  *
- * @returns action object.
+ *  @returns {Object} An action object.
  */
 export function updateMetadata(metadata) {
   return {
@@ -229,6 +341,11 @@ export function updateMetadata(metadata) {
 }
 
 /** Manually update a source.
+ *
+ *  @param {string} sourceName The name of the source to be updated.
+ *  @param {Object} update The changes to the sourceDef to apply.
+ *
+ *  @returns {Object} An action object to pass to the reducer
  */
 export function updateSource(sourceName, update) {
   return {
@@ -240,9 +357,9 @@ export function updateSource(sourceName, update) {
 
 /** Set the time of the map.
  *
- *  @param time - An ISO date time string.
+ *  @param {string} time An ISO date time string.
  *
- * @returns action object.
+ *  @returns {Object} An action object.
  */
 export function setMapTime(time) {
   let metadata = {};

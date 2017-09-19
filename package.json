@@ -19,7 +19,8 @@
     "build:js": "babel ./src --out-dir ./dist",
     "watch:js": "babel --watch ./src --out-dir ./dist",
     "dist:copy": "node tasks/dist-copy.js && node tasks/create-package-json.js",
-    "dist": "npm run build:js && npm run dist:copy"
+    "dist": "npm run build:js && npm run dist:copy",
+    "jsdoc": "jsdoc -r ./src -c docs/conf.json -R docs/getting-started.md -d docs/out"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -64,6 +65,7 @@
     "async": "^2.5.0",
     "extract-css": "^1.0.3",
     "isomorphic-fetch": "^2.2.1",
+    "jsdoc": "^3.5.4",
     "ol": "^4.3.1",
     "ol-mapbox-style": "^2.6.1",
     "prop-types": "^15.5.10",

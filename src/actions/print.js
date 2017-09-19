@@ -11,12 +11,14 @@
  * under the License.
  */
 
-/** Actions for printing the map.
+/** @module actions/print
+ *  @desc Actions for printing the map.
  */
 
 import { PRINT } from '../action-types';
 
 /** Action to export the current map image.
+ *  @returns {Object} Action object to pass to reducer.
  */
 export function exportMapImage() {
   return {
@@ -25,6 +27,7 @@ export function exportMapImage() {
 }
 
 /** Action to handle receipt of the map image.
+ *  @returns {Object} Action object to pass to reducer.
  */
 export function receiveMapImage() {
   return {

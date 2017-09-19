@@ -11,7 +11,8 @@
  * under the License.
  */
 
-/** SDK Popup Component
+/** @module components/map/popup
+ * @desc SDK Popup Component
  */
 
 import React from 'react';
