@@ -185,23 +185,20 @@ function getLoaderFunction(glSource, mapProjection, baseUrl) {
     // if the data is a string, assume it's a url
     if (typeof glSource.data === 'string') {
       let url = glSource.data;
-
       // if the baseUrl is present and the url does not
-      // start with http:// or "/" then assume the path is
+      // start with http:// or "https://" then assume the path is
       // relative to the style doc.
-      if (!(url.indexOf('https://') === 0 || url.indexOf('http://') === 0 || url.indexOf('/') === 0)) {
+      if (!(url.indexOf('https://') === 0 || url.indexOf('http://') === 0)) {
         if (baseUrl && url.indexOf('.') === 0) {
           url = url.substring(1);
         }
         url = baseUrl + url;
       }
-
       // check to see if the bbox strategy should be employed
       //  for this source.
       if (url.indexOf(BBOX_STRING) >= 0) {
         url = url.replace(BBOX_STRING, bbox.toString());
       }
-
       features_promise = fetch(url).then(response => response.json());
     } else if (typeof glSource.data === 'object'
       && (glSource.data.type === 'Feature' || glSource.data.type === 'FeatureCollection')) {
