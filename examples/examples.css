@@ -185,3 +185,31 @@ body {
 .landingContent .contentBlock .image img {
   width: 226px;
 }
+
+/* jsdoc overrides */
+.contentContainer section article p {
+  margin-bottom: 24px;
+}
+
+.contentContainer section article pre {
+  margin-bottom: 24px;
+}
+
+.contentContainer section article h1 {
+  font-weight: 700;
+}
+
+.contentContainer section article h2 {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.contentContainer section article h3 {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.contentContainer section article h4 {
+  font-size: 16px;
+  font-weight: 700;
+}
