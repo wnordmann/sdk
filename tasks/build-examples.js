@@ -7,7 +7,8 @@ const marked = require('marked');
 const config = require('./config');
 const srcDir = path.join(__dirname, '..', 'examples');
 const destDir = path.join(__dirname, '..', 'build', 'examples');
-const templatesDir = path.join(__dirname, '..', 'config', 'examples');
+const templatesDir = path.join(__dirname, '..', 'config', 'templates');
+const partialsDir = path.join(__dirname, '..', 'config', 'templates', 'partials');
 
 const isJsRegEx = /\.js$/;
 const isCssRegEx = /\.css$/;
@@ -18,11 +19,11 @@ function createIndex(files, metalsmith, done) {
   index += '<html>';
   index += '<head>';
   index += '<title>Boundless SDK Examples</title>';
-  index += '<link rel="apple-touch-icon" sizes="180x180" href="_ico/apple-touch-icon.png">';
-  index += '<link rel="icon" type="image/png" sizes="32x32" href="_ico/favicon-32x32.png">';
-  index += '<link rel="icon" type="image/png" sizes="16x16" href="_ico/favicon-16x16.png">';
-  index += '<link rel="manifest" href="_ico/manifest.json">';
-  index += '<link rel="mask-icon" href="_ico/safari-pinned-tab.svg" color="#5bbad5">';
+  index += '<link rel="apple-touch-icon" sizes="180x180" href="resources/apple-touch-icon.png">';
+  index += '<link rel="icon" type="image/png" sizes="32x32" href="resources/favicon-32x32.png">';
+  index += '<link rel="icon" type="image/png" sizes="16x16" href="resources/favicon-16x16.png">';
+  index += '<link rel="manifest" href="resources/manifest.json">';
+  index += '<link rel="mask-icon" href="resources/safari-pinned-tab.svg" color="#5bbad5">';
   index += '<meta name="theme-color" content="#ffffff">';
   index += '<link rel="stylesheet" type="text/css" href="examples.css"/>';
   index += '</head>';
@@ -51,7 +52,7 @@ function createIndex(files, metalsmith, done) {
     const filename = keys[i];
     const example = files[filename];
     const skipExample = process.argv[2] ? config.skip.indexOf(filename.split(path.sep)[0]) !== -1 : false;
-    if (filename.indexOf('index.html') !== -1 && filename.indexOf('.swp') === -1 && !skipExample && !example.skipExamplePage) {
+    if (filename.indexOf('index.html') !== -1 && filename.indexOf('.swp') === -1 && !skipExample && example.layout === 'example.html') {
       index += `<li onClick="location.href = '${filename}'">`;
       index += `<a href="${filename}">${example.title}</a><br>`;
       index += `${example.shortdesc}`;
@@ -130,6 +131,7 @@ function main(callback) {
       .use(templates({
         engine: 'handlebars',
         directory: templatesDir,
+        partials: partialsDir,
         helpers: {
           md(str) {
             return new handlebars.SafeString(marked(str));

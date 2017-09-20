@@ -2,11 +2,7 @@
 <html>
   <head>
     <title>{{ title }}</title>
-    <link rel="apple-touch-icon" sizes="180x180" href="_ico/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="_ico/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="_ico/favicon-16x16.png">
-    <link rel="manifest" href="_ico/manifest.json">
-    <link rel="mask-icon" href="_ico/safari-pinned-tab.svg" color="#5bbad5">
+    {{> icons }}
     <meta name="theme-color" content="#ffffff">
     <link rel="stylesheet" type="text/css" href="sdk.css"/>
     <link rel="stylesheet" type="text/css" href="examples.css"/>
@@ -34,6 +30,5 @@
         {{{ contents }}}
       </div>
     </div>
-    {{{ js.tag }}}
   </body>
 </html>
