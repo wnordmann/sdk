@@ -115,18 +115,6 @@ if (HAS_CANVAS) {
       // if the drawing control has been added to the map then
       //  there should be 1 additional interaction.
       expect(ol_map.getInteractions().getLength()).toBe(n_interactions + 1);
-
-      // get the last interaction, which should be the drawing interaction
-      const draw = ol_map.getInteractions().item(n_interactions);
-
-      const dummy_feature = new Feature();
-      dummy_feature.setGeometry(new Point(5, 5));
-      draw.dispatchEvent({
-        type: 'drawend',
-        feature: dummy_feature,
-      });
-
-      store.dispatch(MapActions.setView([-45, -45], 11));
     });
 
     it('turns on a drawing tool for box', () => {
