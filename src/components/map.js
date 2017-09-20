@@ -1199,13 +1199,15 @@ export class Map extends React.Component {
 
       this.activeInteractions = [select];
     } else if (INTERACTIONS.drawing.includes(drawingProps.interaction)) {
-      var drawObj = {type: drawingProps.interaction};
-      if (drawingProps.interaction === 'Box'){
+      let drawObj = {};
+      if (drawingProps.interaction === INTERACTIONS.box){
         const geometryFunction = DrawInteraction.createBox();
-        drawObj = {source: drawingProps.sourcename,
+        drawObj = {
           type: 'Circle',
-          geometryFunction: geometryFunction
+          geometryFunction
         };
+      } else {
+        drawObj = {type: drawingProps.interaction};
       }
       const draw = new DrawInteraction(drawObj);
 
