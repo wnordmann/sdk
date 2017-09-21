@@ -206,16 +206,20 @@ body {
 .contentContainer section article h2 {
   font-size: 20px;
   font-weight: 700;
+  margin-bottom: 4px;
 }
 
 .contentContainer section article h3 {
   font-size: 18px;
   font-weight: 700;
+  margin-bottom: 0px;
 }
 
 .contentContainer section article h4 {
   font-size: 16px;
   font-weight: 700;
+  margin-bottom: 0px;
+}
 
 .getStarted .btn {
   text-align: center;
