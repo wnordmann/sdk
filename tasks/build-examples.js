@@ -15,38 +15,7 @@ const isCssRegEx = /\.css$/;
 
 function createIndex(files, metalsmith, done) {
   setImmediate(done); // all remaining code is synchronous
-  let index = '<!DOCTYPE html>';
-  index += '<html>';
-  index += '<head>';
-  index += '<title>Boundless SDK Examples</title>';
-  index += '<link rel="apple-touch-icon" sizes="180x180" href="resources/apple-touch-icon.png">';
-  index += '<link rel="icon" type="image/png" sizes="32x32" href="resources/favicon-32x32.png">';
-  index += '<link rel="icon" type="image/png" sizes="16x16" href="resources/favicon-16x16.png">';
-  index += '<link rel="manifest" href="resources/manifest.json">';
-  index += '<link rel="mask-icon" href="resources/safari-pinned-tab.svg" color="#5bbad5">';
-  index += '<meta name="theme-color" content="#ffffff">';
-  index += '<link rel="stylesheet" type="text/css" href="examples.css"/>';
-  index += '</head>';
-  index += '<body>';
-  index += '<div id="header">';
-  index += '<div class="headerContainer">';
-  index += '<span class="logo">';
-  index += '<a href="index.html">';
-  index += '<img src="boundless_sdk_horiz.svg" width="120">';
-  index += '</a>';
-  index += '</span>';
-  index += '<span class="desc">';
-  index += '<ul>';
-  index += '<li><a href="">Examples</a></li>';
-  index += '<li><a href="">Documentation</a></li>';
-  index += '<li><a href="">Download</a></li>';
-  index += '<ul>';
-  index += '</span>';
-  index += '</div>';
-  index += '</div>';
-  index += '<div class="contentContainer">';
-  index += '<h1>Boundless SDK in action</h1>';
-  index += '<ul class="examples">';
+  let index = '<ul class="examples">';
   const keys = Object.keys(files);
   for (let i = 0, ii = keys.length; i < ii; ++i) {
     const filename = keys[i];
@@ -60,11 +29,11 @@ function createIndex(files, metalsmith, done) {
     }
   }
   index += '</ul>';
-  index += '</div>';
-  index += '</body>';
-  index += '</html>';
   // eslint-disable-next-line no-param-reassign
   files['examples.html'] = {
+    layout: 'index.html',
+    title: 'Boundless SDK Examples',
+    pageTitle: 'Boundless SDK in action',
     contents: new Buffer(index),
     mode: '0644',
   };
