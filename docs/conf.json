@@ -1,8 +1,16 @@
 {
-  "opts": {
-    "templates": {
-      "default": {
-        "layoutFile": ".sdkTemplate/layout.tmpl"
+  "templates": {
+    "default": {
+      "layoutFile": "sdkTemplate/layout.tmpl",
+      "staticFiles": {
+        "include": [
+          "examples/resources",
+          "examples/apple-touch-icon.png",
+          "examples/boundless_sdk_horiz.svg",
+          "examples/boundless.png",
+          "examples/examples.css",
+          "examples/favicon.ico"
+        ]
       }
     }
   }
