@@ -48,6 +48,7 @@
     "marked": "^0.3.6",
     "metalsmith": "^2.3.0",
     "metalsmith-layouts": "^1.8.1",
+    "metalsmith-rootpath": "^1.0.4",
     "mixin": "^0.2.0",
     "nock": "^9.0.13",
     "node-sass": "^4.5.3",

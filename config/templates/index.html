@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ title }}</title>
+    {{> icons }}
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" type="text/css" href="sdk.css"/>
+    <link rel="stylesheet" type="text/css" href="examples.css"/>
+    {{{ extraHead.local }}}
+    {{{ css.tag }}}
+  </head>
+  <body>
+    {{> header }}
+    <div class="contentContainer">
+      <h1>{{ pageTitle }}</h1>
+      <div class="description">
+        {{{ contents }}}
+      </div>
+    </div>
+  </body>
+</html>
