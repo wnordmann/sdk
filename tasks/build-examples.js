@@ -1,6 +1,7 @@
 const path = require('path');
 
 const Metalsmith = require('metalsmith');
+const rootPath = require('metalsmith-rootpath');
 const handlebars = require('handlebars');
 const templates = require('metalsmith-layouts');
 const marked = require('marked');
@@ -95,6 +96,7 @@ function main(callback) {
       .source(srcDir)
       .destination(dest)
       .concurrency(25)
+      .use(rootPath())
       .use(augmentExamples)
       .use(createIndex)
       .use(templates({
