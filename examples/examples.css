@@ -91,7 +91,7 @@ body {
   margin: 5px;
   font-size: .85rem;
 }
-#controls p {
+#controls p, .landingContent p {
   margin-bottom: 10px;
 }
 #controls .input {
@@ -159,4 +159,29 @@ body {
   margin-bottom: .45rem;
   margin-left: 1rem;
   list-style: square;
+}
+
+.landingContent ul {
+  margin-bottom: 2rem;
+}
+.landingContent h2 {
+  font-size: 18px;
+  color: grey;
+  margin-bottom: 1rem;
+}
+.landingContent ul li {
+  margin-left: 20px;
+  margin-bottom: .5rem;
+}
+
+.landingContent .contentBlock {
+  display: flex;
+  padding: 16px;
+}
+.landingContent .contentBlock .image {
+  padding-right: 70px;
+}
+
+.landingContent .contentBlock .image img {
+  width: 226px;
 }
