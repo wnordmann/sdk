@@ -19,7 +19,7 @@
     "build:js": "babel ./src --out-dir ./dist",
     "watch:js": "babel --watch ./src --out-dir ./dist",
     "dist:copy": "node tasks/dist-copy.js && node tasks/create-package-json.js",
-    "dist": "npm run build:js && npm run dist:copy",
+    "dist": "npm run build:js && npm run dist:copy && npm run sass -- -o ./dist",
     "build:doc-css": "npm run sass -- -o ./docs",
     "build:jsdoc": "jsdoc -r ./src -R docs/getting-started.md -d docs/out -c docs/conf.json",
     "jsdoc": "npm run build:doc-css && npm run build:jsdoc"
