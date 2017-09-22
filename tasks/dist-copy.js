@@ -2,18 +2,41 @@
  *
  */
 
+const fs = require('fs');
 const fsx = require('fs-extra');
 const path = require('path');
 
 const srcDir = path.join(__dirname, '..', 'src');
 const distDir = path.join(__dirname, '..', 'dist');
 
+// HEADER for the README.md file.
+const README_HEADER = `
+# Boundless SDK
+![Logo](http://boundlessgeo.github.io/sdk/book/styles/boundless_sdk_horiz.svg)
+
+[![Travis CI Status](https://secure.travis-ci.org/boundlessgeo/sdk.svg)](http://travis-ci.org/#!/boundlessgeo/sdk)
+[![Coverage Status](https://coveralls.io/repos/github/boundlessgeo/sdk/badge.svg?branch=master)](https://coveralls.io/github/boundlessgeo/sdk?branch=master)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
+Javascript SDK based on React, OpenLayers and Redux.
+
+`;
+
+// pull in the getting-started doc
+const QUICKSTART = fs.readFileSync(path.join(srcDir, '..', 'docs', 'getting-started.md'));
 
 function main() {
-  // copy the package.json
-  fsx.copy(path.join(srcDir, '..', 'package.json'), path.join(distDir, 'package.json'));
-  // get the stylesheet.
+  const copy_files = ['LICENSE.md'];
+
+  for(const filename of copy_files) {
+    fsx.copy(path.join(srcDir, '..', filename), path.join(distDir, filename));
+  }
+
   fsx.copy(path.join(srcDir, 'stylesheet'), path.join(distDir, 'stylesheet'));
+
+  // build the new README
+  // this is more appropriate for an NPM readme...
+  fs.writeFile(path.join(distDir, 'README.md'), README_HEADER + QUICKSTART);
 }
 
 if (require.main === module) {
