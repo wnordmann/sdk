@@ -8,6 +8,7 @@ import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 
 import MapReducer from '../../src/reducers/map';
+import * as MapActions from '../../src/actions/map';
 import { isLayerVisible } from '../../src/util';
 
 import SdkLayerList, { SdkLayerListItem } from '../../src/components/layer-list';
@@ -171,5 +172,35 @@ describe('test the LayerList component', () => {
     expect(isLayerVisible(store.getState().map.layers[0])).toBe(false);
     checkbox.simulate('change', { target: { checked: true }});
     expect(isLayerVisible(store.getState().map.layers[0])).toBe(true);
+  });
+
+  it('should handle grouping', () => {
+    store.dispatch(MapActions.updateMetadata({
+      'mapbox:groups': {
+        'background': {
+          name: 'Base Maps',
+        },
+        'overlays': {
+          name: 'Overlays',
+        },
+      }
+    }));
+    store.dispatch(MapActions.updateLayer('osm', {
+      metadata: {
+        'mapbox:group': 'background'
+      }
+    }));
+    store.dispatch(MapActions.updateLayer('wms-test', {
+      metadata: {
+        'mapbox:group': 'overlays'
+      }
+    }));
+    store.dispatch(MapActions.updateLayer('image-test', {
+      metadata: {
+        'mapbox:group': 'overlays'
+      }
+    }));
+    const wrapper = mount(<Provider store={store}><SdkLayerList /></Provider>);
+    expect(wrapper.html()).toMatchSnapshot();
   });
 });
