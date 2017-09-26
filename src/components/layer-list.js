@@ -21,6 +21,7 @@ import PropTypes from 'prop-types';
 import { getLayerIndexById, isLayerVisible } from '../util';
 
 import * as mapActions from '../actions/map';
+import {GROUP_KEY, GROUPS_KEY, TITLE_KEY} from '../constants';
 
 export class SdkLayerListItem extends React.Component {
 
@@ -65,8 +66,8 @@ export class SdkLayerListItem extends React.Component {
   }
 
   getTitle() {
-    if (this.props.layer.metadata && this.props.layer.metadata['bnd:title']) {
-      return this.props.layer.metadata['bnd:title'];
+    if (this.props.layer.metadata && this.props.layer.metadata[TITLE_KEY]) {
+      return this.props.layer.metadata[TITLE_KEY];
     }
     return this.props.layer.id;
   }
@@ -101,9 +102,30 @@ class SdkLayerList extends React.Component {
     if (this.props.className) {
       className = `${className} ${this.props.className}`;
     }
+    let i;
     const layers = [];
-    for (let i = this.props.layers.length - 1; i >= 0; i--) {
-      layers.push(<this.layerClass key={i} layers={this.props.layers} layer={this.props.layers[i]} />);
+    const groups = this.props.metadata ? this.props.metadata[GROUPS_KEY] : undefined;
+    const layersHash = {};
+    if (groups) {
+      for (var key in groups) {
+        const children = [];
+        for (i = this.props.layers.length - 1; i >= 0; i--) {
+          const item = this.props.layers[i];
+          if (item.metadata && item.metadata[GROUP_KEY] === key) {
+            layersHash[item.id] = true;
+            children.push(<this.layerClass key={i} layers={this.props.layers} layer={item} />);
+          }
+        }
+        if (children.length > 0) {
+          layers.push(<li key={key}>{groups[key].name}<ul>{children}</ul></li>);
+        }
+      }
+    }
+    for (i = this.props.layers.length - 1; i >= 0; i--) {
+      const layer = this.props.layers[i];
+      if (!layersHash[layer.id]) {
+        layers.push(<this.layerClass key={i} layers={this.props.layers} layer={layer} />);
+      }
     }
     return (
       <ul style={this.props.style} className={className}>
@@ -129,6 +151,7 @@ SdkLayerList.defaultProps = {
 function mapStateToProps(state) {
   return {
     layers: state.map.layers,
+    metadata: state.map.metadata,
   };
 }
 
