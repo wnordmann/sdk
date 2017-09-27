@@ -68,7 +68,6 @@ function main() {
       'text-field': '\uf072',
     },
     paint: {
-      //'text-color': '#552211',
       'text-color': '#CF5300',
     },
   }));
