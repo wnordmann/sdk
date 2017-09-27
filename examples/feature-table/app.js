@@ -61,7 +61,7 @@ function main() {
     type: 'symbol',
     source: 'dynamic-source',
     layout: {
-      'text-font': 'FontAwesome Regular',
+      'text-font': ['FontAwesome normal',],
       'text-size': 18,
       'icon-optional': true,
       // airplane icon
