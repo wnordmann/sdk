@@ -18,10 +18,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { getLayerIndexById, isLayerVisible } from '../util';
+import { getLayerIndexById, isLayerVisible, getLayerTitle } from '../util';
 
 import * as mapActions from '../actions/map';
-import {GROUP_KEY, GROUPS_KEY, TITLE_KEY} from '../constants';
+import {GROUP_KEY, GROUPS_KEY} from '../constants';
 
 export class SdkLayerListItem extends React.Component {
 
@@ -65,20 +65,13 @@ export class SdkLayerListItem extends React.Component {
     );
   }
 
-  getTitle() {
-    if (this.props.layer.metadata && this.props.layer.metadata[TITLE_KEY]) {
-      return this.props.layer.metadata[TITLE_KEY];
-    }
-    return this.props.layer.id;
-  }
-
   render() {
     const layer = this.props.layer;
     const checkbox = this.getVisibilityControl(layer);
     return (
       <li className="sdk-layer" key={layer.id}>
         <span className="sdk-checkbox">{checkbox}</span>
-        <span className="sdk-name">{this.getTitle()}</span>
+        <span className="sdk-name">{getLayerTitle(this.props.layer)}</span>
       </li>
     );
   }
