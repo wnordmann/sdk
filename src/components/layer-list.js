@@ -51,23 +51,39 @@ export class SdkLayerListItem extends React.Component {
 
   toggleVisibility() {
     const shown = isLayerVisible(this.props.layer);
-    this.props.dispatch(mapActions.setLayerVisibility(this.props.layer.id, shown ? 'none' : 'visible'));
+    if (this.props.exclusive) {
+      this.props.dispatch(mapActions.setLayerInGroupVisible(this.props.layer.id, this.props.groupId));
+    } else {
+      this.props.dispatch(mapActions.setLayerVisibility(this.props.layer.id, shown ? 'none' : 'visible'));
+    }
   }
 
-  getVisibilityControl(layer) {
+  getVisibilityControl() {
+    const layer = this.props.layer;
     const is_checked = isLayerVisible(layer);
-    return (
-      <input
-        type="checkbox"
-        onChange={() => { this.toggleVisibility(layer.id, is_checked); }}
-        checked={is_checked}
-      />
-    );
+    if (this.props.exclusive) {
+      return (
+        <input
+          type="radio"
+          name={this.props.groupId}
+          onChange={() => { this.toggleVisibility(); }}
+          checked={is_checked}
+        />
+      );
+    } else {
+      return (
+        <input
+          type="checkbox"
+          onChange={() => { this.toggleVisibility(); }}
+          checked={is_checked}
+        />
+      );
+    }
   }
 
   render() {
     const layer = this.props.layer;
-    const checkbox = this.getVisibilityControl(layer);
+    const checkbox = this.getVisibilityControl();
     return (
       <li className="sdk-layer" key={layer.id}>
         <span className="sdk-checkbox">{checkbox}</span>
@@ -78,6 +94,8 @@ export class SdkLayerListItem extends React.Component {
 }
 
 SdkLayerListItem.PropTypes = {
+  exclusive: PropTypes.bool,
+  groupId: PropTypes.string,
   layer: PropTypes.shape({
     id: PropTypes.string,
   }).isRequired,
@@ -106,7 +124,7 @@ class SdkLayerList extends React.Component {
           const item = this.props.layers[i];
           if (item.metadata && item.metadata[GROUP_KEY] === key) {
             layersHash[item.id] = true;
-            children.push(<this.layerClass key={i} layers={this.props.layers} layer={item} />);
+            children.push(<this.layerClass exclusive={groups[key].exclusive} groupId={key} key={i} layers={this.props.layers} layer={item} />);
           }
         }
         if (children.length > 0) {

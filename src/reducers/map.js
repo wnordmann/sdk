@@ -18,7 +18,7 @@
 import createFilter from '@mapbox/mapbox-gl-style-spec/feature_filter';
 import { reprojectGeoJson } from '../util';
 import { MAP } from '../action-types';
-import { LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TITLE_KEY, DATA_VERSION_KEY } from '../constants';
+import { LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TITLE_KEY, DATA_VERSION_KEY, GROUP_KEY } from '../constants';
 
 function defaultMetadata() {
   // define the metadata.
@@ -372,6 +372,29 @@ function removeFeatures(state, action) {
   return state;
 }
 
+/** Set a layer visible in a mutually exclusive group.
+ */
+function setLayerInGroupVisible(state, action) {
+  const updated_layers = [];
+  for (let i = 0, ii = state.layers.length; i < ii; i++) {
+    const layer = state.layers[i];
+    if (layer.metadata && layer.metadata[GROUP_KEY] === action.groupId) {
+      updated_layers.push({
+        ...layer,
+        layout: {
+          ...layer.layout,
+          visibility: layer.id === action.layerId ? 'visible': 'none',
+        },
+      });
+    } else {
+      updated_layers.push(layer);
+    }
+  }
+  return Object.assign({}, state, {
+    layers: updated_layers,
+  }, incrementVersion(state.metadata, LAYER_VERSION_KEY));
+}
+
 /** Change the visibility of a layer given in the action.
  */
 function setVisibility(state, action) {
@@ -471,6 +494,8 @@ export default function MapReducer(state = defaultState, action) {
       return removeFeatures(state, action);
     case MAP.SET_LAYER_VISIBILITY:
       return setVisibility(state, action);
+    case MAP.SET_LAYER_IN_GROUP_VISIBLE:
+      return setLayerInGroupVisible(state, action);
     case MAP.RECEIVE_CONTEXT:
       return setContext(state, action);
     case MAP.ORDER_LAYER:
