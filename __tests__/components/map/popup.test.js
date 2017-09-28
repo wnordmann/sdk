@@ -15,4 +15,9 @@ describe('Popup component', () => {
     wrapper.find('.sdk-popup-closer').simulate('click');
     expect(popup.state.closed).toBe(true);
   });
+
+  it('should allow for custom className', () => {
+    const wrapper = shallow(<SdkPopup coordinate={[0, 0]} className='foo'><div>bar</div></SdkPopup>);
+    expect(wrapper.find('.foo').length).toBe(1);
+  });
 });

@@ -162,4 +162,9 @@ describe('test the Legend component', () => {
     const wrapper = mount(<SdkLegend layerId="bad-type-test" store={store} />);
     expect(wrapper.find('.sdk-legend').length).toBe(1);
   });
+
+  it('should allow for custom className', () => {
+    const wrapper = mount(<SdkLegend layerId="bad-type-test" className='foo' store={store} />);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
 });

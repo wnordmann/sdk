@@ -35,6 +35,11 @@ describe('Map component', () => {
     expect(wrapper.find('.sdk-map').length).toBe(1);
   });
 
+  it('should allow for custom className', () => {
+    const wrapper = shallow(<Map className='foo' />);
+    expect(wrapper.find('.foo').length).toBe(1);
+  });
+
   it('should create a map', () => {
     const sources = {
       osm: {

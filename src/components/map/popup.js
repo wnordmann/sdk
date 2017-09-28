@@ -40,9 +40,13 @@ class Popup extends React.PureComponent {
     if (this.state.closed) {
       return false;
     }
+    let className = 'sdk-popup';
+    if (this.props.className) {
+      className = `${className} ${this.props.className}`;
+    }
 
     return (
-      <div style={this.props.style} className="sdk-popup">
+      <div style={this.props.style} className={className}>
         { close_btn }
         <div id="sdk-popup-container">
           { React.Children.only(children) }
@@ -73,6 +77,7 @@ Popup.propTypes = {
   closeable: PropTypes.bool,
   onClose: PropTypes.func,
   style: PropTypes.object,
+  className: PropTypes.string,
 };
 
 Popup.defaultProps = {

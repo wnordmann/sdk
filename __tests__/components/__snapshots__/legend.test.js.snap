@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test the Legend component should allow for custom className 1`] = `"<div class=\\"sdk-legend foo\\"></div>"`;

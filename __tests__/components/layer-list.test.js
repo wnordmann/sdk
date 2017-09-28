@@ -99,6 +99,11 @@ describe('test the LayerList component', () => {
     mount(<Provider store={store}><SdkLayerList /></Provider>);
   });
 
+  it('should allow for custom className', () => {
+    const wrapper = mount(<Provider store={store}><SdkLayerList className='foo' /></Provider>);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
   function getCustomLayerList() {
     return mount(<Provider store={store}><SdkLayerList layerClass={TestLayerListItem} /></Provider>);
   }

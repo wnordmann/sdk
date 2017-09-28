@@ -97,12 +97,16 @@ class SdkLayerList extends React.Component {
   }
 
   render() {
+    let className = 'sdk-layer-list';
+    if (this.props.className) {
+      className = `${className} ${this.props.className}`;
+    }
     const layers = [];
     for (let i = this.props.layers.length - 1; i >= 0; i--) {
       layers.push(<this.layerClass key={i} layers={this.props.layers} layer={this.props.layers[i]} />);
     }
     return (
-      <ul style={this.props.style} className='sdk-layer-list'>
+      <ul style={this.props.style} className={className}>
         { layers }
       </ul>
     );
@@ -115,6 +119,7 @@ SdkLayerList.propTypes = {
     id: PropTypes.string,
   })).isRequired,
   style: PropTypes.object,
+  className: PropTypes.string,
 };
 
 SdkLayerList.defaultProps = {
