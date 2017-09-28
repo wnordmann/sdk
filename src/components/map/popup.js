@@ -42,7 +42,7 @@ class Popup extends React.PureComponent {
     }
 
     return (
-      <div className="sdk-popup">
+      <div style={this.props.style} className="sdk-popup">
         { close_btn }
         <div id="sdk-popup-container">
           { React.Children.only(children) }
@@ -72,6 +72,7 @@ Popup.propTypes = {
   ]),
   closeable: PropTypes.bool,
   onClose: PropTypes.func,
+  style: PropTypes.object,
 };
 
 Popup.defaultProps = {

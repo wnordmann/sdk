@@ -102,7 +102,7 @@ class SdkLayerList extends React.Component {
       layers.push(<this.layerClass key={i} layers={this.props.layers} layer={this.props.layers[i]} />);
     }
     return (
-      <ul>
+      <ul style={this.props.style} className='sdk-layer-list'>
         { layers }
       </ul>
     );
@@ -114,6 +114,7 @@ SdkLayerList.propTypes = {
   layers: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string,
   })).isRequired,
+  style: PropTypes.object,
 };
 
 SdkLayerList.defaultProps = {

@@ -204,7 +204,7 @@ class Legend extends React.Component {
     }
 
     return (
-      <div className="sdk-legend">
+      <div style={this.props.style} className="sdk-legend">
         { legend_contents }
       </div>
     );
@@ -218,6 +218,7 @@ Legend.propTypes = {
     source: PropTypes.string,
   }),
   emptyLegendMessage: PropTypes.string,
+  style: PropTypes.object,
 };
 
 Legend.defaultProps = {
