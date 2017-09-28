@@ -174,7 +174,7 @@ describe('test the LayerList component', () => {
     expect(isLayerVisible(store.getState().map.layers[0])).toBe(true);
   });
 
-  it('should handle grouping', () => {
+  it('should handle basic grouping', () => {
     store.dispatch(MapActions.updateMetadata({
       'mapbox:groups': {
         'background': {
@@ -202,5 +202,73 @@ describe('test the LayerList component', () => {
     }));
     const wrapper = mount(<Provider store={store}><SdkLayerList /></Provider>);
     expect(wrapper.html()).toMatchSnapshot();
+  });
+});
+
+describe('test the exclusive grouping of the LayerList component', () => {
+  let store = null;
+
+  beforeEach(() => {
+    store = createStore(combineReducers({
+      map: MapReducer,
+    }), {
+      map: {
+        version: 8,
+        sources: {},
+        metadata: {
+          'mapbox:groups': {
+            'baselayers': {
+              name: 'Base Layers',
+              exclusive: true,
+            },
+          }
+        },
+        layers: [
+          {
+            id: 'osm',
+            source: 'osm',
+            metadata: {
+              'mapbox:group': 'baselayers',
+            },
+          }, {
+            id: 'carto',
+            source: 'carto',
+            metadata: {
+              'mapbox:group': 'baselayers',
+            },
+            layout: {
+              visibility: 'none',
+            },
+          }, {
+            id: 'esri',
+            source: 'esri',
+            metadata: {
+              'mapbox:group': 'baselayers',
+            },
+            layout: {
+              visibility: 'none',
+            },
+          },
+        ],
+      },
+    });
+  });
+
+  it('should handle exclusive groups', () => {
+    const wrapper = mount(<Provider store={store}><SdkLayerList /></Provider>);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('should toggle layer visibility', () => {
+    const wrapper = mount(<Provider store={store}><SdkLayerList /></Provider>);
+
+    expect(isLayerVisible(store.getState().map.layers[0])).toBe(true);
+
+    const checkbox = wrapper.find('input').first();
+    checkbox.simulate('change', { target: { checked: true }});
+
+    expect(isLayerVisible(store.getState().map.layers[0])).toBe(false);
+    expect(isLayerVisible(store.getState().map.layers[1])).toBe(false);
+    expect(isLayerVisible(store.getState().map.layers[2])).toBe(true);
   });
 });

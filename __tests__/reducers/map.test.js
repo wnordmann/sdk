@@ -173,6 +173,79 @@ describe('map reducer', () => {
     });
   });
 
+  it('should handle SET_LAYER_IN_GROUP_VISIBLE', () => {
+    const layer1 = {
+      id: 'layer1',
+      source: 'source1',
+      metadata: {
+       'mapbox:group': 'baselayer',
+      },
+    };
+    const layer2 = {
+      id: 'layer2',
+      source: 'source2',
+      layout: {
+        visibility: 'none',
+      },
+      metadata: {
+       'mapbox:group': 'baselayer',
+      },
+    };
+    deepFreeze(layer1);
+    deepFreeze(layer2);
+    const action = {
+      type: MAP.SET_LAYER_IN_GROUP_VISIBLE,
+      layerId: 'layer2',
+      groupId: 'baselayer',
+    };
+    const state = {
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 0,
+      },
+      sources: {},
+      layers: [layer1, layer2],
+    };
+    deepFreeze(state);
+    deepFreeze(action);
+    expect(reducer(state, action)).toEqual({
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      sources: {},
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 1,
+      },
+      layers: [
+        {
+          id: 'layer1',
+          source: 'source1',
+          layout: {
+            visibility: 'none',
+          },
+          metadata: {
+            'mapbox:group': 'baselayer',
+          },
+        }, {
+          id: 'layer2',
+          source: 'source2',
+          layout: {
+            visibility: 'visible',
+          },
+          metadata: {
+            'mapbox:group': 'baselayer',
+          },
+        },
+      ],
+    });
+  });
+
   it('should handle SET_LAYER_VISIBILITY', () => {
     const layer = {
       id: 'background',

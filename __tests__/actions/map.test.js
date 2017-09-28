@@ -157,6 +157,17 @@ describe('actions', () => {
     expect(actions.setLayerVisibility(layerId, visibility)).toEqual(expectedAction);
   });
 
+  it('should create an action to set layer visible in a group', () => {
+    const layerId = 'osm';
+    const groupId = 'basemaps';
+    const expectedAction = {
+      type: MAP.SET_LAYER_IN_GROUP_VISIBLE,
+      layerId,
+      groupId,
+    };
+    expect(actions.setLayerInGroupVisible(layerId, groupId)).toEqual(expectedAction);
+  });
+
   it('should create an action to remove features', () => {
     const sourceName = 'points';
     const filter = ['all', ['<', 'n', '3']];
