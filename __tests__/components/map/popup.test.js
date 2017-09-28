@@ -1,9 +1,12 @@
 /* global it, describe, expect */
 
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, configure } from 'enzyme';
+import  Adapter from 'enzyme-adapter-react-16';
 
 import SdkPopup from '../../../src/components/map/popup';
+
+configure({ adapter: new Adapter() });
 
 describe('Popup component', () => {
   it('should close', () => {

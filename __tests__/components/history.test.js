@@ -1,13 +1,16 @@
 /* global it, describe, expect, spyOn, beforeEach */
 
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { shallow, mount, configure } from 'enzyme';
+import  Adapter from 'enzyme-adapter-react-16';
 
 import { createStore, combineReducers } from 'redux';
 import MapReducer from '../../src/reducers/map';
 import { setView } from '../../src/actions/map';
 
 import SdkHashHistory, { HashHistory } from '../../src/components/history';
+
+configure({ adapter: new Adapter() });
 
 describe('test the HashHistory component', () => {
   it('should render the components without error', () => {
