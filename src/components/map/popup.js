@@ -29,7 +29,16 @@ class Popup extends React.PureComponent {
 
   close() {
     this.setState({ closed: true });
+    this.setState({ closed: true }, () => {
+      if (this.map) {
+        this.map.updatePopups();
+      }
+    });
     this.props.onClose();
+  }
+
+  setMap(map) {
+    this.map = map;
   }
 
   renderPopup(children) {
@@ -40,7 +49,7 @@ class Popup extends React.PureComponent {
     if (this.state.closed) {
       return false;
     }
-    let className = 'sdk-popup';
+    let className = 'sdk-popup-root';
     if (this.props.className) {
       className = `${className} ${this.props.className}`;
     }
