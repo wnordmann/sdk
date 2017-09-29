@@ -11,6 +11,7 @@
  * under the License.
  */
 
+import {TITLE_KEY} from './constants';
 import GeoJsonFormat from 'ol/format/geojson';
 /** @module util
  * @desc functions for Boundless SDK.
@@ -175,7 +176,6 @@ export function isLayerVisible(layer) {
   return true;
 }
 
-
 /** Get the z-index of a layer.
  *
  *  @param layers The list of layers.
@@ -190,4 +190,17 @@ export function getLayerIndexById(layers, id) {
     }
   }
   return -1;
+}
+
+/** Get the title of a layer.
+ *
+ *  @param {Object} layer The layer.
+ *
+ * @returns {string} The title of the layer.
+ */
+export function getLayerTitle(layer) {
+  if (layer.metadata && layer.metadata[TITLE_KEY]) {
+    return layer.metadata[TITLE_KEY];
+  }
+  return layer.id;
 }

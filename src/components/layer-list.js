@@ -18,9 +18,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { getLayerIndexById, isLayerVisible } from '../util';
+import { getLayerIndexById, isLayerVisible, getLayerTitle } from '../util';
 
 import * as mapActions from '../actions/map';
+import {GROUP_KEY, GROUPS_KEY} from '../constants';
 
 export class SdkLayerListItem extends React.Component {
 
@@ -50,40 +51,51 @@ export class SdkLayerListItem extends React.Component {
 
   toggleVisibility() {
     const shown = isLayerVisible(this.props.layer);
-    this.props.dispatch(mapActions.setLayerVisibility(this.props.layer.id, shown ? 'none' : 'visible'));
-  }
-
-  getVisibilityControl(layer) {
-    const is_checked = isLayerVisible(layer);
-    return (
-      <input
-        type="checkbox"
-        onChange={() => { this.toggleVisibility(layer.id, is_checked); }}
-        checked={is_checked}
-      />
-    );
-  }
-
-  getTitle() {
-    if (this.props.layer.metadata && this.props.layer.metadata['bnd:title']) {
-      return this.props.layer.metadata['bnd:title'];
+    if (this.props.exclusive) {
+      this.props.dispatch(mapActions.setLayerInGroupVisible(this.props.layer.id, this.props.groupId));
+    } else {
+      this.props.dispatch(mapActions.setLayerVisibility(this.props.layer.id, shown ? 'none' : 'visible'));
     }
-    return this.props.layer.id;
+  }
+
+  getVisibilityControl() {
+    const layer = this.props.layer;
+    const is_checked = isLayerVisible(layer);
+    if (this.props.exclusive) {
+      return (
+        <input
+          type="radio"
+          name={this.props.groupId}
+          onChange={() => { this.toggleVisibility(); }}
+          checked={is_checked}
+        />
+      );
+    } else {
+      return (
+        <input
+          type="checkbox"
+          onChange={() => { this.toggleVisibility(); }}
+          checked={is_checked}
+        />
+      );
+    }
   }
 
   render() {
     const layer = this.props.layer;
-    const checkbox = this.getVisibilityControl(layer);
+    const checkbox = this.getVisibilityControl();
     return (
       <li className="sdk-layer" key={layer.id}>
         <span className="sdk-checkbox">{checkbox}</span>
-        <span className="sdk-name">{this.getTitle()}</span>
+        <span className="sdk-name">{getLayerTitle(this.props.layer)}</span>
       </li>
     );
   }
 }
 
 SdkLayerListItem.PropTypes = {
+  exclusive: PropTypes.bool,
+  groupId: PropTypes.string,
   layer: PropTypes.shape({
     id: PropTypes.string,
   }).isRequired,
@@ -101,9 +113,30 @@ class SdkLayerList extends React.Component {
     if (this.props.className) {
       className = `${className} ${this.props.className}`;
     }
+    let i;
     const layers = [];
-    for (let i = this.props.layers.length - 1; i >= 0; i--) {
-      layers.push(<this.layerClass key={i} layers={this.props.layers} layer={this.props.layers[i]} />);
+    const groups = this.props.metadata ? this.props.metadata[GROUPS_KEY] : undefined;
+    const layersHash = {};
+    if (groups) {
+      for (var key in groups) {
+        const children = [];
+        for (i = this.props.layers.length - 1; i >= 0; i--) {
+          const item = this.props.layers[i];
+          if (item.metadata && item.metadata[GROUP_KEY] === key) {
+            layersHash[item.id] = true;
+            children.push(<this.layerClass exclusive={groups[key].exclusive} groupId={key} key={i} layers={this.props.layers} layer={item} />);
+          }
+        }
+        if (children.length > 0) {
+          layers.push(<li key={key}>{groups[key].name}<ul>{children}</ul></li>);
+        }
+      }
+    }
+    for (i = this.props.layers.length - 1; i >= 0; i--) {
+      const layer = this.props.layers[i];
+      if (!layersHash[layer.id]) {
+        layers.push(<this.layerClass key={i} layers={this.props.layers} layer={layer} />);
+      }
     }
     return (
       <ul style={this.props.style} className={className}>
@@ -129,6 +162,7 @@ SdkLayerList.defaultProps = {
 function mapStateToProps(state) {
   return {
     layers: state.map.layers,
+    metadata: state.map.metadata,
   };
 }
 

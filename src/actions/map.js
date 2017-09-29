@@ -215,6 +215,21 @@ export function setLayerVisibility(layerId, visibility) {
   };
 }
 
+/** Set a layer visible in a mutually exclusive group.
+ *
+ *  @param {string} layerId String id for the layer to turn on.
+ *  @param {string} groupId String id for the layer group.
+ *
+ *  @returns {Object} Action object to pass to reducer.
+ */
+export function setLayerInGroupVisible(layerId, groupId) {
+  return {
+    type: MAP.SET_LAYER_IN_GROUP_VISIBLE,
+    layerId,
+    groupId,
+  };
+}
+
 /** Change the metadata object in a given layer in the map state.
  *
  *  @param {string} layerId String id for the layer.
