@@ -1254,8 +1254,12 @@ export class Map extends React.Component {
   }
 
   render() {
+    let className = 'sdk-map';
+    if (this.props.className) {
+      className = `${className} ${this.props.className}`;
+    }
     return (
-      <div ref={(c) => { this.mapdiv = c; }} className="sdk-map" />
+      <div style={this.props.style} ref={(c) => { this.mapdiv = c; }} className={className} />
     );
   }
 }
@@ -1272,6 +1276,8 @@ Map.propTypes = {
     sources: PropTypes.object,
     sprite: PropTypes.string,
   }),
+  style: PropTypes.object,
+  className: PropTypes.string,
   drawing: PropTypes.shape({
     interaction: PropTypes.string,
     sourceName: PropTypes.string,

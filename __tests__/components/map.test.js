@@ -31,7 +31,13 @@ configure({ adapter: new Adapter() });
 
 describe('Map component', () => {
   it('should render without throwing an error', () => {
-    expect(shallow(<Map />).contains(<div className="sdk-map" />)).toBe(true);
+    const wrapper = shallow(<Map />);
+    expect(wrapper.find('.sdk-map').length).toBe(1);
+  });
+
+  it('should allow for custom className', () => {
+    const wrapper = shallow(<Map className='foo' />);
+    expect(wrapper.find('.foo').length).toBe(1);
   });
 
   it('should create a map', () => {

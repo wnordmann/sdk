@@ -150,10 +150,7 @@ describe('test the Legend component', () => {
 
   it('should render an empty legend when id does not exist', () => {
     const wrapper = mount(<SdkLegend layerId="does-not-exist" store={store} />);
-    const empty_legend = (
-      <div className="sdk-legend" />
-    );
-    expect(wrapper.contains(empty_legend)).toBe(true);
+    expect(wrapper.find('.sdk-legend').length).toBe(1);
   });
 
   it('should fallback from raster to vector', () => {
@@ -163,9 +160,11 @@ describe('test the Legend component', () => {
 
   it('should return an empty legend for an invalid legend type', () => {
     const wrapper = mount(<SdkLegend layerId="bad-type-test" store={store} />);
-    const empty_legend = (
-      <div className="sdk-legend" />
-    );
-    expect(wrapper.contains(empty_legend)).toBe(true);
+    expect(wrapper.find('.sdk-legend').length).toBe(1);
+  });
+
+  it('should allow for custom className', () => {
+    const wrapper = mount(<SdkLegend layerId="bad-type-test" className='foo' store={store} />);
+    expect(wrapper.html()).toMatchSnapshot();
   });
 });
