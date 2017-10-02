@@ -58,12 +58,17 @@ function main() {
 
   store.dispatch(mapActions.addLayer({
     id: 'dynamic-layer',
-    type: 'circle',
+    type: 'symbol',
     source: 'dynamic-source',
+    layout: {
+      'text-font': ['FontAwesome normal',],
+      'text-size': 18,
+      'icon-optional': true,
+      // airplane icon
+      'text-field': '\uf072',
+    },
     paint: {
-      'circle-radius': 5,
-      'circle-color': '#552211',
-      'circle-stroke-color': '#00ff11',
+      'text-color': '#CF5300',
     },
   }));
 

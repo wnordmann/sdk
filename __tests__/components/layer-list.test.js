@@ -1,16 +1,19 @@
 /* global it, describe, expect, beforeEach */
 
 import React from 'react';
-import { mount } from 'enzyme';
+import { mount, configure } from 'enzyme';
+import  Adapter from 'enzyme-adapter-react-16';
 
 import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 
 import MapReducer from '../../src/reducers/map';
+import * as MapActions from '../../src/actions/map';
 import { isLayerVisible } from '../../src/util';
 
 import SdkLayerList, { SdkLayerListItem } from '../../src/components/layer-list';
 
+configure({ adapter: new Adapter() });
 
 class TestLayerListItem extends SdkLayerListItem {
   render() {
@@ -97,6 +100,11 @@ describe('test the LayerList component', () => {
     mount(<Provider store={store}><SdkLayerList /></Provider>);
   });
 
+  it('should allow for custom className', () => {
+    const wrapper = mount(<Provider store={store}><SdkLayerList className='foo' /></Provider>);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
   function getCustomLayerList() {
     return mount(<Provider store={store}><SdkLayerList layerClass={TestLayerListItem} /></Provider>);
   }
@@ -164,5 +172,103 @@ describe('test the LayerList component', () => {
     expect(isLayerVisible(store.getState().map.layers[0])).toBe(false);
     checkbox.simulate('change', { target: { checked: true }});
     expect(isLayerVisible(store.getState().map.layers[0])).toBe(true);
+  });
+
+  it('should handle basic grouping', () => {
+    store.dispatch(MapActions.updateMetadata({
+      'mapbox:groups': {
+        'background': {
+          name: 'Base Maps',
+        },
+        'overlays': {
+          name: 'Overlays',
+        },
+      }
+    }));
+    store.dispatch(MapActions.updateLayer('osm', {
+      metadata: {
+        'mapbox:group': 'background'
+      }
+    }));
+    store.dispatch(MapActions.updateLayer('wms-test', {
+      metadata: {
+        'mapbox:group': 'overlays'
+      }
+    }));
+    store.dispatch(MapActions.updateLayer('image-test', {
+      metadata: {
+        'mapbox:group': 'overlays'
+      }
+    }));
+    const wrapper = mount(<Provider store={store}><SdkLayerList /></Provider>);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+});
+
+describe('test the exclusive grouping of the LayerList component', () => {
+  let store = null;
+
+  beforeEach(() => {
+    store = createStore(combineReducers({
+      map: MapReducer,
+    }), {
+      map: {
+        version: 8,
+        sources: {},
+        metadata: {
+          'mapbox:groups': {
+            'baselayers': {
+              name: 'Base Layers',
+              exclusive: true,
+            },
+          }
+        },
+        layers: [
+          {
+            id: 'osm',
+            source: 'osm',
+            metadata: {
+              'mapbox:group': 'baselayers',
+            },
+          }, {
+            id: 'carto',
+            source: 'carto',
+            metadata: {
+              'mapbox:group': 'baselayers',
+            },
+            layout: {
+              visibility: 'none',
+            },
+          }, {
+            id: 'esri',
+            source: 'esri',
+            metadata: {
+              'mapbox:group': 'baselayers',
+            },
+            layout: {
+              visibility: 'none',
+            },
+          },
+        ],
+      },
+    });
+  });
+
+  it('should handle exclusive groups', () => {
+    const wrapper = mount(<Provider store={store}><SdkLayerList /></Provider>);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('should toggle layer visibility', () => {
+    const wrapper = mount(<Provider store={store}><SdkLayerList /></Provider>);
+
+    expect(isLayerVisible(store.getState().map.layers[0])).toBe(true);
+
+    const checkbox = wrapper.find('input').first();
+    checkbox.simulate('change', { target: { checked: true }});
+
+    expect(isLayerVisible(store.getState().map.layers[0])).toBe(false);
+    expect(isLayerVisible(store.getState().map.layers[1])).toBe(false);
+    expect(isLayerVisible(store.getState().map.layers[2])).toBe(true);
   });
 });

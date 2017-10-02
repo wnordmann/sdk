@@ -1,13 +1,16 @@
 /* global it, describe, expect, spyOn */
 
 import React from 'react';
-import { mount } from 'enzyme';
+import { mount, configure } from 'enzyme';
+import  Adapter from 'enzyme-adapter-react-16';
 
 import { createStore, combineReducers } from 'redux';
 
 import ConnectedMap from '../../src/components/map';
 import MapReducer from '../../src/reducers/map';
 import * as MapActions from '../../src/actions/map';
+
+configure({ adapter: new Adapter() });
 
 describe('Map component time tests', () => {
   it('should correctly reload WMS source that is time enabled', () => {

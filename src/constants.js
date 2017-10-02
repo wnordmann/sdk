@@ -22,6 +22,8 @@ export const TITLE_KEY = 'bnd:title';
 export const TIME_KEY = 'bnd:time';
 export const TIME_ATTRIBUTE_KEY = 'bnd:timeattribute';
 export const DATA_VERSION_KEY = 'bnd:data-version';
+export const GROUPS_KEY = 'mapbox:groups';
+export const GROUP_KEY = 'mapbox:group';
 
 export const INTERACTIONS = {
   modify: 'Modify',
@@ -55,6 +57,8 @@ export default {
   SOURCE_VERSION_KEY,
   TITLE_KEY,
   TIME_KEY,
+  GROUP_KEY,
+  GROUPS_KEY,
   TIME_ATTRIBUTE_KEY,
   DATA_VERSION_KEY,
   INTERACTIONS,

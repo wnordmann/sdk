@@ -1,12 +1,25 @@
 /* global it, describe, expect */
 
 import * as util from '../../src/util';
+import {TITLE_KEY} from '../../src/constants';
 
 describe('util', () => {
   it('gets layer by id', () => {
     const layers = [{ id: 'osm', source: 'osm' }];
     expect(util.getLayerById(layers, 'foo')).toEqual(null);
     expect(util.getLayerById(layers, 'osm')).toEqual(layers[0]);
+  });
+
+  it('gets the layer title if no title metadata', () => {
+    const layer = {id: 'osm'};
+    expect(util.getLayerTitle(layer)).toEqual('osm');
+  });
+
+  it('gets the layer title from metadata', () => {
+    const metadata = {};
+    metadata[TITLE_KEY] = 'foo';
+    const layer = {id: 'osm', metadata: metadata};
+    expect(util.getLayerTitle(layer)).toEqual('foo');
   });
 
   it('converts degrees to radians', () => {

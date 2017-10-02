@@ -895,6 +895,7 @@ export class Map extends React.Component {
     overlays.forEach((overlay) => {
       const id = overlay.get('popupId');
       if (this.popups[id].state.closed !== false) {
+        this.popups[id].setMap(null);
         // mark this for removal
         overlays_to_remove.push(overlay);
         // umount the component from the DOM
@@ -928,7 +929,7 @@ export class Map extends React.Component {
     const id = uuid.v4();
 
     const elem = document.createElement('div');
-
+    elem.setAttribute("class", "sdk-popup");
     const overlay = new Overlay({
       // create an empty div element for the Popup
       element: elem,
@@ -954,6 +955,7 @@ export class Map extends React.Component {
     ReactDOM.render(popup, elem, (function addInstance() {
       self.popups[id] = this;
       self.elems[id] = elem;
+      this.setMap(self);
     }));
 
     // set the popup id so we can match the component
@@ -1254,8 +1256,12 @@ export class Map extends React.Component {
   }
 
   render() {
+    let className = 'sdk-map';
+    if (this.props.className) {
+      className = `${className} ${this.props.className}`;
+    }
     return (
-      <div ref={(c) => { this.mapdiv = c; }} className="sdk-map" />
+      <div style={this.props.style} ref={(c) => { this.mapdiv = c; }} className={className} />
     );
   }
 }
@@ -1272,6 +1278,8 @@ Map.propTypes = {
     sources: PropTypes.object,
     sprite: PropTypes.string,
   }),
+  style: PropTypes.object,
+  className: PropTypes.string,
   drawing: PropTypes.shape({
     interaction: PropTypes.string,
     sourceName: PropTypes.string,

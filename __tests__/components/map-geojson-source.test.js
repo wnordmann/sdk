@@ -6,13 +6,15 @@
 
 import React from 'react';
 import { createStore, combineReducers } from 'redux';
-import { mount } from 'enzyme';
+import { mount, configure } from 'enzyme';
 import nock from 'nock';
+import  Adapter from 'enzyme-adapter-react-16';
 
 import SdkMap from '../../src/components/map';
 import MapReducer from '../../src/reducers/map';
 import * as MapActions from '../../src/actions/map';
 
+configure({ adapter: new Adapter() });
 
 describe('tests for the geojson-type map sources', () => {
   let map;

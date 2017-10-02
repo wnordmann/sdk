@@ -202,9 +202,13 @@ class Legend extends React.Component {
     if (legend_contents === null) {
       legend_contents = this.props.emptyLegendMessage;
     }
+    let className = 'sdk-legend';
+    if (this.props.className) {
+      className = `${className} ${this.props.className}`;
+    }
 
     return (
-      <div className="sdk-legend">
+      <div style={this.props.style} className={className}>
         { legend_contents }
       </div>
     );
@@ -218,6 +222,8 @@ Legend.propTypes = {
     source: PropTypes.string,
   }),
   emptyLegendMessage: PropTypes.string,
+  style: PropTypes.object,
+  className: PropTypes.string,
 };
 
 Legend.defaultProps = {

@@ -1,8 +1,9 @@
 /* global it, describe, expect, spyOn, afterEach */
 
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { shallow, mount, configure } from 'enzyme';
 import nock from 'nock';
+import  Adapter from 'enzyme-adapter-react-16';
 
 import olMap from 'ol/map';
 import TileLayer from 'ol/layer/tile';
@@ -26,10 +27,17 @@ import PrintReducer from '../../src/reducers/print';
 import * as MapActions from '../../src/actions/map';
 import * as PrintActions from '../../src/actions/print';
 
+configure({ adapter: new Adapter() });
 
 describe('Map component', () => {
   it('should render without throwing an error', () => {
-    expect(shallow(<Map />).contains(<div className="sdk-map" />)).toBe(true);
+    const wrapper = shallow(<Map />);
+    expect(wrapper.find('.sdk-map').length).toBe(1);
+  });
+
+  it('should allow for custom className', () => {
+    const wrapper = shallow(<Map className='foo' />);
+    expect(wrapper.find('.foo').length).toBe(1);
   });
 
   it('should create a map', () => {
