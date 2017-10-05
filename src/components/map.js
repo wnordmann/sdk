@@ -37,7 +37,6 @@ import XyzSource from 'ol/source/xyz';
 import TileWMSSource from 'ol/source/tilewms';
 import TileJSON from 'ol/source/tilejson';
 import TileGrid from 'ol/tilegrid';
-import ZoomControl from 'ol/control/zoomslider';
 
 import VectorTileLayer from 'ol/layer/vectortile';
 import VectorTileSource from 'ol/source/vectortile';
@@ -54,6 +53,8 @@ import GeoJsonFormat from 'ol/format/geojson';
 import DrawInteraction from 'ol/interaction/draw';
 import ModifyInteraction from 'ol/interaction/modify';
 import SelectInteraction from 'ol/interaction/select';
+
+import AttributionControl from 'ol/control/attribution';
 
 import LoadingStrategy from 'ol/loadingstrategy';
 
@@ -1078,8 +1079,9 @@ export class Map extends React.Component {
       center = Proj.transform(this.props.map.center, 'EPSG:4326', map_proj);
     }
 
-    // intiialize the map.
+    // initialize the map.
     this.map = new OlMap({
+      controls: [new AttributionControl()],
       target: this.mapdiv,
       logo: false,
       view: new View({
@@ -1090,9 +1092,6 @@ export class Map extends React.Component {
       }),
     });
 
-    if (this.props.showZoomSlider) {
-      this.map.addControl(new ZoomControl());
-    }
     // when the map moves update the location in the state
     this.map.on('moveend', () => {
       this.props.setView(this.map.getView());
@@ -1261,7 +1260,9 @@ export class Map extends React.Component {
       className = `${className} ${this.props.className}`;
     }
     return (
-      <div style={this.props.style} ref={(c) => { this.mapdiv = c; }} className={className} />
+      <div style={this.props.style} ref={(c) => { this.mapdiv = c; }} className={className}>
+        {this.props.children}
+      </div>
     );
   }
 }
@@ -1278,13 +1279,13 @@ Map.propTypes = {
     sources: PropTypes.object,
     sprite: PropTypes.string,
   }),
+  children: PropTypes.array,
   style: PropTypes.object,
   className: PropTypes.string,
   drawing: PropTypes.shape({
     interaction: PropTypes.string,
     sourceName: PropTypes.string,
   }),
-  showZoomSlider: PropTypes.bool,
   initialPopups: PropTypes.arrayOf(PropTypes.object),
   setView: PropTypes.func,
   includeFeaturesOnClick: PropTypes.bool,
@@ -1317,7 +1318,6 @@ Map.defaultProps = {
     interaction: null,
     source: null,
   },
-  showZoomSlider: false,
   initialPopups: [],
   setView: () => {
     // swallow event.

@@ -18,7 +18,7 @@
 import createFilter from '@mapbox/mapbox-gl-style-spec/feature_filter';
 import { reprojectGeoJson } from '../util';
 import { MAP } from '../action-types';
-import { LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TITLE_KEY, DATA_VERSION_KEY, GROUP_KEY } from '../constants';
+import { DEFAULT_ZOOM, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TITLE_KEY, DATA_VERSION_KEY, GROUP_KEY } from '../constants';
 
 function defaultMetadata() {
   // define the metadata.
@@ -461,6 +461,12 @@ function updateSource(state, action) {
   }, incrementVersion(state.metadata, dataVersionKey(action.sourceName)));
 }
 
+function setZoom(state, action) {
+  let zoom = Math.min(DEFAULT_ZOOM.MAX, action.zoom);
+  zoom = Math.max(DEFAULT_ZOOM.MIN, zoom);
+  return Object.assign({}, state, { zoom } );
+}
+
 /** Main reducer.
  *  @param {Object} state The redux state.
  *  @param {Object} action The selected action object.
@@ -471,6 +477,14 @@ export default function MapReducer(state = defaultState, action) {
   switch (action.type) {
     case MAP.SET_VIEW:
       return Object.assign({}, state, action.view);
+    case MAP.ZOOM_IN:
+      return setZoom(state, {zoom: state.zoom + 1});
+      //return Object.assign({}, state, { zoom: Math.min(DEFAULT_MAX_ZOOM, state.zoom + 1) });
+    case MAP.ZOOM_OUT:
+      return setZoom(state, {zoom: state.zoom - 1});
+      //return Object.assign({}, state, { zoom: Math.max(DEFAULT_MIN_ZOOM, state.zoom - 1) });
+    case MAP.SET_ZOOM:
+      return setZoom(state, action);
     case MAP.SET_NAME:
       return Object.assign({}, state, { name: action.name });
     case MAP.SET_SPRITE:

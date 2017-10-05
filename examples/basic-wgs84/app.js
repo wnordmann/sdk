@@ -11,9 +11,12 @@ import thunkMiddleware from 'redux-thunk';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import { Provider } from 'react-redux';
+
 import SdkMap from '@boundlessgeo/sdk/components/map';
 import SdkHashHistory from '@boundlessgeo/sdk/components/history';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
+import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
 
 // This will have webpack include all of the SDK styles.
@@ -157,7 +160,11 @@ function main() {
     store.dispatch(mapActions.removeFeatures('points', ['==', 'isRandom', true]));
   };
   // place the map on the page.
-  ReactDOM.render(<SdkMap projection="EPSG:4326" store={store} />, document.getElementById('map'));
+  ReactDOM.render(<Provider store={store}>
+    <SdkMap style={{position: 'relative'}} projection="EPSG:4326">
+      <SdkZoomControl style={{position: 'absolute', top: 20, left: 20}}/>
+    </SdkMap>
+  </Provider>, document.getElementById('map'));
 
   // add some buttons to demo some actions.
   ReactDOM.render((

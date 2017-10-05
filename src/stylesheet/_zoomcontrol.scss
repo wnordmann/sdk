@@ -1,0 +1,13 @@
+.sdk-zoom-control {
+  z-index: 1;
+  border-radius: 4px;
+  padding: 2px;
+}
+.sdk-zoom-control > button {
+  font-size: 1.14em;
+  font-weight: bold;
+  border-radius: 2px 2px 0 0;
+  display: block;
+  width: 1.375em;
+  height: 1.375em;
+}

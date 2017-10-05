@@ -8,9 +8,12 @@ import thunkMiddleware from 'redux-thunk';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import { Provider } from 'react-redux';
+
 import SdkMap from '@boundlessgeo/sdk/components/map';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
 import SdkDrawingReducer from '@boundlessgeo/sdk/reducers/drawing';
+import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
 import * as drawingActions from '@boundlessgeo/sdk/actions/drawing';
 
@@ -173,14 +176,16 @@ function main() {
   };
 
   // place the map on the page.
-  ReactDOM.render(
+  ReactDOM.render(<Provider store={store}>
     <SdkMap
-      store={store}
+      style={{position: 'relative'}}
       onFeatureDrawn={addFeature}
       onFeatureModified={modifyFeature}
       onFeatureSelected={selectFeature}
-    />
-  , document.getElementById('map'));
+    >
+      <SdkZoomControl style={{position: 'absolute', top: 20, left: 20}}/>
+    </SdkMap>
+  </Provider>, document.getElementById('map'));
 
   let drawing_tool = null;
   let drawing_layer = 'points';

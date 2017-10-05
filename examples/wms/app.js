@@ -12,6 +12,7 @@ import { Provider } from 'react-redux';
 import WMSCapabilitiesFormat from 'ol/format/wmscapabilities';
 
 import SdkMap from '@boundlessgeo/sdk/components/map';
+import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
 import SdkLayerList from '@boundlessgeo/sdk/components/layer-list';
@@ -92,35 +93,38 @@ function main() {
   };
 
   // place the map on the page.
-  ReactDOM.render(<SdkMap
-    includeFeaturesOnClick
-    onClick={(map, xy, featuresPromise) => {
-      // show a popup containing WMS GetFeatureInfo.
-      featuresPromise.then((featureGroups) => {
-        // setup an array for all the features returned in the promise.
-        let features = [];
+  ReactDOM.render(<Provider store={store}>
+    <SdkMap
+      style={{position: 'relative'}}
+      includeFeaturesOnClick
+      onClick={(map, xy, featuresPromise) => {
+        // show a popup containing WMS GetFeatureInfo.
+        featuresPromise.then((featureGroups) => {
+          // setup an array for all the features returned in the promise.
+          let features = [];
 
-        // featureGroups is an array of objects. The key of each object
-        // is a layer from the map.
-        for (let g = 0, gg = featureGroups.length; g < gg; g++) {
-          // collect every feature from each layer.
-          const layers = Object.keys(featureGroups[g]);
-          for (let l = 0, ll = layers.length; l < ll; l++) {
-            const layer = layers[l];
-            features = features.concat(featureGroups[g][layer]);
+          // featureGroups is an array of objects. The key of each object
+          // is a layer from the map.
+          for (let g = 0, gg = featureGroups.length; g < gg; g++) {
+            // collect every feature from each layer.
+            const layers = Object.keys(featureGroups[g]);
+            for (let l = 0, ll = layers.length; l < ll; l++) {
+              const layer = layers[l];
+              features = features.concat(featureGroups[g][layer]);
+            }
           }
-        }
-        if (features.length > 0) {
-          map.addPopup(<WMSPopup
-            coordinate={xy}
-            closeable
-            features={features}
-          />);
-        }
-      });
-    }}
-    store={store}
-  />, document.getElementById('map'));
+          if (features.length > 0) {
+            map.addPopup(<WMSPopup
+              coordinate={xy}
+              closeable
+              features={features}
+            />);
+          }
+        });
+      }}>
+      <SdkZoomControl style={{position: 'absolute', top: 20, left: 20}} />
+    </SdkMap>
+  </Provider>, document.getElementById('map'));
 
   // add some buttons to demo some actions.
   ReactDOM.render((

@@ -11,7 +11,11 @@ import thunkMiddleware from 'redux-thunk';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import { Provider } from 'react-redux';
+
 import SdkMap from '@boundlessgeo/sdk/components/map';
+import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
+import SdkZoomSlider from '@boundlessgeo/sdk/components/map/zoom-slider';
 import SdkHashHistory from '@boundlessgeo/sdk/components/history';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
@@ -183,7 +187,12 @@ function main() {
   };
 
   // place the map on the page.
-  ReactDOM.render(<SdkMap store={store} showZoomSlider />, document.getElementById('map'));
+  ReactDOM.render(<Provider store={store}>
+    <SdkMap style={{position: 'relative'}}>
+      <SdkZoomControl style={{position: 'absolute', top: 20, left: 20}} />
+      <SdkZoomSlider style={{position: 'absolute', top: 120, left: -20}} />
+    </SdkMap>
+  </Provider>, document.getElementById('map'));
 
   // add some buttons to demo some actions.
   ReactDOM.render((
