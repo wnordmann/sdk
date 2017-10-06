@@ -17,7 +17,7 @@ const isCssRegEx = /\.css$/;
 function createIndex(files, metalsmith, done) {
   setImmediate(done); // all remaining code is synchronous
   let index = '<ul class="examples">';
-  const keys = Object.keys(files);
+  const keys = Object.keys(files).sort();
   for (let i = 0, ii = keys.length; i < ii; ++i) {
     const filename = keys[i];
     const example = files[filename];
