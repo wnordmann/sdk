@@ -161,8 +161,8 @@ function main() {
   };
   // place the map on the page.
   ReactDOM.render(<Provider store={store}>
-    <SdkMap style={{position: 'relative'}} projection="EPSG:4326">
-      <SdkZoomControl style={{position: 'absolute', top: 20, left: 20}}/>
+    <SdkMap projection="EPSG:4326">
+      <SdkZoomControl />
     </SdkMap>
   </Provider>, document.getElementById('map'));
 

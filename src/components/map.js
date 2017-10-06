@@ -1261,7 +1261,9 @@ export class Map extends React.Component {
     }
     return (
       <div style={this.props.style} ref={(c) => { this.mapdiv = c; }} className={className}>
-        {this.props.children}
+        <div className="controls">
+          {this.props.children}
+        </div>
       </div>
     );
   }

@@ -149,8 +149,8 @@ function main() {
 
   // place the map on the page.
   ReactDOM.render(<Provider store={store}>
-    <SdkMap style={{position: 'relative'}}>
-      <SdkZoomControl style={{position: 'absolute', top: 20, left: 20}}/>
+    <SdkMap>
+      <SdkZoomControl />
     </SdkMap>
   </Provider>, document.getElementById('map'));
 

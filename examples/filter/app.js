@@ -76,9 +76,9 @@ function main() {
   loadJson();
   // place the map on the page.
   ReactDOM.render(<Provider store={store}>
-    <SdkMap style={{position: 'relative'}}>
-      <SdkZoomControl style={{position: 'absolute', top: 20, left: 20}} />
-      <SdkZoomSlider style={{position: 'absolute', top: 120, left: -20}} />
+    <SdkMap>
+      <SdkZoomControl />
+      <SdkZoomSlider />
     </SdkMap>
   </Provider>, document.getElementById('map'));
 

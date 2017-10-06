@@ -34,8 +34,8 @@ function main() {
 
   // place the map on the page.
   ReactDOM.render(<Provider store={store}>
-    <SdkMap style={{position: 'relative'}} accessToken={CONFIG.access_token} baseUrl={'https://api.mapbox.com/styles/v1/mapbox/bright-v8'}>
-      <SdkZoomControl style={{position: 'absolute', top: 20, left: 20}} />
+    <SdkMap accessToken={CONFIG.access_token} baseUrl={'https://api.mapbox.com/styles/v1/mapbox/bright-v8'}>
+      <SdkZoomControl />
     </SdkMap>
   </Provider>, document.getElementById('map'));
 }

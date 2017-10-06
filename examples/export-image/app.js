@@ -39,8 +39,8 @@ function main() {
 
   // place the map on the page.
   ReactDOM.render(<Provider store={store}>
-    <SdkMap style={{position: 'relative'}} onExportImage={exportMapImage}>
-      <SdkZoomControl style={{position: 'absolute', top: 20, left: 20}}/>
+    <SdkMap onExportImage={exportMapImage}>
+      <SdkZoomControl />
     </SdkMap>
   </Provider>, document.getElementById('map'));
 
