@@ -3,6 +3,8 @@
  */
 @import 'ol/ol';
 @import 'popup';
+@import 'zoomslider';
+@import 'zoomcontrol';
 
 $sdk-orange: #f58d50;
 $sdk-blue: #29728d;
@@ -65,4 +67,8 @@ button.sdk-btn {
 
 li.sdk-layer {
     list-style: none;
+}
+
+.sdk-map .controls {
+    position: relative;
 }

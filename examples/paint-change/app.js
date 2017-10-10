@@ -8,7 +8,10 @@ import thunkMiddleware from 'redux-thunk';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import { Provider } from 'react-redux';
+
 import SdkMap from '@boundlessgeo/sdk/components/map';
+import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
 
@@ -100,7 +103,11 @@ function main() {
   addRandomPoints();
 
   // place the map on the page.
-  ReactDOM.render(<SdkMap store={store} />, document.getElementById('map'));
+  ReactDOM.render(<Provider store={store}>
+    <SdkMap>
+      <SdkZoomControl />
+    </SdkMap>
+  </Provider>, document.getElementById('map'));
 
   // Demonstrate the paint colors changing.
   const changeColor = (color, type) => {

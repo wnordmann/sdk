@@ -11,7 +11,10 @@ import thunkMiddleware from 'redux-thunk';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import { Provider } from 'react-redux';
+
 import SdkMap from '@boundlessgeo/sdk/components/map';
+import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
 import SdkPopup from '@boundlessgeo/sdk/components/map/popup';
 
@@ -172,36 +175,40 @@ function main() {
   addPoints('points', 100);
 
   ReactDOM.render((
-    <SdkMap
-      store={store}
-      initialPopups={[<NullIslandPopup coordinate={[0, 0]} closeable={false} />]}
-      includeFeaturesOnClick
-      onClick={(map, xy, featuresPromise) => {
-        featuresPromise.then((featureGroups) => {
-          // setup an array for all the features returned in the promise.
-          let features = [];
+    <Provider store={store}>
+      <SdkMap
+        style={{position: 'relative'}}
+        initialPopups={[<NullIslandPopup coordinate={[0, 0]} closeable={false} />]}
+        includeFeaturesOnClick
+        onClick={(map, xy, featuresPromise) => {
+          featuresPromise.then((featureGroups) => {
+            // setup an array for all the features returned in the promise.
+            let features = [];
 
-          // featureGroups is an array of objects. The key of each object
-          // is a layer from the map.
-          for (let g = 0, gg = featureGroups.length; g < gg; g++) {
-            // collect every feature from each layer.
-            const layers = Object.keys(featureGroups[g]);
-            for (let l = 0, ll = layers.length; l < ll; l++) {
-              const layer = layers[l];
-              features = features.concat(featureGroups[g][layer]);
+            // featureGroups is an array of objects. The key of each object
+            // is a layer from the map.
+            for (let g = 0, gg = featureGroups.length; g < gg; g++) {
+              // collect every feature from each layer.
+              const layers = Object.keys(featureGroups[g]);
+              for (let l = 0, ll = layers.length; l < ll; l++) {
+                const layer = layers[l];
+                features = features.concat(featureGroups[g][layer]);
+              }
             }
-          }
 
-          if (features.length === 0) {
-            // no features, :( Let the user know nothing was there.
-            map.addPopup(<SdkPopup coordinate={xy} closeable><i>No features found.</i></SdkPopup>);
-          } else {
-            // Show the super advanced fun popup!
-            map.addPopup(<MarkFeaturesPopup coordinate={xy} features={features} closeable />);
-          }
-        });
-      }}
-    />
+            if (features.length === 0) {
+              // no features, :( Let the user know nothing was there.
+              map.addPopup(<SdkPopup coordinate={xy} closeable><i>No features found.</i></SdkPopup>);
+            } else {
+              // Show the super advanced fun popup!
+              map.addPopup(<MarkFeaturesPopup coordinate={xy} features={features} closeable />);
+            }
+          });
+        }}
+       >
+        <SdkZoomControl style={{position: 'absolute', top: 20, left: 20}} />
+      </SdkMap>
+    </Provider>
   ), document.getElementById('map'));
 }
 

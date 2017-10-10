@@ -8,7 +8,10 @@ import thunkMiddleware from 'redux-thunk';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import { Provider } from 'react-redux';
+
 import SdkMap from '@boundlessgeo/sdk/components/map';
+import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
 import SdkPrintReducer from '@boundlessgeo/sdk/reducers/print';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
@@ -30,13 +33,11 @@ function main() {
   store.dispatch(mapActions.setContext({ url }));
 
   // place the map on the page.
-  ReactDOM.render(
-    <SdkMap
-      accessToken={CONFIG.access_token}
-      store={store}
-      baseUrl={'https://api.mapbox.com/styles/v1/mapbox/bright-v8'}
-    />
-  , document.getElementById('map'));
+  ReactDOM.render(<Provider store={store}>
+    <SdkMap accessToken={CONFIG.access_token} baseUrl={'https://api.mapbox.com/styles/v1/mapbox/bright-v8'}>
+      <SdkZoomControl />
+    </SdkMap>
+  </Provider>, document.getElementById('map'));
 }
 
 main();

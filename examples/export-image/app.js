@@ -9,8 +9,11 @@ import thunkMiddleware from 'redux-thunk';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import { Provider } from 'react-redux';
+
 import SdkMap from '@boundlessgeo/sdk/components/map';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
+import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
 import SdkPrintReducer from '@boundlessgeo/sdk/reducers/print';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
 import * as printActions from '@boundlessgeo/sdk/actions/print';
@@ -35,12 +38,11 @@ function main() {
   };
 
   // place the map on the page.
-  ReactDOM.render(
-    <SdkMap
-      store={store}
-      onExportImage={exportMapImage}
-    />
-  , document.getElementById('map'));
+  ReactDOM.render(<Provider store={store}>
+    <SdkMap onExportImage={exportMapImage}>
+      <SdkZoomControl />
+    </SdkMap>
+  </Provider>, document.getElementById('map'));
 
   // called by the onExportImage prop of the SdkMap.
   const exportImage = () => {

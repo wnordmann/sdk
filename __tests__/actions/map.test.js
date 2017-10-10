@@ -25,6 +25,29 @@ describe('actions', () => {
     expect(actions.setView(center, zoom)).toEqual(expectedAction);
   });
 
+  it('should create an action to set the zoom', () => {
+    const zoom = 5;
+    const expectedAction = {
+      type: MAP.SET_ZOOM,
+      zoom,
+    };
+    expect(actions.setZoom(zoom)).toEqual(expectedAction);
+  });
+
+  it('should create an action to zoom in', () => {
+    const expectedAction = {
+      type: MAP.ZOOM_IN,
+    };
+    expect(actions.zoomIn()).toEqual(expectedAction);
+  });
+
+  it('should create an action to zoom out', () => {
+    const expectedAction = {
+      type: MAP.ZOOM_OUT,
+    };
+    expect(actions.zoomOut()).toEqual(expectedAction);
+  });
+
   it('should create an action to set the map name', () => {
     const name = 'New Name';
     const expectedAction = {

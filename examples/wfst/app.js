@@ -11,7 +11,10 @@ import thunkMiddleware from 'redux-thunk';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import { Provider } from 'react-redux';
+
 import SdkMap from '@boundlessgeo/sdk/components/map';
+import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
 import SdkHashHistory from '@boundlessgeo/sdk/components/history';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
 import SdkDrawingReducer from '@boundlessgeo/sdk/reducers/drawing';
@@ -131,7 +134,11 @@ function main() {
   store.dispatch(SdkDrawingActions.startSelect('tracts'));
 
   // place the map on the page.
-  ReactDOM.render(<SdkMap onFeatureSelected={selectFeature} store={store} />, document.getElementById('map'));
+  ReactDOM.render(<Provider store={store}>
+    <SdkMap onFeatureSelected={selectFeature} style={{position: 'relative'}}>
+      <SdkZoomControl style={{position: 'absolute', top: 20, left: 20}} />
+    </SdkMap>
+  </Provider>, document.getElementById('map'));
 
   // add some buttons to demo some actions.
   ReactDOM.render((

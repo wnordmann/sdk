@@ -25,6 +25,11 @@ export const DATA_VERSION_KEY = 'bnd:data-version';
 export const GROUPS_KEY = 'mapbox:groups';
 export const GROUP_KEY = 'mapbox:group';
 
+export const DEFAULT_ZOOM = {
+  MIN: 0,
+  MAX: 28,
+};
+
 export const INTERACTIONS = {
   modify: 'Modify',
   select: 'Select',
@@ -62,4 +67,5 @@ export default {
   TIME_ATTRIBUTE_KEY,
   DATA_VERSION_KEY,
   INTERACTIONS,
+  DEFAULT_ZOOM,
 };

@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Zoom control tests should allow for custom className 1`] = `"<div class=\\"sdk-zoom-control foo\\"><button class=\\"sdk-zoom-in\\" title=\\"Zoom in\\">+</button><button class=\\"sdk-zoom-out\\" title=\\"Zoom out\\">−</button></div>"`;

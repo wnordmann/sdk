@@ -42,6 +42,38 @@ export function setView(center, zoom) {
   };
 }
 
+/** Action to zoom in on the map.
+ *
+ *  @returns {Object} Action object to pass to reducer.
+ */
+export function zoomIn() {
+  return {
+    type: MAP.ZOOM_IN,
+  };
+}
+
+/** Action to zoom out on the map.
+ *
+ *  @returns {Object} Action object to pass to reducer.
+ */
+export function zoomOut() {
+  return {
+    type: MAP.ZOOM_OUT,
+  };
+}
+
+/** Action to set the zoom level.
+ *  @param {number} zoom Zoom value.
+ *
+ *  @returns {Object} Action object to pass to reducer.
+ */
+export function setZoom(zoom) {
+  return {
+    type: MAP.SET_ZOOM,
+    zoom,
+  };
+}
+
 /** Action to update the map name in map state.
  *  @param {string} name Map name.
  *

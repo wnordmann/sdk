@@ -94,6 +94,132 @@ describe('map reducer', () => {
     });
   });
 
+  it('should handle ZOOM_IN', () => {
+    const state = {
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      sources: {},
+      layers: [],
+    };
+    deepFreeze(state);
+    const action = {
+      type: MAP.ZOOM_IN,
+    };
+    deepFreeze(action);
+    expect(reducer(state, action)).toEqual({
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 4,
+      sources: {},
+      layers: [],
+    });
+  });
+
+  it('should handle ZOOM_OUT', () => {
+    const state = {
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      sources: {},
+      layers: [],
+    };
+    deepFreeze(state);
+    const action = {
+      type: MAP.ZOOM_OUT,
+    };
+    deepFreeze(action);
+    expect(reducer(state, action)).toEqual({
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 2,
+      sources: {},
+      layers: [],
+    });
+  });
+
+  it('should handle SET_ZOOM', () => {
+    const state = {
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      sources: {},
+      layers: [],
+    };
+    const zoom = 5;
+    deepFreeze(state);
+    const action = {
+      type: MAP.SET_ZOOM,
+      zoom,
+    };
+    deepFreeze(action);
+    expect(reducer(state, action)).toEqual({
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 5,
+      sources: {},
+      layers: [],
+    });
+  });
+
+  it('should handle SET_ZOOM min constraints', () => {
+    const state = {
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      sources: {},
+      layers: [],
+    };
+    const zoom = -10;
+    deepFreeze(state);
+    const action = {
+      type: MAP.SET_ZOOM,
+      zoom,
+    };
+    deepFreeze(action);
+    expect(reducer(state, action)).toEqual({
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 0,
+      sources: {},
+      layers: [],
+    });
+  });
+
+  it('should handle SET_ZOOM max constraints', () => {
+    const state = {
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      sources: {},
+      layers: [],
+    };
+    const zoom = 50;
+    deepFreeze(state);
+    const action = {
+      type: MAP.SET_ZOOM,
+      zoom,
+    };
+    deepFreeze(action);
+    expect(reducer(state, action)).toEqual({
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 28,
+      sources: {},
+      layers: [],
+    });
+  });
+
   it('should handle RECEIVE_CONTEXT', () => {
     const state = {
       version: 8,

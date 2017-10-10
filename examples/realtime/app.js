@@ -7,7 +7,10 @@ import thunkMiddleware from 'redux-thunk';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import { Provider } from 'react-redux';
+
 import SdkMap from '@boundlessgeo/sdk/components/map';
+import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
 
@@ -67,7 +70,11 @@ function main() {
   }, 2000);
 
   // place the map on the page.
-  ReactDOM.render(<SdkMap accessToken={CONFIG.access_token} baseUrl={'https://api.mapbox.com/styles/v1/mapbox/bright-v8'} store={store} />, document.getElementById('map'));
+  ReactDOM.render(<Provider store={store}>
+    <SdkMap accessToken={CONFIG.access_token} baseUrl={'https://api.mapbox.com/styles/v1/mapbox/bright-v8'}>
+      <SdkZoomControl />
+    </SdkMap>
+  </Provider>, document.getElementById('map'));
 }
 
 main();

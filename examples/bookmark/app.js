@@ -10,8 +10,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import fetch from 'isomorphic-fetch';
 
+import { Provider } from 'react-redux';
+
 import SdkMap from '@boundlessgeo/sdk/components/map';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
+import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
 
 import BookmarkComponent from './bookmarks';
@@ -105,8 +108,11 @@ function main() {
   //this.props.zoomTo(feature.geometry.coordinates, 18);
 
   // place the map on the page
-  ReactDOM.render(<SdkMap className='map-container' store={store}/>,
-    document.getElementById('map'));
+  ReactDOM.render(<Provider store={store}>
+    <SdkMap className='map-container' style={{position: 'relative'}}>
+      <SdkZoomControl style={{position: 'absolute', top: 20, left: 20}}/>
+    </SdkMap>
+  </Provider>, document.getElementById('map'));
 
   // place the bookmark control and pass in the features and zoom function
   ReactDOM.render(<BookmarkComponent className='bookmark-item' store={store}/>,

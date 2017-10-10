@@ -14,6 +14,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
 import SdkMap from '@boundlessgeo/sdk/components/map';
+import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
 import SdkLegend from '@boundlessgeo/sdk/components/legend';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
@@ -131,7 +132,11 @@ function main() {
   }));
 
    // place the map on the page.
-  ReactDOM.render(<SdkMap store={store} />, document.getElementById('map'));
+  ReactDOM.render(<Provider store={store}>
+    <SdkMap>
+      <SdkZoomControl />
+    </SdkMap>
+  </Provider>, document.getElementById('map'));
 
   // add some legends to the demo.
   ReactDOM.render((
