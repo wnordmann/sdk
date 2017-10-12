@@ -54,6 +54,9 @@ import DrawInteraction from 'ol/interaction/draw';
 import ModifyInteraction from 'ol/interaction/modify';
 import SelectInteraction from 'ol/interaction/select';
 
+import Style from 'ol/style/style';
+import SpriteStyle from '../style/sprite';
+
 import AttributionControl from 'ol/control/attribution';
 
 import LoadingStrategy from 'ol/loadingstrategy';
@@ -647,6 +650,44 @@ export class Map extends React.Component {
     }
   }
 
+  /** Applies the sprite animation information to the layer
+   *  @param {Object} olLayer OpenLayers layer object.
+   *  @param {Object} layer Mapbox GL layer object.
+   */
+  applySpriteAnimation(olLayer, layer) {
+    const options = jsonClone(layer.metadata['bnd:animate-sprite']);
+    this.map.on('postcompose', (e) => {
+      this.map.render();
+    });
+    // check if we need to use a style function
+    if (options.rotation && options.rotation.property) {
+      const rotationAttribute = options.rotation.property;
+      const styleCache = {};
+      olLayer.setStyle((feature, resolution) => {
+        const rotation = feature.get(rotationAttribute);
+        if (!styleCache[rotation]) { 
+          options.rotation = rotation;
+          const sprite = new SpriteStyle(options);
+          const style = new Style({image: sprite});
+          this.map.on('postcompose', (e) => {
+            sprite.update(e);
+          });
+          styleCache[rotation] = style;
+          return style;
+        } else {
+          return styleCache[rotation];
+        }
+      });
+    } else {
+      const sprite = new SpriteStyle(options);
+      const style = new Style({image: sprite});
+      olLayer.setStyle(style);
+      this.map.on('postcompose', (e) => {
+        sprite.update(e);
+      });
+    }
+  }
+
   /** Configures OpenLayers layer style.
    *  @param {Object} olLayer OpenLayers layer object.
    *  @param {Object[]} layers Array of Mapbox GL layer objects.
@@ -654,8 +695,13 @@ export class Map extends React.Component {
   applyStyle(olLayer, layers) {
     // filter out the layers which are not visible
     const render_layers = [];
+    let apply = true;
     for (let i = 0, ii = layers.length; i < ii; i++) {
       const layer = layers[i];
+      if (layer.metadata && layer.metadata['bnd:animate-sprite']) {
+        this.applySpriteAnimation(olLayer, layer);
+        apply = false;
+      }
       const is_visible = layer.layout ? layer.layout.visibility !== 'none' : true;
       if (is_visible) {
         render_layers.push(layer);
@@ -669,7 +715,7 @@ export class Map extends React.Component {
       this.props.mapbox.accessToken
     );
 
-    if (olLayer.setStyle) {
+    if (olLayer.setStyle && apply) {
       applyStyle(olLayer, fake_style, layers[0].source);
     }
 
