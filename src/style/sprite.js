@@ -25,6 +25,7 @@ class SdkSpriteStyle extends IconStyle {
       rotation: options.rotation,
       scale: options.scale
     });
+    this.color = options.color;
     this.spriteCount = options.spriteCount;
     this.frameRate = options.frameRate !== undefined ? options.frameRate : 100;
     this.width = width;
@@ -43,7 +44,7 @@ class SdkSpriteStyle extends IconStyle {
     }
   }
   drawImage_() {
-    var ctx = this.getImage().getContext("2d");
+    const ctx = this.getImage().getContext("2d");
     ctx.clearRect(0, 0, this.width, this.height);
     ctx.drawImage(
       this.img_,
@@ -56,6 +57,15 @@ class SdkSpriteStyle extends IconStyle {
       this.width,
       this.height
     );
+    if (this.color) {
+      const data = ctx.getImageData(0, 0, this.width, this.height);
+      for (let i = 0, length = data.data.length; i < length; i += 4) {
+        data.data[i] = this.color[0];
+        data.data[i + 1] = this.color[1];
+        data.data[i + 2] = this.color[2];
+      }
+      ctx.putImageData(data, 0, 0);
+    }
   }
   update(e) {
     const step = e.frameState.time / this.frameRate;

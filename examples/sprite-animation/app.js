@@ -60,6 +60,7 @@ function main() {
     metadata: {
       'bnd:animate-sprite': {
         src: 'chopper-small.png',
+        color: [255, 0, 0],
         width: 30.5,
         height: 32,
         frameRate: 200,
