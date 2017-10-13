@@ -1281,7 +1281,10 @@ Map.propTypes = {
     sources: PropTypes.object,
     sprite: PropTypes.string,
   }),
-  children: PropTypes.array,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
+  ]),
   style: PropTypes.object,
   className: PropTypes.string,
   drawing: PropTypes.shape({
