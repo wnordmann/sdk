@@ -654,47 +654,57 @@ export class Map extends React.Component {
 
   /** Applies the sprite animation information to the layer
    *  @param {Object} olLayer OpenLayers layer object.
-   *  @param {Object} layer Mapbox GL layer object.
+   *  @param {Object[]} layers Array of Mapbox GL layer objects.
    */
-  applySpriteAnimation(olLayer, layer) {
-    const options = jsonClone(layer.metadata['bnd:animate-sprite']);
+  applySpriteAnimation(olLayer, layers) {
     this.map.on('postcompose', (e) => {
-      this.map.render();
+      this.map.render(); // animate
     });
-    if (Array.isArray(layer.filter)) {
-      layer.filter = createFilter(layer.filter);
+    let i, ii;
+    const styleCache = {};
+    const spriteOptions = {};
+    for (i = 0, ii = layers.length; i < ii; ++i) {
+      const layer = layers[i];
+      spriteOptions[layer.id] = jsonClone(layer.metadata['bnd:animate-sprite']);
+      if (Array.isArray(layer.filter)) {
+        layer.filter = createFilter(layer.filter);
+      }
     }
-    // check if we need to use a style function
-    if (layer.filter || (options.rotation && options.rotation.property)) {
-      const rotationAttribute = options.rotation.property;
-      const styleCache = {};
-      olLayer.setStyle((feature, resolution) => {
-        if (!layer.filter || layer.filter({properties: feature.getProperties()})) {
-          const rotation = feature.get(rotationAttribute);
-          if (!styleCache[rotation]) { 
-            options.rotation = rotation;
-            const sprite = new SpriteStyle(options);
-            const style = new Style({image: sprite});
-            this.map.on('postcompose', (e) => {
-              sprite.update(e);
-            });
-            styleCache[rotation] = style;
-            return style;
+    olLayer.setStyle((feature, resolution) => {
+      // loop over the layers to see which one matches
+      for (let i = 0, ii = layers.length; i < ii; ++i) {
+        const layer = layers[i];
+        if (layer.filter({properties: feature.getProperties()})) {
+          if (!spriteOptions[layer.id].rotation || (spriteOptions[layer.id].rotation && !spriteOptions[layer.id].rotation.property)) {
+            if (!styleCache[layer.id]) {
+              const sprite = new SpriteStyle(spriteOptions[layer.id]);
+              styleCache[layer.id] = new Style({image: sprite});
+              this.map.on('postcompose', (e) => {
+                sprite.update(e);
+              });
+            }
+            return styleCache[layer.id];
           } else {
-            return styleCache[rotation];
+            if (!styleCache[layer.id]) {
+              styleCache[layer.id] = {};
+            }
+            const rotationAttribute = spriteOptions[layer.id].rotation.property;
+            const rotation = feature.get(rotationAttribute);
+            if (!styleCache[layer.id][rotation]) {
+              const options = jsonClone(layer.metadata['bnd:animate-sprite'])
+              options.rotation = rotation;
+              const sprite = new SpriteStyle(options);
+              const style = new Style({image: sprite});
+              this.map.on('postcompose', (e) => {
+                sprite.update(e);
+              });
+              styleCache[layer.id][rotation] = style;
+            }
+            return styleCache[layer.id][rotation];
           }
-        } else {
-          return null;
         }
-      });
-    } else {
-      const sprite = new SpriteStyle(options);
-      const style = new Style({image: sprite});
-      olLayer.setStyle(style);
-      this.map.on('postcompose', (e) => {
-        sprite.update(e);
-      });
-    }
+      }
+    });
   }
 
   /** Configures OpenLayers layer style.
@@ -704,17 +714,19 @@ export class Map extends React.Component {
   applyStyle(olLayer, layers) {
     // filter out the layers which are not visible
     const render_layers = [];
-    let apply = true;
+    const spriteLayers = [];
     for (let i = 0, ii = layers.length; i < ii; i++) {
       const layer = layers[i];
       if (layer.metadata && layer.metadata['bnd:animate-sprite']) {
-        this.applySpriteAnimation(olLayer, layer);
-        apply = false;
+        spriteLayers.push(layer);
       }
       const is_visible = layer.layout ? layer.layout.visibility !== 'none' : true;
       if (is_visible) {
         render_layers.push(layer);
       }
+    }
+    if (spriteLayers.length > 0) {
+      this.applySpriteAnimation(olLayer, spriteLayers);
     }
 
     const fake_style = getFakeStyle(
@@ -724,7 +736,7 @@ export class Map extends React.Component {
       this.props.mapbox.accessToken
     );
 
-    if (olLayer.setStyle && apply) {
+    if (olLayer.setStyle && spriteLayers.length === 0) {
       applyStyle(olLayer, fake_style, layers[0].source);
     }
 

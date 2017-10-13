@@ -54,9 +54,9 @@ function main() {
     type: 'geojson',
   }));
 
-  // Show our layer of spinning helicopters.
+  // Show our layer of spinning helicopters in red.
   store.dispatch(mapActions.addLayer({
-    id: 'helicopters',
+    id: 'red_helicopters',
     metadata: {
       'bnd:animate-sprite': {
         src: 'chopper-small.png',
@@ -73,6 +73,26 @@ function main() {
     source: 'points',
     type: 'symbol',
     filter: ['==', 'visible', 1],
+  }));
+
+  // show the other set of spinning helicopters
+  store.dispatch(mapActions.addLayer({
+    id: 'helicopters',
+    metadata: {
+      'bnd:animate-sprite': {
+        src: 'chopper-small.png',
+        width: 30.5,
+        height: 32,
+        frameRate: 200,
+        spriteCount: 4,
+        rotation: {
+          property: 'rotation'
+        },
+      }
+    },
+    source: 'points',
+    type: 'symbol',
+    filter: ['==', 'visible', 0],
   }));
 
   // Adds 10 random points to the map
