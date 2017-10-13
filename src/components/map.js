@@ -15,6 +15,8 @@ import fetch from 'isomorphic-fetch';
 
 import uuid from 'uuid';
 
+import createFilter from '@mapbox/mapbox-gl-style-spec/feature_filter';
+
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -659,23 +661,30 @@ export class Map extends React.Component {
     this.map.on('postcompose', (e) => {
       this.map.render();
     });
+    if (Array.isArray(layer.filter)) {
+      layer.filter = createFilter(layer.filter);
+    }
     // check if we need to use a style function
-    if (options.rotation && options.rotation.property) {
+    if (layer.filter || (options.rotation && options.rotation.property)) {
       const rotationAttribute = options.rotation.property;
       const styleCache = {};
       olLayer.setStyle((feature, resolution) => {
-        const rotation = feature.get(rotationAttribute);
-        if (!styleCache[rotation]) { 
-          options.rotation = rotation;
-          const sprite = new SpriteStyle(options);
-          const style = new Style({image: sprite});
-          this.map.on('postcompose', (e) => {
-            sprite.update(e);
-          });
-          styleCache[rotation] = style;
-          return style;
+        if (!layer.filter || layer.filter({properties: feature.getProperties()})) {
+          const rotation = feature.get(rotationAttribute);
+          if (!styleCache[rotation]) { 
+            options.rotation = rotation;
+            const sprite = new SpriteStyle(options);
+            const style = new Style({image: sprite});
+            this.map.on('postcompose', (e) => {
+              sprite.update(e);
+            });
+            styleCache[rotation] = style;
+            return style;
+          } else {
+            return styleCache[rotation];
+          }
         } else {
-          return styleCache[rotation];
+          return null;
         }
       });
     } else {

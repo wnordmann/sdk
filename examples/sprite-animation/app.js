@@ -14,7 +14,6 @@ import { Provider } from 'react-redux';
 import SdkMap from '@boundlessgeo/sdk/components/map';
 import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
 import SdkZoomSlider from '@boundlessgeo/sdk/components/map/zoom-slider';
-import SdkHashHistory from '@boundlessgeo/sdk/components/history';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
 
@@ -72,6 +71,7 @@ function main() {
     },
     source: 'points',
     type: 'symbol',
+    filter: ['==', 'visible', 1],
   }));
 
   // Adds 10 random points to the map
@@ -83,6 +83,7 @@ function main() {
       store.dispatch(mapActions.addFeatures('points', [{
         type: 'Feature',
         properties: {
+          visible: i%2,
           rotation: (Math.random() * 360) / Math.PI,
         },
         geometry: {
