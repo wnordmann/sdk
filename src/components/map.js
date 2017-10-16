@@ -319,7 +319,7 @@ function configureGeojsonSource(glSource, mapView, baseUrl, wrapX) {
  * @param {Object} olSource The OpenLayers source object.
  * @param {Object} mapView The OpenLayers view object.
  * @param {string} accessToken A Mapbox access token.
- * @param {string} baseUrl A baseUrl provided by this.props.baseUrl.
+ * @param {string} baseUrl A baseUrl provided by this.props.mapbox.baseUrl.
  *
  * @returns {(Object|null)} Callback to the applicable configure source method.
  */
@@ -380,7 +380,7 @@ function getLayerNames(groupName) {
  *
  * @returns {Object} A new glLayer object with ref'd layer properties mixed in.
  */
-function hydrateLayer(layersDef, glLayer) {
+export function hydrateLayer(layersDef, glLayer) {
   // Small sanity check for when this
   // is blindly called on any layer.
   if (glLayer === undefined || glLayer.ref === undefined) {
@@ -400,7 +400,7 @@ function hydrateLayer(layersDef, glLayer) {
     // remove the reference
     layer_def.ref = undefined;
     // mixin the layer_def to the ref layer.
-    layer_def = Object.assign({}, layer_def, ref_layer);
+    layer_def = Object.assign({}, ref_layer, layer_def);
   }
   // return the new layer.
   return layer_def;
@@ -421,6 +421,18 @@ function hydrateLayerGroup(layersDef, layerGroup) {
     hydrated_group.push(hydrateLayer(layersDef, layerGroup[i]));
   }
   return hydrated_group;
+}
+
+export function getFakeStyle(sprite, layers, baseUrl, accessToken) {
+  const fake_style = {
+    version: 8,
+    sprite: sprite,
+    layers: layers,
+  };
+  if (sprite && sprite.indexOf(MAPBOX_PROTOCOL) === 0) {
+    fake_style.sprite = `${baseUrl}/sprite?access_token=${accessToken}`;
+  }
+  return fake_style;
 }
 
 export class Map extends React.Component {
@@ -526,7 +538,7 @@ export class Map extends React.Component {
         if (this.props.map.metadata !== undefined &&
             this.props.map.metadata[version_key] !== nextProps.map.metadata[version_key]) {
           const next_src = nextProps.map.sources[src_name];
-          updateGeojsonSource(this.sources[src_name], next_src, map_view, this.props.baseUrl);
+          updateGeojsonSource(this.sources[src_name], next_src, map_view, this.props.mapbox.baseUrl);
         }
       }
     }
@@ -607,7 +619,7 @@ export class Map extends React.Component {
       if (!(src_name in this.sources)) {
         const time = getKey(this.props.map.metadata, TIME_KEY);
         this.sources[src_name] = configureSource(sourcesDef[src_name], map_view,
-          this.props.accessToken, this.props.baseUrl, time, this.props.wrapX);
+          this.props.mapbox.accessToken, this.props.mapbox.baseUrl, time, this.props.wrapX);
       }
 
       // Check to see if there was a clustering change.
@@ -650,16 +662,12 @@ export class Map extends React.Component {
       }
     }
 
-    const fake_style = {
-      version: 8,
-      sprite: this.props.map.sprite,
-      layers: render_layers,
-    };
-
-    if (this.props.map.sprite && this.props.map.sprite.indexOf(MAPBOX_PROTOCOL) === 0) {
-      const baseUrl = this.props.baseUrl;
-      fake_style.sprite = `${baseUrl}/sprite?access_token=${this.props.accessToken}`;
-    }
+    const fake_style = getFakeStyle(
+      this.props.map.sprite,
+      render_layers,
+      this.props.mapbox.baseUrl,
+      this.props.mapbox.accessToken
+    );
 
     if (olLayer.setStyle) {
       applyStyle(olLayer, fake_style, layers[0].source);
@@ -1285,6 +1293,10 @@ Map.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
   ]),
+  mapbox: PropTypes.shape({
+    baseUrl: PropTypes.string,
+    accessToken: PropTypes.string,
+  }),
   style: PropTypes.object,
   className: PropTypes.string,
   drawing: PropTypes.shape({
@@ -1294,8 +1306,6 @@ Map.propTypes = {
   initialPopups: PropTypes.arrayOf(PropTypes.object),
   setView: PropTypes.func,
   includeFeaturesOnClick: PropTypes.bool,
-  baseUrl: PropTypes.string,
-  accessToken: PropTypes.string,
   onClick: PropTypes.func,
   onFeatureDrawn: PropTypes.func,
   onFeatureModified: PropTypes.func,
@@ -1308,8 +1318,6 @@ Map.propTypes = {
 Map.defaultProps = {
   wrapX: true,
   projection: 'EPSG:3857',
-  baseUrl: '',
-  accessToken: '',
   map: {
     center: [0, 0],
     zoom: 2,
@@ -1322,6 +1330,10 @@ Map.defaultProps = {
   drawing: {
     interaction: null,
     source: null,
+  },
+  mapbox: {
+    baseUrl: '',
+    accessToken: '',
   },
   initialPopups: [],
   setView: () => {
@@ -1351,6 +1363,7 @@ function mapStateToProps(state) {
     map: state.map,
     drawing: state.drawing,
     print: state.print,
+    mapbox: state.mapbox,
   };
 }
 

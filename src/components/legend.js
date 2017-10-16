@@ -15,8 +15,15 @@ import fetch from 'isomorphic-fetch';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-
-import { getLayerById, parseQueryString, encodeQueryObject } from '../util';
+import OlRender from 'ol/render';
+import LineString from 'ol/geom/linestring';
+import Polygon from 'ol/geom/polygon';
+import Point from 'ol/geom/point';
+import Feature from 'ol/feature';
+import VectorLayer from 'ol/layer/vector';
+import { applyStyle } from 'ol-mapbox-style';
+import { jsonClone, getLayerById, parseQueryString, encodeQueryObject } from '../util';
+import { getFakeStyle, hydrateLayer } from './map';
 
 /** @module components/legend
  * @desc React Component to render the legend data.
@@ -82,6 +89,110 @@ export function getLegend(layer) {
     default:
       // no legend provided.
       return null;
+  }
+}
+
+const vectorCache = {};
+const canvasCache = {};
+const olLayer = new VectorLayer();
+
+const pointGeomCache = {};
+export function getPointGeometry(size) {
+  if (!pointGeomCache[size]) {
+    pointGeomCache[size] = new Point([size[0] / 2, size[1] / 2]);
+  }
+  return pointGeomCache[size];
+}
+
+const lineGeomCache = {};
+export function getLineGeometry(size) {
+  if (!lineGeomCache[size]) {
+    const center = [size[0] / 2, size[1] / 2];
+    lineGeomCache[size] = new LineString([
+      [-8 + center[0], -3 + center[1]],
+      [-3 + center[0] , 3 + center[1]],
+      [3 + center[0], -3 + center[1]],
+      [8 + center[0], 3 + center[1]]
+    ]);
+  }
+  return lineGeomCache[size];
+}
+
+const polygonGeomCache = {};
+export function getPolygonGeometry(size) {
+  if (!polygonGeomCache[size]) {
+    const center = [size[0] / 2, size[1] / 2];
+    polygonGeomCache[size] = new Polygon([[
+      [-8 + center[0], -4 + center[1]],
+      [-6 + center[0], -6 + center[1]],
+      [6 + center[0], -6 + center[1]],
+      [8 + center[0], -4 + center[1]],
+      [8 + center[0], 4 + center[1]],
+      [6 + center[0], 6 + center[1]],
+      [-6 + center[0], 6 + center[1]],
+      [-8 + center[0], 4 + center[1]]
+    ]]);
+  }
+  return polygonGeomCache[size];
+}
+
+export function getVectorLegend(layer, layer_src, props) {
+  if (!layer.metadata || !layer.metadata['bnd:legend-type']) {
+    const size = props.size;
+    return (<canvas ref={(c) => {
+      if (c !== null) {
+        let vectorContext;
+        if (!vectorCache[layer.id]) {
+          canvasCache[layer.id] = c;
+          vectorContext = OlRender.toContext(c.getContext('2d'), {size: size});
+          vectorCache[layer.id] = vectorContext;
+        } else {
+          vectorContext = vectorCache[layer.id];
+          const canvas = canvasCache[layer.id];
+          canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+        }
+        let newLayer;
+        if (layer.filter) {
+          newLayer = jsonClone(layer);
+          delete newLayer.filter;
+        } else {
+          newLayer = layer;
+        }
+        const fake_style = getFakeStyle(
+          props.sprite,
+          [newLayer],
+          props.mapbox.baseUrl,
+          props.mapbox.accessToken
+        );
+
+        applyStyle(olLayer, fake_style, layer.source).then(function() {
+          const styleFn = olLayer.getStyle();
+          let geom;
+          if (layer.type === 'symbol' || layer.type === 'circle') {
+            geom = getPointGeometry(size);
+          } else if (layer.type === 'line') {
+            geom = getLineGeometry(size);
+          } else if (layer.type === 'fill') {
+            geom = getPolygonGeometry(size);
+          }
+          if (geom) {
+            const properties = {};
+            if (layer['source-layer']) {
+              properties.layer = layer['source-layer'];
+            }
+            const feature = new Feature(properties);
+            feature.setGeometry(geom);
+            const styles = styleFn(feature);
+            if (styles && styles.length > 0) {
+              vectorContext.setStyle(styles[0]);
+              vectorContext.drawGeometry(geom);
+            }
+          }
+        });
+      }
+    }} />);
+  } else {
+    return getLegend(layer, layer_src);
   }
 }
 
@@ -163,6 +274,12 @@ export function getRasterLegend(layer, layer_src) {
 
 class Legend extends React.Component {
 
+  componentWillReceiveProps(nextProps) {
+    const nextLayer = getLayerById(nextProps.layers, this.props.layerId);
+    const layer = getLayerById(this.props.layers, this.props.layerId);
+    return (layer !== nextLayer);
+  }
+
   /** Handles how to get the legend data based on the layer source type.
    *  @returns {Object} Call to getRasterLegend() or getLegend() to return the html element.
    */
@@ -189,6 +306,13 @@ class Legend extends React.Component {
       //  is deemed appropriate.
       case 'vector':
       case 'geojson':
+        let legendLayer;
+        if (layer.ref) {
+          legendLayer = hydrateLayer(this.props.layers, layer);
+        } else {
+          legendLayer = layer;
+        }
+        return getVectorLegend(legendLayer, layer_src, this.props);
       case 'image':
       case 'video':
       case 'canvas':
@@ -221,12 +345,23 @@ Legend.propTypes = {
   sources: PropTypes.shape({
     source: PropTypes.string,
   }),
+  mapbox: PropTypes.shape({
+    baseUrl: PropTypes.string,
+    accessToken: PropTypes.string,
+  }),
+  sprite: PropTypes.string,
   emptyLegendMessage: PropTypes.string,
+  size: PropTypes.arrayOf(PropTypes.number),
   style: PropTypes.object,
   className: PropTypes.string,
 };
 
 Legend.defaultProps = {
+  size: [50, 50],
+  mapbox: {
+    baseUrl: '',
+    accessToken: '',
+  },
   layers: [],
   sources: {},
   emptyLegendMessage: undefined,
@@ -234,9 +369,11 @@ Legend.defaultProps = {
 
 function mapStateToProps(state) {
   return {
+    sprite: state.map.sprite,
     layers: state.map.layers,
     sources: state.map.sources,
+    mapbox: state.mapbox,
   };
 }
 
-export default connect(mapStateToProps)(Legend);
+export default connect(mapStateToProps, undefined, undefined, {withRef: true})(Legend);

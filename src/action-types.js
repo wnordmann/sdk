@@ -58,9 +58,14 @@ export const WFS = {
   FINISHED: 'WFS_FINISHED',
 };
 
+export const MAPBOX = {
+  CONFIGURE: 'MAPBOX_CONFIGURE',
+};
+
 export default {
   MAP,
   DRAWING,
   PRINT,
   WFS,
+  MAPBOX,
 };
