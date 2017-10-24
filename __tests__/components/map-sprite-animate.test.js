@@ -1,4 +1,4 @@
-/** Tests for geojson-type sources in the map.
+/** Tests for sprite animation layers in the map.
  *
  */
 
