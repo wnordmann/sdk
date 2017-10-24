@@ -674,7 +674,7 @@ export class Map extends React.Component {
       // loop over the layers to see which one matches
       for (let i = 0, ii = layers.length; i < ii; ++i) {
         const layer = layers[i];
-        if (layer.filter({properties: feature.getProperties()})) {
+        if (!layer.filter || layer.filter({properties: feature.getProperties()})) {
           if (!spriteOptions[layer.id].rotation || (spriteOptions[layer.id].rotation && !spriteOptions[layer.id].rotation.property)) {
             if (!styleCache[layer.id]) {
               const sprite = new SpriteStyle(spriteOptions[layer.id]);
@@ -704,6 +704,7 @@ export class Map extends React.Component {
           }
         }
       }
+      return null;
     });
   }
 
