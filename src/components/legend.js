@@ -92,8 +92,6 @@ export function getLegend(layer) {
   }
 }
 
-const olLayer = new VectorLayer();
-
 const pointGeomCache = {};
 export function getPointGeometry(size) {
   if (!pointGeomCache[size]) {
@@ -153,7 +151,7 @@ export function getVectorLegend(layer, layer_src, props) {
           props.mapbox.baseUrl,
           props.mapbox.accessToken
         );
-
+        const olLayer = new VectorLayer();
         applyStyle(olLayer, fake_style, layer.source).then(function() {
           const styleFn = olLayer.getStyle();
           let geom;
