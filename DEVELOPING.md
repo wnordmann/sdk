@@ -31,6 +31,16 @@ with OpenLayers.  This requires `node-gyp` and the following dependencies:
 sudo apt-get install -y libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev g++
 ```
 
+**MacOS**
+If you have `homebrew` on your machine you can install via
+```
+brew install cairo
+```
+
+Otherwise you can follow the installation instructions here:
+
+https://github.com/Automattic/node-canvas/wiki/Installation---OSX
+
 It is possible to run the tests without the `canvas` module. In this case a number
 of tests will be skipped.
 
