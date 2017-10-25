@@ -172,9 +172,11 @@ export function getVectorLegend(layer, layer_src, props) {
             const feature = new Feature(properties);
             feature.setGeometry(geom);
             const styles = styleFn(feature);
-            for (let i = 0, ii = styles.length; i < ii; ++i) {
-              vectorContext.setStyle(styles[i]);
-              vectorContext.drawGeometry(geom);
+            if (styles) {
+              for (let i = 0, ii = styles.length; i < ii; ++i) {
+                vectorContext.setStyle(styles[i]);
+                vectorContext.drawGeometry(geom);
+              }
             }
           }
         });
