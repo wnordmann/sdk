@@ -660,10 +660,9 @@ export class Map extends React.Component {
     this.map.on('postcompose', (e) => {
       this.map.render(); // animate
     });
-    let i, ii;
     const styleCache = {};
     const spriteOptions = {};
-    for (i = 0, ii = layers.length; i < ii; ++i) {
+    for (let i = 0, ii = layers.length; i < ii; ++i) {
       const layer = layers[i];
       spriteOptions[layer.id] = jsonClone(layer.metadata['bnd:animate-sprite']);
       if (Array.isArray(layer.filter)) {
@@ -672,8 +671,8 @@ export class Map extends React.Component {
     }
     olLayer.setStyle((feature, resolution) => {
       // loop over the layers to see which one matches
-      for (let i = 0, ii = layers.length; i < ii; ++i) {
-        const layer = layers[i];
+      for (let l = 0, ll = layers.length; l < ll; ++l) {
+        const layer = layers[l];
         if (!layer.filter || layer.filter({properties: feature.getProperties()})) {
           if (!spriteOptions[layer.id].rotation || (spriteOptions[layer.id].rotation && !spriteOptions[layer.id].rotation.property)) {
             if (!styleCache[layer.id]) {
