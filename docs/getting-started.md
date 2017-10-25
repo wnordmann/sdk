@@ -183,3 +183,61 @@ yarn start
 ## Fin!
 
 Congratulations! You should have a fully operational Boundless SDK React app!
+
+
+### Ejecting Create React App
+
+1. `yarn eject`
+2. `yarn add webpack-cli`
+3. Modify `config/webpack.config.prod.js`.
+
+    This section defines which files Babel will transform (on or about line 149):
+    ```javascript
+      // Process JS with Babel.
+      {
+        test: /\.(js|jsx)$/,
+        include: paths.appSrc,
+        loader: require.resolve('babel-loader'),
+        options: {
+
+          compact: true,
+        },
+      },
+    ```
+
+    The include path must be changed from: 
+    ```
+    include: paths.appSrc,
+    ```
+    To:
+    ```
+    include: [paths.appSrc, path.resolve(__dirname, '../node_modules/')],
+    ```
+4. Modify `config/webpack.config.dev.js`, to disable hot-reloading.
+   Hot reloading will not work inside of webpack-dev-server and will simply
+   throw additional errors when served from a static webserver.
+
+   Change this line (on or about line 46):
+
+   ```
+    require.resolve('react-dev-utils/webpackHotDevClient'),
+   ```
+
+   To:
+   ```
+    // require.resolve('react-dev-utils/webpackHotDevClient'),
+
+   ```
+
+5. Modify `package.json` by adding the following line after `"scripts": {`:
+    ```
+    "watch": "NODE_ENV=development webpack --watch --config ./config/webpack.config.dev.js",
+    ```
+6. Serving content.
+
+    After the watch task has been setup the `build/` directory will need to be
+    served using a HTTP server. The create-react-app documentation recommends using
+    `serve` but this can be problematic as `serve` does not support proxying.
+
+    As an alternative, [http-server](https://github.com/indexzero/http-server) does support
+    proxying and is also a light weight install.
