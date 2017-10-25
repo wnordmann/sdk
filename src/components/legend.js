@@ -92,10 +92,6 @@ export function getLegend(layer) {
   }
 }
 
-const vectorCache = {};
-const canvasCache = {};
-const olLayer = new VectorLayer();
-
 const pointGeomCache = {};
 export function getPointGeometry(size) {
   if (!pointGeomCache[size]) {
@@ -141,16 +137,7 @@ export function getVectorLegend(layer, layer_src, props) {
     const size = props.size;
     return (<canvas ref={(c) => {
       if (c !== null) {
-        let vectorContext;
-        if (!vectorCache[layer.id]) {
-          canvasCache[layer.id] = c;
-          vectorContext = OlRender.toContext(c.getContext('2d'), {size: size});
-          vectorCache[layer.id] = vectorContext;
-        } else {
-          vectorContext = vectorCache[layer.id];
-          const canvas = canvasCache[layer.id];
-          canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
-        }
+        let vectorContext = OlRender.toContext(c.getContext('2d'), {size: size});
         let newLayer;
         if (layer.filter) {
           newLayer = jsonClone(layer);
@@ -164,7 +151,7 @@ export function getVectorLegend(layer, layer_src, props) {
           props.mapbox.baseUrl,
           props.mapbox.accessToken
         );
-
+        const olLayer = new VectorLayer();
         applyStyle(olLayer, fake_style, layer.source).then(function() {
           const styleFn = olLayer.getStyle();
           let geom;
@@ -183,9 +170,11 @@ export function getVectorLegend(layer, layer_src, props) {
             const feature = new Feature(properties);
             feature.setGeometry(geom);
             const styles = styleFn(feature);
-            if (styles && styles.length > 0) {
-              vectorContext.setStyle(styles[0]);
-              vectorContext.drawGeometry(geom);
+            if (styles) {
+              for (let i = 0, ii = styles.length; i < ii; ++i) {
+                vectorContext.setStyle(styles[i]);
+                vectorContext.drawGeometry(geom);
+              }
             }
           }
         });
