@@ -15,6 +15,8 @@ import fetch from 'isomorphic-fetch';
 
 import uuid from 'uuid';
 
+import createFilter from '@mapbox/mapbox-gl-style-spec/feature_filter';
+
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -53,6 +55,9 @@ import GeoJsonFormat from 'ol/format/geojson';
 import DrawInteraction from 'ol/interaction/draw';
 import ModifyInteraction from 'ol/interaction/modify';
 import SelectInteraction from 'ol/interaction/select';
+
+import Style from 'ol/style/style';
+import SpriteStyle from '../style/sprite';
 
 import AttributionControl from 'ol/control/attribution';
 
@@ -647,6 +652,61 @@ export class Map extends React.Component {
     }
   }
 
+  /** Applies the sprite animation information to the layer
+   *  @param {Object} olLayer OpenLayers layer object.
+   *  @param {Object[]} layers Array of Mapbox GL layer objects.
+   */
+  applySpriteAnimation(olLayer, layers) {
+    this.map.on('postcompose', (e) => {
+      this.map.render(); // animate
+    });
+    const styleCache = {};
+    const spriteOptions = {};
+    for (let i = 0, ii = layers.length; i < ii; ++i) {
+      const layer = layers[i];
+      spriteOptions[layer.id] = jsonClone(layer.metadata['bnd:animate-sprite']);
+      if (Array.isArray(layer.filter)) {
+        layer.filter = createFilter(layer.filter);
+      }
+    }
+    olLayer.setStyle((feature, resolution) => {
+      // loop over the layers to see which one matches
+      for (let l = 0, ll = layers.length; l < ll; ++l) {
+        const layer = layers[l];
+        if (!layer.filter || layer.filter({properties: feature.getProperties()})) {
+          if (!spriteOptions[layer.id].rotation || (spriteOptions[layer.id].rotation && !spriteOptions[layer.id].rotation.property)) {
+            if (!styleCache[layer.id]) {
+              const sprite = new SpriteStyle(spriteOptions[layer.id]);
+              styleCache[layer.id] = new Style({image: sprite});
+              this.map.on('postcompose', (e) => {
+                sprite.update(e);
+              });
+            }
+            return styleCache[layer.id];
+          } else {
+            if (!styleCache[layer.id]) {
+              styleCache[layer.id] = {};
+            }
+            const rotationAttribute = spriteOptions[layer.id].rotation.property;
+            const rotation = feature.get(rotationAttribute);
+            if (!styleCache[layer.id][rotation]) {
+              const options = jsonClone(layer.metadata['bnd:animate-sprite'])
+              options.rotation = rotation;
+              const sprite = new SpriteStyle(options);
+              const style = new Style({image: sprite});
+              this.map.on('postcompose', (e) => {
+                sprite.update(e);
+              });
+              styleCache[layer.id][rotation] = style;
+            }
+            return styleCache[layer.id][rotation];
+          }
+        }
+      }
+      return null;
+    });
+  }
+
   /** Configures OpenLayers layer style.
    *  @param {Object} olLayer OpenLayers layer object.
    *  @param {Object[]} layers Array of Mapbox GL layer objects.
@@ -654,12 +714,19 @@ export class Map extends React.Component {
   applyStyle(olLayer, layers) {
     // filter out the layers which are not visible
     const render_layers = [];
+    const spriteLayers = [];
     for (let i = 0, ii = layers.length; i < ii; i++) {
       const layer = layers[i];
+      if (layer.metadata && layer.metadata['bnd:animate-sprite']) {
+        spriteLayers.push(layer);
+      }
       const is_visible = layer.layout ? layer.layout.visibility !== 'none' : true;
       if (is_visible) {
         render_layers.push(layer);
       }
+    }
+    if (spriteLayers.length > 0) {
+      this.applySpriteAnimation(olLayer, spriteLayers);
     }
 
     const fake_style = getFakeStyle(
@@ -669,7 +736,7 @@ export class Map extends React.Component {
       this.props.mapbox.accessToken
     );
 
-    if (olLayer.setStyle) {
+    if (olLayer.setStyle && spriteLayers.length === 0) {
       applyStyle(olLayer, fake_style, layers[0].source);
     }
 

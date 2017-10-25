@@ -21,7 +21,7 @@ import { createStore, combineReducers } from 'redux';
 import { radiansToDegrees } from '../../src/util';
 
 import ConnectedMap, { Map } from '../../src/components/map';
-import { hydrateLayer } from '../../src/components/map';
+import { hydrateLayer, getFakeStyle } from '../../src/components/map';
 import SdkPopup from '../../src/components/map/popup';
 import MapReducer from '../../src/reducers/map';
 import PrintReducer from '../../src/reducers/print';
@@ -918,6 +918,15 @@ describe('Map component', () => {
     store.dispatch(MapActions.setSprite('./sprites'));
 
     expect(map.updateSpriteLayers).toHaveBeenCalled();
+  });
+
+  it('should handle getFakeStyle', () => {
+    const sprite = 'mapbox://foo';
+    const baseUrl = 'http://example.com';
+    const accessToken = 'mytoken';
+    const layers = [{id: 'foo'}];
+    const style = getFakeStyle(sprite, layers, baseUrl, accessToken);
+    expect(style.sprite).toEqual(`${baseUrl}/sprite?access_token=${accessToken}`);
   });
 
   it('should handle hydrateLayer', () => {
