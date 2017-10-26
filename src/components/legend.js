@@ -322,9 +322,14 @@ class Legend extends React.Component {
   }
 
   render() {
-    let legend_contents = this.getLegendContents();
-    if (legend_contents === null || this.state.empty) {
+    let legend_contents;
+    if (this.state.empty) {
       legend_contents = this.props.emptyLegendMessage;
+    } else {
+      legend_contents = this.getLegendContents();
+      if (legend_contents === null) {
+        legend_contents = this.props.emptyLegendMessage;
+      }
     }
     let className = 'sdk-legend';
     if (this.props.className) {
