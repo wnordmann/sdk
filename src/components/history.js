@@ -144,11 +144,16 @@ export class HashHistory extends React.Component {
 }
 
 HashHistory.propTypes = {
+  /** Map state */
   map: PropTypes.shape({
+    /** Center of the map. */
     center: PropTypes.arrayOf(PropTypes.number),
+    /** Zoom level of the map. */
     zoom: PropTypes.number,
+    /** Rotation of the map in degrees. */
     rotation: PropTypes.number,
   }),
+  /** setView callback function, called when the view needs to change. */
   setView: PropTypes.func,
 };
 
