@@ -2,9 +2,6 @@
  * Include the SDK stylesheet
  */
 @import 'ol/ol';
-@import 'popup';
-@import 'zoomslider';
-@import 'zoomcontrol';
 
 $sdk-orange: #f58d50;
 $sdk-blue: #29728d;
@@ -21,6 +18,12 @@ $accent-color:         #8BC34A;
 $primary-text-color:   #212121;
 $secondary-text-color: #757575;
 $divider-color:        #BDBDBD;
+
+@import 'popup';
+@import 'zoomslider';
+@import 'zoomcontrol';
+
+
 
 
 
