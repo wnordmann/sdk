@@ -46,28 +46,6 @@ button.sdk-btn {
   border-radius: .25rem;
 }
 
-/** some OpenLayers styling tweaks */
-.ol-control {
-  button {
-    background-color: #f1f1f1;
-    color: #333333;
-    border: solid 1px $divider-color;
-    border-radius: 10px;
-    margin: 0;
-    &:hover {
-      color: #f1f1f1;
-      background-color: $divider-color;
-    }
-    &.active {
-      background-color: $divider-color;
-    }
-    &:focus {
-      color: #333333;
-      background-color: #f1f1f1;
-    }
-  }
-}
-
 li.sdk-layer {
     list-style: none;
 }
