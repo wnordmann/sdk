@@ -626,12 +626,17 @@ export class Map extends React.Component {
         this.sources[src_name] = configureSource(sourcesDef[src_name], map_view,
           this.props.mapbox.accessToken, this.props.mapbox.baseUrl, time, this.props.wrapX);
       }
+      const src = this.props.map.sources[src_name];
+      if (src && src.type !== 'geojson' && !jsonEquals(src, sourcesDef[src_name])) {
+        // reconfigure source and tell layers about it
+        this.sources[src_name] = configureSource(sourcesDef[src_name], map_view);
+        this.updateLayerSource(src_name);
+      }
 
       // Check to see if there was a clustering change.
       // Because OpenLayers requires a *different* source to handle clustering,
       // this handles update the named source and then subsequently updating
       // the layers.
-      const src = this.props.map.sources[src_name];
       if (src && (src.cluster !== sourcesDef[src_name].cluster
           || src.clusterRadius !== sourcesDef[src_name].clusterRadius)) {
         // reconfigure the source for clustering.
