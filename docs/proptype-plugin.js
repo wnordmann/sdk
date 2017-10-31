@@ -25,6 +25,7 @@ function getSubprops(prop) {
       subProps.push({
         name: key,
         description: member.description,
+        optional: !member.required,
         type: {names: [member.name]}
       });
     }
@@ -55,6 +56,7 @@ exports.handlers = {
                 const prop = info[i].props[key];
                 doclet.properties.push({
                   name: key,
+                  optional: !prop.required,
                   description: prop.description,
                   defaultvalue: prop.defaultValue ? prop.defaultValue.value : undefined,
                   type: {names: prop.type ? generateType(prop.type) : undefined},
