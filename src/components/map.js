@@ -1359,41 +1359,72 @@ export class Map extends React.Component {
 }
 
 Map.propTypes = {
+  /** Should we wrap the world? If yes, data will be repeated in all worlds. */
   wrapX: PropTypes.bool,
+  /** Projection of the map, normally an EPSG code. */
   projection: PropTypes.string,
+  /** Map configuration, modelled after the Mapbox Style specification. */
   map: PropTypes.shape({
+    /** Center of the map. */
     center: PropTypes.array,
+    /** Zoom level of the map. */
     zoom: PropTypes.number,
+    /** Rotation of the map in degrees. */
     bearing: PropTypes.number,
+    /** Extra information about the map. */
     metadata: PropTypes.object,
+    /** List of map layers. */
     layers: PropTypes.array,
+    /** List of layer sources. */
     sources: PropTypes.object,
+    /** Sprite sheet to use. */
     sprite: PropTypes.string,
   }),
+  /** Child components. */
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
   ]),
+  /** Mapbox specific configuration. */
   mapbox: PropTypes.shape({
+    /** Base url to use for mapbox:// substitutions. */
     baseUrl: PropTypes.string,
+    /** Access token for the Mapbox account to use. */
     accessToken: PropTypes.string,
   }),
+  /** Style configuration object. */
   style: PropTypes.object,
+  /** Css className. */
   className: PropTypes.string,
+  /** Drawing specific configuration. */
   drawing: PropTypes.shape({
+    /** Current interaction to use for drawing. */
     interaction: PropTypes.string,
+    /** Current source name to use for drawing. */
     sourceName: PropTypes.string,
   }),
+  /** Initial popups to display in the map. */
   initialPopups: PropTypes.arrayOf(PropTypes.object),
+  /** setView callback function, triggered on moveend. */
   setView: PropTypes.func,
+  /** Should we include features when the map is clicked? */
   includeFeaturesOnClick: PropTypes.bool,
+  /** onClick callback function, triggered on singleclick. */
   onClick: PropTypes.func,
+  /** onFeatureDrawn callback, triggered on drawend of the draw interaction. */
   onFeatureDrawn: PropTypes.func,
+  /** onFeatureModified callback, triggered on modifyend of the modify interaction. */
   onFeatureModified: PropTypes.func,
+  /** onFeatureSelected callback, triggered on select event of the select interaction. */
   onFeatureSelected: PropTypes.func,
+  /** onExportImage callback, done on postcompose. */
   onExportImage: PropTypes.func,
+  /** setMeasureGeometry callback, called when the measure geometry changes. */
   setMeasureGeometry: PropTypes.func,
+  /** clearMeasureFeature callback, called when the measure feature is cleared. */
   clearMeasureFeature: PropTypes.func,
+  /** Callback function that should generate a TIME based filter. */
+  createLayerFilter: PropTypes.func,
 };
 
 Map.defaultProps = {

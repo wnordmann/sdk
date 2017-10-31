@@ -13,6 +13,7 @@
 
 import fetch from 'isomorphic-fetch';
 
+import PropTypes from 'prop-types';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 
@@ -161,6 +162,16 @@ class WfsController extends Component {
   }
 }
 
+WfsController.propTypes = {
+  /** List of actions that need to be handled by this controller. */
+  actions: PropTypes.object,
+  /** List of map sources. */
+  sources: PropTypes.object,
+  /** onFinishTransaction callback function, called when the transaction has finished. */
+  onFinishTransaction: PropTypes.func,
+  /** onRequestError callback function, called when a request fails. */
+  onRequestError: PropTypes.func, 
+}
 
 WfsController.defaultProps = {
   actions: {},

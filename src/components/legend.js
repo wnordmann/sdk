@@ -208,7 +208,7 @@ export function getRasterLegend(layer, layer_src) {
 }
 
 
-class Legend extends React.Component {
+export class Legend extends React.Component {
 
   constructor(props) {
     super(props);
@@ -345,19 +345,31 @@ class Legend extends React.Component {
 }
 
 Legend.propTypes = {
+  /** The id of the layer for which this legend is meant. */
   layerId: PropTypes.string.isRequired,
+  /** List of layers from the store. */
   layers: PropTypes.arrayOf(PropTypes.object),
+  /** List of layer sources. */
   sources: PropTypes.shape({
+    /** Source to associate with the layer. */
     source: PropTypes.string,
   }),
+  /** Mapbox specific configuration. */
   mapbox: PropTypes.shape({
+    /** Base url to use when substituting mapbox:// type urls. */
     baseUrl: PropTypes.string,
+    /** Access token of the mapbox account to use. */
     accessToken: PropTypes.string,
   }),
+  /** Sprite sheet url. */
   sprite: PropTypes.string,
+  /** If legend is empty, show this message. */
   emptyLegendMessage: PropTypes.string,
+  /** Size of the legend, only used for vector legends. */
   size: PropTypes.arrayOf(PropTypes.number),
+  /** Style config object. */
   style: PropTypes.object,
+  /** Css classname to apply. */
   className: PropTypes.string,
 };
 
