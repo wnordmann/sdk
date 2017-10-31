@@ -5,7 +5,7 @@ import { shallow, mount, configure } from 'enzyme';
 import nock from 'nock';
 import  Adapter from 'enzyme-adapter-react-16';
 
-import olMap from 'ol/map';
+import olMap from 'ol/pluggablemap';
 import TileLayer from 'ol/layer/tile';
 import VectorLayer from 'ol/layer/vector';
 import ImageLayer from 'ol/layer/image';

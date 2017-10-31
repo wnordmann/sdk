@@ -24,9 +24,14 @@ import { connect } from 'react-redux';
 
 import { applyBackground, applyStyle } from 'ol-mapbox-style';
 
-import OlMap from 'ol/map';
+import OlMap from 'ol/pluggablemap';
 import View from 'ol/view';
 import Overlay from 'ol/overlay';
+import MapRenderer from 'ol/renderer/canvas/map';
+import interaction from 'ol/interaction';
+import plugins from 'ol/plugins';
+import PluginType from 'ol/plugintype';
+import TileLayerRenderer from 'ol/renderer/canvas/tilelayer';
 
 import Observable from 'ol/observable';
 
@@ -83,6 +88,9 @@ const GEOJSON_FORMAT = new GeoJsonFormat();
 const WGS84_SPHERE = new Sphere(6378137);
 const MAPBOX_PROTOCOL = 'mapbox://';
 const BBOX_STRING = '{bbox-epsg-3857}';
+
+plugins.register(PluginType.MAP_RENDERER, MapRenderer);
+plugins.register(PluginType.LAYER_RENDERER, TileLayerRenderer);
 
 /** This variant of getVersion() differs as it allows
  *  for undefined values to be returned.
@@ -1156,6 +1164,7 @@ export class Map extends React.Component {
 
     // initialize the map.
     this.map = new OlMap({
+      interactions: interaction.defaults(),
       controls: [new AttributionControl()],
       target: this.mapdiv,
       logo: false,
