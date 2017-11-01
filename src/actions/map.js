@@ -208,11 +208,12 @@ export function setClusterRadius(sourceName, radius) {
  *
  *  @returns {Object} Action object to pass to reducer.
  */
-export function addFeatures(sourceName, features) {
+export function addFeatures(sourceName, features, position = -1) {
   return {
     type: MAP.ADD_FEATURES,
     sourceName,
     features,
+    position,
   };
 }
 

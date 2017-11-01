@@ -293,10 +293,22 @@ function addFeatures(state, action) {
       features: [data].concat(features),
     };
   } else if (data.type === 'FeatureCollection') {
-    new_data = Object.assign({},
-      data,
-      { features: data.features.concat(features) },
-    );
+    let featureCollection = [];
+
+    if(action.position > -1){
+      var output = [];
+      for(var i = 0, ii = data.features.length; i < ii; i++) {
+        if(i === action.position) {
+          for(var x = 0, xx = features.length; x < xx; x++) {
+            featureCollection.push(features[x]);
+          }
+        }
+        featureCollection.push(data.features[i]);
+      }
+    } else {
+      featureCollection = data.features.concat(features);
+    }
+    new_data = Object.assign({}, data,{ features : featureCollection }, );
   }
 
   if (new_data !== null) {
