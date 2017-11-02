@@ -101,10 +101,45 @@ SdkLayerListItem.PropTypes = {
   }).isRequired,
 };
 
+export class SdkLayerListGroup extends React.Component {
+
+  render() {
+    const children = [];
+
+    for (let i = 0, ii = this.props.layers.length; i < ii; i++) {
+        children.push(
+          <this.props.layerClass
+            exclusive={this.props.group.exclusive}
+            key={i}
+            layer={this.props.layers[i]}
+            groupId={this.props.groupId}
+          />
+        );
+    }
+
+    return (<li>{this.props.group.name}<ul>{children}</ul></li>);
+  }
+}
+
+SdkLayerListGroup.PropTypes = {
+  groupId: PropTypes.string.isRequired,
+  group: PropTypes.shape({
+    name: PropTypes.string,
+    exclusive: PropTypes.bool,
+  }).isRequired,
+  layerClass: PropTypes.func.isRequired,
+  layers: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+  })).isRequired,
+};
+
+
+
 class SdkLayerList extends React.Component {
   constructor(props) {
     super(props);
 
+    this.groupClass = connect()(this.props.groupClass);
     this.layerClass = connect()(this.props.layerClass);
   }
 
@@ -119,16 +154,24 @@ class SdkLayerList extends React.Component {
     const layersHash = {};
     if (groups) {
       for (var key in groups) {
-        const children = [];
+        const group_layers = [];
         for (i = this.props.layers.length - 1; i >= 0; i--) {
           const item = this.props.layers[i];
           if (item.metadata && item.metadata[GROUP_KEY] === key) {
+            group_layers.push(item);
             layersHash[item.id] = true;
-            children.push(<this.layerClass exclusive={groups[key].exclusive} groupId={key} key={i} layers={this.props.layers} layer={item} />);
           }
         }
-        if (children.length > 0) {
-          layers.push(<li key={key}>{groups[key].name}<ul>{children}</ul></li>);
+        if (group_layers.length > 0) {
+          layers.push(
+            <this.groupClass
+              key={key}
+              groupId={key}
+              group={groups[key]}
+              layers={group_layers}
+              layerClass={this.layerClass}
+            />
+          );
         }
       }
     }
@@ -147,6 +190,7 @@ class SdkLayerList extends React.Component {
 }
 
 SdkLayerList.propTypes = {
+  groupClass: PropTypes.func,
   layerClass: PropTypes.func,
   layers: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string,
@@ -157,6 +201,7 @@ SdkLayerList.propTypes = {
 
 SdkLayerList.defaultProps = {
   layerClass: SdkLayerListItem,
+  groupClass: SdkLayerListGroup,
 };
 
 function mapStateToProps(state) {
