@@ -4,9 +4,6 @@ import { connect } from 'react-redux';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
 
 export class EditField extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   render(){
     // If row is edited return input
     if(this.props.editRow){
@@ -160,7 +157,6 @@ render(){
     return null;
   });
 
-  let key = '';
   return (
     <div className="feature-table">
       <div className='table-header'>

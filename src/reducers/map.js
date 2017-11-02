@@ -296,10 +296,9 @@ function addFeatures(state, action) {
     let featureCollection = [];
 
     if(action.position > -1){
-      var output = [];
-      for(var i = 0, ii = data.features.length; i < ii; i++) {
+      for(let i = 0, ii = data.features.length; i < ii; i++) {
         if(i === action.position) {
-          for(var x = 0, xx = features.length; x < xx; x++) {
+          for(let x = 0, xx = features.length; x < xx; x++) {
             featureCollection.push(features[x]);
           }
         }
