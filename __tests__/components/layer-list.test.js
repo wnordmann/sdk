@@ -27,6 +27,41 @@ class TestLayerListItem extends SdkLayerListItem {
   }
 }
 
+// uses ol instead of ul
+class TestList extends React.Component {
+  render() {
+    return (
+      <ol>
+        {this.props.children}
+      </ol>
+    );
+  }
+}
+
+class TestListGroup extends React.Component {
+  render() {
+    const children = [];
+    let text;
+    if (this.props.group.collapsed) {
+      text = this.props.group.name;
+    } else {
+      text = (<b>{this.props.group.name}</b>);
+    }
+    for (let i = 0, ii = this.props.layers.length; i < ii; i++) {
+        children.push(
+          <this.props.layerClass
+            exclusive={this.props.group.exclusive}
+            key={i}
+            layer={this.props.layers[i]}
+            groupId={this.props.groupId}
+          />
+        );
+    }
+    return (<li>{text}<ol>{children}</ol></li>);
+  }
+}
+
+
 describe('test the LayerList component', () => {
   let store = null;
 
@@ -193,6 +228,84 @@ describe('test the LayerList component', () => {
     store.dispatch(MapActions.updateLayer('wms-test', {
       metadata: {
         'mapbox:group': 'overlays'
+      }
+    }));
+    store.dispatch(MapActions.updateLayer('image-test', {
+      metadata: {
+        'mapbox:group': 'overlays'
+      }
+    }));
+    const wrapper = mount(<Provider store={store}><SdkLayerList /></Provider>);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('should handle hiding layers', () => {
+    store.dispatch(MapActions.updateLayer('osm', {
+      metadata: {
+        'bnd:hide-layerlist': true
+      }
+    }));
+    const wrapper = mount(<Provider store={store}><SdkLayerList /></Provider>);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('should handle a custom list class', () => {
+    const wrapper = mount(<Provider store={store}><SdkLayerList listClass={TestList} /></Provider>);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('should handle a custom list and listgroup class', () => {
+    store.dispatch(MapActions.updateMetadata({
+      'mapbox:groups': {
+        'background': {
+          name: 'Base Maps',
+          collapsed: true
+        },
+        'overlays': {
+          name: 'Overlays',
+          collapsed: false
+        },
+      }
+    }));
+    store.dispatch(MapActions.updateLayer('osm', {
+      metadata: {
+        'mapbox:group': 'background'
+      }
+    }));
+    store.dispatch(MapActions.updateLayer('wms-test', {
+      metadata: {
+        'mapbox:group': 'overlays'
+      }
+    }));
+    store.dispatch(MapActions.updateLayer('image-test', {
+      metadata: {
+        'mapbox:group': 'overlays'
+      }
+    }));
+    const wrapper = mount(<Provider store={store}><SdkLayerList groupClass={TestListGroup} listClass={TestList} /></Provider>);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('should handle hiding layers in a group', () => {
+    store.dispatch(MapActions.updateMetadata({
+      'mapbox:groups': {
+        'background': {
+          name: 'Base Maps',
+        },
+        'overlays': {
+          name: 'Overlays',
+        },
+      }
+    }));
+    store.dispatch(MapActions.updateLayer('osm', {
+      metadata: {
+        'mapbox:group': 'background'
+      }
+    }));
+    store.dispatch(MapActions.updateLayer('wms-test', {
+      metadata: {
+        'mapbox:group': 'overlays',
+        'bnd:hide-layerlist': true
       }
     }));
     store.dispatch(MapActions.updateLayer('image-test', {

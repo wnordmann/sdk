@@ -21,7 +21,7 @@ import PropTypes from 'prop-types';
 import { getLayerIndexById, isLayerVisible, getLayerTitle } from '../util';
 
 import * as mapActions from '../actions/map';
-import {GROUP_KEY, GROUPS_KEY} from '../constants';
+import {LAYERLIST_HIDE_KEY, GROUP_KEY, GROUPS_KEY} from '../constants';
 
 export class SdkLayerListItem extends React.Component {
 
@@ -101,6 +101,25 @@ SdkLayerListItem.PropTypes = {
   }).isRequired,
 };
 
+export class SdkList extends React.Component {
+  render() {
+    return (
+      <ul style={this.props.style} className={this.props.className}>
+        {this.props.children}
+      </ul>
+    );
+  }
+}
+
+SdkList.PropTypes = {
+  style: PropTypes.object,
+  className: PropTypes.string,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
+  ])
+};
+
 export class SdkLayerListGroup extends React.Component {
 
   render() {
@@ -148,43 +167,49 @@ class SdkLayerList extends React.Component {
     if (this.props.className) {
       className = `${className} ${this.props.className}`;
     }
-    let i;
     const layers = [];
     const groups = this.props.metadata ? this.props.metadata[GROUPS_KEY] : undefined;
-    const layersHash = {};
-    if (groups) {
-      for (var key in groups) {
-        const group_layers = [];
-        for (i = this.props.layers.length - 1; i >= 0; i--) {
-          const item = this.props.layers[i];
-          if (item.metadata && item.metadata[GROUP_KEY] === key) {
-            group_layers.push(item);
-            layersHash[item.id] = true;
+    let groupName, group_layers;
+    for (let i = 0, ii = this.props.layers.length; i < ii; i++) {
+      const item = this.props.layers[i];
+      if (item.metadata && item.metadata[GROUP_KEY]) {
+        if (groupName !== item.metadata[GROUP_KEY]) {
+          if (group_layers && group_layers.length > 0) {
+            layers.unshift(
+              <this.groupClass
+                key={groupName}
+                groupId={groupName}
+                group={groups[groupName]}
+                layers={group_layers}
+                layerClass={this.layerClass}
+              />
+            );
           }
+          group_layers = [];
         }
-        if (group_layers.length > 0) {
-          layers.push(
-            <this.groupClass
-              key={key}
-              groupId={key}
-              group={groups[key]}
-              layers={group_layers}
-              layerClass={this.layerClass}
-            />
-          );
+        groupName = item.metadata[GROUP_KEY];
+        if (item.metadata[LAYERLIST_HIDE_KEY] !== true) {
+          group_layers.unshift(item);
         }
+      } else if (!item.metadata || item.metadata[LAYERLIST_HIDE_KEY] !== true) {
+        layers.unshift(<this.layerClass key={i} layers={this.props.layers} layer={item} />);
       }
     }
-    for (i = this.props.layers.length - 1; i >= 0; i--) {
-      const layer = this.props.layers[i];
-      if (!layersHash[layer.id]) {
-        layers.push(<this.layerClass key={i} layers={this.props.layers} layer={layer} />);
-      }
+    if (group_layers && group_layers.length) {
+      layers.unshift(
+        <this.groupClass
+          key={groupName}
+          groupId={groupName}
+          group={groups[groupName]}
+          layers={group_layers}
+          layerClass={this.layerClass}
+        />
+      );
     }
     return (
-      <ul style={this.props.style} className={className}>
+      <this.props.listClass style={this.props.style} className={className}>
         { layers }
-      </ul>
+      </this.props.listClass>
     );
   }
 }
@@ -192,6 +217,7 @@ class SdkLayerList extends React.Component {
 SdkLayerList.propTypes = {
   groupClass: PropTypes.func,
   layerClass: PropTypes.func,
+  listClass: PropTypes.func,
   layers: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string,
   })).isRequired,
@@ -202,6 +228,7 @@ SdkLayerList.propTypes = {
 SdkLayerList.defaultProps = {
   layerClass: SdkLayerListItem,
   groupClass: SdkLayerListGroup,
+  listClass: SdkList,
 };
 
 function mapStateToProps(state) {
