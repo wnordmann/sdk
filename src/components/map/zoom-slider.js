@@ -17,24 +17,51 @@ import PropTypes from 'prop-types';
 import * as mapActions from '../../actions/map';
 import { DEFAULT_ZOOM } from '../../constants';
 
+/** @module components/map/zoom-slider
+ * @example
+ * import SdkZoomSlider from '@boundlessgeo/sdk/components/map/zoom-slider';
+ * import { Provider } from 'react-redux';
+ * import SdkMap from '@boundlessgeo/sdk/components/map';
+ * import ReactDOM from 'react-dom';
+ *
+ * ReactDOM.render(<Provider store={store}>
+ *   <SdkMap>
+ *     <SdkZoomSlider />
+ *   </SdkMap>
+ * </Provider>, document.getElementById('map'));
+ *
+ * @desc Provides a vertical slider to zoom the map.
+ */
 class ZoomSlider extends React.Component {
   render() {
-    let className = 'sdk-zoom-slider';
+    let className = 'sdk-slider-control';
     if (this.props.className) {
       className += ' ' + this.props.className;
     }
     return (
-      <div className="sdk-slider-control">
-        <input style={this.props.style} className={className} min={this.props.minZoom} max={this.props.maxZoom} value={this.props.zoom} onChange={(evt) => { this.props.onChange(evt.target.value); }} type='range' />
+      <div style={this.props.style} className={className}>
+        <input className='sdk-zoom-slider' min={this.props.minZoom} max={this.props.maxZoom} value={this.props.zoom} onChange={(evt) => { this.props.onChange(evt.target.value); }} type='range' />
       </div>
     );
   }
 }
 
 ZoomSlider.propTypes = {
+  /**
+   * Css className to use on the root div.
+   */
   className: PropTypes.string,
+  /**
+   * Style config for the root div.
+   */
   style: PropTypes.object,
+  /**
+   * Minimum zoom level value.
+   */
   minZoom: PropTypes.number,
+  /**
+   * Maximum zoom level value.
+   */
   maxZoom: PropTypes.number,
 };
 

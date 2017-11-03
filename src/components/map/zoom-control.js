@@ -16,6 +16,21 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as mapActions from '../../actions/map';
 
+/** @module components/map/zoom-control
+ * @example
+ * import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
+ * import { Provider } from 'react-redux';
+ * import SdkMap from '@boundlessgeo/sdk/components/map';
+ * import ReactDOM from 'react-dom';
+ *
+ * ReactDOM.render(<Provider store={store}>
+ *   <SdkMap>
+ *     <SdkZoomControl />
+ *   </SdkMap>
+ * </Provider>, document.getElementById('map'));
+ *
+ * @desc Provides 2 buttons to zoom the map (zoom in and out).
+ */
 class ZoomControl extends React.Component {
   render() {
     let className = 'sdk-zoom-control';
@@ -32,9 +47,21 @@ class ZoomControl extends React.Component {
 }
 
 ZoomControl.propTypes = {
+  /**
+   * Css className for the root div.
+   */
   className: PropTypes.string,
+  /**
+   * Style config object for root div.
+   */
   style: PropTypes.object,
+  /**
+   * Title for the zoom in button.
+   */
   zoomInTitle: PropTypes.string,
+  /**
+   * Title for the zoom out button.
+   */
   zoomOutTitle: PropTypes.string,
 };
 
