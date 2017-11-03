@@ -11,9 +11,6 @@
  * under the License.
  */
 
-/** SDK Layerlist Component
- */
-
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
