@@ -11,95 +11,12 @@
  * under the License.
  */
 
-/** SDK Layerlist Component
- */
-
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { getLayerIndexById, isLayerVisible, getLayerTitle } from '../util';
-
-import * as mapActions from '../actions/map';
 import {LAYERLIST_HIDE_KEY, GROUP_KEY, GROUPS_KEY} from '../constants';
-
-export class SdkLayerListItem extends React.Component {
-
-  moveLayer(layerId, targetId) {
-    this.props.dispatch(mapActions.orderLayer(layerId, targetId));
-  }
-
-  moveLayerUp() {
-    const layer_id = this.props.layer.id;
-    const index = getLayerIndexById(this.props.layers, layer_id);
-    if (index < this.props.layers.length - 1) {
-      this.moveLayer(this.props.layers[index + 1].id, layer_id);
-    }
-  }
-
-  moveLayerDown() {
-    const layer_id = this.props.layer.id;
-    const index = getLayerIndexById(this.props.layers, layer_id);
-    if (index > 0) {
-      this.moveLayer(layer_id, this.props.layers[index - 1].id);
-    }
-  }
-
-  removeLayer() {
-    this.props.dispatch(mapActions.removeLayer(this.props.layer.id));
-  }
-
-  toggleVisibility() {
-    const shown = isLayerVisible(this.props.layer);
-    if (this.props.exclusive) {
-      this.props.dispatch(mapActions.setLayerInGroupVisible(this.props.layer.id, this.props.groupId));
-    } else {
-      this.props.dispatch(mapActions.setLayerVisibility(this.props.layer.id, shown ? 'none' : 'visible'));
-    }
-  }
-
-  getVisibilityControl() {
-    const layer = this.props.layer;
-    const is_checked = isLayerVisible(layer);
-    if (this.props.exclusive) {
-      return (
-        <input
-          type="radio"
-          name={this.props.groupId}
-          onChange={() => { this.toggleVisibility(); }}
-          checked={is_checked}
-        />
-      );
-    } else {
-      return (
-        <input
-          type="checkbox"
-          onChange={() => { this.toggleVisibility(); }}
-          checked={is_checked}
-        />
-      );
-    }
-  }
-
-  render() {
-    const layer = this.props.layer;
-    const checkbox = this.getVisibilityControl();
-    return (
-      <li className="sdk-layer" key={layer.id}>
-        <span className="sdk-checkbox">{checkbox}</span>
-        <span className="sdk-name">{getLayerTitle(this.props.layer)}</span>
-      </li>
-    );
-  }
-}
-
-SdkLayerListItem.PropTypes = {
-  exclusive: PropTypes.bool,
-  groupId: PropTypes.string,
-  layer: PropTypes.shape({
-    id: PropTypes.string,
-  }).isRequired,
-};
+import SdkLayerListItem from './layer-list-item';
 
 export class SdkList extends React.Component {
   render() {
@@ -152,8 +69,10 @@ SdkLayerListGroup.PropTypes = {
   })).isRequired,
 };
 
-
-
+/** @module components/layer-list
+ *
+ * @desc Provides a layer list control.
+ */
 class SdkLayerList extends React.Component {
   constructor(props) {
     super(props);
@@ -215,13 +134,31 @@ class SdkLayerList extends React.Component {
 }
 
 SdkLayerList.propTypes = {
+  /** 
+   * React.Component to use for rendering layer groups.
+   */
   groupClass: PropTypes.func,
+  /**
+   * React.Component to use for rendering layers.
+   */
   layerClass: PropTypes.func,
+  /**
+   * React.Component to use for rendering lists. The default implementation uses <ul>.
+   */
   listClass: PropTypes.func,
+  /**
+   * List of layers to use.
+   */
   layers: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string,
   })).isRequired,
+  /**
+   * Style config object for the root element.
+   */
   style: PropTypes.object,
+  /**
+   * Css className for the root element.
+   */
   className: PropTypes.string,
 };
 

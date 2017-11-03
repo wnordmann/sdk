@@ -11,7 +11,8 @@ import MapReducer from '../../src/reducers/map';
 import * as MapActions from '../../src/actions/map';
 import { isLayerVisible } from '../../src/util';
 
-import SdkLayerList, { SdkLayerListItem } from '../../src/components/layer-list';
+import SdkLayerList from '../../src/components/layer-list';
+import SdkLayerListItem from  '../../src/components/layer-list-item';
 
 configure({ adapter: new Adapter() });
 

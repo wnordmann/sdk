@@ -54,11 +54,18 @@ exports.handlers = {
             if (info[i].props) {
               for (let key in info[i].props) {
                 const prop = info[i].props[key];
+                let defaultValue;
+                if (prop.defaultValue) {
+                  defaultValue = prop.defaultValue.value;
+                  if (defaultValue.indexOf('class') === 0) {
+                    defaultValue = defaultValue.substring(defaultValue.indexOf('class ') + 6, defaultValue.indexOf('extends'));
+                  }
+                }
                 doclet.properties.push({
                   name: key,
                   optional: !prop.required,
                   description: prop.description,
-                  defaultvalue: prop.defaultValue ? prop.defaultValue.value : undefined,
+                  defaultvalue: defaultValue,
                   type: {names: prop.type ? generateType(prop.type) : undefined},
                   subprops: getSubprops(prop),
                 });
