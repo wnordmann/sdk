@@ -1,13 +1,13 @@
 /** Realtime data example.
  */
 
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import {createStore, combineReducers, applyMiddleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 
 import SdkMap from '@boundlessgeo/sdk/components/map';
 import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
@@ -26,7 +26,7 @@ const store = createStore(combineReducers({
   map: SdkMapReducer,
   mapbox: SdkMapboxReducer,
 }), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-   applyMiddleware(thunkMiddleware));
+applyMiddleware(thunkMiddleware));
 
 function main() {
   const baseUrl = 'https://api.mapbox.com/styles/v1/mapbox/bright-v8';
@@ -58,15 +58,15 @@ function main() {
   const url = 'https://wanderdrone.appspot.com/';
 
   // add our drone source
-  store.dispatch(mapActions.addSource('drone', { type: 'geojson', data: url }));
+  store.dispatch(mapActions.addSource('drone', {type: 'geojson', data: url}));
 
   // add our drone layer with an icon-image from the sprite
   store.dispatch(mapActions.addLayer({
-    id: "drone",
-    type: "symbol",
-    source: "drone",
+    id: 'drone',
+    type: 'symbol',
+    source: 'drone',
     layout: {
-      "icon-image": "rocket-15"
+      'icon-image': 'rocket-15'
     }
   }));
 

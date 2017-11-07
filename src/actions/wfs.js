@@ -15,7 +15,7 @@
  * @desc Actions for handling WFS updates.
  */
 
-import { WFS } from '../action-types';
+import {WFS} from '../action-types';
 
 /** Helper function to define WFS actions.
  *  @param {string} type WFS action type.
@@ -25,14 +25,14 @@ import { WFS } from '../action-types';
  *  @returns {Object} Action object to return for WFS actions.
  */
 function wfsAction(type, sourceName, feature) {
-  return { type, sourceName, feature };
+  return {type, sourceName, feature};
 }
 
 /** WFS feature insert action.
  *  @param {string} sourceName The source name on which the relevant feature will be located.
  *  @param {Object} feature Feature on which the action takes place.
  *
- *  @returns A call to wfsAction().
+ *  @returns {Object} Action object.
  */
 export function insertFeature(sourceName, feature) {
   return wfsAction(WFS.INSERT, sourceName, feature);
@@ -42,7 +42,7 @@ export function insertFeature(sourceName, feature) {
  *  @param {string} sourceName The source name on which the relevant feature will be located.
  *  @param {Object} feature Feature on which the action takes place.
  *
- *  @returns A call to wfsAction().
+ *  @returns {Object} Action object.
  */
 export function updateFeature(sourceName, feature) {
   return wfsAction(WFS.UPDATE, sourceName, feature);
@@ -52,7 +52,7 @@ export function updateFeature(sourceName, feature) {
  *  @param {string} sourceName The source name on which the relevant feature will be located.
  *  @param {Object} feature Feature on which the action takes place.
  *
- *  @returns A call to wfsAction().
+ *  @returns {Object} Action object.
  */
 export function deleteFeature(sourceName, feature) {
   return wfsAction(WFS.DELETE, sourceName, feature);
@@ -81,7 +81,7 @@ export function removeSource(sourceName) {
   return {
     type: WFS.REMOVE_SOURCE,
     sourceName,
-  }
+  };
 }
 
 /** WFS action to indicate finished state.

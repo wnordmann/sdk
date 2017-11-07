@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 
 /**
  * Render a list of layers available on the WMS, and a button to add them to the map.
+ * @param {Object} props The properties config.
+ *
+ * @returns {ReactElement} Markup for the AddWMSLayer component.
  */
 const AddWMSLayer = (props) => {
   const children = [];
@@ -14,7 +17,9 @@ const AddWMSLayer = (props) => {
   });
   for (let i = 0, ii = layers.length; i < ii; ++i) {
     const layer = layers[i];
-    const button = (<button onClick={() => { props.onAddLayer(layer); }}>Add</button>);
+    const button = (<button onClick={() => {
+      props.onAddLayer(layer);
+    }}>Add</button>);
     children.push(<li key={i}>{layer.Title}{button}</li>);
   }
   return (<ul>{children}</ul>);

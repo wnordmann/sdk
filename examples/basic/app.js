@@ -5,13 +5,13 @@
  *
  */
 
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import {createStore, combineReducers, applyMiddleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 
 import SdkMap from '@boundlessgeo/sdk/components/map';
 import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
@@ -27,7 +27,7 @@ import '@boundlessgeo/sdk/stylesheet/sdk.scss';
 const store = createStore(combineReducers({
   map: SdkMapReducer,
 }), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-   applyMiddleware(thunkMiddleware));
+applyMiddleware(thunkMiddleware));
 
 function main() {
   // Start with a reasonable global view of the map.
@@ -144,17 +144,17 @@ function main() {
   class InputField extends React.PureComponent {
     constructor(props) {
       super(props);
-      this.state = { value: store.getState().map.name };
+      this.state = {value: store.getState().map.name};
       this.handleSubmit = this.handleSubmit.bind(this);
       this.updateMapName = this.updateMapName.bind(this);
     }
     updateMapName(event) {
-      this.setState({ value: event.target.value });
+      this.setState({value: event.target.value});
     }
     handleSubmit(event) {
       event.preventDefault();
       store.dispatch(mapActions.setMapName(this.state.value));
-      this.setState({ value: '' });
+      this.setState({value: ''});
     }
     render() {
       return (
@@ -170,7 +170,7 @@ function main() {
         </div>
       );
     }
-  };
+  }
 
   // Updates minzoom level on Null Island layer to 2.
   const updateMinzoom = () => {

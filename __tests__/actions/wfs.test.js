@@ -1,7 +1,7 @@
 /* global describe, it, expect */
 
 import * as actions from '../../src/actions/wfs';
-import { WFS } from '../../src/action-types';
+import {WFS} from '../../src/action-types';
 
 describe('test that wfs actions are properly created', () => {
   const DUMMY_FEATURE = {
@@ -69,7 +69,6 @@ describe('test that wfs actions are properly created', () => {
       sourceName: DUMMY_SOURCE,
     });
   });
-
 
 
 });

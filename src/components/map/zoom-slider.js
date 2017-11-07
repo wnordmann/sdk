@@ -12,10 +12,10 @@
  */
 
 import React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import * as mapActions from '../../actions/map';
-import { DEFAULT_ZOOM } from '../../constants';
+import {DEFAULT_ZOOM} from '../../constants';
 
 /** @module components/map/zoom-slider
  * @example
@@ -40,7 +40,9 @@ class ZoomSlider extends React.Component {
     }
     return (
       <div style={this.props.style} className={className}>
-        <input className='sdk-zoom-slider' min={this.props.minZoom} max={this.props.maxZoom} value={this.props.zoom} onChange={(evt) => { this.props.onChange(evt.target.value); }} type='range' />
+        <input className='sdk-zoom-slider' min={this.props.minZoom} max={this.props.maxZoom} value={this.props.zoom} onChange={(evt) => {
+          this.props.onChange(evt.target.value);
+        }} type='range' />
       </div>
     );
   }
@@ -83,6 +85,6 @@ function mapDispatchToProps(dispatch) {
       dispatch(mapActions.setZoom(value));
     },
   };
-};
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(ZoomSlider);

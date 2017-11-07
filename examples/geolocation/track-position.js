@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import OlGeolocation from 'ol/geolocation';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
 
@@ -24,13 +24,13 @@ class TrackPosition extends React.PureComponent {
     this.initialExtent = this.initialExtent.bind(this);
   }
   isLocating() {
-    this.setState({ locating: true });
+    this.setState({locating: true});
   }
   notLocating() {
-    this.setState({ locating: false, error: false });
+    this.setState({locating: false, error: false});
   }
   success(position) {
-    this.setState({ error: false });
+    this.setState({error: false});
     if (this.state.latitude || this.state.longitude) {
       this.props.removeFeatures(this.props.targetSource, [['==', 'title', 'User Location']]);
     }
@@ -83,11 +83,11 @@ class TrackPosition extends React.PureComponent {
         });
       }
       this.props.setView([longitude, latitude], 17);
-      this.setState({ latitude, longitude });
+      this.setState({latitude, longitude});
     }
   }
   error() {
-    this.setState({ error: true });
+    this.setState({error: true});
   }
   findUser() {
     const position = this.location.getPosition();
@@ -114,7 +114,7 @@ class TrackPosition extends React.PureComponent {
       this.location.setTracking(false);
       this.notLocating();
       this.props.setView([-93, 45], 2);
-      this.setState({ latitude: null, longitude: null });
+      this.setState({latitude: null, longitude: null});
       if (this.props.sources[this.props.targetSource] !== undefined) {
         this.props.removeFeatures(this.props.targetSource, [['==', 'title', 'User Location']]);
       }

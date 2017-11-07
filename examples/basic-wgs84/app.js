@@ -5,13 +5,13 @@
  *
  */
 
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import {createStore, combineReducers, applyMiddleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 
 import SdkMap from '@boundlessgeo/sdk/components/map';
 import SdkHashHistory from '@boundlessgeo/sdk/components/history';
@@ -26,7 +26,7 @@ import '@boundlessgeo/sdk/stylesheet/sdk.scss';
 const store = createStore(combineReducers({
   map: SdkMapReducer,
 }), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-   applyMiddleware(thunkMiddleware));
+applyMiddleware(thunkMiddleware));
 
 function main() {
   // Start with a reasonable global view of the map.
@@ -125,7 +125,7 @@ function main() {
     id: 'overlay',
     source: 'overlay',
     type: 'raster',
-    paint: { 'raster-opacity': 0.85 },
+    paint: {'raster-opacity': 0.85},
   }));
 
   // This doesn't do anything particularly impressive

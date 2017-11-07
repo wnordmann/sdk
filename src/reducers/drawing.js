@@ -19,7 +19,7 @@
  *
  */
 
-import { DRAWING } from '../action-types';
+import {DRAWING} from '../action-types';
 
 const defaultState = {
   interaction: null,
@@ -29,6 +29,10 @@ const defaultState = {
 };
 
 /** Update the state to indicate an interaction has started.
+ *  @param {Object} state Current state.
+ *  @param {Object} action Action to handle.
+ *
+ *  @returns {Object} The new state.
  */
 function startDrawing(state, action) {
   return {
@@ -49,7 +53,7 @@ export default function drawingReducer(state = defaultState, action) {
   switch (action.type) {
     case DRAWING.END:
       // when interaction is null, drawing should cease.
-      return { interaction: null, sourceName: null, measureFeature: null, measureSegments: null };
+      return {interaction: null, sourceName: null, measureFeature: null, measureSegments: null};
     case DRAWING.START:
       return startDrawing(state, action);
     case DRAWING.SET_MEASURE_FEATURE:

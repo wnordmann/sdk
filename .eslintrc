@@ -4,8 +4,9 @@
         "browser": true,
         "node": true
     },
-    "extends": "react-app",
+    "extends": ["react-app", "openlayers"],
     "rules": {
+        "comma-dangle": 0,
         "import/no-extraneous-dependencies": 0,
         "no-console": ["error", {
             "allow" : ["warn", "error"]

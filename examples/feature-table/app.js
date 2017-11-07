@@ -5,13 +5,13 @@
  *
  */
 
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import {createStore, combineReducers, applyMiddleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 
 import SdkMap from '@boundlessgeo/sdk/components/map';
 import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
@@ -33,7 +33,7 @@ import '@boundlessgeo/sdk/stylesheet/sdk.scss';
 const store = createStore(combineReducers({
   map: SdkMapReducer,
 }), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-   applyMiddleware(thunkMiddleware));
+applyMiddleware(thunkMiddleware));
 
 function main() {
   // Start with a view of the sample data location
@@ -60,7 +60,7 @@ function main() {
   // 'geojson' sources allow rendering a vector layer
   // with all the features stored as GeoJSON. "data" can
   // be an individual Feature or a FeatureCollection.
-  store.dispatch(mapActions.addSource('dynamic-source', { type: 'geojson' }));
+  store.dispatch(mapActions.addSource('dynamic-source', {type: 'geojson'}));
 
   // Background layers change the background color of
   // the map. They are not attached to a source.
@@ -79,7 +79,9 @@ function main() {
       type: 'symbol',
       source: 'dynamic-source',
       layout: {
-        'text-font': ['FontAwesome normal',],
+        'text-font': [
+          'FontAwesome normal',
+        ],
         'text-size': 18,
         'icon-optional': true,
         // airplane icon

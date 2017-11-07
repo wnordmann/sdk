@@ -15,9 +15,11 @@
  *  @desc Actions for setting the Mapbox config.
  */
 
-import { MAPBOX } from '../action-types';
+import {MAPBOX} from '../action-types';
 
 /** Action to configure the baseUrl and accessToken.
+ *  @param {Object} config The config object.
+ *
  *  @returns {Object} Action object to pass to reducer.
  */
 export function configure(config) {

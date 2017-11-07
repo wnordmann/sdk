@@ -1,21 +1,21 @@
 /* global it, describe, expect */
 
 import React from 'react';
-import { mount, configure } from 'enzyme';
+import {mount, configure} from 'enzyme';
 import  Adapter from 'enzyme-adapter-react-16';
 
 import TileLayer from 'ol/layer/tile';
 import TileWMSSource from 'ol/source/tilewms';
 import XYZSource from 'ol/source/xyz';
 
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import {createStore, combineReducers, applyMiddleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 
 import ConnectedMap from '../../src/components/map';
 import MapReducer from '../../src/reducers/map';
 import * as MapActions from '../../src/actions/map';
 
-configure({ adapter: new Adapter() });
+configure({adapter: new Adapter()});
 
 describe('Map component context documents', () => {
   it('should correctly reload context documents', () => {
@@ -46,7 +46,7 @@ describe('Map component context documents', () => {
         },
       ],
     };
-    store.dispatch(MapActions.setContext({ json: wmsJson }));
+    store.dispatch(MapActions.setContext({json: wmsJson}));
     let layers = map.map.getLayers().getArray();
     expect(layers[0]).toBeInstanceOf(TileLayer);
     expect(layers[0].getSource()).toBeInstanceOf(TileWMSSource);
@@ -74,7 +74,7 @@ describe('Map component context documents', () => {
         },
       ],
     };
-    store.dispatch(MapActions.setContext({ json: osmJson }));
+    store.dispatch(MapActions.setContext({json: osmJson}));
     layers = map.map.getLayers().getArray();
     expect(layers[0]).toBeInstanceOf(TileLayer);
     expect(layers[0].getSource()).toBeInstanceOf(XYZSource);

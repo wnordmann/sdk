@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
 class MeasureTable extends React.PureComponent {
 
@@ -37,7 +37,7 @@ class MeasureTable extends React.PureComponent {
       rows.push((
         <tr key="polygon">
           <td><b>Polygon area:</b></td>
-          <td>{ area } { units }<span style={{ verticalAlign: 'super' }}>2</span></td>
+          <td>{ area } { units }<span style={{verticalAlign: 'super'}}>2</span></td>
         </tr>
       ));
     } else {

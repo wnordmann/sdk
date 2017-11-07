@@ -5,13 +5,13 @@
  *
  */
 
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import {createStore, combineReducers, applyMiddleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 
 import SdkMap from '@boundlessgeo/sdk/components/map';
 import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
@@ -27,7 +27,7 @@ import '@boundlessgeo/sdk/stylesheet/sdk.scss';
 const store = createStore(combineReducers({
   map: SdkMapReducer,
 }), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-   applyMiddleware(thunkMiddleware));
+applyMiddleware(thunkMiddleware));
 
 
 /** A popup for marking features when they
@@ -68,7 +68,9 @@ class MarkFeaturesPopup extends SdkPopup {
           Feature ID(s):<br />
           <code>{ feature_ids.join(', ') }</code>
           <br />
-          <button className="sdk-btn" onClick={() => { this.markFeatures(); }}>
+          <button className="sdk-btn" onClick={() => {
+            this.markFeatures();
+          }}>
             Mark this feature
           </button>
         </p>
@@ -86,7 +88,9 @@ class NullIslandPopup extends SdkPopup {
       <div>
         Welcome to Null Island!
 
-        <button className="sdk-btn" onClick={() => { this.close(); }}>
+        <button className="sdk-btn" onClick={() => {
+          this.close();
+        }}>
           Close
         </button>
       </div>
@@ -96,6 +100,8 @@ class NullIslandPopup extends SdkPopup {
 
 /** Handy all around function for adding a random
  *  set of points to the map.
+ *  @param {string} sourceName The name of the source to add to.
+ *  @param {number} n_points Number of random points to add.
  */
 function addPoints(sourceName, n_points = 10) {
   for (let i = 0; i < n_points; i++) {
@@ -205,7 +211,7 @@ function main() {
             }
           });
         }}
-       >
+      >
         <SdkZoomControl style={{position: 'absolute', top: 20, left: 20}} />
       </SdkMap>
     </Provider>

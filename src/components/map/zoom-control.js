@@ -12,7 +12,7 @@
  */
 
 import React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import * as mapActions from '../../actions/map';
 
@@ -79,6 +79,6 @@ function mapDispatchToProps(dispatch) {
       dispatch(mapActions.zoomOut());
     },
   };
-};
+}
 
 export default connect(null, mapDispatchToProps)(ZoomControl);

@@ -2,13 +2,13 @@
  *
  */
 
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import {createStore, combineReducers, applyMiddleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 
 import SdkMap from '@boundlessgeo/sdk/components/map';
 import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
@@ -23,7 +23,7 @@ import '@boundlessgeo/sdk/stylesheet/sdk.scss';
 const store = createStore(combineReducers({
   map: SdkMapReducer,
 }), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-   applyMiddleware(thunkMiddleware));
+applyMiddleware(thunkMiddleware));
 
 function main() {
   // Start with a reasonable global view of the map.
@@ -150,7 +150,9 @@ function main() {
         key={i}
         className="colorChanger"
         style={control_style}
-        onClick={() => { changeColor(color, 'fill'); }}
+        onClick={() => {
+          changeColor(color, 'fill');
+        }}
       />
     ));
     stroke_color_controls.push((
@@ -160,7 +162,9 @@ function main() {
         key={i}
         className="colorChanger"
         style={control_style}
-        onClick={() => { changeColor(color, 'stroke'); }}
+        onClick={() => {
+          changeColor(color, 'stroke');
+        }}
       />
     ));
   }
@@ -198,7 +202,9 @@ function main() {
         key={i}
         className="colorChanger"
         style={control_style}
-        onClick={() => { changeSize(size); }}
+        onClick={() => {
+          changeSize(size);
+        }}
       >{sizes[i]}</div>
     ));
   }

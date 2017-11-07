@@ -1,28 +1,34 @@
 /* global it, describe, expect, beforeEach */
 
 import React from 'react';
-import { mount, configure } from 'enzyme';
+import {mount, configure} from 'enzyme';
 import  Adapter from 'enzyme-adapter-react-16';
 
-import { createStore, combineReducers } from 'redux';
-import { Provider } from 'react-redux';
+import {createStore, combineReducers} from 'redux';
+import {Provider} from 'react-redux';
 
 import MapReducer from '../../src/reducers/map';
 import * as MapActions from '../../src/actions/map';
-import { isLayerVisible } from '../../src/util';
+import {isLayerVisible} from '../../src/util';
 
 import SdkLayerList from '../../src/components/layer-list';
 import SdkLayerListItem from  '../../src/components/layer-list-item';
 
-configure({ adapter: new Adapter() });
+configure({adapter: new Adapter()});
 
 class TestLayerListItem extends SdkLayerListItem {
   render() {
     return (
       <div>
-        <button className="btn-up" onClick={() => { this.moveLayerUp(); }}></button>
-        <button className="btn-down" onClick={() => { this.moveLayerDown(); }}></button>
-        <button className="btn-remove" onClick={() => { this.removeLayer(); }}></button>
+        <button className="btn-up" onClick={() => {
+          this.moveLayerUp();
+        }}></button>
+        <button className="btn-down" onClick={() => {
+          this.moveLayerDown();
+        }}></button>
+        <button className="btn-remove" onClick={() => {
+          this.removeLayer();
+        }}></button>
       </div>
     );
   }
@@ -49,14 +55,14 @@ class TestListGroup extends React.Component {
       text = (<b>{this.props.group.name}</b>);
     }
     for (let i = 0, ii = this.props.layers.length; i < ii; i++) {
-        children.push(
-          <this.props.layerClass
-            exclusive={this.props.group.exclusive}
-            key={i}
-            layer={this.props.layers[i]}
-            groupId={this.props.groupId}
-          />
-        );
+      children.push(
+        <this.props.layerClass
+          exclusive={this.props.group.exclusive}
+          key={i}
+          layer={this.props.layers[i]}
+          groupId={this.props.groupId}
+        />
+      );
     }
     return (<li>{text}<ol>{children}</ol></li>);
   }
@@ -203,10 +209,10 @@ describe('test the LayerList component', () => {
     expect(isLayerVisible(store.getState().map.layers[0])).toBe(true);
 
     const checkbox = wrapper.find('input').last();
-    checkbox.simulate('change', { target: { checked: false }});
+    checkbox.simulate('change', {target: {checked: false}});
 
     expect(isLayerVisible(store.getState().map.layers[0])).toBe(false);
-    checkbox.simulate('change', { target: { checked: true }});
+    checkbox.simulate('change', {target: {checked: true}});
     expect(isLayerVisible(store.getState().map.layers[0])).toBe(true);
   });
 
@@ -379,7 +385,7 @@ describe('test the exclusive grouping of the LayerList component', () => {
     expect(isLayerVisible(store.getState().map.layers[0])).toBe(true);
 
     const checkbox = wrapper.find('input').first();
-    checkbox.simulate('change', { target: { checked: true }});
+    checkbox.simulate('change', {target: {checked: true}});
 
     expect(isLayerVisible(store.getState().map.layers[0])).toBe(false);
     expect(isLayerVisible(store.getState().map.layers[1])).toBe(false);

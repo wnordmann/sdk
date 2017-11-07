@@ -4,7 +4,7 @@ import deepFreeze from 'deep-freeze';
 
 import * as actions from '../../src/actions/wfs';
 import reducer from '../../src/reducers/wfs';
-import  { WFS } from '../../src/action-types';
+import  {WFS} from '../../src/action-types';
 
 describe('wfs reducer', () => {
 

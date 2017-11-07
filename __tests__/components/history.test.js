@@ -1,16 +1,16 @@
 /* global it, describe, expect, spyOn, beforeEach */
 
 import React from 'react';
-import { shallow, mount, configure } from 'enzyme';
+import {shallow, mount, configure} from 'enzyme';
 import  Adapter from 'enzyme-adapter-react-16';
 
-import { createStore, combineReducers } from 'redux';
+import {createStore, combineReducers} from 'redux';
 import MapReducer from '../../src/reducers/map';
-import { setView } from '../../src/actions/map';
+import {setView} from '../../src/actions/map';
 
-import SdkHashHistory, { HashHistory } from '../../src/components/history';
+import SdkHashHistory, {HashHistory} from '../../src/components/history';
 
-configure({ adapter: new Adapter() });
+configure({adapter: new Adapter()});
 
 describe('test the HashHistory component', () => {
   it('should render the components without error', () => {
@@ -24,17 +24,17 @@ describe('test the HashHistory component', () => {
     expect(window.location.hash).toBe('#x=0.00000&y=0.00000&z=1&r=0');
 
     // update x
-    wrapper.setProps({ map: { center: [-1, 0], zoom: 1 } });
+    wrapper.setProps({map: {center: [-1, 0], zoom: 1}});
     wrapper.update();
     expect(window.location.hash).toBe('#x=-1.00000&y=0.00000&z=1&r=0');
 
     // update y
-    wrapper.setProps({ map: { center: [-1, -1], zoom: 1 } });
+    wrapper.setProps({map: {center: [-1, -1], zoom: 1}});
     wrapper.update();
     expect(window.location.hash).toBe('#x=-1.00000&y=-1.00000&z=1&r=0');
 
     // update z
-    wrapper.setProps({ map: { center: [-1, -1], zoom: 11 } });
+    wrapper.setProps({map: {center: [-1, -1], zoom: 11}});
     wrapper.update();
     expect(window.location.hash).toBe('#x=-1.00000&y=-1.00000&z=11&r=0');
   });

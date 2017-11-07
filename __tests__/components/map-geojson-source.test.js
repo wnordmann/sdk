@@ -5,8 +5,8 @@
 /* global it, describe, expect, beforeEach, afterEach */
 
 import React from 'react';
-import { createStore, combineReducers } from 'redux';
-import { mount, configure } from 'enzyme';
+import {createStore, combineReducers} from 'redux';
+import {mount, configure} from 'enzyme';
 import nock from 'nock';
 import  Adapter from 'enzyme-adapter-react-16';
 
@@ -16,7 +16,7 @@ import MapboxReducer from '../../src/reducers/mapbox';
 import * as MapActions from '../../src/actions/map';
 import * as MapboxActions from '../../src/actions/mapbox';
 
-configure({ adapter: new Adapter() });
+configure({adapter: new Adapter()});
 
 describe('tests for the geojson-type map sources', () => {
   let map;

@@ -30,10 +30,10 @@ class SdkSpriteStyle extends IconStyle {
     this.frameRate = options.frameRate !== undefined ? options.frameRate : 100;
     this.width = width;
     this.height = height;
-    this.offset = [0,0];
+    this.offset = [0, 0];
     var img, self = this;
     img = this.img_ = new Image();
-    img.crossOrigin = options.crossOrigin || "anonymous";
+    img.crossOrigin = options.crossOrigin || 'anonymous';
     img.src = options.src;
     if (img.width) {
       this.drawImage_();
@@ -44,7 +44,7 @@ class SdkSpriteStyle extends IconStyle {
     }
   }
   drawImage_() {
-    const ctx = this.getImage().getContext("2d");
+    const ctx = this.getImage().getContext('2d');
     ctx.clearRect(0, 0, this.width, this.height);
     ctx.drawImage(
       this.img_,
@@ -69,7 +69,7 @@ class SdkSpriteStyle extends IconStyle {
   }
   update(e) {
     const step = e.frameState.time / this.frameRate;
-    const offset = [(0 + (Math.trunc(step)%this.spriteCount)) * this.width, 0];
+    const offset = [(0 + (Math.trunc(step) % this.spriteCount)) * this.width, 0];
     if (offset[0] !== this.offset[0] || offset[1] !== this.offset[1]) {
       this.offset = offset;
       this.drawImage_();

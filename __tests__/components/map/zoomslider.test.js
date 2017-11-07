@@ -1,16 +1,16 @@
 /* global it, describe, expect, beforeEach */
 
 import React from 'react';
-import { mount, configure } from 'enzyme';
+import {mount, configure} from 'enzyme';
 import  Adapter from 'enzyme-adapter-react-16';
 
-import { createStore, combineReducers } from 'redux';
+import {createStore, combineReducers} from 'redux';
 
 import MapReducer from '../../../src/reducers/map';
 import * as MapActions from '../../../src/actions/map';
 import SdkZoomSlider from '../../../src/components/map/zoom-slider';
 
-configure({ adapter: new Adapter() });
+configure({adapter: new Adapter()});
 
 describe('Zoom slider tests', () => {
 

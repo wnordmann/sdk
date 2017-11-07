@@ -5,7 +5,7 @@ import canvas from 'canvas';
 
 // this is kind of a hack to have tests work in jest
 // but I don't see any other way to tackle this
-canvas.Context2d.prototype.drawImage = function() {}
+canvas.Context2d.prototype.drawImage = function() {};
 
 describe('Sprite style', () => {
 
@@ -62,7 +62,7 @@ describe('Sprite style', () => {
   it('color option should work as expected', () => {
     options.color = [255, 0, 0];
     const style = new SdkSpriteStyle(options);
-    const ctx = style.getImage().getContext("2d");
+    const ctx = style.getImage().getContext('2d');
     spyOn(ctx, 'putImageData');
     style.update({frameState: {time: 400}});
     expect(ctx.putImageData).toHaveBeenCalled();

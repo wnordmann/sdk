@@ -15,45 +15,47 @@ function main() {
       resolve(data);
     });
   })
-  .then((data) => JSON.parse(data))
-  .then((packageData) => {
-    const {
-      author,
-      version,
-      description,
-      keywords,
-      repository,
-      license,
-      bugs,
-      homepage,
-      peerDependencies,
-      dependencies,
-    } = packageData;
+    .then((data) => JSON.parse(data))
+    .then((packageData) => {
+      const {
+        author,
+        version,
+        description,
+        keywords,
+        repository,
+        license,
+        bugs,
+        homepage,
+        peerDependencies,
+        dependencies,
+      } = packageData;
 
-    const minimalPackage = {
-      name: '@boundlessgeo/sdk',
-      author,
-      version,
-      description,
-      keywords,
-      repository,
-      license,
-      bugs,
-      homepage,
-      peerDependencies,
-      dependencies,
-    };
+      const minimalPackage = {
+        name: '@boundlessgeo/sdk',
+        author,
+        version,
+        description,
+        keywords,
+        repository,
+        license,
+        bugs,
+        homepage,
+        peerDependencies,
+        dependencies,
+      };
 
-    return new Promise((resolve) => {
-      const buildPath = path.resolve(__dirname, '../dist/package.json');
-      const data = JSON.stringify(minimalPackage, null, 2);
-      fsx.writeFile(buildPath, data, (err) => {
-        if (err) throw (err);
-        process.stdout.write(`Created package.json in ${buildPath}\n`);
-        resolve();
+      return new Promise((resolve) => {
+        const buildPath = path.resolve(__dirname, '../dist/package.json');
+        const data = JSON.stringify(minimalPackage, null, 2);
+        fsx.writeFile(buildPath, data, (err) => {
+          if (err) {
+            throw (err);
+          }
+          process.stdout.write(`Created package.json in ${buildPath}\n`);
+          resolve();
+        });
       });
     });
-  });
 }
 
 if (require.main === module) {

@@ -18,7 +18,7 @@
  *
  */
 
-import { PRINT } from '../action-types';
+import {PRINT} from '../action-types';
 
 const defaultState = {
   exportImage: false,
@@ -33,9 +33,9 @@ const defaultState = {
 export default function printReducer(state = defaultState, action) {
   switch (action.type) {
     case PRINT.EXPORT_IMAGE:
-      return { exportImage: true };
+      return {exportImage: true};
     case PRINT.RECEIVE_IMAGE:
-      return { exportImage: false };
+      return {exportImage: false};
     default:
       return state;
   }

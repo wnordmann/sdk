@@ -1,14 +1,14 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
 import MoveButtonComponent from './moveButton';
 
 // Custom Bookmark Component
-class BookmarkComponent extends React.PureComponent{
+class BookmarkComponent extends React.PureComponent {
   render() {
     // Get the feature selected by the count in state
     // Render the modal window using style from app.css
-    const count = this.props.bookmark.count
+    const count = this.props.bookmark.count;
     if (this.props.map.sources[this.props.bookmark.source] &&
       this.props.map.sources[this.props.bookmark.source].data.features.length > 0) {
       const feature = this.props.map.sources[this.props.bookmark.source].data.features[count];
@@ -38,11 +38,11 @@ class BookmarkComponent extends React.PureComponent{
             <MoveButtonComponent store={this.props.store} />
           </div>
         </div>
-      )
+      );
     } else {
       return (
-      <div> </div>
-      )
+        <div> </div>
+      );
     }
   }
 }
