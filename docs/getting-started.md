@@ -184,6 +184,9 @@ yarn start
 
 Congratulations! You should have a fully operational Boundless SDK React app!
 
+### Unit testing
+If you want to write unit tests in your application that use the SDK, make sure you have ```canvas``` installed as a ```devDependency```.
+See [here](https://github.com/boundlessgeo/sdk/blob/master/README.md#running-tests) for more details.
 
 ### Ejecting Create React App
 
