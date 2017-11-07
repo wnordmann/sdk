@@ -28,7 +28,7 @@ const QUICKSTART = fs.readFileSync(path.join(srcDir, '..', 'docs', 'getting-star
 function main() {
   const copy_files = ['LICENSE.md'];
 
-  for(const filename of copy_files) {
+  for (const filename of copy_files) {
     fsx.copy(path.join(srcDir, '..', filename), path.join(distDir, filename));
   }
 
@@ -37,12 +37,12 @@ function main() {
   // build the new README
   // this is more appropriate for an NPM readme...
   fs.writeFile(path.join(distDir, 'README.md'), README_HEADER + QUICKSTART, function(err) {
-    if(err) {
+    if (err) {
       // eslint-disable-next-line no-console
       return console.log(err);
     }
     // eslint-disable-next-line no-console
-    console.log("README.md written correctly.");
+    console.log('README.md written correctly.');
   });
 }
 

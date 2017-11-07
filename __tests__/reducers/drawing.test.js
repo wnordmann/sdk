@@ -4,7 +4,7 @@ import deepFreeze from 'deep-freeze';
 
 import * as actions from '../../src/actions/drawing';
 import reducer from '../../src/reducers/drawing';
-import { DRAWING } from '../../src/action-types';
+import {DRAWING} from '../../src/action-types';
 
 describe('drawing reducer', () => {
   it('should return the initial state', () => {
@@ -51,7 +51,7 @@ describe('drawing reducer', () => {
       measureSegments: null,
     };
 
-    expect(reducer(initial_state, { type: DRAWING.END })).toEqual(expected_state);
+    expect(reducer(initial_state, {type: DRAWING.END})).toEqual(expected_state);
   });
 
 

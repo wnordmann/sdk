@@ -1,19 +1,19 @@
 /* global it, describe, expect, afterEach, spyOn */
 
-import { XMLSerializer, DOMParser } from 'xmldom';
+import {XMLSerializer, DOMParser} from 'xmldom';
 
 import React from 'react';
-import { mount, configure } from 'enzyme';
+import {mount, configure} from 'enzyme';
 import nock from 'nock';
 import  Adapter from 'enzyme-adapter-react-16';
 
-import { createStore, combineReducers } from 'redux';
+import {createStore, combineReducers} from 'redux';
 
 import WfsReducer from '../../src/reducers/wfs';
 import WfsController from '../../src/components/wfs';
 import * as actions from '../../src/actions/wfs';
 
-configure({ adapter: new Adapter() });
+configure({adapter: new Adapter()});
 
 // shim the browser XML functions.
 window.DOMParser = DOMParser;

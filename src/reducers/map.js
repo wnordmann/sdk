@@ -16,9 +16,9 @@
  */
 
 import createFilter from '@mapbox/mapbox-gl-style-spec/feature_filter';
-import { reprojectGeoJson } from '../util';
-import { MAP } from '../action-types';
-import { DEFAULT_ZOOM, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TITLE_KEY, DATA_VERSION_KEY, GROUP_KEY } from '../constants';
+import {reprojectGeoJson} from '../util';
+import {MAP} from '../action-types';
+import {DEFAULT_ZOOM, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TITLE_KEY, DATA_VERSION_KEY, GROUP_KEY} from '../constants';
 
 function defaultMetadata() {
   // define the metadata.
@@ -124,6 +124,10 @@ function placeLayer(state, layer, targetId) {
 }
 
 /** Change the order of the layer in the stack.
+ *  @param {Object} state Current state.
+ *  @param {Object} action Action to handle.
+ *
+ *  @returns {Object} The new state.
  */
 function orderLayer(state, action) {
   let layer = null;
@@ -140,6 +144,10 @@ function orderLayer(state, action) {
 }
 
 /** Add a layer to the state.
+ *  @param {Object} state Current state.
+ *  @param {Object} action Action to handle.
+ *
+ *  @returns {Object} The new state.
  */
 function addLayer(state, action) {
   // TODO: Maybe decide on what a "default case" is in
@@ -159,6 +167,10 @@ function addLayer(state, action) {
 }
 
 /** Remove a layer from the state.
+ *  @param {Object} state Current state.
+ *  @param {Object} action Action to handle.
+ *
+ *  @returns {Object} The new state.
  */
 function removeLayer(state, action) {
   const new_layers = [];
@@ -174,6 +186,10 @@ function removeLayer(state, action) {
 }
 
 /** Update a layer that's in the state already.
+ *  @param {Object} state Current state.
+ *  @param {Object} action Action to handle.
+ *
+ *  @returns {Object} The new state.
  */
 function updateLayer(state, action) {
   // action.layer should be a new mix in for the layer.
@@ -202,6 +218,10 @@ function updateLayer(state, action) {
 }
 
 /** Add a source to the state.
+ *  @param {Object} state Current state.
+ *  @param {Object} action Action to handle.
+ *
+ *  @returns {Object} The new state.
  */
 function addSource(state, action) {
   const new_source = {};
@@ -229,6 +249,10 @@ function addSource(state, action) {
 }
 
 /** Remove a source from the state.
+ *  @param {Object} state Current state.
+ *  @param {Object} action Action to handle.
+ *
+ *  @returns {Object} The new state.
  */
 function removeSource(state, action) {
   const new_sources = Object.assign({}, state.sources);
@@ -263,6 +287,10 @@ function changeData(state, sourceName, data) {
 }
 
 /** Add features to a source.
+ *  @param {Object} state Current state.
+ *  @param {Object} action Action to handle.
+ *
+ *  @returns {Object} The new state.
  */
 function addFeatures(state, action) {
   const source = state.sources[action.sourceName];
@@ -295,10 +323,10 @@ function addFeatures(state, action) {
   } else if (data.type === 'FeatureCollection') {
     let featureCollection = [];
 
-    if(action.position > -1){
-      for(let i = 0, ii = data.features.length; i < ii; i++) {
-        if(i === action.position) {
-          for(let x = 0, xx = features.length; x < xx; x++) {
+    if (action.position > -1) {
+      for (let i = 0, ii = data.features.length; i < ii; i++) {
+        if (i === action.position) {
+          for (let x = 0, xx = features.length; x < xx; x++) {
             featureCollection.push(features[x]);
           }
         }
@@ -307,7 +335,7 @@ function addFeatures(state, action) {
     } else {
       featureCollection = data.features.concat(features);
     }
-    new_data = Object.assign({}, data,{ features : featureCollection }, );
+    new_data = Object.assign({}, data, {features: featureCollection});
   }
 
   if (new_data !== null) {
@@ -315,7 +343,12 @@ function addFeatures(state, action) {
   }
   return state;
 }
+
 /** Cluster points.
+ *  @param {Object} state Current state.
+ *  @param {Object} action Action to handle.
+ *
+ *  @returns {Object} The new state.
  */
 function clusterPoints(state, action) {
   const source = state.sources[action.sourceName];
@@ -342,9 +375,12 @@ function clusterPoints(state, action) {
 }
 
 /** Remove features from a source.
- *
  *  The action should define a filter, any feature
  *  matching the filter will be removed.
+ *  @param {Object} state Current state.
+ *  @param {Object} action Action to handle.
+ *
+ *  @returns {Object} The new state.
  */
 function removeFeatures(state, action) {
   // short hand the source source and the data
@@ -374,7 +410,7 @@ function removeFeatures(state, action) {
 
     const new_data = Object.assign({},
       data,
-      { features: new_features },
+      {features: new_features},
     );
 
     return changeData(state, action.sourceName, new_data);
@@ -384,6 +420,10 @@ function removeFeatures(state, action) {
 }
 
 /** Set a layer visible in a mutually exclusive group.
+ *  @param {Object} state Current state.
+ *  @param {Object} action Action to handle.
+ *
+ *  @returns {Object} The new state.
  */
 function setLayerInGroupVisible(state, action) {
   const updated_layers = [];
@@ -394,7 +434,7 @@ function setLayerInGroupVisible(state, action) {
         ...layer,
         layout: {
           ...layer.layout,
-          visibility: layer.id === action.layerId ? 'visible': 'none',
+          visibility: layer.id === action.layerId ? 'visible' : 'none',
         },
       });
     } else {
@@ -407,6 +447,10 @@ function setLayerInGroupVisible(state, action) {
 }
 
 /** Change the visibility of a layer given in the action.
+ *  @param {Object} state Current state.
+ *  @param {Object} action Action to handle.
+ *
+ *  @returns {Object} The new state.
  */
 function setVisibility(state, action) {
   let updated = false;
@@ -437,6 +481,10 @@ function setVisibility(state, action) {
 }
 
 /** Load a new context
+ *  @param {Object} state Current state.
+ *  @param {Object} action Action to handle.
+ *
+ *  @returns {Object} The new state.
  */
 function setContext(state, action) {
   // simply replace the full state
@@ -456,10 +504,12 @@ function updateMetadata(state, action) {
 }
 
 /** Update a source's definition.
- *
  *  This is a heavy-handed operation that will
  *  just mixin whatever is in the new object.
+ *  @param {Object} state Current state.
+ *  @param {Object} action Action to handle.
  *
+ *  @returns {Object} The new state.
  */
 function updateSource(state, action) {
   const old_source = state.sources[action.sourceName];
@@ -481,7 +531,7 @@ function updateSource(state, action) {
 function setZoom(state, action) {
   let zoom = Math.min(DEFAULT_ZOOM.MAX, action.zoom);
   zoom = Math.max(DEFAULT_ZOOM.MIN, zoom);
-  return Object.assign({}, state, { zoom } );
+  return Object.assign({}, state, {zoom});
 }
 
 /** Main reducer.
@@ -503,11 +553,11 @@ export default function MapReducer(state = defaultState, action) {
     case MAP.SET_ZOOM:
       return setZoom(state, action);
     case MAP.SET_NAME:
-      return Object.assign({}, state, { name: action.name });
+      return Object.assign({}, state, {name: action.name});
     case MAP.SET_SPRITE:
-      return Object.assign({}, state, { sprite: action.sprite });
+      return Object.assign({}, state, {sprite: action.sprite});
     case MAP.SET_ROTATION:
-      return Object.assign({}, state, { bearing: action.degrees });
+      return Object.assign({}, state, {bearing: action.degrees});
     case MAP.ADD_LAYER:
       return addLayer(state, action);
     case MAP.REMOVE_LAYER:

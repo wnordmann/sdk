@@ -1,7 +1,7 @@
 /* global it, describe, expect, spyOn, afterEach */
 
 import React from 'react';
-import { shallow, mount, configure } from 'enzyme';
+import {shallow, mount, configure} from 'enzyme';
 import nock from 'nock';
 import  Adapter from 'enzyme-adapter-react-16';
 
@@ -17,18 +17,18 @@ import TileWMSSource from 'ol/source/tilewms';
 import ImageTile from 'ol/imagetile';
 import TileState from 'ol/tilestate';
 
-import { createStore, combineReducers } from 'redux';
-import { radiansToDegrees } from '../../src/util';
+import {createStore, combineReducers} from 'redux';
+import {radiansToDegrees} from '../../src/util';
 
-import ConnectedMap, { Map } from '../../src/components/map';
-import { hydrateLayer, getFakeStyle } from '../../src/components/map';
+import ConnectedMap, {Map} from '../../src/components/map';
+import {hydrateLayer, getFakeStyle} from '../../src/components/map';
 import SdkPopup from '../../src/components/map/popup';
 import MapReducer from '../../src/reducers/map';
 import PrintReducer from '../../src/reducers/print';
 import * as MapActions from '../../src/actions/map';
 import * as PrintActions from '../../src/actions/print';
 
-configure({ adapter: new Adapter() });
+configure({adapter: new Adapter()});
 
 describe('Map component', () => {
   it('should render without throwing an error', () => {
@@ -130,7 +130,7 @@ describe('Map component', () => {
     const apiKey = 'foo';
     const wrapper = mount(<Map
       mapbox={{accessToken: apiKey}}
-      map={{ center, zoom, sources, layers, metadata }}
+      map={{center, zoom, sources, layers, metadata}}
     />);
     const map = wrapper.instance().map;
     expect(map).toBeDefined();
@@ -179,7 +179,7 @@ describe('Map component', () => {
       'bnd:source-version': 0,
       'bnd:layer-version': 0,
     };
-    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
+    const wrapper = mount(<Map map={{center, zoom, sources, layers, metadata}} />);
     const map = wrapper.instance().map;
     expect(map.getLayers().getLength()).toBe(0);
   });
@@ -202,7 +202,7 @@ describe('Map component', () => {
         id: 'overlay',
         source: 'overlay',
         type: 'raster',
-        paint: { 'raster-opacity': 0.85 },
+        paint: {'raster-opacity': 0.85},
       },
     ];
     const center = [0, 0];
@@ -211,7 +211,7 @@ describe('Map component', () => {
       'bnd:source-version': 0,
       'bnd:layer-version': 0,
     };
-    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
+    const wrapper = mount(<Map map={{center, zoom, sources, layers, metadata}} />);
     const map = wrapper.instance().map;
     const layer = map.getLayers().item(0);
     expect(layer).toBeInstanceOf(ImageLayer);
@@ -287,7 +287,7 @@ describe('Map component', () => {
       'bnd:source-version': 0,
       'bnd:layer-version': 0,
     };
-    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
+    const wrapper = mount(<Map map={{center, zoom, sources, layers, metadata}} />);
     const instance = wrapper.instance();
     const map = instance.map;
     expect(map.getLayers().getLength()).toBe(1); // 1 layer created
@@ -323,7 +323,7 @@ describe('Map component', () => {
     };
     const center = [0, 0];
     const zoom = 2;
-    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
+    const wrapper = mount(<Map map={{center, zoom, sources, layers, metadata}} />);
     const map = wrapper.instance().map;
     const layer = map.getLayers().item(0);
     expect(layer).toBeInstanceOf(TileLayer);
@@ -349,7 +349,7 @@ describe('Map component', () => {
     };
     const center = [0, 0];
     const zoom = 2;
-    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
+    const wrapper = mount(<Map map={{center, zoom, sources, layers, metadata}} />);
 
     const instance = wrapper.instance();
     const map = instance.map;
@@ -393,7 +393,7 @@ describe('Map component', () => {
       'bnd:source-version': 0,
       'bnd:layer-version': 0,
     };
-    const wrapper = mount(<Map map={{ sources, layers, metadata }} />);
+    const wrapper = mount(<Map map={{sources, layers, metadata}} />);
 
     const instance = wrapper.instance();
     const map = instance.map;
@@ -423,7 +423,7 @@ describe('Map component', () => {
     const center = [0, 0];
     const zoom = 2;
     const bearing = 45;
-    const wrapper = mount(<Map map={{ bearing, center, zoom, sources, layers, metadata }} />);
+    const wrapper = mount(<Map map={{bearing, center, zoom, sources, layers, metadata}} />);
 
     const instance = wrapper.instance();
     const map = instance.map;
@@ -482,7 +482,7 @@ describe('Map component', () => {
     };
     const center = [0, 0];
     const zoom = 2;
-    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
+    const wrapper = mount(<Map map={{center, zoom, sources, layers, metadata}} />);
     const instance = wrapper.instance();
 
     const map = instance.map;
@@ -510,7 +510,7 @@ describe('Map component', () => {
     };
     const center = [0, 0];
     const zoom = 2;
-    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
+    const wrapper = mount(<Map map={{center, zoom, sources, layers, metadata}} />);
 
     const instance = wrapper.instance();
 
@@ -538,7 +538,7 @@ describe('Map component', () => {
     let error = false;
     try {
       instance.shouldComponentUpdate.call(instance, nextProps);
-    } catch(e) {
+    } catch (e) {
       error = true;
     }
     expect(error).toBe(false);
@@ -563,7 +563,7 @@ describe('Map component', () => {
     };
     const center = [0, 0];
     const zoom = 2;
-    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
+    const wrapper = mount(<Map map={{center, zoom, sources, layers, metadata}} />);
 
     const instance = wrapper.instance();
     const map = instance.map;
@@ -654,7 +654,7 @@ describe('Map component', () => {
       'bnd:source-version': 0,
       'bnd:layer-version': 0,
     };
-    const wrapper = mount(<Map map={{ center, zoom, sources, layers, metadata }} />);
+    const wrapper = mount(<Map map={{center, zoom, sources, layers, metadata}} />);
     const instance = wrapper.instance();
     const map = instance.map;
     expect(map.getLayers().item(0)).not.toBe(undefined);
@@ -705,7 +705,7 @@ describe('Map component', () => {
       'bnd:source-version': 0,
       'bnd:layer-version': 0,
     };
-    const wrapper = mount(<Map map={{ sources, layers, center, zoom, metadata }} />);
+    const wrapper = mount(<Map map={{sources, layers, center, zoom, metadata}} />);
     const instance = wrapper.instance();
     expect(instance.sourcesVersion).toEqual(0);
     const nextProps = {
@@ -1053,20 +1053,20 @@ describe('Map component async', () => {
       .reply(200, response);
 
     sdk_map.sources = {
-      mywms: new TileWMSSource({ url: 'http://example.com/wms', params: { LAYERS: 'bar' } }),
+      mywms: new TileWMSSource({url: 'http://example.com/wms', params: {LAYERS: 'bar'}}),
     };
-    sdk_map.handleWMSGetFeatureInfo(layer, promises, { coordinate: [100, 100] });
+    sdk_map.handleWMSGetFeatureInfo(layer, promises, {coordinate: [100, 100]});
     expect(promises.length).toEqual(1);
     promises = [];
     // invisible layer ignored
-    layer.layout = { visibility: 'none' };
-    sdk_map.handleWMSGetFeatureInfo(layer, promises, { coordinate: [100, 100] });
+    layer.layout = {visibility: 'none'};
+    sdk_map.handleWMSGetFeatureInfo(layer, promises, {coordinate: [100, 100]});
     expect(promises.length).toEqual(0);
     delete layer.layout;
     promises = [];
     // non queryable layer ignored
     layer.metadata['bnd:queryable'] = false;
-    sdk_map.handleWMSGetFeatureInfo(layer, promises, { coordinate: [100, 100] });
+    sdk_map.handleWMSGetFeatureInfo(layer, promises, {coordinate: [100, 100]});
     expect(promises.length).toEqual(0);
   });
 });

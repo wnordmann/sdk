@@ -2,13 +2,13 @@
  *
  */
 
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import {createStore, combineReducers, applyMiddleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 
 import SdkMap from '@boundlessgeo/sdk/components/map';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
@@ -17,7 +17,7 @@ import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
 import * as drawingActions from '@boundlessgeo/sdk/actions/drawing';
 
-import { INTERACTIONS } from '@boundlessgeo/sdk/constants';
+import {INTERACTIONS} from '@boundlessgeo/sdk/constants';
 
 // This will have webpack include all of the SDK styles.
 import '@boundlessgeo/sdk/stylesheet/sdk.scss';
@@ -31,7 +31,7 @@ const store = createStore(combineReducers({
   map: SdkMapReducer,
   drawing: SdkDrawingReducer,
 }), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-   applyMiddleware(thunkMiddleware));
+applyMiddleware(thunkMiddleware));
 
 function main() {
   // Start with a reasonable global view of hte map.
@@ -242,7 +242,9 @@ function main() {
       </div>
       <div className="control-panel">
         <h4>Messages</h4>
-        <div ref={(d) => { error_div = d; }}>
+        <div ref={(d) => {
+          error_div = d;
+        }}>
           Use the select boxes at left to draw on the map.
         </div>
       </div>

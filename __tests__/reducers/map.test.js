@@ -3,7 +3,7 @@
 import deepFreeze from 'deep-freeze';
 
 import reducer from '../../src/reducers/map';
-import { MAP } from '../../src/action-types';
+import {MAP} from '../../src/action-types';
 import * as MapActions from '../../src/actions/map';
 
 
@@ -303,7 +303,7 @@ describe('map reducer', () => {
       id: 'layer1',
       source: 'source1',
       metadata: {
-       'mapbox:group': 'baselayer',
+        'mapbox:group': 'baselayer',
       },
     };
     const layer2 = {
@@ -313,7 +313,7 @@ describe('map reducer', () => {
         visibility: 'none',
       },
       metadata: {
-       'mapbox:group': 'baselayer',
+        'mapbox:group': 'baselayer',
       },
     };
     deepFreeze(layer1);
@@ -678,7 +678,7 @@ describe('map reducer', () => {
       zoom: 3,
       bearing: 0,
       sources: {
-        radar: { ...image_source },
+        radar: {...image_source},
       },
       metadata: {
         'bnd:source-version': 1,
@@ -734,7 +734,7 @@ describe('map reducer', () => {
     });
   });
 
-it('should handle REMOVE_FEATURES with unknown type', () => {
+  it('should handle REMOVE_FEATURES with unknown type', () => {
     // eslint-disable-next-line
     const source = {data: {type:'Foo',properties:{'n':3,'cat':2},'geometry':{type:'Point',coordinates:[0.5,1.5]}}};
     deepFreeze(source);
@@ -993,7 +993,7 @@ it('should handle REMOVE_FEATURES with unknown type', () => {
       name: 'default',
       center: [0, 0],
       zoom: 3,
-      sources: { points: source },
+      sources: {points: source},
       layers: [layer],
     };
     const action = {
@@ -1007,9 +1007,9 @@ it('should handle REMOVE_FEATURES with unknown type', () => {
       name: 'default',
       center: [0, 0],
       zoom: 3,
-      sources: { points: { data: { type: 'FeatureCollection', features: [] }, cluster: true, clusterRadius: 50 } },
-      layers: [{ id: 'my-points', source: 'points' }],
-      metadata: { 'bnd:source-version': 1 },
+      sources: {points: {data: {type: 'FeatureCollection', features: []}, cluster: true, clusterRadius: 50}},
+      layers: [{id: 'my-points', source: 'points'}],
+      metadata: {'bnd:source-version': 1},
     });
   });
 
@@ -1031,7 +1031,7 @@ it('should handle REMOVE_FEATURES with unknown type', () => {
       name: 'default',
       center: [0, 0],
       zoom: 3,
-      sources: { points: source },
+      sources: {points: source},
       layers: [layer],
     };
     const action = {
@@ -1046,9 +1046,9 @@ it('should handle REMOVE_FEATURES with unknown type', () => {
       name: 'default',
       center: [0, 0],
       zoom: 3,
-      sources: { points: { data: { type: 'FeatureCollection', features: [] }, cluster: true, clusterRadius: 10 } },
-      layers: [{ id: 'my-points', source: 'points' }],
-      metadata: { 'bnd:source-version': 1 },
+      sources: {points: {data: {type: 'FeatureCollection', features: []}, cluster: true, clusterRadius: 10}},
+      layers: [{id: 'my-points', source: 'points'}],
+      metadata: {'bnd:source-version': 1},
     });
   });
 
@@ -1086,15 +1086,15 @@ it('should handle REMOVE_FEATURES with unknown type', () => {
       },
       layers: [],
     });
-  })
+  });
 });
 
 describe('map reducer - placing layers', () => {
   // setup four "dummy" layers
-  const layer_a = { id: 'layer_a', source: 'dummy' };
-  const layer_b = { id: 'layer_b', source: 'dummy' };
-  const layer_c = { id: 'layer_c', source: 'dummy' };
-  const layer_d = { id: 'layer_d', source: 'dummy' };
+  const layer_a = {id: 'layer_a', source: 'dummy'};
+  const layer_b = {id: 'layer_b', source: 'dummy'};
+  const layer_c = {id: 'layer_c', source: 'dummy'};
+  const layer_d = {id: 'layer_d', source: 'dummy'};
 
   // ensure the layers themselves are never changed.
   deepFreeze(layer_a);

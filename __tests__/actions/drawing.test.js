@@ -1,8 +1,8 @@
 /* global describe, it, expect */
 
 import * as actions from '../../src/actions/drawing';
-import { DRAWING } from '../../src/action-types';
-import { INTERACTIONS } from '../../src/constants';
+import {DRAWING} from '../../src/action-types';
+import {INTERACTIONS} from '../../src/constants';
 
 describe('drawing actions', () => {
   it('should create an action to start drawing', () => {
@@ -40,15 +40,15 @@ describe('drawing actions', () => {
   });
 
   it('should create an action to end drawing', () => {
-    expect(actions.endDrawing()).toEqual({ type: DRAWING.END });
+    expect(actions.endDrawing()).toEqual({type: DRAWING.END});
   });
 
   it('should create an action to end modify', () => {
-    expect(actions.endModify()).toEqual({ type: DRAWING.END });
+    expect(actions.endModify()).toEqual({type: DRAWING.END});
   });
 
   it('should create an action to end select', () => {
-    expect(actions.endSelect()).toEqual({ type: DRAWING.END });
+    expect(actions.endSelect()).toEqual({type: DRAWING.END});
   });
 
   it('should create an action to set measure feature and segments', () => {
@@ -76,7 +76,7 @@ describe('drawing actions', () => {
   });
 
   it('should create an action to clear the measure feature', () => {
-    expect(actions.clearMeasureFeature()).toEqual({ type: DRAWING.CLEAR_MEASURE_FEATURE });
+    expect(actions.clearMeasureFeature()).toEqual({type: DRAWING.CLEAR_MEASURE_FEATURE});
   });
 
   it('should start a measuring tool', () => {

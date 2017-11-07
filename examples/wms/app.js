@@ -4,11 +4,11 @@
  *
  */
 
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import {createStore, combineReducers, applyMiddleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 import WMSCapabilitiesFormat from 'ol/format/wmscapabilities';
 
 import SdkMap from '@boundlessgeo/sdk/components/map';
@@ -25,7 +25,7 @@ import AddWMSLayer from './addwmslayer';
 const store = createStore(combineReducers({
   map: SdkMapReducer,
 }), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-   applyMiddleware(thunkMiddleware));
+applyMiddleware(thunkMiddleware));
 
 function main() {
   // start in the middle of america
@@ -65,31 +65,31 @@ function main() {
       response => response.text(),
       error => console.error('An error occured.', error),
     )
-    .then((xml) => {
-      const info = new WMSCapabilitiesFormat().read(xml);
-      const root = info.Capability.Layer;
-      ReactDOM.render(<AddWMSLayer
-        onAddLayer={(layer) => {
+      .then((xml) => {
+        const info = new WMSCapabilitiesFormat().read(xml);
+        const root = info.Capability.Layer;
+        ReactDOM.render(<AddWMSLayer
+          onAddLayer={(layer) => {
           // add a new source and layer
-          const getMapUrl = `https://demo.boundlessgeo.com/geoserver/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image/png&TRANSPARENT=TRUE&SRS=EPSG:900913&LAYERS=${layer.Name}&STYLES=&WIDTH=256&HEIGHT=256&BBOX={bbox-epsg-3857}`;
-          store.dispatch(mapActions.addSource(layer.Name, {
-            type: 'raster',
-            tileSize: 256,
-            tiles: [getMapUrl],
-          }));
-          store.dispatch(mapActions.addLayer({
-            metadata: {
-              'bnd:title': layer.Title,
-              'bnd:queryable': layer.queryable,
-            },
-            id: layer.Name,
-            source: layer.Name,
-          }));
-        }
-      }
-        layers={root.Layer}
-      />, document.getElementById('add-wms'));
-    });
+            const getMapUrl = `https://demo.boundlessgeo.com/geoserver/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image/png&TRANSPARENT=TRUE&SRS=EPSG:900913&LAYERS=${layer.Name}&STYLES=&WIDTH=256&HEIGHT=256&BBOX={bbox-epsg-3857}`;
+            store.dispatch(mapActions.addSource(layer.Name, {
+              type: 'raster',
+              tileSize: 256,
+              tiles: [getMapUrl],
+            }));
+            store.dispatch(mapActions.addLayer({
+              metadata: {
+                'bnd:title': layer.Title,
+                'bnd:queryable': layer.queryable,
+              },
+              id: layer.Name,
+              source: layer.Name,
+            }));
+          }
+          }
+          layers={root.Layer}
+        />, document.getElementById('add-wms'));
+      });
   };
 
   // place the map on the page.

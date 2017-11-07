@@ -14,7 +14,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { getLayerIndexById, isLayerVisible, getLayerTitle } from '../util';
+import {getLayerIndexById, isLayerVisible, getLayerTitle} from '../util';
 
 import * as mapActions from '../actions/map';
 
@@ -59,7 +59,9 @@ class SdkLayerListItem extends React.Component {
         <input
           type="radio"
           name={this.props.groupId}
-          onChange={() => { this.toggleVisibility(); }}
+          onChange={() => {
+            this.toggleVisibility();
+          }}
           checked={is_checked}
         />
       );
@@ -67,7 +69,9 @@ class SdkLayerListItem extends React.Component {
       return (
         <input
           type="checkbox"
-          onChange={() => { this.toggleVisibility(); }}
+          onChange={() => {
+            this.toggleVisibility();
+          }}
           checked={is_checked}
         />
       );

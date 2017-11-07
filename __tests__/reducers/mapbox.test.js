@@ -3,7 +3,7 @@
 import deepFreeze from 'deep-freeze';
 
 import reducer from '../../src/reducers/mapbox';
-import { MAPBOX } from '../../src/action-types';
+import {MAPBOX} from '../../src/action-types';
 
 describe('Mapbox reducer', () => {
   it('should return default state', () => {

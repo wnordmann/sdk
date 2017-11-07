@@ -12,7 +12,7 @@
  */
 
 import React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import {LAYERLIST_HIDE_KEY, GROUP_KEY, GROUPS_KEY} from '../constants';
@@ -43,14 +43,14 @@ export class SdkLayerListGroup extends React.Component {
     const children = [];
 
     for (let i = 0, ii = this.props.layers.length; i < ii; i++) {
-        children.push(
-          <this.props.layerClass
-            exclusive={this.props.group.exclusive}
-            key={i}
-            layer={this.props.layers[i]}
-            groupId={this.props.groupId}
-          />
-        );
+      children.push(
+        <this.props.layerClass
+          exclusive={this.props.group.exclusive}
+          key={i}
+          layer={this.props.layers[i]}
+          groupId={this.props.groupId}
+        />
+      );
     }
 
     return (<li>{this.props.group.name}<ul>{children}</ul></li>);
@@ -134,7 +134,7 @@ class SdkLayerList extends React.Component {
 }
 
 SdkLayerList.propTypes = {
-  /** 
+  /**
    * React.Component to use for rendering layer groups.
    */
   groupClass: PropTypes.func,

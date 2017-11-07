@@ -15,8 +15,8 @@
  * @desc Actions for interacting with the map.
  */
 
-import { DRAWING } from '../action-types';
-import { INTERACTIONS } from '../constants';
+import {DRAWING} from '../action-types';
+import {INTERACTIONS} from '../constants';
 
 /** Action to start an interaction on the map.
  *  @param {string} sourceName The name of the source on which the action takes place.

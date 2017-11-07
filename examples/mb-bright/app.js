@@ -2,14 +2,14 @@
  *
  */
 
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import {createStore, combineReducers, applyMiddleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { connect } from 'react-redux';
-import { Provider } from 'react-redux';
+import {connect} from 'react-redux';
+import {Provider} from 'react-redux';
 
 import SdkMap from '@boundlessgeo/sdk/components/map';
 import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
@@ -31,7 +31,7 @@ const store = createStore(combineReducers({
   print: SdkPrintReducer,
   mapbox: SdkMapboxReducer,
 }), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-   applyMiddleware(thunkMiddleware));
+applyMiddleware(thunkMiddleware));
 
 class LegendControl extends React.Component {
   render() {
@@ -60,7 +60,7 @@ function main() {
   store.dispatch(mapboxActions.configure({baseUrl, accessToken: CONFIG.access_token}));
 
   const url = `https://api.mapbox.com/styles/v1/mapbox/bright-v8?access_token=${CONFIG.access_token}`;
-  store.dispatch(mapActions.setContext({ url }));
+  store.dispatch(mapActions.setContext({url}));
 
   // place the map on the page.
   ReactDOM.render(<Provider store={store}>

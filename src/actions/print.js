@@ -15,7 +15,7 @@
  *  @desc Actions for printing the map.
  */
 
-import { PRINT } from '../action-types';
+import {PRINT} from '../action-types';
 
 /** Action to export the current map image.
  *  @returns {Object} Action object to pass to reducer.

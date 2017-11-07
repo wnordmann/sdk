@@ -17,8 +17,8 @@ import fetch from 'isomorphic-fetch';
  * @desc Action Defintions for the map.
  */
 
-import { MAP } from '../action-types';
-import { TITLE_KEY, TIME_KEY } from '../constants';
+import {MAP} from '../action-types';
+import {TITLE_KEY, TIME_KEY} from '../constants';
 
 const sourceTypes = [
   'vector',
@@ -38,7 +38,7 @@ const sourceTypes = [
 export function setView(center, zoom) {
   return {
     type: MAP.SET_VIEW,
-    view: { center, zoom },
+    view: {center, zoom},
   };
 }
 
@@ -121,8 +121,8 @@ export function addLayer(layerDef, layerTitle, positionId) {
  *  @returns {Object} Action object to pass to reducer.
  */
 export function addSource(sourceName, sourceDef) {
-  if (sourceTypes.indexOf(sourceDef.type) === -1 ) {
-    throw(new Error("Invalid source type: " + sourceDef.type + ".  Valid source types are " + sourceTypes.toString()));
+  if (sourceTypes.indexOf(sourceDef.type) === -1) {
+    throw (new Error('Invalid source type: ' + sourceDef.type + '.  Valid source types are ' + sourceTypes.toString()));
   }
   return {
     type: MAP.ADD_SOURCE,
@@ -171,7 +171,7 @@ export function updateLayer(layerId, layerDef) {
 
 /** Action to update cluster status in the map state.
  *  @param {string} sourceName Name of the source to be added.
- *  @param {boolean} isClustered
+ *  @param {boolean} isClustered Is the source clustered?
  *
  *  @returns {Object} Action object to pass to reducer.
  */
@@ -205,6 +205,7 @@ export function setClusterRadius(sourceName, radius) {
  *
  *  @param {Object} sourceName Name of the source on which the features will be added.
  *  @param {Object[]} features An array of features to add.
+ *  @param {number} position The position at which to add the features.
  *
  *  @returns {Object} Action object to pass to reducer.
  */
@@ -236,7 +237,7 @@ export function removeFeatures(sourceName, filter) {
 /** Change the visibility of a given layer in the map state.
  *
  *  @param {string} layerId String id for the layer.
- *  @param {boolean} visibility
+ *  @param {boolean} visibility Should the layer be visible?
  *
  *  @returns {Object} Action object to pass to reducer.
  */

@@ -1,7 +1,7 @@
 /* global describe, it, expect */
 
 import * as actions from '../../src/actions/print';
-import { PRINT } from '../../src/action-types';
+import {PRINT} from '../../src/action-types';
 
 describe('print actions', () => {
   it('should create an action to export image', () => {

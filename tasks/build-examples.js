@@ -93,25 +93,25 @@ function main(callback) {
   }
 
   const smith = new Metalsmith('.')
-      .source(srcDir)
-      .destination(dest)
-      .concurrency(25)
-      .use(rootPath())
-      .use(augmentExamples)
-      .use(createIndex)
-      .use(templates({
-        engine: 'handlebars',
-        directory: templatesDir,
-        partials: partialsDir,
-        helpers: {
-          md(str) {
-            return new handlebars.SafeString(marked(str));
-          },
+    .source(srcDir)
+    .destination(dest)
+    .concurrency(25)
+    .use(rootPath())
+    .use(augmentExamples)
+    .use(createIndex)
+    .use(templates({
+      engine: 'handlebars',
+      directory: templatesDir,
+      partials: partialsDir,
+      helpers: {
+        md(str) {
+          return new handlebars.SafeString(marked(str));
         },
-      }))
-      .build((err) => {
-        callback(err);
-      });
+      },
+    }))
+    .build((err) => {
+      callback(err);
+    });
   return smith;
 }
 

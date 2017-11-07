@@ -3,13 +3,13 @@
  *
  */
 
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import {createStore, combineReducers, applyMiddleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 
 import SdkMap from '@boundlessgeo/sdk/components/map';
 import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
@@ -25,7 +25,7 @@ import ContextSelector from './context-selector';
 const store = createStore(combineReducers({
   map: SdkMapReducer,
 }), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-   applyMiddleware(thunkMiddleware));
+applyMiddleware(thunkMiddleware));
 
 function main() {
   // add a background layer
@@ -40,7 +40,7 @@ function main() {
   const exportMapSpec = () => {
     const map_spec = store.getState().map;
     const text = JSON.stringify(map_spec);
-    const file = new File([text], 'my_map', {type: "application/json"});
+    const file = new File([text], 'my_map', {type: 'application/json'});
     saveAs(file, 'my_map.json');
   };
 

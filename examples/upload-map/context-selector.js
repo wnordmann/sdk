@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import fetch from 'isomorphic-fetch';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
 
@@ -23,11 +23,11 @@ class ContextSelector extends React.PureComponent {
   }
 
   clearError() {
-    this.setState({ error: false, message: '', badurl: '' });
+    this.setState({error: false, message: '', badurl: ''});
   }
 
   setError(msg) {
-    this.setState({ error: true, message: msg });
+    this.setState({error: true, message: msg});
   }
 
   addMap(context) {
@@ -45,8 +45,8 @@ class ContextSelector extends React.PureComponent {
       r.onload = () => {
         try {
           result = JSON.parse(r.result);
-          this.addMap({ json: result });
-        } catch(e) {
+          this.addMap({json: result});
+        } catch (e) {
           this.setError(e.message);
         }
       };
@@ -60,7 +60,7 @@ class ContextSelector extends React.PureComponent {
 
   handleChange(event) {
     this.clearError();
-    this.setState({ value: event.target.value });
+    this.setState({value: event.target.value});
   }
 
   handleSubmit(event) {
@@ -70,17 +70,17 @@ class ContextSelector extends React.PureComponent {
         .then(
           response => {
             if (response.status >= 400) {
-              this.setState({ badurl: response.url });
+              this.setState({badurl: response.url});
               const msg = `${response.status} (${response.statusText})`;
               this.setError(msg);
             } else {
               response.json().then(json => {
-                this.addMap({ json });
-              })
+                this.addMap({json});
+              });
             }
           }
-         )
-    } catch(e) {
+        );
+    } catch (e) {
       this.setError(e);
     }
     event.preventDefault();
@@ -89,7 +89,7 @@ class ContextSelector extends React.PureComponent {
   render() {
     let errormsg;
     if (this.state.error === true) {
-      errormsg = (<p className="error"><strong>Error uploading map:</strong> <a href={this.state.badurl}>{this.state.badurl}</a> {this.state.message}</p>)
+      errormsg = (<p className="error"><strong>Error uploading map:</strong> <a href={this.state.badurl}>{this.state.badurl}</a> {this.state.message}</p>);
     }
     return (
       <div>
@@ -103,7 +103,7 @@ class ContextSelector extends React.PureComponent {
             <form onSubmit={this.handleSubmit}>
               <input className="urlinput" id="urlField" placeholder="Provide a URL to render the map above" type="text" value={this.state.value} onChange={this.handleChange} />
               <button className="sdk-btn" type="submit">Update Map</button>
-          </form>
+            </form>
           </div>
           <div className="drop">
             <h2>Via File Upload:</h2>

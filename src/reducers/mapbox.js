@@ -18,7 +18,7 @@
  *
  */
 
-import { MAPBOX } from '../action-types';
+import {MAPBOX} from '../action-types';
 
 const defaultState = {
   baseUrl: undefined,

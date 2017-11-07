@@ -28,8 +28,8 @@ class Popup extends React.PureComponent {
   }
 
   close() {
-    this.setState({ closed: true });
-    this.setState({ closed: true }, () => {
+    this.setState({closed: true});
+    this.setState({closed: true}, () => {
       if (this.map) {
         this.map.updatePopups();
       }
@@ -44,7 +44,9 @@ class Popup extends React.PureComponent {
   renderPopup(children) {
     let close_btn = false;
     if (this.props.closeable) {
-      close_btn = (<i tabIndex={0} role="link" onClick={() => { this.close(); }} className="sdk-popup-closer fa fa-times" />);
+      close_btn = (<i tabIndex={0} role="link" onClick={() => {
+        this.close();
+      }} className="sdk-popup-closer fa fa-times" />);
     }
     if (this.state.closed) {
       return false;

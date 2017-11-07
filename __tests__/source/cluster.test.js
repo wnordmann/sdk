@@ -14,7 +14,7 @@ describe('Cluster source', () => {
       new Feature(new PointGeom([-1, -1])),
     ];
     const vector = new VectorSource();
-    const source = new SdkClusterSource({ source: vector });
+    const source = new SdkClusterSource({source: vector});
     const cluster = source.createCluster(features);
     expect(cluster.get('point_count')).toEqual(3);
     expect(cluster.get('point_count_abbreviated')).toEqual(3);

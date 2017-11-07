@@ -5,8 +5,8 @@
 /* global it, spyOn, describe, expect, beforeEach, afterEach */
 
 import React from 'react';
-import { createStore, combineReducers } from 'redux';
-import { mount, configure } from 'enzyme';
+import {createStore, combineReducers} from 'redux';
+import {mount, configure} from 'enzyme';
 import  Adapter from 'enzyme-adapter-react-16';
 
 import SdkMap from '../../src/components/map';
@@ -19,9 +19,9 @@ import canvas from 'canvas';
 
 // this is kind of a hack to have tests work in jest
 // but I don't see any other way to tackle this
-canvas.Context2d.prototype.drawImage = function() {}
+canvas.Context2d.prototype.drawImage = function() {};
 
-configure({ adapter: new Adapter() });
+configure({adapter: new Adapter()});
 
 describe('tests for the sprite animation map layers', () => {
   let map;
@@ -47,7 +47,7 @@ describe('tests for the sprite animation map layers', () => {
           coordinates: [0, 0],
         },
         properties: {
-          rotation: 360/Math.PI,
+          rotation: 360 / Math.PI,
         },
       },
     }));
@@ -76,7 +76,7 @@ describe('tests for the sprite animation map layers', () => {
     spyOn(style.getImage(), 'update');
     // postcompose should trigger update
     map.map.dispatchEvent({type: 'postcompose'});
-    expect(style.getImage().update).toHaveBeenCalled(); 
+    expect(style.getImage().update).toHaveBeenCalled();
   });
 
   it('sets the correct style function and filter', () => {
@@ -91,7 +91,7 @@ describe('tests for the sprite animation map layers', () => {
         },
         properties: {
           visible: 1,
-          rotation: 360/Math.PI,
+          rotation: 360 / Math.PI,
         },
       },
     }));

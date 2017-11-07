@@ -20,9 +20,9 @@ import createFilter from '@mapbox/mapbox-gl-style-spec/feature_filter';
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
-import { applyBackground, applyStyle } from 'ol-mapbox-style';
+import {applyBackground, applyStyle} from 'ol-mapbox-style';
 
 import OlMap from 'ol/pluggablemap';
 import View from 'ol/view';
@@ -68,15 +68,15 @@ import AttributionControl from 'ol/control/attribution';
 
 import LoadingStrategy from 'ol/loadingstrategy';
 
-import { updateLayer, setView, setRotation } from '../actions/map';
-import { INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TIME_KEY, TIME_ATTRIBUTE_KEY } from '../constants';
-import { dataVersionKey } from '../reducers/map';
+import {updateLayer, setView, setRotation} from '../actions/map';
+import {INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TIME_KEY, TIME_ATTRIBUTE_KEY} from '../constants';
+import {dataVersionKey} from '../reducers/map';
 
-import { setMeasureFeature, clearMeasureFeature } from '../actions/drawing';
+import {setMeasureFeature, clearMeasureFeature} from '../actions/drawing';
 
 import ClusterSource from '../source/cluster';
 
-import { parseQueryString, jsonClone, jsonEquals, getLayerById, degreesToRadians, radiansToDegrees, getKey } from '../util';
+import {parseQueryString, jsonClone, jsonEquals, getLayerById, degreesToRadians, radiansToDegrees, getKey} from '../util';
 
 /** @module components/map
  *
@@ -111,6 +111,7 @@ function getVersion(obj, key) {
  * Mapbox GL style object.
  * @param {Object} glSource The Mapbox GL map source containing a 'tiles' property.
  * @param {Object} mapProjection The OpenLayers projection object.
+ * @param {string} time TIME parameter.
  *
  * @returns {Object} Configured OpenLayers TileWMSSource or XyzSource.
  */
@@ -213,7 +214,7 @@ function configureMvtSource(glSource, accessToken) {
   }
   const source = new VectorTileSource({
     urls,
-    tileGrid: TileGrid.createXYZ({ maxZoom: 22 }),
+    tileGrid: TileGrid.createXYZ({maxZoom: 22}),
     tilePixelRatio: 16,
     format: new MvtFormat(),
     crossOrigin: 'crossOrigin' in glSource ? glSource.crossOrigin : 'anonymous',
@@ -263,7 +264,7 @@ function getLoaderFunction(glSource, mapProjection, baseUrl) {
         //  are no features to add.
         if (features) {
           // setup the projection options.
-          const readFeatureOpt = { featureProjection: mapProjection };
+          const readFeatureOpt = {featureProjection: mapProjection};
 
           // bulk load the feature data
           this.addFeatures(GEOJSON_FORMAT.readFeatures(features, readFeatureOpt));
@@ -272,7 +273,7 @@ function getLoaderFunction(glSource, mapProjection, baseUrl) {
         console.error(error);
       });
     }
-  }
+  };
 }
 
 function updateGeojsonSource(olSource, glSource, mapView, baseUrl) {
@@ -296,6 +297,9 @@ function updateGeojsonSource(olSource, glSource, mapView, baseUrl) {
  *  Mapbox GL styles definition.
  *
  *  @param {Object} glSource A Mapbox GL styles defintiion of the source.
+ *  @param {Object} mapView The OpenLayers map view.
+ *  @param {string} baseUrl The mapbox base url.
+ *  @param {boolean} wrapX Should we wrap the world?
  *
  *  @returns {Object} ol.source.vector instance.
  */
@@ -329,10 +333,12 @@ function configureGeojsonSource(glSource, mapView, baseUrl, wrapX) {
 
 /** Configures a Mapbox GL source object into appropriate
  *  an appropriatly typed OpenLayers source object.
- * @param {Object} olSource The OpenLayers source object.
+ * @param {Object} glSource The source object.
  * @param {Object} mapView The OpenLayers view object.
  * @param {string} accessToken A Mapbox access token.
  * @param {string} baseUrl A baseUrl provided by this.props.mapbox.baseUrl.
+ * @param {string} time The current time if time-enabled.
+ * @param {boolean} wrapX Should we wrap the world?
  *
  * @returns {(Object|null)} Callback to the applicable configure source method.
  */
@@ -479,6 +485,9 @@ export class Map extends React.Component {
 
   /** This will check nextProps and nextState to see
    *  what needs to be updated on the map.
+   * @param {Object} nextProps The next properties of this component.
+   *
+   * @returns {boolean} should the component re-render?
    */
   shouldComponentUpdate(nextProps) {
     const old_time = getKey(this.props.map.metadata, TIME_KEY);
@@ -573,7 +582,9 @@ export class Map extends React.Component {
 
     if (nextProps.print && nextProps.print.exportImage) {
       // this uses the canvas api to get the map image
-      this.map.once('postcompose', (evt) => { evt.context.canvas.toBlob(this.props.onExportImage); }, this);
+      this.map.once('postcompose', (evt) => {
+        evt.context.canvas.toBlob(this.props.onExportImage);
+      }, this);
       this.map.renderSync();
     }
 
@@ -703,7 +714,7 @@ export class Map extends React.Component {
             const rotationAttribute = spriteOptions[layer.id].rotation.property;
             const rotation = feature.get(rotationAttribute);
             if (!styleCache[layer.id][rotation]) {
-              const options = jsonClone(layer.metadata['bnd:animate-sprite'])
+              const options = jsonClone(layer.metadata['bnd:animate-sprite']);
               options.rotation = rotation;
               const sprite = new SpriteStyle(options);
               const style = new Style({image: sprite});
@@ -889,7 +900,7 @@ export class Map extends React.Component {
       // if the layer is not on the map, create it.
       if (!(group_name in this.layers)) {
         if (lyr_group[0].type === 'background') {
-          applyBackground(this.map, { layers: lyr_group });
+          applyBackground(this.map, {layers: lyr_group});
         } else {
           const hydrated_group = hydrateLayerGroup(layersDef, lyr_group);
           const new_layer = this.configureLayer(source_name, source, hydrated_group);
@@ -1018,7 +1029,7 @@ export class Map extends React.Component {
     const id = uuid.v4();
 
     const elem = document.createElement('div');
-    elem.setAttribute("class", "sdk-popup");
+    elem.setAttribute('class', 'sdk-popup');
     const overlay = new Overlay({
       // create an empty div element for the Popup
       element: elem,
@@ -1092,15 +1103,15 @@ export class Map extends React.Component {
             response => response.json(),
             error => console.error('An error occured.', error),
           )
-          .then((json) => {
-            features_by_layer[layer_name] = GEOJSON_FORMAT.writeFeaturesObject(
-              GEOJSON_FORMAT.readFeatures(json), {
-                featureProjection: GEOJSON_FORMAT.readProjection(json),
-                dataProjection: 'EPSG:4326',
-              },
-            ).features;
-            resolve(features_by_layer);
-          });
+            .then((json) => {
+              features_by_layer[layer_name] = GEOJSON_FORMAT.writeFeaturesObject(
+                GEOJSON_FORMAT.readFeatures(json), {
+                  featureProjection: GEOJSON_FORMAT.readProjection(json),
+                  dataProjection: 'EPSG:4326',
+                },
+              ).features;
+              resolve(features_by_layer);
+            });
         }));
       }
     }
@@ -1224,7 +1235,7 @@ export class Map extends React.Component {
     // bootstrap the map with the current configuration.
     this.configureSources(this.props.map.sources, this.props.map.metadata[SOURCE_VERSION_KEY]);
     this.configureLayers(this.props.map.sources, this.props.map.layers,
-                         this.props.map.metadata[LAYER_VERSION_KEY]);
+      this.props.map.metadata[LAYER_VERSION_KEY]);
 
     // this is done after the map composes itself for the first time.
     //  otherwise the map was not always ready for the initial popups.
@@ -1290,7 +1301,7 @@ export class Map extends React.Component {
       this.activeInteractions = [select];
     } else if (INTERACTIONS.drawing.includes(drawingProps.interaction)) {
       let drawObj = {};
-      if (drawingProps.interaction === INTERACTIONS.box){
+      if (drawingProps.interaction === INTERACTIONS.box) {
         const geometryFunction = DrawInteraction.createBox();
         drawObj = {
           type: 'Circle',
@@ -1349,7 +1360,9 @@ export class Map extends React.Component {
       className = `${className} ${this.props.className}`;
     }
     return (
-      <div style={this.props.style} ref={(c) => { this.mapdiv = c; }} className={className}>
+      <div style={this.props.style} ref={(c) => {
+        this.mapdiv = c;
+      }} className={className}>
         <div className="controls">
           {this.props.children}
         </div>
@@ -1521,4 +1534,4 @@ function mapDispatchToProps(dispatch) {
 }
 
 // Ensure that withRef is set to true so getWrappedInstance will return the Map.
-export default connect(mapStateToProps, mapDispatchToProps, undefined, { withRef: true })(Map);
+export default connect(mapStateToProps, mapDispatchToProps, undefined, {withRef: true})(Map);

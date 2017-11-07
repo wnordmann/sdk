@@ -9,7 +9,7 @@ class EditPanel extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this.state = { feature: null };
+    this.state = {feature: null};
   }
 
   renderColorOption(onclick, color, selected) {
@@ -19,11 +19,13 @@ class EditPanel extends React.PureComponent {
     }
 
     return (
-       <button
+      <button
         key={`color-${color}`}
         className={class_names}
-        style={{backgroundColor: this.props.colors[color] }}
-        onClick={ () => { onclick(this.state.feature, color)} }/>
+        style={{backgroundColor: this.props.colors[color]}}
+        onClick={ () => {
+          onclick(this.state.feature, color);
+        } }/>
     );
 
   }

@@ -1,7 +1,7 @@
 /* global describe, it, expect */
 
 import * as actions from '../../src/actions/mapbox';
-import { MAPBOX } from '../../src/action-types';
+import {MAPBOX} from '../../src/action-types';
 
 describe('Mapbox actions', () => {
   it('should create an action to set configure', () => {

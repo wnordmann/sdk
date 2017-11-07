@@ -5,8 +5,8 @@ import nock from 'nock';
 import thunk from 'redux-thunk';
 
 import * as actions from '../../src/actions/map';
-import { MAP } from '../../src/action-types';
-import { TITLE_KEY, TIME_KEY } from '../../src/constants';
+import {MAP} from '../../src/action-types';
+import {TITLE_KEY, TIME_KEY} from '../../src/constants';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -112,7 +112,9 @@ describe('actions', () => {
     };
 
     const errorMsg = 'Invalid source type: xraster.  Valid source types are vector,raster,geojson,image,video,canvas';
-    expect(() => {actions.addSource(sourceName, sourceDef)} ).toThrow(new Error(errorMsg));
+    expect(() => {
+      actions.addSource(sourceName, sourceDef);
+    }).toThrow(new Error(errorMsg));
   });
 
   it('should create an action to remove a layer', () => {
@@ -338,10 +340,10 @@ describe('async actions', () => {
       .get('/context')
       .reply(200, body);
 
-    const expectedAction = { type: MAP.RECEIVE_CONTEXT, context: body };
+    const expectedAction = {type: MAP.RECEIVE_CONTEXT, context: body};
     const store = mockStore({});
 
-    return store.dispatch(actions.setContext({ url: 'http://example.com/context' })).then(() => {
+    return store.dispatch(actions.setContext({url: 'http://example.com/context'})).then(() => {
       // return of async actions
       expect(store.getActions()).toEqual([expectedAction]);
     });
@@ -355,7 +357,7 @@ describe('async actions', () => {
 
     const store = mockStore({});
 
-    return store.dispatch(actions.setContext({ url: 'http://example.com/context' })).then(() => {
+    return store.dispatch(actions.setContext({url: 'http://example.com/context'})).then(() => {
       // return of async actions
       expect(console.error).toHaveBeenCalled();
     });
@@ -394,10 +396,10 @@ describe('async actions', () => {
       ],
     };
 
-    const expectedAction = { type: MAP.RECEIVE_CONTEXT, context: body };
+    const expectedAction = {type: MAP.RECEIVE_CONTEXT, context: body};
     const store = mockStore({});
 
-    return store.dispatch(actions.setContext({ json: body })).then(() => {
+    return store.dispatch(actions.setContext({json: body})).then(() => {
       // return of async actions
       expect(store.getActions()).toEqual([expectedAction]);
     });
@@ -432,7 +434,7 @@ describe('async actions', () => {
   });
 
   it('should create an action to update the metadata', () => {
-    const metadata = { foo: 'bar' };
+    const metadata = {foo: 'bar'};
     const expectedAction = {
       type: MAP.UPDATE_METADATA,
       metadata,
@@ -444,7 +446,7 @@ describe('async actions', () => {
     const expected = {
       type: MAP.UPDATE_SOURCE,
       sourceName: 'points',
-      sourceDef: { data: {} },
+      sourceDef: {data: {}},
     };
     expect(actions.updateSource('points', {data: {}})).toEqual(expected);
   });
