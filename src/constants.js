@@ -25,6 +25,7 @@ export const DATA_VERSION_KEY = 'bnd:data-version';
 export const GROUPS_KEY = 'mapbox:groups';
 export const GROUP_KEY = 'mapbox:group';
 export const LAYERLIST_HIDE_KEY = 'bnd:hide-layerlist';
+export const QUERYABLE_KEY = 'bnd:queryable';
 
 export const DEFAULT_ZOOM = {
   MIN: 0,

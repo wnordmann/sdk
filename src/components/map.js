@@ -69,7 +69,7 @@ import AttributionControl from 'ol/control/attribution';
 import LoadingStrategy from 'ol/loadingstrategy';
 
 import {updateLayer, setView, setRotation} from '../actions/map';
-import {INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TIME_KEY, TIME_ATTRIBUTE_KEY} from '../constants';
+import {INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TIME_KEY, TIME_ATTRIBUTE_KEY, QUERYABLE_KEY} from '../constants';
 import {dataVersionKey} from '../reducers/map';
 
 import {setMeasureFeature, clearMeasureFeature} from '../actions/drawing';
@@ -1088,7 +1088,7 @@ export class Map extends React.Component {
   handleWMSGetFeatureInfo(layer, promises, evt) {
     const map_prj = this.map.getView().getProjection();
     const map_resolution = this.map.getView().getResolution();
-    if (layer.metadata['bnd:queryable'] && (!layer.layout || (layer.layout.visibility && layer.layout.visibility !== 'none'))) {
+    if (layer.metadata[QUERYABLE_KEY] && (!layer.layout || (layer.layout.visibility && layer.layout.visibility !== 'none'))) {
       const source = this.sources[layer.source];
       if (source instanceof TileWMSSource) {
         promises.push(new Promise((resolve) => {
