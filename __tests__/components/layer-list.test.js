@@ -54,12 +54,14 @@ class TestListGroup extends React.Component {
     } else {
       text = (<b>{this.props.group.name}</b>);
     }
-    for (let i = 0, ii = this.props.layers.length; i < ii; i++) {
+    for (let i = 0, ii = this.props.childLayers.length; i < ii; i++) {
       children.push(
         <this.props.layerClass
           exclusive={this.props.group.exclusive}
           key={i}
-          layer={this.props.layers[i]}
+          groupLayers={this.props.childLayers}
+          layers={this.props.layers}
+          layer={this.props.childLayers[i]}
           groupId={this.props.groupId}
         />
       );

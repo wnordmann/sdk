@@ -41,14 +41,14 @@ export class SdkLayerListGroup extends React.Component {
 
   render() {
     const children = [];
-
-    for (let i = 0, ii = this.props.layers.length; i < ii; i++) {
+    for (let i = 0, ii = this.props.childLayers.length; i < ii; i++) {
       children.push(
         <this.props.layerClass
           exclusive={this.props.group.exclusive}
           key={i}
+          groupLayers={this.props.childLayers}
           layers={this.props.layers}
-          layer={this.props.layers[i]}
+          layer={this.props.childLayers[i]}
           groupId={this.props.groupId}
         />
       );
@@ -65,6 +65,9 @@ SdkLayerListGroup.PropTypes = {
     exclusive: PropTypes.bool,
   }).isRequired,
   layerClass: PropTypes.func.isRequired,
+  childLayers: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+  })).isRequired,
   layers: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string,
   })).isRequired,
@@ -88,7 +91,8 @@ class SdkLayerList extends React.Component {
         key={groupName}
         groupId={groupName}
         group={groups[groupName]}
-        layers={group_layers}
+        childLayers={group_layers}
+        layers={this.props.layers}
         layerClass={this.layerClass}
       />
     );

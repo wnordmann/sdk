@@ -72,6 +72,14 @@ function main() {
   // Start with a reasonable global view of hte map.
   store.dispatch(mapActions.setView([-93, 45], 2));
 
+  store.dispatch(mapActions.updateMetadata({
+    'mapbox:groups': {
+      base: {
+        name: 'Base Maps',
+      },
+    },
+  }));
+
   // add the OSM source
   store.dispatch(mapActions.addSource('osm', {
     type: 'raster',
@@ -88,6 +96,32 @@ function main() {
   store.dispatch(mapActions.addLayer({
     id: 'osm',
     source: 'osm',
+    metadata: {
+      'mapbox:group': 'base'
+    }
+  }));
+
+  // add carto source
+  store.dispatch(mapActions.addSource('cartolight', {
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+    type: 'raster',
+    tileSize: 256,
+    tiles: [
+      'http://s.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+    ],
+  }));
+
+  // add an carto light layer
+  store.dispatch(mapActions.addLayer({
+    metadata: {
+      'mapbox:group': 'base',
+      'bnd:title': 'CartoDB light',
+    },
+    layout: {
+      visibility: 'none',
+    },
+    id: 'cartolight',
+    source: 'cartolight',
   }));
 
   // 'geojson' sources allow rendering a vector layer

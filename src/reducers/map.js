@@ -16,7 +16,7 @@
  */
 
 import createFilter from '@mapbox/mapbox-gl-style-spec/feature_filter';
-import {reprojectGeoJson} from '../util';
+import {getGroup, getLayerIndexById, reprojectGeoJson} from '../util';
 import {MAP} from '../action-types';
 import {DEFAULT_ZOOM, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TITLE_KEY, DATA_VERSION_KEY, GROUP_KEY} from '../constants';
 
@@ -89,38 +89,54 @@ export function dataVersionKey(sourceName) {
  *  @returns {Object} The new state object.
  */
 function placeLayer(state, layer, targetId) {
-  let placed = false;
-  const new_layers = [];
-
-  // do some sanity checks to prevent extra work
-  //  when the targetId is not valid.
-  for (let i = 0, ii = state.layers.length; i < ii; i++) {
-    const l = state.layers[i];
-
-    // if this is the target id then
-    //  place the layer before adding the target
-    //  back into the layer stack
-    if (l.id === targetId) {
-      new_layers.push(layer);
-      placed = true;
-    }
-
-    // if the layer exists in the list,
-    //  do not add it back inline.
-    if (l.id !== layer.id) {
-      new_layers.push(l);
-    }
+  const new_layers = state.layers.slice();
+  const idx1 = getLayerIndexById(new_layers, layer.id);
+  const idx2 = getLayerIndexById(new_layers, targetId);
+  if (idx1 !== -1) {
+    new_layers.splice(idx1, 1);
   }
-
-  // whenever the targetId is not found,
-  //  add the layer to the end of the list.
-  if (!placed) {
-    new_layers.push(layer);
-  }
-
+  const newIndex = targetId ? idx2 : new_layers.length;
+  new_layers.splice(newIndex, 0, layer);
   return Object.assign({}, state, {
     layers: new_layers,
   }, incrementVersion(state.metadata, LAYER_VERSION_KEY));
+}
+
+/** Change the target for reodering of layers. This makes sure that groups
+ *  stay together in the layer stack. Layers of a group cannot move outside of
+ *  the group.
+ *  @param {Object} state Current state.
+ *  @param {Object} action Action to handle.
+ *
+ *  @returns {string|boolean} The new targetId or false if moving should be blocked.
+ */
+function changeTarget(state, action) {
+  const layerIdx = getLayerIndexById(state.layers, action.layerId);
+  const layer = state.layers[layerIdx];
+  const layerGroup = getGroup(layer);
+  const targetIdx = getLayerIndexById(state.layers, action.targetId);
+  if (layerGroup) {
+    return false;
+  }
+  let i, ii;
+  if (layerIdx < targetIdx) {
+    // move up
+    for (i = targetIdx, ii = state.layers.length; i < ii; i++) {
+      if (i === ii  - 1) {
+        return state.layers[i].id;
+      }
+      if (getGroup(state.layers[i]) === layerGroup) {
+        return state.layers[i - 1].id;
+      }
+    }
+  } else {
+    // move down
+    for (i = layerIdx - 2; i >= 0; i--) {
+      if (getGroup(state.layers[i]) !== layerGroup) {
+        return state.layers[i].id;
+      }
+    }
+  }
 }
 
 /** Change the order of the layer in the stack.
@@ -130,15 +146,26 @@ function placeLayer(state, layer, targetId) {
  *  @returns {Object} The new state.
  */
 function orderLayer(state, action) {
-  let layer = null;
-  for (let i = 0, ii = state.layers.length; i < ii && layer === null; i++) {
+  let layer = null, target = null;
+  for (let i = 0, ii = state.layers.length; i < ii && layer === null || target === null; i++) {
     if (state.layers[i].id === action.layerId) {
       layer = state.layers[i];
+    }
+    if (state.layers[i].id === action.targetId) {
+      target = state.layers[i];
     }
   }
 
   if (layer !== null) {
-    return placeLayer(state, layer, action.targetId);
+    let targetId = action.targetId;
+    let targetGroup = getGroup(target);
+    let layerGroup = getGroup(layer);
+    if (layerGroup !== targetGroup) {
+      targetId = changeTarget(state, action);
+    }
+    if (targetId !== false) {
+      return placeLayer(state, layer, targetId);
+    }
   }
   return state;
 }
