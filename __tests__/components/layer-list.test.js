@@ -237,7 +237,7 @@ describe('test the LayerList component', () => {
         'mapbox:group': 'overlays'
       }
     }));
-    store.dispatch(MapActions.updateLayer('image-test', {
+    store.dispatch(MapActions.updateLayer('html-test', {
       metadata: {
         'mapbox:group': 'overlays'
       }
@@ -284,7 +284,7 @@ describe('test the LayerList component', () => {
         'mapbox:group': 'overlays'
       }
     }));
-    store.dispatch(MapActions.updateLayer('image-test', {
+    store.dispatch(MapActions.updateLayer('html-test', {
       metadata: {
         'mapbox:group': 'overlays'
       }
@@ -315,7 +315,7 @@ describe('test the LayerList component', () => {
         'bnd:hide-layerlist': true
       }
     }));
-    store.dispatch(MapActions.updateLayer('image-test', {
+    store.dispatch(MapActions.updateLayer('html-test', {
       metadata: {
         'mapbox:group': 'overlays'
       }
