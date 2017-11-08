@@ -47,7 +47,9 @@ import TileGrid from 'ol/tilegrid';
 
 import VectorTileLayer from 'ol/layer/vectortile';
 import VectorTileSource from 'ol/source/vectortile';
+
 import MvtFormat from 'ol/format/mvt';
+import RenderFeature from 'ol/render/feature';
 
 import ImageLayer from 'ol/layer/image';
 import ImageStaticSource from 'ol/source/imagestatic';
@@ -212,12 +214,25 @@ function configureMvtSource(glSource, accessToken) {
   } else {
     urls = [url];
   }
+
+  // check to see if the url uses bounding box or Z,X,Y
+  let tile_url_fn = undefined;
+  if (url.indexOf(BBOX_STRING) !== -1) {
+    tile_url_fn = function(urlTileCoord, pixelRatio, projection) {
+      let img_src = url.slice();
+      const bbox = source.getTileGrid().getTileCoordExtent(urlTileCoord);
+      img_src = img_src.replace(BBOX_STRING, bbox.toString());
+      return img_src;
+    }
+  }
+
   const source = new VectorTileSource({
     urls,
     tileGrid: TileGrid.createXYZ({maxZoom: 22}),
     tilePixelRatio: 16,
     format: new MvtFormat(),
     crossOrigin: 'crossOrigin' in glSource ? glSource.crossOrigin : 'anonymous',
+    tileUrlFunction: tile_url_fn,
   });
 
   return source;
@@ -1140,11 +1155,20 @@ export class Map extends React.Component {
         if (features_by_layer[layer_name] === undefined) {
           features_by_layer[layer_name] = [];
         }
-        // ensure the features are in 4326 when sent back to the caller.
-        features_by_layer[layer_name].push(GEOJSON_FORMAT.writeFeatureObject(feature, {
-          featureProjection: map_prj,
-          dataProjection: 'EPSG:4326',
-        }));
+        // if the feature comes from a vector tiled source then
+        //  it does not have a complete geometry to serialize and the
+        //  geojson parser will fail.
+        if (feature instanceof RenderFeature) {
+          features_by_layer[layer_name].push({
+            properties: feature.getProperties(),
+          });
+        } else {
+          // ensure the features are in 4326 when sent back to the caller.
+          features_by_layer[layer_name].push(GEOJSON_FORMAT.writeFeatureObject(feature, {
+            featureProjection: map_prj,
+            dataProjection: 'EPSG:4326',
+          }));
+        }
       });
 
       resolve(features_by_layer);
