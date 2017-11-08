@@ -1087,6 +1087,44 @@ describe('map reducer', () => {
       layers: [],
     });
   });
+
+  it('should update a geojson source', () => {
+    const state = {
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      sources: {
+        points: {
+          type: 'geojson',
+          data: 'http://myurl?',
+        },
+      },
+      layers: [],
+    };
+    deepFreeze(state);
+
+    const action = MapActions.updateSource('points', {
+      data: 'http://myurl2?',
+    });
+
+    expect(reducer(state, action)).toEqual({
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      metadata: {
+        'bnd:data-version:points': 1,
+      },
+      sources: {
+        points: {
+          type: 'geojson',
+          data: 'http://myurl2?',
+        },
+      },
+      layers: [],
+    });
+  });
 });
 
 describe('map reducer - placing layers', () => {
