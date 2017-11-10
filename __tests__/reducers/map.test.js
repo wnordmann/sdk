@@ -1186,3 +1186,131 @@ describe('map reducer - placing layers', () => {
     runOrderTest('layer_d', 'layer_b', [layer_a, layer_d, layer_b, layer_c]);
   });
 });
+
+describe('map reducer - placing layers with groups', () => {
+  // setup 5 "dummy" layers
+  const metadata = {};
+  metadata['mapbox:group'] = 'foo';
+  const layer_a = {id: 'layer_a', source: 'dummy', metadata};
+  const layer_b = {id: 'layer_b', source: 'dummy', metadata};
+  const layer_c = {id: 'layer_c', source: 'dummy'};
+  const layer_d = {id: 'layer_d', source: 'dummy'};
+  const layer_e = {id: 'layer_e', source: 'dummy'};
+
+  // ensure the layers themselves are never changed.
+  deepFreeze(layer_a);
+  deepFreeze(layer_b);
+  deepFreeze(layer_c);
+  deepFreeze(layer_d);
+  deepFreeze(layer_e);
+
+  let state = null;
+
+  // reset the state each time.
+  beforeEach(() => {
+    state = {
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      sources: {
+        dummy: { },
+      },
+      layers: [layer_a, layer_b, layer_c, layer_d, layer_e],
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 0,
+      },
+    };
+    deepFreeze(state);
+  });
+
+  // This is a meta function for the various order tests.
+  function runOrderTest(layerId, targetId, expectedOrder, layerVersion) {
+    const new_state = reducer(state, MapActions.orderLayer(layerId, targetId));
+    const expected_state = Object.assign({}, state, {
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': layerVersion !== undefined ? layerVersion : 1,
+      },
+      layers: expectedOrder,
+    });
+    expect(new_state).toEqual(expected_state);
+  }
+
+  it('moves layer_c one down', () => {
+    runOrderTest('layer_c', 'layer_b', [layer_c, layer_a, layer_b, layer_d, layer_e]);
+  });
+
+  it('prevents layer_a from moving out of the group', () => {
+    runOrderTest('layer_a', 'layer_c', [layer_a, layer_b, layer_c, layer_d, layer_e], 0);
+  });
+
+  it('allows layer_a to move inside of the group', () => {
+    runOrderTest('layer_a', 'layer_b', [layer_b, layer_a, layer_c, layer_d, layer_e]);
+  });
+});
+
+describe('map reducer - placing layers with groups (reverse sequence)', () => {
+  // setup 5 "dummy" layers
+  const metadata = {};
+  metadata['mapbox:group'] = 'foo';
+  const layer_a = {id: 'layer_a', source: 'dummy', metadata};
+  const layer_b = {id: 'layer_b', source: 'dummy', metadata};
+  const layer_c = {id: 'layer_c', source: 'dummy'};
+  const layer_d = {id: 'layer_d', source: 'dummy'};
+  const layer_e = {id: 'layer_e', source: 'dummy'};
+
+  // ensure the layers themselves are never changed.
+  deepFreeze(layer_a);
+  deepFreeze(layer_b);
+  deepFreeze(layer_c);
+  deepFreeze(layer_d);
+  deepFreeze(layer_e);
+
+  let state = null;
+
+  // reset the state each time.
+  beforeEach(() => {
+    state = {
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      sources: {
+        dummy: { },
+      },
+      layers: [layer_e, layer_d, layer_c, layer_b, layer_a],
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 0,
+      },
+    };
+    deepFreeze(state);
+  });
+
+  // This is a meta function for the various order tests.
+  function runOrderTest(layerId, targetId, expectedOrder, layerVersion) {
+    const new_state = reducer(state, MapActions.orderLayer(layerId, targetId));
+    const expected_state = Object.assign({}, state, {
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': layerVersion !== undefined ? layerVersion : 1,
+      },
+      layers: expectedOrder,
+    });
+    expect(new_state).toEqual(expected_state);
+  }
+
+  it('moves layer_c one up', () => {
+    runOrderTest('layer_c', 'layer_b', [layer_e, layer_d, layer_b, layer_a, layer_c]);
+  });
+
+  it('prevents layer_a from moving out of the group', () => {
+    runOrderTest('layer_a', 'layer_c', [layer_e, layer_d, layer_c, layer_b, layer_a], 0);
+  });
+
+  it('allows layer_a to move inside of the group', () => {
+    runOrderTest('layer_a', 'layer_b', [layer_e, layer_d, layer_c, layer_a, layer_b]);
+  });
+});

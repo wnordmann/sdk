@@ -147,7 +147,7 @@ function changeTarget(state, action) {
  */
 function orderLayer(state, action) {
   let layer = null, target = null;
-  for (let i = 0, ii = state.layers.length; i < ii && layer === null || target === null; i++) {
+  for (let i = 0, ii = state.layers.length; i < ii; i++) {
     if (state.layers[i].id === action.layerId) {
       layer = state.layers[i];
     }
