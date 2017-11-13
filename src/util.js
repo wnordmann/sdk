@@ -11,7 +11,7 @@
  * under the License.
  */
 
-import {TITLE_KEY} from './constants';
+import {GROUP_KEY, TITLE_KEY} from './constants';
 import GeoJsonFormat from 'ol/format/geojson';
 /** @module util
  * @desc functions for Boundless SDK.
@@ -46,6 +46,20 @@ export function getLayerById(layers, id) {
     }
   }
   return null;
+}
+
+/** Get the group from the layer or null if it doesn't exist.
+ *
+ * @param {Object} layer The layer.
+ *
+ * @returns {string|null} The group.
+ */
+export function getGroup(layer) {
+  let layerGroup = null;
+  if (layer && layer.metadata && layer.metadata[GROUP_KEY]) {
+    layerGroup = layer.metadata[GROUP_KEY];
+  }
+  return layerGroup;
 }
 
 /** Parses an arbitrary string as if it were a URL.
