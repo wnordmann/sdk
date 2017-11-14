@@ -2,6 +2,8 @@
 
 ### Next Release
 
+### v2.2.0
+
 #### ol package
 The version of the ```ol``` package was updated to 4.4.2.
 

@@ -1,7 +1,7 @@
 /* global it, describe, expect */
 
 import * as util from '../../src/util';
-import {TITLE_KEY} from '../../src/constants';
+import {GROUP_KEY, TITLE_KEY} from '../../src/constants';
 
 describe('util', () => {
   it('gets layer by id', () => {
@@ -13,6 +13,28 @@ describe('util', () => {
   it('gets the layer title if no title metadata', () => {
     const layer = {id: 'osm'};
     expect(util.getLayerTitle(layer)).toEqual('osm');
+  });
+
+  it('gets the layer group', () => {
+    const metadata = {};
+    metadata[GROUP_KEY] = 'overlays';
+    const layer = {id: 'osm', metadata: metadata};
+    expect(util.getGroup(layer)).toEqual('overlays');
+  });
+
+  it('gets null for the layer group if no mapbox:group', () => {
+    const metadata = {};
+    const layer = {id: 'osm', metadata: metadata};
+    expect(util.getGroup(layer)).toEqual(null);
+  });
+
+  it('gets null for the layer group if no layer', () => {
+    expect(util.getGroup()).toEqual(null);
+  });
+
+  it('gets null for the layer group if no metadata', () => {
+    const layer = {id: 'osm'};
+    expect(util.getGroup(layer)).toEqual(null);
   });
 
   it('gets the layer title from metadata', () => {

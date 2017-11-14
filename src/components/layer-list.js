@@ -41,13 +41,14 @@ export class SdkLayerListGroup extends React.Component {
 
   render() {
     const children = [];
-
-    for (let i = 0, ii = this.props.layers.length; i < ii; i++) {
+    for (let i = 0, ii = this.props.childLayers.length; i < ii; i++) {
       children.push(
         <this.props.layerClass
           exclusive={this.props.group.exclusive}
           key={i}
-          layer={this.props.layers[i]}
+          groupLayers={this.props.childLayers}
+          layers={this.props.layers}
+          layer={this.props.childLayers[i]}
           groupId={this.props.groupId}
         />
       );
@@ -64,6 +65,9 @@ SdkLayerListGroup.PropTypes = {
     exclusive: PropTypes.bool,
   }).isRequired,
   layerClass: PropTypes.func.isRequired,
+  childLayers: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+  })).isRequired,
   layers: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string,
   })).isRequired,
@@ -81,6 +85,28 @@ class SdkLayerList extends React.Component {
     this.layerClass = connect()(this.props.layerClass);
   }
 
+  addGroup(layers, groupName, groups, group_layers) {
+    layers.unshift(
+      <this.groupClass
+        key={groupName}
+        groupId={groupName}
+        group={groups[groupName]}
+        childLayers={group_layers}
+        layers={this.props.layers}
+        layerClass={this.layerClass}
+      />
+    );
+  }
+
+  handlePendingGroup(layers, group_layers, groupName, groups) {
+    if (group_layers && group_layers.length) {
+      this.addGroup(layers, groupName, groups, group_layers);
+      // reset group_layers
+      group_layers = [];
+    }
+    return group_layers;
+  }
+
   render() {
     let className = 'sdk-layer-list';
     if (this.props.className) {
@@ -94,15 +120,7 @@ class SdkLayerList extends React.Component {
       if (item.metadata && item.metadata[GROUP_KEY]) {
         if (groupName !== item.metadata[GROUP_KEY]) {
           if (group_layers && group_layers.length > 0) {
-            layers.unshift(
-              <this.groupClass
-                key={groupName}
-                groupId={groupName}
-                group={groups[groupName]}
-                layers={group_layers}
-                layerClass={this.layerClass}
-              />
-            );
+            this.addGroup(layers, groupName, groups, group_layers);
           }
           group_layers = [];
         }
@@ -111,20 +129,11 @@ class SdkLayerList extends React.Component {
           group_layers.unshift(item);
         }
       } else if (!item.metadata || item.metadata[LAYERLIST_HIDE_KEY] !== true) {
+        group_layers = this.handlePendingGroup(layers, group_layers, groupName, groups);
         layers.unshift(<this.layerClass key={i} layers={this.props.layers} layer={item} />);
       }
     }
-    if (group_layers && group_layers.length) {
-      layers.unshift(
-        <this.groupClass
-          key={groupName}
-          groupId={groupName}
-          group={groups[groupName]}
-          layers={group_layers}
-          layerClass={this.layerClass}
-        />
-      );
-    }
+    group_layers = this.handlePendingGroup(layers, group_layers, groupName, groups);
     return (
       <this.props.listClass style={this.props.style} className={className}>
         { layers }

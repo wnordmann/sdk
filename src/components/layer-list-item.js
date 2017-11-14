@@ -15,7 +15,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import {getLayerIndexById, isLayerVisible, getLayerTitle} from '../util';
-
 import * as mapActions from '../actions/map';
 
 /** @module components/layer-list-item
@@ -30,7 +29,7 @@ class SdkLayerListItem extends React.Component {
     const layer_id = this.props.layer.id;
     const index = getLayerIndexById(this.props.layers, layer_id);
     if (index < this.props.layers.length - 1) {
-      this.moveLayer(this.props.layers[index + 1].id, layer_id);
+      this.moveLayer(layer_id, this.props.layers[index + 1].id);
     }
   }
   moveLayerDown() {
@@ -90,6 +89,18 @@ class SdkLayerListItem extends React.Component {
 }
 
 SdkLayerListItem.propTypes = {
+  /**
+   * Set of layers which belong to the same group
+   */
+  groupLayers: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+  })),
+  /**
+   * Set of all layers in the map.
+   */
+  layers: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+  })).isRequired,
   /**
    * Does this layer belong to an exclusive group? If so render as a radio button group.
    */
