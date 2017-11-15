@@ -169,6 +169,92 @@ function orderLayer(state, action) {
   return state;
 }
 
+/** Move a group relative to another group.
+ *
+ *  @param {Object} state Current state.
+ *  @param {Object} action Action to handle.
+ *
+ *  @returns {Object} The new state.
+ */
+function moveGroup(state, action) {
+  const place_at = getLayerIndexById(state.layers, action.placeAt);
+  const n_layers = state.layers.length;
+
+  // sanity check the new index.
+  if (place_at < 0 || place_at > n_layers) {
+    return state;
+  }
+
+  // find the starting and ending points of the group
+  let group_start = null;
+  let group_end = null;
+  for (let i = 0, ii = n_layers; i < ii; i++) {
+    const group = getGroup(state.layers[i]);
+    if (group === action.group) {
+      if (group_start === null || i < group_start) {
+        group_start = i;
+      }
+      if (group_end === null || i > group_end) {
+        group_end = i;
+      }
+    }
+  }
+
+
+  // get the real index of the next spot for the group,
+  // if the placeAt index is mid group then place_at should
+  // be the index of the FIRST member of that group.
+  let place_start = place_at;
+  const place_group = getGroup(state.layers[place_at]);
+  const place_ahead = (place_at > group_start);
+
+  // when placing a group before or after another group
+  // the bounds of the target group needs to be found and the
+  // appropriate index chosen based on the direction of placement.
+  if (place_group) {
+    let new_place = -1;
+    if (place_ahead) {
+      for (let i = n_layers - 1; i >= 0 && new_place < 0; i--) {
+        if (getGroup(state.layers[i]) === place_group) {
+          new_place = i;
+        }
+      }
+    } else {
+      for (let i = 0, ii = n_layers; i < ii && new_place < 0; i++) {
+        if (getGroup(state.layers[i]) === place_group) {
+          new_place = i;
+        }
+      }
+    }
+    place_start = new_place;
+  }
+
+  // build a new array for the layers.
+  let new_layers = [];
+
+  // have the group layers ready to concat.
+  const group_layers = state.layers.slice(group_start, group_end + 1);
+
+  for (let i = 0, ii = n_layers; i < ii; i++) {
+    const layer = state.layers[i];
+    const in_group = (getGroup(layer) === action.group);
+
+    if (place_ahead && !in_group) {
+      new_layers.push(layer);
+    }
+    if (i === place_start) {
+      new_layers = new_layers.concat(group_layers);
+    }
+    if (!place_ahead && !in_group) {
+      new_layers.push(layer);
+    }
+  }
+
+  return Object.assign({}, state, {
+    layers: new_layers,
+  }, incrementVersion(state.metadata, LAYER_VERSION_KEY));
+}
+
 /** Add a layer to the state.
  *  @param {Object} state Current state.
  *  @param {Object} action Action to handle.
@@ -614,6 +700,8 @@ export default function MapReducer(state = defaultState, action) {
       return updateMetadata(state, action);
     case MAP.UPDATE_SOURCE:
       return updateSource(state, action);
+    case MAP.MOVE_GROUP:
+      return moveGroup(state, action);
     default:
       return state;
   }

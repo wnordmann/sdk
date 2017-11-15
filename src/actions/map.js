@@ -415,3 +415,18 @@ export function setMapTime(time) {
   metadata[TIME_KEY] = time;
   return updateMetadata(metadata);
 }
+
+/** Create an action for moving a group
+ *
+ *  @param {string} group Group name.
+ *  @param {string} layerId Layer id of the new place for the layer.
+ *
+ *  @returns {object} An action object.
+ */
+export function moveGroup(group, layerId) {
+  return {
+    type: MAP.MOVE_GROUP,
+    placeAt: layerId,
+    group,
+  };
+}
