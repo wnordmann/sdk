@@ -76,6 +76,7 @@
   "dependencies": {
     "@mapbox/mapbox-gl-style-spec": "^9.0.0",
     "isomorphic-fetch": "^2.2.1",
+    "jest-cli": "^21.2.1",
     "ol-mapbox-style": "^2.6.1",
     "prop-types": "^15.5.10",
     "react-dnd": "^2.5.4",

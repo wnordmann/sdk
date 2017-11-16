@@ -19,6 +19,7 @@ import fetch from 'isomorphic-fetch';
 
 import {MAP} from '../action-types';
 import {TITLE_KEY, TIME_KEY} from '../constants';
+import {encodeQueryObject} from '../util';
 
 const sourceTypes = [
   'vector',
@@ -429,4 +430,106 @@ export function moveGroup(group, layerId) {
     placeAt: layerId,
     group,
   };
+}
+
+/** Add a WMS source.
+ *
+ * @param {string} sourceId - new ID for the source.
+ * @param {string} serverUrl - URL for the service.
+ * @param {string} layerName - WFS feature type.
+ * @param {Object} options - Optional settings. Honors: accessToken, projection, asVector, tileSize
+ *
+ * @returns {Object} Action to create a new source.
+ */
+export function addWmsSource(sourceId, serverUrl, layerName, options = {}) {
+  const tile_size = options.tileSize ? options.tileSize : 256;
+  const projection = options.projection ? options.projection : 'EPSG:3857';
+  // default behaviour is vector
+  const format = (options.asVector !== false) ? 'application/x-protobuf;type=mapbox-vector' : 'image/png';
+
+  const params = {
+    'SERVICE': 'WMS',
+    'VERSION': '1.3.0',
+    'REQUEST': 'GetMap',
+    'FORMAT': format,
+    'TRANSPARENT': 'TRUE',
+    'LAYERS': layerName,
+    'WIDTH': tile_size,
+    'HEIGHT': tile_size,
+    'CRS': projection,
+  };
+
+  if (options.accessToken) {
+    params['ACCESS_TOKEN'] = options.accessToken;
+  }
+
+  // the BBOX is not escaped because the "{" and "}" are used for string
+  // substitution in the library.
+  const url_template = `${serverUrl}?${encodeQueryObject(params)}&BBOX={bbox-epsg-3857}`;
+
+  if (options.asVector !== false) {
+    return addSource(sourceId, {
+      type: 'vector',
+      url: url_template,
+    });
+  } else {
+    return addSource(sourceId, {
+      type: 'raster',
+      tileSize: tile_size,
+      tiles: [
+        url_template,
+      ],
+    });
+  }
+}
+
+/** Add a WFS / GeoJSON source.
+ *
+ * @param {string} sourceId - new ID for the source.
+ * @param {string} serverUrl - URL for the service.
+ * @param {string} featureType - WFS feature type.
+ * @param {Object} options - Optional settings. Honors: accessToken
+ *
+ * @returns {Object} Action to create a new source.
+ */
+export function addWfsSource(sourceId, serverUrl, featureType, options = {}) {
+  const params = {
+    'SERVICE': 'WFS',
+    'VERSION': '1.1.0',
+    // projection is always fixed for WFS sources as they
+    // are reprojected on the client.
+    'SRSNAME': 'EPSG:4326',
+    'REQUEST': 'GetFeature',
+    'TYPENAME': featureType,
+    'OUTPUTFORMAT': 'JSON',
+  };
+
+  if (options.accessToken) {
+    params['ACCESS_TOKEN'] = options.accessToken;
+  }
+
+  return addSource(sourceId, {
+    type: 'geojson',
+    data: `${serverUrl}?${encodeQueryObject(params)}`
+  });
+}
+
+/** Add a Mapbox Vector Tile layer from a TMS service.
+ *
+ * @param {string} sourceId - new ID for the source.
+ * @param {string} serverUrl - URL for the service.
+ * @param {string} layerName - Name of the layer.
+ * @param {Object} options - Optional settings. Honors: accessToken
+ *
+ * @returns {Object} Action to create a new source.
+ */
+export function addTmsSource(sourceId, serverUrl, layerName, options = {}) {
+  const token_string = options.accessToken ? `access_token=${options.accessToken}` : '';
+
+  const url = `${serverUrl}/gwc/service/tms/1.0.0/${layerName}@EPSG%3A3857@pbf/{z}/{x}/{-y}.pbf?${token_string}`;
+
+  return addSource(sourceId, {
+    type: 'vector',
+    url,
+  });
 }
