@@ -77,6 +77,7 @@ function main() {
       'circle-radius': 5,
       'circle-color': '#756bb1',
       'circle-stroke-color': '#756bb1',
+      'circle-stroke-width': 1,
     },
   }));
 
@@ -120,6 +121,7 @@ function main() {
       'circle-radius': radius,
       'circle-color': type === 'fill' ? color : fill,
       'circle-stroke-color': type === 'stroke' ? color : stroke,
+      'circle-stroke-width': 1,
     };
     store.dispatch(mapActions.updateLayer('random-points', {
       paint,
@@ -178,6 +180,7 @@ function main() {
       'circle-radius': size,
       'circle-color': fill,
       'circle-stroke-color': stroke,
+      'circle-stroke-width': 1,
     };
     store.dispatch(mapActions.updateLayer('random-points', {
       paint,
