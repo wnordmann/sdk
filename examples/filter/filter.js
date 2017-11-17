@@ -82,8 +82,7 @@ class FilterComponent extends React.PureComponent {
 
   // Action on reset
   reset() {
-    const filter = null;
-    this.props.updateLayer(this.props.source, {filter});
+    this.props.clearLayerFilter(this.props.source);
   }
 
   // Get list of keys
@@ -158,7 +157,10 @@ function mapDispatchToProps(dispatch) {
   return {
     updateLayer: (sourceName, filter) => {
       dispatch(mapActions.updateLayer(sourceName, filter));
-    }
+    },
+    clearLayerFilter: (sourceName) => {
+      dispatch(mapActions.clearLayerFilter(sourceName));
+    },
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(FilterComponent);

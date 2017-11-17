@@ -500,6 +500,12 @@ export class Map extends React.Component {
     this.configureMap();
   }
 
+  componentWillUnmount() {
+    if (this.map) {
+      this.map.setTarget(null);
+    }
+  }
+
   /** This will check nextProps and nextState to see
    *  what needs to be updated on the map.
    * @param {Object} nextProps The next properties of this component.

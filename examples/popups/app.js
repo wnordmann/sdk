@@ -13,7 +13,7 @@ import ReactDOM from 'react-dom';
 
 import {Provider} from 'react-redux';
 
-import SdkMap from '@boundlessgeo/sdk/components/map';
+import RendererSwitch from '../rendererswitch';
 import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
 import SdkPopup from '@boundlessgeo/sdk/components/map/popup';
@@ -35,7 +35,12 @@ applyMiddleware(thunkMiddleware));
  */
 class MarkFeaturesPopup extends SdkPopup {
 
-  markFeatures() {
+  constructor(props) {
+    super(props);
+    this.markFeatures = this.markFeatures.bind(this);
+  }
+
+  markFeatures(evt) {
     const feature_ids = [];
     const features = this.props.features;
 
@@ -51,7 +56,7 @@ class MarkFeaturesPopup extends SdkPopup {
     // add the new freshly marked features.
     store.dispatch(mapActions.addFeatures('points', features));
     // close this popup.
-    this.close();
+    this.close(evt);
   }
 
   render() {
@@ -68,8 +73,10 @@ class MarkFeaturesPopup extends SdkPopup {
           Feature ID(s):<br />
           <code>{ feature_ids.join(', ') }</code>
           <br />
-          <button className="sdk-btn" onClick={() => {
-            this.markFeatures();
+          <button className="sdk-btn" ref={(c) => {
+            if (c) {
+              c.addEventListener('click', this.markFeatures);
+            }
           }}>
             Mark this feature
           </button>
@@ -183,7 +190,7 @@ function main() {
 
   ReactDOM.render((
     <Provider store={store}>
-      <SdkMap
+      <RendererSwitch
         style={{position: 'relative'}}
         initialPopups={[<NullIslandPopup coordinate={[0, 0]} closeable={false} />]}
         includeFeaturesOnClick
@@ -214,7 +221,7 @@ function main() {
         }}
       >
         <SdkZoomControl style={{position: 'absolute', top: 20, left: 20}} />
-      </SdkMap>
+      </RendererSwitch>
     </Provider>
   ), document.getElementById('map'));
 }

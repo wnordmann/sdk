@@ -10,7 +10,7 @@ import ReactDOM from 'react-dom';
 
 import {Provider} from 'react-redux';
 
-import SdkMap from '@boundlessgeo/sdk/components/map';
+import RendererSwitch from '../rendererswitch';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
 import SdkDrawingReducer from '@boundlessgeo/sdk/reducers/drawing';
 import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
@@ -178,14 +178,14 @@ function main() {
 
   // place the map on the page.
   ReactDOM.render(<Provider store={store}>
-    <SdkMap
+    <RendererSwitch
       style={{position: 'relative'}}
       onFeatureDrawn={addFeature}
       onFeatureModified={modifyFeature}
       onFeatureSelected={selectFeature}
     >
       <SdkZoomControl style={{position: 'absolute', top: 20, left: 20}}/>
-    </SdkMap>
+    </RendererSwitch>
   </Provider>, document.getElementById('map'));
 
   let drawing_tool = null;

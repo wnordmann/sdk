@@ -21,13 +21,16 @@ import PropTypes from 'prop-types';
 class Popup extends React.PureComponent {
   constructor(props) {
     super(props);
-
+    this.close = this.close.bind(this);
     this.state = {
       closed: false,
     };
   }
 
-  close() {
+  close(evt) {
+    if (evt) {
+      evt.stopPropagation();
+    }
     this.setState({closed: true});
     this.setState({closed: true}, () => {
       if (this.map) {
@@ -46,7 +49,12 @@ class Popup extends React.PureComponent {
     if (this.props.closeable) {
       close_btn = (<i tabIndex={0} role="link" onClick={() => {
         this.close();
-      }} className="sdk-popup-closer fa fa-times" />);
+      }} ref={(c) => {
+        if (c) {
+          c.addEventListener('click', this.close);
+        }
+      }
+      } className="sdk-popup-closer fa fa-times" />);
     }
     if (this.state.closed) {
       return false;
