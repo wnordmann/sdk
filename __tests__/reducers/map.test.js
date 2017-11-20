@@ -61,7 +61,6 @@ describe('map reducer', () => {
           metadata: {
             'bnd:title': title,
           },
-          filter: null,
         },
       ],
     });

@@ -265,7 +265,6 @@ function addLayer(state, action) {
   // TODO: Maybe decide on what a "default case" is in
   //       order to support easier dev.
   const new_layer = Object.assign({
-    filter: null,
     paint: {},
     metadata: {},
   }, action.layerDef);
