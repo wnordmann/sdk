@@ -218,3 +218,20 @@ export function getLayerTitle(layer) {
   }
   return layer.id;
 }
+
+/** Get a list of layers based on the group
+ *
+ *  @param {Array} layers The list of layers.
+ *  @param {string} groupId the group ID
+ *
+ * @return {Array} of matching layers.
+ */
+export function getLayersByGroup(layers, groupId) {
+  const group_layers = [];
+  for (let i = 0, ii = layers.length; i < ii; i++) {
+    if (getGroup(layers[i]) === groupId) {
+      group_layers.push(layers[i]);
+    }
+  }
+  return group_layers;
+}

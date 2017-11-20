@@ -46,11 +46,13 @@ export const layerListItemTarget = {
 export function collect(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
+    connectDragPreview: connect.dragPreview(),
   };
 }
 
 export function collectDrop(connect, monitor) {
   return {
+    isOver: monitor.isOver({shallow: true}),
     connectDropTarget: connect.dropTarget()
   };
 }

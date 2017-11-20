@@ -182,17 +182,35 @@ describe('util', () => {
     expect(util.reprojectGeoJson(geoJson3857, 'EPSG:4326')).toEqual(features4326);
   });
 
-  it('tests find a layer in a list by id', () => {
-    const layers = [{
+  function getSampleLayers() {
+    return [{
       id: 'A',
+      metadata: {
+        'mapbox:group': 'grp',
+      },
     }, {
       id: 'B',
+      metadata: {
+        'mapbox:group': 'grp',
+      },
     }, {
       id: 'C',
     }];
+  }
+
+  it('tests find a layer in a list by id', () => {
+    const layers = getSampleLayers();
 
     expect(util.getLayerIndexById(layers, 'A')).toBe(0);
 
     expect(util.getLayerIndexById(layers, 'D')).toBe(-1);
+  });
+
+  it('gets a set of layers by group id', () => {
+    const layers = getSampleLayers();
+    const matches = util.getLayersByGroup(layers, 'grp');
+
+    // check to see the first two layers were found.
+    expect(matches).toEqual(layers.slice(0, 2));
   });
 });
