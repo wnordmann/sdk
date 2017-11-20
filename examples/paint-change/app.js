@@ -45,6 +45,7 @@ function main() {
   store.dispatch(mapActions.addLayer({
     id: 'osm',
     source: 'osm',
+    type: 'raster',
   }));
 
   // 'geojson' sources allow rendering a vector layer
@@ -53,16 +54,6 @@ function main() {
   store.dispatch(mapActions.addSource('points', {
     type: 'geojson',
     data: {},
-  }));
-
-  // Background layers change the background color of
-  // the map. They are not attached to a source.
-  store.dispatch(mapActions.addLayer({
-    id: 'background',
-    type: 'background',
-    paint: {
-      'background-color': '#eee',
-    },
   }));
 
   // The points source has both null island

@@ -74,22 +74,12 @@ function main() {
     geometryName: 'geom',
   }));
 
-  // Background layers change the background color of
-  // the map. They are not attached to a source.
-  store.dispatch(SdkMapActions.addLayer({
-    id: 'background',
-    type: 'background',
-    paint: {
-      'background-color': '#eee',
-    },
-  }));
-
-
   // and an OSM layer.
   // Raster layers need not have any paint styles.
   store.dispatch(SdkMapActions.addLayer({
     id: 'osm',
     source: 'osm',
+    type: 'raster',
   }));
 
   const colors = ['#fef0d9', '#fdcc8a', '#fc8d59', '#e34a33', '#b30000'];

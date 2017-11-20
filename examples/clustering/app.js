@@ -47,6 +47,7 @@ function main() {
   store.dispatch(mapActions.addLayer({
     id: 'osm',
     source: 'osm',
+    type: 'raster',
   }));
 
   // 'geojson' sources allow rendering a vector layer
@@ -87,9 +88,10 @@ function main() {
   store.dispatch(mapActions.addLayer({
     id: 'clustered-labels',
     source: 'points',
+    type: 'symbol',
     layout: {
       'text-field': '{point_count}',
-      'text-font': ['Arial'],
+      'text-font': ['Open Sans Regular'],
       'text-size': 10,
     },
     filter: ['has', 'point_count'],

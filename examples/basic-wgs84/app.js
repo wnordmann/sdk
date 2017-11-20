@@ -52,6 +52,7 @@ function main() {
   store.dispatch(mapActions.addLayer({
     id: 'esri',
     source: 'esri',
+    type: 'raster',
   }));
 
   // 'geojson' sources allow rendering a vector layer
@@ -68,16 +69,6 @@ function main() {
       properties: {
         title: 'Null Island',
       },
-    },
-  }));
-
-  // Background layers change the background color of
-  // the map. They are not attached to a source.
-  store.dispatch(mapActions.addLayer({
-    id: 'background',
-    type: 'background',
-    paint: {
-      'background-color': '#eee',
     },
   }));
 
@@ -101,6 +92,7 @@ function main() {
   store.dispatch(mapActions.addLayer({
     id: 'random-points',
     source: 'points',
+    type: 'circle',
     paint: {
       'circle-radius': 5,
       'circle-color': '#756bb1',

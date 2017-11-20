@@ -46,15 +46,7 @@ function main() {
   store.dispatch(mapActions.addLayer({
     id: 'osm',
     source: 'osm',
-  }));
-
-  // set the background color.
-  store.dispatch(mapActions.addLayer({
-    id: 'background',
-    type: 'background',
-    paint: {
-      'background-color': '#eee',
-    },
+    type: 'raster',
   }));
 
   // retrieve GetCapabilities and give user ability to add a layer.
@@ -78,6 +70,7 @@ function main() {
               tiles: [getMapUrl],
             }));
             store.dispatch(mapActions.addLayer({
+              type: 'raster',
               metadata: {
                 'bnd:title': layer.Title,
                 'bnd:queryable': layer.queryable,

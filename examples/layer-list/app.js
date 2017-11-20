@@ -83,6 +83,19 @@ function main() {
     },
   }));
 
+  // Background layers change the background color of
+  // the map. They are not attached to a source.
+  store.dispatch(mapActions.addLayer({
+    id: 'background',
+    type: 'background',
+    paint: {
+      'background-color': '#eee',
+    },
+    metadata: {
+      'bnd:hide-layerlist': true,
+    },
+  }));
+
   // add the OSM source
   store.dispatch(mapActions.addSource('osm', {
     type: 'raster',
@@ -99,6 +112,7 @@ function main() {
   store.dispatch(mapActions.addLayer({
     id: 'osm',
     source: 'osm',
+    type: 'raster',
     metadata: {
       'mapbox:group': 'base'
     }
@@ -120,6 +134,7 @@ function main() {
       'mapbox:group': 'base',
       'bnd:title': 'CartoDB light',
     },
+    type: 'raster',
     layout: {
       visibility: 'none',
     },
@@ -209,6 +224,7 @@ function main() {
   store.dispatch(mapActions.addLayer({
     id: 'states',
     source: 'states',
+    type: 'raster',
   }));
 
   // place the map on the page.

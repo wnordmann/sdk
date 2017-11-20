@@ -48,6 +48,7 @@ function main() {
   store.dispatch(mapActions.addLayer({
     id: 'osm',
     source: 'osm',
+    type: 'raster',
     metadata: {
       'bnd:legend-type': 'href',
       'bnd:legend-content': './osm-legend.html',
@@ -89,6 +90,7 @@ function main() {
   // some purple points!
   store.dispatch(mapActions.addLayer({
     id: 'random-points',
+    type: 'circle',
     source: 'points',
     paint: {
       'circle-radius': 5,
@@ -123,11 +125,12 @@ function main() {
   store.dispatch(mapActions.addSource('states', {
     type: 'raster',
     tileSize: 256,
-    tiles: ['https://ahocevar.com/geoserver/gwc/service/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image/png&SRS=EPSG:900913&LAYERS=topp:states&STYLES=&WIDTH=256&HEIGHT=256&BBOX={bbox-epsg-3857}'],
+    tiles: ['https://demo.boundlessgeo.com/geoserver/wms?SERVICE=WMS&VERSION=1.1.1&TILED=TRUE&REQUEST=GetMap&FORMAT=image/png&SRS=EPSG:900913&LAYERS=topp:states&STYLES=&WIDTH=256&HEIGHT=256&BBOX={bbox-epsg-3857}'],
   }));
 
   store.dispatch(mapActions.addLayer({
     id: 'states',
+    type: 'raster',
     source: 'states',
   }));
 
