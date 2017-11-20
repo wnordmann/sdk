@@ -58,6 +58,7 @@ function main() {
         }));
         store.dispatch(mapActions.addLayer({
           id: sourceName,
+          type: 'circle',
           source: sourceName,
           paint: {
             'circle-radius': 5,

@@ -141,6 +141,7 @@ function main() {
   store.dispatch(mapActions.addLayer({
     id: 'osm',
     source: 'osm',
+    type: 'raster',
   }));
 
   // Add a geojson source to the map.

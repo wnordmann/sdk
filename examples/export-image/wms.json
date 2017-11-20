@@ -1,8 +1,8 @@
 {
   "version": 8,
-  "name": "bookmarks",
-  "center":[2.336734,48.885318],
-  "zoom": 18,
+  "name": "states-wms",
+  "center": [-98.78906130124426, 37.92686191312036],
+  "zoom": 4,
   "sources": {
     "osm": {
       "type": "raster",
@@ -13,6 +13,11 @@
         "https://b.tile.openstreetmap.org/{z}/{x}/{y}.png",
         "https://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
       ]
+    },
+    "states": {
+      "type": "raster",
+      "tileSize": 256,
+      "tiles": ["https://demo.boundlessgeo.com/geoserver/usa/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image/png&SRS=EPSG:900913&LAYERS=topp:states&STYLES=&WIDTH=256&HEIGHT=256&BBOX={bbox-epsg-3857}"]
     }
   },
   "layers": [
@@ -25,9 +30,13 @@
     },
     {
       "id": "osm",
-      "type": "raster",
-      "source": "osm"
+      "source": "osm",
+      "type": "raster"
+    },
+    {
+      "id": "states-wms",
+      "source": "states",
+      "type": "raster"
     }
-  ],
-  "bearing": 0
+  ]
 }

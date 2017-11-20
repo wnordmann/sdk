@@ -99,6 +99,7 @@ function main() {
   store.dispatch(mapActions.addLayer({
     id: 'osm',
     source: 'osm',
+    type: 'raster',
     metadata: {
       'mapbox:group': 'base'
     }
@@ -120,6 +121,7 @@ function main() {
       'mapbox:group': 'base',
       'bnd:title': 'CartoDB light',
     },
+    type: 'raster',
     layout: {
       visibility: 'none',
     },
@@ -209,6 +211,7 @@ function main() {
   store.dispatch(mapActions.addLayer({
     id: 'states',
     source: 'states',
+    type: 'raster',
   }));
 
   // place the map on the page.
