@@ -46,16 +46,6 @@ function main() {
     type: 'raster',
   }));
 
-  // Background layers change the background color of
-  // the map. They are not attached to a source.
-  store.dispatch(mapActions.addLayer({
-    id: 'background',
-    type: 'background',
-    paint: {
-      'background-color': '#eee',
-    },
-  }));
-
   const rotate = (dir) => {
     const bearing = store.getState().map.bearing;
     let calc;

@@ -49,15 +49,6 @@ function main() {
     type: 'raster',
   }));
 
-  // set the background color.
-  store.dispatch(mapActions.addLayer({
-    id: 'background',
-    type: 'background',
-    paint: {
-      'background-color': '#eee',
-    },
-  }));
-
   // retrieve GetCapabilities and give user ability to add a layer.
   const addWMS = () => {
     // this requires CORS headers on the geoserver instance.
