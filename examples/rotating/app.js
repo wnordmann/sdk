@@ -43,6 +43,7 @@ function main() {
   store.dispatch(mapActions.addLayer({
     id: 'osm',
     source: 'osm',
+    type: 'raster',
   }));
 
   // Background layers change the background color of

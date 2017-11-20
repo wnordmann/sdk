@@ -53,6 +53,7 @@ function main() {
   store.dispatch(mapActions.addLayer({
     id: 'osm',
     source: 'osm',
+    type: 'raster',
   }));
 
   const url = 'https://wanderdrone.appspot.com/';

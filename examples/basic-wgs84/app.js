@@ -52,6 +52,7 @@ function main() {
   store.dispatch(mapActions.addLayer({
     id: 'esri',
     source: 'esri',
+    type: 'raster',
   }));
 
   // 'geojson' sources allow rendering a vector layer
@@ -101,6 +102,7 @@ function main() {
   store.dispatch(mapActions.addLayer({
     id: 'random-points',
     source: 'points',
+    type: 'circle',
     paint: {
       'circle-radius': 5,
       'circle-color': '#756bb1',

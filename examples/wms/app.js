@@ -46,6 +46,7 @@ function main() {
   store.dispatch(mapActions.addLayer({
     id: 'osm',
     source: 'osm',
+    type: 'raster',
   }));
 
   // set the background color.
@@ -78,6 +79,7 @@ function main() {
               tiles: [getMapUrl],
             }));
             store.dispatch(mapActions.addLayer({
+              type: 'raster',
               metadata: {
                 'bnd:title': layer.Title,
                 'bnd:queryable': layer.queryable,

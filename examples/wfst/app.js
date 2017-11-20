@@ -90,6 +90,7 @@ function main() {
   store.dispatch(SdkMapActions.addLayer({
     id: 'osm',
     source: 'osm',
+    type: 'raster',
   }));
 
   const colors = ['#fef0d9', '#fdcc8a', '#fc8d59', '#e34a33', '#b30000'];

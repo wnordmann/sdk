@@ -53,6 +53,7 @@ function main() {
   store.dispatch(mapActions.addLayer({
     id: 'osm',
     source: 'osm',
+    type: 'raster',
   }));
 
   // Add three individual GeoJSON stores for the

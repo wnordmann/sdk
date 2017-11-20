@@ -46,6 +46,7 @@ function main() {
   store.dispatch(mapActions.addLayer({
     id: 'osm',
     source: 'osm',
+    type: 'raster',
   }));
 
   // 'geojson' sources allow rendering a vector layer

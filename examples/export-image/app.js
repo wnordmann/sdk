@@ -29,7 +29,7 @@ const store = createStore(combineReducers({
 applyMiddleware(thunkMiddleware));
 
 function main() {
-  const url = 'https://raw.githubusercontent.com/boundlessgeo/ol-mapbox-style/master/example/data/wms.json';
+  const url = 'wms.json';
   store.dispatch(mapActions.setContext({url}));
 
   const exportMapImage = (blob) => {
