@@ -56,16 +56,6 @@ function main() {
     data: {},
   }));
 
-  // Background layers change the background color of
-  // the map. They are not attached to a source.
-  store.dispatch(mapActions.addLayer({
-    id: 'background',
-    type: 'background',
-    paint: {
-      'background-color': '#eee',
-    },
-  }));
-
   // The points source has both null island
   // and random points on it. This layer
   // will style all random points as purple instead

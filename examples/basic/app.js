@@ -72,16 +72,6 @@ function main() {
     },
   }));
 
-  // Background layers change the background color of
-  // the map. They are not attached to a source.
-  store.dispatch(mapActions.addLayer({
-    id: 'background',
-    type: 'background',
-    paint: {
-      'background-color': '#eee',
-    },
-  }));
-
   // Show null island as a layer.
   store.dispatch(mapActions.addLayer({
     id: 'null-island',

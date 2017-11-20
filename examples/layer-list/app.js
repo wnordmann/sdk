@@ -83,6 +83,19 @@ function main() {
     },
   }));
 
+  // Background layers change the background color of
+  // the map. They are not attached to a source.
+  store.dispatch(mapActions.addLayer({
+    id: 'background',
+    type: 'background',
+    paint: {
+      'background-color': '#eee',
+    },
+    metadata: {
+      'bnd:hide-layerlist': true,
+    },
+  }));
+
   // add the OSM source
   store.dispatch(mapActions.addSource('osm', {
     type: 'raster',

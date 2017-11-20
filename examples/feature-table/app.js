@@ -63,16 +63,6 @@ function main() {
   // be an individual Feature or a FeatureCollection.
   store.dispatch(mapActions.addSource('dynamic-source', {type: 'geojson'}));
 
-  // Background layers change the background color of
-  // the map. They are not attached to a source.
-  store.dispatch(mapActions.addLayer({
-    id: 'background',
-    type: 'background',
-    paint: {
-      'background-color': '#eee',
-    },
-  }));
-
   // Fetch the geoJson file from a url and add it to the map at the named source
   const addLayerFromGeoJSON = (url, sourceName) => {
     store.dispatch(mapActions.addLayer({
