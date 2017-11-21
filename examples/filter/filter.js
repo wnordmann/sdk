@@ -48,7 +48,7 @@ class FilterComponent extends React.PureComponent {
     const layers = this.props.map.layers;
     for (let i = 0, ii = layers.length; i < ii; i++) {
       if (layers[i].id === source) {
-        return layers[i].filter === null ? [] : layers[i].filter;
+        return !layers[i].filter ? [] : layers[i].filter;
       }
     }
     return [];
