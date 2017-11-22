@@ -292,10 +292,19 @@ describe('actions', () => {
     const expectedAction = {
       type: MAP.SET_SPRITE,
       sprite: spriteRoot,
-      targetId: undefined,
     };
 
     expect(actions.setSprite(spriteRoot)).toEqual(expectedAction);
+  });
+
+  it('should issue an action to change the glyphs', () => {
+    const glyphs = 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf';
+    const expectedAction = {
+      type: MAP.SET_GLYPHS,
+      glyphs,
+    };
+
+    expect(actions.setGlyphs(glyphs)).toEqual(expectedAction);
   });
 });
 
