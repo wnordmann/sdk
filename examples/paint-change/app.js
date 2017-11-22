@@ -104,7 +104,7 @@ function main() {
 
   // Demonstrate the paint colors changing.
   const changeColor = (color, type) => {
-    const paint_state = store.getState().map.layers[2].paint;
+    const paint_state = store.getState().map.layers[1].paint;
     const fill = paint_state['circle-color'];
     const stroke = paint_state['circle-stroke-color'];
     const radius = paint_state['circle-radius'];
@@ -164,7 +164,7 @@ function main() {
 
   // Demonstrate the paint radius size changing.
   const changeSize = (size) => {
-    const paint_state = store.getState().map.layers[2].paint;
+    const paint_state = store.getState().map.layers[1].paint;
     const fill = paint_state['circle-color'];
     const stroke = paint_state['circle-stroke-color'];
     const paint = {
