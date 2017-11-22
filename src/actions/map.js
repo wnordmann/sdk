@@ -377,6 +377,19 @@ export function setSprite(spriteRoot) {
   };
 }
 
+/** Set the glyphs for the map.
+ *
+ *  @param {string} glyphs The URL template for the glyphs sets.
+ *
+ *  @returns {Object} An action object.
+ */
+export function setGlyphs(glyphs) {
+  return {
+    type: MAP.SET_GLYPHS,
+    glyphs,
+  };
+}
+
 /** Update the map's metadata.
  *
  *  @param {Object} metadata An object containing new/updated metadata.

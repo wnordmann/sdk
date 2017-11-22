@@ -917,6 +917,28 @@ describe('map reducer', () => {
     expect(reducer(state, sprite_action).sprite).toEqual(sprite_root);
   });
 
+  it('should change the map glyphs', () => {
+    const state = {
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      sources: {},
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 0,
+        'bnd:data-version:points': 0,
+      },
+      layers: [],
+    };
+    const glyphs = 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf';
+    const glyphs_action = {
+      type: MAP.SET_GLYPHS,
+      glyphs,
+    };
+    expect(reducer(state, glyphs_action).glyphs).toEqual(glyphs);
+  });
+
   it('should change the map rotation', () => {
     const state = {
       version: 8,
