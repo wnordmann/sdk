@@ -223,6 +223,9 @@ describe('map reducer', () => {
       version: 8,
       name: 'default',
       center: [0, 0],
+      metadata: {
+        foo: 'bar',
+      },
       zoom: 3,
       sources: {},
       layers: [],
@@ -233,6 +236,11 @@ describe('map reducer', () => {
       name: 'foo',
       center: [10, 10],
       zoom: 4,
+      metadata: {
+        foo: 'bar',
+        'bnd:layer-version': 1,
+        'bnd:source-version': 1,
+      },
     };
     const action = {
       type: MAP.RECEIVE_CONTEXT,
