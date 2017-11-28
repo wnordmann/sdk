@@ -598,8 +598,11 @@ function setVisibility(state, action) {
  *  @returns {Object} The new state.
  */
 function setContext(state, action) {
-  // simply replace the full state
-  return Object.assign({}, action.context);
+  let metadata = incrementVersion(state.metadata, SOURCE_VERSION_KEY);
+  metadata = incrementVersion(metadata.metadata, LAYER_VERSION_KEY);
+  return Object.assign({}, action.context, {
+    metadata: Object.assign({}, metadata.metadata, action.context.metadata)
+  });
 }
 
 /** Update the map's metadata.
