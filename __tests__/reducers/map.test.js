@@ -223,6 +223,9 @@ describe('map reducer', () => {
       version: 8,
       name: 'default',
       center: [0, 0],
+      metadata: {
+        foo: 'bar',
+      },
       zoom: 3,
       sources: {},
       layers: [],
@@ -233,6 +236,39 @@ describe('map reducer', () => {
       name: 'foo',
       center: [10, 10],
       zoom: 4,
+      metadata: {
+        foo: 'bar',
+        'bnd:layer-version': 1,
+        'bnd:source-version': 1,
+      },
+    };
+    const action = {
+      type: MAP.RECEIVE_CONTEXT,
+      context,
+    };
+    deepFreeze(action);
+    expect(reducer(state, action)).toEqual(context);
+  });
+
+  it('should handle RECEIVE_CONTEXT with no metadata in context', () => {
+    const state = {
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      sources: {},
+      layers: [],
+    };
+    deepFreeze(state);
+    const context = {
+      version: 9,
+      name: 'foo',
+      center: [10, 10],
+      zoom: 4,
+      metadata: {
+        'bnd:layer-version': 1,
+        'bnd:source-version': 1,
+      },
     };
     const action = {
       type: MAP.RECEIVE_CONTEXT,
@@ -915,6 +951,28 @@ describe('map reducer', () => {
       sprite: sprite_root,
     };
     expect(reducer(state, sprite_action).sprite).toEqual(sprite_root);
+  });
+
+  it('should change the map glyphs', () => {
+    const state = {
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      sources: {},
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 0,
+        'bnd:data-version:points': 0,
+      },
+      layers: [],
+    };
+    const glyphs = 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf';
+    const glyphs_action = {
+      type: MAP.SET_GLYPHS,
+      glyphs,
+    };
+    expect(reducer(state, glyphs_action).glyphs).toEqual(glyphs);
   });
 
   it('should change the map rotation', () => {

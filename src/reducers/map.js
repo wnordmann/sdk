@@ -598,8 +598,11 @@ function setVisibility(state, action) {
  *  @returns {Object} The new state.
  */
 function setContext(state, action) {
-  // simply replace the full state
-  return Object.assign({}, action.context);
+  let metadata = incrementVersion(state.metadata, SOURCE_VERSION_KEY);
+  metadata = incrementVersion(metadata.metadata, LAYER_VERSION_KEY);
+  return Object.assign({}, action.context, {
+    metadata: Object.assign({}, metadata.metadata, action.context.metadata)
+  });
 }
 
 /** Update the map's metadata.
@@ -657,14 +660,14 @@ export default function MapReducer(state = defaultState, action) {
       return Object.assign({}, state, action.view);
     case MAP.ZOOM_IN:
       return setZoom(state, {zoom: state.zoom + 1});
-      //return Object.assign({}, state, { zoom: Math.min(DEFAULT_MAX_ZOOM, state.zoom + 1) });
     case MAP.ZOOM_OUT:
       return setZoom(state, {zoom: state.zoom - 1});
-      //return Object.assign({}, state, { zoom: Math.max(DEFAULT_MIN_ZOOM, state.zoom - 1) });
     case MAP.SET_ZOOM:
       return setZoom(state, action);
     case MAP.SET_NAME:
       return Object.assign({}, state, {name: action.name});
+    case MAP.SET_GLYPHS:
+      return Object.assign({}, state, {glyphs: action.glyphs});
     case MAP.SET_SPRITE:
       return Object.assign({}, state, {sprite: action.sprite});
     case MAP.SET_ROTATION:
