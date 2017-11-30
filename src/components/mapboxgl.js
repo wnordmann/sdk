@@ -59,6 +59,7 @@ export class MapboxGL extends React.Component {
 
   constructor(props) {
     super(props);
+    this.onMapLoad = this.onMapLoad.bind(this);
     this.sourcesVersion = null;
     this.layersVersion = null;
 
@@ -164,6 +165,16 @@ export class MapboxGL extends React.Component {
     this.props.setView(this.map);
   }
 
+  onMapLoad() {
+    // add the initial popups from the user.
+    for (let i = 0, ii = this.props.initialPopups.length; i < ii; i++) {
+      // set silent to true since updatePopups is called after the loop
+      this.addPopup(this.props.initialPopups[i], true);
+    }
+    this.updatePopups();
+    this.map.off('click', this.onMapLoad);
+  }
+
   /** Initialize the map */
   configureMap() {
     // initialize the map.
@@ -185,6 +196,11 @@ export class MapboxGL extends React.Component {
       this.map.on('click', (e) => {
         this.onMapClick(e);
       });
+      // this is done after the map loads itself for the first time.
+      //  otherwise the map was not always ready for the initial popups.
+      if (this.props.initialPopups.length > 0) {
+        this.map.on('load', this.onMapLoad);
+      }
     }
     // check for any interactions
     if (this.props.drawing && this.props.drawing.interaction && this.map) {

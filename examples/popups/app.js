@@ -95,8 +95,10 @@ class NullIslandPopup extends SdkPopup {
       <div>
         Welcome to Null Island!
 
-        <button className="sdk-btn" onClick={() => {
-          this.close();
+        <button className="sdk-btn" ref={(c) => {
+          if (c) {
+            c.addEventListener('click', this.close);
+          }
         }}>
           Close
         </button>

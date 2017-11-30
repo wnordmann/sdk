@@ -327,6 +327,42 @@ describe('MapboxGL component', () => {
     expect(types).toEqual(['moveend', 'click']);
   });
 
+  it('configureMap sets load listener', () => {
+    const sources = {
+      geojson: {
+        type: 'geojson',
+      },
+    };
+    const layers = [];
+    const metadata = {
+      'bnd:source-version': 0,
+      'bnd:layer-version': 0,
+      'bnd:data-version:geojson': 0,
+    };
+
+    const center = [0, 0];
+    const zoom = 2;
+    const apiKey = 'foo';
+    const props = {
+      mapbox: {accessToken: apiKey},
+      initialPopups: [(<SdkPopup coordinate={[0, 0]} closeable><div>foo</div></SdkPopup>)],
+      map: {center, zoom, sources, layers, metadata}
+    };
+    const wrapper = mount(<MapboxGL {...props} />);
+    const map = wrapper.instance();
+    // mock up our GL map
+    map.map = createMapMock();
+    const types = [];
+    const on = (evt) => {
+      types.push(evt);
+    };
+    map.map.on = on;
+    spyOn(map.map, 'on').and.callThrough();
+    map.configureMap();
+    expect(map.map.on).toHaveBeenCalledTimes(3);
+    expect(types).toEqual(['moveend', 'click', 'load']);
+  });
+
   it('configureMap calls updateInteraction', () => {
     const sources = {
       geojson: {
