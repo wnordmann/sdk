@@ -296,6 +296,28 @@ function removeLayer(state, action) {
   }, incrementVersion(state.metadata, LAYER_VERSION_KEY));
 }
 
+/** Clear an existing layer filter.
+ *  @param {Object} state Current state.
+ *  @param {Object} action Action to handle.
+ *
+ *  @returns {Object} The new state.
+ */
+function clearLayerFilter(state, action) {
+  const new_layers = [];
+  for (let i = 0, ii = state.layers.length; i < ii; i++) {
+    if (state.layers[i].id === action.layerId) {
+      // eslint-disable-next-line
+      const { filter, ...newProps } = state.layers[i];
+      new_layers.push(newProps);
+    } else {
+      new_layers.push(state.layers[i]);
+    }
+  }
+  return Object.assign({}, state, {
+    layers: new_layers,
+  }, incrementVersion(state.metadata, LAYER_VERSION_KEY));
+}
+
 /** Update a layer that's in the state already.
  *  @param {Object} state Current state.
  *  @param {Object} action Action to handle.
@@ -679,6 +701,8 @@ export default function MapReducer(state = defaultState, action) {
     case MAP.SET_LAYER_METADATA:
     case MAP.UPDATE_LAYER:
       return updateLayer(state, action);
+    case MAP.CLEAR_LAYER_FILTER:
+      return clearLayerFilter(state, action);
     case MAP.ADD_SOURCE:
       return addSource(state, action);
     case MAP.REMOVE_SOURCE:

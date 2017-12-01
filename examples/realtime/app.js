@@ -9,7 +9,7 @@ import ReactDOM from 'react-dom';
 
 import {Provider} from 'react-redux';
 
-import SdkMap from '@boundlessgeo/sdk/components/map';
+import RendererSwitch from '../rendererswitch';
 import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
 import SdkMapboxReducer from '@boundlessgeo/sdk/reducers/mapbox';
@@ -78,9 +78,9 @@ function main() {
 
   // place the map on the page.
   ReactDOM.render(<Provider store={store}>
-    <SdkMap>
+    <RendererSwitch>
       <SdkZoomControl />
-    </SdkMap>
+    </RendererSwitch>
   </Provider>, document.getElementById('map'));
 }
 

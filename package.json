@@ -25,6 +25,9 @@
     "jsdoc": "npm run build:doc-css && npm run build:jsdoc"
   },
   "devDependencies": {
+    "@mapbox/mapbox-gl-draw": "^1.0.4",
+    "@turf/area": "^5.0.4",
+    "@turf/distance": "^5.0.4",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.24.1",
     "babel-eslint": "^7.2.3",
@@ -50,7 +53,9 @@
     "fs-extra": "^4.0.2",
     "handlebars": "^4.0.10",
     "jest": "^20.0.4",
+    "jest-cli": "^21.2.1",
     "jsdoc": "^3.5.4",
+    "mapbox-gl": "^0.42.0",
     "marked": "^0.3.6",
     "metalsmith": "^2.3.0",
     "metalsmith-layouts": "^1.8.1",
@@ -78,13 +83,16 @@
   "dependencies": {
     "@mapbox/mapbox-gl-style-spec": "^9.0.0",
     "isomorphic-fetch": "^2.2.1",
-    "jest-cli": "^21.2.1",
     "ol-mapbox-style": "^2.6.1",
     "prop-types": "^15.5.10",
     "react-docgen": "^2.19.0",
     "uuid": "^3.1.0"
   },
   "peerDependencies": {
+    "@mapbox/mapbox-gl-draw": "^1.0.4",
+    "@turf/area": "^5.0.4",
+    "@turf/distance": "^5.0.4",
+    "mapbox-gl": "^0.42.0",
     "ol": "^4.3.1",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
