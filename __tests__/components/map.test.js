@@ -447,7 +447,7 @@ describe('Map component', () => {
     instance.shouldComponentUpdate.call(instance, nextProps);
     // previous values should still be valid
     expect(radiansToDegrees(view.getRotation())).toBe(45);
-    expect(view.getZoom()).toBe(2);
+    expect(view.getZoom()).toBe(2 + 1);
     expect(view.getCenter()).toBe(centerWGS84);
   });
 
@@ -1049,7 +1049,7 @@ describe('Map component async', () => {
     // eslint-disable-next-line
     const response = {"type":"FeatureCollection","totalFeatures":"unknown","features":[{"type":"Feature","id":"bugsites.1","geometry":{"type":"Point","coordinates":[590232,4915039]},"geometry_name":"the_geom","properties":{"cat":1,"str1":"Beetle site"}}],"crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:EPSG::26713"}}};
     nock('http://example.com')
-      .get('/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&FORMAT=image%2Fpng&TRANSPARENT=true&QUERY_LAYERS=bar&LAYERS=bar&INFO_FORMAT=application%2Fjson&I=0&J=255&WIDTH=256&HEIGHT=256&CRS=EPSG%3A3857&STYLES=&BBOX=0%2C0%2C5009377.085697311%2C5009377.085697311')
+      .get('/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&FORMAT=image%2Fpng&TRANSPARENT=true&QUERY_LAYERS=bar&LAYERS=bar&INFO_FORMAT=application%2Fjson&I=0&J=255&WIDTH=256&HEIGHT=256&CRS=EPSG%3A3857&STYLES=&BBOX=0%2C0%2C2504688.5428486555%2C2504688.5428486555')
       .reply(200, response);
 
     sdk_map.sources = {

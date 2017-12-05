@@ -92,6 +92,91 @@ describe('map reducer', () => {
     });
   });
 
+  it('should handle SET_VIEW max zoom constraint', () => {
+    const state = {
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      sources: {},
+      layers: [],
+    };
+    deepFreeze(state);
+    const action = {
+      type: MAP.SET_VIEW,
+      view: {
+        zoom: 25,
+        center: [10, 10],
+      },
+    };
+    deepFreeze(action);
+    expect(reducer(state, action)).toEqual({
+      version: 8,
+      name: 'default',
+      center: [10, 10],
+      zoom: 24,
+      sources: {},
+      layers: [],
+    });
+  });
+
+  it('should handle SET_VIEW min zoom constraint', () => {
+    const state = {
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      sources: {},
+      layers: [],
+    };
+    deepFreeze(state);
+    const action = {
+      type: MAP.SET_VIEW,
+      view: {
+        zoom: -1,
+        center: [10, 10],
+      },
+    };
+    deepFreeze(action);
+    expect(reducer(state, action)).toEqual({
+      version: 8,
+      name: 'default',
+      center: [10, 10],
+      zoom: 0,
+      sources: {},
+      layers: [],
+    });
+  });
+
+  it('should handle SET_VIEW zoom undefined', () => {
+    const state = {
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      sources: {},
+      layers: [],
+    };
+    deepFreeze(state);
+    const action = {
+      type: MAP.SET_VIEW,
+      view: {
+        center: [10, 10],
+        bearing: 5,
+      },
+    };
+    deepFreeze(action);
+    expect(reducer(state, action)).toEqual({
+      version: 8,
+      name: 'default',
+      center: [10, 10],
+      zoom: 3,
+      bearing: 5,
+      sources: {},
+      layers: [],
+    });
+  });
+
   it('should handle ZOOM_IN', () => {
     const state = {
       version: 8,
@@ -212,7 +297,7 @@ describe('map reducer', () => {
       version: 8,
       name: 'default',
       center: [0, 0],
-      zoom: 28,
+      zoom: 24,
       sources: {},
       layers: [],
     });
