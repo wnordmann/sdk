@@ -29,7 +29,7 @@ export const QUERYABLE_KEY = 'bnd:queryable';
 
 export const DEFAULT_ZOOM = {
   MIN: 0,
-  MAX: 28,
+  MAX: 24,
 };
 
 export const INTERACTIONS = {
