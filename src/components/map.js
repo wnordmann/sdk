@@ -400,16 +400,6 @@ function getSourceName(groupName) {
   return groupName.substring(0, dash);
 }
 
-/** Get the list of layers from the layer group name.
- * @param {string} groupName The layer group name.
- *
- * @returns {string} A concatenated string of layer names inside the group.
- */
-function getLayerNames(groupName) {
-  const dash = groupName.indexOf('-');
-  return groupName.substring(dash).split(',');
-}
-
 /** Populate a ref'd layer.
  * @param {Object[]} layersDef All layers defined in the Mapbox GL stylesheet.
  * @param {Object} glLayer Subset of layers to be rendered as a group.
@@ -591,12 +581,6 @@ export class Map extends React.Component {
     // do a quick sweep to remove any popups
     //  that have been closed.
     this.updatePopups();
-
-    // update the sprite, this could happen BEFORE the map
-    if (this.props.map.sprite !== nextProps.map.sprite) {
-      // TODO figure out why this kills the map
-      // this.updateSpriteLayers(nextProps.map);
-    }
 
     // change the current interaction as needed
     if (nextProps.drawing && (nextProps.drawing.interaction !== this.props.drawing.interaction
@@ -879,6 +863,7 @@ export class Map extends React.Component {
    *  @param {Object[]} sourcesDef The array of sources in map.state.
    *  @param {Object[]} layersDef The array of layers in map.state.
    *  @param {number} layerVersion The value of state.map.metadata[LAYER_VERSION_KEY].
+   *  @param {string} sprite The sprite of the map.
    */
   configureLayers(sourcesDef, layersDef, layerVersion, sprite) {
     // update the internal version counter.
@@ -968,46 +953,6 @@ export class Map extends React.Component {
 
     // clean up layers which should be removed.
     this.cleanupLayers(group_names);
-  }
-
-  /** Performs updates to layers containing sprites.
-   *  @param {Object} map The state.map object.
-   */
-  updateSpriteLayers(map) {
-    const sprite_layers = [];
-    const layers_by_id = {};
-
-    // restyle all the symbol layers.
-    for (let i = 0, ii = map.layers.length; i < ii; i++) {
-      let gl_layer = map.layers[i];
-      if (gl_layer.ref !== undefined) {
-        gl_layer = hydrateLayer(map.layers, gl_layer);
-      }
-      if (gl_layer.type === 'symbol') {
-        sprite_layers.push(gl_layer.id);
-        layers_by_id[gl_layer.id] = gl_layer;
-      }
-    }
-
-    const layer_groups = Object.keys(this.layers);
-    for (let grp = 0, ngrp = layer_groups.length; grp < ngrp; grp++) {
-      // unpack the layers from the group name
-      const layers = getLayerNames(layer_groups[grp]);
-
-      let restyled = false;
-      for (let lyr = 0, nlyr = sprite_layers.length; !restyled && lyr < nlyr; lyr++) {
-        if (layers.indexOf(sprite_layers[lyr]) >= 0) {
-          const style_layers = [];
-          for (let i = 0, ii = layers.length; i < ii; i++) {
-            if (layers_by_id[layers[i]]) {
-              style_layers.push(layers_by_id[layers[i]]);
-            }
-          }
-          this.applyStyle(this.layers[layer_groups[grp]], style_layers, map.sprite);
-          restyled = true;
-        }
-      }
-    }
   }
 
   /** Removes popups from the map via OpenLayers removeOverlay().
