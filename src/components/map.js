@@ -939,9 +939,7 @@ export class Map extends React.Component {
             this.map.addLayer(this.layers[group_name]);
           }
         }
-      }
-
-      if (group_name in this.layers) {
+      } else {
         const ol_layer = this.layers[group_name];
 
         // check for style changes, the OL style
@@ -950,7 +948,6 @@ export class Map extends React.Component {
         for (let j = 0, jj = lyr_group.length; j < jj; j++) {
           current_layers.push(getLayerById(this.props.map.layers, lyr_group[j].id));
         }
-
         if (!jsonEquals(lyr_group, current_layers)) {
           this.applyStyle(ol_layer, hydrateLayerGroup(layersDef, lyr_group), sprite);
         }
