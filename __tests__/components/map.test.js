@@ -300,9 +300,6 @@ describe('Map component', () => {
     spyOn(layer, 'setSource');
     instance.updateLayerSource('mapbox');
     expect(layer.setSource).toHaveBeenCalled();
-    spyOn(instance, 'applyStyle');
-    instance.updateSpriteLayers({layers});
-    expect(instance.applyStyle).toHaveBeenCalled();
   });
 
   it('should create a raster tilejson', () => {
@@ -933,20 +930,6 @@ describe('Map component', () => {
     sdk_map.popups[id].state.closed = true;
     sdk_map.updatePopups();
     expect(sdk_map.map.getOverlays().getLength()).toEqual(0);
-  });
-
-  it('should change the sprite and redraw the layer', () => {
-    const store = createStore(combineReducers({
-      map: MapReducer,
-    }));
-
-    const wrapper = mount(<ConnectedMap store={store} />);
-    const map = wrapper.instance().getWrappedInstance();
-
-    spyOn(map, 'updateSpriteLayers');
-    store.dispatch(MapActions.setSprite('./sprites'));
-
-    expect(map.updateSpriteLayers).toHaveBeenCalled();
   });
 
   it('should handle getFakeStyle', () => {
