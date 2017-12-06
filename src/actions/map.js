@@ -170,6 +170,18 @@ export function updateLayer(layerId, layerDef) {
   };
 }
 
+/** Action to clear an existing filter on a layer.
+ *  @param {string} layerId String id for the layer for which the filter is to be cleared.
+ *
+ *  @returns {Object} Action object to pass to reducer.
+ */
+export function clearLayerFilter(layerId) {
+  return {
+    type: MAP.CLEAR_LAYER_FILTER,
+    layerId,
+  };
+}
+
 /** Action to update cluster status in the map state.
  *  @param {string} sourceName Name of the source to be added.
  *  @param {boolean} isClustered Is the source clustered?

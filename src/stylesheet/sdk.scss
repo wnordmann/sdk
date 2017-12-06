@@ -2,6 +2,11 @@
  * Include the SDK stylesheet
  */
 @import 'ol/ol';
+@import 'mapbox-gl/dist/mapbox-gl';
+
+.mapboxgl-canvas-container.mapboxgl-interactive, .mapboxgl-ctrl-nav-compass {
+  cursor: default;
+}
 
 $sdk-orange: #f58d50;
 $sdk-blue: #29728d;

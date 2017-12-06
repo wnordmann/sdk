@@ -11,7 +11,7 @@ import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import WMSCapabilitiesFormat from 'ol/format/wmscapabilities';
 
-import SdkMap from '@boundlessgeo/sdk/components/map';
+import RendererSwitch from '../rendererswitch';
 import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
@@ -87,7 +87,7 @@ function main() {
 
   // place the map on the page.
   ReactDOM.render(<Provider store={store}>
-    <SdkMap
+    <RendererSwitch
       style={{position: 'relative'}}
       includeFeaturesOnClick
       onClick={(map, xy, featuresPromise) => {
@@ -116,7 +116,7 @@ function main() {
         });
       }}>
       <SdkZoomControl style={{position: 'absolute', top: 20, left: 20}} />
-    </SdkMap>
+    </RendererSwitch>
   </Provider>, document.getElementById('map'));
 
   // add some buttons to demo some actions.

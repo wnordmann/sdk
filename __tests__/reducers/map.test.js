@@ -546,6 +546,53 @@ describe('map reducer', () => {
     });
   });
 
+  it('should handle CLEAR_LAYER_FILTER', () => {
+    const layer = {
+      id: 'foo',
+      type: 'symbol',
+      filter: ['==', 'STATE_NAME', 'Missouri'],
+    };
+    const other_layer = {
+      id: 'other',
+    };
+    const newLayer = {
+      id: 'foo',
+      type: 'symbol',
+    };
+    deepFreeze(layer);
+    deepFreeze(newLayer);
+    const action = {
+      type: MAP.CLEAR_LAYER_FILTER,
+      layerId: 'foo',
+    };
+    const state = {
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      sources: {},
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 0,
+      },
+      layers: [layer, other_layer],
+    };
+    deepFreeze(state);
+    deepFreeze(action);
+    expect(reducer(state, action)).toEqual({
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      sources: {},
+      metadata: {
+        'bnd:source-version': 0,
+        'bnd:layer-version': 1,
+      },
+      layers: [newLayer, other_layer],
+    });
+  });
+
   it('should handle UPDATE_LAYER (background type)', () => {
     const layer = {
       id: 'background',
