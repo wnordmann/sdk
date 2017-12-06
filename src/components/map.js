@@ -810,12 +810,14 @@ export class Map extends React.Component {
         return layer;
       case 'geojson':
         layer = new VectorLayer({
+          declutter: true,
           source,
         });
         this.applyStyle(layer, layers);
         return layer;
       case 'vector':
         layer = new VectorTileLayer({
+          declutter: true,
           source,
         });
         this.applyStyle(layer, layers);
