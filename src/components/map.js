@@ -462,8 +462,8 @@ function hydrateLayerGroup(layersDef, layerGroup) {
 export function getFakeStyle(sprite, layers, baseUrl, accessToken) {
   const fake_style = {
     version: 8,
-    sprite: sprite,
-    layers: layers,
+    sprite,
+    layers,
   };
   if (sprite && sprite.indexOf(MAPBOX_PROTOCOL) === 0) {
     fake_style.sprite = `${baseUrl}/sprite?access_token=${accessToken}`;
@@ -568,7 +568,7 @@ export class Map extends React.Component {
     const next_layer_version = getVersion(nextProps.map, LAYER_VERSION_KEY);
     if (this.layersVersion !== next_layer_version) {
       // go through and update the layers.
-      this.configureLayers(nextProps.map.sources, nextProps.map.layers, next_layer_version);
+      this.configureLayers(nextProps.map.sources, nextProps.map.layers, next_layer_version, nextProps.map.sprite);
     }
 
     // check the vector sources for data changes
@@ -594,7 +594,8 @@ export class Map extends React.Component {
 
     // update the sprite, this could happen BEFORE the map
     if (this.props.map.sprite !== nextProps.map.sprite) {
-      this.updateSpriteLayers(nextProps.map);
+      // TODO figure out why this kills the map
+      // this.updateSpriteLayers(nextProps.map);
     }
 
     // change the current interaction as needed
@@ -757,8 +758,9 @@ export class Map extends React.Component {
   /** Configures OpenLayers layer style.
    *  @param {Object} olLayer OpenLayers layer object.
    *  @param {Object[]} layers Array of Mapbox GL layer objects.
+   *  @param {string} sprite The sprite of the map.
    */
-  applyStyle(olLayer, layers) {
+  applyStyle(olLayer, layers, sprite) {
     // filter out the layers which are not visible
     const render_layers = [];
     const spriteLayers = [];
@@ -777,12 +779,11 @@ export class Map extends React.Component {
     }
 
     const fake_style = getFakeStyle(
-      this.props.map.sprite,
+      sprite || this.props.map.sprite,
       render_layers,
       this.props.mapbox.baseUrl,
-      this.props.mapbox.accessToken
+      this.props.mapbox.accessToken,
     );
-
     if (olLayer.setStyle && spriteLayers.length === 0) {
       applyStyle(olLayer, fake_style, layers[0].source);
     }
@@ -795,10 +796,11 @@ export class Map extends React.Component {
    *  @param {string} sourceName Layer's source name.
    *  @param {Object} glSource Mapbox GL source object.
    *  @param {Object[]} layers Array of Mapbox GL layer objects.
+   *  @param {string} sprite The sprite of the map.
    *
    *  @returns {(Object|null)} Configured OpenLayers layer object, or null.
    */
-  configureLayer(sourceName, glSource, layers) {
+  configureLayer(sourceName, glSource, layers, sprite) {
     const source = this.sources[sourceName];
     let layer = null;
     switch (glSource.type) {
@@ -806,21 +808,21 @@ export class Map extends React.Component {
         layer = new TileLayer({
           source,
         });
-        this.applyStyle(layer, layers);
+        this.applyStyle(layer, layers, sprite);
         return layer;
       case 'geojson':
         layer = new VectorLayer({
           declutter: true,
           source,
         });
-        this.applyStyle(layer, layers);
+        this.applyStyle(layer, layers, sprite);
         return layer;
       case 'vector':
         layer = new VectorTileLayer({
           declutter: true,
           source,
         });
-        this.applyStyle(layer, layers);
+        this.applyStyle(layer, layers, sprite);
         return layer;
       case 'image':
         return new ImageLayer({
@@ -878,7 +880,7 @@ export class Map extends React.Component {
    *  @param {Object[]} layersDef The array of layers in map.state.
    *  @param {number} layerVersion The value of state.map.metadata[LAYER_VERSION_KEY].
    */
-  configureLayers(sourcesDef, layersDef, layerVersion) {
+  configureLayers(sourcesDef, layersDef, layerVersion, sprite) {
     // update the internal version counter.
     this.layersVersion = layerVersion;
 
@@ -928,7 +930,7 @@ export class Map extends React.Component {
           applyBackground(this.map, {layers: lyr_group});
         } else {
           const hydrated_group = hydrateLayerGroup(layersDef, lyr_group);
-          const new_layer = this.configureLayer(source_name, source, hydrated_group);
+          const new_layer = this.configureLayer(source_name, source, hydrated_group, sprite);
 
           // if the new layer has been defined, add it to the map.
           if (new_layer !== null) {
@@ -950,7 +952,7 @@ export class Map extends React.Component {
         }
 
         if (!jsonEquals(lyr_group, current_layers)) {
-          this.applyStyle(ol_layer, hydrateLayerGroup(layersDef, lyr_group));
+          this.applyStyle(ol_layer, hydrateLayerGroup(layersDef, lyr_group), sprite);
         }
 
         // update the min/maxzooms
@@ -1004,7 +1006,7 @@ export class Map extends React.Component {
               style_layers.push(layers_by_id[layers[i]]);
             }
           }
-          this.applyStyle(this.layers[layer_groups[grp]], style_layers);
+          this.applyStyle(this.layers[layer_groups[grp]], style_layers, map.sprite);
           restyled = true;
         }
       }
