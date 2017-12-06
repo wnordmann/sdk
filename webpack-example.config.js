@@ -2,18 +2,16 @@ const webpack = require('webpack');
 const path = require('path');
 const common  = require('./webpack-common');
 
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 const entry = common.getEntries(false);
 
-const config = {
+module.exports = {
   resolve: {
     alias: {
       '@boundlessgeo/sdk': path.resolve(__dirname, 'src/'),
     },
   },
-  // Entry points to the project
   entry: entry,
   devtool: 'source-map',
   node: {fs: "empty"},
@@ -23,7 +21,6 @@ const config = {
     filename: 'build/hosted/examples/[name]/[name].bundle.js',
   },
   plugins: [
-    new ExtractTextPlugin('build/hosted/examples/sdk.css'),
     new UglifyJSPlugin({
       sourceMap: true,
       uglifyOptions: {
@@ -45,19 +42,8 @@ const config = {
         },
       }, {
         test: /\.s?css$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: ['css-loader', {
-            loader: 'sass-loader',
-            options: {
-              includePaths: ['node_modules'],
-            }
-          }],
-        }),
-
+        use: [ 'style-loader', 'css-loader', 'sass-loader' ]
       }
-    ],
+    ]
   },
-};
-
-module.exports = config;
+}

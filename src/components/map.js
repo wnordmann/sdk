@@ -80,6 +80,8 @@ import ClusterSource from '../source/cluster';
 
 import {parseQueryString, jsonClone, jsonEquals, getLayerById, degreesToRadians, radiansToDegrees, getKey} from '../util';
 
+import 'ol/ol.css';
+
 /** @module components/map
  *
  * @desc Provide an OpenLayers map which reflects the

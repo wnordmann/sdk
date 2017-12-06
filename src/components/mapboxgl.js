@@ -26,6 +26,8 @@ import distance from '@turf/distance';
 import {setMeasureFeature, clearMeasureFeature} from '../actions/drawing';
 import {LAYER_VERSION_KEY, SOURCE_VERSION_KEY} from '../constants';
 
+import 'mapbox-gl/dist/mapbox-gl.css';
+
 const isBrowser = !(
   typeof process === 'object' &&
   String(process) === '[object process]' &&
