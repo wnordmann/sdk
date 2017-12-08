@@ -679,7 +679,11 @@ function setZoom(state, action) {
 export default function MapReducer(state = defaultState, action) {
   switch (action.type) {
     case MAP.SET_VIEW:
-      return Object.assign({}, state, action.view);
+      if (action.view.zoom !== undefined) {
+        return setZoom(Object.assign({}, state, action.view), {zoom: action.view.zoom});
+      } else {
+        return Object.assign({}, state, action.view);
+      }
     case MAP.ZOOM_IN:
       return setZoom(state, {zoom: state.zoom + 1});
     case MAP.ZOOM_OUT:

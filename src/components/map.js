@@ -539,7 +539,7 @@ export class Map extends React.Component {
     }
     // compare the zoom
     if (nextProps.map.zoom !== undefined && (nextProps.map.zoom !== this.props.map.zoom)) {
-      map_view.setZoom(nextProps.map.zoom);
+      map_view.setZoom(nextProps.map.zoom + 1);
     }
     // compare the rotation
     if (nextProps.map.bearing !== undefined && nextProps.map.bearing !== this.props.map.bearing) {
@@ -1162,7 +1162,7 @@ export class Map extends React.Component {
       logo: false,
       view: new View({
         center,
-        zoom: this.props.map.zoom,
+        zoom: this.props.map.zoom >= 0 ? this.props.map.zoom + 1 : this.props.map.zoom,
         rotation,
         projection: map_proj,
       }),
@@ -1477,7 +1477,7 @@ function mapDispatchToProps(dispatch) {
       // transform the center to 4326 before dispatching the action.
       const center = Proj.transform(view.getCenter(), view.getProjection(), 'EPSG:4326');
       const rotation = radiansToDegrees(view.getRotation());
-      dispatch(setView(center, view.getZoom()));
+      dispatch(setView(center, view.getZoom() - 1));
       dispatch(setRotation(rotation));
     },
     setMeasureGeometry: (geometry, projection) => {

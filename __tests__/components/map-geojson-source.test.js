@@ -130,7 +130,7 @@ describe('tests for the geojson-type map sources', () => {
   it('adds a geojson feature collection with a BBOX', (done) => {
     // mock up the url to call
     nock('http://example.com')
-      .get('/base/bbox.geojson?BBOX=-978393.9620502561,-978393.9620502568,978393.9620502561,978393.9620502554')
+      .get('/base/bbox.geojson?BBOX=-489196.98102512804,-489196.98102512874,489196.98102512804,489196.98102512734')
       .reply(200, JSON.stringify(feature_collection));
 
     testGeojsonData(done, '/bbox.geojson?BBOX={bbox-epsg-3857}', 2);
@@ -152,7 +152,7 @@ describe('tests for the geojson-type map sources', () => {
 
     // mock up the url to call
     nock('http://example.com')
-      .get('/base/bbox.geojson?BBOX=-978393.9620502561,-978393.9620502568,978393.9620502561,978393.9620502554')
+      .get('/base/bbox.geojson?BBOX=-489196.98102512804,-489196.98102512874,489196.98102512804,489196.98102512734')
       .reply(200, JSON.stringify(feature_collection));
 
     const next_fetch = () => {
