@@ -24,7 +24,15 @@ const config = {
   },
   plugins: [
     new ExtractTextPlugin('build/hosted/examples/sdk.css'),
-    new UglifyJSPlugin({sourceMap: true})
+    new UglifyJSPlugin({
+      sourceMap: true,
+      uglifyOptions: {
+        compress: {
+          warnings: false,
+          comparisons: false,  // don't optimize comparisons
+        },
+      },
+    }),
   ],
   module: {
     rules: [
