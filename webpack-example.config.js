@@ -15,7 +15,7 @@ const config = {
   },
   // Entry points to the project
   entry: entry,
-  devtool: 'eval',
+  devtool: 'source-map',
   node: {fs: "empty"},
   output: {
     path: __dirname, // Path of output file
@@ -24,7 +24,15 @@ const config = {
   },
   plugins: [
     new ExtractTextPlugin('build/hosted/examples/sdk.css'),
-    new UglifyJSPlugin()
+    new UglifyJSPlugin({
+      sourceMap: true,
+      uglifyOptions: {
+        compress: {
+          warnings: false,
+          comparisons: false,  // don't optimize comparisons
+        },
+      },
+    }),
   ],
   module: {
     rules: [
