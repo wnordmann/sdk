@@ -16,7 +16,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import uuid from 'uuid';
 import {connect} from 'react-redux';
-import {setView, setRotation} from '../actions/map';
+import {setView, setBearing} from '../actions/map';
 
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import {dataVersionKey} from '../reducers/map';
@@ -493,9 +493,9 @@ function mapDispatchToProps(dispatch) {
     },
     setView: (map) => {
       const center = map.getCenter().toArray();
-      const rotation = map.getBearing();
+      const bearing = map.getBearing();
       dispatch(setView(center, map.getZoom()));
-      dispatch(setRotation(rotation));
+      dispatch(setBearing(bearing));
     },
     setMeasureGeometry: (geom) => {
       const segments = [];
