@@ -16,7 +16,13 @@ First, clone the project: `git clone https://github.com/boundlessgeo/sdk.git`
 
 Then change into directory of cloned project: `cd sdk`
 
-and run the following commands:
+Create a file with the name `.env` in the root of your sdk directory and add your Mapbox API key in there:
+
+```
+MAPBOX_API_KEY=<your key here>
+```
+
+After this, run the following commands:
 
 `npm install` - install libraries
 

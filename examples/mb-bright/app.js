@@ -1,3 +1,4 @@
+/* global MAPBOX_API_KEY */
 /** Demonstrate the loading of a Mapbox GL Style Spec document into SDK
  *
  */
@@ -22,8 +23,6 @@ import * as mapboxActions from '@boundlessgeo/sdk/actions/mapbox';
 
 // This will have webpack include all of the SDK styles.
 import '@boundlessgeo/sdk/stylesheet/sdk.scss';
-
-import CONFIG from './conf'; // eslint-disable-line
 
 /* eslint-disable no-underscore-dangle */
 const store = createStore(combineReducers({
@@ -57,9 +56,9 @@ LegendControl = connect(mapStateToProps)(LegendControl);
 
 function main() {
   const baseUrl = 'https://api.mapbox.com/styles/v1/mapbox/bright-v8';
-  store.dispatch(mapboxActions.configure({baseUrl, accessToken: CONFIG.access_token}));
+  store.dispatch(mapboxActions.configure({baseUrl, accessToken: MAPBOX_API_KEY}));
 
-  const url = `https://api.mapbox.com/styles/v1/mapbox/bright-v8?access_token=${CONFIG.access_token}`;
+  const url = `https://api.mapbox.com/styles/v1/mapbox/bright-v8?access_token=${MAPBOX_API_KEY}`;
   store.dispatch(mapActions.setContext({url}));
 
   // place the map on the page.
