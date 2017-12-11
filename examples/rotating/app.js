@@ -48,14 +48,14 @@ function main() {
 
   const rotate = (dir) => {
     const bearing = store.getState().map.bearing;
-    let calc;
+    let calc, interval = 15;
     if (dir === 'pos') {
-      calc = bearing + 15;
+      calc = bearing + interval;
     } else if (dir === 'neg') {
-      calc = bearing - 15;
+      calc = bearing - interval;
     }
-    const degrees = calc % 360;
-    store.dispatch(mapActions.setRotation(degrees));
+    const new_bearing = calc % 360;
+    store.dispatch(mapActions.setBearing(new_bearing));
   };
 
   // place the map on the page.
@@ -70,10 +70,10 @@ function main() {
     <div>
       <h3>Try it out</h3>
       <button className="sdk-btn" onClick={() => {
-        rotate('pos');
+        rotate('neg');
       }}>Rotate Clockwise</button>
       <button className="sdk-btn" onClick={() => {
-        rotate('neg');
+        rotate('pos');
       }}>Rotate Counter Clockwise</button>
     </div>
   ), document.getElementById('controls'));

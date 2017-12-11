@@ -443,7 +443,7 @@ describe('Map component', () => {
     };
     instance.shouldComponentUpdate.call(instance, nextProps);
     // previous values should still be valid
-    expect(radiansToDegrees(view.getRotation())).toBe(45);
+    expect(radiansToDegrees(view.getRotation())).toBe(-45);
     expect(view.getZoom()).toBe(2 + 1);
     expect(view.getCenter()).toBe(centerWGS84);
   });
@@ -779,10 +779,10 @@ describe('Map component', () => {
     const wrapper = mount(<ConnectedMap store={store} />);
     const sdk_map = wrapper.instance().getWrappedInstance();
 
-    store.dispatch(MapActions.setRotation(20));
+    store.dispatch(MapActions.setBearing(20));
     expect(store.getState().map.bearing).toEqual(20);
 
-    sdk_map.map.getView().setRotation(5);
+    sdk_map.map.getView().setRotation(-5);
     sdk_map.map.dispatchEvent({
       type: 'moveend',
     });

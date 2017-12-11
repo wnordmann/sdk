@@ -70,7 +70,7 @@ import AttributionControl from 'ol/control/attribution';
 
 import LoadingStrategy from 'ol/loadingstrategy';
 
-import {updateLayer, setView, setRotation} from '../actions/map';
+import {updateLayer, setView, setBearing} from '../actions/map';
 import {INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TIME_KEY, TIME_ATTRIBUTE_KEY, QUERYABLE_KEY} from '../constants';
 import {dataVersionKey} from '../reducers/map';
 
@@ -548,7 +548,7 @@ export class Map extends React.Component {
     // compare the rotation
     if (nextProps.map.bearing !== undefined && nextProps.map.bearing !== this.props.map.bearing) {
       const rotation = degreesToRadians(nextProps.map.bearing);
-      map_view.setRotation(rotation);
+      map_view.setRotation(-rotation);
     }
 
     // check the sources diff
@@ -1167,7 +1167,7 @@ export class Map extends React.Component {
       view: new View({
         center,
         zoom: this.props.map.zoom >= 0 ? this.props.map.zoom + 1 : this.props.map.zoom,
-        rotation,
+        rotation: rotation !== undefined ? -rotation : 0,
         projection: map_proj,
       }),
     });
@@ -1482,7 +1482,7 @@ function mapDispatchToProps(dispatch) {
       const center = Proj.transform(view.getCenter(), view.getProjection(), 'EPSG:4326');
       const rotation = radiansToDegrees(view.getRotation());
       dispatch(setView(center, view.getZoom() - 1));
-      dispatch(setRotation(rotation));
+      dispatch(setBearing(-rotation));
     },
     setMeasureGeometry: (geometry, projection) => {
       const geom = GEOJSON_FORMAT.writeGeometryObject(geometry, {

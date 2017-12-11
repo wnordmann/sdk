@@ -1107,7 +1107,7 @@ describe('map reducer', () => {
     expect(reducer(state, glyphs_action).glyphs).toEqual(glyphs);
   });
 
-  it('should change the map rotation', () => {
+  it('should change the map bearing', () => {
     const state = {
       version: 8,
       name: 'default',
@@ -1124,8 +1124,8 @@ describe('map reducer', () => {
     };
     const degs = 15;
     const rotation_action = {
-      type: MAP.SET_ROTATION,
-      degrees: degs,
+      type: MAP.SET_BEARING,
+      bearing: degs,
     };
     expect(reducer(state, rotation_action).bearing).toEqual(degs);
   });

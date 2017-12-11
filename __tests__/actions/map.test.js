@@ -57,13 +57,13 @@ describe('actions', () => {
     expect(actions.setMapName(name)).toEqual(expectedAction);
   });
 
-  it('should create an action to set the map rotation', () => {
+  it('should create an action to set the map bearing', () => {
     const degrees = 45;
     const expectedAction = {
-      type: MAP.SET_ROTATION,
-      degrees,
+      type: MAP.SET_BEARING,
+      bearing: degrees,
     };
-    expect(actions.setRotation(degrees)).toEqual(expectedAction);
+    expect(actions.setBearing(degrees)).toEqual(expectedAction);
   });
 
   it('should create an action to add a layer', () => {
