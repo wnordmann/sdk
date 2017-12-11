@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const common  = require('./webpack-common');
+const Config = require('dotenv').config();
 
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
@@ -29,6 +30,9 @@ module.exports = {
           comparisons: false,  // don't optimize comparisons
         },
       },
+    }),
+    new webpack.DefinePlugin({
+      MAPBOX_API_KEY: JSON.stringify(Config.parsed.MAPBOX_API_KEY),
     }),
   ],
   module: {
