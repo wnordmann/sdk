@@ -14,6 +14,7 @@ import VectorTileSource from 'ol/source/vectortile';
 import ImageStaticSource from 'ol/source/imagestatic';
 import TileJSONSource from 'ol/source/tilejson';
 import TileWMSSource from 'ol/source/tilewms';
+import XYZSource from 'ol/source/xyz';
 import ImageTile from 'ol/imagetile';
 import TileState from 'ol/tilestate';
 
@@ -964,7 +965,7 @@ describe('Map component', () => {
     expect(layer.source).toBe('foo');
   });
 
-  it('should call handleWMSGetFeatureInfo', () => {
+  it('should call handleAsyncGetFeatureInfo', () => {
     const store = createStore(combineReducers({
       map: MapReducer,
     }));
@@ -992,13 +993,13 @@ describe('Map component', () => {
     const wrapper = mount(<ConnectedMap {...props} />);
     const sdk_map = wrapper.instance().getWrappedInstance();
 
-    spyOn(sdk_map, 'handleWMSGetFeatureInfo');
+    spyOn(sdk_map, 'handleAsyncGetFeatureInfo');
 
     sdk_map.queryMap({
       pixel: [0, 0],
     });
 
-    expect(sdk_map.handleWMSGetFeatureInfo).toHaveBeenCalled();
+    expect(sdk_map.handleAsyncGetFeatureInfo).toHaveBeenCalled();
   });
 });
 
@@ -1009,7 +1010,7 @@ describe('Map component async', () => {
 
   // removed set spriteData tests as they are now handled in ol-mapbox-style
 
-  it('should handle WMS GetFeatureInfo', () => {
+  it('should handle WMS GetFeatureInfo', (done) => {
     const store = createStore(combineReducers({
       map: MapReducer,
     }));
@@ -1038,18 +1039,68 @@ describe('Map component async', () => {
     sdk_map.sources = {
       mywms: new TileWMSSource({url: 'http://example.com/wms', params: {LAYERS: 'bar'}}),
     };
-    sdk_map.handleWMSGetFeatureInfo(layer, promises, {coordinate: [100, 100]});
-    expect(promises.length).toEqual(1);
-    promises = [];
     // invisible layer ignored
     layer.layout = {visibility: 'none'};
-    sdk_map.handleWMSGetFeatureInfo(layer, promises, {coordinate: [100, 100]});
+    sdk_map.handleAsyncGetFeatureInfo(layer, promises, {coordinate: [100, 100]});
     expect(promises.length).toEqual(0);
     delete layer.layout;
     promises = [];
     // non queryable layer ignored
     layer.metadata['bnd:queryable'] = false;
-    sdk_map.handleWMSGetFeatureInfo(layer, promises, {coordinate: [100, 100]});
+    sdk_map.handleAsyncGetFeatureInfo(layer, promises, {coordinate: [100, 100]});
     expect(promises.length).toEqual(0);
+    promises = [];
+    layer.metadata['bnd:queryable'] = true;
+    delete layer.layout;
+    sdk_map.handleAsyncGetFeatureInfo(layer, promises, {coordinate: [100, 100]});
+    expect(promises.length).toEqual(1);
+    promises[0].then(function(features) {
+      expect(features[layer.id][0].id).toBe('bugsites.1');
+      done();
+    });
   });
+
+  it('should handle Esri GetFeatureInfo', (done) => {
+    const store = createStore(combineReducers({
+      map: MapReducer,
+    }));
+
+    store.dispatch(MapActions.setView([-45, -45], 11));
+
+    const props = {
+      store,
+      includeFeaturesOnClick: true,
+    };
+
+    const wrapper = mount(<ConnectedMap {...props} />);
+    const sdk_map = wrapper.instance().getWrappedInstance();
+    sdk_map.map.getSize = function() {
+      return [300, 300];
+    };
+    let promises = [];
+    const layer = {
+      id: 'foo',
+      source: 'mywms',
+      metadata: {
+        'bnd:queryable': true,
+        'bnd:query-endpoint': 'http://example.com/identify',
+      },
+    };
+    // eslint-disable-next-line
+    const response = {"results":[{"layerId":0,"layerName":"ushigh","value":"Multi-Lane Divided","displayFieldName":"TYPE","attributes":{"OBJECTID":"281","Shape":"Polyline","LENGTH":"124.679","TYPE":"Multi-Lane Divided","ADMN_CLASS":"Interstate","TOLL_RD":"N","RTE_NUM1":"40","RTE_NUM2":"","ROUTE":"Interstate  40","Shape_Length":"2.182181"},"geometryType":"esriGeometryPolyline","geometry":{"spatialReference":{"wkid":102100},"paths":[[[-10035026.9794618,4184192.41321696],[-10039863.8602667,4186507.90771703],[-10058344.2892869,4186795.13931307],[-10074044.8971256,4184729.85084201],[-10082837.9850594,4181792.17764161],[-10105638.1582591,4170327.73329184],[-10115868.3014353,4163464.98998342],[-10151614.7252565,4150862.14745806],[-10170743.9186755,4143051.31641744],[-10180703.8491623,4142175.78372325],[-10191369.5562355,4139428.17898129],[-10195548.1904265,4139522.78885466],[-10204280.8569411,4139699.59211255],[-10208725.3136425,4137812.17764192],[-10220539.3534125,4136610.72980474],[-10228992.6842444,4137340.89255395],[-10244114.0546956,4137190.34705713],[-10266751.9523214,4134360.96965315],[-10270636.7763633,4133810.88555451]]]}}]};
+    nock('http://example.com')
+      .get('/identify?geometryType=esriGeometryPoint&geometry=100%2C100&sr=3857&tolerance=2&mapExtent=-5015109.862818699%2C-5627254.2633134555%2C-5003644.308575923%2C-5615788.709070679&imageDisplay=300%2C300%2C90&f=json&pretty=false')
+      .reply(200, response);
+
+    sdk_map.sources = {
+      mywms: new XYZSource({urls: ['http://example.com/export?F=image&FORMAT=PNG32&TRANSPARENT=true&SIZE=256%2C256&BBOX={bbox-epsg-3857}&BBOXSR=3857&IMAGESR=3857&DPI=90']}),
+    };
+    sdk_map.handleAsyncGetFeatureInfo(layer, promises, {coordinate: [100, 100]});
+    expect(promises.length).toEqual(1);
+    promises[0].then(function(features) {
+      expect(features[layer.id][0].properties.OBJECTID).toBe('281');
+      done();
+    });
+  });
+
 });
