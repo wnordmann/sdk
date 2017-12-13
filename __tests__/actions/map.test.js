@@ -575,4 +575,23 @@ describe('async actions', () => {
       sourceDef,
     });
   });
+
+  it('should generate the correct OSM source', () => {
+    const sourceName = 'my-source';
+    const sourceDef = {
+      type: 'raster',
+      tileSize: 256,
+      tiles: [
+        'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        'https://b.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      ],
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.',
+    };
+    expect(actions.addOsmSource(sourceName)).toEqual({
+      type: MAP.ADD_SOURCE,
+      sourceName,
+      sourceDef,
+    });
+  });
 });
