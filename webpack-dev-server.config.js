@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 const common  = require('./webpack-common');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const Config = require('dotenv').config();
 
 const entry = common.getEntries(true);
 
@@ -38,6 +39,9 @@ const config = {
     new ExtractTextPlugin('build/examples/sdk.css'),
     // Enables Hot Modules Replacement
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({
+      MAPBOX_API_KEY: JSON.stringify(Config.parsed.MAPBOX_API_KEY),
+    }),
   ],
   module: {
     rules: [

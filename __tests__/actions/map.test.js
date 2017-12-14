@@ -57,13 +57,13 @@ describe('actions', () => {
     expect(actions.setMapName(name)).toEqual(expectedAction);
   });
 
-  it('should create an action to set the map rotation', () => {
+  it('should create an action to set the map bearing', () => {
     const degrees = 45;
     const expectedAction = {
-      type: MAP.SET_ROTATION,
-      degrees,
+      type: MAP.SET_BEARING,
+      bearing: degrees,
     };
-    expect(actions.setRotation(degrees)).toEqual(expectedAction);
+    expect(actions.setBearing(degrees)).toEqual(expectedAction);
   });
 
   it('should create an action to add a layer', () => {
@@ -570,6 +570,25 @@ describe('async actions', () => {
       url: 'http://localhost/geoserver/gwc/service/tms/1.0.0/topp:states@EPSG%3A3857@pbf/{z}/{x}/{-y}.pbf?access_token=my-token',
     };
     expect(actions.addTmsSource(sourceName, url, layerName, options)).toEqual({
+      type: MAP.ADD_SOURCE,
+      sourceName,
+      sourceDef,
+    });
+  });
+
+  it('should generate the correct OSM source', () => {
+    const sourceName = 'my-source';
+    const sourceDef = {
+      type: 'raster',
+      tileSize: 256,
+      tiles: [
+        'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        'https://b.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      ],
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.',
+    };
+    expect(actions.addOsmSource(sourceName)).toEqual({
       type: MAP.ADD_SOURCE,
       sourceName,
       sourceDef,

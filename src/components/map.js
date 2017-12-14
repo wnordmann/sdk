@@ -70,7 +70,7 @@ import AttributionControl from 'ol/control/attribution';
 
 import LoadingStrategy from 'ol/loadingstrategy';
 
-import {updateLayer, setView, setRotation} from '../actions/map';
+import {updateLayer, setView, setBearing} from '../actions/map';
 import {INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TIME_KEY, TIME_ATTRIBUTE_KEY, QUERYABLE_KEY} from '../constants';
 import {dataVersionKey} from '../reducers/map';
 
@@ -79,6 +79,8 @@ import {setMeasureFeature, clearMeasureFeature} from '../actions/drawing';
 import ClusterSource from '../source/cluster';
 
 import {parseQueryString, jsonClone, jsonEquals, getLayerById, degreesToRadians, radiansToDegrees, getKey} from '../util';
+
+import 'ol/ol.css';
 
 /** @module components/map
  *
@@ -160,6 +162,17 @@ function configureTileSource(glSource, mapProjection, time) {
     // eslint-disable-next-line
     tile.getImage().src = img_src;
   });
+  if (glSource.scheme === 'tms') {
+    source.setTileUrlFunction((tileCoord, pixelRatio, projection) => {
+      const min = 0;
+      const max = glSource.tiles.length - 1;
+      const idx = Math.floor(Math.random() * (max - min + 1)) + min;
+      const z = tileCoord[0];
+      const x = tileCoord[1];
+      const y = tileCoord[2] + (1 << z);
+      return glSource.tiles[idx].replace('{z}', z).replace('{y}', y).replace('{x}', x);
+    });
+  }
   return source;
 }
 
@@ -544,7 +557,7 @@ export class Map extends React.Component {
     // compare the rotation
     if (nextProps.map.bearing !== undefined && nextProps.map.bearing !== this.props.map.bearing) {
       const rotation = degreesToRadians(nextProps.map.bearing);
-      map_view.setRotation(rotation);
+      map_view.setRotation(-rotation);
     }
 
     // check the sources diff
@@ -1163,7 +1176,7 @@ export class Map extends React.Component {
       view: new View({
         center,
         zoom: this.props.map.zoom >= 0 ? this.props.map.zoom + 1 : this.props.map.zoom,
-        rotation,
+        rotation: rotation !== undefined ? -rotation : 0,
         projection: map_proj,
       }),
     });
@@ -1478,7 +1491,7 @@ function mapDispatchToProps(dispatch) {
       const center = Proj.transform(view.getCenter(), view.getProjection(), 'EPSG:4326');
       const rotation = radiansToDegrees(view.getRotation());
       dispatch(setView(center, view.getZoom() - 1));
-      dispatch(setRotation(rotation));
+      dispatch(setBearing(-rotation));
     },
     setMeasureGeometry: (geometry, projection) => {
       const geom = GEOJSON_FORMAT.writeGeometryObject(geometry, {

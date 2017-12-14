@@ -39,7 +39,7 @@ SDK-based apps do require additional dependencies. These include Redux for
 managing state and node-sass for preprocessing CSS.
 
 ```
-yarn add node-sass-chokidar redux
+yarn add node-sass-chokidar redux react-redux ol ol-mapbox-style
 ```
 
 ### Add sass-building scripts to package.json
@@ -187,6 +187,27 @@ Congratulations! You should have a fully operational Boundless SDK React app!
 ### Unit testing
 If you want to write unit tests in your application that use the SDK, make sure you have ```canvas``` installed as a ```devDependency```.
 See [here](https://github.com/boundlessgeo/sdk/blob/master/DEVELOPING.md#testing-and-the-canvas-module) for more details.
+
+### Doing a production build
+In the current state, `yarn build``` will fail with something like:
+
+    ```bash
+    yarn build v1.0.1
+    $ react-scripts build
+    Creating an optimized production build...
+    Failed to compile.
+
+    Failed to minify the code from this file:
+
+         ./node_modules/@mapbox/mapbox-gl-style-spec/feature_filter/index.js:15
+
+    Read more here: http://bit.ly/2tRViJ9
+
+    error Command failed with exit code 1.
+    ```
+
+This is because some of the dependencies are not published to npm as ES5.
+In order to fix this, we need to eject our application and make changes to `config/webpack/config.prod.js`. See the instructions in the next section.
 
 ### Ejecting Create React App
 

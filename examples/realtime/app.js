@@ -1,3 +1,4 @@
+/* global MAPBOX_API_KEY */
 /** Realtime data example.
  */
 
@@ -16,8 +17,6 @@ import SdkMapboxReducer from '@boundlessgeo/sdk/reducers/mapbox';
 import * as mapActions from '@boundlessgeo/sdk/actions/map';
 import * as mapboxActions from '@boundlessgeo/sdk/actions/mapbox';
 
-import CONFIG from './conf'; // eslint-disable-line
-
 // This will have webpack include all of the SDK styles.
 import '@boundlessgeo/sdk/stylesheet/sdk.scss';
 
@@ -30,7 +29,7 @@ applyMiddleware(thunkMiddleware));
 
 function main() {
   const baseUrl = 'https://api.mapbox.com/styles/v1/mapbox/bright-v8';
-  store.dispatch(mapboxActions.configure({baseUrl, accessToken: CONFIG.access_token}));
+  store.dispatch(mapboxActions.configure({baseUrl, accessToken: MAPBOX_API_KEY}));
 
   // Start with a reasonable global view of the map.
   store.dispatch(mapActions.setView([-93, 45], 2));
@@ -39,15 +38,7 @@ function main() {
   store.dispatch(mapActions.setSprite('mapbox://sprites/mapbox/bright-v8'));
 
   // add the OSM source
-  store.dispatch(mapActions.addSource('osm', {
-    type: 'raster',
-    tileSize: 256,
-    tiles: [
-      'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      'https://b.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    ],
-  }));
+  store.dispatch(mapActions.addOsmSource('osm'));
 
   // and an OSM layer.
   store.dispatch(mapActions.addLayer({

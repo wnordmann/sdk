@@ -84,6 +84,17 @@ describe('Map component', () => {
         tileSize: 256,
         tiles: ['https://www.example.com/foo?BBOX={bbox-epsg-3857}'],
       },
+      tiletms: {
+        type: 'raster',
+        tileSize: 256,
+        scheme: 'tms',
+        tiles: ['http://www.example.com/tms/{z}/{x}/{y}.png'],
+      },
+      tilexyz: {
+        type: 'raster',
+        tileSize: 256,
+        tiles: ['http://www.example.com/{z}/{x}/{y}.png'],
+      },
     };
     const layers = [
       {
@@ -118,6 +129,12 @@ describe('Map component', () => {
       }, {
         id: 'tilelayer',
         source: 'tile',
+      }, {
+        id: 'tmslayer',
+        source: 'tiletms',
+      }, {
+        id: 'xyzlayer',
+        source: 'tilexyz',
       },
     ];
     const metadata = {
@@ -155,6 +172,10 @@ describe('Map component', () => {
     expect(map.getLayers().item(4).getSource().getUrls()[1]).toBe(expected.replace('a.', 'b.'));
     expect(map.getLayers().item(4).getSource().getUrls()[2]).toBe(expected.replace('a.', 'c.'));
     expect(map.getLayers().item(4).getSource().getUrls()[3]).toBe(expected.replace('a.', 'd.'));
+    let tileUrlFunction = map.getLayers().item(7).getSource().getTileUrlFunction();
+    expect(tileUrlFunction(tileCoord)).toBe('http://www.example.com/tms/0/0/1.png');
+    tileUrlFunction = map.getLayers().item(8).getSource().getTileUrlFunction();
+    expect(tileUrlFunction(tileCoord)).toBe('http://www.example.com/0/0/-1.png');
     // move the map.
     wrapper.setProps({
       zoom: 4,
@@ -443,7 +464,7 @@ describe('Map component', () => {
     };
     instance.shouldComponentUpdate.call(instance, nextProps);
     // previous values should still be valid
-    expect(radiansToDegrees(view.getRotation())).toBe(45);
+    expect(radiansToDegrees(view.getRotation())).toBe(-45);
     expect(view.getZoom()).toBe(2 + 1);
     expect(view.getCenter()).toBe(centerWGS84);
   });
@@ -779,10 +800,10 @@ describe('Map component', () => {
     const wrapper = mount(<ConnectedMap store={store} />);
     const sdk_map = wrapper.instance().getWrappedInstance();
 
-    store.dispatch(MapActions.setRotation(20));
+    store.dispatch(MapActions.setBearing(20));
     expect(store.getState().map.bearing).toEqual(20);
 
-    sdk_map.map.getView().setRotation(5);
+    sdk_map.map.getView().setRotation(-5);
     sdk_map.map.dispatchEvent({
       type: 'moveend',
     });

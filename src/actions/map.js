@@ -88,14 +88,14 @@ export function setMapName(name) {
 }
 
 /** Action to update the map bearing value in map state.
- *  @param {number} degrees Bearing value to set in degrees.
+ *  @param {number} bearing Bearing value to set in degrees.
  *
  *  @returns {Object} Action object to pass to reducer.
  */
-export function setRotation(degrees) {
+export function setBearing(bearing) {
   return {
-    type: MAP.SET_ROTATION,
-    degrees,
+    type: MAP.SET_BEARING,
+    bearing,
   };
 }
 
@@ -556,5 +556,24 @@ export function addTmsSource(sourceId, serverUrl, layerName, options = {}) {
   return addSource(sourceId, {
     type: 'vector',
     url,
+  });
+}
+
+/** Add an OSM raster tile source
+ *
+ * @param {string} sourceId - new ID for the source.
+ *
+ * @returns {Object} Action to create a new source.
+ */
+export function addOsmSource(sourceId) {
+  return addSource(sourceId, {
+    type: 'raster',
+    tileSize: 256,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.',
+    tiles: [
+      'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      'https://b.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    ],
   });
 }

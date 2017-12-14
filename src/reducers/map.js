@@ -696,8 +696,8 @@ export default function MapReducer(state = defaultState, action) {
       return Object.assign({}, state, {glyphs: action.glyphs});
     case MAP.SET_SPRITE:
       return Object.assign({}, state, {sprite: action.sprite});
-    case MAP.SET_ROTATION:
-      return Object.assign({}, state, {bearing: action.degrees});
+    case MAP.SET_BEARING:
+      return Object.assign({}, state, {bearing: action.bearing});
     case MAP.ADD_LAYER:
       return addLayer(state, action);
     case MAP.REMOVE_LAYER:
