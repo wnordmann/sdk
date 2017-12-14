@@ -32,15 +32,7 @@ function main() {
   store.dispatch(mapActions.setView([-93, 45], 5));
 
   // add the OSM source
-  store.dispatch(mapActions.addSource('osm', {
-    type: 'raster',
-    tileSize: 256,
-    tiles: [
-      'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      'https://b.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    ],
-  }));
+  store.dispatch(mapActions.addOsmSource('osm'));
 
   // and an OSM layer.
   // Raster layers need not have any paint styles.

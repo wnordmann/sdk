@@ -48,15 +48,7 @@ function main() {
   store.dispatch(SdkMapActions.setView([-93, 45], 2));
 
   // add the OSM source
-  store.dispatch(SdkMapActions.addSource('osm', {
-    type: 'raster',
-    tileSize: 256,
-    tiles: [
-      'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      'https://b.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    ],
-  }));
+  store.dispatch(SdkMapActions.addOsmSource('osm'));
 
   const tracts_url = 'https://demo.boundlessgeo.com/geoserver/wfs?SRSNAME=EPSG:3857&REQUEST=GetFeature&TYPENAME=opengeo:tracts&VERSION=1.1.0&OUTPUTFORMAT=JSON';
 

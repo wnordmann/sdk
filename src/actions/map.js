@@ -558,3 +558,22 @@ export function addTmsSource(sourceId, serverUrl, layerName, options = {}) {
     url,
   });
 }
+
+/** Add an OSM raster tile source
+ *
+ * @param {string} sourceId - new ID for the source.
+ *
+ * @returns {Object} Action to create a new source.
+ */
+export function addOsmSource(sourceId) {
+  return addSource(sourceId, {
+    type: 'raster',
+    tileSize: 256,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.',
+    tiles: [
+      'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      'https://b.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    ],
+  });
+}
