@@ -162,6 +162,17 @@ function configureTileSource(glSource, mapProjection, time) {
     // eslint-disable-next-line
     tile.getImage().src = img_src;
   });
+  if (glSource.scheme === 'tms') {
+    source.setTileUrlFunction((tileCoord, pixelRatio, projection) => {
+      const min = 0;
+      const max = glSource.tiles.length - 1;
+      const idx = Math.floor(Math.random() * (max - min + 1)) + min;
+      const z = tileCoord[0];
+      const x = tileCoord[1];
+      const y = tileCoord[2] + (1 << z);
+      return glSource.tiles[idx].replace('{z}', z).replace('{y}', y).replace('{x}', x);
+    });
+  }
   return source;
 }
 
