@@ -4,7 +4,6 @@
 // requestAnimationFrame polyfill by Erik Möller. fixes from Paul Irish and Tino Zijdel
 
 // MIT license
-
 (function() {
     var lastTime = 0;
     var vendors = ['ms', 'moz', 'webkit', 'o'];
@@ -28,4 +27,10 @@
         window.cancelAnimationFrame = function(id) {
             clearTimeout(id);
         };
+}());
+
+(function() {
+    var canvasBindings = require("canvas/lib/bindings");
+    window.CanvasGradient = canvasBindings.CanvasGradient;
+    window.CanvasPattern = canvasBindings.CanvasPattern;
 }());
