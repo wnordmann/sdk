@@ -91,17 +91,17 @@ class SdkLayerList extends React.Component {
   }
 
   addGroup(layers, groupName, groups, group_layers) {
-    layers.unshift(
-      <this.groupClass
-        enableDD={this.props.enableDD}
-        key={groupName}
-        groupId={groupName}
-        group={groups[groupName]}
-        childLayers={group_layers}
-        layers={this.props.layers}
-        layerClass={this.layerClass}
-      />
-    );
+    const group_props = Object.assign({}, this.props.groupProps, {
+      enableDD: this.props.enableDD,
+      key: groupName,
+      groupId: groupName,
+      group: groups[groupName],
+      childLayers: group_layers,
+      layers: this.props.layers,
+      layerClass: this.layerClass,
+    });
+
+    layers.unshift(<this.groupClass {...group_props} />);
   }
 
   handlePendingGroup(layers, group_layers, groupName, groups) {
@@ -179,6 +179,10 @@ SdkLayerList.propTypes = {
    * Css className for the root element.
    */
   className: PropTypes.string,
+  /**
+   * Additional props for Groups in the list
+   */
+  groupProps: PropTypes.object,
 };
 
 SdkLayerList.defaultProps = {
@@ -186,6 +190,7 @@ SdkLayerList.defaultProps = {
   layerClass: SdkLayerListItemDD,
   groupClass: SdkLayerListGroup,
   listClass: SdkList,
+  groupProps: {},
 };
 
 function mapStateToProps(state) {
