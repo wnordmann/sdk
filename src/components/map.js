@@ -58,6 +58,7 @@ import VectorLayer from 'ol/layer/vector';
 import VectorSource from 'ol/source/vector';
 
 import GeoJsonFormat from 'ol/format/geojson';
+import EsriJsonFormat from 'ol/format/esrijson';
 
 import DrawInteraction from 'ol/interaction/draw';
 import ModifyInteraction from 'ol/interaction/modify';
@@ -71,14 +72,16 @@ import AttributionControl from 'ol/control/attribution';
 import LoadingStrategy from 'ol/loadingstrategy';
 
 import {updateLayer, setView, setBearing} from '../actions/map';
-import {INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TIME_KEY, TIME_ATTRIBUTE_KEY, QUERYABLE_KEY} from '../constants';
+import {INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TIME_KEY, TIME_ATTRIBUTE_KEY, QUERYABLE_KEY, QUERY_ENDPOINT_KEY} from '../constants';
 import {dataVersionKey} from '../reducers/map';
 
 import {setMeasureFeature, clearMeasureFeature} from '../actions/drawing';
 
 import ClusterSource from '../source/cluster';
 
-import {parseQueryString, jsonClone, jsonEquals, getLayerById, degreesToRadians, radiansToDegrees, getKey} from '../util';
+import {parseQueryString, jsonClone, jsonEquals, getLayerById, degreesToRadians, radiansToDegrees, getKey, encodeQueryObject} from '../util';
+
+import fetchJsonp from 'fetch-jsonp';
 
 import 'ol/ol.css';
 
@@ -89,6 +92,7 @@ import 'ol/ol.css';
  */
 
 const GEOJSON_FORMAT = new GeoJsonFormat();
+const ESRIJSON_FORMAT = new EsriJsonFormat();
 const WGS84_SPHERE = new Sphere(6378137);
 const MAPBOX_PROTOCOL = 'mapbox://';
 const BBOX_STRING = '{bbox-epsg-3857}';
@@ -1060,23 +1064,26 @@ export class Map extends React.Component {
     }
   }
 
-  /** Handles WMS GetFeatureInfo for a given map event.
+  /** Handles async (WMS, ArcGIS rest) GetFeatureInfo for a given map event.
    *
    *  @param {Object} layer Mapbox GL layer object.
    *  @param {Promise[]} promises Features promies.
    *  @param {Object} evt Map event whose coordinates drive the feature request.
    *
    */
-  handleWMSGetFeatureInfo(layer, promises, evt) {
-    const map_prj = this.map.getView().getProjection();
-    const map_resolution = this.map.getView().getResolution();
+  handleAsyncGetFeatureInfo(layer, promises, evt) {
+    const map = this.map;
+    const view = map.getView();
+    const map_prj = view.getProjection();
+    let url, features_by_layer, layer_name;
     if (layer.metadata[QUERYABLE_KEY] && (!layer.layout || (layer.layout.visibility && layer.layout.visibility !== 'none'))) {
+      const map_resolution = view.getResolution();
       const source = this.sources[layer.source];
       if (source instanceof TileWMSSource) {
         promises.push(new Promise((resolve) => {
-          const features_by_layer = {};
-          const layer_name = layer.id;
-          const url = this.sources[layer.source].getGetFeatureInfoUrl(
+          features_by_layer = {};
+          layer_name = layer.id;
+          url = this.sources[layer.source].getGetFeatureInfoUrl(
             evt.coordinate, map_resolution, map_prj, {
               INFO_FORMAT: 'application/json',
             },
@@ -1094,6 +1101,40 @@ export class Map extends React.Component {
               ).features;
               resolve(features_by_layer);
             });
+        }));
+      } else if (layer.metadata[QUERY_ENDPOINT_KEY]) {
+        const map_size = map.getSize();
+        promises.push(new Promise((resolve) => {
+          features_by_layer = {};
+          const params = {
+            geometryType: 'esriGeometryPoint',
+            geometry: evt.coordinate.join(','),
+            sr: map_prj.getCode().split(':')[1],
+            tolerance: 2,
+            mapExtent: view.calculateExtent(map_size).join(','),
+            imageDisplay: map_size.join(',') + ',90',
+            f: 'json',
+            pretty: 'false'
+          };
+          url = `${layer.metadata[QUERY_ENDPOINT_KEY]}?${encodeQueryObject(params)}`;
+          fetchJsonp(url).then(
+            response => response.json(),
+          ).then((json) => {
+            layer_name = layer.id;
+            const features = [];
+            for (let i = 0, ii = json.results.length; i < ii; ++i) {
+              features.push(ESRIJSON_FORMAT.readFeature(json.results[i]));
+            }
+            features_by_layer[layer_name] = GEOJSON_FORMAT.writeFeaturesObject(
+              features, {
+                featureProjection: map_prj,
+                dataProjection: 'EPSG:4326',
+              },
+            ).features;
+            resolve(features_by_layer);
+          }).catch(function(error) {
+            console.error('An error occured.', error);
+          });
         }));
       }
     }
@@ -1146,7 +1187,7 @@ export class Map extends React.Component {
     // add other async queries here.
     for (let i = 0, ii = this.props.map.layers.length; i < ii; ++i) {
       const layer = this.props.map.layers[i];
-      this.handleWMSGetFeatureInfo(layer, promises, evt);
+      this.handleAsyncGetFeatureInfo(layer, promises, evt);
     }
 
     return Promise.all(promises);
