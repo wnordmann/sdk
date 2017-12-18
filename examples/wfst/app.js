@@ -31,8 +31,6 @@ import * as SdkMapActions from '@boundlessgeo/sdk/actions/map';
 // This will have webpack include all of the SDK styles.
 import '@boundlessgeo/sdk/stylesheet/sdk.scss';
 
-import './app.css';
-
 import EditPanel from './edit-panel';
 
 /* eslint-disable no-underscore-dangle */
