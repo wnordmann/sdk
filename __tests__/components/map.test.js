@@ -746,6 +746,22 @@ describe('Map component', () => {
     mount(<ConnectedMap store={store} />);
   });
 
+  it('should set the map size', () => {
+    const store = createStore(combineReducers({
+      map: MapReducer,
+    }));
+    const wrapper = mount(<ConnectedMap store={store} />);
+    const sdk_map = wrapper.instance().getWrappedInstance();
+    sdk_map.map.getSize = function() {
+      return [100, 200];
+    };
+    sdk_map.map.dispatchEvent({
+      type: 'change:size',
+    });
+    expect(store.getState().map.metadata['bnd:map-size']).toEqual([100, 200]);
+  });
+
+
   it('should trigger the setView callback', () => {
     const store = createStore(combineReducers({
       map: MapReducer,
