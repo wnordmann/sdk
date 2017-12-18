@@ -27,8 +27,6 @@ import fetch from 'isomorphic-fetch';
 // This will have webpack include all of the SDK styles.
 import '@boundlessgeo/sdk/stylesheet/sdk.scss';
 
-// Use app.css to style current app
-
 /* eslint-disable no-underscore-dangle */
 const store = createStore(combineReducers({
   map: SdkMapReducer,
