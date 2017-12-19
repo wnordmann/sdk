@@ -194,6 +194,10 @@ export class MapboxGL extends React.Component {
     if (this.map) {
       this.props.setSize([this.mapdiv.offsetWidth, this.mapdiv.offsetHeight]);
 
+      this.map.on('resize', () => {
+        this.props.setSize([this.mapdiv.offsetWidth, this.mapdiv.offsetHeight]);
+      });
+
       this.map.on('moveend', () => {
         this.onMapMoveEnd();
       });
