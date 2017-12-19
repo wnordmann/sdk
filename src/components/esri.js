@@ -37,6 +37,10 @@ class EsriController extends Component {
     this.view = new View();
   }
 
+  componentDidMount() {
+    this.fetchData();
+  }
+
   shouldComponentUpdate(nextProps) {
     if (nextProps.map.center[0] !== this.props.map.center[0] || nextProps.map.center[1] !== this.props.map.center[1] || nextProps.map.zoom !== this.props.map.zoom || nextProps.sources !== this.props.sources) {
       this.fetchData();
