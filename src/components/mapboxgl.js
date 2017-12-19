@@ -16,7 +16,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import uuid from 'uuid';
 import {connect} from 'react-redux';
-import {setView, setBearing} from '../actions/map';
+import {setView, setBearing, updateMetadata} from '../actions/map';
 
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import {dataVersionKey} from '../reducers/map';
@@ -24,7 +24,7 @@ import {INTERACTIONS} from '../constants';
 import area from '@turf/area';
 import distance from '@turf/distance';
 import {setMeasureFeature, clearMeasureFeature} from '../actions/drawing';
-import {LAYER_VERSION_KEY, SOURCE_VERSION_KEY} from '../constants';
+import {LAYER_VERSION_KEY, SOURCE_VERSION_KEY, MAP_SIZE_KEY} from '../constants';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -192,6 +192,8 @@ export class MapboxGL extends React.Component {
     this.layersVersion = getVersion(this.props.map, LAYER_VERSION_KEY);
     // when the map moves update the location in the state
     if (this.map) {
+      this.props.setSize([this.mapdiv.offsetWidth, this.mapdiv.offsetHeight]);
+
       this.map.on('moveend', () => {
         this.onMapMoveEnd();
       });
@@ -465,6 +467,9 @@ MapboxGL.defaultProps = {
   setView: () => {
     // swallow event.
   },
+  setSize: () => {
+    // swallow event.
+  },
   includeFeaturesOnClick: false,
   onClick: () => {
   },
@@ -498,6 +503,11 @@ function mapDispatchToProps(dispatch) {
       const bearing = map.getBearing();
       dispatch(setView(center, map.getZoom()));
       dispatch(setBearing(bearing));
+    },
+    setSize: (size) => {
+      const metadata = {};
+      metadata[MAP_SIZE_KEY] = size;
+      dispatch(updateMetadata(metadata));
     },
     setMeasureGeometry: (geom) => {
       const segments = [];
