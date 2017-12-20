@@ -72,7 +72,7 @@ import AttributionControl from 'ol/control/attribution';
 import LoadingStrategy from 'ol/loadingstrategy';
 
 import {updateLayer, setView, setBearing} from '../actions/map';
-import {setMapSize} from '../actions/mapinfo';
+import {setMapSize, setMousePosition} from '../actions/mapinfo';
 import {INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TIME_KEY, TIME_ATTRIBUTE_KEY, QUERYABLE_KEY, QUERY_ENDPOINT_KEY} from '../constants';
 import {dataVersionKey} from '../reducers/map';
 
@@ -1225,6 +1225,13 @@ export class Map extends React.Component {
       }),
     });
 
+    if (this.props.hover) {
+      this.map.on('pointermove', (evt) => {
+        const lngLat = Proj.toLonLat(evt.coordinate);
+        this.props.setMousePosition({lng: lngLat[0], lat: lngLat[1]}, evt.coordinate);
+      });
+    }
+
     // when the map moves update the location in the state
     this.map.on('moveend', () => {
       this.props.setView(this.map.getView());
@@ -1413,6 +1420,8 @@ export class Map extends React.Component {
 Map.propTypes = {
   /** Should we wrap the world? If yes, data will be repeated in all worlds. */
   wrapX: PropTypes.bool,
+  /** Should we handle map hover to show mouseposition? */
+  hover: PropTypes.bool,
   /** Projection of the map, normally an EPSG code. */
   projection: PropTypes.string,
   /** Map configuration, modelled after the Mapbox Style specification. */
@@ -1461,6 +1470,8 @@ Map.propTypes = {
   setView: PropTypes.func,
   /** setSize callback function, triggered on change size. */
   setSize: PropTypes.func,
+  /** setMousePosition callback function, triggered on pointermove. */
+  setMousePosition: PropTypes.func,
   /** Should we include features when the map is clicked? */
   includeFeaturesOnClick: PropTypes.bool,
   /** onClick callback function, triggered on singleclick. */
@@ -1483,6 +1494,7 @@ Map.propTypes = {
 
 Map.defaultProps = {
   wrapX: true,
+  hover: true,
   projection: 'EPSG:3857',
   map: {
     center: [0, 0],
@@ -1506,6 +1518,9 @@ Map.defaultProps = {
     // swallow event.
   },
   setSize: () => {},
+  setMousePosition: () => {
+    // swallow event.
+  },
   includeFeaturesOnClick: false,
   onClick: () => {
   },
@@ -1574,6 +1589,9 @@ function mapDispatchToProps(dispatch) {
     },
     clearMeasureFeature: () => {
       dispatch(clearMeasureFeature());
+    },
+    setMousePosition(lngLat, coordinate) {
+      dispatch(setMousePosition(lngLat, coordinate));
     },
   };
 }

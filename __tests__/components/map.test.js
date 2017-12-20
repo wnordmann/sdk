@@ -182,6 +182,9 @@ describe('Map component', () => {
     wrapper.setProps({
       zoom: 4,
     });
+    spyOn(map, 'setTarget');
+    wrapper.unmount();
+    expect(map.setTarget).toHaveBeenCalledWith(null);
   });
 
   it('should ignore unknown types', () => {
@@ -780,6 +783,26 @@ describe('Map component', () => {
     });
 
     expect(store.getState().map.center).toEqual([0, 0]);
+  });
+
+  it('should trigger the setMousePosition callback', () => {
+    const store = createStore(combineReducers({
+      map: MapReducer,
+      mapinfo: MapInfoReducer,
+    }));
+
+    const props = {
+      store,
+    };
+    const wrapper = mount(<ConnectedMap {...props} />);
+    const sdk_map = wrapper.instance().getWrappedInstance();
+
+    sdk_map.map.dispatchEvent({
+      type: 'pointermove',
+      coordinate: [0, 0],
+    });
+
+    expect(store.getState().mapinfo.mouseposition.lngLat).toEqual({lng: 0, lat: 0});
   });
 
   it('should update the source url', () => {
