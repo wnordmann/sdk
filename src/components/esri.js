@@ -17,8 +17,6 @@ import PropTypes from 'prop-types';
 import {Component} from 'react';
 import {connect} from 'react-redux';
 
-import {MAP_SIZE_KEY} from '../constants';
-
 import View from 'ol/view';
 import EsriJsonFormat from 'ol/format/esrijson';
 import GeoJsonFormat from 'ol/format/geojson';
@@ -53,7 +51,7 @@ class EsriController extends Component {
   fetchData() {
     this.view.setCenter(Proj.fromLonLat(this.props.map.center));
     this.view.setZoom(this.props.map.zoom + 1);
-    const extent = this.view.calculateExtent(this.props.map.metadata[MAP_SIZE_KEY]);
+    const extent = this.view.calculateExtent(this.props.mapinfo.size);
     for (let key in this.props.sources) {
       const source = this.props.sources[key];
       const bbox = `{"xmin":${extent[0]},"ymin":${extent[1]},"xmax":${extent[2]},"ymax":${extent[3]},"spatialReference":{"wkid":102100}}`;
@@ -89,6 +87,7 @@ function mapStateToProps(state) {
   return {
     sources: state.esri.sources,
     map: state.map,
+    mapinfo: state.mapinfo,
   };
 }
 

@@ -13,6 +13,7 @@ import RendererSwitch from '../rendererswitch';
 
 import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
+import SdkMapInfoReducer from '@boundlessgeo/sdk/reducers/mapinfo';
 import SdkEsriReducer from '@boundlessgeo/sdk/reducers/esri';
 
 import SdkHashHistory from '@boundlessgeo/sdk/components/history';
@@ -30,6 +31,7 @@ import '@boundlessgeo/sdk/stylesheet/sdk.scss';
 const store = createStore(combineReducers({
   map: SdkMapReducer,
   esri: SdkEsriReducer,
+  mapinfo: SdkMapInfoReducer,
 }), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
 applyMiddleware(thunkMiddleware));
 

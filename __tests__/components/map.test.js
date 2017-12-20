@@ -25,6 +25,7 @@ import ConnectedMap, {Map} from '../../src/components/map';
 import {hydrateLayer, getFakeStyle} from '../../src/components/map';
 import SdkPopup from '../../src/components/map/popup';
 import MapReducer from '../../src/reducers/map';
+import MapInfoReducer from '../../src/reducers/mapinfo';
 import PrintReducer from '../../src/reducers/print';
 import * as MapActions from '../../src/actions/map';
 import * as PrintActions from '../../src/actions/print';
@@ -749,6 +750,7 @@ describe('Map component', () => {
   it('should set the map size', () => {
     const store = createStore(combineReducers({
       map: MapReducer,
+      mapinfo: MapInfoReducer,
     }));
     const wrapper = mount(<ConnectedMap store={store} />);
     const sdk_map = wrapper.instance().getWrappedInstance();
@@ -758,7 +760,7 @@ describe('Map component', () => {
     sdk_map.map.dispatchEvent({
       type: 'change:size',
     });
-    expect(store.getState().map.metadata['bnd:map-size']).toEqual([100, 200]);
+    expect(store.getState().mapinfo.size).toEqual([100, 200]);
   });
 
 

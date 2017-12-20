@@ -70,6 +70,10 @@ export const ESRI = {
   REMOVE_SOURCE: 'ESRI_REMOVE_SOURCE',
 };
 
+export const MAPINFO = {
+  SET_SIZE: 'MAPINFO.SET_SIZE',
+};
+
 export default {
   MAP,
   DRAWING,
@@ -77,4 +81,5 @@ export default {
   WFS,
   MAPBOX,
   ESRI,
+  MAPINFO,
 };
