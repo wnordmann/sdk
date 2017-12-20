@@ -22,6 +22,7 @@ import EsriJsonFormat from 'ol/format/esrijson';
 import GeoJsonFormat from 'ol/format/geojson';
 import Proj from 'ol/proj';
 
+import {encodeQueryObject} from '../util';
 import {updateSource} from '../actions/map';
 
 /** @module components/esri
@@ -54,13 +55,33 @@ class EsriController extends Component {
     const extent = this.view.calculateExtent(this.props.mapinfo.size);
     for (let key in this.props.sources) {
       const source = this.props.sources[key];
-      const bbox = `{"xmin":${extent[0]},"ymin":${extent[1]},"xmax":${extent[2]},"ymax":${extent[3]},"spatialReference":{"wkid":102100}}`;
-      const url = `${source.onlineResource}${source.featureLayer}/query/?f=json&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry=${bbox}&geometryType=esriGeometryEnvelope&inSR=102100&outFields=*&outSR=4326`;
+      const bbox = JSON.stringify({
+        xmin: extent[0],
+        ymin: extent[1],
+        xmax: extent[2],
+        ymax: extent[3],
+        spatialReference: {
+          wkid: 102100,
+        }
+      });
+      const params = {
+        f: 'json',
+        returnGeometry: true,
+        spatialRel: 'esriSpatialRelIntersects',
+        geometry: bbox,
+        geometryType: 'esriGeometryEnvelope',
+        inSR: '102100',
+        outFields: '*',
+        outSR: '4326',
+      };
+      const url = `${source.onlineResource}${source.featureLayer}/query/?${encodeQueryObject(params)}`;
       fetchJsonp(url, {timeout: this.props.timeout}).then(
         response => response.json(),
       ).then((json) => {
         const features = this.esri_format.readFeatures(json);
         this.props.dispatch(updateSource(key, {data: this.geojson_format.writeFeaturesObject(features)}));
+      }).catch(function(error) {
+        console.error('An error occured.', error);
       });
     }
   }
