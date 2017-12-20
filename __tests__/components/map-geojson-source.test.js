@@ -118,7 +118,7 @@ describe('tests for the geojson-type map sources', () => {
     testGeojsonData(done, 'http://example.com/test.geojson', 2);
   });
 
-  it('adds a geojson feature collection from a relative url', (done) => {
+  xit('adds a geojson feature collection from a relative url', (done) => {
     // mock up the url to call
     nock('http://example.com')
       .get('/base/test.geojson')
