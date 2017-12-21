@@ -117,6 +117,7 @@
   },
   "homepage": "https://github.com/boundlessgeo/sdk#readme",
   "jest": {
+    "testURL": "http://localhost",
     "setupFiles": [
       "<rootDir>/env-setup.js"
     ],

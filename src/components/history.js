@@ -136,7 +136,7 @@ export class HashHistory extends React.Component {
 
   render() {
     // set the hash as appropriate.
-    window.location.hash = `#${this.encodeState()}`;
+    window.history.replaceState(null, null, window.location.pathname + `#${this.encodeState()}`);
 
     // this doesn't actually contribute anything to the DOM!
     return false;

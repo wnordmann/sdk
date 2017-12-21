@@ -72,6 +72,7 @@ import AttributionControl from 'ol/control/attribution';
 import LoadingStrategy from 'ol/loadingstrategy';
 
 import {updateLayer, setView, setBearing} from '../actions/map';
+import {setMapSize} from '../actions/mapinfo';
 import {INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TIME_KEY, TIME_ATTRIBUTE_KEY, QUERYABLE_KEY, QUERY_ENDPOINT_KEY} from '../constants';
 import {dataVersionKey} from '../reducers/map';
 
@@ -1229,6 +1230,12 @@ export class Map extends React.Component {
       this.props.setView(this.map.getView());
     });
 
+    this.props.setSize(this.map.getSize());
+
+    this.map.on('change:size', () => {
+      this.props.setSize(this.map.getSize());
+    });
+
     // when the map is clicked, handle the event.
     this.map.on('singleclick', (evt) => {
       // React listens to events on the document, OpenLayers places their
@@ -1452,6 +1459,8 @@ Map.propTypes = {
   initialPopups: PropTypes.arrayOf(PropTypes.object),
   /** setView callback function, triggered on moveend. */
   setView: PropTypes.func,
+  /** setSize callback function, triggered on change size. */
+  setSize: PropTypes.func,
   /** Should we include features when the map is clicked? */
   includeFeaturesOnClick: PropTypes.bool,
   /** onClick callback function, triggered on singleclick. */
@@ -1496,6 +1505,7 @@ Map.defaultProps = {
   setView: () => {
     // swallow event.
   },
+  setSize: () => {},
   includeFeaturesOnClick: false,
   onClick: () => {
   },
@@ -1535,6 +1545,9 @@ function mapDispatchToProps(dispatch) {
       const rotation = radiansToDegrees(view.getRotation());
       dispatch(setView(center, view.getZoom() - 1));
       dispatch(setBearing(-rotation));
+    },
+    setSize: (size) => {
+      dispatch(setMapSize(size));
     },
     setMeasureGeometry: (geometry, projection) => {
       const geom = GEOJSON_FORMAT.writeGeometryObject(geometry, {

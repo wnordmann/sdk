@@ -323,8 +323,8 @@ describe('MapboxGL component', () => {
     map.map.on = on;
     spyOn(map.map, 'on').and.callThrough();
     map.configureMap();
-    expect(map.map.on).toHaveBeenCalledTimes(2);
-    expect(types).toEqual(['moveend', 'click']);
+    expect(map.map.on).toHaveBeenCalledTimes(3);
+    expect(types).toEqual(['resize', 'moveend', 'click']);
   });
 
   it('configureMap sets load listener', () => {
@@ -359,8 +359,8 @@ describe('MapboxGL component', () => {
     map.map.on = on;
     spyOn(map.map, 'on').and.callThrough();
     map.configureMap();
-    expect(map.map.on).toHaveBeenCalledTimes(3);
-    expect(types).toEqual(['moveend', 'click', 'load']);
+    expect(map.map.on).toHaveBeenCalledTimes(4);
+    expect(types).toEqual(['resize', 'moveend', 'click', 'load']);
   });
 
   it('configureMap calls updateInteraction', () => {
@@ -470,6 +470,33 @@ describe('MapboxGL component', () => {
     spyOn(map.map, 'addControl');
     map.updateInteraction({interaction: 'measure:LineString'});
     expect(map.map.addControl).toHaveBeenCalled();
+  });
+
+  it('should create an overlay for the initialPopups', () => {
+    const store = createStore(combineReducers({
+      map: MapReducer,
+    }));
+
+    const props = {
+      store,
+      initialPopups: [(<SdkPopup coordinate={[0, 0]}><div>foo</div></SdkPopup>)],
+    };
+
+    const wrapper = mount(<ConnectedMap {...props} />);
+    const map = wrapper.instance().getWrappedInstance();
+    // mock up our GL map
+    map.map = createMapMock();
+    let types = [];
+    map.map.off = (eventType) => {
+      types.push(eventType);
+    };
+
+    expect(Object.keys(map.popups).length).toBe(0);
+
+    map.onMapLoad();
+
+    expect(Object.keys(map.popups).length).toBe(1);
+    expect(types[0]).toBe('click');
   });
 
   it('addPopup works correctly', () => {
