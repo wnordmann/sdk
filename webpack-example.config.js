@@ -32,7 +32,7 @@ module.exports = {
       },
     }),
     new webpack.DefinePlugin({
-      MAPBOX_API_KEY: JSON.stringify(Config.parsed.MAPBOX_API_KEY),
+      MAPBOX_API_KEY: Config.parsed ? JSON.stringify(Config.parsed.MAPBOX_API_KEY) : undefined,
     }),
   ],
   module: {
