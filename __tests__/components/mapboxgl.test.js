@@ -309,6 +309,7 @@ describe('MapboxGL component', () => {
     const zoom = 2;
     const apiKey = 'foo';
     const props = {
+      hover: false,
       mapbox: {accessToken: apiKey},
       map: {center, zoom, sources, layers, metadata}
     };
@@ -325,6 +326,46 @@ describe('MapboxGL component', () => {
     map.configureMap();
     expect(map.map.on).toHaveBeenCalledTimes(3);
     expect(types).toEqual(['resize', 'moveend', 'click']);
+  });
+
+  it('hover for mouse position works correctly', () => {
+    const sources = {
+      geojson: {
+        type: 'geojson',
+      },
+    };
+    const layers = [];
+    const metadata = {
+      'bnd:source-version': 0,
+      'bnd:layer-version': 0,
+      'bnd:data-version:geojson': 0,
+    };
+
+    const center = [0, 0];
+    const zoom = 2;
+    const apiKey = 'foo';
+    const props = {
+      setMousePosition: (lngLat) => {
+      },
+      mapbox: {accessToken: apiKey},
+      map: {center, zoom, sources, layers, metadata}
+    };
+    spyOn(props, 'setMousePosition');
+    const wrapper = mount(<MapboxGL {...props} />);
+    const map = wrapper.instance();
+    // mock up our GL map
+    map.map = createMapMock();
+    const types = [];
+    const on = (evt) => {
+      types.push(evt);
+    };
+    map.map.on = on;
+    spyOn(map.map, 'on').and.callThrough();
+    map.configureMap();
+    expect(map.map.on).toHaveBeenCalledTimes(4);
+    expect(types).toEqual(['resize', 'mousemove', 'moveend', 'click']);
+    map.onMouseMove({lngLat: {lng: 50, lat: 45}});
+    expect(props.setMousePosition).toHaveBeenCalledWith({lng: 50, lat: 45});
   });
 
   it('configureMap sets load listener', () => {
@@ -344,6 +385,7 @@ describe('MapboxGL component', () => {
     const zoom = 2;
     const apiKey = 'foo';
     const props = {
+      hover: false,
       mapbox: {accessToken: apiKey},
       initialPopups: [(<SdkPopup coordinate={[0, 0]} closeable><div>foo</div></SdkPopup>)],
       map: {center, zoom, sources, layers, metadata}

@@ -13,5 +13,15 @@ describe('test that mapinfo actions are properly created', () => {
     });
   });
 
+  it('should issue an action to change the mouse position', () => {
+    const lngLat = {lng: 50, lat: 45};
+    const coordinate = [100000, 80000];
+    expect(actions.setMousePosition(lngLat, coordinate)).toEqual({
+      type: MAPINFO.SET_MOUSE_POSITION,
+      lngLat,
+      coordinate,
+    });
+  });
+
 });
 

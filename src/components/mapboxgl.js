@@ -17,7 +17,7 @@ import ReactDOM from 'react-dom';
 import uuid from 'uuid';
 import {connect} from 'react-redux';
 import {setView, setBearing} from '../actions/map';
-import {setMapSize} from '../actions/mapinfo';
+import {setMapSize, setMousePosition} from '../actions/mapinfo';
 
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import {dataVersionKey} from '../reducers/map';
@@ -168,6 +168,10 @@ export class MapboxGL extends React.Component {
     this.props.setView(this.map);
   }
 
+  onMouseMove(e) {
+    this.props.setMousePosition(e.lngLat);
+  }
+
   onMapLoad() {
     // add the initial popups from the user.
     for (let i = 0, ii = this.props.initialPopups.length; i < ii; i++) {
@@ -199,6 +203,11 @@ export class MapboxGL extends React.Component {
         this.props.setSize([this.mapdiv.offsetWidth, this.mapdiv.offsetHeight]);
       });
 
+      if (this.props.hover) {
+        this.map.on('mousemove', (e) => {
+          this.onMouseMove(e);
+        });
+      }
       this.map.on('moveend', () => {
         this.onMapMoveEnd();
       });
@@ -389,6 +398,8 @@ export class MapboxGL extends React.Component {
 MapboxGL.propTypes = {
   /** Should we wrap the world? If yes, data will be repeated in all worlds. */
   wrapX: PropTypes.bool,
+  /** Should we handle map hover to show mouseposition? */
+  hover: PropTypes.bool,
   /** Map configuration, modelled after the Mapbox Style specification. */
   map: PropTypes.shape({
     /** Center of the map. */
@@ -433,6 +444,8 @@ MapboxGL.propTypes = {
   initialPopups: PropTypes.arrayOf(PropTypes.object),
   /** setView callback function, triggered on moveend. */
   setView: PropTypes.func,
+  /** setMousePosition callback function, triggered on mousemove. */
+  setMousePosition: PropTypes.func,
   /** Should we include features when the map is clicked? */
   includeFeaturesOnClick: PropTypes.bool,
   /** onClick callback function, triggered on singleclick. */
@@ -451,6 +464,7 @@ MapboxGL.propTypes = {
 
 MapboxGL.defaultProps = {
   wrapX: true,
+  hover: true,
   map: {
     center: [0, 0],
     zoom: 2,
@@ -472,7 +486,8 @@ MapboxGL.defaultProps = {
   setView: () => {
     // swallow event.
   },
-  setSize: () => {
+  setSize: () => {},
+  setMousePosition: () => {
     // swallow event.
   },
   includeFeaturesOnClick: false,
@@ -531,6 +546,9 @@ function mapDispatchToProps(dispatch) {
     },
     clearMeasureFeature: () => {
       dispatch(clearMeasureFeature());
+    },
+    setMousePosition(lngLat) {
+      dispatch(setMousePosition(lngLat));
     },
   };
 }

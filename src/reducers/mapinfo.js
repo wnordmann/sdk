@@ -19,6 +19,10 @@ import {MAPINFO} from '../action-types';
 
 const defaultState = {
   size: null,
+  mouseposition: {
+    lngLat: null,
+    coordinate: null,
+  },
 };
 
 /** Map info reducer.
@@ -31,6 +35,8 @@ export default function mapInfoReducer(state = defaultState, action) {
   switch (action.type) {
     case MAPINFO.SET_SIZE:
       return Object.assign({}, state, {size: action.size});
+    case MAPINFO.SET_MOUSE_POSITION:
+      return Object.assign({}, state, {mouseposition: {lngLat: action.lngLat, coordinate: action.coordinate}});
     default:
       return state;
   }

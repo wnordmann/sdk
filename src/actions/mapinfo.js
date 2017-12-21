@@ -28,3 +28,17 @@ export function setMapSize(size) {
     size,
   };
 }
+
+/** Action to set the current mouse position.
+ *  @param {Object} lngLat The longitude latitude object.
+ *  @param {number[]} coordinate Coordinate pair in map projection.
+ *
+ *  @returns {Object} Action object to pass to reducer.
+ */
+export function setMousePosition(lngLat, coordinate) {
+  return {
+    type: MAPINFO.SET_MOUSE_POSITION,
+    lngLat,
+    coordinate,
+  };
+}
