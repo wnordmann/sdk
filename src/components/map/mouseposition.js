@@ -36,12 +36,11 @@ class MousePosition extends React.Component {
     if (this.props.className) {
       className += ' ' + this.props.className;
     }
-    if (this.props.mapinfo.mouseposition.lngLat !== null) {
+    const mouseposition = this.props.mapinfo.mouseposition;
+    if (mouseposition.lngLat !== null) {
+      const text = this.props.templateFunction(mouseposition);
       return (
-        <div className={className} style={this.props.style}>
-          Longitude: {this.props.mapinfo.mouseposition.lngLat.lng}<br/>
-          Latitude: {this.props.mapinfo.mouseposition.lngLat.lat}
-        </div>
+        <div className={className} style={this.props.style} dangerouslySetInnerHTML={{__html: text}}/>
       );
     } else {
       return false;
@@ -58,6 +57,19 @@ MousePosition.propTypes = {
    * Style config object for root div.
    */
   style: PropTypes.object,
+  /**
+   * Template function to use for the content. Gets passed the mouseposition object with lngLat and coordinate.
+   * Coordinate is the optional coordinate pair in the map projection.
+   */
+  templateFunction: PropTypes.func,
+};
+
+MousePosition.defaultProps = {
+  templateFunction: (mouseposition) => {
+    const lng = mouseposition.lngLat.lng.toFixed(2);
+    const lat = mouseposition.lngLat.lat.toFixed(2);
+    return `Longitude: ${lng}<br/>Latitude: ${lat}`;
+  }
 };
 
 function mapStateToProps(state) {
