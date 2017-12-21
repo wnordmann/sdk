@@ -178,7 +178,7 @@ function main() {
   // place the map on the page.
   ReactDOM.render(<Provider store={store}>
     <RendererSwitch>
-      <SdkMousePosition /><SdkZoomControl /><SdkZoomSlider />
+      <SdkMousePosition style={{position: 'absolute', top: 20, right: 12, zIndex: 1, width: '5em'}} /><SdkZoomControl /><SdkZoomSlider />
     </RendererSwitch>
   </Provider>, document.getElementById('map'));
 
