@@ -54,3 +54,27 @@ export function setMapExtent(extent) {
     extent,
   };
 }
+
+/** Action to set the resolution.
+ *  @param {number} resolution Resolution.
+ *
+ *  @returns {Object} Action object to pass to reducer.
+ */
+export function setResolution(resolution) {
+  return {
+    type: MAPINFO.SET_RESOLUTION,
+    resolution,
+  };
+}
+
+/** Action to set the projection.
+ *  @param {string} projection Projection.
+ *
+ *  @returns {Object} Action object to pass to reducer.
+ */
+export function setProjection(projection) {
+  return {
+    type: MAPINFO.SET_PROJECTION,
+    projection,
+  };
+}

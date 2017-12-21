@@ -29,6 +29,8 @@ describe('mapinfo reducer', () => {
     deepFreeze(action);
     expect(reducer(state, action)).toEqual({
       extent: [-90, -45, 90, 45],
+      resolution: null,
+      projection: null,
     });
   });
 

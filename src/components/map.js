@@ -72,7 +72,7 @@ import AttributionControl from 'ol/control/attribution';
 import LoadingStrategy from 'ol/loadingstrategy';
 
 import {updateLayer, setView, setBearing} from '../actions/map';
-import {setMapSize, setMousePosition, setMapExtent} from '../actions/mapinfo';
+import {setMapSize, setMousePosition, setMapExtent, setResolution, setProjection} from '../actions/mapinfo';
 import {INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TIME_KEY, TIME_ATTRIBUTE_KEY, QUERYABLE_KEY, QUERY_ENDPOINT_KEY} from '../constants';
 import {dataVersionKey} from '../reducers/map';
 
@@ -1239,6 +1239,8 @@ export class Map extends React.Component {
 
     this.props.setSize(this.map);
 
+    this.props.setProjection(map_proj);
+
     this.map.on('change:size', () => {
       this.props.setSize(this.map);
     });
@@ -1472,6 +1474,8 @@ Map.propTypes = {
   setSize: PropTypes.func,
   /** setMousePosition callback function, triggered on pointermove. */
   setMousePosition: PropTypes.func,
+  /** setProjection callback function. */
+  setProjection: PropTypes.func,
   /** Should we include features when the map is clicked? */
   includeFeaturesOnClick: PropTypes.bool,
   /** onClick callback function, triggered on singleclick. */
@@ -1521,6 +1525,7 @@ Map.defaultProps = {
   setMousePosition: () => {
     // swallow event.
   },
+  setProjection: () => {},
   includeFeaturesOnClick: false,
   onClick: () => {
   },
@@ -1572,12 +1577,16 @@ function mapDispatchToProps(dispatch) {
       dispatch(setView(center, zoom));
       dispatch(setBearing(-rotation));
       dispatch(setMapExtent(getMapExtent(view, size)));
+      dispatch(setResolution(view.getResolution()));
     },
     setSize: (map) => {
       const size = map.getSize();
       const view = map.getView();
       dispatch(setMapExtent(getMapExtent(view, size)));
       dispatch(setMapSize(size));
+    },
+    setProjection: (projection) => {
+      dispatch(setProjection(projection));
     },
     setMeasureGeometry: (geometry, projection) => {
       const geom = GEOJSON_FORMAT.writeGeometryObject(geometry, {
