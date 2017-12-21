@@ -7,12 +7,12 @@
       "layoutFile": "sdkTemplate/layout.tmpl",
       "staticFiles": {
         "include": [
-          "resources",
-          "apple-touch-icon.png",
-          "boundless_sdk_horiz.svg",
-          "boundless.png",
-          "examples.css",
-          "favicon.ico"
+          "examples/resources",
+          "examples/apple-touch-icon.png",
+          "examples/boundless_sdk_horiz.svg",
+          "examples/boundless.png",
+          "examples/examples.css",
+          "examples/favicon.ico"
         ]
       }
     }
