@@ -65,10 +65,22 @@ export const MAPBOX = {
   CONFIGURE: 'MAPBOX_CONFIGURE',
 };
 
+export const ESRI = {
+  ADD_SOURCE: 'ESRI_ADD_SOURCE',
+  REMOVE_SOURCE: 'ESRI_REMOVE_SOURCE',
+};
+
+export const MAPINFO = {
+  SET_SIZE: 'MAPINFO.SET_SIZE',
+  SET_MOUSE_POSITION: 'MAPINFO.SET_MOUSE_POSITION',
+};
+
 export default {
   MAP,
   DRAWING,
   PRINT,
   WFS,
   MAPBOX,
+  ESRI,
+  MAPINFO,
 };

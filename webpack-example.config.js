@@ -14,7 +14,7 @@ module.exports = {
     },
   },
   entry: entry,
-  devtool: 'source-map',
+  devtool: 'eval',
   node: {fs: "empty"},
   output: {
     path: __dirname, // Path of output file
@@ -23,7 +23,7 @@ module.exports = {
   },
   plugins: [
     new UglifyJSPlugin({
-      sourceMap: true,
+      sourceMap: false,
       uglifyOptions: {
         compress: {
           warnings: false,
@@ -32,7 +32,7 @@ module.exports = {
       },
     }),
     new webpack.DefinePlugin({
-      MAPBOX_API_KEY: JSON.stringify(Config.parsed.MAPBOX_API_KEY),
+      MAPBOX_API_KEY: Config.parsed ? JSON.stringify(Config.parsed.MAPBOX_API_KEY) : undefined,
     }),
   ],
   module: {

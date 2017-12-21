@@ -72,6 +72,7 @@ import AttributionControl from 'ol/control/attribution';
 import LoadingStrategy from 'ol/loadingstrategy';
 
 import {updateLayer, setView, setBearing} from '../actions/map';
+import {setMapSize, setMousePosition} from '../actions/mapinfo';
 import {INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TIME_KEY, TIME_ATTRIBUTE_KEY, QUERYABLE_KEY, QUERY_ENDPOINT_KEY} from '../constants';
 import {dataVersionKey} from '../reducers/map';
 
@@ -1222,9 +1223,22 @@ export class Map extends React.Component {
       }),
     });
 
+    if (this.props.hover) {
+      this.map.on('pointermove', (evt) => {
+        const lngLat = Proj.toLonLat(evt.coordinate);
+        this.props.setMousePosition({lng: lngLat[0], lat: lngLat[1]}, evt.coordinate);
+      });
+    }
+
     // when the map moves update the location in the state
     this.map.on('moveend', () => {
       this.props.setView(this.map.getView());
+    });
+
+    this.props.setSize(this.map.getSize());
+
+    this.map.on('change:size', () => {
+      this.props.setSize(this.map.getSize());
     });
 
     // when the map is clicked, handle the event.
@@ -1404,6 +1418,8 @@ export class Map extends React.Component {
 Map.propTypes = {
   /** Should we wrap the world? If yes, data will be repeated in all worlds. */
   wrapX: PropTypes.bool,
+  /** Should we handle map hover to show mouseposition? */
+  hover: PropTypes.bool,
   /** Projection of the map, normally an EPSG code. */
   projection: PropTypes.string,
   /** Map configuration, modelled after the Mapbox Style specification. */
@@ -1450,6 +1466,10 @@ Map.propTypes = {
   initialPopups: PropTypes.arrayOf(PropTypes.object),
   /** setView callback function, triggered on moveend. */
   setView: PropTypes.func,
+  /** setSize callback function, triggered on change size. */
+  setSize: PropTypes.func,
+  /** setMousePosition callback function, triggered on pointermove. */
+  setMousePosition: PropTypes.func,
   /** Should we include features when the map is clicked? */
   includeFeaturesOnClick: PropTypes.bool,
   /** onClick callback function, triggered on singleclick. */
@@ -1472,6 +1492,7 @@ Map.propTypes = {
 
 Map.defaultProps = {
   wrapX: true,
+  hover: true,
   projection: 'EPSG:3857',
   map: {
     center: [0, 0],
@@ -1492,6 +1513,10 @@ Map.defaultProps = {
   },
   initialPopups: [],
   setView: () => {
+    // swallow event.
+  },
+  setSize: () => {},
+  setMousePosition: () => {
     // swallow event.
   },
   includeFeaturesOnClick: false,
@@ -1534,6 +1559,9 @@ function mapDispatchToProps(dispatch) {
       dispatch(setView(center, view.getZoom() - 1));
       dispatch(setBearing(-rotation));
     },
+    setSize: (size) => {
+      dispatch(setMapSize(size));
+    },
     setMeasureGeometry: (geometry, projection) => {
       const geom = GEOJSON_FORMAT.writeGeometryObject(geometry, {
         featureProjection: projection,
@@ -1559,6 +1587,9 @@ function mapDispatchToProps(dispatch) {
     },
     clearMeasureFeature: () => {
       dispatch(clearMeasureFeature());
+    },
+    setMousePosition(lngLat, coordinate) {
+      dispatch(setMousePosition(lngLat, coordinate));
     },
   };
 }
