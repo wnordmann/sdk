@@ -1,0 +1,175 @@
+/* global it, describe, expect, beforeEach */
+
+import React from 'react';
+import {mount, configure} from 'enzyme';
+import  Adapter from 'enzyme-adapter-react-16';
+
+import {createStore, combineReducers} from 'redux';
+
+import MapReducer from '../../../src/reducers/map';
+import MapInfoReducer from '../../../src/reducers/mapinfo';
+import * as MapInfoActions from '../../../src/actions/mapinfo';
+import * as MapActions from '../../../src/actions/map';
+import ConnectedScaleLine, {ScaleLine} from '../../../src/components/map/scaleline';
+
+configure({adapter: new Adapter()});
+
+describe('Scaleline tests', () => {
+
+  let store;
+
+  beforeEach(() => {
+    store = createStore(combineReducers({
+      map: MapReducer,
+      mapinfo: MapInfoReducer,
+    }));
+  });
+
+  it('create the correct scaleline', () => {
+    store.dispatch(MapInfoActions.setProjection('EPSG:3857'));
+    store.dispatch(MapInfoActions.setResolution(1000));
+    store.dispatch(MapActions.setView([-98, 40], 4));
+    const wrapper = mount(<ConnectedScaleLine store={store} />);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('creates the meter suffix', () => {
+    store.dispatch(MapInfoActions.setProjection('EPSG:3857'));
+    store.dispatch(MapInfoActions.setResolution(2.388657133911758));
+    store.dispatch(MapActions.setView([-98, 40], 4));
+    const wrapper = mount(<ConnectedScaleLine store={store} />);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('creates the millimeter suffix', () => {
+    store.dispatch(MapInfoActions.setProjection('EPSG:3857'));
+    store.dispatch(MapInfoActions.setResolution(0.009330691929342804));
+    store.dispatch(MapActions.setView([-98, 40], 4));
+    const wrapper = mount(<ConnectedScaleLine store={store} />);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('creates the micrometer suffix', () => {
+    store.dispatch(MapInfoActions.setProjection('EPSG:3857'));
+    store.dispatch(MapInfoActions.setResolution(0.000009330691929342804));
+    store.dispatch(MapActions.setView([-98, 40], 4));
+    const wrapper = mount(<ConnectedScaleLine store={store} />);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('create the correct scaleline in EPSG:4326', () => {
+    store.dispatch(MapInfoActions.setProjection('EPSG:4326'));
+    store.dispatch(MapInfoActions.setResolution(1000));
+    store.dispatch(MapActions.setView([-98, 40], 4));
+    const wrapper = mount(<ConnectedScaleLine units='degrees' store={store} />);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('create the correct scaleline in degrees', () => {
+    store.dispatch(MapInfoActions.setProjection('EPSG:3857'));
+    store.dispatch(MapInfoActions.setResolution(19567.87924100512));
+    store.dispatch(MapActions.setView([-98, 40], 4));
+    const wrapper = mount(<ConnectedScaleLine units='degrees' store={store} />);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('create the correct scaleline in degrees (minutes)', () => {
+    store.dispatch(MapInfoActions.setProjection('EPSG:3857'));
+    store.dispatch(MapInfoActions.setResolution(300));
+    store.dispatch(MapActions.setView([-98, 40], 4));
+    const wrapper = mount(<ConnectedScaleLine units='degrees' store={store} />);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('create the correct scaleline in degrees (seconds)', () => {
+    store.dispatch(MapInfoActions.setProjection('EPSG:3857'));
+    store.dispatch(MapInfoActions.setResolution(1));
+    store.dispatch(MapActions.setView([-98, 40], 4));
+    const wrapper = mount(<ConnectedScaleLine units='degrees' store={store} />);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('create the correct scaleline in imperial', () => {
+    store.dispatch(MapInfoActions.setProjection('EPSG:3857'));
+    store.dispatch(MapInfoActions.setResolution(1000));
+    store.dispatch(MapActions.setView([-98, 40], 4));
+    const wrapper = mount(<ConnectedScaleLine units='imperial' store={store} />);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('create the correct scaleline in imperial (ft)', () => {
+    store.dispatch(MapInfoActions.setProjection('EPSG:3857'));
+    store.dispatch(MapInfoActions.setResolution(1));
+    store.dispatch(MapActions.setView([-98, 40], 4));
+    const wrapper = mount(<ConnectedScaleLine units='imperial' store={store} />);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('create the correct scaleline in imperial (in)', () => {
+    store.dispatch(MapInfoActions.setProjection('EPSG:3857'));
+    store.dispatch(MapInfoActions.setResolution(0.001));
+    store.dispatch(MapActions.setView([-98, 40], 4));
+    const wrapper = mount(<ConnectedScaleLine units='imperial' store={store} />);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('create the correct scaleline in nautical', () => {
+    store.dispatch(MapInfoActions.setProjection('EPSG:3857'));
+    store.dispatch(MapInfoActions.setResolution(1000));
+    store.dispatch(MapActions.setView([-98, 40], 4));
+    const wrapper = mount(<ConnectedScaleLine units='nautical' store={store} />);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('create the correct scaleline in us', () => {
+    store.dispatch(MapInfoActions.setProjection('EPSG:3857'));
+    store.dispatch(MapInfoActions.setResolution(1000));
+    store.dispatch(MapActions.setView([-98, 40], 4));
+    const wrapper = mount(<ConnectedScaleLine units='us' store={store} />);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('create the correct scaleline in us (ft)', () => {
+    store.dispatch(MapInfoActions.setProjection('EPSG:3857'));
+    store.dispatch(MapInfoActions.setResolution(1));
+    store.dispatch(MapActions.setView([-98, 40], 4));
+    const wrapper = mount(<ConnectedScaleLine units='us' store={store} />);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('create the correct scaleline in us (in)', () => {
+    store.dispatch(MapInfoActions.setProjection('EPSG:3857'));
+    store.dispatch(MapInfoActions.setResolution(0.001));
+    store.dispatch(MapActions.setView([-98, 40], 4));
+    const wrapper = mount(<ConnectedScaleLine units='us' store={store} />);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('shouldComponentUpdate should work correctly', () => {
+    store.dispatch(MapInfoActions.setProjection('EPSG:3857'));
+    store.dispatch(MapInfoActions.setResolution(1000));
+    store.dispatch(MapActions.setView([-98, 40], 4));
+    const props = {
+      map: {
+        center: [-98, 40],
+        zoom: 4,
+      },
+      mapinfo: {
+        projection: 'EPSG:3857',
+        resolution: 1000,
+      }
+    };
+    const wrapper = mount(<ScaleLine {...props} />);
+    const scaleline = wrapper.instance();
+    let result;
+    result = scaleline.shouldComponentUpdate({mapinfo: {resolution: 1000}});
+    expect(result).toBe(false);
+    result = scaleline.shouldComponentUpdate({units: 'degrees'});
+    expect(result).toBe(true);
+    result = scaleline.shouldComponentUpdate({mapinfo: {resolution: 500}});
+    expect(result).toBe(true);
+    result = scaleline.shouldComponentUpdate({map: {center: [-98, 50]}});
+    expect(result).toBe(true);
+  });
+
+});
