@@ -17,7 +17,8 @@ import ReactDOM from 'react-dom';
 import uuid from 'uuid';
 import {connect} from 'react-redux';
 import {setView, setBearing} from '../actions/map';
-import {setMapSize, setMousePosition, setMapExtent} from '../actions/mapinfo';
+import {setMapSize, setMousePosition, setMapExtent, setResolution, setProjection} from '../actions/mapinfo';
+import {getResolutionForZoom} from '../util';
 
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import {dataVersionKey} from '../reducers/map';
@@ -198,6 +199,8 @@ export class MapboxGL extends React.Component {
     // when the map moves update the location in the state
     if (this.map) {
       this.props.setSize([this.mapdiv.offsetWidth, this.mapdiv.offsetHeight], this.map);
+
+      this.props.setProjection('EPSG:3857');
 
       this.map.on('resize', () => {
         this.props.setSize([this.mapdiv.offsetWidth, this.mapdiv.offsetHeight], this.map);
@@ -446,6 +449,8 @@ MapboxGL.propTypes = {
   setView: PropTypes.func,
   /** setMousePosition callback function, triggered on mousemove. */
   setMousePosition: PropTypes.func,
+  /** setProjection callback function. */
+  setProjection: PropTypes.func,
   /** Should we include features when the map is clicked? */
   includeFeaturesOnClick: PropTypes.bool,
   /** onClick callback function, triggered on singleclick. */
@@ -490,6 +495,7 @@ MapboxGL.defaultProps = {
   setMousePosition: () => {
     // swallow event.
   },
+  setProjection: () => {},
   includeFeaturesOnClick: false,
   onClick: () => {
   },
@@ -528,13 +534,18 @@ function mapDispatchToProps(dispatch) {
     setView: (map) => {
       const center = map.getCenter().toArray();
       const bearing = map.getBearing();
-      dispatch(setView(center, map.getZoom()));
+      const zoom = map.getZoom();
+      dispatch(setView(center, zoom));
       dispatch(setBearing(bearing));
       dispatch(setMapExtent(getMapExtent(map)));
+      dispatch(setResolution(getResolutionForZoom(zoom + 1)));
     },
     setSize: (size, map) => {
       dispatch(setMapSize(size));
       dispatch(setMapExtent(getMapExtent(map)));
+    },
+    setProjection: (projection) => {
+      dispatch(setProjection(projection));
     },
     setMeasureGeometry: (geom) => {
       const segments = [];
