@@ -4,6 +4,12 @@ import * as util from '../../src/util';
 import {GROUP_KEY, TITLE_KEY} from '../../src/constants';
 
 describe('util', () => {
+  it('calculates the resolution for zoom', () => {
+    const zoom = 5;
+    const resolution = util.getResolutionForZoom(zoom);
+    expect(resolution).toEqual(4891.96981025128);
+  });
+
   it('gets layer by id', () => {
     const layers = [{id: 'osm', source: 'osm'}];
     expect(util.getLayerById(layers, 'foo')).toEqual(null);
