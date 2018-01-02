@@ -24,6 +24,8 @@ const defaultState = {
     coordinate: null,
   },
   extent: null,
+  resolution: null,
+  projection: 'EPSG:3857',
 };
 
 /** Map info reducer.
@@ -40,6 +42,10 @@ export default function mapInfoReducer(state = defaultState, action) {
       return Object.assign({}, state, {size: action.size});
     case MAPINFO.SET_MOUSE_POSITION:
       return Object.assign({}, state, {mouseposition: {lngLat: action.lngLat, coordinate: action.coordinate}});
+    case MAPINFO.SET_RESOLUTION:
+      return Object.assign({}, state, {resolution: action.resolution});
+    case MAPINFO.SET_PROJECTION:
+      return Object.assign({}, state, {projection: action.projection});
     default:
       return state;
   }

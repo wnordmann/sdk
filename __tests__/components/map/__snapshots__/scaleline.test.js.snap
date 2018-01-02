@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Scaleline tests create the correct scaleline 1`] = `"<div class=\\"sdk-scale-line\\"><div class=\\"sdk-scale-line-inner\\" style=\\"width: 65px;\\">50 km</div></div>"`;
+
+exports[`Scaleline tests create the correct scaleline in EPSG:4326 1`] = `"<div class=\\"sdk-scale-line\\"><div class=\\"sdk-scale-line-inner\\" style=\\"width: 100px;\\">100000 °</div></div>"`;
+
+exports[`Scaleline tests create the correct scaleline in degrees (minutes) 1`] = `"<div class=\\"sdk-scale-line\\"><div class=\\"sdk-scale-line-inner\\" style=\\"width: 81px;\\">10 ′</div></div>"`;
+
+exports[`Scaleline tests create the correct scaleline in degrees (seconds) 1`] = `"<div class=\\"sdk-scale-line\\"><div class=\\"sdk-scale-line-inner\\" style=\\"width: 81px;\\">2 ″</div></div>"`;
+
+exports[`Scaleline tests create the correct scaleline in degrees 1`] = `"<div class=\\"sdk-scale-line\\"><div class=\\"sdk-scale-line-inner\\" style=\\"width: 74px;\\">10 °</div></div>"`;
+
+exports[`Scaleline tests create the correct scaleline in imperial (ft) 1`] = `"<div class=\\"sdk-scale-line\\"><div class=\\"sdk-scale-line-inner\\" style=\\"width: 80px;\\">200 ft</div></div>"`;
+
+exports[`Scaleline tests create the correct scaleline in imperial (in) 1`] = `"<div class=\\"sdk-scale-line\\"><div class=\\"sdk-scale-line-inner\\" style=\\"width: 66px;\\">2 in</div></div>"`;
+
+exports[`Scaleline tests create the correct scaleline in imperial 1`] = `"<div class=\\"sdk-scale-line\\"><div class=\\"sdk-scale-line-inner\\" style=\\"width: 105px;\\">50 mi</div></div>"`;
+
+exports[`Scaleline tests create the correct scaleline in nautical 1`] = `"<div class=\\"sdk-scale-line\\"><div class=\\"sdk-scale-line-inner\\" style=\\"width: 121px;\\">50 nm</div></div>"`;
+
+exports[`Scaleline tests create the correct scaleline in us (ft) 1`] = `"<div class=\\"sdk-scale-line\\"><div class=\\"sdk-scale-line-inner\\" style=\\"width: 80px;\\">200 ft</div></div>"`;
+
+exports[`Scaleline tests create the correct scaleline in us (in) 1`] = `"<div class=\\"sdk-scale-line\\"><div class=\\"sdk-scale-line-inner\\" style=\\"width: 66px;\\">2 in</div></div>"`;
+
+exports[`Scaleline tests create the correct scaleline in us 1`] = `"<div class=\\"sdk-scale-line\\"><div class=\\"sdk-scale-line-inner\\" style=\\"width: 105px;\\">50 mi</div></div>"`;
+
+exports[`Scaleline tests creates the meter suffix 1`] = `"<div class=\\"sdk-scale-line\\"><div class=\\"sdk-scale-line-inner\\" style=\\"width: 109px;\\">200 m</div></div>"`;
+
+exports[`Scaleline tests creates the micrometer suffix 1`] = `"<div class=\\"sdk-scale-line\\"><div class=\\"sdk-scale-line-inner\\" style=\\"width: 70px;\\">500 μm</div></div>"`;
+
+exports[`Scaleline tests creates the millimeter suffix 1`] = `"<div class=\\"sdk-scale-line\\"><div class=\\"sdk-scale-line-inner\\" style=\\"width: 70px;\\">500 mm</div></div>"`;
