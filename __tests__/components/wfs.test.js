@@ -91,7 +91,7 @@ describe('WfsController component.', () => {
       expect(store.getState().wfs.actions).toEqual({});
       expect(message).toBe('Transaction support is not enabled');
       done();
-    }, 200);
+    }, 300);
   });
 
   it('updates a feature', (done) => {
