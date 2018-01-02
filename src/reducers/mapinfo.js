@@ -25,7 +25,7 @@ const defaultState = {
   },
   extent: null,
   resolution: null,
-  projection: null,
+  projection: 'EPSG:3857',
 };
 
 /** Map info reducer.

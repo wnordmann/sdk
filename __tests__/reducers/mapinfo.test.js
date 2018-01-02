@@ -15,7 +15,7 @@ describe('mapinfo reducer', () => {
         coordinate: null,
       },
       extent: null,
-      projection: null,
+      projection: 'EPSG:3857',
       resolution: null,
     });
   });
