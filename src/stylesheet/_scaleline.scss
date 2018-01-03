@@ -1,23 +1,21 @@
 $scale-color: $sdk-blue !default;
 $scale-inner-color: $sdk-grey !default;
 
-.controls {
-  .sdk-scale-line {
-    z-index: 1;
-    background: $scale-color;
-    border-radius: 4px;
-    bottom: .5em;
-    left: .5em;
-    padding: 2px;
-    position: absolute;
-  }
-  .sdk-scale-line-inner {
-    border: 1px solid $scale-inner-color;
-    border-top: none;
-    color: $scale-inner-color;
-    font-size: 10px;
-    text-align: center;
-    margin: 1px;
-    will-change: contents, width;
-  }
+.sdk-scale-line {
+  z-index: 1;
+  background: $scale-color;
+  border-radius: 4px;
+  bottom: .5em;
+  left: .5em;
+  padding: 2px;
+  position: absolute;
+}
+.sdk-scale-line-inner {
+  border: 1px solid $scale-inner-color;
+  border-top: none;
+  color: $scale-inner-color;
+  font-size: 10px;
+  text-align: center;
+  margin: 1px;
+  will-change: contents, width;
 }
