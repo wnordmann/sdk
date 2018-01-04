@@ -42,3 +42,39 @@ export function setMousePosition(lngLat, coordinate) {
     coordinate,
   };
 }
+
+/** Action to set the map extent.
+ *  @param {number[]} extent Map extent in EPSG:4326.
+ *
+ *  @returns {Object} Action object to pass to reducer.
+ */
+export function setMapExtent(extent) {
+  return {
+    type: MAPINFO.SET_EXTENT,
+    extent,
+  };
+}
+
+/** Action to set the resolution.
+ *  @param {number} resolution Resolution.
+ *
+ *  @returns {Object} Action object to pass to reducer.
+ */
+export function setResolution(resolution) {
+  return {
+    type: MAPINFO.SET_RESOLUTION,
+    resolution,
+  };
+}
+
+/** Action to set the projection.
+ *  @param {string} projection Projection.
+ *
+ *  @returns {Object} Action object to pass to reducer.
+ */
+export function setProjection(projection) {
+  return {
+    type: MAPINFO.SET_PROJECTION,
+    projection,
+  };
+}

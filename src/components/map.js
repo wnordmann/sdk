@@ -72,7 +72,7 @@ import AttributionControl from 'ol/control/attribution';
 import LoadingStrategy from 'ol/loadingstrategy';
 
 import {updateLayer, setView, setBearing} from '../actions/map';
-import {setMapSize, setMousePosition} from '../actions/mapinfo';
+import {setMapSize, setMousePosition, setMapExtent, setResolution, setProjection} from '../actions/mapinfo';
 import {INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TIME_KEY, TIME_ATTRIBUTE_KEY, QUERYABLE_KEY, QUERY_ENDPOINT_KEY} from '../constants';
 import {dataVersionKey} from '../reducers/map';
 
@@ -1232,13 +1232,15 @@ export class Map extends React.Component {
 
     // when the map moves update the location in the state
     this.map.on('moveend', () => {
-      this.props.setView(this.map.getView());
+      this.props.setView(this.map);
     });
 
-    this.props.setSize(this.map.getSize());
+    this.props.setSize(this.map);
+
+    this.props.setProjection(map_proj);
 
     this.map.on('change:size', () => {
-      this.props.setSize(this.map.getSize());
+      this.props.setSize(this.map);
     });
 
     // when the map is clicked, handle the event.
@@ -1470,6 +1472,8 @@ Map.propTypes = {
   setSize: PropTypes.func,
   /** setMousePosition callback function, triggered on pointermove. */
   setMousePosition: PropTypes.func,
+  /** setProjection callback function. */
+  setProjection: PropTypes.func,
   /** Should we include features when the map is clicked? */
   includeFeaturesOnClick: PropTypes.bool,
   /** onClick callback function, triggered on singleclick. */
@@ -1519,6 +1523,7 @@ Map.defaultProps = {
   setMousePosition: () => {
     // swallow event.
   },
+  setProjection: () => {},
   includeFeaturesOnClick: false,
   onClick: () => {
   },
@@ -1547,20 +1552,39 @@ function mapStateToProps(state) {
   };
 }
 
+export function getMapExtent(view, size) {
+  const projection = view.getProjection();
+  const targetProj = 'EPSG:4326';
+  const view_extent = view.calculateExtent(size);
+  return Proj.transformExtent(view_extent, projection, targetProj);
+}
+
 function mapDispatchToProps(dispatch) {
   return {
     updateLayer: (layerId, layerConfig) => {
       dispatch(updateLayer(layerId, layerConfig));
     },
-    setView: (view) => {
+    setView: (map) => {
+      const view = map.getView();
+      const projection = view.getProjection();
       // transform the center to 4326 before dispatching the action.
-      const center = Proj.transform(view.getCenter(), view.getProjection(), 'EPSG:4326');
+      const center = Proj.transform(view.getCenter(), projection, 'EPSG:4326');
       const rotation = radiansToDegrees(view.getRotation());
-      dispatch(setView(center, view.getZoom() - 1));
+      const zoom = view.getZoom() - 1;
+      const size = map.getSize();
+      dispatch(setView(center, zoom));
       dispatch(setBearing(-rotation));
+      dispatch(setMapExtent(getMapExtent(view, size)));
+      dispatch(setResolution(view.getResolution()));
     },
-    setSize: (size) => {
+    setSize: (map) => {
+      const size = map.getSize();
+      const view = map.getView();
+      dispatch(setMapExtent(getMapExtent(view, size)));
       dispatch(setMapSize(size));
+    },
+    setProjection: (projection) => {
+      dispatch(setProjection(projection));
     },
     setMeasureGeometry: (geometry, projection) => {
       const geom = GEOJSON_FORMAT.writeGeometryObject(geometry, {

@@ -31,6 +31,16 @@ export function jsonEquals(objectA, objectB) {
 }
 
 
+/** Gets the resolution for a zoom level in spherical mercator.
+ *
+ * @param {number} zoom The zoom level.
+ *
+ * @returns {number} The resolution for that zoom level.
+ */
+export function getResolutionForZoom(zoom) {
+  return (6378137.0 * 2 * Math.PI / 256) /  Math.pow(2, zoom);
+}
+
 /** Gets a layer by it's id. https://www.mapbox.com/mapbox-gl-js/style-spec/#layer-id
  *
  * @param {Object[]} layers An array of Mapbox GL layer objects.

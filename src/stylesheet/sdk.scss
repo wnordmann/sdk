@@ -24,7 +24,7 @@ $divider-color:        #BDBDBD;
 @import 'popup';
 @import 'zoomslider';
 @import 'zoomcontrol';
-
+@import 'scaleline';
 
 
 
@@ -52,6 +52,14 @@ li.sdk-layer {
     list-style: none;
 }
 
-.sdk-map .controls {
+.sdk-map {
     position: relative;
+}
+
+.sdk-map .controls {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
 }
