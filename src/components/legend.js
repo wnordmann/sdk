@@ -406,4 +406,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, undefined, undefined, {withRef: true})(Legend);
+export default connect(mapStateToProps)(Legend);
