@@ -96,6 +96,7 @@ const GEOJSON_FORMAT = new GeoJsonFormat();
 const ESRIJSON_FORMAT = new EsriJsonFormat();
 const WGS84_SPHERE = new Sphere(6378137);
 const MAPBOX_PROTOCOL = 'mapbox://';
+const MAPBOX_HOST = 'tiles.mapbox.com/v4';
 const BBOX_STRING = '{bbox-epsg-3857}';
 
 plugins.register(PluginType.MAP_RENDERER, MapRenderer);
@@ -181,6 +182,21 @@ function configureTileSource(glSource, mapProjection, time) {
   return source;
 }
 
+/** Gets the url for the TileJSON source.
+ * @param {Object} glSource The Mapbox GL map source containing a 'url' property.
+ * @param {string} accessToken The user's Mapbox tiles access token.
+ *
+ * @returns {string} The url to use (mapbox protocol substituted).
+ */
+export function getTileJSONUrl(glSource, accessToken) {
+  let url = glSource.url;
+  if (url.indexOf(MAPBOX_PROTOCOL) === 0) {
+    const mapid = url.replace(MAPBOX_PROTOCOL, '');
+    url = `https://a.${MAPBOX_HOST}/${mapid}.json?access_token=${accessToken}`;
+  }
+  return url;
+}
+
 /** Configures an OpenLayers TileJSONSource object from the provided
  * Mapbox GL style object.
  * @param {Object} glSource The Mapbox GL map source containing a 'url' property.
@@ -189,13 +205,8 @@ function configureTileSource(glSource, mapProjection, time) {
  * @returns {Object} Configured OpenLayers TileJSONSource.
  */
 function configureTileJSONSource(glSource, accessToken) {
-  let url = glSource.url;
-  if (url.indexOf(MAPBOX_PROTOCOL) === 0) {
-    const mapid = url.replace(MAPBOX_PROTOCOL, '');
-    url = `https://a.tiles.mapbox.com/v4/${mapid}.json?access_token=${accessToken}`;
-  }
   return new TileJSON({
-    url: url,
+    url: getTileJSONUrl(glSource, accessToken),
     crossOrigin: 'anonymous',
   });
 }
@@ -233,7 +244,7 @@ function configureMvtSource(glSource, accessToken) {
     urls = [];
     for (let i = 0, ii = hosts.length; i < ii; ++i) {
       const host = hosts[i];
-      urls.push(`https://${host}.tiles.mapbox.com/v4/${mapid}/{z}/{x}/{y}.${suffix}?access_token=${accessToken}`);
+      urls.push(`https://${host}.${MAPBOX_HOST}/${mapid}/{z}/{x}/{y}.${suffix}?access_token=${accessToken}`);
     }
   } else {
     urls = [url];
