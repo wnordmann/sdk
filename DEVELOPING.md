@@ -34,7 +34,7 @@ sudo apt-get install -y libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev g+
 **MacOS**
 If you have `homebrew` on your machine you can install via
 ```
-brew install cairo
+brew install cairo pkg-config
 ```
 
 Otherwise you can follow the installation instructions here:
