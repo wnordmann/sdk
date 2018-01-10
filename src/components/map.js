@@ -96,6 +96,7 @@ const GEOJSON_FORMAT = new GeoJsonFormat();
 const ESRIJSON_FORMAT = new EsriJsonFormat();
 const WGS84_SPHERE = new Sphere(6378137);
 const MAPBOX_PROTOCOL = 'mapbox://';
+const MAPBOX_HOST = 'tiles.mapbox.com/v4';
 const BBOX_STRING = '{bbox-epsg-3857}';
 
 plugins.register(PluginType.MAP_RENDERER, MapRenderer);
@@ -181,15 +182,31 @@ function configureTileSource(glSource, mapProjection, time) {
   return source;
 }
 
+/** Gets the url for the TileJSON source.
+ * @param {Object} glSource The Mapbox GL map source containing a 'url' property.
+ * @param {string} accessToken The user's Mapbox tiles access token.
+ *
+ * @returns {string} The url to use (mapbox protocol substituted).
+ */
+export function getTileJSONUrl(glSource, accessToken) {
+  let url = glSource.url;
+  if (url.indexOf(MAPBOX_PROTOCOL) === 0) {
+    const mapid = url.replace(MAPBOX_PROTOCOL, '');
+    url = `https://a.${MAPBOX_HOST}/${mapid}.json?access_token=${accessToken}`;
+  }
+  return url;
+}
+
 /** Configures an OpenLayers TileJSONSource object from the provided
  * Mapbox GL style object.
  * @param {Object} glSource The Mapbox GL map source containing a 'url' property.
+ * @param {string} accessToken The user's Mapbox tiles access token.
  *
  * @returns {Object} Configured OpenLayers TileJSONSource.
  */
-function configureTileJSONSource(glSource) {
+function configureTileJSONSource(glSource, accessToken) {
   return new TileJSON({
-    url: glSource.url,
+    url: getTileJSONUrl(glSource, accessToken),
     crossOrigin: 'anonymous',
   });
 }
@@ -227,7 +244,7 @@ function configureMvtSource(glSource, accessToken) {
     urls = [];
     for (let i = 0, ii = hosts.length; i < ii; ++i) {
       const host = hosts[i];
-      urls.push(`https://${host}.tiles.mapbox.com/v4/${mapid}/{z}/{x}/{y}.${suffix}?access_token=${accessToken}`);
+      urls.push(`https://${host}.${MAPBOX_HOST}/${mapid}/{z}/{x}/{y}.${suffix}?access_token=${accessToken}`);
     }
   } else {
     urls = [url];
@@ -383,7 +400,7 @@ function configureSource(glSource, mapView, accessToken, baseUrl, time, wrapX) {
     if ('tiles' in glSource) {
       return configureTileSource(glSource, mapView.getProjection(), time);
     } else if (glSource.url) {
-      return configureTileJSONSource(glSource);
+      return configureTileJSONSource(glSource, accessToken);
     }
   } else if (glSource.type === 'geojson') {
     return configureGeojsonSource(glSource, mapView, baseUrl, wrapX);
@@ -678,7 +695,14 @@ export class Map extends React.Component {
       const src = this.props.map.sources[src_name];
       if (src && src.type !== 'geojson' && !jsonEquals(src, sourcesDef[src_name])) {
         // reconfigure source and tell layers about it
-        this.sources[src_name] = configureSource(sourcesDef[src_name], map_view);
+        this.sources[src_name] = configureSource(
+          sourcesDef[src_name],
+          map_view,
+          this.props.mapbox.accessToken,
+          this.props.mapbox.baseUrl,
+          undefined,
+          this.props.wrapX
+        );
         this.updateLayerSource(src_name);
       }
 
@@ -689,7 +713,14 @@ export class Map extends React.Component {
       if (src && (src.cluster !== sourcesDef[src_name].cluster
           || src.clusterRadius !== sourcesDef[src_name].clusterRadius)) {
         // reconfigure the source for clustering.
-        this.sources[src_name] = configureSource(sourcesDef[src_name], map_view);
+        this.sources[src_name] = configureSource(
+          sourcesDef[src_name],
+          map_view,
+          this.props.mapbox.accessToken,
+          this.props.mapbox.baseUrl,
+          undefined,
+          this.props.wrapX
+        );
         // tell all the layers about it.
         this.updateLayerSource(src_name);
       }

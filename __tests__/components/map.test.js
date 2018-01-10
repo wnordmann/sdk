@@ -23,7 +23,7 @@ import {createStore, combineReducers} from 'redux';
 import {radiansToDegrees} from '../../src/util';
 
 import ConnectedMap, {Map} from '../../src/components/map';
-import {hydrateLayer, getFakeStyle, getMapExtent} from '../../src/components/map';
+import {hydrateLayer, getFakeStyle, getMapExtent, getTileJSONUrl} from '../../src/components/map';
 import SdkPopup from '../../src/components/map/popup';
 import MapReducer from '../../src/reducers/map';
 import MapInfoReducer from '../../src/reducers/mapinfo';
@@ -1020,6 +1020,17 @@ describe('Map component', () => {
     sdk_map.popups[id].state.closed = true;
     sdk_map.updatePopups();
     expect(sdk_map.map.getOverlays().getLength()).toEqual(0);
+  });
+
+  it('should handle Mapbox substitution in TileJSON', () => {
+    const apiKey = 'foo';
+    const glSource = {
+      type: 'raster',
+      tileSize: 256,
+      url: 'mapbox://mapbox.satellite',
+    };
+    const url = getTileJSONUrl(glSource, apiKey);
+    expect(url).toEqual('https://a.tiles.mapbox.com/v4/mapbox.satellite.json?access_token=foo');
   });
 
   it('should handle getFakeStyle', () => {
