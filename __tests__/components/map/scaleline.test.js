@@ -26,6 +26,12 @@ describe('Scaleline tests', () => {
     store.dispatch(MapActions.setView([-98, 40], 4));
   });
 
+  it('should allow for custom className', () => {
+    store.dispatch(MapInfoActions.setResolution(1000));
+    const wrapper = mount(<ConnectedScaleLine className='foo' store={store} />);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
   it('create the correct scaleline', () => {
     store.dispatch(MapInfoActions.setResolution(1000));
     const wrapper = mount(<ConnectedScaleLine store={store} />);
