@@ -22,7 +22,7 @@ import Point from 'ol/geom/point';
 import Feature from 'ol/feature';
 import VectorLayer from 'ol/layer/vector';
 import {applyStyle} from 'ol-mapbox-style';
-import {jsonClone, getLayerById, parseQueryString, encodeQueryObject} from '../util';
+import {jsonEquals, jsonClone, getLayerById, parseQueryString, encodeQueryObject} from '../util';
 import {getFakeStyle, hydrateLayer} from './map';
 
 /** @module components/legend
@@ -225,7 +225,21 @@ export class Legend extends React.Component {
     return (layer !== nextLayer);
   }
 
-  getVectorLegend(layer, layer_src) {
+  shouldComponentUpdate(nextProps) {
+    let layerEqual;
+    const nextLayer = getLayerById(nextProps.layers, this.props.layerId);
+    const layer = getLayerById(this.props.layers, this.props.layerId);
+    layerEqual = jsonEquals(layer, nextLayer);
+    let strokeEqual = true;
+    if (this.props.strokeId) {
+      const nextStrokeLayer = getLayerById(nextProps.layers, this.props.strokeId);
+      const strokeLayer = getLayerById(this.props.layers, this.props.strokeId);
+      strokeEqual = jsonEquals(strokeLayer, nextStrokeLayer);
+    }
+    return !layerEqual || !strokeEqual;
+  }
+
+  getVectorLegend(layer, layer_src, strokeLayer) {
     const props = this.props;
     if (!layer.metadata || !layer.metadata['bnd:legend-type']) {
       const size = props.size;
@@ -239,9 +253,13 @@ export class Legend extends React.Component {
           } else {
             newLayer = layer;
           }
+          let layers = [newLayer];
+          if (strokeLayer) {
+            layers.push(strokeLayer);
+          }
           const fake_style = getFakeStyle(
             props.sprite,
-            [newLayer],
+            layers,
             props.mapbox.baseUrl,
             props.mapbox.accessToken
           );
@@ -325,7 +343,11 @@ export class Legend extends React.Component {
         } else {
           legendLayer = layer;
         }
-        return this.getVectorLegend(legendLayer, layer_src);
+        let strokeLayer;
+        if (this.props.strokeId) {
+          strokeLayer = getLayerById(this.props.layers, this.props.strokeId);
+        }
+        return this.getVectorLegend(legendLayer, layer_src, strokeLayer);
       case 'image':
       case 'video':
       case 'canvas':
@@ -360,6 +382,11 @@ export class Legend extends React.Component {
 Legend.propTypes = {
   /** The id of the layer for which this legend is meant. */
   layerId: PropTypes.string.isRequired,
+  /**
+   * Id of the layer that should serve as the stroke of a polygon legend swatch.
+   * Only useful for vector legends that have a separate layer for fill and stroke.
+   */
+  strokeId: PropTypes.string,
   /** List of layers from the store. */
   layers: PropTypes.arrayOf(PropTypes.object),
   /** List of layer sources. */
