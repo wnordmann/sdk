@@ -239,24 +239,14 @@ export class Legend extends React.Component {
     return !layerEqual || !strokeEqual;
   }
 
-  getVectorLegend(layer, layer_src, strokeLayer) {
+  getVectorLegend(layers, layer_src) {
     const props = this.props;
+    const layer = layers[0];
     if (!layer.metadata || !layer.metadata['bnd:legend-type']) {
       const size = props.size;
       return (<canvas ref={(c) => {
         if (c !== null) {
           let vectorContext = OlRender.toContext(c.getContext('2d'), {size: size});
-          let newLayer;
-          if (layer.filter) {
-            newLayer = jsonClone(layer);
-            delete newLayer.filter;
-          } else {
-            newLayer = layer;
-          }
-          let layers = [newLayer];
-          if (strokeLayer) {
-            layers.push(strokeLayer);
-          }
           const fake_style = getFakeStyle(
             props.sprite,
             layers,
@@ -311,6 +301,18 @@ export class Legend extends React.Component {
     }
   }
 
+  transformVectorLayer(layer) {
+    let result = layer;
+    if (layer.ref) {
+      result = hydrateLayer(this.props.layers, layer);
+    }
+    if (result.filter) {
+      result = jsonClone(result);
+      delete result.filter;
+    }
+    return result;
+  }
+
   /** Handles how to get the legend data based on the layer source type.
    *  @returns {Object} Call to getRasterLegend() or getLegend() to return the html element.
    */
@@ -337,17 +339,14 @@ export class Legend extends React.Component {
       //  is deemed appropriate.
       case 'vector':
       case 'geojson':
-        let legendLayer;
-        if (layer.ref) {
-          legendLayer = hydrateLayer(this.props.layers, layer);
-        } else {
-          legendLayer = layer;
-        }
-        let strokeLayer;
+        const layers = [this.transformVectorLayer(layer)];
         if (this.props.strokeId) {
-          strokeLayer = getLayerById(this.props.layers, this.props.strokeId);
+          const strokeLayer = getLayerById(this.props.layers, this.props.strokeId);
+          if (strokeLayer !== null) {
+            layers.push(this.transformVectorLayer(strokeLayer));
+          }
         }
-        return this.getVectorLegend(legendLayer, layer_src, strokeLayer);
+        return this.getVectorLegend(layers, layer_src);
       case 'image':
       case 'video':
       case 'canvas':
