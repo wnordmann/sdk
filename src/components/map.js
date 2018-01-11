@@ -593,7 +593,7 @@ export class Map extends React.Component {
     const next_layer_version = getVersion(nextProps.map, LAYER_VERSION_KEY);
     if (this.layersVersion !== next_layer_version) {
       // go through and update the layers.
-      this.configureLayers(nextProps.map.sources, nextProps.map.layers, next_layer_version, nextProps.map.sprite);
+      this.configureLayers(nextProps.map.sources, nextProps.map.layers, next_layer_version, nextProps.map.sprite, this.props.declutter);
     }
 
     // check the vector sources for data changes
@@ -834,10 +834,11 @@ export class Map extends React.Component {
    *  @param {Object} glSource Mapbox GL source object.
    *  @param {Object[]} layers Array of Mapbox GL layer objects.
    *  @param {string} sprite The sprite of the map.
+   *  @param {boolean} declutter Should we declutter labels and symbols?
    *
    *  @returns {(Object|null)} Configured OpenLayers layer object, or null.
    */
-  configureLayer(sourceName, glSource, layers, sprite) {
+  configureLayer(sourceName, glSource, layers, sprite, declutter) {
     const source = this.sources[sourceName];
     let layer = null;
     switch (glSource.type) {
@@ -849,14 +850,14 @@ export class Map extends React.Component {
         return layer;
       case 'geojson':
         layer = new VectorLayer({
-          declutter: true,
+          declutter: declutter,
           source,
         });
         this.applyStyle(layer, layers, sprite);
         return layer;
       case 'vector':
         layer = new VectorTileLayer({
-          declutter: true,
+          declutter: declutter,
           source,
         });
         this.applyStyle(layer, layers, sprite);
@@ -917,8 +918,9 @@ export class Map extends React.Component {
    *  @param {Object[]} layersDef The array of layers in map.state.
    *  @param {number} layerVersion The value of state.map.metadata[LAYER_VERSION_KEY].
    *  @param {string} sprite The sprite of the map.
+   *  @param {boolean} declutter Should we declutter labels and symbols?
    */
-  configureLayers(sourcesDef, layersDef, layerVersion, sprite) {
+  configureLayers(sourcesDef, layersDef, layerVersion, sprite, declutter) {
     // update the internal version counter.
     this.layersVersion = layerVersion;
 
@@ -968,7 +970,7 @@ export class Map extends React.Component {
           applyBackground(this.map, {layers: lyr_group});
         } else {
           const hydrated_group = hydrateLayerGroup(layersDef, lyr_group);
-          const new_layer = this.configureLayer(source_name, source, hydrated_group, sprite);
+          const new_layer = this.configureLayer(source_name, source, hydrated_group, sprite, declutter);
 
           // if the new layer has been defined, add it to the map.
           if (new_layer !== null) {
@@ -1318,7 +1320,7 @@ export class Map extends React.Component {
     // bootstrap the map with the current configuration.
     this.configureSources(this.props.map.sources, this.props.map.metadata[SOURCE_VERSION_KEY]);
     this.configureLayers(this.props.map.sources, this.props.map.layers,
-      this.props.map.metadata[LAYER_VERSION_KEY]);
+      this.props.map.metadata[LAYER_VERSION_KEY], this.props.map.sprite, this.props.declutter);
 
     // this is done after the map composes itself for the first time.
     //  otherwise the map was not always ready for the initial popups.
@@ -1455,6 +1457,8 @@ export class Map extends React.Component {
 }
 
 Map.propTypes = {
+  /** Should we declutter labels and symbols? */
+  declutter: PropTypes.bool,
   /** Should we wrap the world? If yes, data will be repeated in all worlds. */
   wrapX: PropTypes.bool,
   /** Should we handle map hover to show mouseposition? */
@@ -1532,6 +1536,7 @@ Map.propTypes = {
 };
 
 Map.defaultProps = {
+  declutter: false,
   wrapX: true,
   hover: true,
   projection: 'EPSG:3857',
