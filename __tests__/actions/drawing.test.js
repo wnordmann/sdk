@@ -86,31 +86,34 @@ describe('drawing actions', () => {
       sourceName: null,
     });
   });
-  it('should change the edit style function', () => {
-    const styleFunc = function(feature, resolution) {
-      return '';
+  it('should change the edit style', () => {
+    const style = {
+      id: 'style1',
+      type: 'fill'
     };
-    expect(actions.setEditStyle(styleFunc)).toEqual({
+    expect(actions.setEditStyle(style)).toEqual({
       type: DRAWING.SET_EDIT_STYLE,
-      editStyle: styleFunc
+      editStyle: style
     });
   });
   it('should change the select style function', () => {
-    const styleFunc = function(feature, resolution) {
-      return '';
+    const style = {
+      id: 'style1',
+      type: 'fill'
     };
-    expect(actions.setSelectStyle(styleFunc)).toEqual({
+    expect(actions.setSelectStyle(style)).toEqual({
       type: DRAWING.SET_SELECT_STYLE,
-      selectStyle: styleFunc
+      selectStyle: style
     });
   });
   it('should change the modify style function', () => {
-    const styleFunc = function(feature, resolution) {
-      return '';
+    const style = {
+      id: 'style1',
+      type: 'fill'
     };
-    expect(actions.setModifyStyle(styleFunc)).toEqual({
+    expect(actions.setModifyStyle(style)).toEqual({
       type: DRAWING.SET_MODIFY_STYLE,
-      modifyStyle: styleFunc
+      modifyStyle: style
     });
   });
 });

@@ -19,7 +19,7 @@ import Point from 'ol/geom/point';
 import LineString from 'ol/geom/linestring';
 import Polygon from 'ol/geom/polygon';
 
-import SdkMap from '../../src/components/map';
+import SdkMap, {getOLStyleFunctionFromMapboxStyle} from '../../src/components/map';
 import MapReducer from '../../src/reducers/map';
 import DrawingReducer from '../../src/reducers/drawing';
 
@@ -338,5 +338,24 @@ describe('Map component with drawing', () => {
         coordinates: coords,
       },
     });
+  });
+  it('returns ol style func', () => {
+
+    const mbStyle = [{
+      'id': 'gl-draw-polygon-fill-inactive',
+      'type': 'fill',
+      'filter': ['all',
+        ['==', '$type', 'Polygon'],
+      ],
+      'paint': {
+        'fill-color': '#3bb2d0',
+        'fill-outline-color': '#3bb2d0',
+        'fill-opacity': 0.1
+      }
+    }];
+    const feature = new Feature(new Polygon([[[-1, -1], [-1, 1], [1, 1], [1, -1], [-1, -1]]]));
+    feature.set('PERSONS', 2000000);
+    const styleFunc = getOLStyleFunctionFromMapboxStyle(mbStyle);
+    expect(styleFunc(feature, 1).length).toEqual(2);
   });
 });
