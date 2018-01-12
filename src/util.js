@@ -13,6 +13,9 @@
 
 import {GROUP_KEY, TITLE_KEY} from './constants';
 import GeoJsonFormat from 'ol/format/geojson';
+import VectorLayer from 'ol/layer/vector';
+import mb2olstyle from 'mapbox-to-ol-style';
+
 /** @module util
  * @desc functions for Boundless SDK.
  *
@@ -244,4 +247,17 @@ export function getLayersByGroup(layers, groupId) {
     }
   }
   return group_layers;
+}
+
+export function getOLStyleFunctionFromMapboxStyle(styles) {
+  const sources = styles.map(function(style) {
+    return style.id;
+  });
+  const glStyle = {
+    version: 8,
+    layers: styles,
+    sources: sources
+  };
+  const olLayer = new VectorLayer();
+  return mb2olstyle(olLayer, glStyle, sources);
 }

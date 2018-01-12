@@ -291,6 +291,9 @@ export class MapboxGL extends React.Component {
     if (INTERACTIONS.drawing.includes(drawingProps.interaction)) {
       defaultMode = this.getMode(drawingProps.interaction);
       const drawOptions = {displayControlsDefault: false, defaultMode};
+      if (drawingProps.editStyle) {
+        drawOptions.styles = drawingProps.editStyle;
+      }
       const draw = new MapboxDraw(drawOptions);
       this.map.on('draw.create', (evt) => {
         this.onDrawCreate(evt, drawingProps, draw, defaultMode);

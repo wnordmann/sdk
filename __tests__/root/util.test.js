@@ -2,6 +2,8 @@
 
 import * as util from '../../src/util';
 import {GROUP_KEY, TITLE_KEY} from '../../src/constants';
+import Feature from 'ol/feature';
+import Polygon from 'ol/geom/polygon';
 
 describe('util', () => {
   it('calculates the resolution for zoom', () => {
@@ -218,5 +220,23 @@ describe('util', () => {
 
     // check to see the first two layers were found.
     expect(matches).toEqual(layers.slice(0, 2));
+  });
+  it('returns ol style func', () => {
+    const mbStyle = [{
+      'id': 'gl-draw-polygon-fill-inactive',
+      'type': 'fill',
+      'filter': ['all',
+        ['==', '$type', 'Polygon'],
+      ],
+      'paint': {
+        'fill-color': '#3bb2d0',
+        'fill-outline-color': '#3bb2d0',
+        'fill-opacity': 0.1
+      }
+    }];
+    const feature = new Feature(new Polygon([[[-1, -1], [-1, 1], [1, 1], [1, -1], [-1, -1]]]));
+    feature.set('PERSONS', 2000000);
+    const styleFunc = util.getOLStyleFunctionFromMapboxStyle(mbStyle);
+    expect(styleFunc(feature, 1).length).toEqual(2);
   });
 });

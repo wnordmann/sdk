@@ -80,7 +80,7 @@ import {setMeasureFeature, clearMeasureFeature} from '../actions/drawing';
 
 import ClusterSource from '../source/cluster';
 
-import {parseQueryString, jsonClone, jsonEquals, getLayerById, degreesToRadians, radiansToDegrees, getKey, encodeQueryObject} from '../util';
+import {parseQueryString, jsonClone, jsonEquals, getLayerById, degreesToRadians, radiansToDegrees, getKey, encodeQueryObject, getOLStyleFunctionFromMapboxStyle} from '../util';
 
 import fetchJsonp from 'fetch-jsonp';
 
@@ -1353,9 +1353,14 @@ export class Map extends React.Component {
     }
 
     if (drawingProps.interaction === INTERACTIONS.modify) {
-      const select = new SelectInteraction({
+      let drawObj = {
         wrapX: false,
-      });
+      };
+      if (drawingProps.modifyStyle) {
+        const styleFunc = getOLStyleFunctionFromMapboxStyle(drawingProps.modifyStyle);
+        drawObj.style = styleFunc;
+      }
+      const select = new SelectInteraction(drawObj);
 
       const modify = new ModifyInteraction({
         features: select.getFeatures(),
@@ -1392,6 +1397,10 @@ export class Map extends React.Component {
         };
       } else {
         drawObj = {type: drawingProps.interaction};
+      }
+      if (drawingProps.editStyle) {
+        const styleFunc = getOLStyleFunctionFromMapboxStyle(drawingProps.editStyle);
+        drawObj.style = styleFunc;
       }
       const draw = new DrawInteraction(drawObj);
 

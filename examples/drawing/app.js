@@ -94,6 +94,30 @@ function main() {
       'fill-outline-color': '#f03b20',
     },
   }));
+  store.dispatch(drawingActions.setEditStyle([
+    {
+      'id': 'gl-draw-polygon-fill-inactive',
+      'type': 'fill',
+      'filter': ['all',
+        ['==', '$type', 'Polygon'],
+      ],
+      'paint': {
+        'fill-color': '#fbb03b',
+        'fill-outline-color': '#fbb03b',
+        'fill-opacity': 0.1
+      }
+    },
+    {
+      'id': 'gl-draw-polygon-midpoint',
+      'type': 'circle',
+      'filter': ['all',
+        ['==', '$type', 'Point']],
+      'paint': {
+        'circle-radius': 3,
+        'circle-color': '#fbb03b'
+      }
+    }
+  ]));
 
   // A counter for the feature IDs
   let FEATURE_ID = 1;

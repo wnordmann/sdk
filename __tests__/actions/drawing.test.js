@@ -86,4 +86,31 @@ describe('drawing actions', () => {
       sourceName: null,
     });
   });
+  it('should change the edit style function', () => {
+    const styleFunc = function(feature, resolution) {
+      return '';
+    };
+    expect(actions.setEditStyle(styleFunc)).toEqual({
+      type: DRAWING.SET_EDIT_STYLE,
+      editStyle: styleFunc
+    });
+  });
+  it('should change the select style function', () => {
+    const styleFunc = function(feature, resolution) {
+      return '';
+    };
+    expect(actions.setSelectStyle(styleFunc)).toEqual({
+      type: DRAWING.SET_SELECT_STYLE,
+      selectStyle: styleFunc
+    });
+  });
+  it('should change the modify style function', () => {
+    const styleFunc = function(feature, resolution) {
+      return '';
+    };
+    expect(actions.setModifyStyle(styleFunc)).toEqual({
+      type: DRAWING.SET_MODIFY_STYLE,
+      modifyStyle: styleFunc
+    });
+  });
 });
