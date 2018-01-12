@@ -13,7 +13,6 @@
 
 import {GROUP_KEY, TITLE_KEY} from './constants';
 import GeoJsonFormat from 'ol/format/geojson';
-
 /** @module util
  * @desc functions for Boundless SDK.
  *
