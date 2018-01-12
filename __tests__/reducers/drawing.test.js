@@ -164,4 +164,45 @@ describe('drawing reducer', () => {
 
     expect(reducer(undefined, test_action)).toEqual(expected_state);
   });
+  it('should keep the style even if drawing end', () => {
+    const editStyle = 'Point';
+
+    const test_action = {
+      type: DRAWING.SET_EDIT_STYLE,
+      editStyle: editStyle
+    };
+    deepFreeze(test_action);
+
+    const expected_state = {
+      interaction: null,
+      sourceName: null,
+      measureFeature: null,
+      measureSegments: null,
+      editStyle: editStyle,
+      modifyStyle: null,
+      selectStyle: null
+    };
+
+    expect(reducer(undefined, test_action)).toEqual(expected_state);
+    const source_name = 'points-test';
+    const geo_type = 'Point';
+
+    const test_action_start = {
+      type: DRAWING.START,
+      interaction: geo_type,
+      sourceName: source_name,
+    };
+    const expected_state_in_between = {
+      interaction: geo_type,
+      sourceName: source_name,
+      measureFeature: null,
+      measureSegments: null,
+      editStyle: editStyle,
+      modifyStyle: null,
+      selectStyle: null
+    };
+    deepFreeze(test_action_start);
+    expect(reducer(expected_state, test_action_start)).toEqual(expected_state_in_between);
+    expect(reducer(expected_state_in_between, {type: DRAWING.END})).toEqual(expected_state);
+  });
 });
