@@ -13,6 +13,9 @@ describe('drawing reducer', () => {
       sourceName: null,
       measureFeature: null,
       measureSegments: null,
+      editStyle: null,
+      modifyStyle: null,
+      selectStyle: null
     });
   });
 
@@ -32,6 +35,9 @@ describe('drawing reducer', () => {
       sourceName: source_name,
       measureFeature: null,
       measureSegments: null,
+      editStyle: null,
+      modifyStyle: null,
+      selectStyle: null
     };
 
     expect(reducer(undefined, test_action)).toEqual(expected_state);
@@ -79,6 +85,9 @@ describe('drawing reducer', () => {
       sourceName: null,
       measureFeature: line,
       measureSegments: segs,
+      editStyle: null,
+      modifyStyle: null,
+      selectStyle: null
     });
 
     const cleared_state = reducer(state, actions.clearMeasureFeature(line, segs));
@@ -87,6 +96,72 @@ describe('drawing reducer', () => {
       sourceName: null,
       measureFeature: null,
       measureSegments: null,
+      editStyle: null,
+      modifyStyle: null,
+      selectStyle: null
     });
+  });
+  it('should change the select style', () => {
+    const selectStyle = 'Point';
+
+    const test_action = {
+      type: DRAWING.SET_SELECT_STYLE,
+      selectStyle: selectStyle
+    };
+    deepFreeze(test_action);
+
+    const expected_state = {
+      interaction: null,
+      sourceName: null,
+      measureFeature: null,
+      measureSegments: null,
+      editStyle: null,
+      modifyStyle: null,
+      selectStyle: selectStyle
+    };
+
+    expect(reducer(undefined, test_action)).toEqual(expected_state);
+  });
+  it('should change the modify style', () => {
+    const modifyStyle = 'Point';
+
+    const test_action = {
+      type: DRAWING.SET_MODIFY_STYLE,
+      modifyStyle: modifyStyle
+    };
+    deepFreeze(test_action);
+
+    const expected_state = {
+      interaction: null,
+      sourceName: null,
+      measureFeature: null,
+      measureSegments: null,
+      editStyle: null,
+      modifyStyle: modifyStyle,
+      selectStyle: null
+    };
+
+    expect(reducer(undefined, test_action)).toEqual(expected_state);
+  });
+  it('should change the edit style', () => {
+    const editStyle = 'Point';
+
+    const test_action = {
+      type: DRAWING.SET_EDIT_STYLE,
+      editStyle: editStyle
+    };
+    deepFreeze(test_action);
+
+    const expected_state = {
+      interaction: null,
+      sourceName: null,
+      measureFeature: null,
+      measureSegments: null,
+      editStyle: editStyle,
+      modifyStyle: null,
+      selectStyle: null
+    };
+
+    expect(reducer(undefined, test_action)).toEqual(expected_state);
   });
 });

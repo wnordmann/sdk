@@ -64,6 +64,8 @@ import DrawInteraction from 'ol/interaction/draw';
 import ModifyInteraction from 'ol/interaction/modify';
 import SelectInteraction from 'ol/interaction/select';
 
+import mb2olstyle from 'mapbox-to-ol-style';
+
 import Style from 'ol/style/style';
 import SpriteStyle from '../style/sprite';
 
@@ -1353,13 +1355,17 @@ export class Map extends React.Component {
     }
 
     if (drawingProps.interaction === INTERACTIONS.modify) {
-      const select = new SelectInteraction({
+      let drawObj = {
         wrapX: false,
-      });
-
-      const modify = new ModifyInteraction({
+      };
+      drawObj = this.setStyleFunc(drawObj, drawingProps.modifyStyle);
+      const select = new SelectInteraction(drawObj);
+      let modifyObj = {
         features: select.getFeatures(),
-      });
+      };
+      modifyObj = this.setStyleFunc(modifyObj, drawingProps.modifyStyle);
+
+      const modify = new ModifyInteraction(modifyObj);
 
       modify.on('modifyend', (evt) => {
         this.onFeatureEvent('modified', drawingProps.sourceName, evt.features.item(0));
@@ -1369,13 +1375,15 @@ export class Map extends React.Component {
     } else if (drawingProps.interaction === INTERACTIONS.select) {
       // TODO: Select is typically a single-feature affair but there
       //       should be support for multiple feature selections in the future.
-      const select = new SelectInteraction({
+      let drawObj = {
         wrapX: false,
         layers: (layer) => {
           const layer_src = this.sources[drawingProps.sourceName];
           return (layer.getSource() === layer_src);
         },
-      });
+      };
+      drawObj = this.setStyleFunc(drawObj, drawingProps.selectStyle);
+      const select = new SelectInteraction(drawObj);
 
       select.on('select', () => {
         this.onFeatureEvent('selected', drawingProps.sourcename, select.getFeatures().item(0));
@@ -1393,7 +1401,8 @@ export class Map extends React.Component {
       } else {
         drawObj = {type: drawingProps.interaction};
       }
-      const draw = new DrawInteraction(drawObj);
+      const styleDrawObj = this.setStyleFunc(drawObj, drawingProps.editStyle);
+      const draw = new DrawInteraction(styleDrawObj);
 
       draw.on('drawend', (evt) => {
         this.onFeatureEvent('drawn', drawingProps.sourceName, evt.feature);
@@ -1435,6 +1444,13 @@ export class Map extends React.Component {
         this.map.addInteraction(this.activeInteractions[i]);
       }
     }
+  }
+  setStyleFunc(styleObj, style) {
+    if (style) {
+      styleObj.style = getOLStyleFunctionFromMapboxStyle(style);
+    }
+    return styleObj;
+
   }
 
   render() {
@@ -1654,6 +1670,19 @@ function mapDispatchToProps(dispatch) {
       dispatch(setMousePosition(lngLat, coordinate));
     },
   };
+}
+
+export function getOLStyleFunctionFromMapboxStyle(styles) {
+  const sources = styles.map(function(style) {
+    return style.id;
+  });
+  const glStyle = {
+    version: 8,
+    layers: styles,
+    sources: sources
+  };
+  const olLayer = new VectorLayer();
+  return mb2olstyle(olLayer, glStyle, sources);
 }
 
 // Ensure that withRef is set to true so getWrappedInstance will return the Map.

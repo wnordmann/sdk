@@ -109,3 +109,33 @@ export function clearMeasureFeature() {
     type: DRAWING.CLEAR_MEASURE_FEATURE,
   };
 }
+/** Set the editing style.
+ *  @param {Object} mbStyle The mapbox style to be used for the edit feature mode.
+ *  @returns {Object} An action object to pass to the reducer.
+ */
+export function setEditStyle(mbStyle) {
+  return {
+    type: DRAWING.SET_EDIT_STYLE,
+    editStyle: mbStyle
+  };
+}
+/** Set the select style.
+ *  @param {Object} mbStyle The mapbox style to be used for the select feature mode.
+ *  @returns {Object} An action object to pass to the reducer.
+ */
+export function setSelectStyle(mbStyle) {
+  return {
+    type: DRAWING.SET_SELECT_STYLE,
+    selectStyle: mbStyle
+  };
+}
+/** Set the modify style.
+ *  @param {Object} mbStyle The mapbox style to be used for the modify feature mode.
+ *  @returns {Object} An action object to pass to the reducer.
+ */
+export function setModifyStyle(mbStyle) {
+  return {
+    type: DRAWING.SET_MODIFY_STYLE,
+    modifyStyle: mbStyle
+  };
+}

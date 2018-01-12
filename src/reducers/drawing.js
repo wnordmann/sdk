@@ -26,6 +26,9 @@ const defaultState = {
   sourceName: null,
   measureFeature: null,
   measureSegments: null,
+  editStyle: null,
+  modifyStyle: null,
+  selectStyle: null
 };
 
 /** Update the state to indicate an interaction has started.
@@ -40,6 +43,9 @@ function startDrawing(state, action) {
     sourceName: action.sourceName,
     measureFeature: null,
     measureSegments: null,
+    editStyle: state.editStyle,
+    modifyStyle: state.modifyStyle,
+    selectStyle: state.selectStyle
   };
 }
 
@@ -56,6 +62,18 @@ export default function drawingReducer(state = defaultState, action) {
       return {interaction: null, sourceName: null, measureFeature: null, measureSegments: null};
     case DRAWING.START:
       return startDrawing(state, action);
+    case DRAWING.SET_EDIT_STYLE:
+      return Object.assign({}, state, {
+        editStyle: action.editStyle
+      });
+    case DRAWING.SET_SELECT_STYLE:
+      return Object.assign({}, state, {
+        selectStyle: action.selectStyle
+      });
+    case DRAWING.SET_MODIFY_STYLE:
+      return Object.assign({}, state, {
+        modifyStyle: action.modifyStyle
+      });
     case DRAWING.SET_MEASURE_FEATURE:
       return Object.assign({}, state, {
         measureFeature: action.feature,
