@@ -858,8 +858,8 @@ export class Map extends React.Component {
         this.applyStyle(layer, layers, sprite);
         return layer;
       case 'vector':
-        const time = this.props.map.metadata[TIME_KEY];
-        if (time && layers[0].metadata[TIME_START_KEY] !== undefined) {
+        const time = getKey(this.props.map.metadata, TIME_KEY);
+        if (time && layers[0].metadata && layers[0].metadata[TIME_START_KEY] !== undefined) {
           layers[0].filter = this.props.createLayerFilter(layers[0], time);
         }
         layer = new VectorTileLayer({
