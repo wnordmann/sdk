@@ -52,6 +52,7 @@ export default function drawingReducer(state = defaultState, action) {
       return Object.assign({}, state, {
         interaction: action.interaction,
         sourceName: action.sourceName,
+        measureDone: false,
         measureFeature: null,
         measureSegments: null,
       });
@@ -69,7 +70,6 @@ export default function drawingReducer(state = defaultState, action) {
       });
     case DRAWING.SET_MEASURE_FEATURE:
       return Object.assign({}, state, {
-        measureDone: false,
         measureFeature: action.feature,
         measureSegments: action.segments,
       });

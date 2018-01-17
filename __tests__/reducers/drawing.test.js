@@ -36,7 +36,7 @@ describe('drawing reducer', () => {
       sourceName: source_name,
       measureFeature: null,
       measureSegments: null,
-      measureDone: null,
+      measureDone: false,
       editStyle: null,
       modifyStyle: null,
       selectStyle: null
@@ -87,7 +87,7 @@ describe('drawing reducer', () => {
       sourceName: null,
       measureFeature: line,
       measureSegments: segs,
-      measureDone: false,
+      measureDone: null,
       editStyle: null,
       modifyStyle: null,
       selectStyle: null
@@ -205,13 +205,23 @@ describe('drawing reducer', () => {
       sourceName: source_name,
       measureFeature: null,
       measureSegments: null,
-      measureDone: null,
+      measureDone: false,
+      editStyle: editStyle,
+      modifyStyle: null,
+      selectStyle: null
+    };
+    const expected_state_end = {
+      interaction: null,
+      sourceName: null,
+      measureFeature: null,
+      measureSegments: null,
+      measureDone: false,
       editStyle: editStyle,
       modifyStyle: null,
       selectStyle: null
     };
     deepFreeze(test_action_start);
     expect(reducer(expected_state, test_action_start)).toEqual(expected_state_in_between);
-    expect(reducer(expected_state_in_between, {type: DRAWING.END})).toEqual(expected_state);
+    expect(reducer(expected_state_in_between, {type: DRAWING.END})).toEqual(expected_state_end);
   });
 });
