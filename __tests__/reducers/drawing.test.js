@@ -13,6 +13,7 @@ describe('drawing reducer', () => {
       sourceName: null,
       measureFeature: null,
       measureSegments: null,
+      measureDone: null,
       editStyle: null,
       modifyStyle: null,
       selectStyle: null
@@ -35,6 +36,7 @@ describe('drawing reducer', () => {
       sourceName: source_name,
       measureFeature: null,
       measureSegments: null,
+      measureDone: null,
       editStyle: null,
       modifyStyle: null,
       selectStyle: null
@@ -85,6 +87,7 @@ describe('drawing reducer', () => {
       sourceName: null,
       measureFeature: line,
       measureSegments: segs,
+      measureDone: false,
       editStyle: null,
       modifyStyle: null,
       selectStyle: null
@@ -96,6 +99,7 @@ describe('drawing reducer', () => {
       sourceName: null,
       measureFeature: null,
       measureSegments: null,
+      measureDone: null,
       editStyle: null,
       modifyStyle: null,
       selectStyle: null
@@ -115,6 +119,7 @@ describe('drawing reducer', () => {
       sourceName: null,
       measureFeature: null,
       measureSegments: null,
+      measureDone: null,
       editStyle: null,
       modifyStyle: null,
       selectStyle: selectStyle
@@ -136,6 +141,7 @@ describe('drawing reducer', () => {
       sourceName: null,
       measureFeature: null,
       measureSegments: null,
+      measureDone: null,
       editStyle: null,
       modifyStyle: modifyStyle,
       selectStyle: null
@@ -157,6 +163,7 @@ describe('drawing reducer', () => {
       sourceName: null,
       measureFeature: null,
       measureSegments: null,
+      measureDone: null,
       editStyle: editStyle,
       modifyStyle: null,
       selectStyle: null
@@ -178,6 +185,7 @@ describe('drawing reducer', () => {
       sourceName: null,
       measureFeature: null,
       measureSegments: null,
+      measureDone: null,
       editStyle: editStyle,
       modifyStyle: null,
       selectStyle: null
@@ -197,6 +205,7 @@ describe('drawing reducer', () => {
       sourceName: source_name,
       measureFeature: null,
       measureSegments: null,
+      measureDone: null,
       editStyle: editStyle,
       modifyStyle: null,
       selectStyle: null
