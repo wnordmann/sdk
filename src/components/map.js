@@ -1286,6 +1286,9 @@ export class Map extends React.Component {
 
     // when the map is clicked, handle the event.
     this.map.on('singleclick', (evt) => {
+      if (this.activeInteractions !== null) {
+        return;
+      }
       // React listens to events on the document, OpenLayers places their
       // event listeners on the element themselves. The only element
       // the map should care to listen to is the actual rendered map
