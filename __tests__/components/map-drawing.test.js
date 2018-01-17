@@ -331,7 +331,7 @@ describe('Map component with drawing', () => {
     });
   });
 
-  it('measures a polygon', () => {
+  it('measures a polygon, and finalizes it', () => {
     const sdk_map = wrapper.instance().getWrappedInstance();
     const ol_map = sdk_map.map;
 
@@ -356,7 +356,8 @@ describe('Map component with drawing', () => {
     tmp_polygon.transform('EPSG:4326', 'EPSG:3857');
     sketch_geometry.setCoordinates(tmp_polygon.getCoordinates());
 
-    expect(store.getState().drawing.measureFeature).toEqual({
+    let state = store.getState().drawing;
+    expect(state.measureFeature).toEqual({
       type: 'Feature',
       properties: {},
       geometry: {
@@ -364,7 +365,17 @@ describe('Map component with drawing', () => {
         coordinates: coords,
       },
     });
+    expect(state.measureDone).toEqual(null);
+
+    measure.dispatchEvent({
+      type: 'drawend',
+    });
+
+    state = store.getState().drawing;
+    expect(state.measureDone).toEqual(true);
+
   });
+
   it('returns ol style func', () => {
 
     const mbStyle = [{
