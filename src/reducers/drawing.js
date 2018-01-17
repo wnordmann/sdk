@@ -45,6 +45,7 @@ export default function drawingReducer(state = defaultState, action) {
       return Object.assign({}, state, {
         interaction: null,
         sourceName: null,
+        measureDone: false,
         measureFeature: null,
         measureSegments: null
       });

@@ -55,6 +55,7 @@ describe('drawing reducer', () => {
     const expected_state = {
       interaction: null,
       sourceName: null,
+      measureDone: false,
       measureFeature: null,
       measureSegments: null,
     };
