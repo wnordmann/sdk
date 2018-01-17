@@ -62,7 +62,6 @@ describe('drawing reducer', () => {
     expect(reducer(initial_state, {type: DRAWING.END})).toEqual(expected_state);
   });
 
-
   it('should set and clear the measure feature and segments', () => {
     const line = {
       type: 'Feature',
@@ -105,6 +104,39 @@ describe('drawing reducer', () => {
       selectStyle: null
     });
   });
+
+  it('should finalize the measure feature', () => {
+    const line = {
+      type: 'Feature',
+      properties: {},
+      geometry: {
+        type: 'Line',
+        coordinates: [
+          [0, 0], [1, 1], [2, 2],
+        ],
+      },
+    };
+    const segs = [1, 1];
+
+    deepFreeze(line);
+    deepFreeze(segs);
+
+    let state = reducer(undefined, actions.setMeasureFeature(line, segs));
+    state = reducer(state, actions.finalizeMeasureFeature());
+    deepFreeze(state);
+
+    expect(state).toEqual({
+      interaction: null,
+      sourceName: null,
+      measureFeature: line,
+      measureSegments: segs,
+      measureDone: true,
+      editStyle: null,
+      modifyStyle: null,
+      selectStyle: null
+    });
+  });
+
   it('should change the select style', () => {
     const selectStyle = 'Point';
 
