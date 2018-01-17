@@ -365,7 +365,7 @@ describe('Map component with drawing', () => {
         coordinates: coords,
       },
     });
-    expect(state.measureDone).toEqual(null);
+    expect(state.measureDone).toEqual(false);
 
     measure.dispatchEvent({
       type: 'drawend',

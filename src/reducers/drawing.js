@@ -26,7 +26,7 @@ const defaultState = {
   sourceName: null,
   measureFeature: null,
   measureSegments: null,
-  measureDone: null,
+  measureDone: false,
   editStyle: null,
   modifyStyle: null,
   selectStyle: null
@@ -70,6 +70,7 @@ export default function drawingReducer(state = defaultState, action) {
       });
     case DRAWING.SET_MEASURE_FEATURE:
       return Object.assign({}, state, {
+        measureDone: false,
         measureFeature: action.feature,
         measureSegments: action.segments,
       });
@@ -81,7 +82,7 @@ export default function drawingReducer(state = defaultState, action) {
       return Object.assign({}, state, {
         measureFeature: null,
         measureSegments: null,
-        measureDone: null,
+        measureDone: false,
       });
     default:
       return state;
