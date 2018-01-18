@@ -75,7 +75,7 @@ import LoadingStrategy from 'ol/loadingstrategy';
 
 import {updateLayer, setView, setBearing} from '../actions/map';
 import {setMapSize, setMousePosition, setMapExtent, setResolution, setProjection} from '../actions/mapinfo';
-import {INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TIME_KEY, TIME_ATTRIBUTE_KEY, QUERYABLE_KEY, QUERY_ENDPOINT_KEY} from '../constants';
+import {INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TIME_KEY, TIME_START_KEY, QUERYABLE_KEY, QUERY_ENDPOINT_KEY} from '../constants';
 import {dataVersionKey} from '../reducers/map';
 
 import {finalizeMeasureFeature, setMeasureFeature, clearMeasureFeature} from '../actions/drawing';
@@ -548,7 +548,7 @@ export class Map extends React.Component {
       // find time dependent layers
       for (let i = 0, ii = nextProps.map.layers.length; i < ii; ++i) {
         const layer = nextProps.map.layers[i];
-        if (layer.metadata[TIME_ATTRIBUTE_KEY] !== undefined) {
+        if (layer.metadata[TIME_START_KEY] !== undefined) {
           this.props.updateLayer(layer.id, {
             filter: this.props.createLayerFilter(layer, nextProps.map.metadata[TIME_KEY])
           });
@@ -858,6 +858,10 @@ export class Map extends React.Component {
         this.applyStyle(layer, layers, sprite);
         return layer;
       case 'vector':
+        const time = getKey(this.props.map.metadata, TIME_KEY);
+        if (time && layers[0].metadata && layers[0].metadata[TIME_START_KEY] !== undefined) {
+          layers[0].filter = this.props.createLayerFilter(layers[0], time);
+        }
         layer = new VectorTileLayer({
           declutter: declutter,
           source,

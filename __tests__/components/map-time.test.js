@@ -124,7 +124,7 @@ describe('Map component time tests', () => {
 
     const layerConfig = {
       metadata: {
-        'bnd:timeattribute': 'time'
+        'bnd:start-time': 'time'
       },
       id: 'earthquakes',
       type: 'circle',
