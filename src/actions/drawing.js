@@ -101,6 +101,18 @@ export function setMeasureFeature(feature, segments) {
   };
 }
 
+/** Finalize a measurement feature.
+ *
+ *  This is called when the measure feature is done.
+ *
+ *  @returns {Object} A measurement action.
+ */
+export function finalizeMeasureFeature() {
+  return {
+    type: DRAWING.FINALIZE_MEASURE_FEATURE,
+  };
+}
+
 /** Clear the measurement feature.
  *  @returns {Object} An action object to pass to the reducer.
  */

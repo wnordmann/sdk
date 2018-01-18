@@ -78,7 +78,7 @@ import {setMapSize, setMousePosition, setMapExtent, setResolution, setProjection
 import {INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TIME_KEY, TIME_ATTRIBUTE_KEY, QUERYABLE_KEY, QUERY_ENDPOINT_KEY} from '../constants';
 import {dataVersionKey} from '../reducers/map';
 
-import {setMeasureFeature, clearMeasureFeature} from '../actions/drawing';
+import {finalizeMeasureFeature, setMeasureFeature, clearMeasureFeature} from '../actions/drawing';
 
 import ClusterSource from '../source/cluster';
 
@@ -1286,6 +1286,9 @@ export class Map extends React.Component {
 
     // when the map is clicked, handle the event.
     this.map.on('singleclick', (evt) => {
+      if (this.activeInteractions !== null) {
+        return;
+      }
       // React listens to events on the document, OpenLayers places their
       // event listeners on the element themselves. The only element
       // the map should care to listen to is the actual rendered map
@@ -1436,6 +1439,7 @@ export class Map extends React.Component {
       measure.on('drawend', () => {
         // remove the listener
         Observable.unByKey(measure_listener);
+        this.props.finalizeMeasureFeature();
       });
 
       this.activeInteractions = [measure];
@@ -1547,6 +1551,8 @@ Map.propTypes = {
   setMeasureGeometry: PropTypes.func,
   /** clearMeasureFeature callback, called when the measure feature is cleared. */
   clearMeasureFeature: PropTypes.func,
+  /** finalizeMeasureFeature callback, called when the measure feature is done. */
+  finalizeMeasureFeature: PropTypes.func,
   /** Callback function that should generate a TIME based filter. */
   createLayerFilter: PropTypes.func,
 };
@@ -1596,6 +1602,8 @@ Map.defaultProps = {
   setMeasureGeometry: () => {
   },
   clearMeasureFeature: () => {
+  },
+  finalizeMeasureFeature: () => {
   },
   createLayerFilter: () => {
   },
@@ -1667,6 +1675,9 @@ function mapDispatchToProps(dispatch) {
         properties: {},
         geometry: geom,
       }, segments));
+    },
+    finalizeMeasureFeature: () => {
+      dispatch(finalizeMeasureFeature());
     },
     clearMeasureFeature: () => {
       dispatch(clearMeasureFeature());

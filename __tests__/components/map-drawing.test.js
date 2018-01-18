@@ -80,7 +80,7 @@ describe('Map component with drawing', () => {
       },
     }));
 
-    wrapper = mount(<SdkMap store={store} />);
+    wrapper = mount(<SdkMap store={store} includeFeaturesOnClick={true} />);
   });
 
   it('turns on a drawing tool', () => {
@@ -109,6 +109,32 @@ describe('Map component with drawing', () => {
     });
 
     store.dispatch(MapActions.setView([-45, -45], 11));
+  });
+
+  it('should not trigger the popup-related callbacks when drawing', () => {
+    store.dispatch({
+      type: DRAWING.START,
+      interaction: INTERACTIONS.point,
+      sourceName: 'test',
+    });
+    const sdk_map = wrapper.instance().getWrappedInstance();
+    spyOn(sdk_map.map, 'forEachFeatureAtPixel');
+    sdk_map.map.dispatchEvent({
+      type: 'postcompose',
+    });
+
+    sdk_map.map.dispatchEvent({
+      type: 'singleclick',
+      coordinate: [0, 0],
+      // this fakes the clicking of the canvas.
+      originalEvent: {
+        // eslint-disable-next-line no-underscore-dangle
+        target: sdk_map.map.getRenderer().canvas_,
+      },
+    });
+
+    // forEachFeatureAtPixel should not get called
+    expect(sdk_map.map.forEachFeatureAtPixel).not.toHaveBeenCalled();
   });
 
   it('turns on a drawing tool for box', () => {
@@ -305,7 +331,7 @@ describe('Map component with drawing', () => {
     });
   });
 
-  it('measures a polygon', () => {
+  it('measures a polygon, and finalizes it', () => {
     const sdk_map = wrapper.instance().getWrappedInstance();
     const ol_map = sdk_map.map;
 
@@ -330,7 +356,8 @@ describe('Map component with drawing', () => {
     tmp_polygon.transform('EPSG:4326', 'EPSG:3857');
     sketch_geometry.setCoordinates(tmp_polygon.getCoordinates());
 
-    expect(store.getState().drawing.measureFeature).toEqual({
+    let state = store.getState().drawing;
+    expect(state.measureFeature).toEqual({
       type: 'Feature',
       properties: {},
       geometry: {
@@ -338,7 +365,17 @@ describe('Map component with drawing', () => {
         coordinates: coords,
       },
     });
+    expect(state.measureDone).toEqual(false);
+
+    measure.dispatchEvent({
+      type: 'drawend',
+    });
+
+    state = store.getState().drawing;
+    expect(state.measureDone).toEqual(true);
+
   });
+
   it('returns ol style func', () => {
 
     const mbStyle = [{

@@ -79,6 +79,10 @@ describe('drawing actions', () => {
     expect(actions.clearMeasureFeature()).toEqual({type: DRAWING.CLEAR_MEASURE_FEATURE});
   });
 
+  it('should create an action to finalize the measure feature', () => {
+    expect(actions.finalizeMeasureFeature()).toEqual({type: DRAWING.FINALIZE_MEASURE_FEATURE});
+  });
+
   it('should start a measuring tool', () => {
     expect(actions.startMeasure(INTERACTIONS.measure_point)).toEqual({
       type: DRAWING.START,
