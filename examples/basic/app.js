@@ -41,6 +41,12 @@ function main() {
   // Set the map name
   store.dispatch(mapActions.setMapName('Basic Map Example'));
 
+  // Restrict the zoom levels
+  store.dispatch(mapActions.updateMetadata({
+    'bnd:minzoom': 4,
+    'bnd:maxzoom': 20,
+  }));
+
   // add the OSM source
   store.dispatch(mapActions.addOsmSource('osm'));
 

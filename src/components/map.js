@@ -75,7 +75,7 @@ import LoadingStrategy from 'ol/loadingstrategy';
 
 import {updateLayer, setView, setBearing} from '../actions/map';
 import {setMapSize, setMousePosition, setMapExtent, setResolution, setProjection} from '../actions/mapinfo';
-import {INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TIME_KEY, TIME_START_KEY, QUERYABLE_KEY, QUERY_ENDPOINT_KEY} from '../constants';
+import {INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TIME_KEY, TIME_START_KEY, QUERYABLE_KEY, QUERY_ENDPOINT_KEY, MIN_ZOOM_KEY, MAX_ZOOM_KEY} from '../constants';
 import {dataVersionKey} from '../reducers/map';
 
 import {finalizeMeasureFeature, setMeasureFeature, clearMeasureFeature} from '../actions/drawing';
@@ -1253,12 +1253,16 @@ export class Map extends React.Component {
     }
 
     // initialize the map.
+    const minZoom = getKey(this.props.map.metadata, MIN_ZOOM_KEY);
+    const maxZoom = getKey(this.props.map.metadata, MAX_ZOOM_KEY);
     this.map = new OlMap({
       interactions: interaction.defaults(),
       controls: [new AttributionControl()],
       target: this.mapdiv,
       logo: false,
       view: new View({
+        minZoom: minZoom ? minZoom + 1 : undefined,
+        maxZoom: maxZoom ? maxZoom + 1 : undefined,
         center,
         zoom: this.props.map.zoom >= 0 ? this.props.map.zoom + 1 : this.props.map.zoom,
         rotation: rotation !== undefined ? -rotation : 0,
