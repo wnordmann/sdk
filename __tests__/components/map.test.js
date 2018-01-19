@@ -23,12 +23,13 @@ import {createStore, combineReducers} from 'redux';
 import {radiansToDegrees} from '../../src/util';
 
 import ConnectedMap, {Map} from '../../src/components/map';
-import {hydrateLayer, getFakeStyle, getMapExtent} from '../../src/components/map';
+import {hydrateLayer, getFakeStyle, getMapExtent, getTileJSONUrl} from '../../src/components/map';
 import SdkPopup from '../../src/components/map/popup';
 import MapReducer from '../../src/reducers/map';
 import MapInfoReducer from '../../src/reducers/mapinfo';
 import PrintReducer from '../../src/reducers/print';
 import * as MapActions from '../../src/actions/map';
+import * as MapInfoActions from '../../src/actions/mapinfo';
 import * as PrintActions from '../../src/actions/print';
 
 configure({adapter: new Adapter()});
@@ -798,12 +799,37 @@ describe('Map component', () => {
     const wrapper = mount(<ConnectedMap {...props} />);
     const sdk_map = wrapper.instance().getWrappedInstance();
 
+    sdk_map.map.getSize = function() {
+      return [100, 200];
+    };
+
     sdk_map.map.dispatchEvent({
       type: 'pointermove',
       coordinate: [0, 0],
     });
 
     expect(store.getState().mapinfo.mouseposition.lngLat).toEqual({lng: 0, lat: 0});
+  });
+
+  it('should trigger updateSize', () => {
+    const store = createStore(combineReducers({
+      map: MapReducer,
+      mapinfo: MapInfoReducer,
+    }));
+
+    const props = {
+      store,
+    };
+    const wrapper = mount(<ConnectedMap {...props} />);
+    const sdk_map = wrapper.instance().getWrappedInstance();
+
+    sdk_map.map.getSize = function() {
+      return [100, 200];
+    };
+
+    spyOn(sdk_map.map, 'updateSize');
+    store.dispatch(MapInfoActions.setMapSize([200, 200]));
+    expect(sdk_map.map.updateSize).toHaveBeenCalled();
   });
 
   it('should update the source url', () => {
@@ -994,6 +1020,17 @@ describe('Map component', () => {
     sdk_map.popups[id].state.closed = true;
     sdk_map.updatePopups();
     expect(sdk_map.map.getOverlays().getLength()).toEqual(0);
+  });
+
+  it('should handle Mapbox substitution in TileJSON', () => {
+    const apiKey = 'foo';
+    const glSource = {
+      type: 'raster',
+      tileSize: 256,
+      url: 'mapbox://mapbox.satellite',
+    };
+    const url = getTileJSONUrl(glSource, apiKey);
+    expect(url).toEqual('https://a.tiles.mapbox.com/v4/mapbox.satellite.json?access_token=foo');
   });
 
   it('should handle getFakeStyle', () => {

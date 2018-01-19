@@ -64,6 +64,8 @@ import DrawInteraction from 'ol/interaction/draw';
 import ModifyInteraction from 'ol/interaction/modify';
 import SelectInteraction from 'ol/interaction/select';
 
+import mb2olstyle from 'mapbox-to-ol-style';
+
 import Style from 'ol/style/style';
 import SpriteStyle from '../style/sprite';
 
@@ -73,10 +75,10 @@ import LoadingStrategy from 'ol/loadingstrategy';
 
 import {updateLayer, setView, setBearing} from '../actions/map';
 import {setMapSize, setMousePosition, setMapExtent, setResolution, setProjection} from '../actions/mapinfo';
-import {INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TIME_KEY, TIME_ATTRIBUTE_KEY, QUERYABLE_KEY, QUERY_ENDPOINT_KEY} from '../constants';
+import {INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TIME_KEY, TIME_START_KEY, QUERYABLE_KEY, QUERY_ENDPOINT_KEY} from '../constants';
 import {dataVersionKey} from '../reducers/map';
 
-import {setMeasureFeature, clearMeasureFeature} from '../actions/drawing';
+import {finalizeMeasureFeature, setMeasureFeature, clearMeasureFeature} from '../actions/drawing';
 
 import ClusterSource from '../source/cluster';
 
@@ -96,6 +98,7 @@ const GEOJSON_FORMAT = new GeoJsonFormat();
 const ESRIJSON_FORMAT = new EsriJsonFormat();
 const WGS84_SPHERE = new Sphere(6378137);
 const MAPBOX_PROTOCOL = 'mapbox://';
+const MAPBOX_HOST = 'tiles.mapbox.com/v4';
 const BBOX_STRING = '{bbox-epsg-3857}';
 
 plugins.register(PluginType.MAP_RENDERER, MapRenderer);
@@ -181,15 +184,31 @@ function configureTileSource(glSource, mapProjection, time) {
   return source;
 }
 
+/** Gets the url for the TileJSON source.
+ * @param {Object} glSource The Mapbox GL map source containing a 'url' property.
+ * @param {string} accessToken The user's Mapbox tiles access token.
+ *
+ * @returns {string} The url to use (mapbox protocol substituted).
+ */
+export function getTileJSONUrl(glSource, accessToken) {
+  let url = glSource.url;
+  if (url.indexOf(MAPBOX_PROTOCOL) === 0) {
+    const mapid = url.replace(MAPBOX_PROTOCOL, '');
+    url = `https://a.${MAPBOX_HOST}/${mapid}.json?access_token=${accessToken}`;
+  }
+  return url;
+}
+
 /** Configures an OpenLayers TileJSONSource object from the provided
  * Mapbox GL style object.
  * @param {Object} glSource The Mapbox GL map source containing a 'url' property.
+ * @param {string} accessToken The user's Mapbox tiles access token.
  *
  * @returns {Object} Configured OpenLayers TileJSONSource.
  */
-function configureTileJSONSource(glSource) {
+function configureTileJSONSource(glSource, accessToken) {
   return new TileJSON({
-    url: glSource.url,
+    url: getTileJSONUrl(glSource, accessToken),
     crossOrigin: 'anonymous',
   });
 }
@@ -227,7 +246,7 @@ function configureMvtSource(glSource, accessToken) {
     urls = [];
     for (let i = 0, ii = hosts.length; i < ii; ++i) {
       const host = hosts[i];
-      urls.push(`https://${host}.tiles.mapbox.com/v4/${mapid}/{z}/{x}/{y}.${suffix}?access_token=${accessToken}`);
+      urls.push(`https://${host}.${MAPBOX_HOST}/${mapid}/{z}/{x}/{y}.${suffix}?access_token=${accessToken}`);
     }
   } else {
     urls = [url];
@@ -381,7 +400,7 @@ function configureSource(glSource, mapView, accessToken, baseUrl, time, wrapX) {
     if ('tiles' in glSource) {
       return configureTileSource(glSource, mapView.getProjection(), time);
     } else if (glSource.url) {
-      return configureTileJSONSource(glSource);
+      return configureTileJSONSource(glSource, accessToken);
     }
   } else if (glSource.type === 'geojson') {
     return configureGeojsonSource(glSource, mapView, baseUrl, wrapX);
@@ -527,7 +546,7 @@ export class Map extends React.Component {
       // find time dependent layers
       for (let i = 0, ii = nextProps.map.layers.length; i < ii; ++i) {
         const layer = nextProps.map.layers[i];
-        if (layer.metadata[TIME_ATTRIBUTE_KEY] !== undefined) {
+        if (layer.metadata[TIME_START_KEY] !== undefined) {
           this.props.updateLayer(layer.id, {
             filter: this.props.createLayerFilter(layer, nextProps.map.metadata[TIME_KEY])
           });
@@ -574,7 +593,7 @@ export class Map extends React.Component {
     const next_layer_version = getVersion(nextProps.map, LAYER_VERSION_KEY);
     if (this.layersVersion !== next_layer_version) {
       // go through and update the layers.
-      this.configureLayers(nextProps.map.sources, nextProps.map.layers, next_layer_version, nextProps.map.sprite);
+      this.configureLayers(nextProps.map.sources, nextProps.map.layers, next_layer_version, nextProps.map.sprite, this.props.declutter);
     }
 
     // check the vector sources for data changes
@@ -610,6 +629,10 @@ export class Map extends React.Component {
         evt.context.canvas.toBlob(this.props.onExportImage);
       }, this);
       this.map.renderSync();
+    }
+
+    if (nextProps.mapinfo && this.props.mapinfo.size !== null && (nextProps.mapinfo.size[0] !== this.props.mapinfo.size[0] || nextProps.mapinfo.size[1] !== this.props.mapinfo.size[1])) {
+      this.map.updateSize();
     }
 
     // This should always return false to keep
@@ -672,7 +695,14 @@ export class Map extends React.Component {
       const src = this.props.map.sources[src_name];
       if (src && src.type !== 'geojson' && !jsonEquals(src, sourcesDef[src_name])) {
         // reconfigure source and tell layers about it
-        this.sources[src_name] = configureSource(sourcesDef[src_name], map_view);
+        this.sources[src_name] = configureSource(
+          sourcesDef[src_name],
+          map_view,
+          this.props.mapbox.accessToken,
+          this.props.mapbox.baseUrl,
+          undefined,
+          this.props.wrapX
+        );
         this.updateLayerSource(src_name);
       }
 
@@ -683,7 +713,14 @@ export class Map extends React.Component {
       if (src && (src.cluster !== sourcesDef[src_name].cluster
           || src.clusterRadius !== sourcesDef[src_name].clusterRadius)) {
         // reconfigure the source for clustering.
-        this.sources[src_name] = configureSource(sourcesDef[src_name], map_view);
+        this.sources[src_name] = configureSource(
+          sourcesDef[src_name],
+          map_view,
+          this.props.mapbox.accessToken,
+          this.props.mapbox.baseUrl,
+          undefined,
+          this.props.wrapX
+        );
         // tell all the layers about it.
         this.updateLayerSource(src_name);
       }
@@ -797,10 +834,11 @@ export class Map extends React.Component {
    *  @param {Object} glSource Mapbox GL source object.
    *  @param {Object[]} layers Array of Mapbox GL layer objects.
    *  @param {string} sprite The sprite of the map.
+   *  @param {boolean} declutter Should we declutter labels and symbols?
    *
    *  @returns {(Object|null)} Configured OpenLayers layer object, or null.
    */
-  configureLayer(sourceName, glSource, layers, sprite) {
+  configureLayer(sourceName, glSource, layers, sprite, declutter) {
     const source = this.sources[sourceName];
     let layer = null;
     switch (glSource.type) {
@@ -812,14 +850,18 @@ export class Map extends React.Component {
         return layer;
       case 'geojson':
         layer = new VectorLayer({
-          declutter: true,
+          declutter: declutter,
           source,
         });
         this.applyStyle(layer, layers, sprite);
         return layer;
       case 'vector':
+        const time = getKey(this.props.map.metadata, TIME_KEY);
+        if (time && layers[0].metadata && layers[0].metadata[TIME_START_KEY] !== undefined) {
+          layers[0].filter = this.props.createLayerFilter(layers[0], time);
+        }
         layer = new VectorTileLayer({
-          declutter: true,
+          declutter: declutter,
           source,
         });
         this.applyStyle(layer, layers, sprite);
@@ -880,8 +922,9 @@ export class Map extends React.Component {
    *  @param {Object[]} layersDef The array of layers in map.state.
    *  @param {number} layerVersion The value of state.map.metadata[LAYER_VERSION_KEY].
    *  @param {string} sprite The sprite of the map.
+   *  @param {boolean} declutter Should we declutter labels and symbols?
    */
-  configureLayers(sourcesDef, layersDef, layerVersion, sprite) {
+  configureLayers(sourcesDef, layersDef, layerVersion, sprite, declutter) {
     // update the internal version counter.
     this.layersVersion = layerVersion;
 
@@ -931,7 +974,7 @@ export class Map extends React.Component {
           applyBackground(this.map, {layers: lyr_group});
         } else {
           const hydrated_group = hydrateLayerGroup(layersDef, lyr_group);
-          const new_layer = this.configureLayer(source_name, source, hydrated_group, sprite);
+          const new_layer = this.configureLayer(source_name, source, hydrated_group, sprite, declutter);
 
           // if the new layer has been defined, add it to the map.
           if (new_layer !== null) {
@@ -1245,6 +1288,9 @@ export class Map extends React.Component {
 
     // when the map is clicked, handle the event.
     this.map.on('singleclick', (evt) => {
+      if (this.activeInteractions !== null) {
+        return;
+      }
       // React listens to events on the document, OpenLayers places their
       // event listeners on the element themselves. The only element
       // the map should care to listen to is the actual rendered map
@@ -1281,7 +1327,7 @@ export class Map extends React.Component {
     // bootstrap the map with the current configuration.
     this.configureSources(this.props.map.sources, this.props.map.metadata[SOURCE_VERSION_KEY]);
     this.configureLayers(this.props.map.sources, this.props.map.layers,
-      this.props.map.metadata[LAYER_VERSION_KEY]);
+      this.props.map.metadata[LAYER_VERSION_KEY], this.props.map.sprite, this.props.declutter);
 
     // this is done after the map composes itself for the first time.
     //  otherwise the map was not always ready for the initial popups.
@@ -1316,13 +1362,17 @@ export class Map extends React.Component {
     }
 
     if (drawingProps.interaction === INTERACTIONS.modify) {
-      const select = new SelectInteraction({
+      let drawObj = {
         wrapX: false,
-      });
-
-      const modify = new ModifyInteraction({
+      };
+      drawObj = this.setStyleFunc(drawObj, drawingProps.modifyStyle);
+      const select = new SelectInteraction(drawObj);
+      let modifyObj = {
         features: select.getFeatures(),
-      });
+      };
+      modifyObj = this.setStyleFunc(modifyObj, drawingProps.modifyStyle);
+
+      const modify = new ModifyInteraction(modifyObj);
 
       modify.on('modifyend', (evt) => {
         this.onFeatureEvent('modified', drawingProps.sourceName, evt.features.item(0));
@@ -1332,13 +1382,15 @@ export class Map extends React.Component {
     } else if (drawingProps.interaction === INTERACTIONS.select) {
       // TODO: Select is typically a single-feature affair but there
       //       should be support for multiple feature selections in the future.
-      const select = new SelectInteraction({
+      let drawObj = {
         wrapX: false,
         layers: (layer) => {
           const layer_src = this.sources[drawingProps.sourceName];
           return (layer.getSource() === layer_src);
         },
-      });
+      };
+      drawObj = this.setStyleFunc(drawObj, drawingProps.selectStyle);
+      const select = new SelectInteraction(drawObj);
 
       select.on('select', () => {
         this.onFeatureEvent('selected', drawingProps.sourcename, select.getFeatures().item(0));
@@ -1356,7 +1408,8 @@ export class Map extends React.Component {
       } else {
         drawObj = {type: drawingProps.interaction};
       }
-      const draw = new DrawInteraction(drawObj);
+      const styleDrawObj = this.setStyleFunc(drawObj, drawingProps.editStyle);
+      const draw = new DrawInteraction(styleDrawObj);
 
       draw.on('drawend', (evt) => {
         this.onFeatureEvent('drawn', drawingProps.sourceName, evt.feature);
@@ -1388,6 +1441,7 @@ export class Map extends React.Component {
       measure.on('drawend', () => {
         // remove the listener
         Observable.unByKey(measure_listener);
+        this.props.finalizeMeasureFeature();
       });
 
       this.activeInteractions = [measure];
@@ -1398,6 +1452,13 @@ export class Map extends React.Component {
         this.map.addInteraction(this.activeInteractions[i]);
       }
     }
+  }
+  setStyleFunc(styleObj, style) {
+    if (style) {
+      styleObj.style = getOLStyleFunctionFromMapboxStyle(style);
+    }
+    return styleObj;
+
   }
 
   render() {
@@ -1418,6 +1479,8 @@ export class Map extends React.Component {
 }
 
 Map.propTypes = {
+  /** Should we declutter labels and symbols? */
+  declutter: PropTypes.bool,
   /** Should we wrap the world? If yes, data will be repeated in all worlds. */
   wrapX: PropTypes.bool,
   /** Should we handle map hover to show mouseposition? */
@@ -1490,11 +1553,14 @@ Map.propTypes = {
   setMeasureGeometry: PropTypes.func,
   /** clearMeasureFeature callback, called when the measure feature is cleared. */
   clearMeasureFeature: PropTypes.func,
+  /** finalizeMeasureFeature callback, called when the measure feature is done. */
+  finalizeMeasureFeature: PropTypes.func,
   /** Callback function that should generate a TIME based filter. */
   createLayerFilter: PropTypes.func,
 };
 
 Map.defaultProps = {
+  declutter: false,
   wrapX: true,
   hover: true,
   projection: 'EPSG:3857',
@@ -1539,6 +1605,8 @@ Map.defaultProps = {
   },
   clearMeasureFeature: () => {
   },
+  finalizeMeasureFeature: () => {
+  },
   createLayerFilter: () => {
   },
 };
@@ -1549,6 +1617,7 @@ function mapStateToProps(state) {
     drawing: state.drawing,
     print: state.print,
     mapbox: state.mapbox,
+    mapinfo: state.mapinfo,
   };
 }
 
@@ -1609,6 +1678,9 @@ function mapDispatchToProps(dispatch) {
         geometry: geom,
       }, segments));
     },
+    finalizeMeasureFeature: () => {
+      dispatch(finalizeMeasureFeature());
+    },
     clearMeasureFeature: () => {
       dispatch(clearMeasureFeature());
     },
@@ -1616,6 +1688,19 @@ function mapDispatchToProps(dispatch) {
       dispatch(setMousePosition(lngLat, coordinate));
     },
   };
+}
+
+export function getOLStyleFunctionFromMapboxStyle(styles) {
+  const sources = styles.map(function(style) {
+    return style.id;
+  });
+  const glStyle = {
+    version: 8,
+    layers: styles,
+    sources: sources
+  };
+  const olLayer = new VectorLayer();
+  return mb2olstyle(olLayer, glStyle, sources);
 }
 
 // Ensure that withRef is set to true so getWrappedInstance will return the Map.

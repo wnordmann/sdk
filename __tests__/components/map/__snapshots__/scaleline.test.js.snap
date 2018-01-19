@@ -29,3 +29,5 @@ exports[`Scaleline tests creates the meter suffix 1`] = `"<div class=\\"sdk-scal
 exports[`Scaleline tests creates the micrometer suffix 1`] = `"<div class=\\"sdk-scale-line\\"><div class=\\"sdk-scale-line-inner\\" style=\\"width: 70px;\\">500 μm</div></div>"`;
 
 exports[`Scaleline tests creates the millimeter suffix 1`] = `"<div class=\\"sdk-scale-line\\"><div class=\\"sdk-scale-line-inner\\" style=\\"width: 70px;\\">500 mm</div></div>"`;
+
+exports[`Scaleline tests should allow for custom className 1`] = `"<div class=\\"sdk-scale-line foo\\"><div class=\\"sdk-scale-line-inner\\" style=\\"width: 65px;\\">50 km</div></div>"`;

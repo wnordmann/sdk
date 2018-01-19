@@ -30,7 +30,7 @@ export class SdkList extends React.Component {
   }
 }
 
-SdkList.PropTypes = {
+SdkList.propTypes = {
   style: PropTypes.object,
   className: PropTypes.string,
   children: PropTypes.oneOfType([
@@ -62,7 +62,7 @@ export class SdkLayerListGroup extends React.Component {
   }
 }
 
-SdkLayerListGroup.PropTypes = {
+SdkLayerListGroup.propTypes = {
   enableDD: PropTypes.bool,
   groupId: PropTypes.string.isRequired,
   group: PropTypes.shape({

@@ -79,11 +79,45 @@ describe('drawing actions', () => {
     expect(actions.clearMeasureFeature()).toEqual({type: DRAWING.CLEAR_MEASURE_FEATURE});
   });
 
+  it('should create an action to finalize the measure feature', () => {
+    expect(actions.finalizeMeasureFeature()).toEqual({type: DRAWING.FINALIZE_MEASURE_FEATURE});
+  });
+
   it('should start a measuring tool', () => {
     expect(actions.startMeasure(INTERACTIONS.measure_point)).toEqual({
       type: DRAWING.START,
       interaction: INTERACTIONS.measure_point,
       sourceName: null,
+    });
+  });
+  it('should change the edit style', () => {
+    const style = {
+      id: 'style1',
+      type: 'fill'
+    };
+    expect(actions.setEditStyle(style)).toEqual({
+      type: DRAWING.SET_EDIT_STYLE,
+      editStyle: style
+    });
+  });
+  it('should change the select style function', () => {
+    const style = {
+      id: 'style1',
+      type: 'fill'
+    };
+    expect(actions.setSelectStyle(style)).toEqual({
+      type: DRAWING.SET_SELECT_STYLE,
+      selectStyle: style
+    });
+  });
+  it('should change the modify style function', () => {
+    const style = {
+      id: 'style1',
+      type: 'fill'
+    };
+    expect(actions.setModifyStyle(style)).toEqual({
+      type: DRAWING.SET_MODIFY_STYLE,
+      modifyStyle: style
     });
   });
 });

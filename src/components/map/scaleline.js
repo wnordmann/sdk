@@ -118,6 +118,10 @@ export class ScaleLine extends React.Component {
   }
   render() {
     if (this.props.mapinfo && this.props.mapinfo.resolution !== null) {
+      let className = 'sdk-scale-line';
+      if (this.props.className) {
+        className += ' ' + this.props.className;
+      }
       const properties = this.calculateProperties();
       const pointResolution = properties.pointResolution;
       const suffix = properties.suffix;
@@ -137,7 +141,11 @@ export class ScaleLine extends React.Component {
         i += 1;
       }
       let html = count + ' ' + suffix;
-      return (<div style={this.props.style} className="sdk-scale-line"><div className="sdk-scale-line-inner" style={{width: width}} dangerouslySetInnerHTML={{__html: html}}></div></div>);
+      return (
+        <div style={this.props.style} className={className}>
+          <div className="sdk-scale-line-inner" style={{width: width}} dangerouslySetInnerHTML={{__html: html}}></div>
+        </div>
+      );
     } else {
       return false;
     }

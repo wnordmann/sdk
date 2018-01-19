@@ -22,7 +22,7 @@ import Point from 'ol/geom/point';
 import Feature from 'ol/feature';
 import VectorLayer from 'ol/layer/vector';
 import {applyStyle} from 'ol-mapbox-style';
-import {jsonClone, getLayerById, parseQueryString, encodeQueryObject} from '../util';
+import {jsonEquals, jsonClone, getLayerById, parseQueryString, encodeQueryObject} from '../util';
 import {getFakeStyle, hydrateLayer} from './map';
 
 /** @module components/legend
@@ -225,23 +225,31 @@ export class Legend extends React.Component {
     return (layer !== nextLayer);
   }
 
-  getVectorLegend(layer, layer_src) {
+  shouldComponentUpdate(nextProps) {
+    let layerEqual;
+    const nextLayer = getLayerById(nextProps.layers, this.props.layerId);
+    const layer = getLayerById(this.props.layers, this.props.layerId);
+    layerEqual = jsonEquals(layer, nextLayer);
+    let strokeEqual = true;
+    if (this.props.strokeId) {
+      const nextStrokeLayer = getLayerById(nextProps.layers, this.props.strokeId);
+      const strokeLayer = getLayerById(this.props.layers, this.props.strokeId);
+      strokeEqual = jsonEquals(strokeLayer, nextStrokeLayer);
+    }
+    return !layerEqual || !strokeEqual;
+  }
+
+  getVectorLegend(layers, layer_src) {
     const props = this.props;
+    const layer = layers[0];
     if (!layer.metadata || !layer.metadata['bnd:legend-type']) {
       const size = props.size;
       return (<canvas ref={(c) => {
         if (c !== null) {
           let vectorContext = OlRender.toContext(c.getContext('2d'), {size: size});
-          let newLayer;
-          if (layer.filter) {
-            newLayer = jsonClone(layer);
-            delete newLayer.filter;
-          } else {
-            newLayer = layer;
-          }
           const fake_style = getFakeStyle(
             props.sprite,
-            [newLayer],
+            layers,
             props.mapbox.baseUrl,
             props.mapbox.accessToken
           );
@@ -293,6 +301,18 @@ export class Legend extends React.Component {
     }
   }
 
+  transformVectorLayer(layer) {
+    let result = layer;
+    if (layer.ref) {
+      result = hydrateLayer(this.props.layers, layer);
+    }
+    if (result.filter) {
+      result = jsonClone(result);
+      delete result.filter;
+    }
+    return result;
+  }
+
   /** Handles how to get the legend data based on the layer source type.
    *  @returns {Object} Call to getRasterLegend() or getLegend() to return the html element.
    */
@@ -319,13 +339,14 @@ export class Legend extends React.Component {
       //  is deemed appropriate.
       case 'vector':
       case 'geojson':
-        let legendLayer;
-        if (layer.ref) {
-          legendLayer = hydrateLayer(this.props.layers, layer);
-        } else {
-          legendLayer = layer;
+        const layers = [this.transformVectorLayer(layer)];
+        if (this.props.strokeId) {
+          const strokeLayer = getLayerById(this.props.layers, this.props.strokeId);
+          if (strokeLayer !== null) {
+            layers.push(this.transformVectorLayer(strokeLayer));
+          }
         }
-        return this.getVectorLegend(legendLayer, layer_src);
+        return this.getVectorLegend(layers, layer_src);
       case 'image':
       case 'video':
       case 'canvas':
@@ -360,6 +381,11 @@ export class Legend extends React.Component {
 Legend.propTypes = {
   /** The id of the layer for which this legend is meant. */
   layerId: PropTypes.string.isRequired,
+  /**
+   * Id of the layer that should serve as the stroke of a polygon legend swatch.
+   * Only useful for vector legends that have a separate layer for fill and stroke.
+   */
+  strokeId: PropTypes.string,
   /** List of layers from the store. */
   layers: PropTypes.arrayOf(PropTypes.object),
   /** List of layer sources. */

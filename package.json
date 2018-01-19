@@ -1,6 +1,6 @@
 {
   "name": "@boundlessgeo/sdk",
-  "version": "2.3.0-beta4",
+  "version": "2.3.0-beta8",
   "description": "Boundless Web SDK",
   "scripts": {
     "start": "webpack-dev-server --config webpack-dev-server.config.js --open --open-page 'build/examples'",
@@ -58,6 +58,7 @@
     "jest-css-modules": "^1.1.0",
     "jsdoc": "^3.5.4",
     "mapbox-gl": "^0.42.0",
+    "mapbox-to-ol-style": "^3.3.0",
     "marked": "^0.3.6",
     "metalsmith": "^2.3.0",
     "metalsmith-layouts": "^1.8.1",
@@ -96,6 +97,7 @@
     "@turf/area": "^5.0.4",
     "@turf/distance": "^5.0.4",
     "mapbox-gl": "^0.42.0",
+    "mapbox-to-ol-style": "^3.3.0",
     "ol": "^4.5.0",
     "ol-mapbox-style": "^2.8.4",
     "react": "^16.0.0",

@@ -20,7 +20,8 @@ export const LAYER_VERSION_KEY = 'bnd:layer-version';
 export const SOURCE_VERSION_KEY = 'bnd:source-version';
 export const TITLE_KEY = 'bnd:title';
 export const TIME_KEY = 'bnd:time';
-export const TIME_ATTRIBUTE_KEY = 'bnd:timeattribute';
+export const TIME_START_KEY = 'bnd:start-time';
+export const TIME_END_KEY = 'bnd:end-time';
 export const DATA_VERSION_KEY = 'bnd:data-version';
 export const GROUPS_KEY = 'mapbox:groups';
 export const GROUP_KEY = 'mapbox:group';
@@ -67,7 +68,8 @@ export default {
   TIME_KEY,
   GROUP_KEY,
   GROUPS_KEY,
-  TIME_ATTRIBUTE_KEY,
+  TIME_START_KEY,
+  TIME_END_KEY,
   DATA_VERSION_KEY,
   INTERACTIONS,
   DEFAULT_ZOOM,
