@@ -16,7 +16,7 @@
  */
 
 import createFilter from '@mapbox/mapbox-gl-style-spec/feature_filter';
-import {getGroup, getLayerIndexById, reprojectGeoJson} from '../util';
+import {getGroup, getLayerIndexById, reprojectGeoJson, getResolutionForExtent, getZoomForResolution} from '../util';
 import {MAP} from '../action-types';
 import {DEFAULT_ZOOM, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TITLE_KEY, DATA_VERSION_KEY, GROUP_KEY} from '../constants';
 
@@ -664,10 +664,30 @@ function updateSource(state, action) {
   }, metadata);
 }
 
+/** Set the zoom level of the map.
+ *  @param {Object} state Current state.
+ *  @param {Object} action Action to handle.
+ *
+ *  @returns {Object} The new state.
+ */
 function setZoom(state, action) {
   let zoom = Math.min(DEFAULT_ZOOM.MAX, action.zoom);
   zoom = Math.max(DEFAULT_ZOOM.MIN, zoom);
   return Object.assign({}, state, {zoom});
+}
+
+/** Fit the extent on the map. Can be used to zoom to a layer for instance.
+ *  @param {Object} state Current state.
+ *  @param {Object} action Action to handle.
+ *
+ *  @returns {Object} The new state.
+ */
+function fitExtent(state, action) {
+  const extent = action.extent;
+  const resolution = getResolutionForExtent(extent, action.size);
+  const zoom = getZoomForResolution(resolution);
+  const center = [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
+  return Object.assign({}, state, {center, zoom});
 }
 
 /** Main reducer.
@@ -690,6 +710,8 @@ export default function MapReducer(state = defaultState, action) {
       return setZoom(state, {zoom: state.zoom - 1});
     case MAP.SET_ZOOM:
       return setZoom(state, action);
+    case MAP.FIT_EXTENT:
+      return fitExtent(state, action);
     case MAP.SET_NAME:
       return Object.assign({}, state, {name: action.name});
     case MAP.SET_GLYPHS:

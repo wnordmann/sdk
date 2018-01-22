@@ -13,6 +13,8 @@
 
 import {GROUP_KEY, TITLE_KEY} from './constants';
 import GeoJsonFormat from 'ol/format/geojson';
+import Proj from 'ol/proj';
+
 /** @module util
  * @desc functions for Boundless SDK.
  *
@@ -39,6 +41,31 @@ export function jsonEquals(objectA, objectB) {
  */
 export function getResolutionForZoom(zoom) {
   return (6378137.0 * 2 * Math.PI / 256) /  Math.pow(2, zoom);
+}
+
+
+/** Gets the zoom level for a resolution in spherical mercator.
+ *
+ * @param {number} resolution The resolution.
+ *
+ * @returns {number} The zoom level for that zoom resolution.
+ */
+export function getZoomForResolution(resolution) {
+  return Math.log((2 * Math.PI * 6378137.0) / (resolution * 512)) / Math.log(2);
+}
+
+/** Gets the resolution for a specific extent.
+ *
+ * @param {number[]} extent The extent to consider.
+ * @param {number[]} size The size of the map.
+ *
+ * @returns {number} The resolution to use when zooming to the extent.
+ */
+export function getResolutionForExtent(extent, size) {
+  const bbox = Proj.transformExtent(extent, 'EPSG:4326', 'EPSG:3857');
+  const xResolution = (bbox[2] - bbox[0]) / size[0];
+  const yResolution = (bbox[3] - bbox[1]) / size[1];
+  return Math.max(xResolution, yResolution);
 }
 
 /** Gets a layer by it's id. https://www.mapbox.com/mapbox-gl-js/style-spec/#layer-id

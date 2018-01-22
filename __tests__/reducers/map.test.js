@@ -92,6 +92,32 @@ describe('map reducer', () => {
     });
   });
 
+  it('should handle FIT_EXTENT', () => {
+    const state = {
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      sources: {},
+      layers: [],
+    };
+    deepFreeze(state);
+    const action = {
+      type: MAP.FIT_EXTENT,
+      extent: [-45, -45, 0, 0],
+      size: [1000, 750],
+    };
+    deepFreeze(action);
+    expect(reducer(state, action)).toEqual({
+      version: 8,
+      name: 'default',
+      center: [-22.5, -22.5],
+      zoom: 3.384417347126773,
+      sources: {},
+      layers: [],
+    });
+  });
+
   it('should handle SET_VIEW max zoom constraint', () => {
     const state = {
       version: 8,

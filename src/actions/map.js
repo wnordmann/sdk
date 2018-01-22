@@ -75,6 +75,20 @@ export function setZoom(zoom) {
   };
 }
 
+/** Action to fit an extent.
+ *  @param {number[]} extent The extent to zoom to.
+ *  @param {number[]} size The size of the map.
+ *
+ *  @returns {Object} Action object to pass to reducer.
+ */
+export function fitExtent(extent, size) {
+  return {
+    type: MAP.FIT_EXTENT,
+    extent,
+    size,
+  };
+}
+
 /** Action to update the map name in map state.
  *  @param {string} name Map name.
  *
