@@ -13,6 +13,11 @@ import SdkPopup from '../../src/components/map/popup';
 
 configure({adapter: new Adapter()});
 
+const createMapDrawMock = () => {
+  return {
+    changeMode: () => {}
+  };
+};
 const createMapMock = () => {
   return {
     getSource: () => {
@@ -25,6 +30,7 @@ const createMapMock = () => {
     setCenter: () => {},
     setBearing: () => {},
     setZoom: () => {},
+    addControl: () => {},
     queryRenderedFeatures: () => {
       return [{
         layer: {
@@ -97,6 +103,7 @@ describe('MapboxGL component', () => {
     const map = wrapper.instance();
     // mock up our GL map
     map.map = createMapMock();
+    map.draw = createMapDrawMock();
     spyOn(map.map, 'setStyle');
     spyOn(map.map, 'setCenter');
     spyOn(map.map, 'setBearing');
@@ -141,7 +148,6 @@ describe('MapboxGL component', () => {
     };
     map.shouldComponentUpdate(nextProps);
     expect(map.updateInteraction).toHaveBeenCalled();
-    expect(map.map.removeControl).toHaveBeenCalled();
     delete nextProps.map.metadata;
     nextProps.map.sources = {};
     map.shouldComponentUpdate(nextProps);
@@ -469,13 +475,14 @@ describe('MapboxGL component', () => {
     const map = wrapper.instance();
     // mock up our GL map
     map.map = createMapMock();
+    map.draw = createMapDrawMock();
     const on = () => {};
     map.map.on = on;
     const addControl = () => {};
     map.map.addControl = addControl;
-    spyOn(map.map, 'addControl');
+    spyOn(map.draw, 'changeMode');
     map.updateInteraction({interaction: 'Polygon'});
-    expect(map.map.addControl).toHaveBeenCalled();
+    expect(map.draw.changeMode).toHaveBeenCalled();
   });
 
   it('updateInteraction with measure works correctly', () => {
