@@ -40,7 +40,7 @@ export function jsonEquals(objectA, objectB) {
  * @returns {number} The resolution for that zoom level.
  */
 export function getResolutionForZoom(zoom) {
-  return (6378137.0 * 2 * Math.PI / 256) /  Math.pow(2, zoom);
+  return (6378137.0 * 2 * Math.PI / 512) /  Math.pow(2, zoom);
 }
 
 

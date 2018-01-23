@@ -5,7 +5,7 @@ import {GROUP_KEY, TITLE_KEY} from '../../src/constants';
 
 describe('util', () => {
   it('calculates the resolution for zoom', () => {
-    const zoom = 5;
+    const zoom = 4;
     const resolution = util.getResolutionForZoom(zoom);
     expect(resolution).toEqual(4891.96981025128);
   });
