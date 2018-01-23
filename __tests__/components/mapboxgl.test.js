@@ -84,6 +84,9 @@ describe('MapboxGL component', () => {
     const sources = {
       geojson: {
         type: 'geojson',
+        data: {
+          features: []
+        }
       },
     };
     const layers = [];
@@ -129,8 +132,6 @@ describe('MapboxGL component', () => {
       types.push(type);
     };
     map.map.on = on;
-    const addControl = () => {};
-    map.map.addControl = addControl;
     const removeControl = () => {};
     map.map.removeControl = removeControl;
     spyOn(map.map, 'removeControl');
@@ -478,8 +479,6 @@ describe('MapboxGL component', () => {
     map.draw = createMapDrawMock();
     const on = () => {};
     map.map.on = on;
-    const addControl = () => {};
-    map.map.addControl = addControl;
     spyOn(map.draw, 'changeMode');
     map.updateInteraction({interaction: 'Polygon'});
     expect(map.draw.changeMode).toHaveBeenCalled();
@@ -515,8 +514,6 @@ describe('MapboxGL component', () => {
     map.map = createMapMock();
     const on = () => {};
     map.map.on = on;
-    const addControl = () => {};
-    map.map.addControl = addControl;
     spyOn(map.map, 'addControl');
     map.updateInteraction({interaction: 'measure:LineString'});
     expect(map.map.addControl).toHaveBeenCalled();

@@ -135,7 +135,7 @@ export class MapboxGL extends React.Component {
             this.props.map.metadata[version_key] !== nextProps.map.metadata[version_key] && this.map) {
           this.map.getSource(src_name).setData(nextProps.map.sources[src_name].data);
           if (this.draw) {
-            if (this.map.getSource(src_name).type === 'geojson') {
+            if (nextProps.map.sources[src_name].type === 'geojson') {
               nextProps.map.sources[src_name].data.features.forEach((feature) => {
                 this.draw.add(feature);
               });
@@ -234,7 +234,7 @@ export class MapboxGL extends React.Component {
         this.map.on('load', this.onMapLoad);
       }
       if (!this.draw) {
-        var modes = MapboxDraw.modes;
+        const modes = MapboxDraw.modes;
         modes.static = StaticMode;
         const drawOptions = {displayControlsDefault: false, modes: modes, defaultMode: 'static'};
         this.draw = new MapboxDraw(drawOptions);
