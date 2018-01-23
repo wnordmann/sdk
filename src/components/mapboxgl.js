@@ -29,6 +29,7 @@ import {setMeasureFeature, clearMeasureFeature} from '../actions/drawing';
 import {LAYER_VERSION_KEY, SOURCE_VERSION_KEY} from '../constants';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
+import StaticMode from '@mapbox/mapbox-gl-draw-static-mode';
 
 const isBrowser = !(
   typeof process === 'object' &&
@@ -71,6 +72,9 @@ export class MapboxGL extends React.Component {
     this.popups = {};
     this.elems = {};
     this.overlays = [];
+
+    this.draw = null;
+    this.drawMode = StaticMode;
 
     // interactions are how the user can manipulate the map,
     //  this tracks any active interaction.
@@ -130,6 +134,13 @@ export class MapboxGL extends React.Component {
         if (this.props.map.metadata !== undefined &&
             this.props.map.metadata[version_key] !== nextProps.map.metadata[version_key] && this.map) {
           this.map.getSource(src_name).setData(nextProps.map.sources[src_name].data);
+          if (this.draw) {
+            if (nextProps.map.sources[src_name].type === 'geojson') {
+              nextProps.map.sources[src_name].data.features.forEach((feature) => {
+                this.draw.add(feature);
+              });
+            }
+          }
         }
       }
     }
@@ -222,6 +233,13 @@ export class MapboxGL extends React.Component {
       if (this.props.initialPopups.length > 0) {
         this.map.on('load', this.onMapLoad);
       }
+      if (!this.draw) {
+        const modes = MapboxDraw.modes;
+        modes.static = StaticMode;
+        const drawOptions = {displayControlsDefault: false, modes: modes, defaultMode: 'static'};
+        this.draw = new MapboxDraw(drawOptions);
+        this.map.addControl(this.draw);
+      }
     }
     // check for any interactions
     if (this.props.drawing && this.props.drawing.interaction && this.map) {
@@ -263,16 +281,23 @@ export class MapboxGL extends React.Component {
     }
   }
 
-  onDrawCreate(evt, drawingProps, draw, defaultMode) {
+  onDrawCreate(evt, drawingProps, draw, mode) {
     this.onFeatureEvent('drawn', drawingProps.sourceName, evt.features[0]);
     window.setTimeout(function() {
       // allow to draw more features
-      draw.changeMode(defaultMode);
+      draw.changeMode(mode);
+    }, 0);
+  }
+  onDrawModify(evt, drawingProps, draw, mode) {
+    this.onFeatureEvent('modified', drawingProps.sourceName, evt.features[0]);
+    window.setTimeout(function() {
+      // allow to draw more features
+      draw.changeMode(mode, {feature: evt.features[0]});
     }, 0);
   }
 
-  onDrawRender(measure) {
-    const collection = measure.getAll();
+  onDrawRender(evt) {
+    const collection = this.draw.getAll();
     if (collection.features.length > 0) {
       this.props.setMeasureGeometry(collection.features[0].geometry);
     }
@@ -290,15 +315,15 @@ export class MapboxGL extends React.Component {
     let defaultMode;
     if (INTERACTIONS.drawing.includes(drawingProps.interaction)) {
       defaultMode = this.getMode(drawingProps.interaction);
-      const drawOptions = {displayControlsDefault: false, defaultMode};
-      if (drawingProps.editStyle) {
-        drawOptions.styles = drawingProps.editStyle;
-      }
-      const draw = new MapboxDraw(drawOptions);
+      this.draw.changeMode(defaultMode);
       this.map.on('draw.create', (evt) => {
-        this.onDrawCreate(evt, drawingProps, draw, defaultMode);
+        this.onDrawCreate(evt, drawingProps, this.draw, defaultMode);
       });
-      this.activeInteractions = [draw];
+    } else if (INTERACTIONS.modify === drawingProps.interaction || INTERACTIONS.select === drawingProps.interaction) {
+      this.draw.changeMode('simple_select');
+      this.map.on('draw.update', (evt) => {
+        this.onDrawModify(evt, drawingProps, this.draw, 'direct_select');
+      });
     } else if (INTERACTIONS.measuring.includes(drawingProps.interaction)) {
       // clear the previous measure feature.
       this.props.clearMeasureFeature();
@@ -306,15 +331,12 @@ export class MapboxGL extends React.Component {
       // but are prefixed with "measure:"
       const measureType = drawingProps.interaction.split(':')[1];
       defaultMode = this.getMode(measureType);
-      const measure = new MapboxDraw({
-        displayControlsDefault: false,
-        defaultMode,
-      });
+      this.draw.changeMode(defaultMode);
       this.map.on('draw.render', (evt) => {
-        this.onDrawRender(measure);
+        this.onDrawRender(evt);
       });
-
-      this.activeInteractions = [measure];
+    } else {
+      this.draw.changeMode('static');
     }
 
     if (this.activeInteractions) {
