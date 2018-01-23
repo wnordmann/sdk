@@ -645,30 +645,28 @@ export class Map extends React.Component {
   /** Callback for finished drawings, converts the event's feature
    *  to GeoJSON and then passes the relevant information on to
    *  this.props.onFeatureDrawn, this.props.onFeatureModified,
-   *  or this.props.onFeatureSelected.
+   *  or this.props.onFeatureSelected, this.props.onFeatureDeselected.
    *
-   *  @param {string} eventType One of 'drawn', 'modified', or 'selected'.
+   *  @param {string} eventType One of 'drawn', 'modified', 'selected' or 'deselected'.
    *  @param {string} sourceName Name of the geojson source.
-   *  @param {Object} feature OpenLayers feature object.
+   *  @param {Object[]} features OpenLayers feature objects.
    *
    */
-  onFeatureEvent(eventType, sourceName, feature) {
-    if (feature !== undefined) {
-      // convert the feature to GeoJson
-      const proposed_geojson = GEOJSON_FORMAT.writeFeatureObject(feature, {
-        dataProjection: 'EPSG:4326',
-        featureProjection: this.map.getView().getProjection(),
-      });
-
-      // Pass on feature drawn this map object, the target source,
-      //  and the drawn feature.
-      if (eventType === 'drawn') {
-        this.props.onFeatureDrawn(this, sourceName, proposed_geojson);
-      } else if (eventType === 'modified') {
-        this.props.onFeatureModified(this, sourceName, proposed_geojson);
-      } else if (eventType === 'selected') {
-        this.props.onFeatureSelected(this, sourceName, proposed_geojson);
-      }
+  onFeatureEvent(eventType, sourceName, features) {
+    // convert the features to GeoJson
+    const proposed_geojson = GEOJSON_FORMAT.writeFeaturesObject(features, {
+      dataProjection: 'EPSG:4326',
+      featureProjection: this.map.getView().getProjection(),
+    });
+    // Pass on this map object, the target source and the features.
+    if (eventType === 'drawn') {
+      this.props.onFeatureDrawn(this, sourceName, proposed_geojson);
+    } else if (eventType === 'modified') {
+      this.props.onFeatureModified(this, sourceName, proposed_geojson);
+    } else if (eventType === 'selected') {
+      this.props.onFeatureSelected(this, sourceName, proposed_geojson);
+    } else if (eventType === 'deselected') {
+      this.props.onFeatureDeselected(this, sourceName, proposed_geojson);
     }
   }
 
@@ -1377,7 +1375,7 @@ export class Map extends React.Component {
       const modify = new ModifyInteraction(modifyObj);
 
       modify.on('modifyend', (evt) => {
-        this.onFeatureEvent('modified', drawingProps.sourceName, evt.features.item(0));
+        this.onFeatureEvent('modified', drawingProps.sourceName, [evt.features.item(0)]);
       });
 
       this.activeInteractions = [select, modify];
@@ -1394,8 +1392,12 @@ export class Map extends React.Component {
       drawObj = this.setStyleFunc(drawObj, drawingProps.selectStyle);
       const select = new SelectInteraction(drawObj);
 
-      select.on('select', () => {
-        this.onFeatureEvent('selected', drawingProps.sourcename, select.getFeatures().item(0));
+      select.on('select', (evt) => {
+        if (evt.selected.length > 0) {
+          this.onFeatureEvent('selected', drawingProps.sourcename, evt.selected);
+        } else if (evt.deselected.length > 0) {
+          this.onFeatureEvent('deselected', drawingProps.sourcename, evt.deselected);
+        }
       });
 
       this.activeInteractions = [select];
@@ -1414,7 +1416,7 @@ export class Map extends React.Component {
       const draw = new DrawInteraction(styleDrawObj);
 
       draw.on('drawend', (evt) => {
-        this.onFeatureEvent('drawn', drawingProps.sourceName, evt.feature);
+        this.onFeatureEvent('drawn', drawingProps.sourceName, [evt.feature]);
       });
 
       this.activeInteractions = [draw];
@@ -1549,6 +1551,8 @@ Map.propTypes = {
   onFeatureModified: PropTypes.func,
   /** onFeatureSelected callback, triggered on select event of the select interaction. */
   onFeatureSelected: PropTypes.func,
+  /** onFeatureDeselected callback, triggered when a feature gets deselected. */
+  onFeatureDeselected: PropTypes.func,
   /** onExportImage callback, done on postcompose. */
   onExportImage: PropTypes.func,
   /** setMeasureGeometry callback, called when the measure geometry changes. */
@@ -1600,6 +1604,8 @@ Map.defaultProps = {
   onFeatureModified: () => {
   },
   onFeatureSelected: () => {
+  },
+  onFeatureDeselected: () => {
   },
   onExportImage: () => {
   },
