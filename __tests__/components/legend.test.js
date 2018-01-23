@@ -315,10 +315,10 @@ describe('test the Legend component', () => {
     const legend = wrapper.instance();
     let result = legend.shouldComponentUpdate({layers: [layer, stroke]});
     expect(result).toBe(false); // no need to update
-    const newLayer = {id: 'vector-polygon-test'};
+    const newLayer = {id: 'vector-polygon-test', paint: {}};
     result = legend.shouldComponentUpdate({layers: [newLayer, stroke]});
     expect(result).toBe(true); // layer changed so update
-    const newStroke = {id: 'vector-stroke-test'};
+    const newStroke = {id: 'vector-line-test', paint: {}};
     result = legend.shouldComponentUpdate({layers: [layer, newStroke]});
     expect(result).toBe(true); // stroke layer changed so update
   });

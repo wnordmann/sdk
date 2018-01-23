@@ -11,6 +11,7 @@
  * under the License.
  */
 
+import omit from 'lodash.omit';
 import fetch from 'isomorphic-fetch';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -225,16 +226,27 @@ export class Legend extends React.Component {
     return (layer !== nextLayer);
   }
 
+  layersEqual(layer1, layer2) {
+    let paintEqual = true;
+    if (layer1 && layer1.paint && layer2 && layer2.paint) {
+      paintEqual = jsonEquals(layer1.paint, layer2.paint);
+    }
+    let layoutEqual = true;
+    if (layer1 && layer1.layout && layer2 && layer2.layout) {
+      layoutEqual = jsonEquals(omit(layer1.layout, 'visibility'), omit(layer2.layout, 'visibility'));
+    }
+    return paintEqual && layoutEqual;
+  }
+
   shouldComponentUpdate(nextProps) {
-    let layerEqual;
     const nextLayer = getLayerById(nextProps.layers, this.props.layerId);
     const layer = getLayerById(this.props.layers, this.props.layerId);
-    layerEqual = jsonEquals(layer, nextLayer);
+    const layerEqual = this.layersEqual(nextLayer, layer);
     let strokeEqual = true;
     if (this.props.strokeId) {
       const nextStrokeLayer = getLayerById(nextProps.layers, this.props.strokeId);
       const strokeLayer = getLayerById(this.props.layers, this.props.strokeId);
-      strokeEqual = jsonEquals(strokeLayer, nextStrokeLayer);
+      strokeEqual = this.layersEqual(nextStrokeLayer, strokeLayer);
     }
     return !layerEqual || !strokeEqual;
   }
@@ -306,9 +318,12 @@ export class Legend extends React.Component {
     if (layer.ref) {
       result = hydrateLayer(this.props.layers, layer);
     }
-    if (result.filter) {
+    if (result.filter || (result.layout && result.layout.visibility === 'none')) {
       result = jsonClone(result);
       delete result.filter;
+      if (result.layout) {
+        delete result.layout.visibility;
+      }
     }
     return result;
   }
