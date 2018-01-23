@@ -296,8 +296,8 @@ export class MapboxGL extends React.Component {
     }, 0);
   }
 
-  onDrawRender(measure) {
-    const collection = measure.getAll();
+  onDrawRender(evt) {
+    const collection = this.draw.getAll();
     if (collection.features.length > 0) {
       this.props.setMeasureGeometry(collection.features[0].geometry);
     }
@@ -331,15 +331,10 @@ export class MapboxGL extends React.Component {
       // but are prefixed with "measure:"
       const measureType = drawingProps.interaction.split(':')[1];
       defaultMode = this.getMode(measureType);
-      const measure = new MapboxDraw({
-        displayControlsDefault: false,
-        defaultMode,
-      });
+      this.draw.changeMode(defaultMode);
       this.map.on('draw.render', (evt) => {
-        this.onDrawRender(measure);
+        this.onDrawRender(evt);
       });
-
-      this.activeInteractions = [measure];
     } else {
       this.draw.changeMode('static');
     }
