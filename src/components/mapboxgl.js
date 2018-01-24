@@ -315,14 +315,18 @@ export class MapboxGL extends React.Component {
     if (INTERACTIONS.drawing.includes(drawingProps.interaction)) {
       defaultMode = this.getMode(drawingProps.interaction);
       this.draw.changeMode(defaultMode);
-      this.map.on('draw.create', (evt) => {
+      const onDrawCreate = (evt) => {
         this.onDrawCreate(evt, drawingProps, this.draw, defaultMode);
-      });
+      };
+      this.map.off('draw.create', onDrawCreate);
+      this.map.on('draw.create', onDrawCreate);
     } else if (INTERACTIONS.modify === drawingProps.interaction || INTERACTIONS.select === drawingProps.interaction) {
       this.draw.changeMode('simple_select');
-      this.map.on('draw.update', (evt) => {
+      const onDrawModify = (evt) => {
         this.onDrawModify(evt, drawingProps, this.draw, 'direct_select', {featureId: evt.features[0].id});
-      });
+      };
+      this.map.off('draw.update', onDrawModify);
+      this.map.on('draw.update', onDrawModify);
     } else if (INTERACTIONS.measuring.includes(drawingProps.interaction)) {
       // clear the previous measure feature.
       this.props.clearMeasureFeature();
@@ -331,9 +335,11 @@ export class MapboxGL extends React.Component {
       const measureType = drawingProps.interaction.split(':')[1];
       defaultMode = this.getMode(measureType);
       this.draw.changeMode(defaultMode);
-      this.map.on('draw.render', (evt) => {
+      const onDrawRender = (evt) => {
         this.onDrawRender(evt);
-      });
+      };
+      this.map.off('draw.render', onDrawRender);
+      this.map.on('draw.render', onDrawRender);
     } else {
       this.draw.changeMode('static');
     }
