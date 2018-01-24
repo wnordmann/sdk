@@ -288,11 +288,10 @@ export class MapboxGL extends React.Component {
       draw.changeMode(mode);
     }, 0);
   }
-  onDrawModify(evt, drawingProps, draw, mode) {
+  onDrawModify(evt, drawingProps, draw, mode, options = {}) {
     this.onFeatureEvent('modified', drawingProps.sourceName, evt.features[0]);
     window.setTimeout(function() {
-      // allow to draw more features
-      draw.changeMode(mode, {feature: evt.features[0]});
+      draw.changeMode(mode, options);
     }, 0);
   }
 
@@ -322,7 +321,7 @@ export class MapboxGL extends React.Component {
     } else if (INTERACTIONS.modify === drawingProps.interaction || INTERACTIONS.select === drawingProps.interaction) {
       this.draw.changeMode('simple_select');
       this.map.on('draw.update', (evt) => {
-        this.onDrawModify(evt, drawingProps, this.draw, 'direct_select');
+        this.onDrawModify(evt, drawingProps, this.draw, 'direct_select', {featureId: evt.features[0].id});
       });
     } else if (INTERACTIONS.measuring.includes(drawingProps.interaction)) {
       // clear the previous measure feature.
