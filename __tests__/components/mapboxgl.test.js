@@ -779,7 +779,7 @@ describe('MapboxGL component', () => {
     expect(map.setMode('direct_select', 'simple_select')).toEqual('simple_select');
   });
 
-  it('setMode returns after if afterMode is set', () => {
+  it('default modes are simple_select and direct_select for modify interaction', () => {
     const wrapper = shallow(<MapboxGL />);
     const map = wrapper.instance();
     // mock up our GL map
