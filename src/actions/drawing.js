@@ -24,11 +24,13 @@ import {INTERACTIONS} from '../constants';
  *
  *  @returns {Object} An action object to pass to the reducer.
  */
-export function startDrawing(sourceName, drawingType) {
+export function startDrawing(sourceName, drawingType, afterMode, currentMode) {
   return {
     type: DRAWING.START,
     interaction: drawingType,
     sourceName,
+    currentMode,
+    afterMode,
   };
 }
 
@@ -37,8 +39,8 @@ export function startDrawing(sourceName, drawingType) {
  *
  *  @returns {Object} Call to startDrawing()
  */
-export function startModify(sourceName) {
-  return startDrawing(sourceName, INTERACTIONS.modify);
+export function startModify(sourceName, afterMode, currentMode) {
+  return startDrawing(sourceName, INTERACTIONS.modify, afterMode, currentMode);
 }
 
 /** Short-hand action to start select-feature
@@ -53,17 +55,18 @@ export function startSelect(sourceName) {
 /** Stop drawing / select / modify
  *  @returns {Object} An action object to pass to the reducer.
  */
-export function endDrawing() {
+export function endDrawing(afterMode) {
   return {
     type: DRAWING.END,
+    afterMode,
   };
 }
 
 /** These are just aliases to end drawing.
  *  @returns {Object} Call to endDrawing().
  */
-export function endModify() {
-  return endDrawing();
+export function endModify(afterMode) {
+  return endDrawing(afterMode);
 }
 
 /** These are just aliases to end drawing.

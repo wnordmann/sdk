@@ -75,6 +75,9 @@ export class MapboxGL extends React.Component {
 
     this.draw = null;
     this.drawMode = StaticMode;
+    this.addedDrawListener = false;
+    this.currentMode = 'static';
+    this.afterMode = 'static';
 
     // interactions are how the user can manipulate the map,
     //  this tracks any active interaction.
@@ -235,6 +238,11 @@ export class MapboxGL extends React.Component {
       }
       if (!this.draw) {
         const modes = MapboxDraw.modes;
+        if (this.props.drawingModes && this.props.drawingModes.length > 0) {
+          this.props.drawingModes.forEach((mode) => {
+            modes[mode.name] = mode.mode;
+          });
+        }
         modes.static = StaticMode;
         const drawOptions = {displayControlsDefault: false, modes: modes, defaultMode: 'static'};
         this.draw = new MapboxDraw(drawOptions);
@@ -281,11 +289,11 @@ export class MapboxGL extends React.Component {
     }
   }
 
-  onDrawCreate(evt, drawingProps, draw, mode) {
+  onDrawCreate(evt, drawingProps, draw, mode, options = {}) {
     this.onFeatureEvent('drawn', drawingProps.sourceName, evt.features[0]);
     window.setTimeout(function() {
       // allow to draw more features
-      draw.changeMode(mode);
+      draw.changeMode(mode, options);
     }, 0);
   }
   onDrawModify(evt, drawingProps, draw, mode, options = {}) {
@@ -302,6 +310,17 @@ export class MapboxGL extends React.Component {
     }
   }
 
+  setMode(defaultMode, customMode) {
+    return customMode ? customMode : defaultMode;
+  }
+
+  optionsForMode(mode, evt) {
+    if (mode === 'direct_select') {
+      return {featureId: evt.features[0].id};
+    }
+    return {};
+  }
+
   updateInteraction(drawingProps) {
     // this assumes the interaction is different,
     //  so the first thing to do is clear out the old interaction
@@ -311,37 +330,42 @@ export class MapboxGL extends React.Component {
       }
       this.activeInteractions = null;
     }
-    let defaultMode;
     if (INTERACTIONS.drawing.includes(drawingProps.interaction)) {
-      defaultMode = this.getMode(drawingProps.interaction);
-      this.draw.changeMode(defaultMode);
-      const onDrawCreate = (evt) => {
-        this.onDrawCreate(evt, drawingProps, this.draw, defaultMode);
-      };
-      this.map.off('draw.create', onDrawCreate);
-      this.map.on('draw.create', onDrawCreate);
+      this.currentMode = this.setMode(this.getMode(drawingProps.interaction), drawingProps.currentMode);
+      this.afterMode = this.setMode(this.currentMode, drawingProps.afterMode);
+      this.draw.changeMode(this.currentMode);
     } else if (INTERACTIONS.modify === drawingProps.interaction || INTERACTIONS.select === drawingProps.interaction) {
-      this.draw.changeMode('simple_select');
-      const onDrawModify = (evt) => {
-        this.onDrawModify(evt, drawingProps, this.draw, 'direct_select', {featureId: evt.features[0].id});
-      };
-      this.map.off('draw.update', onDrawModify);
-      this.map.on('draw.update', onDrawModify);
+      this.currentMode = this.setMode('simple_select', drawingProps.currentMode);
+      this.draw.changeMode(this.currentMode);
+      this.afterMode = this.setMode('direct_select', drawingProps.afterMode);
     } else if (INTERACTIONS.measuring.includes(drawingProps.interaction)) {
       // clear the previous measure feature.
       this.props.clearMeasureFeature();
       // The measure interactions are the same as the drawing interactions
       // but are prefixed with "measure:"
       const measureType = drawingProps.interaction.split(':')[1];
-      defaultMode = this.getMode(measureType);
-      this.draw.changeMode(defaultMode);
-      const onDrawRender = (evt) => {
-        this.onDrawRender(evt);
-      };
-      this.map.off('draw.render', onDrawRender);
-      this.map.on('draw.render', onDrawRender);
+      this.currentMode = this.setMode(this.getMode(measureType), drawingProps.currentMode);
+      this.draw.changeMode(this.currentMode);
+      if (!this.addedMeasurementListener) {
+        this.map.on('draw.render', (evt) => {
+          this.onDrawRender(evt);
+        });
+      }
     } else {
       this.draw.changeMode('static');
+    }
+    if (!this.addedDrawListener) {
+      if (drawingProps.sourceName) {
+        this.addedDrawListener = true;
+        const drawCreate = (evt) => {
+          this.onDrawCreate(evt, drawingProps, this.draw, this.afterMode, this.optionsForMode(this.afterMode, evt));
+        };
+        const drawModify =  (evt) => {
+          this.onDrawModify(evt, drawingProps, this.draw, this.afterMode, this.optionsForMode(this.afterMode, evt));
+        };
+        this.map.on('draw.create', drawCreate.bind(this));
+        this.map.on('draw.update', drawModify.bind(this));
+      }
     }
 
     if (this.activeInteractions) {
@@ -475,6 +499,8 @@ MapboxGL.propTypes = {
   }),
   /** Initial popups to display in the map. */
   initialPopups: PropTypes.arrayOf(PropTypes.object),
+  /** Inital drawing modes that are available for drawing */
+  drawingModes: PropTypes.arrayOf(PropTypes.object),
   /** setView callback function, triggered on moveend. */
   setView: PropTypes.func,
   /** setMousePosition callback function, triggered on mousemove. */

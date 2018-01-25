@@ -213,7 +213,7 @@ function main() {
     if (drawing_tool === 'none') {
       store.dispatch(drawingActions.endDrawing());
     } else if (drawing_layer !== null) {
-      store.dispatch(drawingActions.startDrawing(drawing_layer, drawing_tool));
+      store.dispatch(drawingActions.startDrawing(drawing_layer, drawing_tool, 'direct_select'));
     }
   };
 
