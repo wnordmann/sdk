@@ -752,6 +752,49 @@ describe('MapboxGL component', () => {
     }, 0);
   });
 
+  it('optionsForMode returns featureId object', () => {
+    const wrapper = shallow(<MapboxGL />);
+    const map = wrapper.instance();
+    // mock up our GL map
+    map.map = createMapMock();
+    map.draw = createMapDrawMock();
+    expect(map.optionsForMode('direct_select', {features: [{id: 1}]})).toEqual({featureId: 1});
+  });
+
+  it('setMode returns the currentMode if afterMode is not set', () => {
+    const wrapper = shallow(<MapboxGL />);
+    const map = wrapper.instance();
+    // mock up our GL map
+    map.map = createMapMock();
+    map.draw = createMapDrawMock();
+    expect(map.setMode('direct_select')).toEqual('direct_select');
+  });
+
+  it('setMode returns after if afterMode is set', () => {
+    const wrapper = shallow(<MapboxGL />);
+    const map = wrapper.instance();
+    // mock up our GL map
+    map.map = createMapMock();
+    map.draw = createMapDrawMock();
+    expect(map.setMode('direct_select', 'simple_select')).toEqual('simple_select');
+  });
+
+  it('setMode returns after if afterMode is set', () => {
+    const wrapper = shallow(<MapboxGL />);
+    const map = wrapper.instance();
+    // mock up our GL map
+    map.map = createMapMock();
+    map.draw = createMapDrawMock();
+    map.addedDrawListener = true;
+    const drawingProps = {
+      interaction: 'Modify',
+      sourceName: 'geojson',
+    };
+    map.updateInteraction(drawingProps)
+    expect(map.currentMode).toEqual('simple_select');
+    expect(map.afterMode).toEqual('direct_select');
+  });
+
   it('setMeasureGeometry works correctly for LineString', (done) => {
     const store = createStore(combineReducers({
       map: MapReducer,
