@@ -39,6 +39,10 @@ const isBrowser = !(
 
 const mapboxgl = isBrowser ? require('mapbox-gl') : null;
 
+const SIMPLE_SELECT_MODE = 'simple_select';
+const DIRECT_SELECT_MODE = 'direct_select';
+const STATIC_MODE = 'static';
+
 /** @module components/map
  *
  * @desc Provide a Mapbox GL map which reflects the
@@ -77,8 +81,8 @@ export class MapboxGL extends React.Component {
     this.drawMode = StaticMode;
     this.addedDrawListener = false;
     this.addedMeasurementListener = false;
-    this.currentMode = 'static';
-    this.afterMode = 'static';
+    this.currentMode = STATIC_MODE;
+    this.afterMode = STATIC_MODE;
 
     // interactions are how the user can manipulate the map,
     //  this tracks any active interaction.
@@ -245,7 +249,7 @@ export class MapboxGL extends React.Component {
           });
         }
         modes.static = StaticMode;
-        const drawOptions = {displayControlsDefault: false, modes: modes, defaultMode: 'static'};
+        const drawOptions = {displayControlsDefault: false, modes: modes, defaultMode: STATIC_MODE};
         this.draw = new MapboxDraw(drawOptions);
         this.map.addControl(this.draw);
       }
@@ -316,7 +320,7 @@ export class MapboxGL extends React.Component {
   }
 
   optionsForMode(mode, evt) {
-    if (mode === 'direct_select') {
+    if (mode === DIRECT_SELECT_MODE) {
       return {featureId: evt.features[0].id};
     }
     return {};
@@ -336,9 +340,9 @@ export class MapboxGL extends React.Component {
       this.afterMode = this.setMode(this.currentMode, drawingProps.afterMode);
       this.draw.changeMode(this.currentMode);
     } else if (INTERACTIONS.modify === drawingProps.interaction || INTERACTIONS.select === drawingProps.interaction) {
-      this.currentMode = this.setMode('simple_select', drawingProps.currentMode);
+      this.currentMode = this.setMode(SIMPLE_SELECT_MODE, drawingProps.currentMode);
       this.draw.changeMode(this.currentMode);
-      this.afterMode = this.setMode('direct_select', drawingProps.afterMode);
+      this.afterMode = this.setMode(DIRECT_SELECT_MODE, drawingProps.afterMode);
     } else if (INTERACTIONS.measuring.includes(drawingProps.interaction)) {
       // clear the previous measure feature.
       this.props.clearMeasureFeature();
@@ -354,7 +358,7 @@ export class MapboxGL extends React.Component {
         this.addedMeasurementListener = true;
       }
     } else {
-      this.draw.changeMode('static');
+      this.draw.changeMode(STATIC_MODE);
     }
     if (!this.addedDrawListener) {
       if (drawingProps.sourceName) {
