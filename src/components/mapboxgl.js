@@ -76,6 +76,7 @@ export class MapboxGL extends React.Component {
     this.draw = null;
     this.drawMode = StaticMode;
     this.addedDrawListener = false;
+    this.addedMeasurementListener = false;
     this.currentMode = 'static';
     this.afterMode = 'static';
 
@@ -350,21 +351,22 @@ export class MapboxGL extends React.Component {
         this.map.on('draw.render', (evt) => {
           this.onDrawRender(evt);
         });
+        this.addedMeasurementListener = true;
       }
     } else {
       this.draw.changeMode('static');
     }
     if (!this.addedDrawListener) {
       if (drawingProps.sourceName) {
-        this.addedDrawListener = true;
         const drawCreate = (evt) => {
           this.onDrawCreate(evt, drawingProps, this.draw, this.afterMode, this.optionsForMode(this.afterMode, evt));
         };
         const drawModify =  (evt) => {
           this.onDrawModify(evt, drawingProps, this.draw, this.afterMode, this.optionsForMode(this.afterMode, evt));
         };
-        this.map.on('draw.create', drawCreate.bind(this));
-        this.map.on('draw.update', drawModify.bind(this));
+        this.map.on('draw.create', drawCreate);
+        this.map.on('draw.update', drawModify);
+        this.addedDrawListener = true;
       }
     }
 
@@ -499,7 +501,7 @@ MapboxGL.propTypes = {
   }),
   /** Initial popups to display in the map. */
   initialPopups: PropTypes.arrayOf(PropTypes.object),
-  /** Inital drawing modes that are available for drawing */
+  /** Initial drawing modes that are available for drawing */
   drawingModes: PropTypes.arrayOf(PropTypes.object),
   /** setView callback function, triggered on moveend. */
   setView: PropTypes.func,
