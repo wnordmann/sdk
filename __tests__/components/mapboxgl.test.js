@@ -790,7 +790,7 @@ describe('MapboxGL component', () => {
       interaction: 'Modify',
       sourceName: 'geojson',
     };
-    map.updateInteraction(drawingProps)
+    map.updateInteraction(drawingProps);
     expect(map.currentMode).toEqual('simple_select');
     expect(map.afterMode).toEqual('direct_select');
   });
