@@ -13,6 +13,8 @@ describe('drawing reducer', () => {
       sourceName: null,
       measureFeature: null,
       measureSegments: null,
+      currentMode: null,
+      afterMode: null,
       measureDone: false,
       editStyle: null,
       modifyStyle: null,
@@ -36,6 +38,8 @@ describe('drawing reducer', () => {
       sourceName: source_name,
       measureFeature: null,
       measureSegments: null,
+      currentMode: undefined,
+      afterMode: undefined,
       measureDone: false,
       editStyle: null,
       modifyStyle: null,
@@ -55,6 +59,8 @@ describe('drawing reducer', () => {
     const expected_state = {
       interaction: null,
       sourceName: null,
+      currentMode: undefined,
+      afterMode: undefined,
       measureDone: false,
       measureFeature: null,
       measureSegments: null,
@@ -85,6 +91,8 @@ describe('drawing reducer', () => {
     expect(state).toEqual({
       interaction: null,
       sourceName: null,
+      currentMode: null,
+      afterMode: null,
       measureFeature: line,
       measureSegments: segs,
       measureDone: false,
@@ -97,6 +105,8 @@ describe('drawing reducer', () => {
     expect(cleared_state).toEqual({
       interaction: null,
       sourceName: null,
+      currentMode: null,
+      afterMode: null,
       measureFeature: null,
       measureSegments: null,
       measureDone: false,
@@ -129,6 +139,8 @@ describe('drawing reducer', () => {
     expect(state).toEqual({
       interaction: null,
       sourceName: null,
+      currentMode: null,
+      afterMode: null,
       measureFeature: line,
       measureSegments: segs,
       measureDone: true,
@@ -150,6 +162,8 @@ describe('drawing reducer', () => {
     const expected_state = {
       interaction: null,
       sourceName: null,
+      currentMode: null,
+      afterMode: null,
       measureFeature: null,
       measureSegments: null,
       measureDone: false,
@@ -172,6 +186,8 @@ describe('drawing reducer', () => {
     const expected_state = {
       interaction: null,
       sourceName: null,
+      currentMode: null,
+      afterMode: null,
       measureFeature: null,
       measureSegments: null,
       measureDone: false,
@@ -194,6 +210,8 @@ describe('drawing reducer', () => {
     const expected_state = {
       interaction: null,
       sourceName: null,
+      currentMode: null,
+      afterMode: null,
       measureFeature: null,
       measureSegments: null,
       measureDone: false,
@@ -216,6 +234,8 @@ describe('drawing reducer', () => {
     const expected_state = {
       interaction: null,
       sourceName: null,
+      currentMode: null,
+      afterMode: null,
       measureFeature: null,
       measureSegments: null,
       measureDone: false,
@@ -236,6 +256,8 @@ describe('drawing reducer', () => {
     const expected_state_in_between = {
       interaction: geo_type,
       sourceName: source_name,
+      currentMode: null,
+      afterMode: null,
       measureFeature: null,
       measureSegments: null,
       measureDone: false,

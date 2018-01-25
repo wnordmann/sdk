@@ -26,6 +26,8 @@ const defaultState = {
   sourceName: null,
   measureFeature: null,
   measureSegments: null,
+  currentMode: null,
+  afterMode: null,
   measureDone: false,
   editStyle: null,
   modifyStyle: null,
@@ -45,6 +47,8 @@ export default function drawingReducer(state = defaultState, action) {
       return Object.assign({}, state, {
         interaction: null,
         sourceName: null,
+        currentMode: action.currentMode,
+        afterMode: action.afterMode,
         measureDone: false,
         measureFeature: null,
         measureSegments: null
@@ -53,6 +57,8 @@ export default function drawingReducer(state = defaultState, action) {
       return Object.assign({}, state, {
         interaction: action.interaction,
         sourceName: action.sourceName,
+        currentMode: action.currentMode,
+        afterMode: action.afterMode,
         measureDone: false,
         measureFeature: null,
         measureSegments: null,
