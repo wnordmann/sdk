@@ -137,7 +137,7 @@ describe('MapboxGL component', () => {
     map.map.removeControl = removeControl;
     spyOn(map.map, 'removeControl');
     map.shouldComponentUpdate(nextProps);
-    expect(types).toEqual(['draw.create']);
+    expect(types).toEqual(['draw.create', 'draw.update']);
     expect(map.map.setStyle).toHaveBeenCalled();
     expect(map.map.setCenter).toHaveBeenCalled();
     expect(map.map.setBearing).toHaveBeenCalled();

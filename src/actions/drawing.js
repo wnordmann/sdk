@@ -21,6 +21,8 @@ import {INTERACTIONS} from '../constants';
 /** Action to start an interaction on the map.
  *  @param {string} sourceName The name of the source on which the action takes place.
  *  @param {string} drawingType The type of drawing interaction.
+ *  @param {string} afterMode The mode to be used after the drawing interaction finishes.
+ *  @param {string} currentMode The mode to be used for drawing interaction.
  *
  *  @returns {Object} An action object to pass to the reducer.
  */
@@ -36,6 +38,8 @@ export function startDrawing(sourceName, drawingType, afterMode, currentMode) {
 
 /** Short-hand action to start modify-feature
  *  @param {string} sourceName The name of the source to modify.
+ *  @param {string} afterMode The mode to be used after the drawing interaction finishes.
+ *  @param {string} currentMode The mode to be used for drawing interaction.
  *
  *  @returns {Object} Call to startDrawing()
  */
@@ -53,6 +57,8 @@ export function startSelect(sourceName) {
 }
 
 /** Stop drawing / select / modify
+ *  @param {string} afterMode The mode to be used after the drawing interaction finishes.
+ *
  *  @returns {Object} An action object to pass to the reducer.
  */
 export function endDrawing(afterMode) {
@@ -63,6 +69,8 @@ export function endDrawing(afterMode) {
 }
 
 /** These are just aliases to end drawing.
+ *  @param {string} afterMode The mode to be used after the drawing interaction finishes.
+ *
  *  @returns {Object} Call to endDrawing().
  */
 export function endModify(afterMode) {

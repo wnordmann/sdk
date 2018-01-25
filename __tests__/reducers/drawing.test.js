@@ -256,8 +256,8 @@ describe('drawing reducer', () => {
     const expected_state_in_between = {
       interaction: geo_type,
       sourceName: source_name,
-      currentMode: null,
-      afterMode: null,
+      currentMode: undefined,
+      afterMode: undefined,
       measureFeature: null,
       measureSegments: null,
       measureDone: false,
@@ -265,8 +265,22 @@ describe('drawing reducer', () => {
       modifyStyle: null,
       selectStyle: null
     };
+
+    const expected_end_state = {
+      interaction: null,
+      sourceName: null,
+      currentMode: undefined,
+      afterMode: undefined,
+      measureFeature: null,
+      measureSegments: null,
+      measureDone: false,
+      editStyle: editStyle,
+      modifyStyle: null,
+      selectStyle: null
+    };
+
     deepFreeze(test_action_start);
     expect(reducer(expected_state, test_action_start)).toEqual(expected_state_in_between);
-    expect(reducer(expected_state_in_between, {type: DRAWING.END})).toEqual(expected_state);
+    expect(reducer(expected_state_in_between, {type: DRAWING.END})).toEqual(expected_end_state);
   });
 });
