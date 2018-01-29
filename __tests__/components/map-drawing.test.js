@@ -258,10 +258,45 @@ describe('Map component with drawing', () => {
     select.getFeatures().push(features[0]);
     select.dispatchEvent({
       type: 'select',
+      selected: [features[0]],
     });
 
     // ensure onFeatureEvent was called.
     expect(sdk_map.onFeatureEvent).toHaveBeenCalled();
+  });
+
+  it('handles deselect', () => {
+    const props = {};
+    props.onFeatureDeselected = () => {};
+    props.store = store;
+    spyOn(props, 'onFeatureDeselected');
+    wrapper = mount(<SdkMap {...props} />);
+    const sdk_map = wrapper.instance().getWrappedInstance();
+    const ol_map = sdk_map.map;
+
+    // dummy feature
+    const feature = new Feature();
+
+    // kick-off the select interaction.
+    store.dispatch({
+      type: DRAWING.START,
+      interaction: INTERACTIONS.select,
+      sourceName: 'test',
+    });
+
+    const interactions = ol_map.getInteractions();
+
+    // get the select interaction
+    const select = interactions.item(interactions.getLength() - 1);
+
+    select.dispatchEvent({
+      type: 'select',
+      selected: [],
+      deselected: [feature],
+    });
+
+    // ensure onFeatureDeselected was called.
+    expect(props.onFeatureDeselected).toHaveBeenCalled();
   });
 
   it('measures a point', () => {

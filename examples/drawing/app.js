@@ -161,7 +161,8 @@ function main() {
 
   // When the feature is drawn on the map, validate it and
   //  then add it to the source.
-  const addFeature = (map, sourceName, proposedFeature) => {
+  const addFeature = (map, sourceName, collection) => {
+    const proposedFeature = collection.features[0];
     // This calls the validation function which returns a Promise.
     validateFeature(sourceName, proposedFeature)
       .then((feature) => {
@@ -180,7 +181,8 @@ function main() {
   // As redux doesn't really have an "update" as state
   //  is immutable. The method here is to remove the old feature,
   //  then immediate create a new one with our changes.
-  const modifyFeature = (map, sourceName, feature) => {
+  const modifyFeature = (map, sourceName, collection) => {
+    const feature = collection.features[0];
     store.dispatch(mapActions.removeFeatures(sourceName, ['==', 'id', feature.properties.id]));
     store.dispatch(mapActions.addFeatures(sourceName, [feature]));
     // let the user know what happened.
@@ -188,8 +190,21 @@ function main() {
   };
 
   // Selecting a feature displays its ID.
-  const selectFeature = (map, sourceName, feature) => {
-    error_div.innerHTML = `Feature with ID ${feature.properties.id} selected.`;
+  const selectFeature = (map, sourceName, collection) => {
+    const ids = [];
+    for (let i = 0, ii = collection.features.length; i < ii; ++i) {
+      ids.push(collection.features[i].properties.id);
+    }
+    error_div.innerHTML = `Feature(s) with ID ${ids.join(', ')} selected.`;
+  };
+
+  // Deselecting a feature displays its ID.
+  const deselectFeature = (map, sourceName, collection) => {
+    const ids = [];
+    for (let i = 0, ii = collection.features.length; i < ii; ++i) {
+      ids.push(collection.features[i].properties.id);
+    }
+    error_div.innerHTML = `Feature(s) with ID ${ids.join(', ')} deselected.`;
   };
 
   // place the map on the page.
@@ -199,6 +214,7 @@ function main() {
       onFeatureDrawn={addFeature}
       onFeatureModified={modifyFeature}
       onFeatureSelected={selectFeature}
+      onFeatureDeselected={deselectFeature}
     >
       <SdkZoomControl style={{position: 'absolute', top: 20, left: 20}}/>
     </RendererSwitch>
