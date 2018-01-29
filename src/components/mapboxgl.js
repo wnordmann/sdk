@@ -602,7 +602,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(setView(center, zoom));
       dispatch(setBearing(bearing));
       dispatch(setMapExtent(getMapExtent(map)));
-      dispatch(setResolution(getResolutionForZoom(zoom + 1)));
+      dispatch(setResolution(getResolutionForZoom(zoom, 'EPSG:3857')));
     },
     setSize: (size, map) => {
       dispatch(setMapSize(size));

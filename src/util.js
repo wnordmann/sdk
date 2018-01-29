@@ -13,6 +13,9 @@
 
 import {GROUP_KEY, TITLE_KEY} from './constants';
 import GeoJsonFormat from 'ol/format/geojson';
+import Proj from 'ol/proj';
+import View from 'ol/view';
+
 /** @module util
  * @desc functions for Boundless SDK.
  *
@@ -34,11 +37,41 @@ export function jsonEquals(objectA, objectB) {
 /** Gets the resolution for a zoom level in spherical mercator.
  *
  * @param {number} zoom The zoom level.
+ * @param {string} projection The map projection.
  *
  * @returns {number} The resolution for that zoom level.
  */
-export function getResolutionForZoom(zoom) {
-  return (6378137.0 * 2 * Math.PI / 256) /  Math.pow(2, zoom);
+export function getResolutionForZoom(zoom, projection) {
+  const view = new View({projection: projection});
+  return view.getResolutionForZoom(zoom) / 2;
+}
+
+
+/** Gets the zoom level for a resolution in spherical mercator.
+ *
+ * @param {number} resolution The resolution.
+ * @param {string} projection The map projection.
+ *
+ * @returns {number} The zoom level for that zoom resolution.
+ */
+export function getZoomForResolution(resolution, projection) {
+  const view = new View({projection: projection});
+  return view.getZoomForResolution(resolution) - 1;
+}
+
+/** Gets the resolution for a specific extent.
+ *
+ * @param {number[]} extent The extent to consider.
+ * @param {number[]} size The size of the map.
+ * @param {string} projection The projection of the map.
+ *
+ * @returns {number} The resolution to use when zooming to the extent.
+ */
+export function getResolutionForExtent(extent, size, projection) {
+  const bbox = Proj.transformExtent(extent, 'EPSG:4326', projection);
+  const xResolution = (bbox[2] - bbox[0]) / size[0];
+  const yResolution = (bbox[3] - bbox[1]) / size[1];
+  return Math.max(xResolution, yResolution);
 }
 
 /** Gets a layer by it's id. https://www.mapbox.com/mapbox-gl-js/style-spec/#layer-id
