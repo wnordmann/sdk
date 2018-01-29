@@ -14,6 +14,9 @@
 import {GROUP_KEY, TITLE_KEY} from './constants';
 import GeoJsonFormat from 'ol/format/geojson';
 import Proj from 'ol/proj';
+import View from 'ol/view';
+
+const view = new View();
 
 /** @module util
  * @desc functions for Boundless SDK.
@@ -40,7 +43,7 @@ export function jsonEquals(objectA, objectB) {
  * @returns {number} The resolution for that zoom level.
  */
 export function getResolutionForZoom(zoom) {
-  return (6378137.0 * 2 * Math.PI / 512) /  Math.pow(2, zoom);
+  return view.getResolutionForZoom(zoom) / 2;
 }
 
 
@@ -51,7 +54,7 @@ export function getResolutionForZoom(zoom) {
  * @returns {number} The zoom level for that zoom resolution.
  */
 export function getZoomForResolution(resolution) {
-  return Math.log((2 * Math.PI * 6378137.0) / (resolution * 512)) / Math.log(2);
+  return view.getZoomForResolution(resolution) - 1;
 }
 
 /** Gets the resolution for a specific extent.

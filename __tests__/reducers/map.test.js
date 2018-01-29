@@ -112,7 +112,7 @@ describe('map reducer', () => {
       version: 8,
       name: 'default',
       center: [-22.5, -22.5],
-      zoom: 3.384417347126773,
+      zoom: 3.3844173471267736,
       sources: {},
       layers: [],
     });
