@@ -19,7 +19,8 @@ describe('util', () => {
   it('calculates resolution for extent', () => {
     const extent = [-45, 0, -25, 20];
     const size = [1000, 600];
-    const resolution = util.getResolutionForExtent(extent, size);
+    const projection = 'EPSG:3857';
+    const resolution = util.getResolutionForExtent(extent, size, projection);
     expect(resolution).toEqual(3788.3848783128165);
   });
 

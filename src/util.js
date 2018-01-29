@@ -63,11 +63,12 @@ export function getZoomForResolution(resolution, projection) {
  *
  * @param {number[]} extent The extent to consider.
  * @param {number[]} size The size of the map.
+ * @param {string} projection The projection of the map.
  *
  * @returns {number} The resolution to use when zooming to the extent.
  */
-export function getResolutionForExtent(extent, size) {
-  const bbox = Proj.transformExtent(extent, 'EPSG:4326', 'EPSG:3857');
+export function getResolutionForExtent(extent, size, projection) {
+  const bbox = Proj.transformExtent(extent, 'EPSG:4326', projection);
   const xResolution = (bbox[2] - bbox[0]) / size[0];
   const yResolution = (bbox[3] - bbox[1]) / size[1];
   return Math.max(xResolution, yResolution);
