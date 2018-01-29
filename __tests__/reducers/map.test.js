@@ -106,6 +106,7 @@ describe('map reducer', () => {
       type: MAP.FIT_EXTENT,
       extent: [-45, -45, 0, 0],
       size: [1000, 750],
+      projection: 'EPSG:3857',
     };
     deepFreeze(action);
     expect(reducer(state, action)).toEqual({

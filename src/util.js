@@ -16,8 +16,6 @@ import GeoJsonFormat from 'ol/format/geojson';
 import Proj from 'ol/proj';
 import View from 'ol/view';
 
-const view = new View();
-
 /** @module util
  * @desc functions for Boundless SDK.
  *
@@ -39,10 +37,12 @@ export function jsonEquals(objectA, objectB) {
 /** Gets the resolution for a zoom level in spherical mercator.
  *
  * @param {number} zoom The zoom level.
+ * @param {string} projection The map projection.
  *
  * @returns {number} The resolution for that zoom level.
  */
-export function getResolutionForZoom(zoom) {
+export function getResolutionForZoom(zoom, projection) {
+  const view = new View({projection: projection});
   return view.getResolutionForZoom(zoom) / 2;
 }
 
@@ -50,10 +50,12 @@ export function getResolutionForZoom(zoom) {
 /** Gets the zoom level for a resolution in spherical mercator.
  *
  * @param {number} resolution The resolution.
+ * @param {string} projection The map projection.
  *
  * @returns {number} The zoom level for that zoom resolution.
  */
-export function getZoomForResolution(resolution) {
+export function getZoomForResolution(resolution, projection) {
+  const view = new View({projection: projection});
   return view.getZoomForResolution(resolution) - 1;
 }
 

@@ -60,12 +60,14 @@ describe('actions', () => {
   it('should create an action to fit an extemt', () => {
     const extent = [-45, 0, 20, 25];
     const size = [800, 600];
+    const projection = 'EPSG:3857';
     const expectedAction = {
       type: MAP.FIT_EXTENT,
       extent,
       size,
+      projection,
     };
-    expect(actions.fitExtent(extent, size)).toEqual(expectedAction);
+    expect(actions.fitExtent(extent, size, projection)).toEqual(expectedAction);
   });
 
   it('should create an action to set the map bearing', () => {

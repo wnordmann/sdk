@@ -78,14 +78,16 @@ export function setZoom(zoom) {
 /** Action to fit an extent.
  *  @param {number[]} extent The extent to zoom to.
  *  @param {number[]} size The size of the map.
+ *  @param {string} projection The projection of the map.
  *
  *  @returns {Object} Action object to pass to reducer.
  */
-export function fitExtent(extent, size) {
+export function fitExtent(extent, size, projection) {
   return {
     type: MAP.FIT_EXTENT,
     extent,
     size,
+    projection,
   };
 }
 

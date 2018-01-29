@@ -685,7 +685,7 @@ function setZoom(state, action) {
 function fitExtent(state, action) {
   const extent = action.extent;
   const resolution = getResolutionForExtent(extent, action.size);
-  const zoom = getZoomForResolution(resolution);
+  const zoom = getZoomForResolution(resolution, action.projection);
   const center = [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
   return Object.assign({}, state, {center, zoom});
 }
