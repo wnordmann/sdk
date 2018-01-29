@@ -11,7 +11,6 @@
  * under the License.
  */
 
-import omit from 'lodash.omit';
 import fetch from 'isomorphic-fetch';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -233,7 +232,11 @@ export class Legend extends React.Component {
     }
     let layoutEqual = true;
     if (layer1 && layer1.layout && layer2 && layer2.layout) {
-      layoutEqual = jsonEquals(omit(layer1.layout, 'visibility'), omit(layer2.layout, 'visibility'));
+      const layout1 = Object.assign({}, layer1.layout);
+      const layout2 = Object.assign({}, layer2.layout);
+      delete layout1.visibility;
+      delete layout2.visibility;
+      layoutEqual = jsonEquals(layout1, layout2);
     }
     return paintEqual && layoutEqual;
   }
