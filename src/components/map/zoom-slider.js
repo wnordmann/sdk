@@ -34,13 +34,15 @@ import {DEFAULT_ZOOM} from '../../constants';
  */
 class ZoomSlider extends React.Component {
   render() {
+    const minZoom = this.props.metadata && this.props.metadata['bnd:minzoom'] !== undefined ? this.props.metadata['bnd:minzoom'] : DEFAULT_ZOOM.MIN;
+    const maxZoom = this.props.metadata && this.props.metadata['bnd:maxzoom'] !== undefined ? this.props.metadata['bnd:maxzoom'] : DEFAULT_ZOOM.MAX;
     let className = 'sdk-slider-control';
     if (this.props.className) {
       className += ' ' + this.props.className;
     }
     return (
       <div style={this.props.style} className={className}>
-        <input className='sdk-zoom-slider' min={this.props.minZoom} max={this.props.maxZoom} value={this.props.zoom} onChange={(evt) => {
+        <input className='sdk-zoom-slider' min={minZoom} max={maxZoom} value={this.props.zoom} onChange={(evt) => {
           this.props.onChange(evt.target.value);
         }} type='range' />
       </div>
@@ -57,25 +59,13 @@ ZoomSlider.propTypes = {
    * Style config for the root div.
    */
   style: PropTypes.object,
-  /**
-   * Minimum zoom level value.
-   */
-  minZoom: PropTypes.number,
-  /**
-   * Maximum zoom level value.
-   */
-  maxZoom: PropTypes.number,
 };
 
-
-ZoomSlider.defaultProps = {
-  minZoom: DEFAULT_ZOOM.MIN,
-  maxZoom: DEFAULT_ZOOM.MAX,
-};
 
 function mapStateToProps(state) {
   return {
     zoom: state.map.zoom,
+    metadata: state.map.metadata,
   };
 }
 

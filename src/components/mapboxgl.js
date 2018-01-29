@@ -18,7 +18,7 @@ import uuid from 'uuid';
 import {connect} from 'react-redux';
 import {setView, setBearing} from '../actions/map';
 import {setMapSize, setMousePosition, setMapExtent, setResolution, setProjection} from '../actions/mapinfo';
-import {getResolutionForZoom} from '../util';
+import {getResolutionForZoom, getKey} from '../util';
 
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import {dataVersionKey} from '../reducers/map';
@@ -26,7 +26,7 @@ import {INTERACTIONS} from '../constants';
 import area from '@turf/area';
 import distance from '@turf/distance';
 import {setMeasureFeature, clearMeasureFeature} from '../actions/drawing';
-import {LAYER_VERSION_KEY, SOURCE_VERSION_KEY} from '../constants';
+import {LAYER_VERSION_KEY, SOURCE_VERSION_KEY, MIN_ZOOM_KEY, MAX_ZOOM_KEY} from '../constants';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 import StaticMode from '@mapbox/mapbox-gl-draw-static-mode';
@@ -208,6 +208,8 @@ export class MapboxGL extends React.Component {
     if (mapboxgl) {
       mapboxgl.accessToken = this.props.mapbox.accessToken;
       this.map = new mapboxgl.Map({
+        minZoom: getKey(this.props.map.metadata, MIN_ZOOM_KEY),
+        maxZoom: getKey(this.props.map.metadata, MAX_ZOOM_KEY),
         renderWorldCopies: this.props.wrapX,
         container: this.mapdiv,
         style: this.props.map,
