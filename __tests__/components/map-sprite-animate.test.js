@@ -36,7 +36,7 @@ describe('tests for the sprite animation map layers', () => {
     map = wrapper.instance().getWrappedInstance();
   });
 
-  it('sets the correct style function', () => {
+  it('sets the correct style function', (done) => {
     // add source
     store.dispatch(MapActions.addSource('points', {
       type: 'geojson',
@@ -69,17 +69,20 @@ describe('tests for the sprite animation map layers', () => {
       source: 'points',
       type: 'symbol',
     }));
-    const olLayer = map.layers['points-helicopters'];
-    const styleFn = olLayer.getStyle();
-    const style = styleFn(new Feature());
-    expect(style.getImage()).toBeInstanceOf(SdkSpriteStyle);
-    spyOn(style.getImage(), 'update');
-    // postcompose should trigger update
-    map.map.dispatchEvent({type: 'postcompose'});
-    expect(style.getImage().update).toHaveBeenCalled();
+    window.setTimeout(() => {
+      const olLayer = map.layers['points-helicopters'];
+      const styleFn = olLayer.getStyle();
+      const style = styleFn(new Feature());
+      expect(style.getImage()).toBeInstanceOf(SdkSpriteStyle);
+      spyOn(style.getImage(), 'update');
+      // postcompose should trigger update
+      map.map.dispatchEvent({type: 'postcompose'});
+      expect(style.getImage().update).toHaveBeenCalled();
+      done();
+    }, 0);
   });
 
-  it('sets the correct style function and filter', () => {
+  it('sets the correct style function and filter', (done) => {
     // add source
     store.dispatch(MapActions.addSource('points', {
       type: 'geojson',
@@ -111,12 +114,15 @@ describe('tests for the sprite animation map layers', () => {
       source: 'points',
       type: 'symbol',
     }));
-    const olLayer = map.layers['points-helicopters'];
-    const styleFn = olLayer.getStyle();
-    let style = styleFn(new Feature({visible: 1}));
-    expect(style).toEqual(null);
-    style = styleFn(new Feature({visible: 0}));
-    expect(style.getImage()).toBeInstanceOf(SdkSpriteStyle);
+    window.setTimeout(() => {
+      const olLayer = map.layers['points-helicopters'];
+      const styleFn = olLayer.getStyle();
+      let style = styleFn(new Feature({visible: 1}));
+      expect(style).toEqual(null);
+      style = styleFn(new Feature({visible: 0}));
+      expect(style.getImage()).toBeInstanceOf(SdkSpriteStyle);
+      done();
+    }, 0);
   });
 
 });
