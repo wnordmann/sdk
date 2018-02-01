@@ -511,15 +511,13 @@ export function addWmsSource(sourceId, serverUrl, layerName, options = {}) {
   if (options.asVector !== false) {
     return addSource(sourceId, {
       type: 'vector',
-      url: url_template,
+      tiles: [url_template],
     });
   } else {
     return addSource(sourceId, {
       type: 'raster',
       tileSize: tile_size,
-      tiles: [
-        url_template,
-      ],
+      tiles: [url_template],
     });
   }
 }
@@ -571,7 +569,7 @@ export function addTmsSource(sourceId, serverUrl, layerName, options = {}) {
 
   return addSource(sourceId, {
     type: 'vector',
-    url,
+    tiles: [url],
   });
 }
 
