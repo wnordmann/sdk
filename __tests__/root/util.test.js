@@ -5,9 +5,23 @@ import {GROUP_KEY, TITLE_KEY} from '../../src/constants';
 
 describe('util', () => {
   it('calculates the resolution for zoom', () => {
-    const zoom = 5;
+    const zoom = 4;
     const resolution = util.getResolutionForZoom(zoom);
     expect(resolution).toEqual(4891.96981025128);
+  });
+
+  it('calculates the zoom for resolution', () => {
+    const resolution = 4891.96981025128;
+    const zoom = util.getZoomForResolution(resolution);
+    expect(zoom).toEqual(4);
+  });
+
+  it('calculates resolution for extent', () => {
+    const extent = [-45, 0, -25, 20];
+    const size = [1000, 600];
+    const projection = 'EPSG:3857';
+    const resolution = util.getResolutionForExtent(extent, size, projection);
+    expect(resolution).toEqual(3788.3848783128165);
   });
 
   it('gets layer by id', () => {

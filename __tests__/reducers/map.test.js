@@ -92,6 +92,33 @@ describe('map reducer', () => {
     });
   });
 
+  it('should handle FIT_EXTENT', () => {
+    const state = {
+      version: 8,
+      name: 'default',
+      center: [0, 0],
+      zoom: 3,
+      sources: {},
+      layers: [],
+    };
+    deepFreeze(state);
+    const action = {
+      type: MAP.FIT_EXTENT,
+      extent: [-45, -45, 0, 0],
+      size: [1000, 750],
+      projection: 'EPSG:3857',
+    };
+    deepFreeze(action);
+    expect(reducer(state, action)).toEqual({
+      version: 8,
+      name: 'default',
+      center: [-22.5, -22.5],
+      zoom: 3.3844173471267736,
+      sources: {},
+      layers: [],
+    });
+  });
+
   it('should handle SET_VIEW max zoom constraint', () => {
     const state = {
       version: 8,
@@ -114,7 +141,7 @@ describe('map reducer', () => {
       version: 8,
       name: 'default',
       center: [10, 10],
-      zoom: 24,
+      zoom: 22,
       sources: {},
       layers: [],
     });
@@ -297,7 +324,7 @@ describe('map reducer', () => {
       version: 8,
       name: 'default',
       center: [0, 0],
-      zoom: 24,
+      zoom: 22,
       sources: {},
       layers: [],
     });

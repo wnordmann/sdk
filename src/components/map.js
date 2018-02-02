@@ -75,7 +75,7 @@ import LoadingStrategy from 'ol/loadingstrategy';
 
 import {updateLayer, setView, setBearing} from '../actions/map';
 import {setMapSize, setMousePosition, setMapExtent, setResolution, setProjection} from '../actions/mapinfo';
-import {INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TIME_KEY, TIME_START_KEY, QUERYABLE_KEY, QUERY_ENDPOINT_KEY} from '../constants';
+import {INTERACTIONS, LAYER_VERSION_KEY, SOURCE_VERSION_KEY, TIME_KEY, TIME_START_KEY, QUERYABLE_KEY, QUERY_ENDPOINT_KEY, MIN_ZOOM_KEY, MAX_ZOOM_KEY} from '../constants';
 import {dataVersionKey} from '../reducers/map';
 
 import {finalizeMeasureFeature, setMeasureFeature, clearMeasureFeature} from '../actions/drawing';
@@ -643,30 +643,28 @@ export class Map extends React.Component {
   /** Callback for finished drawings, converts the event's feature
    *  to GeoJSON and then passes the relevant information on to
    *  this.props.onFeatureDrawn, this.props.onFeatureModified,
-   *  or this.props.onFeatureSelected.
+   *  or this.props.onFeatureSelected, this.props.onFeatureDeselected.
    *
-   *  @param {string} eventType One of 'drawn', 'modified', or 'selected'.
+   *  @param {string} eventType One of 'drawn', 'modified', 'selected' or 'deselected'.
    *  @param {string} sourceName Name of the geojson source.
-   *  @param {Object} feature OpenLayers feature object.
+   *  @param {Object[]} features OpenLayers feature objects.
    *
    */
-  onFeatureEvent(eventType, sourceName, feature) {
-    if (feature !== undefined) {
-      // convert the feature to GeoJson
-      const proposed_geojson = GEOJSON_FORMAT.writeFeatureObject(feature, {
-        dataProjection: 'EPSG:4326',
-        featureProjection: this.map.getView().getProjection(),
-      });
-
-      // Pass on feature drawn this map object, the target source,
-      //  and the drawn feature.
-      if (eventType === 'drawn') {
-        this.props.onFeatureDrawn(this, sourceName, proposed_geojson);
-      } else if (eventType === 'modified') {
-        this.props.onFeatureModified(this, sourceName, proposed_geojson);
-      } else if (eventType === 'selected') {
-        this.props.onFeatureSelected(this, sourceName, proposed_geojson);
-      }
+  onFeatureEvent(eventType, sourceName, features) {
+    // convert the features to GeoJson
+    const proposed_geojson = GEOJSON_FORMAT.writeFeaturesObject(features, {
+      dataProjection: 'EPSG:4326',
+      featureProjection: this.map.getView().getProjection(),
+    });
+    // Pass on this map object, the target source and the features.
+    if (eventType === 'drawn') {
+      this.props.onFeatureDrawn(this, sourceName, proposed_geojson);
+    } else if (eventType === 'modified') {
+      this.props.onFeatureModified(this, sourceName, proposed_geojson);
+    } else if (eventType === 'selected') {
+      this.props.onFeatureSelected(this, sourceName, proposed_geojson);
+    } else if (eventType === 'deselected') {
+      this.props.onFeatureDeselected(this, sourceName, proposed_geojson);
     }
   }
 
@@ -1253,12 +1251,16 @@ export class Map extends React.Component {
     }
 
     // initialize the map.
+    const minZoom = getKey(this.props.map.metadata, MIN_ZOOM_KEY);
+    const maxZoom = getKey(this.props.map.metadata, MAX_ZOOM_KEY);
     this.map = new OlMap({
       interactions: interaction.defaults(),
       controls: [new AttributionControl()],
       target: this.mapdiv,
       logo: false,
       view: new View({
+        minZoom: minZoom ? minZoom + 1 : undefined,
+        maxZoom: maxZoom ? maxZoom + 1 : undefined,
         center,
         zoom: this.props.map.zoom >= 0 ? this.props.map.zoom + 1 : this.props.map.zoom,
         rotation: rotation !== undefined ? -rotation : 0,
@@ -1375,7 +1377,7 @@ export class Map extends React.Component {
       const modify = new ModifyInteraction(modifyObj);
 
       modify.on('modifyend', (evt) => {
-        this.onFeatureEvent('modified', drawingProps.sourceName, evt.features.item(0));
+        this.onFeatureEvent('modified', drawingProps.sourceName, [evt.features.item(0)]);
       });
 
       this.activeInteractions = [select, modify];
@@ -1392,8 +1394,12 @@ export class Map extends React.Component {
       drawObj = this.setStyleFunc(drawObj, drawingProps.selectStyle);
       const select = new SelectInteraction(drawObj);
 
-      select.on('select', () => {
-        this.onFeatureEvent('selected', drawingProps.sourcename, select.getFeatures().item(0));
+      select.on('select', (evt) => {
+        if (evt.selected.length > 0) {
+          this.onFeatureEvent('selected', drawingProps.sourcename, evt.selected);
+        } else if (evt.deselected.length > 0) {
+          this.onFeatureEvent('deselected', drawingProps.sourcename, evt.deselected);
+        }
       });
 
       this.activeInteractions = [select];
@@ -1412,7 +1418,7 @@ export class Map extends React.Component {
       const draw = new DrawInteraction(styleDrawObj);
 
       draw.on('drawend', (evt) => {
-        this.onFeatureEvent('drawn', drawingProps.sourceName, evt.feature);
+        this.onFeatureEvent('drawn', drawingProps.sourceName, [evt.feature]);
       });
 
       this.activeInteractions = [draw];
@@ -1547,6 +1553,8 @@ Map.propTypes = {
   onFeatureModified: PropTypes.func,
   /** onFeatureSelected callback, triggered on select event of the select interaction. */
   onFeatureSelected: PropTypes.func,
+  /** onFeatureDeselected callback, triggered when a feature gets deselected. */
+  onFeatureDeselected: PropTypes.func,
   /** onExportImage callback, done on postcompose. */
   onExportImage: PropTypes.func,
   /** setMeasureGeometry callback, called when the measure geometry changes. */
@@ -1598,6 +1606,8 @@ Map.defaultProps = {
   onFeatureModified: () => {
   },
   onFeatureSelected: () => {
+  },
+  onFeatureDeselected: () => {
   },
   onExportImage: () => {
   },

@@ -1,6 +1,6 @@
 {
   "name": "@boundlessgeo/sdk",
-  "version": "2.3.0-beta8",
+  "version": "2.3.0-beta12",
   "description": "Boundless Web SDK",
   "scripts": {
     "start": "webpack-dev-server --config webpack-dev-server.config.js --open --open-page 'build/examples'",
@@ -25,6 +25,7 @@
     "jsdoc": "npm run build:doc-css && npm run build:jsdoc"
   },
   "devDependencies": {
+    "@mapbox/mapbox-gl-draw-static-mode": "^1.0.1",
     "@mapbox/mapbox-gl-draw": "^1.0.4",
     "@turf/area": "^5.0.4",
     "@turf/distance": "^5.0.4",
@@ -93,6 +94,7 @@
     "uuid": "^3.1.0"
   },
   "peerDependencies": {
+    "@mapbox/mapbox-gl-draw-static-mode": "^1.0.1",
     "@mapbox/mapbox-gl-draw": "^1.0.4",
     "@turf/area": "^5.0.4",
     "@turf/distance": "^5.0.4",
