@@ -609,13 +609,14 @@ export class Map extends React.Component {
     // check the sources diff
     const next_sources_version = getVersion(nextProps.map, SOURCE_VERSION_KEY);
     const next_layer_version = getVersion(nextProps.map, LAYER_VERSION_KEY);
-    if (this.sourcesVersion !== next_sources_version || this.layersVersion !== next_layer_version) {
+    if (this.sourcesVersion !== next_sources_version) {
       this.configureSources(nextProps.map.sources, next_sources_version)
         .then(() => {
           this.configureLayers(nextProps.map.sources, nextProps.map.layers, next_layer_version, nextProps.map.sprite, this.props.declutter);
         });
+    } else if (this.layersVersion !== next_layer_version) {
+      this.configureLayers(nextProps.map.sources, nextProps.map.layers, next_layer_version, nextProps.map.sprite, this.props.declutter);
     }
-
     // check the vector sources for data changes
     const src_names = Object.keys(nextProps.map.sources);
     for (let i = 0, ii = src_names.length; i < ii; i++) {
