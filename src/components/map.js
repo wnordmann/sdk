@@ -754,6 +754,9 @@ export class Map extends React.Component {
         layer.filter = createFilter(layer.filter);
       }
     }
+    const onPostCompose = function(e) {
+      this.update(e);
+    };
     olLayer.setStyle((feature, resolution) => {
       // loop over the layers to see which one matches
       for (let l = 0, ll = layers.length; l < ll; ++l) {
@@ -763,9 +766,7 @@ export class Map extends React.Component {
             if (!styleCache[layer.id]) {
               const sprite = new SpriteStyle(spriteOptions[layer.id]);
               styleCache[layer.id] = new Style({image: sprite});
-              this.map.on('postcompose', (e) => {
-                sprite.update(e);
-              });
+              this.map.on('postcompose', onPostCompose, sprite);
             }
             return styleCache[layer.id];
           } else {
@@ -779,9 +780,7 @@ export class Map extends React.Component {
               options.rotation = rotation;
               const sprite = new SpriteStyle(options);
               const style = new Style({image: sprite});
-              this.map.on('postcompose', (e) => {
-                sprite.update(e);
-              });
+              this.map.on('postcompose', onPostCompose, sprite);
               styleCache[layer.id][rotation] = style;
             }
             return styleCache[layer.id][rotation];
