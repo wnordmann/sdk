@@ -306,8 +306,8 @@ function clearLayerFilter(state, action) {
   const new_layers = [];
   for (let i = 0, ii = state.layers.length; i < ii; i++) {
     if (state.layers[i].id === action.layerId) {
-      // eslint-disable-next-line
-      const { filter, ...newProps } = state.layers[i];
+      const newProps = Object.assign({}, state.layers[i]);
+      delete newProps.filter;
       new_layers.push(newProps);
     } else {
       new_layers.push(state.layers[i]);
