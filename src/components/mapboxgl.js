@@ -328,6 +328,10 @@ export class MapboxGL extends React.Component {
     return {};
   }
 
+  modeOptions(modeOptions) {
+    return modeOptions ? modeOptions : {};
+  }
+
   updateInteraction(drawingProps) {
     // this assumes the interaction is different,
     //  so the first thing to do is clear out the old interaction
@@ -340,10 +344,10 @@ export class MapboxGL extends React.Component {
     if (INTERACTIONS.drawing.includes(drawingProps.interaction)) {
       this.currentMode = this.setMode(this.getMode(drawingProps.interaction), drawingProps.currentMode);
       this.afterMode = this.setMode(this.currentMode, drawingProps.afterMode);
-      this.draw.changeMode(this.currentMode);
+      this.draw.changeMode(this.currentMode, this.modeOptions(drawingProps.currentModeOptions));
     } else if (INTERACTIONS.modify === drawingProps.interaction || INTERACTIONS.select === drawingProps.interaction) {
       this.currentMode = this.setMode(SIMPLE_SELECT_MODE, drawingProps.currentMode);
-      this.draw.changeMode(this.currentMode);
+      this.draw.changeMode(this.currentMode, this.modeOptions(drawingProps.currentModeOptions));
       this.afterMode = this.setMode(DIRECT_SELECT_MODE, drawingProps.afterMode);
     } else if (INTERACTIONS.measuring.includes(drawingProps.interaction)) {
       // clear the previous measure feature.
@@ -352,7 +356,7 @@ export class MapboxGL extends React.Component {
       // but are prefixed with "measure:"
       const measureType = drawingProps.interaction.split(':')[1];
       this.currentMode = this.setMode(this.getMode(measureType), drawingProps.currentMode);
-      this.draw.changeMode(this.currentMode);
+      this.draw.changeMode(this.currentMode, this.modeOptions(drawingProps.currentModeOptions));
       if (!this.addedMeasurementListener) {
         this.map.on('draw.render', (evt) => {
           this.onDrawRender(evt);

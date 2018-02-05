@@ -23,16 +23,18 @@ import {INTERACTIONS} from '../constants';
  *  @param {string} drawingType The type of drawing interaction.
  *  @param {string} afterMode The mode to be used after the drawing interaction finishes.
  *  @param {string} currentMode The mode to be used for drawing interaction.
+ *  @param {Object} currentModeOptions The mode options for the currentMode
  *
  *  @returns {Object} An action object to pass to the reducer.
  */
-export function startDrawing(sourceName, drawingType, afterMode, currentMode) {
+export function startDrawing(sourceName, drawingType, afterMode, currentMode, currentModeOptions) {
   return {
     type: DRAWING.START,
     interaction: drawingType,
     sourceName,
     currentMode,
     afterMode,
+    currentModeOptions,
   };
 }
 
