@@ -312,7 +312,7 @@ export class Legend extends React.Component {
         }
       }} />);
     } else {
-      return getLegend(layer, layer_src);
+      return getLegend(layer);
     }
   }
 
@@ -369,7 +369,7 @@ export class Legend extends React.Component {
       case 'video':
       case 'canvas':
       default:
-        return getLegend(layer, layer_src);
+        return getLegend(layer);
     }
   }
 
