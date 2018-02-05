@@ -842,6 +842,32 @@ describe('Map component', () => {
     expect(store.getState().mapinfo.size).toEqual([100, 200]);
   });
 
+  it('should change layer visibility', (done) => {
+    const store = createStore(combineReducers({
+      map: MapReducer,
+    }));
+
+    const wrapper = mount(<ConnectedMap store={store} />);
+    const sdk_map = wrapper.instance().getWrappedInstance();
+
+    store.dispatch(MapActions.addOsmSource('foo'));
+    store.dispatch(MapActions.addLayer({
+      id: 'foo',
+      source: 'foo',
+    }));
+
+    let layer;
+    window.setTimeout(function() {
+      layer = sdk_map.map.getLayers().item(0);
+      expect(layer.getVisible()).toBe(true);
+      store.dispatch(MapActions.setLayerVisibility('foo', 'none'));
+      window.setTimeout(function() {
+        layer = sdk_map.map.getLayers().item(0);
+        expect(layer.getVisible()).toBe(false);
+        done();
+      }, 0);
+    }, 0);
+  });
 
   it('should trigger the setView callback', () => {
     const store = createStore(combineReducers({

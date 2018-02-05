@@ -266,7 +266,7 @@ export function removeFeatures(sourceName, filter) {
 /** Change the visibility of a given layer in the map state.
  *
  *  @param {string} layerId String id for the layer.
- *  @param {boolean} visibility Should the layer be visible?
+ *  @param {string} visibility 'none' or 'visible'.
  *
  *  @returns {Object} Action object to pass to reducer.
  */
