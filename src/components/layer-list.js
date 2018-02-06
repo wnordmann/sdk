@@ -131,7 +131,7 @@ class SdkLayerList extends React.Component {
           group_layers = [];
         }
         groupName = item.metadata[GROUP_KEY];
-        if (item.metadata[LAYERLIST_HIDE_KEY] !== true) {
+        if (group_layers && item.metadata[LAYERLIST_HIDE_KEY] !== true) {
           group_layers.unshift(item);
         }
       } else if (!item.metadata || item.metadata[LAYERLIST_HIDE_KEY] !== true) {
@@ -139,7 +139,7 @@ class SdkLayerList extends React.Component {
         layers.unshift(<this.layerClass enableDD={this.props.enableDD} index={i} key={i} layers={this.props.layers} layer={item} />);
       }
     }
-    group_layers = this.handlePendingGroup(layers, group_layers, groupName, groups);
+    this.handlePendingGroup(layers, group_layers, groupName, groups);
     return (
       <this.props.listClass style={this.props.style} className={className}>
         { layers }

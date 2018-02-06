@@ -142,7 +142,7 @@ class FilterComponent extends React.PureComponent {
     );
   }
 }
-FilterComponent.PropTypes = {
+FilterComponent.propTypes = {
   source: PropTypes.string,
   store: PropTypes.object
 };

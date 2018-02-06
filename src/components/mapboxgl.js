@@ -195,8 +195,7 @@ export class MapboxGL extends React.Component {
   onMapLoad() {
     // add the initial popups from the user.
     for (let i = 0, ii = this.props.initialPopups.length; i < ii; i++) {
-      // set silent to true since updatePopups is called after the loop
-      this.addPopup(this.props.initialPopups[i], true);
+      this.addPopup(this.props.initialPopups[i]);
     }
     this.updatePopups();
     this.map.off('click', this.onMapLoad);
@@ -413,13 +412,8 @@ export class MapboxGL extends React.Component {
     const size = ReactDOM.findDOMNode(elem).getBoundingClientRect();
     const yTransform = size.height / 2 + 11;
     const xTransform = size.width / 2 - 48;
-    // TODO do not use mapbox internals here
     if (overlay) {
-      const offset = new mapboxgl.Point.convert([xTransform, -yTransform]);
-      overlay._offset = offset;
-      overlay._update();
-      // TODO use when this fix is in a release
-      //overlay.setOffset([xTransform, -yTransform]);
+      overlay.setOffset([xTransform, -yTransform]);
     }
   }
 
