@@ -13,7 +13,7 @@ import * as MapActions from '../../src/actions/map';
 configure({adapter: new Adapter()});
 
 describe('Map component time tests', () => {
-  it('should correctly reload WMS source that is time enabled', () => {
+  it('should correctly reload WMS source that is time enabled', (done) => {
     const store = createStore(combineReducers({
       map: MapReducer,
     }));
@@ -35,16 +35,19 @@ describe('Map component time tests', () => {
     }));
     store.dispatch(MapActions.setLayerTime('nexrad', '1995-01-01/2017-12-31/PT5M'));
 
-    let layers = map.map.getLayers().getArray();
-    const source = layers[0].getSource();
-    let params = source.getParams();
-    expect(params.TIME).toBeUndefined();
-    store.dispatch(MapActions.setMapTime('2006-06-23T03:10:00Z'));
-    params = source.getParams();
-    expect(params.TIME).toBe('2006-06-23T03:10:00Z');
+    window.setTimeout(() => {
+      let layers = map.map.getLayers().getArray();
+      const source = layers[0].getSource();
+      let params = source.getParams();
+      expect(params.TIME).toBeUndefined();
+      store.dispatch(MapActions.setMapTime('2006-06-23T03:10:00Z'));
+      params = source.getParams();
+      expect(params.TIME).toBe('2006-06-23T03:10:00Z');
+      done();
+    }, 0);
   });
 
-  it('should correctly set TIME param if source added after setMapTime', () => {
+  it('should correctly set TIME param if source added after setMapTime', (done) => {
     const store = createStore(combineReducers({
       map: MapReducer,
     }));
@@ -67,10 +70,13 @@ describe('Map component time tests', () => {
     }));
     store.dispatch(MapActions.setLayerTime('nexrad', '1995-01-01/2017-12-31/PT5M'));
 
-    let layers = map.map.getLayers().getArray();
-    const source = layers[0].getSource();
-    const params = source.getParams();
-    expect(params.TIME).toBe('2006-06-23T03:10:00Z');
+    window.setTimeout(() => {
+      let layers = map.map.getLayers().getArray();
+      const source = layers[0].getSource();
+      const params = source.getParams();
+      expect(params.TIME).toBe('2006-06-23T03:10:00Z');
+      done();
+    }, 0);
   });
 
   it('should correctly filter a vector source that is time enabled', () => {

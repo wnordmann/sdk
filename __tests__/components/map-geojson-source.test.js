@@ -50,15 +50,17 @@ describe('tests for the geojson-type map sources', () => {
       data,
     }));
 
-    // check to see if the map source is now defined.
-    expect(map.sources[src_name]).not.toBe(undefined);
+    window.setTimeout(() => {
+      // check to see if the map source is now defined.
+      expect(map.sources[src_name]).not.toBe(undefined);
 
-    // check the feature count matches.
-    setTimeout(() => {
-      const src = map.sources[src_name];
-      expect(src.getFeatures().length).toBe(nFeatures);
-      done();
-    }, 200);
+      // check the feature count matches.
+      setTimeout(() => {
+        const src = map.sources[src_name];
+        expect(src.getFeatures().length).toBe(nFeatures);
+        done();
+      }, 200);
+    }, 0);
   }
 
   it('handles undefined data', (done) => {
