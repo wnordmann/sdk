@@ -128,63 +128,61 @@ function getVersion(obj, key) {
  * @returns {Object} Configured OpenLayers TileWMSSource or XyzSource.
  */
 function configureTileSource(glSource, mapProjection, time) {
-  return new Promise((resolve) => {
-    const tile_url = glSource.tiles[0];
-    const commonProps = {
-      attributions: glSource.attribution,
-      minZoom: glSource.minzoom,
-      maxZoom: 'maxzoom' in glSource ? glSource.maxzoom : 22,
-      tileSize: glSource.tileSize || 512,
-      crossOrigin: 'crossOrigin' in glSource ? glSource.crossOrigin : 'anonymous',
-      projection: mapProjection,
-    };
-    // check to see if the url is a wms request.
-    if (tile_url.toUpperCase().indexOf('SERVICE=WMS') >= 0) {
-      const urlParts = glSource.tiles[0].split('?');
-      const params = parseQueryString(urlParts[1]);
-      const keys = Object.keys(params);
-      for (let i = 0, ii = keys.length; i < ii; ++i) {
-        if (keys[i].toUpperCase() === 'REQUEST') {
-          delete params[keys[i]];
-        }
+  const tile_url = glSource.tiles[0];
+  const commonProps = {
+    attributions: glSource.attribution,
+    minZoom: glSource.minzoom,
+    maxZoom: 'maxzoom' in glSource ? glSource.maxzoom : 22,
+    tileSize: glSource.tileSize || 512,
+    crossOrigin: 'crossOrigin' in glSource ? glSource.crossOrigin : 'anonymous',
+    projection: mapProjection,
+  };
+  // check to see if the url is a wms request.
+  if (tile_url.toUpperCase().indexOf('SERVICE=WMS') >= 0) {
+    const urlParts = glSource.tiles[0].split('?');
+    const params = parseQueryString(urlParts[1]);
+    const keys = Object.keys(params);
+    for (let i = 0, ii = keys.length; i < ii; ++i) {
+      if (keys[i].toUpperCase() === 'REQUEST') {
+        delete params[keys[i]];
       }
-      if (time) {
-        params.TIME = time;
-      }
-      resolve(new TileWMSSource(Object.assign({
-        url: urlParts[0],
-        params,
-      }, commonProps)));
-    } else {
-      const source = new XyzSource(Object.assign({
-        urls: glSource.tiles,
-      }, commonProps));
-      source.setTileLoadFunction((tile, src) => {
-        // copy the src string.
-        let img_src = src.slice();
-        if (src.indexOf(BBOX_STRING) !== -1) {
-          const bbox = source.getTileGrid().getTileCoordExtent(tile.getTileCoord());
-          img_src = src.replace(BBOX_STRING, bbox.toString());
-        }
-        // disabled the linter below as this is how
-        //  OpenLayers documents this operation.
-        // eslint-disable-next-line
-        tile.getImage().src = img_src;
-      });
-      if (glSource.scheme === 'tms') {
-        source.setTileUrlFunction((tileCoord, pixelRatio, projection) => {
-          const min = 0;
-          const max = glSource.tiles.length - 1;
-          const idx = Math.floor(Math.random() * (max - min + 1)) + min;
-          const z = tileCoord[0];
-          const x = tileCoord[1];
-          const y = tileCoord[2] + (1 << z);
-          return glSource.tiles[idx].replace('{z}', z).replace('{y}', y).replace('{x}', x);
-        });
-      }
-      resolve(source);
     }
-  });
+    if (time) {
+      params.TIME = time;
+    }
+    return new TileWMSSource(Object.assign({
+      url: urlParts[0],
+      params,
+    }, commonProps));
+  } else {
+    const source = new XyzSource(Object.assign({
+      urls: glSource.tiles,
+    }, commonProps));
+    source.setTileLoadFunction((tile, src) => {
+      // copy the src string.
+      let img_src = src.slice();
+      if (src.indexOf(BBOX_STRING) !== -1) {
+        const bbox = source.getTileGrid().getTileCoordExtent(tile.getTileCoord());
+        img_src = src.replace(BBOX_STRING, bbox.toString());
+      }
+      // disabled the linter below as this is how
+      //  OpenLayers documents this operation.
+      // eslint-disable-next-line
+      tile.getImage().src = img_src;
+    });
+    if (glSource.scheme === 'tms') {
+      source.setTileUrlFunction((tileCoord, pixelRatio, projection) => {
+        const min = 0;
+        const max = glSource.tiles.length - 1;
+        const idx = Math.floor(Math.random() * (max - min + 1)) + min;
+        const z = tileCoord[0];
+        const x = tileCoord[1];
+        const y = tileCoord[2] + (1 << z);
+        return glSource.tiles[idx].replace('{z}', z).replace('{y}', y).replace('{x}', x);
+      });
+    }
+    return source;
+  }
 }
 
 /** Gets the url for the TileJSON source.
@@ -210,11 +208,9 @@ export function getTileJSONUrl(glSource, accessToken) {
  * @returns {Object} Configured OpenLayers TileJSONSource.
  */
 function configureTileJSONSource(glSource, accessToken) {
-  return new Promise((resolve) => {
-    resolve(new TileJSON({
-      url: getTileJSONUrl(glSource, accessToken),
-      crossOrigin: 'anonymous',
-    }));
+  return new TileJSON({
+    url: getTileJSONUrl(glSource, accessToken),
+    crossOrigin: 'anonymous',
   });
 }
 
@@ -225,14 +221,11 @@ function configureTileJSONSource(glSource, accessToken) {
  * @returns {Object} Configured OpenLayers ImageStaticSource.
  */
 function configureImageSource(glSource) {
-  return new Promise((resolve) => {
-    const coords = glSource.coordinates;
-    const source = new ImageStaticSource({
-      url: glSource.url,
-      imageExtent: [coords[0][0], coords[3][1], coords[1][0], coords[0][1]],
-      projection: 'EPSG:4326',
-    });
-    resolve(source);
+  const coords = glSource.coordinates;
+  return new ImageStaticSource({
+    url: glSource.url,
+    imageExtent: [coords[0][0], coords[3][1], coords[1][0], coords[0][1]],
+    projection: 'EPSG:4326',
   });
 }
 
@@ -374,33 +367,31 @@ function updateGeojsonSource(olSource, glSource, mapView, baseUrl) {
  *  @returns {Object} ol.source.vector instance.
  */
 function configureGeojsonSource(glSource, mapView, baseUrl, wrapX) {
-  return new Promise((resolve) => {
-    const use_bbox = (typeof glSource.data === 'string' && glSource.data.indexOf(BBOX_STRING) >= 0);
-    const vector_src = new VectorSource({
-      strategy: use_bbox ? LoadingStrategy.bbox : LoadingStrategy.all,
-      loader: getLoaderFunction(glSource, mapView.getProjection(), baseUrl),
-      useSpatialIndex: true,
-      wrapX: wrapX,
-    });
-
-    // GeoJson sources can be clustered but OpenLayers
-    // uses a special source type for that. This handles the
-    // "switch" of source-class.
-    let new_src = vector_src;
-    if (glSource.cluster) {
-      new_src = new ClusterSource({
-        source: vector_src,
-        // default the distance to 50 as that's what
-        //  is specified by Mapbox.
-        distance: glSource.clusterRadius ? glSource.clusterRadius : 50,
-      });
-    }
-
-    // seed the vector source with the first update
-    //  before returning it.
-    updateGeojsonSource(new_src, glSource, mapView, baseUrl);
-    resolve(new_src);
+  const use_bbox = (typeof glSource.data === 'string' && glSource.data.indexOf(BBOX_STRING) >= 0);
+  const vector_src = new VectorSource({
+    strategy: use_bbox ? LoadingStrategy.bbox : LoadingStrategy.all,
+    loader: getLoaderFunction(glSource, mapView.getProjection(), baseUrl),
+    useSpatialIndex: true,
+    wrapX: wrapX,
   });
+
+  // GeoJson sources can be clustered but OpenLayers
+  // uses a special source type for that. This handles the
+  // "switch" of source-class.
+  let new_src = vector_src;
+  if (glSource.cluster) {
+    new_src = new ClusterSource({
+      source: vector_src,
+      // default the distance to 50 as that's what
+      //  is specified by Mapbox.
+      distance: glSource.clusterRadius ? glSource.clusterRadius : 50,
+    });
+  }
+
+  // seed the vector source with the first update
+  //  before returning it.
+  updateGeojsonSource(new_src, glSource, mapView, baseUrl);
+  return new_src;
 }
 
 /** Configures a Mapbox GL source object into appropriate
@@ -415,22 +406,23 @@ function configureGeojsonSource(glSource, mapView, baseUrl, wrapX) {
  * @returns {(Object|null)} Callback to the applicable configure source method.
  */
 function configureSource(glSource, mapView, accessToken, baseUrl, time, wrapX) {
+  let src;
   // tiled raster layer.
   if (glSource.type === 'raster') {
     if ('tiles' in glSource) {
-      return configureTileSource(glSource, mapView.getProjection(), time);
+      src = configureTileSource(glSource, mapView.getProjection(), time);
     } else if (glSource.url) {
-      return configureTileJSONSource(glSource, accessToken);
+      src = configureTileJSONSource(glSource, accessToken);
     }
   } else if (glSource.type === 'geojson') {
-    return configureGeojsonSource(glSource, mapView, baseUrl, wrapX);
+    src = configureGeojsonSource(glSource, mapView, baseUrl, wrapX);
   } else if (glSource.type === 'image') {
-    return configureImageSource(glSource);
+    src = configureImageSource(glSource);
   } else if (glSource.type === 'vector') {
     return configureMvtSource(glSource, accessToken);
   }
   return new Promise((resolve, reject) => {
-    resolve(undefined);
+    resolve(src);
   });
 }
 
