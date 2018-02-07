@@ -31,7 +31,7 @@ const LEADING_DIGITS = [1, 2, 5];
 export class ScaleLine extends React.Component {
   shouldComponentUpdate(nextProps) {
     // compare center
-    if (this.props.map && nextProps.map && this.props.map.center && nextProps.map.center && ((nextProps.map.center[0] !== this.props.map.center[0] || nextProps.map.center[1] !== this.props.map.center[1]))) {
+    if (this.props.map && nextProps.map && this.props.map.center && nextProps.map.center && (nextProps.map.center[0] !== this.props.map.center[0] || nextProps.map.center[1] !== this.props.map.center[1])) {
       return true;
     }
     // compare resolution

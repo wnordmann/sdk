@@ -266,7 +266,7 @@ export function removeFeatures(sourceName, filter) {
 /** Change the visibility of a given layer in the map state.
  *
  *  @param {string} layerId String id for the layer.
- *  @param {boolean} visibility Should the layer be visible?
+ *  @param {string} visibility 'none' or 'visible'.
  *
  *  @returns {Object} Action object to pass to reducer.
  */
@@ -511,15 +511,13 @@ export function addWmsSource(sourceId, serverUrl, layerName, options = {}) {
   if (options.asVector !== false) {
     return addSource(sourceId, {
       type: 'vector',
-      url: url_template,
+      tiles: [url_template],
     });
   } else {
     return addSource(sourceId, {
       type: 'raster',
       tileSize: tile_size,
-      tiles: [
-        url_template,
-      ],
+      tiles: [url_template],
     });
   }
 }
@@ -571,7 +569,7 @@ export function addTmsSource(sourceId, serverUrl, layerName, options = {}) {
 
   return addSource(sourceId, {
     type: 'vector',
-    url,
+    tiles: [url],
   });
 }
 

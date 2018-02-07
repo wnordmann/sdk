@@ -485,6 +485,45 @@ describe('MapboxGL component', () => {
     expect(map.draw.changeMode).toHaveBeenCalled();
   });
 
+  it('changes the mode with options', () => {
+    const sources = {
+      geojson: {
+        type: 'geojson',
+      },
+    };
+    const layers = [];
+    const metadata = {
+      'bnd:source-version': 0,
+      'bnd:layer-version': 0,
+      'bnd:data-version:geojson': 0,
+    };
+
+    const center = [0, 0];
+    const zoom = 2;
+    const apiKey = 'foo';
+    const drawing = {
+      interaction: 'Point'
+    };
+    const props = {
+      drawing,
+      mapbox: {accessToken: apiKey},
+      map: {center, zoom, sources, layers, metadata}
+    };
+    const modeOptions = {
+      custom: true
+    };
+    const wrapper = mount(<MapboxGL {...props} />);
+    const map = wrapper.instance();
+    // mock up our GL map
+    map.map = createMapMock();
+    map.draw = createMapDrawMock();
+    const on = () => {};
+    map.map.on = on;
+    spyOn(map.draw, 'changeMode');
+    map.updateInteraction({interaction: 'Polygon', currentMode: 'customMode', currentModeOptions: modeOptions});
+    expect(map.draw.changeMode).toHaveBeenCalledWith('customMode', modeOptions);
+  });
+
   it('updateInteraction with measure works correctly', () => {
     const sources = {
       geojson: {

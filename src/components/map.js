@@ -98,7 +98,7 @@ const GEOJSON_FORMAT = new GeoJsonFormat();
 const ESRIJSON_FORMAT = new EsriJsonFormat();
 const WGS84_SPHERE = new Sphere(6378137);
 const MAPBOX_PROTOCOL = 'mapbox://';
-const MAPBOX_HOST = 'tiles.mapbox.com/v4';
+const MAPBOX_HOST = 'api.mapbox.com/v4';
 const BBOX_STRING = '{bbox-epsg-3857}';
 
 plugins.register(PluginType.MAP_RENDERER, MapRenderer);
@@ -154,34 +154,35 @@ function configureTileSource(glSource, mapProjection, time) {
       url: urlParts[0],
       params,
     }, commonProps));
-  }
-  const source = new XyzSource(Object.assign({
-    urls: glSource.tiles,
-  }, commonProps));
-  source.setTileLoadFunction((tile, src) => {
-    // copy the src string.
-    let img_src = src.slice();
-    if (src.indexOf(BBOX_STRING) !== -1) {
-      const bbox = source.getTileGrid().getTileCoordExtent(tile.getTileCoord());
-      img_src = src.replace(BBOX_STRING, bbox.toString());
-    }
-    // disabled the linter below as this is how
-    //  OpenLayers documents this operation.
-    // eslint-disable-next-line
-    tile.getImage().src = img_src;
-  });
-  if (glSource.scheme === 'tms') {
-    source.setTileUrlFunction((tileCoord, pixelRatio, projection) => {
-      const min = 0;
-      const max = glSource.tiles.length - 1;
-      const idx = Math.floor(Math.random() * (max - min + 1)) + min;
-      const z = tileCoord[0];
-      const x = tileCoord[1];
-      const y = tileCoord[2] + (1 << z);
-      return glSource.tiles[idx].replace('{z}', z).replace('{y}', y).replace('{x}', x);
+  } else {
+    const source = new XyzSource(Object.assign({
+      urls: glSource.tiles,
+    }, commonProps));
+    source.setTileLoadFunction((tile, src) => {
+      // copy the src string.
+      let img_src = src.slice();
+      if (src.indexOf(BBOX_STRING) !== -1) {
+        const bbox = source.getTileGrid().getTileCoordExtent(tile.getTileCoord());
+        img_src = src.replace(BBOX_STRING, bbox.toString());
+      }
+      // disabled the linter below as this is how
+      //  OpenLayers documents this operation.
+      // eslint-disable-next-line
+      tile.getImage().src = img_src;
     });
+    if (glSource.scheme === 'tms') {
+      source.setTileUrlFunction((tileCoord, pixelRatio, projection) => {
+        const min = 0;
+        const max = glSource.tiles.length - 1;
+        const idx = Math.floor(Math.random() * (max - min + 1)) + min;
+        const z = tileCoord[0];
+        const x = tileCoord[1];
+        const y = tileCoord[2] + (1 << z);
+        return glSource.tiles[idx].replace('{z}', z).replace('{y}', y).replace('{x}', x);
+      });
+    }
+    return source;
   }
-  return source;
 }
 
 /** Gets the url for the TileJSON source.
@@ -194,7 +195,7 @@ export function getTileJSONUrl(glSource, accessToken) {
   let url = glSource.url;
   if (url.indexOf(MAPBOX_PROTOCOL) === 0) {
     const mapid = url.replace(MAPBOX_PROTOCOL, '');
-    url = `https://a.${MAPBOX_HOST}/${mapid}.json?access_token=${accessToken}`;
+    url = `https://${MAPBOX_HOST}/${mapid}.json?access_token=${accessToken}`;
   }
   return url;
 }
@@ -221,12 +222,11 @@ function configureTileJSONSource(glSource, accessToken) {
  */
 function configureImageSource(glSource) {
   const coords = glSource.coordinates;
-  const source = new ImageStaticSource({
+  return new ImageStaticSource({
     url: glSource.url,
     imageExtent: [coords[0][0], coords[3][1], coords[1][0], coords[0][1]],
     projection: 'EPSG:4326',
   });
-  return source;
 }
 
 /** Configures an OpenLayers VectorTileSource object from the provided
@@ -237,42 +237,53 @@ function configureImageSource(glSource) {
  * @returns {Object} Configured OpenLayers VectorTileSource.
  */
 function configureMvtSource(glSource, accessToken) {
-  const url = glSource.url;
-  let urls;
-  if (url.indexOf(MAPBOX_PROTOCOL) === 0) {
-    const mapid = url.replace(MAPBOX_PROTOCOL, '');
-    const suffix = 'vector.pbf';
-    const hosts = ['a', 'b', 'c', 'd'];
-    urls = [];
-    for (let i = 0, ii = hosts.length; i < ii; ++i) {
-      const host = hosts[i];
-      urls.push(`https://${host}.${MAPBOX_HOST}/${mapid}/{z}/{x}/{y}.${suffix}?access_token=${accessToken}`);
-    }
+  if (glSource.tiles) {
+    return new Promise((resolve, reject) => {
+      // predefine the source in-case since it's needed for the tile_url_fn
+      let source;
+      let tile_url_fn;
+      // check the first tile to see if we need to do BBOX subsitution
+      if (glSource.tiles[0].indexOf(BBOX_STRING) !== -1) {
+        tile_url_fn = function(urlTileCoord, pixelRatio, projection) {
+          const bbox = source.getTileGrid().getTileCoordExtent(urlTileCoord);
+          return glSource.tiles[0].replace(BBOX_STRING, bbox.toString());
+        };
+      }
+      source = new VectorTileSource({
+        urls: glSource.tiles,
+        tileGrid: TileGrid.createXYZ({
+          tileSize: 512,
+          maxZoom: 'maxzoom' in glSource ? glSource.maxzoom : 22,
+          minZoom: glSource.minzoom,
+        }),
+        attributions: glSource.attribution,
+        format: new MvtFormat(),
+        crossOrigin: 'crossOrigin' in glSource ? glSource.crossOrigin : 'anonymous',
+        tileUrlFunction: tile_url_fn,
+      });
+      resolve(source);
+    });
   } else {
-    urls = [url];
+    let url = getTileJSONUrl(glSource, accessToken);
+    return fetch(url).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+    })
+      .then((json) => {
+        return new VectorTileSource({
+          crossOrigin: 'crossOrigin' in glSource ? glSource.crossOrigin : 'anonymous',
+          attributions: json.attribution,
+          format: new MvtFormat(),
+          tileGrid: TileGrid.createXYZ({
+            minZoom: json.minzoom,
+            maxZoom: json.maxzoom,
+            tileSize: 512
+          }),
+          urls: json.tiles,
+        });
+      });
   }
-
-  // check to see if the url uses bounding box or Z,X,Y
-  let tile_url_fn = undefined;
-  if (url.indexOf(BBOX_STRING) !== -1) {
-    tile_url_fn = function(urlTileCoord, pixelRatio, projection) {
-      let img_src = url.slice();
-      const bbox = source.getTileGrid().getTileCoordExtent(urlTileCoord);
-      img_src = img_src.replace(BBOX_STRING, bbox.toString());
-      return img_src;
-    }
-  }
-
-  const source = new VectorTileSource({
-    urls,
-    tileGrid: TileGrid.createXYZ({maxZoom: 22}),
-    tilePixelRatio: 16,
-    format: new MvtFormat(),
-    crossOrigin: 'crossOrigin' in glSource ? glSource.crossOrigin : 'anonymous',
-    tileUrlFunction: tile_url_fn,
-  });
-
-  return source;
 }
 
 function getLoaderFunction(glSource, mapProjection, baseUrl) {
@@ -395,21 +406,24 @@ function configureGeojsonSource(glSource, mapView, baseUrl, wrapX) {
  * @returns {(Object|null)} Callback to the applicable configure source method.
  */
 function configureSource(glSource, mapView, accessToken, baseUrl, time, wrapX) {
+  let src;
   // tiled raster layer.
   if (glSource.type === 'raster') {
     if ('tiles' in glSource) {
-      return configureTileSource(glSource, mapView.getProjection(), time);
+      src = configureTileSource(glSource, mapView.getProjection(), time);
     } else if (glSource.url) {
-      return configureTileJSONSource(glSource, accessToken);
+      src = configureTileJSONSource(glSource, accessToken);
     }
   } else if (glSource.type === 'geojson') {
-    return configureGeojsonSource(glSource, mapView, baseUrl, wrapX);
+    src = configureGeojsonSource(glSource, mapView, baseUrl, wrapX);
   } else if (glSource.type === 'image') {
-    return configureImageSource(glSource);
+    src = configureImageSource(glSource);
   } else if (glSource.type === 'vector') {
     return configureMvtSource(glSource, accessToken);
   }
-  return null;
+  return new Promise((resolve, reject) => {
+    resolve(src);
+  });
 }
 
 /** Create a unique key for a group of layers
@@ -586,16 +600,15 @@ export class Map extends React.Component {
 
     // check the sources diff
     const next_sources_version = getVersion(nextProps.map, SOURCE_VERSION_KEY);
-    if (this.sourcesVersion !== next_sources_version) {
-      // go through and update the sources.
-      this.configureSources(nextProps.map.sources, next_sources_version);
-    }
     const next_layer_version = getVersion(nextProps.map, LAYER_VERSION_KEY);
-    if (this.layersVersion !== next_layer_version) {
-      // go through and update the layers.
+    if (this.sourcesVersion !== next_sources_version) {
+      this.configureSources(nextProps.map.sources, next_sources_version)
+        .then(() => {
+          this.configureLayers(nextProps.map.sources, nextProps.map.layers, next_layer_version, nextProps.map.sprite, this.props.declutter);
+        });
+    } else if (this.layersVersion !== next_layer_version) {
       this.configureLayers(nextProps.map.sources, nextProps.map.layers, next_layer_version, nextProps.map.sprite, this.props.declutter);
     }
-
     // check the vector sources for data changes
     const src_names = Object.keys(nextProps.map.sources);
     for (let i = 0, ii = src_names.length; i < ii; i++) {
@@ -673,9 +686,11 @@ export class Map extends React.Component {
    *  OpenLayers source definitions.
    *  @param {Object} sourcesDef All sources defined in the Mapbox GL stylesheet.
    *  @param {number} sourceVersion Counter for the source metadata updates.
+   *
+   *  @returns {Promise} When all sources are done, the promise is resolved.
    */
   configureSources(sourcesDef, sourceVersion) {
-    this.sourcesVersion = sourceVersion;
+    const promises = [];
     // TODO: Update this to check "diff" configurations
     //       of sources.  Currently, this will only detect
     //       additions and removals.
@@ -687,21 +702,32 @@ export class Map extends React.Component {
       //  list of sources.
       if (!(src_name in this.sources)) {
         const time = getKey(this.props.map.metadata, TIME_KEY);
-        this.sources[src_name] = configureSource(sourcesDef[src_name], map_view,
-          this.props.mapbox.accessToken, this.props.mapbox.baseUrl, time, this.props.wrapX);
+        promises.push(configureSource(sourcesDef[src_name], map_view,
+          this.props.mapbox.accessToken, this.props.mapbox.baseUrl, time, this.props.wrapX)
+          .then((source) => {
+            if (source) {
+              this.sources[src_name] = source;
+            }
+          })
+        );
       }
       const src = this.props.map.sources[src_name];
       if (src && src.type !== 'geojson' && !jsonEquals(src, sourcesDef[src_name])) {
         // reconfigure source and tell layers about it
-        this.sources[src_name] = configureSource(
+        promises.push(configureSource(
           sourcesDef[src_name],
           map_view,
           this.props.mapbox.accessToken,
           this.props.mapbox.baseUrl,
           undefined,
           this.props.wrapX
-        );
-        this.updateLayerSource(src_name);
+        )
+          .then((source) => {
+            if (source) {
+              this.sources[src_name] = source;
+              this.updateLayerSource(src_name);
+            }
+          }));
       }
 
       // Check to see if there was a clustering change.
@@ -711,16 +737,20 @@ export class Map extends React.Component {
       if (src && (src.cluster !== sourcesDef[src_name].cluster
           || src.clusterRadius !== sourcesDef[src_name].clusterRadius)) {
         // reconfigure the source for clustering.
-        this.sources[src_name] = configureSource(
+        promises.push(configureSource(
           sourcesDef[src_name],
           map_view,
           this.props.mapbox.accessToken,
           this.props.mapbox.baseUrl,
           undefined,
           this.props.wrapX
-        );
-        // tell all the layers about it.
-        this.updateLayerSource(src_name);
+        ).then((source) => {
+          if (source) {
+            this.sources[src_name] = source;
+            // tell all the layers about it.
+            this.updateLayerSource(src_name);
+          }
+        }));
       }
     }
 
@@ -733,6 +763,9 @@ export class Map extends React.Component {
         delete this.sources[src_name];
       }
     }
+    return Promise.all(promises).then(() => {
+      this.sourcesVersion = sourceVersion;
+    });
   }
 
   /** Applies the sprite animation information to the layer
@@ -752,6 +785,9 @@ export class Map extends React.Component {
         layer.filter = createFilter(layer.filter);
       }
     }
+    const onPostCompose = function(e) {
+      this.update(e);
+    };
     olLayer.setStyle((feature, resolution) => {
       // loop over the layers to see which one matches
       for (let l = 0, ll = layers.length; l < ll; ++l) {
@@ -761,9 +797,7 @@ export class Map extends React.Component {
             if (!styleCache[layer.id]) {
               const sprite = new SpriteStyle(spriteOptions[layer.id]);
               styleCache[layer.id] = new Style({image: sprite});
-              this.map.on('postcompose', (e) => {
-                sprite.update(e);
-              });
+              this.map.on('postcompose', onPostCompose, sprite);
             }
             return styleCache[layer.id];
           } else {
@@ -777,9 +811,7 @@ export class Map extends React.Component {
               options.rotation = rotation;
               const sprite = new SpriteStyle(options);
               const style = new Style({image: sprite});
-              this.map.on('postcompose', (e) => {
-                sprite.update(e);
-              });
+              this.map.on('postcompose', onPostCompose, sprite);
               styleCache[layer.id][rotation] = style;
             }
             return styleCache[layer.id][rotation];
@@ -833,10 +865,11 @@ export class Map extends React.Component {
    *  @param {Object[]} layers Array of Mapbox GL layer objects.
    *  @param {string} sprite The sprite of the map.
    *  @param {boolean} declutter Should we declutter labels and symbols?
+   *  @param {number} idx The index in the layer stack.
    *
    *  @returns {(Object|null)} Configured OpenLayers layer object, or null.
    */
-  configureLayer(sourceName, glSource, layers, sprite, declutter) {
+  configureLayer(sourceName, glSource, layers, sprite, declutter, idx) {
     const source = this.sources[sourceName];
     let layer = null;
     switch (glSource.type) {
@@ -858,8 +891,11 @@ export class Map extends React.Component {
         if (time && layers[0].metadata && layers[0].metadata[TIME_START_KEY] !== undefined) {
           layers[0].filter = this.props.createLayerFilter(layers[0], time);
         }
+        const tileGrid = source.getTileGrid();
         layer = new VectorTileLayer({
+          maxResolution: tileGrid.getMinZoom() > 0 ? tileGrid.getResolution(tileGrid.getMinZoom()) : undefined,
           declutter: declutter,
+          zIndex: idx,
           source,
         });
         this.applyStyle(layer, layers, sprite);
@@ -925,7 +961,6 @@ export class Map extends React.Component {
   configureLayers(sourcesDef, layersDef, layerVersion, sprite, declutter) {
     // update the internal version counter.
     this.layersVersion = layerVersion;
-
     // bin layers into groups based on their source.
     const layer_groups = [];
 
@@ -972,7 +1007,7 @@ export class Map extends React.Component {
           applyBackground(this.map, {layers: lyr_group});
         } else {
           const hydrated_group = hydrateLayerGroup(layersDef, lyr_group);
-          const new_layer = this.configureLayer(source_name, source, hydrated_group, sprite, declutter);
+          const new_layer = this.configureLayer(source_name, source, hydrated_group, sprite, declutter, i);
 
           // if the new layer has been defined, add it to the map.
           if (new_layer !== null) {
@@ -1267,7 +1302,6 @@ export class Map extends React.Component {
         projection: map_proj,
       }),
     });
-
     if (this.props.hover) {
       this.map.on('pointermove', (evt) => {
         const lngLat = Proj.toLonLat(evt.coordinate);
@@ -1327,9 +1361,13 @@ export class Map extends React.Component {
 
 
     // bootstrap the map with the current configuration.
-    this.configureSources(this.props.map.sources, this.props.map.metadata[SOURCE_VERSION_KEY]);
-    this.configureLayers(this.props.map.sources, this.props.map.layers,
-      this.props.map.metadata[LAYER_VERSION_KEY], this.props.map.sprite, this.props.declutter);
+    if (this.props.map.layers.length > 0) {
+      this.configureSources(this.props.map.sources, this.props.map.metadata[SOURCE_VERSION_KEY])
+        .then(() => {
+          this.configureLayers(this.props.map.sources, this.props.map.layers,
+            this.props.map.metadata[LAYER_VERSION_KEY], this.props.map.sprite, this.props.declutter);
+        });
+    }
 
     // this is done after the map composes itself for the first time.
     //  otherwise the map was not always ready for the initial popups.
